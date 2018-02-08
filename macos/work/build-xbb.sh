@@ -60,14 +60,14 @@ IFS=$'\n\t'
 
 # -----------------------------------------------------------------------------
 
-XBB_INPUT="/xbb-input"
+# XBB_INPUT="/xbb-input"
 XBB_DOWNLOAD="/tmp/xbb-download"
 XBB_TMP="/tmp/xbb"
 
-XBB="/opt/xbb"
+XBB="${HOME}/opt/xbb"
 XBB_BUILD="${XBB_TMP}"/xbb-build
 
-XBB_BOOTSTRAP="/opt/xbb-bootstrap"
+# XBB_BOOTSTRAP="/opt/xbb-bootstrap"
 
 MAKE_CONCURRENCY=2
 
@@ -82,7 +82,7 @@ mkdir -p "${XBB_BUILD}"
 # -----------------------------------------------------------------------------
 
 # x86_64 or i686
-UNAME_ARCH=$(uname -p)
+UNAME_ARCH=$(uname -m)
 if [ "${UNAME_ARCH}" == "x86_64" ]
 then
   BITS="64"
@@ -109,18 +109,18 @@ export CXX=g++
 # Note: __EOF__ is quoted to prevent substitutions here.
 cat <<'__EOF__' > "${XBB}"/xbb.sh
 
-export XBB_FOLDER="/opt/xbb"
+export XBB_FOLDER="${HOME}/opt/xbb"
 
 xbb_activate()
 {
   PATH=${PATH:-""}
-  PATH=/opt/texlive/bin/$(uname -p)-linux:${PATH}
+  PATH=/opt/texlive/bin/$(uname -m)-darwin:${PATH}
   export PATH="${XBB_FOLDER}"/bin:${PATH}
 
   LD_LIBRARY_PATH=${LD_LIBRARY_PATH:-""}
   export LD_LIBRARY_PATH="${XBB_FOLDER}/lib:${LD_LIBRARY_PATH}"
 
-  UNAME_ARCH=$(uname -p)
+  UNAME_ARCH=$(uname -m)
   if [ "${UNAME_ARCH}" == "x86_64" ]
   then
     export LD_LIBRARY_PATH="${XBB_FOLDER}/lib64:${LD_LIBRARY_PATH}"
@@ -139,7 +139,7 @@ function xbb_activate_param()
   EXTRA_LDPATHFLAGS_=${EXTRA_LDPATHFLAGS_:-""}
 
   PATH=${PATH:-""}
-  PATH=/opt/texlive/bin/$(uname -p)-linux:${PATH}
+  PATH=${HOME}/opt/texlive/bin/$(uname -m)-darwin:${PATH}
 
   LD_LIBRARY_PATH=${LD_LIBRARY_PATH:-""}
 
@@ -154,7 +154,7 @@ function xbb_activate_param()
   export LD_LIBRARY_PATH="${PREFIX_}"/lib:${LD_LIBRARY_PATH}
   export LDPATHFLAGS="-L${PREFIX_}/lib ${EXTRA_LDPATHFLAGS_}"
 
-  UNAME_ARCH=$(uname -p)
+  UNAME_ARCH=$(uname -m)
   if [ "${UNAME_ARCH}" == "x86_64" ]
   then
     export PKG_CONFIG_PATH="${PREFIX_}"/lib64/pkgconfig:${PKG_CONFIG_PATH}
@@ -233,9 +233,9 @@ source "${XBB}"/xbb.sh
 # The newly built binaries will be prefered.
 xbb_activate_dev()
 {
-  UNAME_ARCH=$(uname -p)
+  UNAME_ARCH=$(uname -m)
   PATH=${PATH:-""}
-  PATH=/opt/texlive/bin/${UNAME_ARCH}-linux:${PATH}
+  PATH=${HOME}/opt/texlive/bin/${UNAME_ARCH}-darwin:${PATH}
   export PATH="${XBB_BOOTSTRAP}"/bin:${PATH}
 
   LD_LIBRARY_PATH=${LD_LIBRARY_PATH:-""}

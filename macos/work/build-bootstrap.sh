@@ -38,11 +38,11 @@ IFS=$'\n\t'
 # PATH, for the programs to start, the LD_LIBRARY_PATH must also be set 
 # correctly.
 
-XBB_INPUT="/xbb-input"
+# XBB_INPUT="/xbb-input"
 XBB_DOWNLOAD="/tmp/xbb-download"
 XBB_TMP="/tmp/xbb"
 
-XBB="/opt/xbb-bootstrap"
+XBB="${HOME}/opt/xbb-bootstrap"
 XBB_BUILD="${XBB_TMP}"/bootstrap-build
 
 MAKE_CONCURRENCY=2
@@ -58,7 +58,7 @@ mkdir -p "${XBB_BUILD}"
 # -----------------------------------------------------------------------------
 
 # x86_64 or i686
-UNAME_ARCH=$(uname -p)
+UNAME_ARCH=$(uname -m)
 if [ "${UNAME_ARCH}" == "x86_64" ]
 then
   BITS="64"
@@ -67,20 +67,20 @@ then
   BITS="32"
 fi
 
-BUILD=${UNAME_ARCH}-linux-gnu
+BUILD=${UNAME_ARCH}-darwin
 
 # -----------------------------------------------------------------------------
 
 # Make all tools choose gcc, not the old cc.
-export CC=gcc
-export CXX=g++
+export CC=clang
+export CXX=clang++
 
 # -----------------------------------------------------------------------------
 
 # Note: __EOF__ is quoted to prevent substitutions here.
 cat <<'__EOF__' > "${XBB}"/xbb.sh
 
-export XBB_FOLDER="/opt/xbb-bootstrap"
+export XBB_FOLDER="${HOME}/opt/xbb-bootstrap"
 
 function xbb_activate_param()
 {
@@ -108,7 +108,7 @@ function xbb_activate_param()
   export LD_LIBRARY_PATH="${PREFIX_}"/lib:${LD_LIBRARY_PATH}
   export LDPATHFLAGS="-L${PREFIX_}/lib ${EXTRA_LDPATHFLAGS_}"
 
-  UNAME_ARCH=$(uname -p)
+  UNAME_ARCH=$(uname -m)
   if [ "${UNAME_ARCH}" == "x86_64" ]
   then
     export PKG_CONFIG_PATH="${PREFIX_}"/lib64/pkgconfig:${PKG_CONFIG_PATH}
@@ -125,7 +125,8 @@ function xbb_activate_param()
   export LDFLAGS="${LDPATHFLAGS} ${EXTRA_LDFLAGS_}"
 
   echo
-  echo "xPack Build Box Bootstrap activated! $(lsb_release -is) $(lsb_release -rs), $(gcc --version | grep gcc), $(ldd --version | grep ldd)"
+  # echo "xPack Build Box Bootstrap activated! $(lsb_release -is) $(lsb_release -rs), $(gcc --version | grep gcc), $(ldd --version | grep ldd)"
+  echo "xPack Build Box Bootstrap activated! $(gcc --version | grep gcc)"
   echo
   echo PATH=${PATH}
   echo
@@ -146,13 +147,14 @@ function xbb_activate_bootstrap()
   LD_LIBRARY_PATH=${LD_LIBRARY_PATH:-""}
   export LD_LIBRARY_PATH="${XBB_FOLDER}/lib:${LD_LIBRARY_PATH}"
 
-  UNAME_ARCH=$(uname -p)
+  UNAME_ARCH=$(uname -m)
   if [ "${UNAME_ARCH}" == "x86_64" ]
   then
     export LD_LIBRARY_PATH="${XBB_FOLDER}/lib64:${LD_LIBRARY_PATH}"
   fi
   echo
-  echo "xPack Build Box Bootstrap activated! $(lsb_release -is) $(lsb_release -rs)"
+  # echo "xPack Build Box Bootstrap activated! $(lsb_release -is) $(lsb_release -rs)"
+  echo "xPack Build Box Bootstrap activated!"
 }
 
 
@@ -161,12 +163,14 @@ function xbb_activate_bootstrap_dev()
   PREFIX_="${XBB_FOLDER}"
 
   # `-pipe` should make things faster, by using more memory.
-  EXTRA_CFLAGS_="-pipe -ffunction-sections -fdata-sections"
-  EXTRA_CXXFLAGS_="-pipe -ffunction-sections -fdata-sections"
+  EXTRA_CFLAGS_="-pipe -ffunction-sections -fdata-sections -arch x86_64"
+  EXTRA_CXXFLAGS_="-pipe -ffunction-sections -fdata-sections -arch x86_64"
   # Without -static-libstdc++ it'll pick up the out of date 
   # /usr/lib[64]/libstdc++.so.6
   # Do not use extra quotes around XBB_FOLDER, tools like guile fail.
-  EXTRA_LDFLAGS_="-static-libstdc++ -Wl,--gc-sections  -Wl,-rpath -Wl,${XBB_FOLDER}/lib" 
+  # EXTRA_LDFLAGS_="-static-libstdc++ -Wl,--gc-sections  -Wl,-rpath -Wl,${XBB_FOLDER}/lib" 
+  # macOS has no -static-libstdc++ -Wl,--gc-sections
+  EXTRA_LDFLAGS_="-Wl,-rpath -Wl,${XBB_FOLDER}/lib" 
 
   xbb_activate_param
 }
@@ -427,32 +431,33 @@ function do_openssl()
 
     xbb_activate_bootstrap_dev
 
-    ./config --help
+    # ./config --help
+    ./Configure darwin64-x86_64-cc --help
 
-    if [ "${UNAME_ARCH}" == 'x86_64' ]; then
-		  optflags='enable-ec_nistp_64_gcc_128'
-	  elif [ "${UNAME_ARCH}" == 'i686' ]; then
-		  optflags=''
-	  fi
-
-    ./config \
+    # -Wa,--noexecstack failed
+    # ./config 
+    ./Configure darwin64-x86_64-cc \
       --prefix="${XBB}" \
       --openssldir="${XBB}"/openssl \
       shared \
       no-ssl3-method \
-      ${optflags} \
-      "-Wa,--noexecstack ${CPPFLAGS} ${CFLAGS} ${LDFLAGS}"
+      enable-ec_nistp_64_gcc_128 \
+      "${CPPFLAGS} ${CFLAGS}"
     
-    make depend -j${MAKE_CONCURRENCY}
+    # Fails on macOS.
+    # make depend -j${MAKE_CONCURRENCY}
     make -j${MAKE_CONCURRENCY}
     make install_sw
 
-    strip --strip-all "${XBB}"/bin/openssl
+    strip "${XBB}"/bin/openssl
 
     if [ ! -f "${XBB}"/openssl/cert.pem ]
     then
       mkdir -p "${XBB}"/openssl
-      ln -s /etc/pki/tls/certs/ca-bundle.crt "${XBB}"/openssl/cert.pem
+      # Don't know where to get it on macOS.
+      # ln -s /etc/pki/tls/certs/ca-bundle.crt "${XBB}"/openssl/cert.pem
+      # security export -p -t certs -k `security list-keychains -d system|cut -d '"' -f 2` -o "${XBB}"/openssl/certs/cert.pem
+      curl --fail -L -o "${XBB}"/openssl/certs/cert.pem https://curl.haxx.se/ca/cacert.pem
     fi
   )
 
@@ -512,12 +517,12 @@ function do_curl()
       --enable-versioned-symbols \
       --enable-threaded-resolver \
       --with-gssapi \
-      --with-ca-bundle=/etc/pki/tls/certs/ca-bundle.crt
+      --with-ca-bundle="${XBB}"/openssl/certs/cacert.pem
     
     make -j${MAKE_CONCURRENCY}
     make install
 
-    strip --strip-all "${XBB}"/bin/curl
+    strip "${XBB}"/bin/curl
   )
 
   (
@@ -531,11 +536,62 @@ function do_curl()
 
 # -----------------------------------------------------------------------------
 
+function do_help2man() 
+{
+  # https://www.gnu.org/software/m4/
+  # http://ftp.sotirov-bg.net/pub/mirrors/gnu/help2man/
+  # https://aur.archlinux.org/cgit/aur.git/tree/PKGBUILD?h=m4-git
+
+  # 2017-09-23
+  XBB_HELP2MAN_VERSION="1.47.5"
+
+  XBB_HELP2MAN_FOLDER="help2man-${XBB_HELP2MAN_VERSION}"
+  XBB_HELP2MAN_ARCHIVE="${XBB_HELP2MAN_FOLDER}.tar.xz"
+  XBB_HELP2MAN_URL="http://ftp.sotirov-bg.net/pub/mirrors/gnu/help2man//${XBB_HELP2MAN_ARCHIVE}"
+
+  echo
+  echo "Building m4 ${XBB_HELP2MAN_VERSION}..."
+
+  cd "${XBB_BUILD}"
+
+  download_and_extract "${XBB_HELP2MAN_ARCHIVE}" "${XBB_HELP2MAN_URL}"
+
+  (
+    cd "${XBB_BUILD}/${XBB_HELP2MAN_FOLDER}"
+
+    xbb_activate_bootstrap_dev
+
+    ./configure --help
+
+    export CFLAGS="${CFLAGS}"
+    ./configure \
+      --prefix="${XBB}"
+    
+    make -j${MAKE_CONCURRENCY}
+    make install
+  )
+
+  (
+    xbb_activate_bootstrap
+
+    "${XBB}"/bin/help2man --version
+  )
+
+  hash -r
+}
+
+
+# -----------------------------------------------------------------------------
+
 function do_m4() 
 {
   # https://www.gnu.org/software/m4/
   # https://ftp.gnu.org/gnu/m4/
   # https://aur.archlinux.org/cgit/aur.git/tree/PKGBUILD?h=m4-git
+
+  # gnulib in macOS 10.13 crashes the executable when it is called with a 
+  # format string containing %n located in writable memory, because that 
+  # is a potential attack vector, and the older gnulib use it that way.
 
   # 2016-12-31
   XBB_M4_VERSION="1.4.18"
@@ -558,11 +614,14 @@ function do_m4()
 
     ./configure --help
 
+    ./bootstrap
+
+    export CFLAGS="${CFLAGS}"
     ./configure \
       --prefix="${XBB}"
     
     make -j${MAKE_CONCURRENCY}
-    make install-strip
+    make # install-strip
   )
 
   (
@@ -1161,7 +1220,7 @@ function do_cmake()
     make -j${MAKE_CONCURRENCY}
     make install
 
-    strip --strip-all "${XBB}"/bin/cmake
+    strip "${XBB}"/bin/cmake
   )
 
   (
@@ -1225,7 +1284,7 @@ function do_python()
     make -j${MAKE_CONCURRENCY} 
     make install
 
-    strip --strip-all "${XBB}"/bin/python
+    strip "${XBB}"/bin/python
   )
 
   (
@@ -1665,7 +1724,7 @@ do_cleaunup()
 
 # -----------------------------------------------------------------------------
 
-if true
+if false
 then
 
   # New zlib, it is used in most of the tools.
@@ -1678,12 +1737,40 @@ then
   do_tar # Requires xz.
 
   # From this moment on, .xz archives can be processed.
+fi
+
+if false
+then
 
   # New openssl, required by curl, cmake, python, etc.
   do_openssl
 
+fi
+
+if false
+then
+
+  do_autoconf
+  do_automake
+
+  do_libtool
+
+fi
+
+if false
+then
+
   # New curl, that better understands all protocols.
+  # requires autoconf & libtool
   do_curl
+
+fi
+
+if false
+then
+
+  # Required by m4 & bison
+  do_help2man
 
 fi
 
@@ -1691,15 +1778,34 @@ if true
 then
 
   # GNU tools. 
+
+  #  Illegal instruction: 4
   do_m4
+
+fi
+
+if false
+then
+
   do_gawk
-  do_autoconf
-  do_automake
   do_libtool
   do_gettext
   do_patch
   do_diffutils
+
+fi
+
+if false
+then
+
+  #  Illegal instruction: 4
   do_bison
+
+fi
+
+if false
+then
+
   do_make
 
   # Third party tools.
@@ -1712,7 +1818,7 @@ then
 
 fi
 
-if true
+if false
 then
 
   do_python
@@ -1720,7 +1826,7 @@ then
 
 fi
 
-if true
+if false
 then
 
   # Libraries, required by gcc.
@@ -1731,7 +1837,7 @@ then
 
 fi
 
-if true
+if false
 then
 
   # Native binutils and gcc.
@@ -1740,11 +1846,12 @@ then
 
 fi
 
-# Strip debug from *.a and *.so.
-do_strip_libs
 
-if true
+if false
 then
+
+  # Strip debug from *.a and *.so.
+  do_strip_libs
 
   do_cleaunup
 
