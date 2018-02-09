@@ -79,7 +79,7 @@ brew link flex --force
 brew link m4 --force
 brew link bison --force
 
-brew install gnu-tar
+brew install gnu-tar xz
 
 # OpenOCD does not build with gcc-7 :-(
 # brew install gcc
