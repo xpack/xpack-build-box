@@ -81,9 +81,13 @@ brew link bison --force
 
 brew install gnu-tar xz
 
-# Must be updated after xcode updates, to match the new location of 
-# system headers, otherwise builds fail complaining about cpp problems.
-brew install gcc@7
+# The off-the-shelf GCC has a problem on macOS and requires patching.
+if false
+then
+  # Must be updated after xcode updates, to match the new location of 
+  # system headers, otherwise builds fail complaining about cpp problems.
+  brew install gcc@7
+fi
 
 # -----------------------------------------------------------------------------
 
