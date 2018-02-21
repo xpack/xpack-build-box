@@ -64,7 +64,14 @@ source ${HOME}/opt/homebrew/xbb/xbb-source.sh
 xbb_activate
 ```
 
+### Hack
 
+The GCC 7 available from Homebrew has a problem and building GDB generates 
+faulty binaries (`set language auto` results in `SIGABRT`).
+
+ARMs solution is to use a patched version of GCC 7.2.0; this separate GCC is 
+built with `install-patched-gcc.sh`; binaries are suffixed with 
+`-7.2.0-patched`.
 
 
 

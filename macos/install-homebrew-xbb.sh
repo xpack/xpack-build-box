@@ -19,9 +19,9 @@ IFS=$'\n\t'
 
 # -----------------------------------------------------------------------------
 
-echo
-echo "Checking if Xcode Command Line Tools are installed..."
-xcode-select -p
+set +e
+xcode-select --install
+set -e
 
 # -----------------------------------------------------------------------------
 
@@ -81,8 +81,9 @@ brew link bison --force
 
 brew install gnu-tar xz
 
-# OpenOCD does not build with gcc-7 :-(
-# brew install gcc
+# Must be updated after xcode updates, to match the new location of 
+# system headers, otherwise builds fail complaining about cpp problems.
+brew install gcc@7
 
 # -----------------------------------------------------------------------------
 
@@ -125,3 +126,5 @@ __EOF__
 
 # To use Homebrew, add something like this to ~/.profile
 echo alias axbb=\'export PATH=${HB_PREFIX}/bin:\${PATH}\'
+
+echo "Also run install-patched-gcc.sh to install a patched 7.2.0."
