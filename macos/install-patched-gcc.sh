@@ -165,6 +165,9 @@ PROGRAM_SUFFIX="-${GCC_VERSION}-patched"
       --enable-languages=c,c++ \
       --enable-checking=release \
       --program-suffix="${PROGRAM_SUFFIX}" 
+  else
+    echo "Update script for other Darwin versions and rerun."
+    exit 1
   fi
   threads=$(sysctl -n hw.ncpu)
   caffeinate make -j${threads}
