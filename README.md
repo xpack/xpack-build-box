@@ -73,8 +73,19 @@ ARMs solution is to use a patched version of GCC 7.2.0; this separate GCC is
 built with `install-patched-gcc.sh`; binaries are suffixed with 
 `-7.2.0-patched`.
 
+### End-of-support schedule
 
+According to 
+[CentOS schedule](https://en.wikipedia.org/wiki/CentOS#End-of-support_schedule)
+version 6 will be supported up to Nov. 20120.
 
+After this date XBB will probably be updated to CentOS 7.
+
+### 32-bit support
+
+Existing support for 32-bit builds will be preserved for moment, 
+but most probably will no longer be present in the next version
+using CentOS 7.
 
 
 
