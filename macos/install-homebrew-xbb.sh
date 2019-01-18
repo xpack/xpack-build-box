@@ -89,6 +89,9 @@ then
   brew install gcc@7
 fi
 
+# To build the µOS++ reference pages
+brew install doxygen
+
 # -----------------------------------------------------------------------------
 
 cat <<'__EOF__' > "${HB_PREFIX}"/bin/pkg-config-verbose
