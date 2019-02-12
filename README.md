@@ -12,22 +12,29 @@ Generally, xPack binaries are available for the following platforms:
 - GNU/Linux 64-bits
 - macOS (Intel, 64-bits)
 
-For a repetitive and controllable build process, the Windows and GNU/Linux binaries are built using two Docker images (32/64-bits).
+For a repetitive and controllable build process, the Windows and GNU/Linux 
+binaries are built using two Docker images (32/64-bits).
 
 - ilegeul/centos:6-xbb-v1
 - ilegeul/centos32:6-xbb-v1
 
-The images are based on CentOS 6 (glibc 2.12), and the GNU/Linux binaries should run on most modern distributions.
+The images are based on CentOS 6 (glibc 2.12), and the GNU/Linux binaries 
+should run on most modern distributions.
 
-The Windows executables are created with mingw-w64 v5.0.3 and the mingw-w64 GCC 7.2, available from the same Docker images.
+The Windows executables are created with mingw-w64 v5.0.3 and the 
+mingw-w64 GCC 7.2, available from the same Docker images.
 
-The macOS binaries are generated on a macOS 10.10.5, plus a set of new GNU tools, installed in a custom instance of Homebrew. The TeX tools are also installed in a custom instance.
+The macOS binaries are generated on a macOS 10.10.5, plus a set of new 
+GNU tools, installed in a custom instance of Homebrew. The TeX tools 
+are also installed in a custom instance.
 
 ## How to use?
 
-Both on GNU/Linux and macOS, the XBB tools are installed in separate folders, and are fully distinct from the system tools.
+Both on GNU/Linux and macOS, the XBB tools are installed in separate 
+folders, and are fully distinct from the system tools.
 
-To access them, the application should update the `PATH` and `LD_LIBRARY_PATH` to prefer the newer XBB tools. 
+To access them, the application should update the `PATH` and 
+`LD_LIBRARY_PATH` to prefer the newer XBB tools. 
 
 Scripts defining some helper functions are available.
 
@@ -40,7 +47,9 @@ source "/opt/xbb/xhh.sh"
 xbb_activate
 ```
 
-The `xbb_activate` function can be called either for the entire lifespan of the script, or, for a better isolation, in inner scripts when the new tools are really needed.
+The `xbb_activate` function can be called either for the entire lifespan 
+of the script, or, for a better isolation, in inner scripts when the new 
+tools are really needed.
 
 ```bash
 source "/opt/xbb/xbb.sh"
@@ -57,7 +66,8 @@ fi
 
 ### macOS
 
-For macOS the recommended use case is similar, except the XBB tools are installed in the user HOME folder:
+For macOS the recommended use case is similar, except the XBB tools 
+are installed in the user HOME folder:
 
 ```bash
 source ${HOME}/opt/homebrew/xbb/xbb-source.sh
@@ -86,15 +96,3 @@ After this date XBB will probably be updated to CentOS 7.
 Existing support for 32-bit builds will be preserved for moment, 
 but most probably will no longer be present in the next version
 using CentOS 7.
-
-
-
-
-
-
-
-
-
-
-
-
