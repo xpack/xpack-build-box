@@ -8,6 +8,25 @@ packed in the Docker images.
 
 To build this Homebrew instance, clone the git and start the install scripts.
 
+### Prerequisites
+
+As usual with macOS, the compiler and other development tools are not
+available in the base system and need to be installed as part of the
+**Xcode Command Line Tools** package.
+
+### Remove macPorts or Homebrew from PATH
+
+To avoid unwanted versions of different programs to be inadvertently 
+used during builds, it is highly recommended to remove any additional 
+tools from the system PATH while running the XBB build script or the 
+later application build scripts.
+
+Preferably temporarily set the path to the minimum:
+
+```console
+$ PATH=/usr/bin:/bin:/usr/sbin:/sbin
+```
+
 ### Clone the repository
 
 ```console
@@ -37,19 +56,26 @@ typedef void (*dispatch_block_t)(void);
 
 This was true for macOS 10.13. More recent systems may have this already fixed.
 
+Recent systems do not allow changes to system files; to fix this file it is
+necessary to temporarily disable SIP by booting to the 
+Recovery System (hold down Apple-R while booting), and issuing
+`csrutil disable` in a terminal.
+
 ### Build Homebrew XBB
 
 ```console
 $ caffeinate bash "${HOME}/Downloads/xpack-build-box.git/macos/install-homebrew-xbb.sh"
 ```
 
-The build process takes quite a while. Since brew automatically updates 
-packages to the latest version, and there is no way to lock the build to
-certain versions, it is not guaranteed that the build succeeds. (That's 
-the reason why Docker builds are safer.)
+The build process takes quite a while. 
 
 The result of this step is a folder in user home (`${HOME}/opt/homebrew/xbb`).
 No files are stored in system locations.
+
+Warning: Since brew automatically updates 
+packages to the latest version, and there is no way to lock the build to
+certain versions, it is not guaranteed that the build succeeds. (That's 
+the reason why Docker builds are safer.)
 
 ### Build GCC 7
 
