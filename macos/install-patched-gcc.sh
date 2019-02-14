@@ -137,8 +137,8 @@ PROGRAM_SUFFIX="-${GCC_VERSION}-patched"
   mkdir -p "${BUILD_FOLDER_PATH}"
   cd "${BUILD_FOLDER_PATH}"
 
-  if [ "$(uname -r)" == "17.4.0" ]
-  then
+  case "$(uname -r)" in
+  "17.4.0" | "17.7.0" )
     bash ../${GCC_FOLDER_NAME}/configure \
       --prefix="${INSTALL_FOLDER_PATH}" \
       --with-gmp=${HOME}/opt/homebrew/xbb \
@@ -152,8 +152,8 @@ PROGRAM_SUFFIX="-${GCC_VERSION}-patched"
       --program-suffix="${PROGRAM_SUFFIX}" \
       --with-native-system-header-dir=/usr/include \
       --with-sysroot=$(xcode-select -print-path)/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk
-  elif [ "$(uname -r)" == "14.5.0" ]
-  then
+    ;;
+  "14.5.0" )
     bash ../${GCC_FOLDER_NAME}/configure \
       --prefix="${INSTALL_FOLDER_PATH}" \
       --with-gmp=${HOME}/opt/homebrew/xbb \
@@ -164,11 +164,14 @@ PROGRAM_SUFFIX="-${GCC_VERSION}-patched"
       --disable-nls \
       --enable-languages=c,c++ \
       --enable-checking=release \
-      --program-suffix="${PROGRAM_SUFFIX}" 
-  else
+      --program-suffix="${PROGRAM_SUFFIX}"
+    ;;
+  *)
     echo "Update script for other Darwin versions and rerun."
     exit 1
-  fi
+    ;;
+  esac
+  
   threads=$(sysctl -n hw.ncpu)
   caffeinate make -j${threads}
 
