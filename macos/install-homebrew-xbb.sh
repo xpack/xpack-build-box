@@ -20,6 +20,20 @@ IFS=$'\n\t'
 # -----------------------------------------------------------------------------
 
 set +e
+which_brew=$(which brew)
+if [ ! -z "${which_brew}" ]
+then
+  echo
+  echo "'${which_brew}' found in PATH."
+  echo "Remove '$(dirname ${which_brew})' from PATH and try again..."
+  exit 1
+fi
+set -e
+
+# -----------------------------------------------------------------------------
+
+set +e
+echo
 xcode-select --install
 set -e
 
@@ -28,24 +42,37 @@ set -e
 HB_PREFIX=${HB_PREFIX:-"$HOME/opt/homebrew/xbb"}
 export HOMEBREW_NO_EMOJI=1
 
-echo "Recreating \"${HB_PREFIX}\"..."
-rm -rf "${HB_PREFIX}"
+echo
+if [ -d "${HB_PREFIX}" ]
+then
+  echo "Recreating '${HB_PREFIX}'..."
+  rm -rf "${HB_PREFIX}"
+else
+  echo "Creating '${HB_PREFIX}'..."
+fi
 mkdir -p "${HB_PREFIX}"
 
 PATH=${HB_PREFIX}/bin:${PATH}
 
 # -----------------------------------------------------------------------------
 
-bash -c "(curl -L https://github.com/Homebrew/homebrew/tarball/master | \
-  tar -x -v --strip 1 -C "${HB_PREFIX}" -f -)"
+# If neded, it is possible to lock o a specific version, but the problem
+# is related to formulas, not the core.
+# master_url=https://github.com/Homebrew/brew/archive/2.0.1.tar.gz
+
+master_url=https://github.com/Homebrew/brew/tarball/master
+
+echo
+echo "Downloading and unpacking Homebrew/brew..."
+bash -c "(curl -L ${master_url} | \
+  tar -x --strip 1 -C "${HB_PREFIX}" -f -)"
   
 brew --version
 
-echo "Updating homebrew..."
-rm -rf "${HB_PREFIX}/share/doc/homebrew"
-brew update
-
 # -----------------------------------------------------------------------------
+
+if true
+then
 
 brew install curl
 brew link curl --force
@@ -92,6 +119,8 @@ fi
 # To build the µOS++ reference pages
 brew install doxygen
 
+fi
+
 # -----------------------------------------------------------------------------
 
 cat <<'__EOF__' > "${HB_PREFIX}"/bin/pkg-config-verbose
@@ -128,10 +157,23 @@ function xbb_activate()
 
 __EOF__
 
+# -----------------------------------------------------------------------------
+
+echo
+echo curl --version
+curl --version
+
+echo
+echo cmake --version
+cmake --version
 
 # -----------------------------------------------------------------------------
 
 # To use Homebrew, add something like this to ~/.profile
+echo
 echo alias axbb=\'export PATH=${HB_PREFIX}/bin:\${PATH}\'
 
-echo "Also run install-patched-gcc.sh to install a patched 7.2.0."
+echo
+echo "Don't forget to run install-patched-gcc.sh to install a patched GCC 7.2.0."
+
+# -----------------------------------------------------------------------------

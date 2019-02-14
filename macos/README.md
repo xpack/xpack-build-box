@@ -24,7 +24,7 @@ later application build scripts.
 Preferably temporarily set the path to the minimum:
 
 ```console
-$ PATH=/usr/bin:/bin:/usr/sbin:/sbin
+$ export PATH=/usr/bin:/bin:/usr/sbin:/sbin
 ```
 
 ### Clone the repository
