@@ -33,7 +33,7 @@ for free from
 Select the `.deb` file, and install it:
 
 ```console
-$ sudo apt install code_1.31.1-1549938243_amd64.deb
+$ sudo apt install ~/Downloads/code_1.31.1-1549938243_amd64.deb
 ```
 
 Preferably add it to the tool bar, for convenient access.
@@ -47,7 +47,7 @@ Git Kraken, which can be downloaded for free from
 Select the `.deb` file, and install it:
 
 ```console
-$ sudo apt install gitkraken-amd64.deb
+$ sudo apt install ~/Downloads/gitkraken-amd64.deb
 ```
 
 Preferably add it to the tool bar, for convenient access.
