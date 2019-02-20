@@ -1,6 +1,13 @@
 # XBB (xPack Build Box)
 
-Tools to build the xPack binary distributions.
+There are two types of builds:
+
+- local/native builds
+- distribution builds
+  
+These tools were initially intended for the xPack binary distributions,
+but later were extended to support native builds for development purposes
+(see the `ubuntu` folder).
 
 ## Overview
 
@@ -43,7 +50,7 @@ Scripts defining some helper functions are available.
 The recommended use on GNU/Linux is:
 
 ```bash
-source "/opt/xbb/xhh.sh"
+source "/opt/xbb/xbb.sh"
 xbb_activate
 ```
 
@@ -74,7 +81,7 @@ source ${HOME}/opt/homebrew/xbb/xbb-source.sh
 xbb_activate
 ```
 
-### Hack
+### Hacks
 
 The GCC 7 available from Homebrew has a problem and building GDB generates 
 faulty binaries (`set language auto` results in `SIGABRT`).
