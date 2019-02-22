@@ -66,16 +66,23 @@ libmpc-dev \
 libisl-dev \
 libffi-dev \
 libiconv-hook-dev \
+libxml2-dev \
 
 # -----------------------------------------------------------------------------
 
-# Additional libraries needed by QEMU builds.
+# Packages needed by QEMU builds.
 apt install --yes \
+gettext \
 libpng-dev \
 libjpeg-dev \
 libsdl2-dev \
 libsdl2-image-dev \
 libpixman-1-dev \
+libglib2.0-dev \
+zlib1g-dev \
+libffi-dev \
+libxml2-dev \
+zlib1g-dev \
 libglib2.0-dev \
 
 # -----------------------------------------------------------------------------
