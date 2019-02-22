@@ -94,6 +94,8 @@ GCC_URL="https://ftp.gnu.org/gnu/gcc/${GCC_FOLDER_NAME}/${GCC_ARCHIVE}"
 if [ ! -f "${WORK_FOLDER_PATH}/${GCC_FOLDER_NAME}" ]
 then
   (
+    xbb_activate
+
     cd "${WORK_FOLDER_PATH}"
     download_and_extract "${GCC_URL}" "${GCC_ARCHIVE}" "${GCC_FOLDER_NAME}"
 
