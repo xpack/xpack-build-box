@@ -72,10 +72,14 @@ The build process takes quite a while.
 The result of this step is a folder in user home (`${HOME}/opt/homebrew/xbb`).
 No files are stored in system locations.
 
-Warning: Since brew automatically updates 
-packages to the latest version, and there is no way to lock the build to
-certain versions, it is not guaranteed that the build succeeds. (That's 
-the reason why Docker builds are safer.)
+Since Homebrew does not allow to explicitly install a specific version of 
+a package, the workaround is to revert to a specific date which is known 
+to have functional packages. This is done by checking out a specific 
+commit id from the homebrew-core repository.
+
+Warning: Since brew automatically updates itself to the latest version, 
+it is not guaranteed that the build succeeds. (That's 
+the reason why Docker builds are significantly much safer.)
 
 ### Build GCC 7
 
@@ -97,6 +101,34 @@ read-only.
 
 ```console
 $ chmod -R -w ${HOME}/opt/homebrew/xbb
+```
+
+### Actual versions
+
+The following packages were used for QEMU:
+
+```console
+$ brew list --versions \
+libpng \
+jpeg \
+sdl2 \
+sdl2_image \
+pixman \
+glib \
+libffi \
+libxml2 \
+libiconv \
+
+glib 2.58.3
+jpeg 9c
+libffi 3.2.1
+libiconv 1.15
+libpng 1.6.36
+libxml2 2.9.9_2
+pixman 0.38.0
+sdl2 2.0.9
+sdl2_image 2.0.4
+
 ```
 
 ## Install TeX
