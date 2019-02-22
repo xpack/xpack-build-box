@@ -110,6 +110,8 @@ cat <<'__EOF__' > "${XBB_FOLDER}"/bin/xbb-source.sh
 
 export XBB_FOLDER=/opt/xbb
 
+# Allow binaries from XBB to be found before all other.
+# Includes and pkg_config should be enabled only when needed.
 function xbb_activate()
 {
   PATH=${PATH:-""}
@@ -117,6 +119,25 @@ function xbb_activate()
 
   LD_LIBRARY_PATH=${LD_LIBRARY_PATH:-""}
   export LD_LIBRARY_PATH="${XBB_FOLDER}/lib:${LD_LIBRARY_PATH}"
+}
+
+# Allow for the headers and pkg_config files to be found before all other.
+function xbb_activate_dev()
+{
+  EXTRA_CPPFLAGS=${EXTRA_CPPFLAGS:-""}
+
+  if [ ! -z "${PKG_CONFIG_PATH}" ]
+  then
+    if [ -d "/usr/lib/pkgconfig" ]
+    then
+      PKG_CONFIG_PATH="/usr/lib/pkgconfig"
+    fi
+  fi
+  if [ \( "${TARGET_BITS}" == "64" \) -a \( -d "/usr/lib/x86_64-linux-gnu/pkgconfig" \) ]
+  then
+    PKG_CONFIG_PATH=/usr/lib/x86_64-linux-gnu/pkgconfig:"${PKG_CONFIG_PATH}"
+  fi
+  export PKG_CONFIG_PATH
 }
 
 __EOF__
