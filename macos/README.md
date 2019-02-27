@@ -1,10 +1,17 @@
 
 ## The macOS XBB
 
-When running on macOS, the build scripts do not use Docker; instead,
+### Overview
+
+When running on macOS, the build scripts do not use Docker, since there
+are no macOS Docker images; instead,
 a custom Homebrew is expected in a specific folder 
 (`${HOME}/opt/homebrew/xbb`), which includes the same tools as 
 packed in the Docker images.
+
+The reason for a separate image is that, in order to achieve consistent and 
+reproducible results, the tools in the XBB instance must be locked to
+certain versions, and no updates should be performed. 
 
 To build this Homebrew instance, clone the git and start the install scripts.
 
@@ -12,7 +19,7 @@ To build this Homebrew instance, clone the git and start the install scripts.
 
 As usual with macOS, the compiler and other development tools are not
 available in the base system and need to be installed as part of the
-**Xcode Command Line Tools** package.
+**Xcode Command Line Tools** package, available from Apple.
 
 ### Remove macPorts or Homebrew from PATH
 
@@ -30,15 +37,19 @@ $ export PATH=/usr/bin:/bin:/usr/sbin:/sbin
 ### Clone the repository
 
 ```console
-$ git clone https://github.com/xpack/xpack-build-box.git ${HOME}/Downloads/xpack-build-box.git
+$ rm "${HOME}"/Downloads/xpack-build-box.git
+$ git clone https://github.com/xpack/xpack-build-box.git \
+  "${HOME}"/Downloads/xpack-build-box.git
 ```
 
 ### Patches
 
-To make the build pass, one of the system headers (`/usr/include/dispatch/object.h`) 
-may require a small patch, to make it palatable for C too, not only for Objective-C.
+This step should normally not be needed, but on some system versions and/or
+Homebrew versions, the Homebrew build fails with an error related to the 
+system header `/usr/include/dispatch/object.h`, which has a bug, one of the 
+definitions is available only for Objective-C, and not for C.
 
-Instead of:
+To make the build pass, the file must be edited, and instead of:
 
 ```c
 typedef void (^dispatch_block_t)(void);
@@ -54,17 +65,24 @@ typedef void (*dispatch_block_t)(void);
 #endif
 ```
 
-This was true for macOS 10.13. More recent systems may have this already fixed.
+This was true for macOS 10.13. More recent systems may have this 
+file already fixed.
+
+#### SIP
 
 Recent systems do not allow changes to system files; to fix this file it is
 necessary to temporarily disable SIP by booting to the 
 Recovery System (hold down Apple-R while booting), and issuing
 `csrutil disable` in a terminal.
 
+After fixing the file, be sure you restore the secure SIP setting 
+(`csrutil enable`).
+
 ### Build Homebrew XBB
 
 ```console
-$ caffeinate bash "${HOME}/Downloads/xpack-build-box.git/macos/install-homebrew-xbb.sh"
+$ caffeinate bash "${HOME}"/Downloads/xpack-build-box.git/macos/install-homebrew-xbb.sh
+$ bash "${HOME}"/Downloads/xpack-build-box.git/macos/add-xbb-extras.sh
 ```
 
 The build process takes quite a while. 
@@ -81,9 +99,13 @@ Warning: Since brew automatically updates itself to the latest version,
 it is not guaranteed that the build succeeds. (That's 
 the reason why Docker builds are significantly much safer.)
 
-### Build GCC 7
+### Build a patched GCC 7
 
-The current packages build scripts are based on GCC 7. Unfortunately, 
+This step is required only for building distribution builds on macOS 10.10;
+for native builds on macOS 10.13, like for QEMU, the Homebrew GCC 7 proved 
+to be ok.
+
+The current xPack build scripts are based on GCC 7.2. Unfortunately, 
 the standard version provided by Homebrew has a problem, and requires a patch.
 
 To build the patched GCC 7, use the following script:
@@ -103,7 +125,33 @@ read-only.
 $ chmod -R -w ${HOME}/opt/homebrew/xbb
 ```
 
-### Actual versions
+### How to use?
+
+The recommended use is similar to all other XBBs:
+
+```bash
+# At init time.
+source "${HOME}/opt/homebrew/xbb/xbb-source.sh"
+
+(
+  # When needed; preferably in a sub-shell.
+  xbb_activate
+
+  ../configure
+  make
+)
+```
+
+## The `xbb-source.sh` script
+
+See the parent [`README.md`](../README.md).
+
+## The `pkg-config-verbose` script
+
+See the parent [`README.md`](../README.md).
+
+
+### Actual libraries versions
 
 The following packages were used for QEMU:
 
@@ -134,10 +182,11 @@ sdl2_image 2.0.4
 ## Install TeX
 
 TeX is used to generate the documentation. For development builds, to 
-speed up things, the manuals can be skipped, so this step is not mandatory.
+speed up things, creating the manuals can be skipped, so this step is 
+not mandatory.
 
 ```console
-$ caffeinate bash "${HOME}/Downloads/xpack-build-box.git/macos/install-texlive.sh"
+$ caffeinate bash "${HOME}"/Downloads/xpack-build-box.git/macos/install-texlive.sh
 ```
 
 The TeX install script is locked to a certain version, but depends on the

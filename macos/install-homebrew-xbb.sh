@@ -35,7 +35,7 @@ script_folder=$(dirname $0)
 # -----------------------------------------------------------------------------
 # Definitions.
 
-HB_PREFIX=${HB_PREFIX:-"${HOME}/opt/homebrew/xbb"}
+XBB_FOLDER=${XBB_FOLDER:-"${HOME}/opt/homebrew/xbb"}
 
 macos_version=$(defaults read loginwindow SystemVersionStampAsString)
 xcode_version=$(xcodebuild -version | grep Xcode | sed -e 's/Xcode //')
@@ -145,17 +145,17 @@ set -e
 # -----------------------------------------------------------------------------
 
 echo
-if [ -d "${HB_PREFIX}" ]
+if [ -d "${XBB_FOLDER}" ]
 then
-  echo "Renaming existing '${HB_PREFIX}' -> '${HB_PREFIX}.bak'..."
-  rm -rf "${HB_PREFIX}.bak"
-  mv "${HB_PREFIX}" "${HB_PREFIX}.bak"
+  echo "Renaming existing '${XBB_FOLDER}' -> '${XBB_FOLDER}.bak'..."
+  rm -rf "${XBB_FOLDER}.bak"
+  mv "${XBB_FOLDER}" "${XBB_FOLDER}.bak"
 fi
 
-echo "Creating '${HB_PREFIX}'..."
-mkdir -p "${HB_PREFIX}"
+echo "Creating '${XBB_FOLDER}'..."
+mkdir -p "${XBB_FOLDER}"
 
-PATH=${HB_PREFIX}/bin:${PATH}
+PATH=${XBB_FOLDER}/bin:${PATH}
 
 # -----------------------------------------------------------------------------
 # Install the Homebrew tools.
@@ -168,12 +168,12 @@ then
 
   echo
   echo "Downloading and unpacking Homebrew/brew..."
-  bash -c "(curl -L ${brew_master_url} | tar -x --strip 1 -C "${HB_PREFIX}" -f -)"
+  bash -c "(curl -L ${brew_master_url} | tar -x --strip 1 -C "${XBB_FOLDER}" -f -)"
 else
   # brew_git_commit_id="1.5.4"
-  folder_name="$(basename "${HB_PREFIX}")"
+  folder_name="$(basename "${XBB_FOLDER}")"
 
-  cd "$(dirname "${HB_PREFIX}")"
+  cd "$(dirname "${XBB_FOLDER}")"
 
   echo
   echo "Cloning Homebrew/brew..."
@@ -182,7 +182,7 @@ else
   cd "${folder_name}"
   git checkout -b xbb ${brew_git_commit_id}
 
-  cd "${HB_PREFIX}"
+  cd "${XBB_FOLDER}"
   mkdir -p Library/Taps/homebrew
   cd Library/Taps/homebrew
 
@@ -294,6 +294,8 @@ then
     brew install mpfr
   fi
 
+  brew install gdb
+
   # To build the µOS++ reference pages
   brew install doxygen
 
@@ -336,64 +338,20 @@ then
 fi
 
 # -----------------------------------------------------------------------------
-# Create a more verbose pkg-config.
-
-cat <<'__EOF__' > "${HB_PREFIX}"/bin/pkg-config-verbose
-#! /bin/sh
-# pkg-config wrapper for debug
-
-pkg-config $@
-RET=$?
-OUT=$(pkg-config $@)
-echo "($PKG_CONFIG_PATH) | pkg-config $@ -> $RET [$OUT]" 1>&2
-exit ${RET}
-
-__EOF__
-
-chmod +x "${HB_PREFIX}"/bin/pkg-config-verbose
-
-# -----------------------------------------------------------------------------
-# Create the XBB activator script.
-
-cat <<'__EOF__' > "${HB_PREFIX}"/bin/xbb-source.sh
-
-export XBB_FOLDER="${HOME}"/opt/homebrew/xbb
-export TEXLIVE_FOLDER="${HOME}"/opt/texlive
-
-# Allow binaries from XBB to be found before all other.
-# Includes and pkg_config should be enabled only when needed.
-function xbb_activate()
-{
-  PATH=${PATH:-""}
-  PATH=${TEXLIVE_FOLDER}/bin/$(uname -m)-darwin:${PATH}
-  PATH="${XBB_FOLDER}"/opt/gnu-tar/libexec/gnubin:${PATH}
-  export PATH="${XBB_FOLDER}"/bin:${PATH}
-
-  LD_LIBRARY_PATH=${LD_LIBRARY_PATH:-""}
-  export LD_LIBRARY_PATH="${XBB_FOLDER}/lib:${LD_LIBRARY_PATH}"
-}
-
-# Allow for the headers and pkg_config files to be found before all other.
-function xbb_activate_dev()
-{
-  EXTRA_CPPFLAGS=${EXTRA_CPPFLAGS:-""}
-  export EXTRA_CPPFLAGS="-I${XBB_FOLDER}/include ${EXTRA_CPPFLAGS}"
-
-  export PKG_CONFIG_PATH="${XBB_FOLDER}/lib/pkgconfig:${PKG_CONFIG_PATH}"
-}
-
-__EOF__
-
-# -----------------------------------------------------------------------------
 
 # To use Homebrew, add something like this to ~/.profile
 echo
-echo alias axbb=\'export PATH=${HB_PREFIX}/bin:\${PATH}; export HOMEBREW_NO_AUTO_UPDATE=1\'
+echo alias axbb=\'export PATH=${XBB_FOLDER}/bin:\${PATH}; export HOMEBREW_NO_AUTO_UPDATE=1\'
 
 if [ "$install_gcc" != "y" ]
 then
   echo
   echo "Don't forget to run install-patched-gcc.sh to install a patched GCC 7.2.0."
 fi
+
+echo cat ~/.gdbinit
+cat ~/.gdbinit
+echo 'echo "set startup-with-shell off" >> ~/.gdbinit'
+echo 'To codesign gdb: https://sourceware.org/gdb/wiki/BuildingOnDarwin'
 
 # -----------------------------------------------------------------------------

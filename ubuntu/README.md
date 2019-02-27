@@ -9,19 +9,24 @@ be as fast as reasonably possible.
 For this, the build environment should use the tools and libraries 
 available in the host machine and do not build any of them from sources.
 
-### How to install?
+### Prerequisites
 
-The current procedure was tested on an Ubuntu 18LTS 64-bit virtual
-machine running on VirtualBox, but should work with physical systems too.
+The current procedure was tested on an Ubuntu 18 LTS 64-bit virtual
+machine running on VirtualBox, but should work on any virtualisation
+platform, or even with a physical systems.
 
 For virtual machines, to keep the space requirements low, preferably 
 install a **minimal** system (select this during the install).
 
+### How to install?
+
 ```console
-$ rm -rf ~/Downloads/xpack-build-box.git
+$ rm -rf "${HOME}"/Downloads/xpack-build-box.git
 $ git clone --recurse-submodules https://github.com/xpack/xpack-build-box.git \
-  ~/Downloads/xpack-build-box.git
-$ sudo bash ~/Downloads/xpack-build-box.git/ubuntu/install-xbb.sh
+  "${HOME}"/Downloads/xpack-build-box.git
+
+$ sudo bash "${HOME}"/Downloads/xpack-build-box.git/ubuntu/install-xbb.sh
+$ sudo bash "${HOME}"/Downloads/xpack-build-box.git/ubuntu/add-xbb-extras.sh
 ```
 
 It takes a few minutes to install all system requirements.
@@ -72,11 +77,28 @@ even the command line one.
 The recommended use is similar to all other XBBs:
 
 ```bash
+# At init time.
 source "/opt/xbb/xbb-source.sh"
-xbb_activate
+
+(
+  # When needed; preferably in a sub-shell.
+  xbb_activate
+
+  ../configure
+  make
+)
 ```
 
-### Package versions
+## The `xbb-source.sh` script
+
+See the parent [`README.md`](../README.md).
+
+## The `pkg-config-verbose` script
+
+See the parent [`README.md`](../README.md).
+
+
+### Actual libraries versions
 
 On Ubuntu 18LTS, the following packages were used for QEMU:
 
