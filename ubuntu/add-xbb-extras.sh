@@ -44,12 +44,15 @@ mkdir -p "${XBB_FOLDER}"/bin
 # -----------------------------------------------------------------------------
 # Create a more verbose pkg-config.
 
+echo
+echo "Copying ${XBB_FOLDER}/bin/pkg-config-verbose..."
 cp "$(dirname "${script_folder_path}")"/scripts/pkg-config-verbose "${XBB_FOLDER}"/bin
 chmod +x "${XBB_FOLDER}"/bin/pkg-config-verbose
 
 # -----------------------------------------------------------------------------
 # Create the XBB activator script.
 
+echo "Creating ${XBB_FOLDER}/xbb-source.sh..."
 cat <<'__EOF__' > "${XBB_FOLDER}"/xbb-source.sh
 
 export XBB_FOLDER=/opt/xbb
