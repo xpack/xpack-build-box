@@ -50,7 +50,7 @@ chmod +x "${XBB_FOLDER}"/bin/pkg-config-verbose
 # -----------------------------------------------------------------------------
 # Create the XBB activator script.
 
-cat <<'__EOF__' > "${XBB_FOLDER}"/bin/xbb-source.sh
+cat <<'__EOF__' > "${XBB_FOLDER}"/xbb-source.sh
 
 export XBB_FOLDER="${HOME}"/opt/homebrew/xbb
 export TEXLIVE_FOLDER="${HOME}"/opt/texlive
