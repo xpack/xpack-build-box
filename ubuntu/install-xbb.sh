@@ -82,8 +82,11 @@ libglib2.0-dev \
 zlib1g-dev \
 libffi-dev \
 libxml2-dev \
-zlib1g-dev \
-libglib2.0-dev \
+
+# -----------------------------------------------------------------------------
+
+# Optional, to check if Windows binaries start properly.
+apt install --yes win64
 
 # -----------------------------------------------------------------------------
 
