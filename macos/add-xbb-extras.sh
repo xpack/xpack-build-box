@@ -71,15 +71,27 @@ function xbb_activate()
   export LD_LIBRARY_PATH="${XBB_FOLDER}/lib:${LD_LIBRARY_PATH}"
 }
 
-# Allow for the headers and pkg_config files to be found before all other.
-function xbb_activate_dev()
+# Allow for pkg_config files to be found before all other.
+function xbb_activate_pkgconfig()
 {
-  EXTRA_CPPFLAGS=${EXTRA_CPPFLAGS:-""}
-  export EXTRA_CPPFLAGS="-I${XBB_FOLDER}/include ${EXTRA_CPPFLAGS}"
-
   export PKG_CONFIG_PATH="${XBB_FOLDER}/lib/pkgconfig:${PKG_CONFIG_PATH}"
 
   export PKG_CONFIG=pkg-config-verbose
+}
+
+# Add the XBB include folders to the preprocessor defs.
+function xbb_activate_includes()
+{
+  EXTRA_CPPFLAGS=${EXTRA_CPPFLAGS:-""}
+
+  export EXTRA_CPPFLAGS="-I${XBB_FOLDER}/include ${EXTRA_CPPFLAGS}"
+}
+
+# Make the build use the XBB libs & includes.
+function xbb_activate_dev()
+{
+  xbb_activate_pkgconfig
+  xbb_activate_includes
 }
 
 __EOF__
