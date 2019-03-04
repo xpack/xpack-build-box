@@ -349,8 +349,14 @@ then
   echo "Don't forget to run install-patched-gcc.sh to install a patched GCC 7.2.0."
 fi
 
-echo cat ~/.gdbinit
-cat ~/.gdbinit
+if [ -f ~/.gdbinit ]
+then
+  echo cat ~/.gdbinit
+  cat ~/.gdbinit
+else
+  echo "No .gdbinit, creating one."
+  touch ~/.gdbinit
+fi
 echo 'echo "set startup-with-shell off" >> ~/.gdbinit'
 echo 'To codesign gdb: https://sourceware.org/gdb/wiki/BuildingOnDarwin'
 
