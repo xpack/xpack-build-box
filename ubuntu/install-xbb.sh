@@ -86,7 +86,12 @@ libxml2-dev \
 # -----------------------------------------------------------------------------
 
 # Optional, to check if Windows binaries start properly.
-apt install --yes win64
+# On 32-bit machines it is win32.
+if [ -z "$(which wsl.exe)" ]
+then
+  # If not on WSL, install wine.
+  apt install --yes wine64
+fi
 
 # -----------------------------------------------------------------------------
 
