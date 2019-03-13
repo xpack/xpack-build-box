@@ -12,10 +12,11 @@ This step installs the newly created tools in `/opt/xbb`, using several temporar
 
 To use the new tools, add `/opt/xpp/bin` to the path and adjust the include and library search paths.
 
-To simplify things, use the functions provided by the `xbb.sh` bash script:
+To simplify things, use the functions provided by the `xbb-source.sh` bash 
+script (was named `xbb.sh` in the initial version):
 
 ```console
-$ source /opt/xbb/xbb.sh
+$ source /opt/xbb/xbb-source.sh
 $ xbb_activate
 xPack Build Box activated! CentOS 6.9, gcc (GCC) 7.2.0, ldd (GNU libc) 2.12
 
@@ -36,20 +37,6 @@ LD_LIBRARY_PATH=/opt/xbb/lib
 PKG_CONFIG_PATH=/opt/xbb/lib/pkgconfig:/usr/lib/pkgconfig
 ```
 
-or 
-
-```console
-$ source /opt/xbb/xbb.sh
-$ xbb_activate_static
-```
-
-or 
-
-```console
-$ source /opt/xbb/xbb.sh
-$ xbb_activate_shared
-```
-
 ### Developer
 
 #### Create
@@ -58,24 +45,24 @@ To create the Docker image locally, use:
 
 ```console
 $ cd ...
-$ docker build --squash --tag "ilegeul/centos:6-xbb-v1" -f Dockerfile-v1 .
-$ docker build --squash --tag "ilegeul/centos32:6-xbb-v1" -f Dockerfile32-v1 .
+$ docker build --tag "ilegeul/centos:6-xbb-v1" -f Dockerfile-v1 .
+$ docker build --tag "ilegeul/centos32:6-xbb-v1" -f Dockerfile32-v1 .
 ```
 
 On macOS, to prevent entering sleep, use:
 
 ```console
-$ caffeinate docker build --squash --tag "ilegeul/centos:6-xbb-v1" -f Dockerfile-v1 .
-$ caffeinate docker build --squash --tag "ilegeul/centos32:6-xbb-v1" -f Dockerfile32-v1 .
+$ caffeinate docker build --tag "ilegeul/centos:6-xbb-v1" -f Dockerfile-v1 .
+$ caffeinate docker build --tag "ilegeul/centos32:6-xbb-v1" -f Dockerfile32-v1 .
 ```
 
 To create a second, third, etc version:
 
 ```console
-$ caffeinate docker build --squash --tag "ilegeul/centos:6-xbb-v2" -f Dockerfile-v2 .
-$ caffeinate docker build --squash --tag "ilegeul/centos:6-xbb-v3" -f Dockerfile-v3 .
-$ caffeinate docker build --squash --tag "ilegeul/centos32:6-xbb-v2" -f Dockerfile32-v2 .
-$ caffeinate docker build --squash --tag "ilegeul/centos32:6-xbb-v3" -f Dockerfile32-v3 .
+$ caffeinate docker build --tag "ilegeul/centos:6-xbb-v2" -f Dockerfile-v2 .
+$ caffeinate docker build --tag "ilegeul/centos:6-xbb-v3" -f Dockerfile-v3 .
+$ caffeinate docker build --tag "ilegeul/centos32:6-xbb-v2" -f Dockerfile32-v2 .
+$ caffeinate docker build --tag "ilegeul/centos32:6-xbb-v3" -f Dockerfile32-v3 .
 ```
 
 #### Test
@@ -98,12 +85,17 @@ $ docker push "ilegeul/centos:6-xbb-v1"
 $ docker push "ilegeul/centos32:6-xbb-v1"
 ```
 
+```console
+$ docker push "ilegeul/centos:6-xbb-v2"
+$ docker push "ilegeul/centos32:6-xbb-v2"
+```
+
 #### Copy & Paste
 
 ```bash
-caffeinate docker build --squash --tag "ilegeul/centos:6-xbb-v1" -f Dockerfile-v1 .
+caffeinate docker build --tag "ilegeul/centos:6-xbb-v1" -f Dockerfile-v1 .
 docker push "ilegeul/centos:6-xbb-v1"
-caffeinate docker build --squash --tag "ilegeul/centos32:6-xbb-v1" -f Dockerfile32-v1 .
+caffeinate docker build --tag "ilegeul/centos32:6-xbb-v1" -f Dockerfile32-v1 .
 docker push "ilegeul/centos32:6-xbb-v1"
 
 ```
