@@ -830,7 +830,7 @@ function do_wine()
     # As a side effect, the "${HOME}/.wine" folder is created
     # and populated with lots of files., so subsequent runs
     # will no longer have to do it.
-    "${XBB_FOLDER}/bin/wine" "${XBB_FOLDER}/lib/wine/fakedlls/netstat.exe"
+    "${XBB_FOLDER}/bin/wine" "${XBB_FOLDER}"/lib*/wine/fakedlls/netstat.exe
   )
 
   hash -r
