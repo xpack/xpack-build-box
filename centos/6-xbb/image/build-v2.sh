@@ -808,6 +808,7 @@ function do_wine()
       \
       --without-freetype \
       --without-x \
+      --with-png
     
     make -j${MAKE_CONCURRENCY} STRIP=true
     make install
