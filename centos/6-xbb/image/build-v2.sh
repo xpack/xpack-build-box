@@ -418,8 +418,8 @@ function do_mingw_all()
   # The original SourceForge location.
   XBB_MINGW_FOLDER_NAME="mingw-w64-v${XBB_MINGW_VERSION}"
   XBB_MINGW_ARCHIVE="${XBB_MINGW_FOLDER_NAME}.tar.bz2"
-  XBB_MINGW_URL="https://sourceforge.net/projects/mingw-w64/files/mingw-w64/mingw-w64-release/${XBB_MINGW_ARCHIVE}"
-  # XBB_MINGW_URL="https://github.com/gnu-mcu-eclipse/files/raw/master/libs/${XBB_MINGW_ARCHIVE}"
+  # XBB_MINGW_URL="https://sourceforge.net/projects/mingw-w64/files/mingw-w64/mingw-w64-release/${XBB_MINGW_ARCHIVE}"
+  XBB_MINGW_URL="https://github.com/gnu-mcu-eclipse/files/raw/master/libs/${XBB_MINGW_ARCHIVE}"
   
   # If SourceForge is down, there is also a GitHub mirror.
   # https://github.com/mirror/mingw-w64
@@ -739,7 +739,8 @@ function do_libpng()
 
   XBB_LIBPNG_FOLDER_NAME="libpng-${XBB_LIBPNG_VERSION}"
   XBB_LIBPNG_ARCHIVE="${XBB_LIBPNG_FOLDER_NAME}.tar.xz"
-  XBB_LIBPNG_URL="https://sourceforge.net/projects/libpng/files/${XBB_LIBPNG_SFOLDER}/${XBB_LIBPNG_VERSION}/${XBB_LIBPNG_ARCHIVE}"
+   # XBB_LIBPNG_URL="https://sourceforge.net/projects/libpng/files/${XBB_LIBPNG_SFOLDER}/${XBB_LIBPNG_VERSION}/${XBB_LIBPNG_ARCHIVE}"
+  XBB_LIBPNG_URL="https://github.com/gnu-mcu-eclipse/files/raw/master/libs/${XBB_LIBPNG_ARCHIVE}"
 
   echo
   echo "Installing libpng ${XBB_LIBPNG_VERSION}..."
