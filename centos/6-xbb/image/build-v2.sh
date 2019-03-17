@@ -899,6 +899,46 @@ function do_meson
 
 # -----------------------------------------------------------------------------
 
+function do_p7zip()
+{
+  # https://sourceforge.net/projects/p7zip/files/p7zip/16.02/p7zip_16.02_src_all.tar.bz2/download
+
+  XBB_P7ZIP_VERSION="16.02"
+
+  XBB_P7ZIP_FOLDER_NAME="p7zip_${XBB_P7ZIP_VERSION}"
+  XBB_P7ZIP_ARCHIVE="${XBB_P7ZIP_FOLDER_NAME}_src_all.tar.bz2"
+  XBB_P7ZIP_URL="https://sourceforge.net/projects/p7zip/files/p7zip/${XBB_P7ZIP_VERSION}/${XBB_P7ZIP_ARCHIVE}"
+
+  echo
+  echo "Building p7zip ${XBB_P7ZIP_VERSION}..."
+
+  cd "${XBB_BUILD_FOLDER}"
+
+  download_and_extract "${XBB_P7ZIP_ARCHIVE}" "${XBB_P7ZIP_URL}"
+
+  (
+    cd "${XBB_BUILD_FOLDER}/${XBB_P7ZIP_FOLDER_NAME}"
+
+    xbb_activate_dev
+
+    # Make & test only 7za, the full 7z is problematic.
+    make test
+
+    ls -lL bin
+    install -m755 -t "${XBB_FOLDER}/bin" bin/7za
+  )
+
+  (
+    xbb_activate
+
+    "${XBB_FOLDER}/bin/7za" --help
+  )
+
+  hash -r
+}
+
+# -----------------------------------------------------------------------------
+
 (
   xbb_activate
   
@@ -957,6 +997,8 @@ then
   do_libpng
   do_wine
 fi
+
+do_p7zip
 
 # -----------------------------------------------------------------------------
 
