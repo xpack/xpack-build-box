@@ -46,23 +46,23 @@ mkdir -p "${XBB_FOLDER}"/bin
 
 echo
 echo "Copying ${XBB_FOLDER}/bin/pkg-config-verbose..."
-cp "$(dirname "${script_folder_path}")"/scripts/pkg-config-verbose "${XBB_FOLDER}"/bin
-chmod +x "${XBB_FOLDER}"/bin/pkg-config-verbose
+cp "$(dirname "${script_folder_path}")/scripts/pkg-config-verbose" "${XBB_FOLDER}/bin"
+chmod +x "${XBB_FOLDER}/bin/pkg-config-verbose"
 
 # -----------------------------------------------------------------------------
 # Create the XBB activator script.
 
 echo "Creating ${XBB_FOLDER}/xbb-source.sh..."
-cat <<'__EOF__' > "${XBB_FOLDER}"/xbb-source.sh
+cat <<'__EOF__' > "${XBB_FOLDER}/xbb-source.sh"
 
-export XBB_FOLDER=/opt/xbb
+export XBB_FOLDER="/opt/xbb"
 
 # Allow binaries from XBB to be found before all other.
 # Includes and pkg_config should be enabled only when needed.
 function xbb_activate()
 {
   PATH=${PATH:-""}
-  export PATH="${XBB_FOLDER}"/bin:${PATH}
+  export PATH="${XBB_FOLDER}/bin:${PATH}"
 
   LD_LIBRARY_PATH=${LD_LIBRARY_PATH:-""}
   export LD_LIBRARY_PATH="${XBB_FOLDER}/lib:${LD_LIBRARY_PATH}"
@@ -82,11 +82,11 @@ function xbb_activate_dev()
   fi
   if [ \( "${TARGET_BITS}" == "64" \) -a \( -d "/usr/lib/x86_64-linux-gnu/pkgconfig" \) ]
   then
-    PKG_CONFIG_PATH=/usr/lib/x86_64-linux-gnu/pkgconfig:"${PKG_CONFIG_PATH}"
+    PKG_CONFIG_PATH="/usr/lib/x86_64-linux-gnu/pkgconfig:${PKG_CONFIG_PATH}"
   fi
   export PKG_CONFIG_PATH
 
-  export PKG_CONFIG=pkg-config-verbose
+  export PKG_CONFIG="pkg-config-verbose"
 }
 
 __EOF__
