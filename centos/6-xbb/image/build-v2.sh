@@ -964,6 +964,8 @@ function do_p7zip()
   ${MINGW_TARGET}-g++ --version
 )
 
+# -----------------------------------------------------------------------------
+
 # Needed by QEMU.
 # yum provides '*/X11/extensions/Xext.h'
 # yum provides '*/GL/gl.h'
@@ -1009,3 +1011,4 @@ then
   do_cleaunup
 fi
 
+# -----------------------------------------------------------------------------
