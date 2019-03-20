@@ -43,7 +43,7 @@ prepare_env
 # -----------------------------------------------------------------------------
 
 # Make the functions available to the entire script.
-source "${XBB}/xbb-source.sh"
+source "${XBB_FOLDER}/xbb-source.sh"
 
 # -----------------------------------------------------------------------------
 
