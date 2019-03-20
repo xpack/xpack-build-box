@@ -55,10 +55,11 @@ dos2unix \
 flex \
 perl \
 cmake \
-python \
+python python3 \
 g++-7 \
 g++-mingw-w64 \
-\
+
+echo apt install --yes \
 libexpat1-dev \
 libgmp-dev \
 libmpfr-dev \
@@ -71,7 +72,7 @@ libxml2-dev \
 # -----------------------------------------------------------------------------
 
 # Packages needed by QEMU builds.
-apt install --yes \
+echo apt install --yes \
 gettext \
 libpng-dev \
 libjpeg-dev \
