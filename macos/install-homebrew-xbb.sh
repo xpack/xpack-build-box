@@ -1,19 +1,6 @@
 #!/usr/bin/env bash
 
 # -----------------------------------------------------------------------------
-
-# This script installs the macOS XBB (xPack Build Box) using Homebrew tools.
-# The challenge is to lock all tools to a specific version. Since Homebrew
-# does not allow to explicitly install a specific version of a package,
-# the workaround is to revert to a specific date which is known to have
-# functional packages.
-# This is done by checking out a specific commit id from the homebrew-core
-# repository.
-# There is still no guarantee that this works, since brew insistes on
-# updating itself to the latest version, which is not guaranteed to work
-# with the old formulas.
-
-# -----------------------------------------------------------------------------
 # Safety settings (see https://gist.github.com/ilg-ul/383869cbb01f61a51c4d).
 
 if [[ ! -z ${DEBUG} ]]
@@ -30,9 +17,37 @@ set -o nounset # Exit if variable not set.
 # Remove the initial space and instead use '\n'.
 IFS=$'\n\t'
 
-script_folder=$(dirname $0)
+# -----------------------------------------------------------------------------
+# Identify the script location, to reach, for example, the helper scripts.
+
+build_script_path="$0"
+if [[ "${build_script_path}" != /* ]]
+then
+  # Make relative path absolute.
+  build_script_path="$(pwd)/$0"
+fi
+
+script_folder_path="$(dirname "${build_script_path}")"
+script_folder_name="$(basename "${script_folder_path}")"
+
+# =============================================================================
+
+# This script installs the macOS XBB (xPack Build Box) using Homebrew tools.
+# The challenge is to lock all tools to a specific version. Since Homebrew
+# does not allow to explicitly install a specific version of a package,
+# the workaround is to revert to a specific date which is known to have
+# functional packages.
+# This is done by checking out a specific commit id from the homebrew-core
+# repository.
+# There is still no guarantee that this works, but no better solution
+# was identified.
+# Another complication is caused by brew insisting on updating itself to the
+# latest version, which is not guaranteed to work with the old formulas. 
+# To prevent this it is mandatory to define HOMEBREW_NO_AUTO_UPDATE in the
+# environment before calling brew.
 
 # -----------------------------------------------------------------------------
+
 # Definitions.
 
 XBB_FOLDER=${XBB_FOLDER:-"${HOME}/opt/homebrew/xbb"}
@@ -286,7 +301,10 @@ then
     # Must be updated after xcode updates, to match the new location of 
     # system headers, otherwise builds fail complaining about cpp problems.
     brew install gcc@7
-  else
+  fi
+
+  if false
+  then
     # Needed by the separate gcc-7.2.0
     brew install gmp 
     brew install isl 
@@ -303,6 +321,7 @@ fi
 
 if [ "${install_qemu_libs}" == "y" ]
 then
+  # Normally not needed, since the build scripts compile them too.
   brew install \
     libpng \
     jpeg \
@@ -361,3 +380,8 @@ echo 'echo "set startup-with-shell off" >> ~/.gdbinit'
 echo 'To codesign gdb: https://sourceware.org/gdb/wiki/BuildingOnDarwin'
 
 # -----------------------------------------------------------------------------
+
+# Warning: to use some of the tools with the usual names (like make instead 
+# of gmake) it is necessary to add extra folders to the PATH, like
+# .../Cellar/make/4.2.1_1/libexec/gnubin
+
