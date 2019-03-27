@@ -229,6 +229,15 @@ brew --version
 echo
 echo "Installing..."
 
+# This is generally the most complicated package, if it does not pass it is
+# useless to install all other packages.
+if [ "$install_gcc" == "y" ]
+then
+  # Must be updated after xcode updates, to match the new location of
+  # system headers, otherwise builds fail complaining about cpp problems.
+  brew install gcc@7
+fi
+
 if true
 then
 
@@ -294,14 +303,6 @@ then
 
   brew install gnu-tar 
   brew install xz
-
-  # The off-the-shelf GCC has a problem on macOS and requires patching.
-  if [ "$install_gcc" == "y" ]
-  then
-    # Must be updated after xcode updates, to match the new location of 
-    # system headers, otherwise builds fail complaining about cpp problems.
-    brew install gcc@7
-  fi
 
   if false
   then
