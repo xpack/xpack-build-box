@@ -1,0 +1,20 @@
+--- libgcc/config/t-slibgcc-darwin	2011-11-02 12:49:46.000000000 +0200
++++ libgcc/config/t-slibgcc-darwin-patched	2019-03-26 22:43:02.000000000 +0200
+@@ -62,7 +62,7 @@
+ libgcc_s.%.dylib : all-multi $(SHLIB_VERPFX).%.ver libgcc_s$(SHLIB_EXT)
+ 	MLIBS=`$(CC) --print-multi-lib | sed -e 's/;.*$$//'` ; \
+ 	for mlib in $$MLIBS ; do \
+-	  $(STRIP) -o $(@)_T$${mlib} \
++	  /usr/bin/strip -o $(@)_T$${mlib} \
+ 	    -s $(SHLIB_VERPFX).$(*).ver -c -u \
+ 	    ../$${mlib}/libgcc/$${mlib}/libgcc_s$(SHLIB_EXT)  || exit 1 ; \
+ 	done
+@@ -72,7 +72,7 @@
+ libgcc_ext.%.dylib : all-multi $(SHLIB_VERPFX).%.ver libgcc_s$(SHLIB_EXT) 
+ 	MLIBS=`$(CC) --print-multi-lib | sed -e 's/;.*$$//'` ; \
+ 	for mlib in $$MLIBS ; do \
+-	  $(STRIP) -o $(@)_T$${mlib} \
++	  /usr/bin/strip -o $(@)_T$${mlib} \
+ 	    -R $(SHLIB_VERPFX).$(*).ver -c -urx \
+ 	    ../$${mlib}/libgcc/$${mlib}/libgcc_s$(SHLIB_EXT) || exit 1 ; \
+ 	done

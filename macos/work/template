@@ -1,0 +1,136 @@
+# =============================================================================
+# Libs
+
+function do_xxx() 
+{
+  # ...
+  local xxx_version="1.2.3"
+
+  local xxx_folder_name="xxx-${xxx_version}"
+  local xxx_archive="${xxx_folder_name}.tar.xz"
+  # local xxx_url="ftp://ftp.gnu.org/gnu/xxx/${xxx_archive}"
+  local xxx_url="https://github.com/gnu-mcu-eclipse/files/raw/master/libs/${xxx_archive}"
+
+  local xxx_stamp_file_path="${STAMPS_FOLDER_PATH}/stamp-xxx-${xxx_version}-installed"
+  if [ ! -f "${xxx_stamp_file_path}" -o ! -d "${LIBS_BUILD_FOLDER_PATH}/${xxx_folder_name}" ]
+  then
+
+    cd "${SOURCES_FOLDER_PATH}"
+
+    download_and_extract "${xxx_url}" "${xxx_archive}" "${xxx_folder_name}"
+
+    (
+      mkdir -p "${LIBS_BUILD_FOLDER_PATH}/${xxx_folder_name}"
+      cd "${LIBS_BUILD_FOLDER_PATH}/${xxx_folder_name}"
+
+      xbb_activate_this
+
+      export CPPFLAGS="${XBB_CPPFLAGS}"
+      export CFLAGS="${XBB_CFLAGS}"
+      export CXXFLAGS="${XBB_CXXFLAGS}"
+      export LDFLAGS="${XBB_LDFLAGS_LIB}"
+
+      if [ ! -f "config.status" ]
+      then
+        (
+          echo
+          echo "Running xxx configure..."
+
+          bash "${SOURCES_FOLDER_PATH}/${xxx_folder_name}/configure" --help
+
+          bash ${DEBUG} "${SOURCES_FOLDER_PATH}/${xxx_folder_name}/configure" \
+            --prefix="${INSTALL_FOLDER_PATH}" 
+
+          cp "config.log" "${LOGS_FOLDER_PATH}/config-xxx-log.txt"
+        ) 2>&1 | tee "${LOGS_FOLDER_PATH}/configure-xxx-output.txt"
+      fi
+
+      (
+        echo
+        echo "Running xxx make..."
+
+        # Build.
+        make ${JOBS}
+        make install-strip
+      ) 2>&1 | tee "${LOGS_FOLDER_PATH}/make-xxx-output.txt"
+    )
+
+    touch "${xxx_stamp_file_path}"
+
+  else
+    echo "Library xxx already installed."
+  fi
+}
+
+# =============================================================================
+# Apps
+
+function do_zzz() 
+{
+  # ...
+  local zzz_version="1.2.3"
+
+  local zzz_folder_name="zzz-${zzz_version}"
+  local zzz_archive="${zzz_folder_name}.tar.xz"
+  # local zzz_url="https://ftp.gnu.org/gnu/zzz/${zzz_archive}"
+  local zzz_url="https://github.com/gnu-mcu-eclipse/files/raw/master/libs/${zzz_archive}"
+
+  local zzz_stamp_file_path="${STAMPS_FOLDER_PATH}/stamp-zzz-${zzz_version}-installed"
+  if [ ! -f "${zzz_stamp_file_path}" -o ! -d "${BUILD_FOLDER_PATH}/${zzz_folder_name}" ]
+  then
+
+    cd "${SOURCES_FOLDER_PATH}"
+
+    download_and_extract "${zzz_url}" "${zzz_archive}" "${zzz_folder_name}"
+
+    (
+      mkdir -p "${BUILD_FOLDER_PATH}/${zzz_folder_name}"
+      cd "${BUILD_FOLDER_PATH}/${zzz_folder_name}"
+
+      xbb_activate_this
+
+      export CPPFLAGS="${XBB_CPPFLAGS}"
+      export CFLAGS="${XBB_CFLAGS}"
+      export CXXFLAGS="${XBB_CXXFLAGS}"
+      export LDFLAGS="${XBB_LDFLAGS_APP}"
+
+      if [ ! -f "config.status" ]
+      then
+        (
+          echo
+          echo "Running zzz configure..."
+
+          bash "${SOURCES_FOLDER_PATH}/${zzz_folder_name}/configure" --help
+
+          bash ${DEBUG} "${SOURCES_FOLDER_PATH}/${zzz_folder_name}/configure" \
+            --prefix="${INSTALL_FOLDER_PATH}" 
+
+          cp "config.log" "${LOGS_FOLDER_PATH}/config-zzz-log.txt"
+        ) 2>&1 | tee "${LOGS_FOLDER_PATH}/configure-zzz-output.txt"
+      fi
+
+      (
+        echo
+        echo "Running zzz make..."
+
+        # Build.
+        make ${JOBS}
+        make install-strip
+      ) 2>&1 | tee "${LOGS_FOLDER_PATH}/make-zzz-output.txt"
+    )
+
+    (
+      echo
+      "${INSTALL_FOLDER_PATH}/bin/zzz" --version
+    )
+
+    hash -r
+
+    touch "${zzz_stamp_file_path}"
+
+  else
+    echo "Component zzz already installed."
+  fi
+}
+
+# =============================================================================
