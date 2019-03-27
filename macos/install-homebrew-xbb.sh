@@ -277,7 +277,7 @@ then
   fi
 
   brew install git 
-  brew install python python@2
+  brew install python python@3
 
   brew install flex
   brew link flex --force
