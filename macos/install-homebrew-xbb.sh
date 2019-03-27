@@ -216,7 +216,7 @@ fi
 export HOMEBREW_NO_EMOJI=1
 export HOMEBREW_NO_AUTO_UPDATE=1
 
-cd "${script_folder}"
+cd "${script_folder_path}"
 
 echo
 brew config
