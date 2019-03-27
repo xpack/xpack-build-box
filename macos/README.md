@@ -37,7 +37,7 @@ $ export PATH=/usr/bin:/bin:/usr/sbin:/sbin
 ### Clone the repository
 
 ```console
-$ rm "${HOME}"/Downloads/xpack-build-box.git
+$ rm -rf "${HOME}"/Downloads/xpack-build-box.git
 $ git clone https://github.com/xpack/xpack-build-box.git \
   "${HOME}"/Downloads/xpack-build-box.git
 ```
@@ -192,3 +192,11 @@ $ caffeinate bash "${HOME}"/Downloads/xpack-build-box.git/macos/install-texlive.
 The TeX install script is locked to a certain version, but depends on the
 presence of that version on a certain server, which is also not guaranteed
 to last forever.
+
+## macOS 10.10 problems
+
+The `curl` program on this old system cannot download files from sites
+with the certificates, so it must be added, by manually downloading
+the required files into `${HOME}/Library/Caches/Homebrew`.
+ 
+- https://curl.haxx.se/download/curl-7.64.0.tar.bz2
