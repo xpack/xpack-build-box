@@ -1,0 +1,3 @@
+[submodule "ca-bundle"]
+	path = ca-bundle
+	url = https://github.com/bagder/ca-bundle
