@@ -383,5 +383,5 @@ echo 'To codesign gdb: https://sourceware.org/gdb/wiki/BuildingOnDarwin'
 
 # Warning: to use some of the tools with the usual names (like make instead 
 # of gmake) it is necessary to add extra folders to the PATH, like
-# .../Cellar/make/4.2.1_1/libexec/gnubin
+# .../opt/make/libexec/gnubin
 

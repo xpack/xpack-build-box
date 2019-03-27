@@ -65,6 +65,8 @@ function xbb_activate()
   PATH=${PATH:-""}
   PATH=${TEXLIVE_FOLDER}/bin/$(uname -m)-darwin:${PATH}
   PATH="${XBB_FOLDER}"/opt/gnu-tar/libexec/gnubin:${PATH}
+  PATH="${XBB_FOLDER}"/opt/coreutils/libexec/gnubin:${PATH}
+  PATH="${XBB_FOLDER}"/opt/make/libexec/gnubin:${PATH}
   export PATH="${XBB_FOLDER}"/bin:${PATH}
 
   LD_LIBRARY_PATH=${LD_LIBRARY_PATH:-""}
