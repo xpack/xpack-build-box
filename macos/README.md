@@ -5,15 +5,15 @@
 
 When running on macOS, the build scripts do not use Docker, since there
 are no macOS Docker images; instead,
-a custom Homebrew is expected in a specific folder 
-(`${HOME}/opt/homebrew/xbb`), which includes the same tools as 
+a custom set of tools is expected in a specific folder 
+(`${HOME}/opt/xbb`), which includes the same tools as 
 packed in the Docker images.
 
-The reason for a separate image is that, in order to achieve consistent and 
+The reason for a separate folder is that, in order to achieve consistent and 
 reproducible results, the tools in the XBB instance must be locked to
 certain versions, and no updates should be performed. 
 
-To build this Homebrew instance, clone the git and start the install scripts.
+To build these tools, clone the git and start the install scripts.
 
 ### Prerequisites
 
@@ -37,14 +37,107 @@ $ export PATH=/usr/bin:/bin:/usr/sbin:/sbin
 ### Clone the repository
 
 ```console
-$ rm -rf "${HOME}"/Downloads/xpack-build-box.git
-$ git clone https://github.com/xpack/xpack-build-box.git \
-  "${HOME}"/Downloads/xpack-build-box.git
+$ rm -rf "${HOME}/Downloads/xpack-build-box.git"
+$ git clone --recurse-submodules https://github.com/xpack/xpack-build-box.git \
+  "${HOME}/Downloads/xpack-build-box.git"
 ```
+
+### Build the XBB bootstrap
+
+For consistent results, the XBB tools are not compiled with the native Apple 
+compiler, but with a GCC 7.
+
+```console
+$ caffeinate bash "${HOME}/Downloads/xpack-build-box.git/macos/build-xbb-bootstrap.sh"
+```
+
+The build process takes quite a while. 
+
+The build is performed in a folder like `${HOME}/Work/darwin-xbb-bootstrap` 
+which can be removed after the build is completed.
+
+The result of this step is a folder in user home (`${HOME}/opt/xbb-bootstrap`).
+No files are stored in system locations.
+
+This folder can also be removed after the final XBB tools are built.
+
+### Build the XBB tools
+
+The final XBB tools are compiled with the bootstrapped compiler.
+
+```console
+$ caffeinate bash "${HOME}/Downloads/xpack-build-box.git/macos/build-xbb.sh"
+```
+
+The build process takes quite a while. 
+
+The build is performed in a folder like `${HOME}/Work/darwin-xbb` 
+which can be removed after the build is completed.
+
+The result of this step is a folder in user home (`${HOME}/opt/xbb`).
+No files are stored in system locations.
+
+### Protect the XBB folders
+
+To prevent inadvertent changes, it is recommended to make the XBB folders 
+read-only.
+
+```console
+$ chmod -R -w ${HOME}/opt/xbb
+```
+
+### How to use?
+
+The recommended use is similar to all other XBBs:
+
+```bash
+# At init time.
+source "${HOME}/opt/xbb/xbb-source.sh"
+
+(
+  # When needed; preferably in a sub-shell.
+  xbb_activate
+
+  ../configure
+  make
+)
+```
+
+## The `xbb-source.sh` script
+
+See the parent [`README.md`](../README.md).
+
+## The `pkg-config-verbose` script
+
+See the parent [`README.md`](../README.md).
+
+## Install TeX
+
+TeX is used to generate the documentation. For development builds, to 
+speed up things, creating the manuals can be skipped, so this step is 
+not mandatory.
+
+```console
+$ caffeinate bash "${HOME}"/Downloads/xpack-build-box.git/macos/install-texlive.sh
+```
+
+The TeX install script is locked to a certain version, but depends on the
+presence of that version on a certain server, which is also not guaranteed
+to last forever.
+
+## macOS 10.10 problems
+
+The `curl` program on this old system cannot download files from sites
+with new certificates, so it must be helped, by manually downloading
+the required files into `${HOME}/Library/Caches/Homebrew`.
+ 
+- https://curl.haxx.se/download/curl-7.64.0.tar.bz2
+
+## Obsolete Homebrew solution
 
 ### Patches
 
-This step should normally not be needed, but on some system versions and/or
+**This step should normally not be needed**, but on some system versions and/or
 Homebrew versions, the Homebrew build fails with an error related to the 
 system header `/usr/include/dispatch/object.h`, which has a bug, one of the 
 definitions is available only for Objective-C, and not for C.
@@ -78,11 +171,36 @@ Recovery System (hold down Apple-R while booting), and issuing
 After fixing the file, be sure you restore the secure SIP setting 
 (`csrutil enable`).
 
-### Build Homebrew XBB
+### Prevent auto-update
+
+By default Homebrew updates its internal Git repositories to the latest
+commits. For a controlled environment like XBB, this is a no-go. To
+prevent it, add `HOMEBREW_NO_AUTO_UPDATE` to the environment:
+
+```
+export HOMEBREW_NO_AUTO_UPDATE=1
+```
+
+### Build the Homebrew XBB bootstrap
+
+This step was superseded by the XBB bootstrap step not using Homebrew.
+
+The bootstrap is basically a GCC 7 compiler used to build the final XBB tools.
 
 ```console
-$ caffeinate bash "${HOME}"/Downloads/xpack-build-box.git/macos/install-homebrew-xbb.sh
-$ bash "${HOME}"/Downloads/xpack-build-box.git/macos/add-xbb-extras.sh
+$ caffeinate bash "${HOME}/Downloads/xpack-build-box.git/macos/install-homebrew-xbb-bootstrap.sh"
+```
+
+The build process takes quite a while. 
+
+The result of this step is a folder in user home (`${HOME}/opt/homebrew/xbb`).
+No files are stored in system locations.
+
+### Build the Homebrew XBB
+
+```console
+$ caffeinate bash "${HOME}/Downloads/xpack-build-box.git/macos/install-homebrew-xbb.sh"
+$ bash "${HOME}/Downloads/xpack-build-box.git/macos/add-xbb-extras.sh
 ```
 
 The build process takes quite a while. 
@@ -115,88 +233,3 @@ $ caffeinate bash "${HOME}/Downloads/xpack-build-box.git/macos/install-patched-g
 ```
 
 The result is also stored in the `${HOME}/opt/homebrew/xbb` folder.
-
-### Protect the XBB folder
-
-To prevent inadvertent changes, it is recommended to make the XBB folder 
-read-only.
-
-```console
-$ chmod -R -w ${HOME}/opt/homebrew/xbb
-```
-
-### How to use?
-
-The recommended use is similar to all other XBBs:
-
-```bash
-# At init time.
-source "${HOME}/opt/homebrew/xbb/xbb-source.sh"
-
-(
-  # When needed; preferably in a sub-shell.
-  xbb_activate
-
-  ../configure
-  make
-)
-```
-
-## The `xbb-source.sh` script
-
-See the parent [`README.md`](../README.md).
-
-## The `pkg-config-verbose` script
-
-See the parent [`README.md`](../README.md).
-
-
-### Actual libraries versions
-
-The following packages were used for QEMU:
-
-```console
-$ brew list --versions \
-libpng \
-jpeg \
-sdl2 \
-sdl2_image \
-pixman \
-glib \
-libffi \
-libxml2 \
-libiconv \
-
-glib 2.58.3
-jpeg 9c
-libffi 3.2.1
-libiconv 1.15
-libpng 1.6.36
-libxml2 2.9.9_2
-pixman 0.38.0
-sdl2 2.0.9
-sdl2_image 2.0.4
-
-```
-
-## Install TeX
-
-TeX is used to generate the documentation. For development builds, to 
-speed up things, creating the manuals can be skipped, so this step is 
-not mandatory.
-
-```console
-$ caffeinate bash "${HOME}"/Downloads/xpack-build-box.git/macos/install-texlive.sh
-```
-
-The TeX install script is locked to a certain version, but depends on the
-presence of that version on a certain server, which is also not guaranteed
-to last forever.
-
-## macOS 10.10 problems
-
-The `curl` program on this old system cannot download files from sites
-with the certificates, so it must be added, by manually downloading
-the required files into `${HOME}/Library/Caches/Homebrew`.
- 
-- https://curl.haxx.se/download/curl-7.64.0.tar.bz2

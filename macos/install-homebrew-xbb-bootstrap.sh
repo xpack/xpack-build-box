@@ -40,7 +40,9 @@ script_folder_name="$(basename "${script_folder_path}")"
 
 # =============================================================================
 
-# This script installs the macOS XBB (xPack Build Box) using Homebrew tools.
+# This script installs a set of Homebrew tools to bootstrap the
+# macOS XBB (xPack Build Box).
+#
 # The challenge is to lock all tools to a specific version. Since Homebrew
 # does not allow to explicitly install a specific version of a package,
 # the workaround is to revert to a specific date which is known to have
@@ -58,7 +60,7 @@ script_folder_name="$(basename "${script_folder_path}")"
 
 # Definitions.
 
-XBB_FOLDER=${XBB_FOLDER:-"${HOME}/opt/homebrew/xbb"}
+XBB_FOLDER=${XBB_FOLDER:-"${HOME}/opt/homebrew/xbb-bootstrap"}
 
 macos_version=$(defaults read loginwindow SystemVersionStampAsString)
 xcode_version=$(xcodebuild -version | grep Xcode | sed -e 's/Xcode //')
@@ -70,10 +72,7 @@ echo "XCode Command Line Tools version ${xclt_version}"
 brew_git_url="https://github.com/Homebrew/brew.git"
 homebrew_core_git_url="https://github.com/Homebrew/homebrew-core.git"
 
-install_gcc="y"
 install_perl="y"
-install_qemu_libs=""
-
 use_master_archive=""
 
 # 2.x releases support only:
@@ -113,39 +112,16 @@ then
   homebrew_core_git_commit_id="d85a6e77835a964adba81b90fc508f0f672bb974"
 
   install_perl="n"
+
 elif [[ "${macos_version}" =~ 10\.10\.* ]]
 then
+
   # 24 January 2019 at 11:24:36, 6a912c369125caca5e1e3929e942bbb946ce6367, 1.9.3
   brew_git_commit_id="1.9.3"
   # 24 January 2018 at 10:09:12 EET 
   homebrew_core_git_commit_id="dcb056fc8533ebf1edbc0b600712ebbd5bd476ac"
+
 fi
-
-# ---
-  # brew_git_url="https://github.com/Homebrew/brew.git"
-  # Fails with :cxx is disabled! There is no replacement.
-  # brew_git_commit_id="2.0.1"
-
-  # Fails on macOS 10.13, was ok on 10.10 
-  # Error: Your Xcode (1) is too outdated.
-  # Please update to Xcode 9.2 (or delete it).
-  # brew_git_commit_id="1.5.4"
-
-  # Fails with:
-  # Error: undefined method `strip' for :provided_until_xcode43:Symbol
-  # brew_git_commit_id="1.9.3"
-  # 24 January 2019 at 11:24:36, 6a912c369125caca5e1e3929e942bbb946ce6367, 1.9.3
-
-  # 28 Mar 2018: 0141aa62b0a8d9043ec6d6a5b0890b7908924f79
-  # 24 January 2018 at 10:09:12, dcb056fc8533ebf1edbc0b600712ebbd5bd476ac (1.9.3)
-  # 15 Feb 2018: 39e72cdec0cadefbdf17bccea59f7f23b5837639
-
-  # homebrew_core_git_url="https://github.com/Homebrew/homebrew-core.git"
-  # The current production macOS XBB uses the 15 Feb 2018 formulas.
-  # homebrew_core_git_commit_id="39e72cdec0cadefbdf17bccea59f7f23b5837639"
-  # homebrew_core_git_commit_id="dcb056fc8533ebf1edbc0b600712ebbd5bd476ac"
-# ---
-
 
 # -----------------------------------------------------------------------------
 # Check if brew is in the bath. This is not good, since it does not
@@ -162,19 +138,6 @@ then
 fi
 set -e
 
-# -----------------------------------------------------------------------------
-
-echo
-if [ -d "${XBB_FOLDER}" ]
-then
-  echo "Renaming existing '${XBB_FOLDER}' -> '${XBB_FOLDER}.bak'..."
-  rm -rf "${XBB_FOLDER}.bak"
-  mv "${XBB_FOLDER}" "${XBB_FOLDER}.bak"
-fi
-
-echo "Creating '${XBB_FOLDER}'..."
-mkdir -p "${XBB_FOLDER}"
-
 PATH=${XBB_FOLDER}/bin:${PATH}
 
 # -----------------------------------------------------------------------------
@@ -184,6 +147,15 @@ PATH=${XBB_FOLDER}/bin:${PATH}
 # Run in a subshell to isolate the homebrew install from the packages install.
 if [ "${use_master_archive}" == "y" ]
 then
+  echo
+  echo "Renaming existing '${XBB_FOLDER}' -> '${XBB_FOLDER}.bak'..."
+  rm -rf "${XBB_FOLDER}.bak"
+  mv "${XBB_FOLDER}" "${XBB_FOLDER}.bak"
+
+  echo
+  echo "Creating '${XBB_FOLDER}'..."
+  mkdir -p "${XBB_FOLDER}"
+
   brew_master_url=https://github.com/Homebrew/brew/tarball/master
 
   echo
@@ -193,29 +165,34 @@ else
   # brew_git_commit_id="1.5.4"
   folder_name="$(basename "${XBB_FOLDER}")"
 
-  cd "$(dirname "${XBB_FOLDER}")"
-
   echo
-  echo "Cloning Homebrew/brew..."
-  git clone ${brew_git_url} "${folder_name}"
 
-  cd "${folder_name}"
-  git checkout -b xbb ${brew_git_commit_id}
+  if [ ! -d "$(dirname "${XBB_FOLDER}")/${folder_name}/.git" ]
+  then
+    mkdir -p "${XBB_FOLDER}"
+    cd "$(dirname "${XBB_FOLDER}")"
 
-  cd "${XBB_FOLDER}"
-  mkdir -p Library/Taps/homebrew
-  cd Library/Taps/homebrew
+    echo
+    echo "Cloning Homebrew/brew..."
+    git clone ${brew_git_url} "${folder_name}"
 
-  echo
-  echo "Cloning Homebrew/homebrew-core..."
-  git clone ${homebrew_core_git_url} homebrew-core
+    cd "${folder_name}"
+    git checkout -b xbb ${brew_git_commit_id}
 
-  cd homebrew-core
+    cd "${XBB_FOLDER}"
+    mkdir -p Library/Taps/homebrew
+    cd Library/Taps/homebrew
 
-  echo
-  echo "Checking out ${homebrew_core_git_commit_id}"
-  git checkout -b xbb ${homebrew_core_git_commit_id}
+    echo
+    echo "Cloning Homebrew/homebrew-core..."
+    git clone ${homebrew_core_git_url} homebrew-core
 
+    cd homebrew-core
+
+    echo
+    echo "Checking out ${homebrew_core_git_commit_id}"
+    git checkout -b xbb ${homebrew_core_git_commit_id}
+  fi
 fi
 
 export HOMEBREW_NO_EMOJI=1
@@ -234,24 +211,35 @@ brew --version
 echo
 echo "Installing..."
 
-# This is generally the most complicated package, if it does not pass it is
+# GCC is generally the most complicated package, if it does not pass it is
 # useless to install all other packages.
-if [ "$install_gcc" == "y" ]
-then
-  # Must be updated after xcode updates, to match the new location of
-  # system headers, otherwise builds fail complaining about cpp problems.
-  brew install gcc@7
-fi
+# GCC may need to be updated after xcode updates, to match the new location 
+# of system headers, otherwise builds fail complaining about cpp problems.
+brew install gcc@7
 
-if true
+brew install coreutils
+
+brew install m4
+brew link m4 --force
+
+brew install gawk 
+brew install gnu-sed
+
+brew install autoconf automake
+brew install libtool
+brew install make 
+brew install pkg-config
+
+brew install diffutils 
+brew install gpatch
+
+if false
 then
 
   brew install curl
   brew link curl --force
 
-  brew install autoconf automake
   brew install cmake
-  brew install pkg-config
 
   # Required by QEMU
   brew install gettext
@@ -261,17 +249,8 @@ then
   brew install texinfo
   brew link texinfo --force
 
-  # libtool required to build openOCD (bootstrap) 
-  brew install libtool
-
   brew install readline
   brew link readline --force
-
-  # gawk & gsed required by GCC
-  brew install gawk 
-  brew install gnu-sed
-
-  # Same packages as for CentOS XBB (missing 'patch')
 
   # On recent versions perl fails a test; skip it if necessary.
   if [ "$install_perl" == "y" ]
@@ -287,16 +266,9 @@ then
 
   brew install dos2unix 
   brew install wget 
-  brew install make 
-  brew install diffutils 
-
-  brew install m4
-  brew link m4 --force
 
   brew install bison
   brew link bison --force
-
-  brew install gpatch
 
   brew install sqlite
   brew link sqlite --force
@@ -314,75 +286,33 @@ then
 
 fi
 
-if false
-then
-  # Needed when the separate gcc-7.2.0 patched is addded.
-  brew install gmp
-  brew install isl
-  brew install libmpc
-  brew install mpfr
-fi
-
-if [ "${install_qemu_libs}" == "y" ]
-then
-  # Normally not needed, since the build scripts compile them too.
-  brew install \
-    libpng \
-    jpeg \
-    sdl2 \
-    sdl2_image \
-    pixman \
-    glib \
-    libffi \
-    libxml2 \
-    libiconv \
-
-  brew link libxml2 --force
-  brew link libffi --force
-  brew link libiconv --force
-
-  brew list --versions \
-    libpng \
-    jpeg \
-    sdl2 \
-    sdl2_image \
-    pixman \
-    glib \
-    libffi \
-    libxml2 \
-    libiconv \
-
-fi
+# -----------------------------------------------------------------------------
 
 echo
 brew config
+
+echo
+brew list
+
+echo
+ls ${XBB_FOLDER}/opt/*/libexec/gnubin
 
 # -----------------------------------------------------------------------------
 
 # To use Homebrew, add something like this to ~/.profile
 echo
-echo alias axbb=\'export PATH=${XBB_FOLDER}/bin:\${PATH}; export HOMEBREW_NO_AUTO_UPDATE=1\'
+echo alias axbb-bs=\'export PATH=${XBB_FOLDER}/bin:\${PATH}; export HOMEBREW_NO_AUTO_UPDATE=1\'
 
-if [ "$install_gcc" != "y" ]
-then
-  echo
-  echo "Don't forget to run install-patched-gcc.sh to install a patched GCC 7.2.0."
-fi
-
-if [ -f ~/.gdbinit ]
-then
-  echo cat ~/.gdbinit
-  cat ~/.gdbinit
-else
-  echo "No .gdbinit, creating one."
-  touch ~/.gdbinit
-fi
-echo 'echo "set startup-with-shell off" >> ~/.gdbinit'
-echo 'To codesign gdb: https://sourceware.org/gdb/wiki/BuildingOnDarwin'
+echo
+echo Done
+say done
 
 # -----------------------------------------------------------------------------
 
 # Warning: to use some of the tools with the usual names (like make instead 
 # of gmake) it is necessary to add extra folders to the PATH, like
+# .../opt/coreutils/libexec/gnubin
+# .../opt/gawk/libexec/gnubin
+# .../opt/gnu-sed/libexec/gnubin
 # .../opt/make/libexec/gnubin
 
