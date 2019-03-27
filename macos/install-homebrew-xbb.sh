@@ -105,11 +105,8 @@ then
   homebrew_core_git_commit_id="d85a6e77835a964adba81b90fc508f0f672bb974"
 
   install_perl="n"
-
 elif [[ "${macos_version}" =~ 10\.10\.* ]]
 then
-  echo "Not yet implemented."
-
   # 24 January 2019 at 11:24:36, 6a912c369125caca5e1e3929e942bbb946ce6367, 1.9.3
   brew_git_commit_id="1.9.3"
   # 24 January 2018 at 10:09:12 EET 
@@ -244,8 +241,6 @@ then
   brew install curl
   brew link curl --force
 
-  brew config
-
   brew install autoconf automake
   brew install cmake
   brew install pkg-config
@@ -304,20 +299,20 @@ then
   brew install gnu-tar 
   brew install xz
 
-  if false
-  then
-    # Needed by the separate gcc-7.2.0
-    brew install gmp 
-    brew install isl 
-    brew install libmpc 
-    brew install mpfr
-  fi
-
   brew install gdb
 
   # To build the µOS++ reference pages
   brew install doxygen
 
+fi
+
+if false
+then
+  # Needed when the separate gcc-7.2.0 patched is addded.
+  brew install gmp
+  brew install isl
+  brew install libmpc
+  brew install mpfr
 fi
 
 if [ "${install_qemu_libs}" == "y" ]
@@ -337,13 +332,7 @@ then
   brew link libxml2 --force
   brew link libffi --force
   brew link libiconv --force
-fi
 
-echo
-brew config
-
-if [ "${install_qemu_libs}" == "y" ]
-then
   brew list --versions \
     libpng \
     jpeg \
@@ -356,6 +345,9 @@ then
     libiconv \
 
 fi
+
+echo
+brew config
 
 # -----------------------------------------------------------------------------
 
