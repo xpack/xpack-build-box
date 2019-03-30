@@ -1747,6 +1747,8 @@ function do_cmake()
       export CC=clang
       export CXX=clang++
 
+      JOBS=1
+
       local which_cmake="$(which cmake)"
       if [ -z "${which_cmake}" ]
       then
