@@ -139,7 +139,7 @@ source "${script_folder_path}/common-functions-source.sh"
 source "${script_folder_path}/common-libs-functions-source.sh"
 source "${script_folder_path}/common-apps-functions-source.sh"
 
-install -m 755 -c "${script_folder_path}/scripts/pkg-config-verbose" "${INSTALL_FOLDER_PATH}/bin" 
+install -m 755 -c "$(dirname "${script_folder_path}")/scripts/pkg-config-verbose" "${INSTALL_FOLDER_PATH}/bin" 
 
 export PKG_CONFIG="${INSTALL_FOLDER_PATH}/bin/pkg-config-verbose"
 
