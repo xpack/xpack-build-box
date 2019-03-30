@@ -11,16 +11,18 @@ function do_zlib()
 {
   # http://zlib.net
   # http://zlib.net/fossils/
+  # http://zlib.net/fossils/zlib-1.2.11.tar.gz
   # https://aur.archlinux.org/cgit/aur.git/tree/PKGBUILD?h=zlib-static
   # https://aur.archlinux.org/cgit/aur.git/tree/PKGBUILD?h=zlib-git
 
-  # 2017-01-15
-  local zlib_version="1.2.11"
+  # 2017-01-15 "1.2.11"
+
+  local zlib_version="$1"
 
   local zlib_folder_name="zlib-${zlib_version}"
   local zlib_archive="${zlib_folder_name}.tar.gz"
-  # local zlib_url="http://zlib.net/fossils/${zlib_archive}"
-  local zlib_url="https://github.com/gnu-mcu-eclipse/files/raw/master/libs/${zlib_archive}"
+  local zlib_url="http://zlib.net/fossils/${zlib_archive}"
+  # local zlib_url="https://github.com/gnu-mcu-eclipse/files/raw/master/libs/${zlib_archive}"
 
   local zlib_stamp_file_path="${STAMPS_FOLDER_PATH}/stamp-zlib-${zlib_version}-installed"
   if [ ! -f "${zlib_stamp_file_path}" -o ! -d "${LIBS_BUILD_FOLDER_PATH}/${zlib_folder_name}" ]
@@ -61,7 +63,7 @@ function do_zlib()
         echo "Running zlib make..."
 
         # Build.
-        make ${JOBS}
+        make -j ${JOBS}
         make install
       ) 2>&1 | tee "${LOGS_FOLDER_PATH}/make-zlib-output.txt"
     )
@@ -77,15 +79,17 @@ function do_gmp()
 {
   # https://gmplib.org
   # https://gmplib.org/download/gmp/
+  # https://gmplib.org/download/gmp/gmp-6.1.2.tar.xz
   # https://aur.archlinux.org/cgit/aur.git/tree/PKGBUILD?h=gmp-hg
 
-  # 16-Dec-2016
-  local gmp_version="6.1.2"
+  # 16-Dec-2016 "6.1.2"
+
+  local gmp_version="$1"
 
   local gmp_folder_name="gmp-${gmp_version}"
   local gmp_archive="${gmp_folder_name}.tar.xz"
-  # local gmp_url="http://gmp.net/abc/${gmp_archive}"
-  local gmp_url="https://github.com/gnu-mcu-eclipse/files/raw/master/libs/${gmp_archive}"
+  local gmp_url="https://gmplib.org/download/gmp/${gmp_archive}"
+  # local gmp_url="https://github.com/gnu-mcu-eclipse/files/raw/master/libs/${gmp_archive}"
 
   local gmp_stamp_file_path="${STAMPS_FOLDER_PATH}/stamp-gmp-${gmp_version}-installed"
   if [ ! -f "${gmp_stamp_file_path}" -o ! -d "${LIBS_BUILD_FOLDER_PATH}/${gmp_folder_name}" ]
@@ -127,7 +131,7 @@ function do_gmp()
         echo "Running gmp make..."
 
         # Build.
-        make ${JOBS}
+        make -j ${JOBS}
         make install-strip
       ) 2>&1 | tee "${LOGS_FOLDER_PATH}/make-gmp-output.txt"
     )
@@ -143,15 +147,19 @@ function do_mpfr()
 {
   # http://www.mpfr.org
   # http://www.mpfr.org/mpfr-3.1.6
+  # https://www.mpfr.org/mpfr-4.0.2/mpfr-4.0.2.tar.xz
   # https://git.archlinux.org/svntogit/packages.git/tree/trunk/PKGBUILD?h=packages/mpfr
 
-  # 7 September 2017
-  local mpfr_version="3.1.6"
+  # 7 September 2017 "3.1.6"
+  # Fails mpc
+  # 31 January 2019 "4.0.2"
+
+  local mpfr_version="$1"
 
   local mpfr_folder_name="mpfr-${mpfr_version}"
   local mpfr_archive="${mpfr_folder_name}.tar.xz"
-  # local mpfr_url="http://mpfr.net/abc/${mpfr_archive}"
-  local mpfr_url="https://github.com/gnu-mcu-eclipse/files/raw/master/libs/${mpfr_archive}"
+  local mpfr_url="https://www.mpfr.org/${mpfr_folder_name}/${mpfr_archive}"
+  # local mpfr_url="https://github.com/gnu-mcu-eclipse/files/raw/master/libs/${mpfr_archive}"
 
   local mpfr_stamp_file_path="${STAMPS_FOLDER_PATH}/stamp-mpfr-${mpfr_version}-installed"
   if [ ! -f "${mpfr_stamp_file_path}" -o ! -d "${LIBS_BUILD_FOLDER_PATH}/${mpfr_folder_name}" ]
@@ -192,7 +200,7 @@ function do_mpfr()
         echo "Running mpfr make..."
 
         # Build.
-        make ${JOBS}
+        make -j ${JOBS}
         make install-strip
       ) 2>&1 | tee "${LOGS_FOLDER_PATH}/make-mpfr-output.txt"
     )
@@ -208,10 +216,12 @@ function do_mpc()
 {
   # http://www.multiprecision.org/
   # ftp://ftp.gnu.org/gnu/mpc
+  # https://ftp.gnu.org/gnu/mpc/mpc-1.0.3.tar.gz
   # https://git.archlinux.org/svntogit/packages.git/tree/trunk/PKGBUILD?h=packages/libmpc
 
-  # February 2015
-  local mpc_version="1.0.3"
+  # February 2015 "1.0.3"
+
+  local mpc_version="$1"
 
   local mpc_folder_name="mpc-${mpc_version}"
   local mpc_archive="${mpc_folder_name}.tar.gz"
@@ -256,7 +266,7 @@ function do_mpc()
         echo "Running mpc make..."
 
         # Build.
-        make ${JOBS}
+        make -j ${JOBS}
         make install-strip
       ) 2>&1 | tee "${LOGS_FOLDER_PATH}/make-mpc-output.txt"
     )
@@ -271,15 +281,18 @@ function do_mpc()
 function do_isl() 
 {
   # http://isl.gforge.inria.fr
+  # http://isl.gforge.inria.fr/isl-0.21.tar.xz
   # https://aur.archlinux.org/cgit/aur.git/tree/PKGBUILD?h=isl
 
-  # 2016-12-20
-  local isl_version="0.18"
+  # 2016-12-20 "0.18"
+  # 2019-03-26 "0.21"
+
+  local isl_version="$1"
 
   local isl_folder_name="isl-${isl_version}"
   local isl_archive="${isl_folder_name}.tar.xz"
-  # local isl_url="ftp://ftp.gnu.org/gnu/isl/${isl_archive}"
-  local isl_url="https://github.com/gnu-mcu-eclipse/files/raw/master/libs/${isl_archive}"
+  local isl_url="http://isl.gforge.inria.fr/${isl_archive}"
+  # local isl_url="https://github.com/gnu-mcu-eclipse/files/raw/master/libs/${isl_archive}"
 
   local isl_stamp_file_path="${STAMPS_FOLDER_PATH}/stamp-isl-${isl_version}-installed"
   if [ ! -f "${isl_stamp_file_path}" -o ! -d "${LIBS_BUILD_FOLDER_PATH}/${isl_folder_name}" ]
@@ -320,7 +333,7 @@ function do_isl()
         echo "Running isl make..."
 
         # Build.
-        make ${JOBS}
+        make -j ${JOBS}
         make install-strip
       ) 2>&1 | tee "${LOGS_FOLDER_PATH}/make-isl-output.txt"
     )
@@ -338,8 +351,10 @@ function do_nettle()
   # https://ftp.gnu.org/gnu/nettle/
   # https://aur.archlinux.org/cgit/aur.git/tree/PKGBUILD?h=nettle-git
 
-  # 2017-11-19
-  local nettle_version="3.4"
+  # 2017-11-19, "3.4"
+  # 2018-12-04, "3.4.1"
+
+  local nettle_version="$1"
 
   local nettle_folder_name="nettle-${nettle_version}"
   local nettle_archive="${nettle_folder_name}.tar.gz"
@@ -385,7 +400,7 @@ function do_nettle()
         echo "Running nettle make..."
 
         # Build.
-        make ${JOBS}
+        make -j ${JOBS}
         # make install-strip
         # For unknown reasons, on 32-bits make install-info fails 
         # (`install-info --info-dir="/opt/xbb/share/info" nettle.info` returns 1)
@@ -408,8 +423,10 @@ function do_tasn1()
   # https://ftp.gnu.org/gnu/libtasn1/libtasn1-4.12.tar.gz
   # https://aur.archlinux.org/cgit/aur.git/tree/PKGBUILD?h=libtasn1-git
 
-  # 2017-11-19
-  local tasn1_version="4.12"
+  # 2017-11-19, "4.12"
+  # 2018-01-16, "4.13"
+
+  local tasn1_version="$1"
 
   local tasn1_folder_name="libtasn1-${tasn1_version}"
   local tasn1_archive="${tasn1_folder_name}.tar.gz"
@@ -454,7 +471,7 @@ function do_tasn1()
         echo "Running tasn1 make..."
 
         # Build.
-        make ${JOBS}
+        make -j ${JOBS}
         make install-strip
       ) 2>&1 | tee "${LOGS_FOLDER_PATH}/make-tasn1-output.txt"
     )
@@ -472,7 +489,10 @@ function do_expat()
   # https://github.com/libexpat/libexpat/releases
   # https://aur.archlinux.org/cgit/aur.git/tree/PKGBUILD?h=expat-git
 
-  local expat_version="2.2.5"
+  # Nov 1, 2017, "2.2.5"
+  # Aug 15, 2018, "2.2.6"
+
+  local expat_version="$1"
 
   local expat_folder_name="expat-${expat_version}"
   local expat_archive="${expat_folder_name}.tar.bz2"
@@ -519,7 +539,7 @@ function do_expat()
         echo "Running expat make..."
 
         # Build.
-        make ${JOBS}
+        make -j ${JOBS}
         make install-strip
       ) 2>&1 | tee "${LOGS_FOLDER_PATH}/make-expat-output.txt"
     )
@@ -537,8 +557,9 @@ function do_libffi()
   # https://sourceware.org/pub/libffi/
   # https://aur.archlinux.org/cgit/aur.git/tree/PKGBUILD?h=libffi-git
 
-  # 12-Nov-2014
-  local libffi_version="3.2.1"
+  # 12-Nov-2014, "3.2.1", latest
+
+  local libffi_version="$1"
 
   local libffi_folder_name="libffi-${libffi_version}"
   # .gz only.
@@ -586,7 +607,7 @@ function do_libffi()
         echo "Running libffi make..."
 
         # Build.
-        make ${JOBS}
+        make -j ${JOBS}
         make install-strip
       ) 2>&1 | tee "${LOGS_FOLDER_PATH}/make-libffi-output.txt"
     )
@@ -604,8 +625,9 @@ function do_libiconv()
   # https://ftp.gnu.org/pub/gnu/libiconv/
   # https://aur.archlinux.org/cgit/aur.git/tree/PKGBUILD?h=libiconv
 
-  # 2017-02-02
-  local libiconv_version="1.15"
+  # 2017-02-02, "1.15", latest
+
+  local libiconv_version="$1"
 
   local libiconv_folder_name="libiconv-${libiconv_version}"
   local libiconv_archive="${libiconv_folder_name}.tar.gz"
@@ -650,7 +672,7 @@ function do_libiconv()
         echo "Running libiconv make..."
 
         # Build.
-        make ${JOBS}
+        make -j ${JOBS}
         make install-strip
 
         # Does not leave a pkgconfig/iconv.pc;
@@ -669,15 +691,14 @@ function do_gnutls()
 {
   # http://www.gnutls.org/
   # https://www.gnupg.org/ftp/gcrypt/gnutls/
+  # https://www.gnupg.org/ftp/gcrypt/gnutls/v3.6/gnutls-3.6.7.tar.xz
   # https://aur.archlinux.org/cgit/aur.git/tree/PKGBUILD?h=gnutls-git
 
-  # 2017-10-21
-  # XBB_GNUTLS_MAJOR_VERSION="3.5"
-  # XBB_GNUTLS_VERSION="${XBB_GNUTLS_MAJOR_VERSION}.16"
+  # 2017-10-21, "3.6.1"
+  # 2019-03-27, "3.6.7"
 
-  # 2017-10-21
-  local gnutls_version_major="3.6"
-  local gnutls_version="${gnutls_version_major}.1"
+  local gnutls_version="$1"
+  local gnutls_version_major="$(echo ${gnutls_version} | sed -e 's|\([0-9][0-9]*\.[0-9][0-9]*\)\.[0-9][0-9]*|\1|')"
 
   local gnutls_folder_name="gnutls-${gnutls_version}"
   local gnutls_archive="${gnutls_folder_name}.tar.xz"
@@ -702,6 +723,9 @@ function do_gnutls()
       export CXXFLAGS="${XBB_CXXFLAGS}"
       export LDFLAGS="${XBB_LDFLAGS_LIB}"
 
+      export CC=clang
+      export CXX=clang++
+      
       if [ ! -f "config.status" ]
       then
         (
@@ -714,7 +738,6 @@ function do_gnutls()
             --prefix="${INSTALL_FOLDER_PATH}" \
             --without-p11-kit \
             --enable-guile \
-            --with-guile-site-dir=no \
             --with-included-unistring
 
           cp "config.log" "${LOGS_FOLDER_PATH}/config-gnutls-log.txt"
@@ -726,7 +749,7 @@ function do_gnutls()
         echo "Running gnutls make..."
 
         # Build.
-        make ${JOBS}
+        make -j ${JOBS}
         make install-strip
       ) 2>&1 | tee "${LOGS_FOLDER_PATH}/make-gnutls-output.txt"
     )
@@ -735,6 +758,130 @@ function do_gnutls()
 
   else
     echo "Library gnutls already installed."
+  fi
+}
+
+function do_util_macros() 
+{
+  # http://www.linuxfromscratch.org/blfs/view/7.4/x/util-macros.html
+  # http://xorg.freedesktop.org/releases/individual/util/util-macros-1.17.1.tar.bz2
+
+  local util_macros_version="$1"
+
+  local util_macros_folder_name="util-macros-${util_macros_version}"
+  local util_macros_archive="${util_macros_folder_name}.tar.bz2"
+  local util_macros_url="http://xorg.freedesktop.org/releases/individual/util/${util_macros_archive}"
+
+  local util_macros_stamp_file_path="${STAMPS_FOLDER_PATH}/stamp-util_macros-${util_macros_version}-installed"
+  if [ ! -f "${util_macros_stamp_file_path}" -o ! -d "${LIBS_BUILD_FOLDER_PATH}/${util_macros_folder_name}" ]
+  then
+
+    cd "${SOURCES_FOLDER_PATH}"
+
+    download_and_extract "${util_macros_url}" "${util_macros_archive}" "${util_macros_folder_name}"
+
+    (
+      mkdir -p "${LIBS_BUILD_FOLDER_PATH}/${util_macros_folder_name}"
+      cd "${LIBS_BUILD_FOLDER_PATH}/${util_macros_folder_name}"
+
+      xbb_activate_this
+
+      export CPPFLAGS="${XBB_CPPFLAGS}"
+      export CFLAGS="${XBB_CFLAGS}"
+      export CXXFLAGS="${XBB_CXXFLAGS}"
+      export LDFLAGS="${XBB_LDFLAGS_LIB}"
+
+      if [ ! -f "config.status" ]
+      then
+        (
+          echo
+          echo "Running util_macros configure..."
+
+          bash "${SOURCES_FOLDER_PATH}/${util_macros_folder_name}/configure" --help
+
+          bash ${DEBUG} "${SOURCES_FOLDER_PATH}/${util_macros_folder_name}/configure" \
+            --prefix="${INSTALL_FOLDER_PATH}" 
+
+          cp "config.log" "${LOGS_FOLDER_PATH}/config-util_macros-log.txt"
+        ) 2>&1 | tee "${LOGS_FOLDER_PATH}/configure-util_macros-output.txt"
+      fi
+
+      (
+        echo
+        echo "Running util_macros make..."
+
+        # Build.
+        make -j ${JOBS}
+        make install-strip
+      ) 2>&1 | tee "${LOGS_FOLDER_PATH}/make-util_macros-output.txt"
+    )
+
+    touch "${util_macros_stamp_file_path}"
+
+  else
+    echo "Library util_macros already installed."
+  fi
+}
+
+function do_xorg_xproto() 
+{
+  # http://www.linuxfromscratch.org/blfs/view/7.4/x/x7proto.html
+  # https://www.x.org/releases/individual/proto/xproto-7.0.31.tar.bz2
+
+  local xorg_xproto_version="$1"
+
+  local xorg_xproto_folder_name="xproto-${xorg_xproto_version}"
+  local xorg_xproto_archive="${xorg_xproto_folder_name}.tar.bz2"
+  local xorg_xproto_url="https://www.x.org/releases/individual/proto/${xorg_xproto_archive}"
+
+  local xorg_xproto_stamp_file_path="${STAMPS_FOLDER_PATH}/stamp-xorg_xproto-${xorg_xproto_version}-installed"
+  if [ ! -f "${xorg_xproto_stamp_file_path}" -o ! -d "${LIBS_BUILD_FOLDER_PATH}/${xorg_xproto_folder_name}" ]
+  then
+
+    cd "${SOURCES_FOLDER_PATH}"
+
+    download_and_extract "${xorg_xproto_url}" "${xorg_xproto_archive}" "${xorg_xproto_folder_name}"
+
+    (
+      mkdir -p "${LIBS_BUILD_FOLDER_PATH}/${xorg_xproto_folder_name}"
+      cd "${LIBS_BUILD_FOLDER_PATH}/${xorg_xproto_folder_name}"
+
+      xbb_activate_this
+
+      export CPPFLAGS="${XBB_CPPFLAGS}"
+      export CFLAGS="${XBB_CFLAGS}"
+      export CXXFLAGS="${XBB_CXXFLAGS}"
+      export LDFLAGS="${XBB_LDFLAGS_LIB}"
+
+      if [ ! -f "config.status" ]
+      then
+        (
+          echo
+          echo "Running xorg_xproto configure..."
+
+          bash "${SOURCES_FOLDER_PATH}/${xorg_xproto_folder_name}/configure" --help
+
+          bash ${DEBUG} "${SOURCES_FOLDER_PATH}/${xorg_xproto_folder_name}/configure" \
+            --prefix="${INSTALL_FOLDER_PATH}" 
+
+          cp "config.log" "${LOGS_FOLDER_PATH}/config-xorg_xproto-log.txt"
+        ) 2>&1 | tee "${LOGS_FOLDER_PATH}/configure-xorg_xproto-output.txt"
+      fi
+
+      (
+        echo
+        echo "Running xorg_xproto make..."
+
+        # Build.
+        make -j ${JOBS}
+        make install-strip
+      ) 2>&1 | tee "${LOGS_FOLDER_PATH}/make-xorg_xproto-output.txt"
+    )
+
+    touch "${xorg_xproto_stamp_file_path}"
+
+  else
+    echo "Library xorg_xproto already installed."
   fi
 }
 

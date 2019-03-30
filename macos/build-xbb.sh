@@ -40,15 +40,19 @@ script_folder_name="$(basename "${script_folder_path}")"
 
 # =============================================================================
 
-# WARNING: NOT YET fUNCTIONAL!
-
 # Script to build a separate macOS XBB.
 # Basically it tries to be similar to the Docker images.
 
 # -----------------------------------------------------------------------------
 
+VERSION="$(cat "${script_folder_path}"/VERSION)"
+echo
+echo "macOS XBB v${VERSION} script started..."
+
+# -----------------------------------------------------------------------------
+
 XBB_FOLDER="${HOME}/opt/xbb"
-XBB_BOOTSTRAP_FOLDER="${HOME}/opt/homebrew/xbb-bootstrap"
+XBB_BOOTSTRAP_FOLDER="${HOME}/opt/xbb-bootstrap"
 
 DOWNLOAD_FOLDER_PATH="${HOME}/Library/Caches/XBB"
 WORK_FOLDER_PATH="${HOME}/Work/darwin-xbb"
@@ -59,14 +63,19 @@ SOURCES_FOLDER_PATH="${WORK_FOLDER_PATH}/sources"
 STAMPS_FOLDER_PATH="${WORK_FOLDER_PATH}/stamps"
 LOGS_FOLDER_PATH="${WORK_FOLDER_PATH}/logs"
 
-if true
-then
-  INSTALL_FOLDER_PATH="${XBB_FOLDER}"
-else
-  INSTALL_FOLDER_PATH="${WORK_FOLDER_PATH}/install"
-fi
+INSTALL_FOLDER_PATH="${XBB_FOLDER}"
 
-JOBS=-j2
+JOBS=${JOBS:-""}
+IS_BOOTSTRAP="n"
+
+# -----------------------------------------------------------------------------
+
+if [ ! -d "${XBB_BOOTSTRAP_FOLDER}" -o ! -x "${XBB_BOOTSTRAP_FOLDER}/bin/g++-7bs" ]
+then
+  echo "macOS XBB Bootstrap not found in \"${XBB_BOOTSTRAP_FOLDER}\""
+  echo "https://github.com/xpack/xpack-build-box/tree/master/macos"
+  exit 1
+fi
 
 # -----------------------------------------------------------------------------
 
@@ -90,12 +99,12 @@ export CONFIG_SHELL="/bin/bash"
 
 XBB_CPPFLAGS=""
 
-XBB_CFLAGS="-ffunction-sections -fdata-sections -pipe"
-XBB_CXXFLAGS="-ffunction-sections -fdata-sections -pipe"
+XBB_CFLAGS="-pipe"
+XBB_CXXFLAGS="-pipe"
 
 XBB_LDFLAGS=""
 XBB_LDFLAGS_LIB="${XBB_LDFLAGS}"
-XBB_LDFLAGS_APP="${XBB_LDFLAGS} -Wl,-dead_strip"
+XBB_LDFLAGS_APP="${XBB_LDFLAGS}"
 
 PATH=${PATH:-""}
 export PATH
@@ -108,20 +117,18 @@ export PKG_CONFIG_PATH
 PKG_CONFIG_LIBDIR=${PKG_CONFIG_LIBDIR:-":"}
 export PKG_CONFIG_LIBDIR
 
-export CC=gcc-7
-export CXX=g++-7
+# Build the XBB tools with the bootstrap compiler.
+# Some packages fail, and have to revert to the Apple clang.
+export CC=gcc-7bs
+export CXX=g++-7bs
 
 xbb_activate()
 {
   # Default
   PATH=${PATH:-""}
 
-  # Add the bootstrap binaries, including the separate ones.
+  # Add the bootstrap binaries.
   PATH="${XBB_BOOTSTRAP_FOLDER}/bin:${PATH}"
-  PATH="${XBB_BOOTSTRAP_FOLDER}/opt/make/coreutils/gnubin:${PATH}"
-  PATH="${XBB_BOOTSTRAP_FOLDER}/opt/make/gawk/gnubin:${PATH}"
-  PATH="${XBB_BOOTSTRAP_FOLDER}/opt/gnu-sed/libexec/gnubin:${PATH}"
-  PATH="${XBB_BOOTSTRAP_FOLDER}/opt/make/libexec/gnubin:${PATH}"
 
   # Add the current binaries.
   PATH="${INSTALL_FOLDER_PATH}/bin:${PATH}"
@@ -153,7 +160,7 @@ source "${script_folder_path}/common-functions-source.sh"
 source "${script_folder_path}/common-libs-functions-source.sh"
 source "${script_folder_path}/common-apps-functions-source.sh"
 
-create_pkg_config_verbose
+install -m 755 -c "${script_folder_path}/scripts/pkg-config-verbose" "${INSTALL_FOLDER_PATH}/bin" 
 
 export PKG_CONFIG="${INSTALL_FOLDER_PATH}/bin/pkg-config-verbose"
 
@@ -161,222 +168,95 @@ export PKG_CONFIG="${INSTALL_FOLDER_PATH}/bin/pkg-config-verbose"
 
 GCC_SUFFIX="-7"
 
-function do_gcc() 
-{
-  # https://gcc.gnu.org
-  # https://ftp.gnu.org/gnu/gcc/
-  # https://gcc.gnu.org/wiki/InstallingGCC
-  # https://aur.archlinux.org/cgit/aur.git/tree/PKGBUILD?h=gcc-git
-
-  # 2018-12-06
-  local gcc_version="7.4.0"
-
-  local gcc_folder_name="gcc-${gcc_version}"
-  local gcc_archive="${gcc_folder_name}.tar.xz"
-  local gcc_url="https://ftp.gnu.org/gnu/gcc/gcc-${gcc_version}/${gcc_archive}"
-  local gcc_branding="xPack Build Box GCC\x2C 64-bit"
-
-  local gcc_stamp_file_path="${STAMPS_FOLDER_PATH}/stamp-gcc-${gcc_version}-installed"
-  if [ ! -f "${gcc_stamp_file_path}" -o ! -d "${BUILD_FOLDER_PATH}/${gcc_folder_name}" ]
-  then
-
-    cd "${SOURCES_FOLDER_PATH}"
-
-    download_and_extract "${gcc_url}" "${gcc_archive}" "${gcc_folder_name}"
-
-    (
-      mkdir -p "${BUILD_FOLDER_PATH}/${gcc_folder_name}"
-      cd "${BUILD_FOLDER_PATH}/${gcc_folder_name}"
-
-      xbb_activate_this
-
-      export CPPFLAGS="${XBB_CPPFLAGS}"
-      export CFLAGS="${XBB_CFLAGS} -Wno-sign-compare -Wno-varargs -Wno-tautological-compare  "
-      export CXXFLAGS="${XBB_CXXFLAGS} -Wno-sign-compare -Wno-varargs -Wno-tautological-compare"
-      export LDFLAGS="${XBB_LDFLAGS_APP}"
-
-      local sdk_path
-      if [ "${xcode_version}" == "7.2.1" ]
-      then
-        # macOS 10.10
-        sdk_path="$(xcode-select -print-path)/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.11.sdk"
-      elif [ "${xcode_version}" == "10.1" ]
-      then
-        # macOS 10.13
-        sdk_path="$(xcode-select -print-path)/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk"
-      else
-        echo "Unsupported Xcode ${xcode_version}; edit the script to add new versions."
-        exit 1
-      fi
-
-      if [ ! -f "config.status" ]
-      then
-        (
-          echo
-          echo "Running gcc configure..."
-
-          bash "${SOURCES_FOLDER_PATH}/${gcc_folder_name}/configure" --help
-
-          bash ${DEBUG} "${SOURCES_FOLDER_PATH}/${gcc_folder_name}/configure" \
-            --prefix="${INSTALL_FOLDER_PATH}" \
-            --program-suffix="${GCC_SUFFIX}" \
-            --with-pkgversion="${gcc_branding}" \
-            --with-native-system-header-dir="/usr/include" \
-            --with-sysroot="${sdk_path}" \
-            \
-            --enable-languages=c,c++ \
-            --enable-checking=release \
-            --disable-multilib \
-            --disable-werror \
-            \
-            --with-gmp="${INSTALL_FOLDER_PATH}" \
-            --with-mpfr="${INSTALL_FOLDER_PATH}" \
-            --with-mpc="${INSTALL_FOLDER_PATH}" \
-            --with-isl="${INSTALL_FOLDER_PATH}" \
-
-
-          cp "config.log" "${LOGS_FOLDER_PATH}/config-gcc-log.txt"
-        ) 2>&1 | tee "${LOGS_FOLDER_PATH}/configure-gcc-output.txt"
-      fi
-
-      (
-        echo
-        echo "Running gcc make..."
-
-        # Build.
-        make ${JOBS}
-        make install-strip
-      ) 2>&1 | tee "${LOGS_FOLDER_PATH}/make-gcc-output.txt"
-    )
-
-    (
-      echo
-      "${INSTALL_FOLDER_PATH}/bin/g++${GCC_SUFFIX}" --version
-
-      mkdir -p "${HOME}/tmp"
-      cd "${HOME}/tmp"
-
-      # Note: __EOF__ is quoted to prevent substitutions here.
-      cat <<'__EOF__' > hello.cpp
-#include <iostream>
-
-int
-main(int argc, char* argv[])
-{
-  std::cout << "Hello" << std::endl;
-}
-__EOF__
-
-      if true
-      then
-
-        "${INSTALL_FOLDER_PATH}/bin/g++${GCC_SUFFIX}" hello.cpp -o hello
-
-        if [ "x$(./hello)x" != "xHellox" ]
-        then
-          exit 1
-        fi
-
-      fi
-
-      rm -rf hello.cpp hello
-    )
-
-    hash -r
-
-    touch "${gcc_stamp_file_path}"
-
-  else
-    echo "Component gcc already installed."
-  fi
-}
-
 # =============================================================================
 
-# WARNING: the order is important, since some of the builds depend
-# on previous ones.
+# Libraries
 
-# New zlib, used in most of the tools.
-# do_zlib
+do_zlib "1.2.11"
 
-if false
-then
+do_gmp "6.1.2"
+do_mpfr "3.1.6"
+do_mpc "1.0.3"
+do_isl "0.21"
 
-do_openssl
+do_nettle "3.4.1"
+do_tasn1 "4.13"
+do_expat "2.2.6"
+do_libffi "3.2.1"
 
-do_curl
-do_xz
-do_tar
+do_libiconv "1.15"
 
-do_coreutils
+do_gnutls "3.6.7"
 
-fi
+# Both libs and apps.
+do_xz "5.2.4"
 
-do_gmp
-do_mpfr
-do_mpc
-do_isl
+do_openssl "1.1.1b"
 
-if false
-then
 
-do_nettle
-do_tasn1
-do_expat
-do_libffi
-
-do_pkg_config
-do_libiconv
-
-do_gnutls
-
-do_gawk
-do_autoconf
-do_automake
-do_libtool
-
-# Abort trap: 6
-# do_m4
-
-do_gettext
-
-do_patch
-do_diffutils
-
-do_bison
-
-do_make
-
-# error: no member named 'rpl_unlink' in 'struct options'
-# do_wget
-
-do_texinfo
-# do_patchelf
-# do_dos2unix
-# do_flex
-
-# do_git
-
-# do_perl
-do_cmake
-# do_python
-# do_scons
-# do_python3
-
-# do_ninja
-# do_meson
-
-fi
+# Applications
 
 # By all means DO NOT build binutils, since this will override Apple 
 # specific tools (ar, strip, etc) and break the build in multiple ways.
-# do_binutils
-do_gcc
 
-create_pkg_config_verbose
+do_gcc "7.4.0"
+
+do_curl "7.64.1"
+
+do_tar "1.32"
+
+do_coreutils "8.31"
+
+do_pkg_config "0.29.2"
+
+do_gawk "4.2.1"
+do_sed "4.7"
+do_autoconf "2.69"
+do_automake "1.16"
+do_libtool "2.4.6"
+
+do_m4 "1.4.18"
+
+do_gettext "0.19.8"
+
+do_diffutils "3.7"
+do_patch "2.7.6"
+
+do_bison "3.3.2"
+
+do_make "4.2.1"
+
+do_wget "1.20.1"
+
+do_texinfo "6.6"
+do_patchelf "0.10"
+do_dos2unix "7.4.0"
+
+# Apple uses 2.5.3, an update is not mandatory.
+# do_flex "2.6.4"
+
+# Apple uses 5.18.2, an update is not mandatory.
+# do_perl "5.28.1"
+
+do_cmake "3.13.4"
+do_ninja "1.9.0"
+
+do_python "2.7.16"
+
+# require xz, openssl
+do_python3 "3.7.3"
+do_meson
+
+do_scons "3.0.5"
+
+do_git "2.21.0"
+
 create_xbb_source
 
+install -m 755 -c  "${script_folder_path}/VERSION" "${INSTALL_FOLDER_PATH}"
+
 # -----------------------------------------------------------------------------
+
 
 echo
 echo "macOS version ${macos_version}"
@@ -384,10 +264,10 @@ echo "Xcode version ${xcode_version}"
 echo "XCode Command Line Tools version ${xclt_version}"
 
 echo
-echo chmod -R -w "${INSTALL_FOLDER_PATH}"
+echo "You may want to 'chmod -R -w \"${INSTALL_FOLDER_PATH}\"'"
 
 echo
-echo Done
+echo "macOS XBB v${VERSION} created in \"${INSTALL_FOLDER_PATH}\""
 say done
 
 # -----------------------------------------------------------------------------

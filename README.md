@@ -1,26 +1,35 @@
 # XBB (xPack Build Box)
 
-There are two types of builds:
+The xPack Build Box is an elaborated build environment focused on
+obtaining repeatable and consistent results while building applications
+on GNU/Linux and macOS.
 
-- local/native builds
-- distribution builds
-  
-These tools were initially intended for the xPack binary distributions,
-but later were extended to support native builds for development purposes
-(see the `ubuntu` folder).
+It does so by compiling from sources, in a separate folder, all tools
+required for the package builds. 
+
+By strictly controlling the versions of the compiled sources, it is 
+possible to create build environments that use about the same tools
+on both GNU/Linux and macOS, helping to obtain consistent results.
 
 ## Overview
 
+There are two types of builds:
+
+- local/native builds, intended for development and running on the local 
+  machine (see the `ubuntu` folder)
+- distribution builds, intended for xPack binary distributions and running 
+  on most modern machines
+
 Generally, xPack binaries are available for the following platforms:
 
-- Windows 32-bits
-- Windows 64-bits
-- GNU/Linux 32-bits
-- GNU/Linux 64-bits
-- macOS (Intel, 64-bits)
+- Windows 32-bit
+- Windows 64-bit
+- GNU/Linux 32-bit
+- GNU/Linux 64-bit
+- macOS (Intel, 64-bit)
 
 For a repetitive and controllable build process, the Windows and GNU/Linux 
-binaries are built using two Docker images (32/64-bits).
+binaries are built using two Docker images (32/64-bit).
 
 - ilegeul/centos:6-xbb-v1
 - ilegeul/centos32:6-xbb-v1
@@ -28,12 +37,12 @@ binaries are built using two Docker images (32/64-bits).
 The images are based on CentOS 6 (glibc 2.12), and the GNU/Linux binaries 
 should run on most modern distributions.
 
-The Windows executables are created with mingw-w64 v5.0.3 and the 
-mingw-w64 GCC 7.2, available from the same Docker images.
+The Windows executables are created with mingw-w64 v5.0.4 and the 
+mingw-w64 GCC 7.4, available from the same Docker images.
 
 The macOS binaries are generated on a macOS 10.10.5, plus a set of new 
-GNU tools, installed in a custom instance of Homebrew. The TeX tools 
-are also installed in a custom instance.
+GNU tools, installed in a separate folder. The TeX tools 
+are also installed in a custom folder.
 
 ## How to use?
 
@@ -68,7 +77,7 @@ For macOS the recommended use case is similar, except the XBB tools
 are installed in the user HOME folder:
 
 ```bash
-source "${HOME}"/opt/homebrew/xbb/xbb-source.sh
+source "${HOME}"/opt/xbb/xbb-source.sh
 ...
 (
   xbb_activate
@@ -79,6 +88,8 @@ source "${HOME}"/opt/homebrew/xbb/xbb-source.sh
 
 ### Hacks
 
+Note: deprecated in recent XBB versions 
+
 The GCC 7 available from Homebrew has a problem and building GDB generates 
 faulty binaries (`set language auto` results in `SIGABRT`).
 
@@ -88,10 +99,9 @@ built with `install-patched-gcc.sh`; binaries are suffixed with
 
 ## The `xbb-source.sh` script
 
-The `add-xbb-extras.sh` script referred in the install sections
-is used to add two more scripts to the build environment.
+The build environment includes two more scripts.
 
-The first script is `xbb-source.sh`, which, if available, is included 
+The first script is `xbb-source.sh`, which, if available, should be included 
 with `source` by the build scripts, to define more bash functions to 
 the shell.
 
@@ -100,24 +110,26 @@ in the XBB folders.
 
 The `xbb_activate` function is used to extend the `PATH` and the 
 `LD_LIBRARY_PATH` with folders in the XBB folders, in front of existing
-folders, so that the XBB executables are used instead of system ones.
+folders, so that the XBB executables are preferred over the system ones.
 
-The `xbb_activate_dev` function is used to further extend the environment
-with other definitions, like `PKG_CONFIG_PATH`, the path where `pkgconfig`
+The `xbb_activate_this` function is used to further extend the environment
+with other definitions, like `PKG_CONFIG_PATH`, the path where `pkg-config`
 searches for resources, if it is necessary to search for the XBB 
-folders.
+folders. There are also custom variables that can be used as
+CPPFLAGS and LDFLAGS, that add the XBB folders to the include paths and 
+the library path.
 
 ## The `pkg-config-verbose` script
 
 While running the configuration step, it is sometimes useful to trace
-how `pkgconfig` identifies resources to be used during the build.
+how `pkg-config` identifies resources to be used during the build.
 
-The standard `pkgconfig` does not have an option to increase verbosity.
+The standard `pkg-config` does not have an option to increase verbosity.
 
-The solution is to use a separate script that displays the received command
+The workaround is to use a separate script that displays the received command
 and the response on the stderr stream.
 
-This script is not specific to XBB, it can be used with any build.
+This script is not specific to XBB, and can be used with any build.
 
 For this, copy the file into `.../xbb/bin` or any other folder present 
 in the PATH and pass the script name via the environment.
@@ -129,14 +141,18 @@ $ export PKG_CONFIG=pkg-config-verbose
 
 ## End-of-support schedule
 
-According to 
-[CentOS schedule](https://en.wikipedia.org/wiki/CentOS#End-of-support_schedule)
-version 6 will be supported up to Nov. 20120.
+According to the 
+[CentOS schedule](https://en.wikipedia.org/wiki/CentOS#End-of-support_schedule),
+version 6 will be supported up to Nov. 2020.
 
-After this date XBB will probably be updated to CentOS 7.
+After this date XBB will be updated, probably to CentOS 7.
 
 ## 32-bit support
 
-Existing support for 32-bit builds will be preserved for moment, 
-but most probably will no longer be present in the next version
-using CentOS 7.
+Existing support for 32-bit builds will be preserved for the moment, 
+but will probably be dropped in one of the future version, possibly
+after the upgrade to CentOS 7.
+
+If you still need the 32-bit binaries after 2020, please open an issue 
+in the specific build script repository, and the request will be
+analysed. 

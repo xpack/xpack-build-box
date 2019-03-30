@@ -7,6 +7,146 @@
 # for any purpose is hereby granted, under the terms of the MIT license.
 # -----------------------------------------------------------------------------
 
+function do_gcc() 
+{
+  # https://gcc.gnu.org
+  # https://ftp.gnu.org/gnu/gcc/
+  # https://gcc.gnu.org/wiki/InstallingGCC
+  # https://gcc.gnu.org/install/build.html
+  # https://aur.archlinux.org/cgit/aur.git/tree/PKGBUILD?h=gcc-git
+
+  # 2018-12-06, "7.4.0"
+
+  local gcc_version="$1"
+  
+  local gcc_folder_name="gcc-${gcc_version}"
+  local gcc_archive="${gcc_folder_name}.tar.xz"
+  local gcc_url="https://ftp.gnu.org/gnu/gcc/gcc-${gcc_version}/${gcc_archive}"
+  local gcc_branding="xPack Build Box Bootstrap GCC\x2C 64-bit"
+
+  local gcc_stamp_file_path="${STAMPS_FOLDER_PATH}/stamp-gcc-${gcc_version}-installed"
+  if [ ! -f "${gcc_stamp_file_path}" -o ! -d "${BUILD_FOLDER_PATH}/${gcc_folder_name}" ]
+  then
+
+    cd "${SOURCES_FOLDER_PATH}"
+
+    download_and_extract "${gcc_url}" "${gcc_archive}" "${gcc_folder_name}" 
+
+    (
+      mkdir -p "${BUILD_FOLDER_PATH}/${gcc_folder_name}"
+      cd "${BUILD_FOLDER_PATH}/${gcc_folder_name}"
+
+      xbb_activate_this
+
+      export CPPFLAGS="${XBB_CPPFLAGS}"
+      export CFLAGS="${XBB_CFLAGS} -Wno-sign-compare -Wno-varargs -Wno-tautological-compare  "
+      export CXXFLAGS="${XBB_CXXFLAGS} -Wno-sign-compare -Wno-varargs -Wno-tautological-compare"
+      export LDFLAGS="${XBB_LDFLAGS_APP}"
+
+      local sdk_path
+      if [ "${xcode_version}" == "7.2.1" ]
+      then
+        # macOS 10.10
+        sdk_path="$(xcode-select -print-path)/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.11.sdk"
+      elif [ "${xcode_version}" == "10.1" ]
+      then
+        # macOS 10.13
+        sdk_path="$(xcode-select -print-path)/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk"
+      else
+        echo "Unsupported Xcode ${xcode_version}; edit the script to add new versions."
+        exit 1
+      fi
+
+      if [ ! -f "config.status" ]
+      then
+        (
+          echo
+          echo "Running gcc configure..."
+
+          bash "${SOURCES_FOLDER_PATH}/${gcc_folder_name}/configure" --help
+
+          bash ${DEBUG} "${SOURCES_FOLDER_PATH}/${gcc_folder_name}/configure" \
+            --prefix="${INSTALL_FOLDER_PATH}" \
+            --program-suffix="${GCC_SUFFIX}" \
+            --with-pkgversion="${gcc_branding}" \
+            --with-native-system-header-dir="/usr/include" \
+            --with-sysroot="${sdk_path}" \
+            \
+            --enable-languages=c,c++ \
+            --enable-checking=release \
+            --enable-static \
+            --enable-threads=posix \
+            \
+            --disable-multilib \
+            --disable-werror \
+            --disable-nls \
+            --disable-bootstrap \
+            \
+            --with-gmp="${INSTALL_FOLDER_PATH}" \
+            --with-mpfr="${INSTALL_FOLDER_PATH}" \
+            --with-mpc="${INSTALL_FOLDER_PATH}" \
+            --with-isl="${INSTALL_FOLDER_PATH}" \
+
+          cp "config.log" "${LOGS_FOLDER_PATH}/config-gcc-log.txt"
+        ) 2>&1 | tee "${LOGS_FOLDER_PATH}/configure-gcc-output.txt"
+      fi
+
+      (
+        echo
+        echo "Running gcc make..."
+
+        # Build.
+        make -j ${JOBS}
+        make install-strip
+      ) 2>&1 | tee "${LOGS_FOLDER_PATH}/make-gcc-output.txt"
+    )
+
+    (
+      echo
+      "${INSTALL_FOLDER_PATH}/bin/g++${GCC_SUFFIX}" --version
+      "${INSTALL_FOLDER_PATH}/bin/g++${GCC_SUFFIX}" -dumpmachine
+      "${INSTALL_FOLDER_PATH}/bin/g++${GCC_SUFFIX}" -dumpspecs | wc -l
+
+      mkdir -p "${HOME}"/tmp
+      cd "${HOME}"/tmp
+
+      # Note: __EOF__ is quoted to prevent substitutions here.
+      cat <<'__EOF__' > hello.cpp
+#include <iostream>
+
+int
+main(int argc, char* argv[])
+{
+  std::cout << "Hello" << std::endl;
+}
+__EOF__
+
+      if true
+      then
+
+        "${INSTALL_FOLDER_PATH}/bin/g++${GCC_SUFFIX}" hello.cpp -o hello
+
+        if [ "x$(./hello)x" != "xHellox" ]
+        then
+          exit 1
+        fi
+
+      fi
+
+      rm -rf hello.cpp hello
+    )
+
+    hash -r
+
+    touch "${gcc_stamp_file_path}"
+
+  else
+    echo "Component gcc already installed."
+  fi
+}
+
+# -----------------------------------------------------------------------------
+
 function do_openssl() 
 {
   # https://www.openssl.org
@@ -19,18 +159,22 @@ function do_openssl()
   # The new version deprecated CRYPTO_set_locking_callback, and yum fails with
   # /usr/lib64/python2.6/site-packages/pycurl.so: undefined symbol: CRYPTO_set_locking_callback
 
-  # 2017-Dec-07 
-  local openssl_version="1.0.2n"
+  # 2017-Dec-07 "1.0.2n"
+  # local openssl_version="1.0.2n"
+  # 2019-Feb-26 "1.1.1b"
+
+  local openssl_version="$1"
 
   local openssl_folder_name="openssl-${openssl_version}"
   local openssl_archive="${openssl_folder_name}.tar.gz"
-  # local openssl_url="https://www.openssl.org/source/${openssl_archive}"
-  local openssl_url="https://github.com/gnu-mcu-eclipse/files/raw/master/libs/${openssl_archive}"
+  local openssl_url="https://www.openssl.org/source/${openssl_archive}"
+  # local openssl_url="https://github.com/gnu-mcu-eclipse/files/raw/master/libs/${openssl_archive}"
 
   local openssl_stamp_file_path="${STAMPS_FOLDER_PATH}/stamp-openssl-${openssl_version}-installed"
   if [ ! -f "${openssl_stamp_file_path}" -o ! -d "${BUILD_FOLDER_PATH}/${openssl_folder_name}" ]
   then
 
+    # In-source build.
     cd "${BUILD_FOLDER_PATH}"
 
     download_and_extract "${openssl_url}" "${openssl_archive}" "${openssl_folder_name}"
@@ -41,6 +185,7 @@ function do_openssl()
 
       xbb_activate_this
 
+      # export CPPFLAGS="${XBB_CPPFLAGS} -I${BUILD_FOLDER_PATH}/${openssl_folder_name}/include"
       export CPPFLAGS="${XBB_CPPFLAGS}"
       export CFLAGS="${XBB_CFLAGS}"
       export CXXFLAGS="${XBB_CXXFLAGS}"
@@ -53,15 +198,16 @@ function do_openssl()
           echo "Running openssl configure..."
 
           # This config does not use the standard GNU environment definitions.
-          bash ./Configure --help || true
+          # `Configure` is a Perl script.
+          "./Configure" --help || true
 
-          ./Configure darwin64-x86_64-cc \
+          "./Configure" darwin64-x86_64-cc \
             --prefix="${INSTALL_FOLDER_PATH}" \
             --openssldir="${INSTALL_FOLDER_PATH}/openssl" \
-            shared \
             no-ssl3-method 
 
-          make depend ${JOBS}
+          make depend 
+          make -j ${JOBS}
 
           touch config.stamp
 
@@ -74,15 +220,18 @@ function do_openssl()
         echo "Running openssl make..."
 
         # Build.
-        make ${JOBS}
+        make -j ${JOBS}
         make install_sw
 
-        strip "${INSTALL_FOLDER_PATH}/bin/openssl"
+        strip -S "${INSTALL_FOLDER_PATH}/bin/openssl"
 
         if [ ! -f "${INSTALL_FOLDER_PATH}/openssl/cert.pem" ]
         then
           mkdir -p "${INSTALL_FOLDER_PATH}/openssl"
-          ln -s "/private/etc/ssl/cert.pem" "${INSTALL_FOLDER_PATH}/openssl/cert.pem"
+
+          /usr/bin/install -v -c -m 644 "/private/etc/ssl/cert.pem" "${INSTALL_FOLDER_PATH}/openssl"
+          # Used by curl.
+          /usr/bin/install -v -c -m 644 "$(dirname "${script_folder_path}")/ca-bundle/ca-bundle.crt" "${INSTALL_FOLDER_PATH}/openssl"
         fi
 
       ) 2>&1 | tee "${LOGS_FOLDER_PATH}/make-openssl-output.txt"
@@ -106,17 +255,19 @@ function do_curl()
 {
   # https://curl.haxx.se
   # https://curl.haxx.se/download/
+  # https://curl.haxx.se/download/curl-7.64.1.tar.xz
   # https://aur.archlinux.org/cgit/aur.git/tree/PKGBUILD?h=curl-git
 
-  # 2017-10-23 
-  # XBB_CURL_VERSION="7.56.1"
-  # 2017-11-29
-  local curl_version="7.57.0"
+  # 2017-10-23 "7.56.1"
+  # 2017-11-29 "7.57.0"
+  # 2019-03-27 "7.64.1"
+
+  local curl_version="$1"
 
   local curl_folder_name="curl-${curl_version}"
   local curl_archive="${curl_folder_name}.tar.xz"
-  # local curl_url="http://curl.net/abc/${curl_archive}"
-  local curl_url="https://github.com/gnu-mcu-eclipse/files/raw/master/libs/${curl_archive}"
+  local curl_url="https://curl.haxx.se/download/${curl_archive}"
+  # local curl_url="https://github.com/gnu-mcu-eclipse/files/raw/master/libs/${curl_archive}"
 
   local curl_stamp_file_path="${STAMPS_FOLDER_PATH}/stamp-curl-${curl_version}-installed"
   if [ ! -f "${curl_stamp_file_path}" -o ! -d "${BUILD_FOLDER_PATH}/${curl_folder_name}" ]
@@ -156,7 +307,7 @@ function do_curl()
             --enable-versioned-symbols \
             --enable-threaded-resolver \
             --with-gssapi \
-            --with-ca-bundle="${INSTALL_FOLDER_PATH}/openssl/cert.pem"
+            --with-ca-bundle="${INSTALL_FOLDER_PATH}/openssl/ca-bundle.crt"
 
           cp "config.log" "${LOGS_FOLDER_PATH}/config-curl-log.txt"
         ) 2>&1 | tee "${LOGS_FOLDER_PATH}/configure-curl-output.txt"
@@ -167,10 +318,10 @@ function do_curl()
         echo "Running curl make..."
 
         # Build.
-        make ${JOBS}
+        make -j ${JOBS}
         make install
 
-        strip "${INSTALL_FOLDER_PATH}/bin/curl"
+        strip -S "${INSTALL_FOLDER_PATH}/bin/curl"
       ) 2>&1 | tee "${LOGS_FOLDER_PATH}/make-curl-output.txt"
     )
 
@@ -190,15 +341,18 @@ function do_xz()
 {
   # https://tukaani.org/xz/
   # https://sourceforge.net/projects/lzmautils/files/
+  # https://tukaani.org/xz/xz-5.2.4.tar.xz
   # https://aur.archlinux.org/cgit/aur.git/tree/PKGBUILD?h=xz-git
 
-  # 2016-12-30
-  local xz_version="5.2.3"
+  # 2016-12-30 "5.2.3"
+  # 2018-04-29 "5.2.4"
+
+  local xz_version="$1"
 
   local xz_folder_name="xz-${xz_version}"
   local xz_archive="${xz_folder_name}.tar.xz"
-  # local xz_url="http://xz.net/abc/${xz_archive}"
-  local xz_url="https://github.com/gnu-mcu-eclipse/files/raw/master/libs/${xz_archive}"
+  local xz_url="https://tukaani.org/xz/${xz_archive}"
+  # local xz_url="https://github.com/gnu-mcu-eclipse/files/raw/master/libs/${xz_archive}"
 
   local xz_stamp_file_path="${STAMPS_FOLDER_PATH}/stamp-xz-${xz_version}-installed"
   if [ ! -f "${xz_stamp_file_path}" -o ! -d "${BUILD_FOLDER_PATH}/${xz_folder_name}" ]
@@ -240,7 +394,7 @@ function do_xz()
         echo "Running xz make..."
 
         # Build.
-        make ${JOBS}
+        make -j ${JOBS}
         make install-strip
       ) 2>&1 | tee "${LOGS_FOLDER_PATH}/make-xz-output.txt"
     )
@@ -265,10 +419,11 @@ function do_tar()
   # https://ftp.gnu.org/gnu/tar/
   # https://aur.archlinux.org/cgit/aur.git/tree/PKGBUILD?h=tar-git
 
-  # 2016-05-16
-  # XBB_TAR_VERSION="1.29"
-  # 2017-12-17
-  local tar_version="1.30"
+  # 2016-05-16 "1.29"
+  # 2017-12-17 "1.30"
+  # 2019-02-23 "1.32"
+
+  local tar_version="$1"
 
   local tar_folder_name="tar-${tar_version}"
   local tar_archive="${tar_folder_name}.tar.xz"
@@ -313,7 +468,7 @@ function do_tar()
         echo "Running tar make..."
 
         # Build.
-        make ${JOBS}
+        make -j ${JOBS}
         make install-strip
       ) 2>&1 | tee "${LOGS_FOLDER_PATH}/make-tar-output.txt"
     )
@@ -337,8 +492,9 @@ function do_coreutils()
   # https://www.gnu.org/software/coreutils/
   # https://ftp.gnu.org/gnu/coreutils/
 
-  # 2019-03-10
-  local coreutils_version="8.31"
+  # 2019-03-10 "8.31"
+
+  local coreutils_version="$1"
 
   local coreutils_folder_name="coreutils-${coreutils_version}"
   local coreutils_archive="${coreutils_folder_name}.tar.xz"
@@ -363,6 +519,10 @@ function do_coreutils()
       export CXXFLAGS="${XBB_CXXFLAGS}"
       export LDFLAGS="${XBB_LDFLAGS_APP}"
 
+      # Use Apple GCC, since with GNU GCC it fails with some undefined symbols.
+      export CC=clang
+      export CXX=clang++
+
       if [ ! -f "config.status" ]
       then
         (
@@ -385,7 +545,7 @@ function do_coreutils()
         echo "Running coreutils make..."
 
         # Build.
-        make ${JOBS}
+        make -j ${JOBS}
         # make install-strip
         make install
       ) 2>&1 | tee "${LOGS_FOLDER_PATH}/make-coreutils-output.txt"
@@ -411,13 +571,14 @@ function do_pkg_config()
   # https://pkgconfig.freedesktop.org/releases/
   # https://aur.archlinux.org/cgit/aur.git/tree/PKGBUILD?h=pkg-config-git
 
-  # 2017-03-20
-  local pkg_config_version="0.29.2"
+  # 2017-03-20, "0.29.2", latest
+
+  local pkg_config_version="$1"
 
   local pkg_config_folder_name="pkg-config-${pkg_config_version}"
   local pkg_config_archive="${pkg_config_folder_name}.tar.gz"
-  # local pkg_config_url="https://ftp.gnu.org/gnu/pkg_config/${pkg_config_archive}"
-  local pkg_config_url="https://github.com/gnu-mcu-eclipse/files/raw/master/libs/${pkg_config_archive}"
+  local pkg_config_url="https://ftp.gnu.org/gnu/pkg_config/${pkg_config_archive}"
+  # local pkg_config_url="https://github.com/gnu-mcu-eclipse/files/raw/master/libs/${pkg_config_archive}"
 
   local pkg_config_stamp_file_path="${STAMPS_FOLDER_PATH}/stamp-pkg_config-${pkg_config_version}-installed"
   if [ ! -f "${pkg_config_stamp_file_path}" -o ! -d "${BUILD_FOLDER_PATH}/${pkg_config_folder_name}" ]
@@ -438,6 +599,9 @@ function do_pkg_config()
       export CXXFLAGS="${XBB_CXXFLAGS}"
       export LDFLAGS="${XBB_LDFLAGS_APP}"
 
+      export CC=clang
+      export CXX=clang++
+
       if [ ! -f "config.status" ]
       then
         (
@@ -452,7 +616,6 @@ function do_pkg_config()
           bash ${DEBUG} "${SOURCES_FOLDER_PATH}/${pkg_config_folder_name}/configure" \
             --prefix="${INSTALL_FOLDER_PATH}" \
             --with-internal-glib \
-            --enable-static \
             --disable-debug \
             --disable-host-tool \
             --with-pc-path=""
@@ -466,7 +629,7 @@ function do_pkg_config()
         echo "Running pkg_config make..."
 
         # Build.
-        make ${JOBS}
+        make -j ${JOBS}
         make install-strip
       ) 2>&1 | tee "${LOGS_FOLDER_PATH}/make-pkg_config-output.txt"
     )
@@ -491,8 +654,9 @@ function do_m4()
   # https://ftp.gnu.org/gnu/m4/
   # https://aur.archlinux.org/cgit/aur.git/tree/PKGBUILD?h=m4-git
 
-  # 2016-12-31
-  local m4_version="1.4.18"
+  # 2016-12-31, "1.4.18", latest
+
+  local m4_version="$1"
 
   local m4_folder_name="m4-${m4_version}"
   local m4_archive="${m4_folder_name}.tar.xz"
@@ -539,8 +703,14 @@ function do_m4()
         echo "Running m4 make..."
 
         # Build.
-        make ${JOBS}
+        make -j ${JOBS}
         make install-strip
+
+        echo
+        echo "Linking gm4..."
+        cd "${INSTALL_FOLDER_PATH}/bin"
+        ln -s -v m4 gm4
+
       ) 2>&1 | tee "${LOGS_FOLDER_PATH}/make-m4-output.txt"
     )
 
@@ -565,8 +735,10 @@ function do_gawk()
   # https://ftp.gnu.org/gnu/gawk/
   # https://aur.archlinux.org/cgit/aur.git/tree/PKGBUILD?h=gawk-git
 
-  # 2017-10-19
-  local gawk_version="4.2.0"
+  # 2017-10-19, "4.2.0"
+  # 2018-02-25, "4.2.1"
+
+  local gawk_version="$1"
 
   local gawk_folder_name="gawk-${gawk_version}"
   local gawk_archive="${gawk_folder_name}.tar.xz"
@@ -612,7 +784,7 @@ function do_gawk()
         echo "Running gawk make..."
 
         # Build.
-        make ${JOBS}
+        make -j ${JOBS}
         make install-strip
       ) 2>&1 | tee "${LOGS_FOLDER_PATH}/make-gawk-output.txt"
     )
@@ -636,8 +808,9 @@ function do_sed()
   # https://www.gnu.org/software/sed/
   # https://ftp.gnu.org/gnu/sed/
 
-  # 2018-12-21
-  local sed_version="4.7"
+  # 2018-12-21, "4.7"
+
+  local sed_version="$1"
 
   local sed_folder_name="sed-${sed_version}"
   local sed_archive="${sed_folder_name}.tar.xz"
@@ -682,8 +855,13 @@ function do_sed()
         echo "Running sed make..."
 
         # Build.
-        make ${JOBS}
+        make -j ${JOBS}
         make install-strip
+
+        echo
+        echo "Linking gsed..."
+        cd "${INSTALL_FOLDER_PATH}/bin"
+        ln -s -v sed gsed
       ) 2>&1 | tee "${LOGS_FOLDER_PATH}/make-sed-output.txt"
     )
 
@@ -707,8 +885,9 @@ function do_autoconf()
   # https://ftp.gnu.org/gnu/autoconf/
   # https://aur.archlinux.org/cgit/aur.git/tree/PKGBUILD?h=autoconf-git
 
-  # 2012-04-24
-  local autoconf_version="2.69"
+  # 2012-04-24, "2.69", latest
+
+  local autoconf_version="$1"
 
   local autoconf_folder_name="autoconf-${autoconf_version}"
   local autoconf_archive="${autoconf_folder_name}.tar.xz"
@@ -753,7 +932,7 @@ function do_autoconf()
         echo "Running autoconf make..."
 
         # Build.
-        make ${JOBS}
+        make -j ${JOBS}
         make install-strip
       ) 2>&1 | tee "${LOGS_FOLDER_PATH}/make-autoconf-output.txt"
     )
@@ -778,8 +957,10 @@ function do_automake()
   # https://ftp.gnu.org/gnu/automake/
   # https://aur.archlinux.org/cgit/aur.git/tree/PKGBUILD?h=automake-git
 
-  # 2015-01-05
-  local automake_version="1.15"
+  # 2015-01-05, "1.15"
+  # 2018-02-25, "1.16"
+
+  local automake_version="$1"
 
   local automake_folder_name="automake-${automake_version}"
   local automake_archive="${automake_folder_name}.tar.xz"
@@ -824,7 +1005,7 @@ function do_automake()
         echo "Running automake make..."
 
         # Build.
-        make ${JOBS}
+        make -j ${JOBS}
         make install-strip
       ) 2>&1 | tee "${LOGS_FOLDER_PATH}/make-automake-output.txt"
     )
@@ -847,15 +1028,17 @@ function do_libtool()
 {
   # https://www.gnu.org/software/libtool/
   # http://gnu.mirrors.linux.ro/libtool/
+  # http://mirrors.nav.ro/gnu/libtool/libtool-2.4.6.tar.xz
   # https://aur.archlinux.org/cgit/aur.git/tree/PKGBUILD?h=libtool-git
 
-  # 15-Feb-2015
-  local libtool_version="2.4.6"
+  # 15-Feb-2015, "2.4.6", latest
+
+  local libtool_version="$1"
 
   local libtool_folder_name="libtool-${libtool_version}"
   local libtool_archive="${libtool_folder_name}.tar.xz"
-  # local libtool_url="https://ftp.gnu.org/gnu/libtool/${libtool_${libtool_version}-archive}"
-  local libtool_url="https://github.com/gnu-mcu-eclipse/files/raw/master/libs/${libtool_archive}"
+  local libtool_url="http://mirrors.nav.ro/gnu/libtool/${libtool_archive}"
+  # local libtool_url="https://github.com/gnu-mcu-eclipse/files/raw/master/libs/${libtool_archive}"
 
   local libtool_stamp_file_path="${STAMPS_FOLDER_PATH}/stamp-libtool-installed"
   if [ ! -f "${libtool_stamp_file_path}" -o ! -d "${BUILD_FOLDER_PATH}/${libtool_folder_name}" ]
@@ -896,7 +1079,7 @@ function do_libtool()
         echo "Running libtool make..."
 
         # Build.
-        make ${JOBS}
+        make -j ${JOBS}
         make install-strip
       ) 2>&1 | tee "${LOGS_FOLDER_PATH}/make-libtool-output.txt"
     )
@@ -921,8 +1104,9 @@ function do_gettext()
   # https://ftp.gnu.org/gnu/gettext/
   # https://aur.archlinux.org/cgit/aur.git/tree/PKGBUILD?h=gettext-git
 
-  # 2016-06-09
-  local gettext_version="0.19.8"
+  # 2016-06-09, "0.19.8"
+
+  local gettext_version="$1"
 
   local gettext_folder_name="gettext-${gettext_version}"
   local gettext_archive="${gettext_folder_name}.tar.xz"
@@ -967,7 +1151,7 @@ function do_gettext()
         echo "Running gettext make..."
 
         # Build.
-        make ${JOBS}
+        make -j ${JOBS}
         make install-strip
       ) 2>&1 | tee "${LOGS_FOLDER_PATH}/make-gettext-output.txt"
     )
@@ -992,8 +1176,10 @@ function do_patch()
   # https://ftp.gnu.org/gnu/patch/
   # https://aur.archlinux.org/cgit/aur.git/tree/PKGBUILD?h=patch-git
 
-  # 2015-03-06
-  local patch_version="2.7.5"
+  # 2015-03-06, "2.7.5"
+  # 2018-02-06, "2.7.6"
+
+  local patch_version="$1"
 
   local patch_folder_name="patch-${patch_version}"
   local patch_archive="${patch_folder_name}.tar.xz"
@@ -1038,7 +1224,7 @@ function do_patch()
         echo "Running patch make..."
 
         # Build.
-        make ${JOBS}
+        make -j ${JOBS}
         make install-strip
       ) 2>&1 | tee "${LOGS_FOLDER_PATH}/make-patch-output.txt"
     )
@@ -1063,8 +1249,10 @@ function do_diffutils()
   # https://ftp.gnu.org/gnu/diffutils/
   # https://aur.archlinux.org/cgit/aur.git/tree/PKGBUILD?h=diffutils-git
 
-  # 2017-05-21
-  local diffutils_version="3.6"
+  # 2017-05-21, "3.6"
+  # 2018-12-31, "3.7"
+
+  local diffutils_version="$1"
 
   local diffutils_folder_name="diffutils-${diffutils_version}"
   local diffutils_archive="${diffutils_folder_name}.tar.xz"
@@ -1109,7 +1297,7 @@ function do_diffutils()
         echo "Running diffutils make..."
 
         # Build.
-        make ${JOBS}
+        make -j ${JOBS}
         make install-strip
       ) 2>&1 | tee "${LOGS_FOLDER_PATH}/make-diffutils-output.txt"
     )
@@ -1134,11 +1322,11 @@ function do_bison()
   # https://ftp.gnu.org/gnu/bison/
   # https://aur.archlinux.org/cgit/aur.git/tree/PKGBUILD?h=bison-git
 
-  # 2015-01-23
+  # 2015-01-23, "3.0.4"
   # Crashes with Abort trap 6.
-  # local bison_version="3.0.4"
-  # 2019-02-03
-  local bison_version="3.3.2"
+  # 2019-02-03, "3.3.2"
+
+  local bison_version="$1"
 
   local bison_folder_name="bison-${bison_version}"
   local bison_archive="${bison_folder_name}.tar.xz"
@@ -1183,7 +1371,7 @@ function do_bison()
         echo "Running bison make..."
 
         # Build.
-        make ${JOBS}
+        make -j ${JOBS}
         make install-strip
       ) 2>&1 | tee "${LOGS_FOLDER_PATH}/make-bison-output.txt"
     )
@@ -1206,13 +1394,18 @@ function do_bison()
 function do_flex() 
 {
   # https://www.gnu.org/software/flex/
+  # https://github.com/westes/flex/releases
   # https://github.com/westes/flex/releases/download/v2.6.4/flex-2.6.4.tar.gz
-  local flex_version="2.6.4"
+
+  # Apple uses 2.5.3
+  # May 6, 2017, "2.6.4"
+
+  local flex_version="$1"
 
   local flex_folder_name="flex-${flex_version}"
   local flex_archive="${flex_folder_name}.tar.gz"
-  # local flex_url="https://ftp.gnu.org/gnu/flex/${flex_archive}"
-  local flex_url="https://github.com/westes/flex/releases/download/v${flex_version}/libs/${flex_archive}"
+  local flex_url="ttps://github.com/westes/flex/releases/download/v${flex_version}/${flex_archive}"
+  # local flex_url="https://github.com/westes/flex/releases/download/v${flex_version}/libs/${flex_archive}"
 
   local flex_stamp_file_path="${STAMPS_FOLDER_PATH}/stamp-flex-${flex_version}-installed"
   if [ ! -f "${flex_stamp_file_path}" -o ! -d "${BUILD_FOLDER_PATH}/${flex_folder_name}" ]
@@ -1261,7 +1454,7 @@ function do_flex()
         echo "Running flex make..."
 
         # Build.
-        make ${JOBS}
+        make -j ${JOBS}
         make install-strip
       ) 2>&1 | tee "${LOGS_FOLDER_PATH}/make-flex-output.txt"
     )
@@ -1286,8 +1479,9 @@ function do_make()
   # https://ftp.gnu.org/gnu/make/
   # https://aur.archlinux.org/cgit/aur.git/tree/PKGBUILD?h=make-git
 
-  # 2016-06-10
-  local make_version="4.2.1"
+  # 2016-06-10, "4.2.1"
+
+  local make_version="$1"
 
   local make_folder_name="make-${make_version}"
   local make_archive="${make_folder_name}.tar.bz2"
@@ -1333,8 +1527,13 @@ function do_make()
         echo "Running make make..."
 
         # Build.
-        make ${JOBS}
+        make -j ${JOBS}
         make install-strip
+
+        echo
+        echo "Linking gmake..."
+        cd "${INSTALL_FOLDER_PATH}/bin"
+        ln -s -v make gmake
       ) 2>&1 | tee "${LOGS_FOLDER_PATH}/make-make-output.txt"
     )
 
@@ -1358,11 +1557,13 @@ function do_wget()
   # https://ftp.gnu.org/gnu/wget/
   # https://aur.archlinux.org/cgit/aur.git/tree/PKGBUILD?h=wget-git
 
-  # 2016-06-10
-  local wget_version="1.19"
+  # 2016-06-10, "1.19"
+  # 2018-12-26, "1.20.1"
+
+  local wget_version="$1"
 
   local wget_folder_name="wget-${wget_version}"
-  local wget_archive="${wget_folder_name}.tar.xz"
+  local wget_archive="${wget_folder_name}.tar.gz"
   local wget_url="https://ftp.gnu.org/gnu/wget/${wget_archive}"
 
   local wget_stamp_file_path="${STAMPS_FOLDER_PATH}/stamp-wget-${wget_version}-installed"
@@ -1415,7 +1616,7 @@ function do_wget()
         echo "Running wget make..."
 
         # Build.
-        make ${JOBS} V=1
+        make -j ${JOBS}
         make install-strip
       ) 2>&1 | tee "${LOGS_FOLDER_PATH}/make-wget-output.txt"
     )
@@ -1440,8 +1641,10 @@ function do_texinfo()
   # https://ftp.gnu.org/gnu/texinfo/
   # https://aur.archlinux.org/cgit/aur.git/tree/PKGBUILD?h=texinfo-svn
 
-  # 2017-09-12
-  local texinfo_version="6.5"
+  # 2017-09-12, "6.5"
+  # 2019-02-16, "6.6"
+
+  local texinfo_version="$1"
 
   local texinfo_folder_name="texinfo-${texinfo_version}"
   local texinfo_archive="${texinfo_folder_name}.tar.gz"
@@ -1486,7 +1689,7 @@ function do_texinfo()
         echo "Running texinfo make..."
 
         # Build.
-        make ${JOBS}
+        make -j ${JOBS}
         make install-strip
       ) 2>&1 | tee "${LOGS_FOLDER_PATH}/make-texinfo-output.txt"
     )
@@ -1508,20 +1711,19 @@ function do_texinfo()
 function do_cmake() 
 {
   # https://cmake.org
-  # https://cmake.org/download/
+  # https://github.com/Kitware/CMake/releases/
+  # https://github.com/Kitware/CMake/releases/download/v3.14.0/cmake-3.14.0.tar.gz
+  # https://github.com/Kitware/CMake/releases/download/v3.13.4/cmake-3.13.4.tar.gz
   # https://aur.archlinux.org/cgit/aur.git/tree/PKGBUILD?h=cmake-git
 
-  # November 10, 2017
-  # XBB_CMAKE_MAJOR_VERSION="3.9"
-  # XBB_CMAKE_VERSION="${XBB_CMAKE_MAJOR_VERSION}.6"
+  # November 10, 2017, "3.9.6"
+  # November 2017, "3.10.1"
 
-  # November 2017
-  local cmake_version_major="3.10"
-  local cmake_version="${cmake_version_major}.1"
+  local cmake_version="$1"
 
   local cmake_folder_name="cmake-${cmake_version}"
   local cmake_archive="${cmake_folder_name}.tar.gz"
-  local cmake_url="https://cmake.org/files/v${cmake_version_major}/${cmake_archive}"
+  local cmake_url="https://github.com/Kitware/CMake/releases/download/v${cmake_version}/${cmake_archive}"
 
   local cmake_stamp_file_path="${STAMPS_FOLDER_PATH}/stamp-cmake-${cmake_version}-installed"
   if [ ! -f "${cmake_stamp_file_path}" -o ! -d "${BUILD_FOLDER_PATH}/${cmake_folder_name}" ]
@@ -1541,6 +1743,9 @@ function do_cmake()
       export CFLAGS="${XBB_CFLAGS}"
       export CXXFLAGS="${XBB_CXXFLAGS}"
       export LDFLAGS="${XBB_LDFLAGS_APP}"
+
+      export CC=clang
+      export CXX=clang++
 
       local which_cmake="$(which cmake)"
       if [ -z "${which_cmake}" ]
@@ -1570,7 +1775,7 @@ function do_cmake()
             # Use the existing cmake to configure this one.
             cmake \
               -DCMAKE_INSTALL_PREFIX="${INSTALL_FOLDER_PATH}" \
-              .
+              "${SOURCES_FOLDER_PATH}/${cmake_folder_name}"
 
           ) 2>&1 | tee "${LOGS_FOLDER_PATH}/cmake-cmake-output.txt"
       fi
@@ -1580,7 +1785,7 @@ function do_cmake()
         echo "Running cmake make..."
 
         # Build.
-        make ${JOBS}
+        make -j ${JOBS}
         # make install-strip
         make install
 
@@ -1600,6 +1805,691 @@ function do_cmake()
 
   else
     echo "Component cmake already installed."
+  fi
+}
+
+function do_perl() 
+{
+  # https://www.cpan.org
+  # http://www.cpan.org/src/
+  # https://git.archlinux.org/svntogit/packages.git/tree/trunk/PKGBUILD?h=packages/perl
+
+  # 2017-09-22
+  local perl_version_major="5.0"
+  # local perl_version="5.26.1"
+  # 2018-11-29
+
+  local perl_version="$1"
+
+  local perl_folder_name="perl-${perl_version}"
+  local perl_archive="${perl_folder_name}.tar.gz"
+  local perl_url="http://www.cpan.org/src/${perl_version_major}/${perl_archive}"
+
+  local perl_stamp_file_path="${STAMPS_FOLDER_PATH}/stamp-perl-${perl_version}-installed"
+  if [ ! -f "${perl_stamp_file_path}" -o ! -d "${BUILD_FOLDER_PATH}/${perl_folder_name}" ]
+  then
+
+    # In-source build.
+    cd "${BUILD_FOLDER_PATH}"
+
+    download_and_extract "${perl_url}" "${perl_archive}" "${perl_folder_name}"
+
+    (
+      mkdir -p "${BUILD_FOLDER_PATH}/${perl_folder_name}"
+      cd "${BUILD_FOLDER_PATH}/${perl_folder_name}"
+
+      xbb_activate_this
+
+      export CPPFLAGS="${XBB_CPPFLAGS}"
+      export CFLAGS="${XBB_CFLAGS} -Wno-implicit-fallthrough -Wno-nonnull -Wno-format -Wno-sign-compare -Wno-null-pointer-arithmetic"
+      export CXXFLAGS="${XBB_CXXFLAGS}"
+      export LDFLAGS="${XBB_LDFLAGS_APP}"
+
+      if [ ! -f "config.h" ]
+      then
+        (
+          echo
+          echo "Running perl configure..."
+
+          bash "./Configure" --help || true
+
+          bash ${DEBUG} "./Configure" -d -e -s \
+            -Dprefix="${INSTALL_FOLDER_PATH}" \
+            -Dcc="${CC}" \
+            -Dccflags="${CFLAGS}"
+
+        ) 2>&1 | tee "${LOGS_FOLDER_PATH}/configure-perl-output.txt"
+      fi
+
+      (
+        echo
+        echo "Running perl make..."
+
+        # Build.
+        make -j ${JOBS}
+        # 
+        # make test
+        make install-strip
+
+        # https://www.cpan.org/modules/INSTALL.html
+        # cpan App::cpanminus
+
+      ) 2>&1 | tee "${LOGS_FOLDER_PATH}/make-perl-output.txt"
+    )
+
+    (
+      echo
+      "${INSTALL_FOLDER_PATH}/bin/perl" --version
+    )
+
+    hash -r
+
+    touch "${perl_stamp_file_path}"
+
+  else
+    echo "Component perl already installed."
+  fi
+}
+
+function do_makedepend() 
+{
+  # http://www.linuxfromscratch.org/blfs/view/7.4/x/makedepend.html
+  # http://xorg.freedesktop.org/archive/individual/util/makedepend-1.0.5.tar.bz2
+
+  local makedepend_version="$1"
+
+  local makedepend_folder_name="makedepend-${makedepend_version}"
+  local makedepend_archive="${makedepend_folder_name}.tar.bz2"
+  local makedepend_url="http://xorg.freedesktop.org/archive/individual/util/${makedepend_archive}"
+  
+
+  local makedepend_stamp_file_path="${STAMPS_FOLDER_PATH}/stamp-makedepend-${makedepend_version}-installed"
+  if [ ! -f "${makedepend_stamp_file_path}" -o ! -d "${BUILD_FOLDER_PATH}/${makedepend_folder_name}" ]
+  then
+
+    cd "${SOURCES_FOLDER_PATH}"
+
+    download_and_extract "${makedepend_url}" "${makedepend_archive}" "${makedepend_folder_name}"
+
+    (
+      mkdir -p "${BUILD_FOLDER_PATH}/${makedepend_folder_name}"
+      cd "${BUILD_FOLDER_PATH}/${makedepend_folder_name}"
+
+      xbb_activate_this
+
+      export CPPFLAGS="${XBB_CPPFLAGS}"
+      export CFLAGS="${XBB_CFLAGS}"
+      export CXXFLAGS="${XBB_CXXFLAGS}"
+      export LDFLAGS="${XBB_LDFLAGS_APP}"
+      export PKG_CONFIG_PATH="${INSTALL_FOLDER_PATH}/share/pkgconfig:${PKG_CONFIG_PATH}"
+
+      if [ ! -f "config.status" ]
+      then
+        (
+          echo
+          echo "Running makedepend configure..."
+
+          bash "${SOURCES_FOLDER_PATH}/${makedepend_folder_name}/configure" --help
+
+          bash ${DEBUG} "${SOURCES_FOLDER_PATH}/${makedepend_folder_name}/configure" \
+            --prefix="${INSTALL_FOLDER_PATH}" 
+
+          cp "config.log" "${LOGS_FOLDER_PATH}/config-makedepend-log.txt"
+        ) 2>&1 | tee "${LOGS_FOLDER_PATH}/configure-makedepend-output.txt"
+      fi
+
+      (
+        echo
+        echo "Running makedepend make..."
+
+        # Build.
+        make -j ${JOBS}
+        make install-strip
+      ) 2>&1 | tee "${LOGS_FOLDER_PATH}/make-makedepend-output.txt"
+    )
+
+    (
+      echo
+      "${INSTALL_FOLDER_PATH}/bin/makedepend" || true
+    )
+
+    hash -r
+
+    touch "${makedepend_stamp_file_path}"
+
+  else
+    echo "Component makedepend already installed."
+  fi
+}
+
+function do_patchelf() 
+{
+  # https://nixos.org/patchelf.html
+  # https://nixos.org/releases/patchelf/
+  # https://nixos.org/releases/patchelf/patchelf-0.10/patchelf-0.10.tar.bz2
+
+  # 2016-02-29, "0.9"
+  # 2019-03-28, "0.10"
+
+  local patchelf_version="$1"
+
+  local patchelf_folder_name="patchelf-${patchelf_version}"
+  local patchelf_archive="${patchelf_folder_name}.tar.bz2"
+  local patchelf_url="https://nixos.org/releases/patchelf/${patchelf_folder_name}/${patchelf_archive}"
+  # local patchelf_url="https://github.com/gnu-mcu-eclipse/files/raw/master/libs/${patchelf_archive}"
+
+  local patchelf_stamp_file_path="${STAMPS_FOLDER_PATH}/stamp-patchelf-${patchelf_version}-installed"
+  if [ ! -f "${patchelf_stamp_file_path}" -o ! -d "${BUILD_FOLDER_PATH}/${patchelf_folder_name}" ]
+  then
+
+    cd "${SOURCES_FOLDER_PATH}"
+
+    download_and_extract "${patchelf_url}" "${patchelf_archive}" "${patchelf_folder_name}"
+
+    (
+      mkdir -p "${BUILD_FOLDER_PATH}/${patchelf_folder_name}"
+      cd "${BUILD_FOLDER_PATH}/${patchelf_folder_name}"
+
+      xbb_activate_this
+
+      export CPPFLAGS="${XBB_CPPFLAGS}"
+      export CFLAGS="${XBB_CFLAGS}"
+      export CXXFLAGS="${XBB_CXXFLAGS}"
+      export LDFLAGS="${XBB_LDFLAGS_APP}"
+
+      if [ ! -f "config.status" ]
+      then
+        (
+          echo
+          echo "Running patchelf configure..."
+
+          bash "${SOURCES_FOLDER_PATH}/${patchelf_folder_name}/configure" --help
+
+          bash ${DEBUG} "${SOURCES_FOLDER_PATH}/${patchelf_folder_name}/configure" \
+            --prefix="${INSTALL_FOLDER_PATH}" 
+
+          cp "config.log" "${LOGS_FOLDER_PATH}/config-patchelf-log.txt"
+        ) 2>&1 | tee "${LOGS_FOLDER_PATH}/configure-patchelf-output.txt"
+      fi
+
+      (
+        echo
+        echo "Running patchelf make..."
+
+        # Build.
+        make -j ${JOBS}
+        make install-strip
+      ) 2>&1 | tee "${LOGS_FOLDER_PATH}/make-patchelf-output.txt"
+    )
+
+    (
+      echo
+      "${INSTALL_FOLDER_PATH}/bin/patchelf" --version
+    )
+
+    hash -r
+
+    touch "${patchelf_stamp_file_path}"
+
+  else
+    echo "Component patchelf already installed."
+  fi
+}
+
+function do_dos2unix() 
+{
+  # https://waterlan.home.xs4all.nl/dos2unix.html
+  # http://dos2unix.sourceforge.net
+  # https://waterlan.home.xs4all.nl/dos2unix/dos2unix-7.4.0.tar.gz
+
+  # 30-Oct-2017, "7.4.0"
+
+  local dos2unix_version="$1"
+
+  local dos2unix_folder_name="dos2unix-${dos2unix_version}"
+  local dos2unix_archive="${dos2unix_folder_name}.tar.gz"
+  local dos2unix_url="https://waterlan.home.xs4all.nl/dos2unix/${dos2unix_archive}"
+  # local dos2unix_url="https://github.com/gnu-mcu-eclipse/files/raw/master/libs/${dos2unix_archive}"
+
+  local dos2unix_stamp_file_path="${STAMPS_FOLDER_PATH}/stamp-dos2unix-${dos2unix_version}-installed"
+  if [ ! -f "${dos2unix_stamp_file_path}" -o ! -d "${BUILD_FOLDER_PATH}/${dos2unix_folder_name}" ]
+  then
+
+    cd "${BUILD_FOLDER_PATH}"
+
+    download_and_extract "${dos2unix_url}" "${dos2unix_archive}" "${dos2unix_folder_name}"
+
+    (
+      mkdir -p "${BUILD_FOLDER_PATH}/${dos2unix_folder_name}"
+      cd "${BUILD_FOLDER_PATH}/${dos2unix_folder_name}"
+
+      xbb_activate_this
+
+      export CPPFLAGS="${XBB_CPPFLAGS}"
+      export CFLAGS="${XBB_CFLAGS}"
+      export CXXFLAGS="${XBB_CXXFLAGS}"
+      export LDFLAGS="${XBB_LDFLAGS_APP}"
+
+      (
+        echo
+        echo "Running dos2unix make..."
+
+        # Build.
+        make -j ${JOBS} prefix="${INSTALL_FOLDER_PATH}" ENABLE_NLS=
+        make prefix="${INSTALL_FOLDER_PATH}" strip install
+      ) 2>&1 | tee "${LOGS_FOLDER_PATH}/make-dos2unix-output.txt"
+    )
+
+    (
+      echo
+      "${INSTALL_FOLDER_PATH}/bin/unix2dos" --version
+    )
+
+    hash -r
+
+    touch "${dos2unix_stamp_file_path}"
+
+  else
+    echo "Component dos2unix already installed."
+  fi
+}
+
+function do_git() 
+{
+  # https://git-scm.com/
+  # https://www.kernel.org/pub/software/scm/git/
+  # https://git.archlinux.org/svntogit/packages.git/tree/trunk/PKGBUILD?h=packages/git
+
+  # 30-Oct-2017, "2.15.0"
+  # 24-Feb-2019, "2.21.0"
+
+  local git_version="$1"
+
+  local git_folder_name="git-${git_version}"
+  local git_archive="${git_folder_name}.tar.xz"
+  local git_url="https://www.kernel.org/pub/software/scm/git/${git_archive}"
+  # local git_url="https://github.com/gnu-mcu-eclipse/files/raw/master/libs/${git_archive}"
+
+  local git_stamp_file_path="${STAMPS_FOLDER_PATH}/stamp-git-${git_version}-installed"
+  if [ ! -f "${git_stamp_file_path}" -o ! -d "${BUILD_FOLDER_PATH}/${git_folder_name}" ]
+  then
+
+    # In-source build.
+    cd "${BUILD_FOLDER_PATH}"
+
+    download_and_extract "${git_url}" "${git_archive}" "${git_folder_name}"
+
+    (
+      mkdir -p "${BUILD_FOLDER_PATH}/${git_folder_name}"
+      cd "${BUILD_FOLDER_PATH}/${git_folder_name}"
+
+      xbb_activate_this
+
+      export CPPFLAGS="${XBB_CPPFLAGS}"
+      export CFLAGS="${XBB_CFLAGS}"
+      export CXXFLAGS="${XBB_CXXFLAGS}"
+      export LDFLAGS="${XBB_LDFLAGS_APP}"
+
+      if [ ! -f "config.status" ]
+      then
+        (
+          echo
+          echo "Running git configure..."
+
+          bash "./configure" --help
+
+          bash ${DEBUG} "./configure" \
+            --prefix="${INSTALL_FOLDER_PATH}" 
+
+          cp "config.log" "${LOGS_FOLDER_PATH}/config-git-log.txt"
+        ) 2>&1 | tee "${LOGS_FOLDER_PATH}/configure-git-output.txt"
+      fi
+
+      (
+        echo
+        echo "Running git make..."
+
+        # Build.
+        # make -j ${JOBS}
+        # Parallel build failed.
+        make
+        # make install-strip
+        make install
+        strip -S "${INSTALL_FOLDER_PATH}/bin/git"
+      ) 2>&1 | tee "${LOGS_FOLDER_PATH}/make-git-output.txt"
+    )
+
+    (
+      echo
+      "${INSTALL_FOLDER_PATH}/bin/git" --version
+    )
+
+    hash -r
+
+    touch "${git_stamp_file_path}"
+
+  else
+    echo "Component git already installed."
+  fi
+}
+
+function do_python() 
+{
+  # https://www.python.org
+  # https://www.python.org/downloads/source/
+  # https://www.python.org/ftp/python/2.7.16/Python-2.7.16.tar.xz
+  # https://git.archlinux.org/svntogit/packages.git/tree/trunk/PKGBUILD?h=packages/python2
+
+  # 2017-09-16, "2.7.14"
+  # March 4, 2019, "2.7.16"
+
+  local python_version="$1"
+
+  local python_folder_name="Python-${python_version}"
+  local python_archive="${python_folder_name}.tar.xz"
+  local python_url="https://www.python.org/ftp/python/${python_version}/${python_archive}"
+  # local python_url="https://github.com/gnu-mcu-eclipse/files/raw/master/libs/${python_archive}"
+
+  local python_stamp_file_path="${STAMPS_FOLDER_PATH}/stamp-python-${python_version}-installed"
+  if [ ! -f "${python_stamp_file_path}" -o ! -d "${BUILD_FOLDER_PATH}/${python_folder_name}" ]
+  then
+
+    cd "${SOURCES_FOLDER_PATH}"
+
+    download_and_extract "${python_url}" "${python_archive}" "${python_folder_name}"
+
+    (
+      mkdir -p "${BUILD_FOLDER_PATH}/${python_folder_name}"
+      cd "${BUILD_FOLDER_PATH}/${python_folder_name}"
+
+      xbb_activate_this
+
+      export CPPFLAGS="${XBB_CPPFLAGS}"
+      export CFLAGS="${XBB_CFLAGS} -Wno-int-in-bool-context -Wno-maybe-uninitialized -Wno-nonnull -Wno-stringop-overflow"
+      export CXXFLAGS="${XBB_CXXFLAGS}"
+      export LDFLAGS="${XBB_LDFLAGS_APP}"
+
+      export CC=clang
+      export CXX=clang++
+
+      if [ ! -f "config.status" ]
+      then
+        (
+          echo
+          echo "Running python configure..."
+
+          bash "${SOURCES_FOLDER_PATH}/${python_folder_name}/configure" --help
+
+          bash ${DEBUG} "${SOURCES_FOLDER_PATH}/${python_folder_name}/configure" \
+            --prefix="${INSTALL_FOLDER_PATH}" \
+            \
+            --without-ensurepip
+
+          cp "config.log" "${LOGS_FOLDER_PATH}/config-python-log.txt"
+        ) 2>&1 | tee "${LOGS_FOLDER_PATH}/configure-python-output.txt"
+      fi
+
+      (
+        echo
+        echo "Running python make..."
+
+        # Build.
+        make -j ${JOBS}
+        # make install-strip
+        make install
+
+        # Install setuptools and pip. Be sure the new version is used.
+        # https://packaging.python.org/tutorials/installing-packages/
+        echo
+        echo "Installing setuptools and pip..."
+        "${INSTALL_FOLDER_PATH}/bin/python2" -m ensurepip --default-pip
+        "${INSTALL_FOLDER_PATH}/bin/python2" -m pip install --upgrade pip setuptools wheel
+        "${INSTALL_FOLDER_PATH}/bin/pip2" --version
+      ) 2>&1 | tee "${LOGS_FOLDER_PATH}/make-python-output.txt"
+    )
+
+    (
+      echo
+      "${INSTALL_FOLDER_PATH}/bin/python" --version
+    )
+
+    hash -r
+
+    touch "${python_stamp_file_path}"
+
+  else
+    echo "Component python already installed."
+  fi
+}
+
+function do_python3() 
+{
+  # https://www.python.org
+  # https://www.python.org/downloads/source/
+  # https://www.python.org/ftp/python/3.7.3/Python-3.7.3.tar.xz
+  
+  # https://git.archlinux.org/svntogit/packages.git/tree/trunk/PKGBUILD?h=packages/python
+  # https://git.archlinux.org/svntogit/packages.git/tree/trunk/PKGBUILD?h=packages/python-pip
+
+  # 2018-12-24, "3.7.2"
+  # March 25, 2019, "3.7.3"
+
+  local python3_version="$1"
+
+  local python3_folder_name="Python-${python3_version}"
+  local python3_archive="${python3_folder_name}.tar.xz"
+  local python3_url="https://www.python.org/ftp/python/${python3_version}/${python3_archive}"
+  # local python3_url="https://github.com/gnu-mcu-eclipse/files/raw/master/libs/${python3_archive}"
+
+  local python3_stamp_file_path="${STAMPS_FOLDER_PATH}/stamp-python3-${python3_version}-installed"
+  if [ ! -f "${python3_stamp_file_path}" -o ! -d "${BUILD_FOLDER_PATH}/${python3_folder_name}" ]
+  then
+
+    cd "${SOURCES_FOLDER_PATH}"
+
+    download_and_extract "${python3_url}" "${python3_archive}" "${python3_folder_name}"
+
+    (
+      mkdir -p "${BUILD_FOLDER_PATH}/${python3_folder_name}"
+      cd "${BUILD_FOLDER_PATH}/${python3_folder_name}"
+
+      xbb_activate_this
+
+      export CPPFLAGS="${XBB_CPPFLAGS}"
+      export CFLAGS="${XBB_CFLAGS} -Wno-int-in-bool-context -Wno-maybe-uninitialized -Wno-nonnull -Wno-stringop-overflow"
+      export CXXFLAGS="${XBB_CXXFLAGS}"
+      export LDFLAGS="${XBB_LDFLAGS_APP}"
+
+      export CC=clang
+      export CXX=clang++
+
+      if [ ! -f "config.status" ]
+      then
+        (
+          echo
+          echo "Running python3 configure..."
+
+          bash "${SOURCES_FOLDER_PATH}/${python3_folder_name}/configure" --help
+
+          bash ${DEBUG} "${SOURCES_FOLDER_PATH}/${python3_folder_name}/configure" \
+            --prefix="${INSTALL_FOLDER_PATH}" \
+            \
+            --without-ensurepip
+            
+          cp "config.log" "${LOGS_FOLDER_PATH}/config-python3-log.txt"
+        ) 2>&1 | tee "${LOGS_FOLDER_PATH}/configure-python3-output.txt"
+      fi
+
+      (
+        echo
+        echo "Running python3 make..."
+
+        # Build.
+        make -j ${JOBS}
+        # make install-strip
+        make install
+
+        # Install setuptools and pip. Be sure the new version is used.
+        # https://packaging.python.org/tutorials/installing-packages/
+        echo
+        echo "Installing setuptools and pip..."
+        "${INSTALL_FOLDER_PATH}/bin/python3" -m ensurepip --default-pip
+        "${INSTALL_FOLDER_PATH}/bin/python3" -m pip install --upgrade pip setuptools wheel
+        "${INSTALL_FOLDER_PATH}/bin/pip3" --version
+      ) 2>&1 | tee "${LOGS_FOLDER_PATH}/make-python3-output.txt"
+    )
+
+    (
+      echo
+      "${INSTALL_FOLDER_PATH}/bin/python3" --version
+    )
+
+    hash -r
+
+    touch "${python3_stamp_file_path}"
+
+  else
+    echo "Component python3 already installed."
+  fi
+}
+
+function do_scons() 
+{
+  # http://scons.org
+  # https://sourceforge.net/projects/scons/files/scons/
+  # https://sourceforge.net/projects/scons/files/scons/3.0.5/scons-3.0.5.tar.gz/download
+  # https://aur.archlinux.org/cgit/aur.git/tree/PKGBUILD?h=python2-scons
+
+  # 2017-09-16, "3.0.1"
+  # 2019-03-27, "3.0.5"
+
+  local scons_version="$1"
+
+  local scons_folder_name="scons-${scons_version}"
+  local scons_archive="${scons_folder_name}.tar.gz"
+  local scons_url="https://sourceforge.net/projects/scons/files/scons/${scons_version}/${scons_archive}"
+  # local scons_url="https://github.com/gnu-mcu-eclipse/files/raw/master/libs/${scons_archive}"
+
+  local scons_stamp_file_path="${STAMPS_FOLDER_PATH}/stamp-scons-${scons_version}-installed"
+  if [ ! -f "${scons_stamp_file_path}" -o ! -d "${BUILD_FOLDER_PATH}/${scons_folder_name}" ]
+  then
+
+    # In-source build
+    cd "${BUILD_FOLDER_PATH}"
+
+    download_and_extract "${scons_url}" "${scons_archive}" "${scons_folder_name}"
+
+    (
+      mkdir -p "${BUILD_FOLDER_PATH}/${scons_folder_name}"
+      cd "${BUILD_FOLDER_PATH}/${scons_folder_name}"
+
+      xbb_activate_this
+
+      export CPPFLAGS="${XBB_CPPFLAGS}"
+      export CFLAGS="${XBB_CFLAGS}"
+      export CXXFLAGS="${XBB_CXXFLAGS}"
+      export LDFLAGS="${XBB_LDFLAGS_APP}"
+
+      echo
+      echo "Running scons install..."
+
+      "${INSTALL_FOLDER_PATH}/bin/python" setup.py install \
+      --prefix="${INSTALL_FOLDER_PATH}" \
+      --optimize=1
+
+    ) 2>&1 | tee "${LOGS_FOLDER_PATH}/install-scons-output.txt"
+
+    (
+      echo
+      "${INSTALL_FOLDER_PATH}/bin/scons" --version
+    )
+
+    hash -r
+
+    touch "${scons_stamp_file_path}"
+
+  else
+    echo "Component scons already installed."
+  fi
+}
+
+function do_meson
+{
+  (
+    xbb_activate
+
+    pip3 install meson
+
+    "${INSTALL_FOLDER_PATH}/bin/meson" --version
+  )
+
+  hash -r
+}
+
+function do_ninja() 
+{
+  # https://ninja-build.org
+  # https://github.com/ninja-build/ninja/releases
+  # https://github.com/ninja-build/ninja/archive/v1.9.0.zip
+  # https://github.com/ninja-build/ninja/archive/v1.9.0.tar.gz
+
+  # Jan 30, 2019 "1.9.0"
+
+  local ninja_version="$1"
+
+  local ninja_folder_name="ninja-${ninja_version}"
+  local ninja_archive="v${ninja_version}.tar.gz"
+  local ninja_url="https://github.com/ninja-build/ninja/archive/${ninja_archive}"
+  # local ninja_url="https://github.com/gnu-mcu-eclipse/files/raw/master/libs/${ninja_archive}"
+
+  local ninja_stamp_file_path="${STAMPS_FOLDER_PATH}/stamp-ninja-${ninja_version}-installed"
+  if [ ! -f "${ninja_stamp_file_path}" -o ! -d "${BUILD_FOLDER_PATH}/${ninja_folder_name}" ]
+  then
+
+    # In-source build
+    cd "${BUILD_FOLDER_PATH}"
+
+    download_and_extract "${ninja_url}" "${ninja_archive}" "${ninja_folder_name}"
+
+    (
+      mkdir -p "${BUILD_FOLDER_PATH}/${ninja_folder_name}"
+      cd "${BUILD_FOLDER_PATH}/${ninja_folder_name}"
+
+      xbb_activate_this
+
+      export CPPFLAGS="${XBB_CPPFLAGS}"
+      export CFLAGS="${XBB_CFLAGS}"
+      export CXXFLAGS="${XBB_CXXFLAGS}"
+      export LDFLAGS="${XBB_LDFLAGS_APP}"
+
+      (
+        echo
+        echo "Running ninja bootstrap..."
+
+        ./configure.py --help
+
+        echo "Patience..."
+        
+        ./configure.py \
+          --bootstrap \
+          --verbose \
+          --with-python=$(which python2) 
+
+        /usr/bin/install -m755 -c ninja "${INSTALL_FOLDER_PATH}/bin"
+      ) 2>&1 | tee "${LOGS_FOLDER_PATH}/configure-ninja-output.txt"
+    )
+
+    (
+      echo
+      "${INSTALL_FOLDER_PATH}/bin/ninja" --version
+    )
+
+    hash -r
+
+    touch "${ninja_stamp_file_path}"
+
+  else
+    echo "Component ninja already installed."
   fi
 }
 

@@ -7,28 +7,9 @@
 # for any purpose is hereby granted, under the terms of the MIT license.
 # -----------------------------------------------------------------------------
 
-function create_pkg_config_verbose()
-{
-  # Note: __EOF__ is quoted to prevent substitutions here.
-  mkdir -p "${INSTALL_FOLDER_PATH}/bin"
-  cat <<'__EOF__' > "${INSTALL_FOLDER_PATH}/bin/pkg-config-verbose"
-#! /bin/sh
-# pkg-config wrapper for debug
-
-pkg-config $@
-RET=$?
-OUT=$(pkg-config $@)
-echo "($PKG_CONFIG_PATH) | pkg-config $@ -> $RET [$OUT]" 1>&2
-exit ${RET}
-
-__EOF__
-# The above marker must start in the first column.
-
-  chmod +x "${INSTALL_FOLDER_PATH}/bin/pkg-config-verbose"
-}
-
 function create_xbb_source()
 {
+  echo
   echo "Creating ${XBB_FOLDER}/xbb-source.sh..."
   cat <<'__EOF__' > "${INSTALL_FOLDER_PATH}/xbb-source.sh"
 

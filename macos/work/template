@@ -4,12 +4,13 @@
 function do_xxx() 
 {
   # ...
-  local xxx_version="1.2.3"
+
+  local xxx_version="$1"
 
   local xxx_folder_name="xxx-${xxx_version}"
   local xxx_archive="${xxx_folder_name}.tar.xz"
-  # local xxx_url="ftp://ftp.gnu.org/gnu/xxx/${xxx_archive}"
-  local xxx_url="https://github.com/gnu-mcu-eclipse/files/raw/master/libs/${xxx_archive}"
+  local xxx_url="ftp://ftp.gnu.org/gnu/xxx/${xxx_archive}"
+  # local xxx_url="https://github.com/gnu-mcu-eclipse/files/raw/master/libs/${xxx_archive}"
 
   local xxx_stamp_file_path="${STAMPS_FOLDER_PATH}/stamp-xxx-${xxx_version}-installed"
   if [ ! -f "${xxx_stamp_file_path}" -o ! -d "${LIBS_BUILD_FOLDER_PATH}/${xxx_folder_name}" ]
@@ -68,7 +69,8 @@ function do_xxx()
 function do_zzz() 
 {
   # ...
-  local zzz_version="1.2.3"
+
+  local zzz_version="$1"
 
   local zzz_folder_name="zzz-${zzz_version}"
   local zzz_archive="${zzz_folder_name}.tar.xz"

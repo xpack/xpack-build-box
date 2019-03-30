@@ -8,6 +8,8 @@
 # for any purpose is hereby granted, under the terms of the MIT license.
 # -----------------------------------------------------------------------------
 
+# DEPRECATED! Use `build-xbb-bootstrap.sh` instead.
+
 # -----------------------------------------------------------------------------
 # Safety settings (see https://gist.github.com/ilg-ul/383869cbb01f61a51c4d).
 

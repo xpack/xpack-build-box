@@ -3,25 +3,26 @@
 
 ### Overview
 
-When running on macOS, the build scripts do not use Docker, since there
+When running on macOS, the build scripts cannot use Docker, since there
 are no macOS Docker images; instead,
 a custom set of tools is expected in a specific folder 
 (`${HOME}/opt/xbb`), which includes the same tools as 
 packed in the Docker images.
 
 The reason for a separate folder is that, in order to achieve consistent and 
-reproducible results, the tools in the XBB instance must be locked to
+reproducible results, the tools in the XBB folder must be locked to
 certain versions, and no updates should be performed. 
 
-To build these tools, clone the git and start the install scripts.
+To build the macOS XBB, clone the git, run the the bootstrap script and 
+finally run the main XBB build script.
 
 ### Prerequisites
 
 As usual with macOS, the compiler and other development tools are not
-available in the base system and need to be installed as part of the
+packed in the base system and need to be installed as part of the
 **Xcode Command Line Tools** package, available from Apple.
 
-### Remove macPorts or Homebrew from PATH
+### Remove macPorts or Homebrew from the PATH
 
 To avoid unwanted versions of different programs to be inadvertently 
 used during builds, it is highly recommended to remove any additional 
@@ -34,6 +35,10 @@ Preferably temporarily set the path to the minimum:
 $ export PATH=/usr/bin:/bin:/usr/sbin:/sbin
 ```
 
+Note: strict control of the path is a hard requirement and should not 
+be treated lightly; failing to do so will probably result in broken
+builds.
+
 ### Clone the repository
 
 ```console
@@ -42,10 +47,14 @@ $ git clone --recurse-submodules https://github.com/xpack/xpack-build-box.git \
   "${HOME}/Downloads/xpack-build-box.git"
 ```
 
+Note: the repository uses submodules, and if updated manually, the 
+submodules must also be updated.
+
 ### Build the XBB bootstrap
 
 For consistent results, the XBB tools are not compiled with the native Apple 
-compiler, but with a GCC 7.
+compiler, but with a GCC 7. This first set of tools is called _the XBB 
+bootstrap_.
 
 ```console
 $ caffeinate bash "${HOME}/Downloads/xpack-build-box.git/macos/build-xbb-bootstrap.sh"
@@ -133,11 +142,17 @@ the required files into `${HOME}/Library/Caches/Homebrew`.
  
 - https://curl.haxx.se/download/curl-7.64.0.tar.bz2
 
-## Obsolete Homebrew solution
+## Deprecated Homebrew solution
+
+The first version of the macOS XBB used Homebrew, but it was soon discovered
+that Homebrew was not designed to facilitate the version locking required
+by XBB, because changes to the Ruby core are quite often, sometimes
+incompatible, and support for older macOS versions, like 10.10, was 
+discontinued.
 
 ### Patches
 
-**This step should normally not be needed**, but on some system versions and/or
+**Normally this step should not be needed**, but on some system versions and/or
 Homebrew versions, the Homebrew build fails with an error related to the 
 system header `/usr/include/dispatch/object.h`, which has a bug, one of the 
 definitions is available only for Objective-C, and not for C.
@@ -193,7 +208,7 @@ $ caffeinate bash "${HOME}/Downloads/xpack-build-box.git/macos/install-homebrew-
 
 The build process takes quite a while. 
 
-The result of this step is a folder in user home (`${HOME}/opt/homebrew/xbb`).
+The result of this step is a folder in user home (`${HOME}/opt/homebrew/xbb-bootstrap`).
 No files are stored in system locations.
 
 ### Build the Homebrew XBB
@@ -213,9 +228,9 @@ a package, the workaround is to revert to a specific date which is known
 to have functional packages. This is done by checking out a specific 
 commit id from the homebrew-core repository.
 
-Warning: Since brew automatically updates itself to the latest version, 
-it is not guaranteed that the build succeeds. (That's 
-the reason why Docker builds are significantly much safer.)
+Warning: Since `brew` automatically updates itself to the latest version, 
+it is not guaranteed that the build succeeds. This is 
+one more reason why the non Homebrew version of the macOS XBB was preferred.
 
 ### Build a patched GCC 7
 
