@@ -229,7 +229,10 @@ function do_openssl()
         then
           mkdir -p "${INSTALL_FOLDER_PATH}/openssl"
 
-          /usr/bin/install -v -c -m 644 "/private/etc/ssl/cert.pem" "${INSTALL_FOLDER_PATH}/openssl"
+          if [ -f "/private/etc/ssl/cert.pem" ]
+          then
+            /usr/bin/install -v -c -m 644 "/private/etc/ssl/cert.pem" "${INSTALL_FOLDER_PATH}/openssl"
+          fi
           # Used by curl.
           /usr/bin/install -v -c -m 644 "$(dirname "${script_folder_path}")/ca-bundle/ca-bundle.crt" "${INSTALL_FOLDER_PATH}/openssl"
         fi
