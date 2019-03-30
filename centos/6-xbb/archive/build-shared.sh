@@ -1742,7 +1742,6 @@ function do_git() {
 function do_dos2unix() {
 
   # http://dos2unix.sourceforge.net
-  # https://www.kernel.org/pub/software/scm/git/
   # 30-Oct-2017
   XBB_DOS2UNIX_VERSION="7.4.0"
   XBB_DOS2UNIX_FOLDER="dos2unix-${XBB_DOS2UNIX_VERSION}"
