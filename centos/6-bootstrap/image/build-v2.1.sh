@@ -475,6 +475,8 @@ function do_openssl()
     export CXXFLAGS="${XBB_CXXFLAGS}"
     export LDFLAGS="${XBB_LDFLAGS}"
 
+    JOBS=1
+
     ./config --help
 
     if [ "${UNAME_ARCH}" == 'x86_64' ]; then
