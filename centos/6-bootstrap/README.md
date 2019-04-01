@@ -26,22 +26,22 @@ To create the Docker image locally, use:
 
 ```console
 $ cd ...
-$ docker build --squash --tag "ilegeul/centos:6-bootstrap-v1" -f Dockerfile-v1 .
-$ docker build --squash --tag "ilegeul/centos32:6-bootstrap-v1" -f Dockerfile32-v1 .
+$ docker build --tag "ilegeul/centos:6-bootstrap-v1" -f Dockerfile-v1 .
+$ docker build --tag "ilegeul/centos32:6-bootstrap-v1" -f Dockerfile32-v1 .
 ```
 
 On macOS, to prevent entering sleep, use:
 
 ```console
-$ caffeinate docker build --squash --tag "ilegeul/centos:6-bootstrap-v1" -f Dockerfile-v1 .
-$ caffeinate docker build --squash --tag "ilegeul/centos32:6-bootstrap-v1" -f Dockerfile32-v1 .
+$ caffeinate docker build --tag "ilegeul/centos:6-bootstrap-v1" -f Dockerfile-v1 .
+$ caffeinate docker build --tag "ilegeul/centos32:6-bootstrap-v1" -f Dockerfile32-v1 .
 ```
 
 To create a second version:
 
 ```console
-$ caffeinate docker build --squash --tag "ilegeul/centos:6-bootstrap-v2" -f Dockerfile-v2 .
-$ caffeinate docker build --squash --tag "ilegeul/centos32:6-bootstrap-v2" -f Dockerfile32-v2 .
+$ caffeinate docker build --tag "ilegeul/centos:6-bootstrap-v2.1" -f Dockerfile-v2.1 .
+$ caffeinate docker build --tag "ilegeul/centos32:6-bootstrap-v2.1" -f Dockerfile32-v2.1 .
 ```
 
 #### Test
