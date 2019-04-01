@@ -20,6 +20,17 @@ $ PATH=/opt/xbb-bootstrap/bin:$PATH
 
 ### Developer
 
+### Clone the repository
+
+```console
+$ rm -rf "${HOME}/Downloads/xpack-build-box.git"
+$ git clone --recurse-submodules https://github.com/xpack/xpack-build-box.git \
+  "${HOME}/Downloads/xpack-build-box.git"
+```
+
+Note: the repository uses submodules, and if updated manually, the 
+submodules must also be updated.
+
 #### Create
 
 To create the Docker image locally, use:
