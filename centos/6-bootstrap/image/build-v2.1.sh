@@ -186,6 +186,7 @@ function xbb_activate_dev()
 
   XBB_CPPFLAGS="-I${XBB_FOLDER}/include ${XBB_CPPFLAGS}"
 
+  XBB_LDFLAGS="-L${XBB_FOLDER}/lib ${XBB_LDFLAGS}"
   XBB_LDFLAGS_LIB="-L${XBB_FOLDER}/lib ${XBB_LDFLAGS_LIB}"
   XBB_LDFLAGS_APP="-L${XBB_FOLDER}/lib ${XBB_LDFLAGS_APP}"
   XBB_LDFLAGS_APP_STATIC="-L${XBB_FOLDER}/lib ${XBB_LDFLAGS_APP_STATIC}"
@@ -194,6 +195,7 @@ function xbb_activate_dev()
 
   if [ -d "${XBB_FOLDER}/lib" ]
   then
+    XBB_LDFLAGS="-L${XBB_FOLDER}/lib64 ${XBB_LDFLAGS}"
     XBB_LDFLAGS_LIB="-L${XBB_FOLDER}/lib64 ${XBB_LDFLAGS_LIB}"
     XBB_LDFLAGS_APP="-L${XBB_FOLDER}/lib64 ${XBB_LDFLAGS_APP}"
     XBB_LDFLAGS_APP_STATIC="-L${XBB_FOLDER}/lib54 ${XBB_LDFLAGS_APP_STATIC}"
@@ -201,6 +203,7 @@ function xbb_activate_dev()
   fi
 
   export XBB_CPPFLAGS
+  export XBB_LDFLAGS
   export XBB_LDFLAGS_LIB
   export XBB_LDFLAGS_APP
   export XBB_LDFLAGS_APP_STATIC
@@ -470,7 +473,7 @@ function do_openssl()
     export CPPFLAGS="${XBB_CPPFLAGS}" 
     export CFLAGS="${XBB_CFLAGS}"
     export CXXFLAGS="${XBB_CXXFLAGS}"
-    export LDFLAGS="${XBB_LDFLAGS_APP}"
+    export LDFLAGS="${XBB_LDFLAGS}"
 
     ./config --help
 
