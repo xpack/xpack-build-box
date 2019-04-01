@@ -46,11 +46,8 @@ $ caffeinate docker build --tag "ilegeul/centos32:6-xbb-v1" -f Dockerfile32-v1 .
 To create a second, third, etc version:
 
 ```console
-$ caffeinate docker build --tag "ilegeul/centos:6-xbb-v2" -f Dockerfile-v2 .
-$ caffeinate docker build --tag "ilegeul/centos:6-xbb-v3" -f Dockerfile-v3 .
-$ caffeinate docker build --tag "ilegeul/centos:6-xbb-v4" -f Dockerfile-v4 .
-$ caffeinate docker build --tag "ilegeul/centos32:6-xbb-v2" -f Dockerfile32-v2 .
-$ caffeinate docker build --tag "ilegeul/centos32:6-xbb-v3" -f Dockerfile32-v3 .
+$ caffeinate docker build --tag "ilegeul/centos:6-xbb-v2.1" -f Dockerfile-v2.1 .
+$ caffeinate docker build --tag "ilegeul/centos32:6-xbb-v2.1" -f Dockerfile32-v2.1 .
 ```
 
 #### Test
@@ -59,11 +56,9 @@ To test the image:
 
 ```console
 $ docker run --interactive --tty ilegeul/centos:6-xbb-v1
-$ docker run --interactive --tty ilegeul/centos:6-xbb-v2
-$ docker run --interactive --tty ilegeul/centos:6-xbb-v3
-$ docker run --interactive --tty ilegeul/centos:6-xbb-v4
+$ docker run --interactive --tty ilegeul/centos:6-xbb-v2.1
 $ docker run --interactive --tty ilegeul/centos32:6-xbb-v1
-$ docker run --interactive --tty ilegeul/centos32:6-xbb-v2
+$ docker run --interactive --tty ilegeul/centos32:6-xbb-v2.1
 ```
 
 #### Publish
@@ -76,8 +71,8 @@ $ docker push "ilegeul/centos32:6-xbb-v1"
 ```
 
 ```console
-$ docker push "ilegeul/centos:6-xbb-v2"
-$ docker push "ilegeul/centos32:6-xbb-v2"
+$ docker push "ilegeul/centos:6-xbb-v2.1"
+$ docker push "ilegeul/centos32:6-xbb-v2.1"
 ```
 
 #### Copy & Paste

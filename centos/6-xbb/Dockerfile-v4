@@ -1,9 +1,0 @@
-FROM ilegeul/centos:6-xbb-v3
-MAINTAINER Liviu Ionescu <ilg@livius.net>
-WORKDIR /root
-
-ADD image /xbb-input
-RUN time bash -x /xbb-input/build-v4.sh
-
-CMD ["/bin/bash"]
-

@@ -11,6 +11,9 @@
 # Support functions to be used in all versions of the containers.
 # -----------------------------------------------------------------------------
 
+# To split version into components:
+# local XBB_CMAKE_MAJOR_VERSION="$(echo ${XBB_CMAKE_MAJOR_VERSION} | sed -e 's|\([0-9][0-9]*\)\.\([0-9][0-9]*\)\.\([0-9][0-9]*\)|\1.\2|')"
+
 function prepare_env()
 {
   XBB_DOWNLOAD_FOLDER="/tmp/xbb-download"
@@ -20,7 +23,7 @@ function prepare_env()
   XBB_BOOTSTRAP_FOLDER="/opt/xbb-bootstrap"
   XBB_BUILD_FOLDER="${XBB_TMP_FOLDER}/xbb-build"
 
-  MAKE_CONCURRENCY=2
+  JOBS=${JOBS:-""}
 
   # x86_64 or i686
   UNAME_ARCH="$(uname -m)"
@@ -42,8 +45,8 @@ function prepare_env()
   # ---------------------------------------------------------------------------
 
   # Make all tools choose gcc, not the old cc.
-  export CC="gcc"
-  export CXX="g++"
+  export CC="gcc-7bs"
+  export CXX="g++-7bs"
 
   mkdir -p "${XBB_TMP_FOLDER}"
   mkdir -p "${XBB_DOWNLOAD_FOLDER}"
@@ -80,21 +83,21 @@ xbb_activate()
   # Add TeX to PATH.
   if [ -d "/opt/texlive/bin/x86_64-linux" ]
   then
-    PATH=/opt/texlive/bin/x86_64-linux:${PATH}
+    PATH="/opt/texlive/bin/x86_64-linux:${PATH}"
   elif [ -d "/opt/texlive/bin/i386-linux" ]
   then
-    PATH=/opt/texlive/bin/i386-linux:${PATH}
+    PATH="/opt/texlive/bin/i386-linux:${PATH}"
   fi
 
   # Add the XBB bin to PATH.
-  PATH="${XBB_FOLDER}/bin":${PATH}
+  PATH="${XBB_FOLDER}/bin:${PATH}"
   export PATH
 
   # Default LD_LIBRARY_PATH.
   LD_LIBRARY_PATH=${LD_LIBRARY_PATH:-""}
 
   # Add XBB lib to LD_LIBRARY_PATH.
-  LD_LIBRARY_PATH="${XBB_FOLDER}/lib":${LD_LIBRARY_PATH}
+  LD_LIBRARY_PATH="${XBB_FOLDER}/lib:${LD_LIBRARY_PATH}"
 
   if [ -d "${XBB_FOLDER}/lib64" ]
   then
@@ -103,117 +106,51 @@ xbb_activate()
   fi
   export LD_LIBRARY_PATH
 }
-
 __EOF__
 # The above marker must start in the first column.
-}
-
-function xbb_activate_param()
-{
-  PREFIX_PARAM=${PREFIX_PARAM:-${XBB_FOLDER}}
-
-  PATH=${PATH:-""}
-  # Add TeX to PATH.
-  if [ -d "/opt/texlive/bin/x86_64-linux" ]
-  then
-    PATH=/opt/texlive/bin/x86_64-linux:${PATH}
-  elif [ -d "/opt/texlive/bin/i386-linux" ]
-  then
-    PATH=/opt/texlive/bin/i386-linux:${PATH}
-  fi
-  export PATH="${PREFIX_PARAM}/bin":${PATH}
-
-  LD_LIBRARY_PATH=${LD_LIBRARY_PATH:-""}
-  export LD_LIBRARY_PATH="${PREFIX_PARAM}/lib":${LD_LIBRARY_PATH}
-
-  # Do not include -I... here, use CPPFLAGS.
-  EXTRA_CFLAGS_PARAM=${EXTRA_CFLAGS_PARAM:-""}
-  EXTRA_CXXFLAGS_PARAM=${EXTRA_CXXFLAGS_PARAM:-${EXTRA_CFLAGS_PARAM}}
-
-  EXTRA_LDFLAGS_PARAM=${EXTRA_LDFLAGS_PARAM:-""}
-  EXTRA_LDPATHFLAGS_PARAM=${EXTRA_LDPATHFLAGS_PARAM:-""}
-
-  export C_INCLUDE_PATH="${PREFIX_PARAM}/include"
-  export CPLUS_INCLUDE_PATH="${PREFIX_PARAM}/include"
-  export LIBRARY_PATH="${PREFIX_PARAM}/lib"
-  export CPPFLAGS="-I${PREFIX_PARAM}/include"
-  export PKG_CONFIG_PATH="${PREFIX_PARAM}/lib/pkgconfig":/usr/lib/pkgconfig
-  export LDPATHFLAGS="-L${PREFIX_PARAM}/lib ${EXTRA_LDPATHFLAGS_PARAM}"
-
-  if [ -d "${PREFIX_PARAM}/lib64" ]
-  then
-    export PKG_CONFIG_PATH="${PREFIX_PARAM}/lib64/pkgconfig":${PKG_CONFIG_PATH}
-    export LD_LIBRARY_PATH="${PREFIX_PARAM}/lib64":${LD_LIBRARY_PATH}
-    export LDPATHFLAGS="-L${PREFIX_PARAM}/lib64 ${LDPATHFLAGS}"
-  fi
-
-  # Do not include -I... here, use CPPFLAGS.
-  local COMMON_CFLAGS_PARAM=${COMMON_CFLAGS_PARAM:-"-g -O2"}
-  local COMMON_CXXFLAGS_PARAM=${COMMON_CXXFLAGS_PARAM:-${COMMON_CFLAGS_PARAM}}
-
-  export CFLAGS="${COMMON_CFLAGS_PARAM} ${EXTRA_CFLAGS_PARAM}"
-	export CXXFLAGS="${COMMON_CXXFLAGS_PARAM} ${EXTRA_CXXFLAGS_PARAM}"
-  export LDFLAGS="${LDPATHFLAGS} ${EXTRA_LDFLAGS_PARAM}"
-
-  if false
-  then
-    echo "xPack Build Box activated! $(lsb_release -is) $(lsb_release -rs), $(gcc --version | grep gcc), $(ldd --version | grep ldd)"
-    echo
-    echo PATH=${PATH}
-    echo
-    echo CFLAGS=${CFLAGS}
-    echo CXXFLAGS=${CXXFLAGS}
-    echo CPPFLAGS=${CPPFLAGS}
-    echo LDFLAGS=${LDFLAGS}
-    echo
-    echo LD_LIBRARY_PATH=${LD_LIBRARY_PATH}
-    echo PKG_CONFIG_PATH=${PKG_CONFIG_PATH}
-  fi
-}
-
-xbb_activate_dev_sample()
-{
-  PREFIX_PARAM="${XBB_FOLDER}"
-
-  # `-pipe` should make things faster, by using more memory.
-  EXTRA_CFLAGS_PARAM="-ffunction-sections -fdata-sections"
-  EXTRA_CXXFLAGS_PARAM="-ffunction-sections -fdata-sections" 
-  # Without -static-libstdc++ it'll pick up the out of date 
-  # /usr/lib[64]/libstdc++.so.6
-  EXTRA_LDFLAGS_PARAM="-static-libstdc++ -Wl,--gc-sections"
-
-  xbb_activate_param
 }
 
 # This build uses the bootstrap binaries; redefine 
 # this function to add the bootstrap path.
 # The newly built binaries will be prefered.
-xbb_activate_dev()
+function xbb_activate_dev()
 {
+  # Default PATH.
   PATH=${PATH:-""}
-  # Add bootstrap bin folder.
-  PATH="${XBB_BOOTSTRAP_FOLDER}/bin":${PATH}
-
-  # Default empty LD_LIBRARY_PATH.
+  # Default LD_LIBRARY_PATH.
   LD_LIBRARY_PATH=${LD_LIBRARY_PATH:-""}
-  # Add bootstrap lib folder.
+
+  # Insert XBB bootstrap paths at the bottom.
+
+  # Add the XBB bootstrap bin to PATH.
+  PATH="${XBB_BOOTSTRAP_FOLDER}/bin:${PATH}"
+
+  # Add the XBB bootstrap lib to LD_LIBRARY_PATH.
   LD_LIBRARY_PATH="${XBB_BOOTSTRAP_FOLDER}/lib:${LD_LIBRARY_PATH}"
 
-  if [ -d "${XBB_BOOTSTRAP_FOLDER}/lib64" ]
+  xbb_activate
+
+  XBB_CPPFLAGS="-I${XBB_FOLDER}/include ${XBB_CPPFLAGS}"
+
+  XBB_LDFLAGS_LIB="-L${XBB_FOLDER}/lib ${XBB_LDFLAGS_LIB}"
+  XBB_LDFLAGS_APP="-L${XBB_FOLDER}/lib ${XBB_LDFLAGS_APP}"
+  XBB_LDFLAGS_APP_STATIC="-L${XBB_FOLDER}/lib ${XBB_LDFLAGS_APP_STATIC}"
+
+  PKG_CONFIG_PATH="${XBB_FOLDER}/lib/pkgconfig:${PKG_CONFIG_PATH}"
+
+  if [ -d "${XBB_FOLDER}/lib" ]
   then
-    # On 64-bit systems, also add lib64.
-    LD_LIBRARY_PATH="${XBB_BOOTSTRAP_FOLDER}/lib64:${LD_LIBRARY_PATH}"
+    XBB_LDFLAGS_LIB="-L${XBB_FOLDER}/lib64 ${XBB_LDFLAGS_LIB}"
+    XBB_LDFLAGS_APP="-L${XBB_FOLDER}/lib64 ${XBB_LDFLAGS_APP}"
+    XBB_LDFLAGS_APP_STATIC="-L${XBB_FOLDER}/lib54 ${XBB_LDFLAGS_APP_STATIC}"
+    PKG_CONFIG_PATH="${XBB_FOLDER}/lib64/pkgconfig:${PKG_CONFIG_PATH}"
   fi
 
-  PREFIX_PARAM="${XBB_FOLDER}"
+  export XBB_CPPFLAGS
+  export XBB_LDFLAGS_LIB
+  export XBB_LDFLAGS_APP
+  export XBB_LDFLAGS_APP_STATIC
 
-  EXTRA_CFLAGS_PARAM="-pipe -ffunction-sections -fdata-sections"
-  EXTRA_CXXFLAGS_PARAM="-pipe -ffunction-sections -fdata-sections"
-  # Do not use extra quotes around XBB, tools like guile fail.
-  EXTRA_LDFLAGS_PARAM="-static-libstdc++ -Wl,--gc-sections -Wl,-rpath -Wl,${XBB_FOLDER}/lib"
-
-  # This will also add XBB in front of XBB_BOOTSTRAP_FOLDER.
-  xbb_activate_param
 }
 
 # -----------------------------------------------------------------------------
