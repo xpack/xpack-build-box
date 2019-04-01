@@ -473,6 +473,12 @@ function do_tar()
         # Build.
         make -j ${JOBS}
         make install-strip
+
+        echo
+        echo "Linking gnutar..."
+        cd "${INSTALL_FOLDER_PATH}/bin"
+        ln -s -v tar gnutar
+        
       ) 2>&1 | tee "${LOGS_FOLDER_PATH}/make-tar-output.txt"
     )
 
