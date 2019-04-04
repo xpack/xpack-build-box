@@ -285,10 +285,8 @@ function do_mingw_all()
     xbb_activate_installed_dev
 
     bash "${XBB_BUILD_FOLDER}/${XBB_MINGW_FOLDER_NAME}/mingw-w64-headers/configure" --help
-
-    "${XBB_BUILD_FOLDER}/${XBB_MINGW_FOLDER_NAME}/mingw-w64-headers/configure" --help
     
-    "${XBB_BUILD_FOLDER}/${XBB_MINGW_FOLDER_NAME}/mingw-w64-headers/configure" \
+    bash "${XBB_BUILD_FOLDER}/${XBB_MINGW_FOLDER_NAME}/mingw-w64-headers/configure" \
       --prefix="${XBB_FOLDER}/${MINGW_TARGET}" \
       --build="${BUILD}" \
       --host="${MINGW_TARGET}"
@@ -342,9 +340,9 @@ function do_mingw_all()
     export LDFLAGS="${XBB_LDFLAGS_APP}"
 
     # For the native build, --disable-shared failed with errors in libstdc++-v3
-    "${XBB_BUILD_FOLDER}/${XBB_MINGW_GCC_FOLDER_NAME}/configure" --help
+    bash "${XBB_BUILD_FOLDER}/${XBB_MINGW_GCC_FOLDER_NAME}/configure" --help
 
-    "${XBB_BUILD_FOLDER}/${XBB_MINGW_GCC_FOLDER_NAME}/configure" \
+    bash "${XBB_BUILD_FOLDER}/${XBB_MINGW_GCC_FOLDER_NAME}/configure" \
       --prefix="${XBB_FOLDER}" \
       --with-sysroot="${XBB_FOLDER}" \
       --build="${BUILD}" \
@@ -421,7 +419,7 @@ function do_mingw_all()
       exit 1
     fi
 
-    "${XBB_BUILD_FOLDER}/${XBB_MINGW_FOLDER_NAME}/mingw-w64-crt/configure" \
+    bash "${XBB_BUILD_FOLDER}/${XBB_MINGW_FOLDER_NAME}/mingw-w64-crt/configure" \
       --prefix="${XBB_FOLDER}/${MINGW_TARGET}" \
       --with-sysroot="${XBB_FOLDER}" \
       --build="${BUILD}" \
@@ -697,9 +695,9 @@ function do_tar()
     # Avoid 'configure: error: you should not run configure as root'.
     export FORCE_UNSAFE_CONFIGURE=1
 
-    ./configure --help
+    bash configure --help
 
-    ./configure \
+    bash configure \
       --prefix="${XBB_FOLDER}" 
     
     make -j ${JOBS}
@@ -750,9 +748,9 @@ function do_curl()
     export CXXFLAGS="${XBB_CXXFLAGS}"
     export LDFLAGS="${XBB_LDFLAGS_APP}"
 
-    ./configure --help
+    bash configure --help
 
-    ./configure \
+    bash configure \
       --prefix="${XBB_FOLDER}" \
       --disable-debug \
       --with-ssl \
@@ -813,11 +811,11 @@ function do_pkg_config()
     export CXXFLAGS="${XBB_CXXFLAGS}"
     export LDFLAGS="${XBB_LDFLAGS_APP}"
 
-    ./configure --help
-    glib/configure --help
+    bash configure --help
+    bash glib/configure --help
 
     # Use internal glib
-    ./configure \
+    bash configure \
       --prefix="${XBB_FOLDER}" \
       --with-internal-glib \
       --with-libiconv
@@ -870,9 +868,9 @@ function do_coreutils()
     # in environment to bypass this check
     export FORCE_UNSAFE_CONFIGURE=1
 
-    bash ./configure --help
+    bash configure --help
 
-    bash ./configure \
+    bash configure \
       --prefix="${XBB_FOLDER}" 
     
     make -j ${JOBS}
@@ -920,9 +918,9 @@ function do_m4()
     export CXXFLAGS="${XBB_CXXFLAGS}"
     export LDFLAGS="${XBB_LDFLAGS_APP}"
 
-    ./configure --help
+    bash configure --help
 
-    ./configure \
+    bash configure \
       --prefix="${XBB_FOLDER}" 
     
     make -j ${JOBS}
@@ -970,9 +968,9 @@ function do_gawk()
     export CXXFLAGS="${XBB_CXXFLAGS}"
     export LDFLAGS="${XBB_LDFLAGS_APP}"
 
-    ./configure --help
+    bash configure --help
 
-    ./configure \
+    bash configure \
       --prefix="${XBB_FOLDER}" \
       --without-libsigsegv
     
@@ -1020,9 +1018,9 @@ function do_sed()
     export CXXFLAGS="${XBB_CXXFLAGS}"
     export LDFLAGS="${XBB_LDFLAGS_APP}"
 
-    ./configure --help
+    bash configure --help
 
-    ./configure \
+    bash configure \
     --prefix="${XBB_FOLDER}" 
 
     make -j ${JOBS}
@@ -1070,9 +1068,9 @@ function do_autoconf()
     export CXXFLAGS="${XBB_CXXFLAGS}"
     export LDFLAGS="${XBB_LDFLAGS_APP}"
 
-    ./configure --help
+    bash configure --help
 
-    ./configure \
+    bash configure \
       --prefix="${XBB_FOLDER}" 
       
     make -j ${JOBS}
@@ -1120,9 +1118,9 @@ function do_automake()
     export CXXFLAGS="${XBB_CXXFLAGS}"
     export LDFLAGS="${XBB_LDFLAGS_APP}"
 
-    ./configure --help
+    bash configure --help
 
-    ./configure \
+    bash configure \
       --prefix="${XBB_FOLDER}" 
           
     make -j ${JOBS}
@@ -1171,9 +1169,9 @@ function do_libtool()
     export CXXFLAGS="${XBB_CXXFLAGS}"
     export LDFLAGS="${XBB_LDFLAGS_APP}"
 
-    ./configure --help
+    bash configure --help
 
-    ./configure \
+    bash configure \
       --prefix="${XBB_FOLDER}" 
     
     make -j ${JOBS}
@@ -1221,9 +1219,9 @@ function do_gettext()
     export CXXFLAGS="${XBB_CXXFLAGS}"
     export LDFLAGS="${XBB_LDFLAGS_APP}"
 
-    ./configure --help
+    bash configure --help
 
-    ./configure \
+    bash configure \
       --prefix="${XBB_FOLDER}" 
     
     make -j ${JOBS}
@@ -1271,9 +1269,9 @@ function do_diffutils()
     export CXXFLAGS="${XBB_CXXFLAGS}"
     export LDFLAGS="${XBB_LDFLAGS_APP}"
 
-    ./configure --help
+    bash configure --help
 
-    ./configure \
+    bash configure \
       --prefix="${XBB_FOLDER}" 
       
     make -j ${JOBS}
@@ -1321,9 +1319,9 @@ function do_patch()
     export CXXFLAGS="${XBB_CXXFLAGS}"
     export LDFLAGS="${XBB_LDFLAGS_APP}"
 
-    ./configure --help
+    bash configure --help
 
-    ./configure \
+    bash configure \
       --prefix="${XBB_FOLDER}" 
     
     make -j ${JOBS}
@@ -1371,9 +1369,9 @@ function do_bison()
     export CXXFLAGS="${XBB_CXXFLAGS}"
     export LDFLAGS="${XBB_LDFLAGS_APP}"
 
-    ./configure --help
+    bash configure --help
 
-    ./configure \
+    bash configure \
       --prefix="${XBB_FOLDER}" 
       
     make -j ${JOBS}
@@ -1422,9 +1420,9 @@ function do_make()
     export CXXFLAGS="${XBB_CXXFLAGS}"
     export LDFLAGS="${XBB_LDFLAGS_APP}"
 
-    ./configure --help
+    bash configure --help
 
-    ./configure \
+    bash configure \
       --prefix="${XBB_FOLDER}" \
       --with-guile
       
@@ -1480,10 +1478,10 @@ function do_wget()
     export LDFLAGS="${XBB_LDFLAGS_APP}"
     export LIBS="-liconv"
 
-    ./configure --help
+    bash configure --help
 
     # libpsl is not available anyway.
-    ./configure \
+    bash configure \
       --prefix="${XBB_FOLDER}" \
       --without-libpsl \
       --without-included-regex \
@@ -1540,9 +1538,9 @@ function do_texinfo()
     export CXXFLAGS="${XBB_CXXFLAGS}"
     export LDFLAGS="${XBB_LDFLAGS_APP}"
 
-    ./configure --help
+    bash configure --help
 
-    ./configure \
+    bash configure \
       --prefix="${XBB_FOLDER}"
 
     make -j ${JOBS}
@@ -1591,9 +1589,9 @@ function do_patchelf()
     # find libstdc++.
     export LDFLAGS="${XBB_LDFLAGS_APP}"
 
-    ./configure --help
+    bash configure --help
 
-    ./configure \
+    bash configure \
       --prefix="${XBB_FOLDER}" 
     
     make -j ${JOBS} 
@@ -1687,9 +1685,9 @@ function do_flex()
     export LDFLAGS="${XBB_LDFLAGS_APP}"
 
     ./autogen.sh
-    ./configure --help
+    bash configure --help
 
-    ./configure \
+    bash configure \
       --prefix="${XBB_FOLDER}" 
     
     make -j ${JOBS}
@@ -1869,7 +1867,7 @@ function do_python()
     export CXXFLAGS="${XBB_CXXFLAGS}"
     export LDFLAGS="${XBB_LDFLAGS_APP}"
 
-    ./configure --help
+    bash configure --help
 
     # Python is happier with dynamic zlib and curl.
     # Without --enabled-shared the build fails with
@@ -1882,7 +1880,7 @@ function do_python()
 
     export CFLAGS="${CFLAGS} -Wno-int-in-bool-context -Wno-maybe-uninitialized -Wno-nonnull -Wno-stringop-overflow"
 
-    ./configure \
+    bash configure \
       --prefix="${XBB_FOLDER}" \
       --enable-shared \
       --with-universal-archs=${BITS}-bits \
@@ -1960,7 +1958,7 @@ function do_python3()
     export CXXFLAGS="${XBB_CXXFLAGS}"
     export LDFLAGS="${XBB_LDFLAGS_APP}"
 
-    bash ./configure --help
+    bash configure --help
 
     # Python is happier with dynamic zlib and curl.
     # Without --enabled-shared the build fails with
@@ -1973,7 +1971,7 @@ function do_python3()
 
     export CFLAGS="${CFLAGS} -Wno-int-in-bool-context -Wno-maybe-uninitialized -Wno-nonnull -Wno-stringop-overflow"
 
-    bash ./configure \
+    bash configure \
       --prefix="${XBB_FOLDER}" \
       --enable-shared \
       --with-universal-archs=${BITS}-bits \
@@ -2112,9 +2110,9 @@ function do_wine()
       ENABLE_64=""
     fi
 
-    bash ./configure --help
+    bash configure --help
 
-    bash ./configure \
+    bash configure \
       --prefix="${XBB_FOLDER}" \
       \
       ${ENABLE_64} \
@@ -2244,9 +2242,9 @@ function do_git()
     export LIBS="-ldl"
 
     make configure 
-    ./configure --help
+    bash configure --help
 
-	  ./configure \
+	  bash configure \
       --prefix="${XBB_FOLDER}"
 	  
     # Parallel builds fail with

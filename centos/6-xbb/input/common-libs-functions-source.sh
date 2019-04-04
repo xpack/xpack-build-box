@@ -44,12 +44,12 @@ function do_zlib()
     export CXXFLAGS="${XBB_CXXFLAGS}"
     export LDFLAGS="${XBB_LDFLAGS_LIB}"
 
-    ./configure --help
+    bash configure --help
 
     # Some apps (cmake) would be happier with shared libs.
     # Some apps (python) fail without shared libs. 
  
-     ./configure \
+     bash configure \
       --prefix="${XBB_FOLDER}"
 
     make -j ${JOBS}
@@ -93,9 +93,9 @@ function do_gmp()
     # Mandatory, it fails on 32-bits. 
     export ABI="${BITS}"
 
-    ./configure --help
+    bash configure --help
 
-    ./configure \
+    bash configure \
       --prefix="${XBB_FOLDER}" 
     
     make -j ${JOBS}
@@ -136,9 +136,9 @@ function do_mpfr()
     export CXXFLAGS="${XBB_CXXFLAGS}"
     export LDFLAGS="${XBB_LDFLAGS_LIB}"
 
-    ./configure --help
+    bash configure --help
 
-    ./configure \
+    bash configure \
       --prefix="${XBB_FOLDER}" 
     
     make -j ${JOBS}
@@ -178,9 +178,9 @@ function do_mpc()
     export CXXFLAGS="${XBB_CXXFLAGS}"
     export LDFLAGS="${XBB_LDFLAGS_LIB}"
 
-    ./configure --help
+    bash configure --help
 
-    ./configure \
+    bash configure \
       --prefix="${XBB_FOLDER}" 
     
     make -j ${JOBS}
@@ -221,9 +221,9 @@ function do_isl()
     export CXXFLAGS="${XBB_CXXFLAGS}"
     export LDFLAGS="${XBB_LDFLAGS_LIB}"
 
-    ./configure --help
+    bash configure --help
 
-    ./configure \
+    bash configure \
       --prefix="${XBB_FOLDER}" 
     
     make -j ${JOBS}
@@ -263,9 +263,9 @@ function do_nettle()
     export CXXFLAGS="${XBB_CXXFLAGS}"
     export LDFLAGS="${XBB_LDFLAGS_LIB}"
 
-    ./configure --help
+    bash configure --help
 
-    ./configure \
+    bash configure \
       --prefix="${XBB_FOLDER}" \
       --disable-documentation
 
@@ -322,9 +322,9 @@ function do_tasn1()
     export CXXFLAGS="${XBB_CXXFLAGS}"
     export LDFLAGS="${XBB_LDFLAGS_LIB}"
 
-    ./configure --help
+    bash configure --help
 
-    ./configure \
+    bash configure \
       --prefix="${XBB_FOLDER}" 
     
     make -j ${JOBS}
@@ -371,9 +371,9 @@ function do_expat()
     export CXXFLAGS="${XBB_CXXFLAGS}"
     export LDFLAGS="${XBB_LDFLAGS_LIB}"
 
-    ./configure --help
+    bash configure --help
 
-    ./configure \
+    bash configure \
       --prefix="${XBB_FOLDER}" 
     
     make -j ${JOBS}
@@ -414,9 +414,9 @@ function do_libffi()
     export CXXFLAGS="${XBB_CXXFLAGS}"
     export LDFLAGS="${XBB_LDFLAGS_LIB}"
 
-    ./configure --help
+    bash configure --help
 
-    ./configure \
+    bash configure \
       --prefix="${XBB_FOLDER}" \
       --enable-pax_emutramp
     
@@ -464,9 +464,9 @@ function do_libiconv()
     export CXXFLAGS="${XBB_CXXFLAGS}"
     export LDFLAGS="${XBB_LDFLAGS_LIB}"
 
-    ./configure --help
+    bash configure --help
 
-    ./configure \
+    bash configure \
       --prefix="${XBB_FOLDER}" 
     
     make -j ${JOBS}
@@ -515,9 +515,9 @@ function do_gnutls()
     export CXXFLAGS="${XBB_CXXFLAGS}"
     export LDFLAGS="${XBB_LDFLAGS_LIB}"
 
-    ./configure --help
+    bash configure --help
 
-    ./configure \
+    bash configure \
       --prefix="${XBB_FOLDER}" \
       --without-p11-kit \
       --enable-guile \
@@ -568,9 +568,9 @@ function do_xz()
     export CXXFLAGS="${XBB_CXXFLAGS}"
     export LDFLAGS="${XBB_LDFLAGS_LIB}"
 
-    ./configure --help
+    bash configure --help
 
-    ./configure \
+    bash configure \
       --prefix="${XBB_FOLDER}" \
       --disable-rpath
     
@@ -632,9 +632,9 @@ function do_libpng()
     export CXXFLAGS="${XBB_CXXFLAGS}"
     export LDFLAGS="${XBB_LDFLAGS_LIB}"
 
-    bash ./configure --help
+    bash configure --help
 
-    bash ./configure \
+    bash configure \
       --prefix="${XBB_FOLDER}"
     
     make -j ${JOBS}
