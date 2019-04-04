@@ -55,6 +55,7 @@ function do_native_binutils()
     cd "${XBB_BUILD_FOLDER}/${XBB_BINUTILS_FOLDER}"
 
     xbb_activate
+    xbb_activate_installed_bin
     xbb_activate_installed_dev
 
     export CPPFLAGS="${XBB_CPPFLAGS}" 
@@ -121,6 +122,7 @@ function do_native_gcc()
     cd "${XBB_BUILD_FOLDER}/${XBB_GCC_FOLDER}"-build
 
     xbb_activate
+    xbb_activate_installed_bin
     xbb_activate_installed_dev
 
     export CPPFLAGS="${XBB_CPPFLAGS}" 
@@ -242,6 +244,7 @@ function do_openssl()
     cd "${XBB_BUILD_FOLDER}/${XBB_OPENSSL_FOLDER}"
 
     xbb_activate
+    xbb_activate_installed_bin
     xbb_activate_installed_dev
 
     export CPPFLAGS="${XBB_CPPFLAGS}" 
@@ -317,6 +320,7 @@ function do_tar()
     cd "${XBB_BUILD_FOLDER}/${XBB_TAR_FOLDER}"
 
     xbb_activate
+    xbb_activate_installed_bin
     xbb_activate_installed_dev
 
     export CPPFLAGS="${XBB_CPPFLAGS}" 
@@ -376,6 +380,7 @@ function do_curl()
     cd "${XBB_BUILD_FOLDER}/${XBB_CURL_FOLDER}"
 
     xbb_activate
+    xbb_activate_installed_bin
     xbb_activate_installed_dev
 
     export CPPFLAGS="${XBB_CPPFLAGS}" 
@@ -442,6 +447,7 @@ function do_m4()
     cd "${XBB_BUILD_FOLDER}/${XBB_M4_FOLDER}"
 
     xbb_activate
+    xbb_activate_installed_bin
     xbb_activate_installed_dev
 
     export CPPFLAGS="${XBB_CPPFLAGS}" 
@@ -492,6 +498,7 @@ function do_gawk()
     cd "${XBB_BUILD_FOLDER}/${XBB_GAWK_FOLDER}"
 
     xbb_activate
+    xbb_activate_installed_bin
     xbb_activate_installed_dev
 
     export CPPFLAGS="${XBB_CPPFLAGS}" 
@@ -543,6 +550,7 @@ function do_autoconf()
     cd "${XBB_BUILD_FOLDER}/${XBB_AUTOCONF_FOLDER}"
 
     xbb_activate
+    xbb_activate_installed_bin
     xbb_activate_installed_dev
 
     export CPPFLAGS="${XBB_CPPFLAGS}" 
@@ -593,6 +601,8 @@ function do_automake()
     cd "${XBB_BUILD_FOLDER}/${XBB_AUTOMAKE_FOLDER}"
 
     xbb_activate
+    # configure: error: Autoconf 2.65 or better is required.
+    xbb_activate_installed_bin
     xbb_activate_installed_dev
 
     export CPPFLAGS="${XBB_CPPFLAGS}" 
@@ -644,6 +654,7 @@ function do_libtool()
     cd "${XBB_BUILD_FOLDER}/${XBB_LIBTOOL_FOLDER}"
 
     xbb_activate
+    xbb_activate_installed_bin
     xbb_activate_installed_dev
 
     export CPPFLAGS="${XBB_CPPFLAGS}" 
@@ -694,6 +705,7 @@ function do_gettext()
     cd "${XBB_BUILD_FOLDER}/${XBB_GETTEXT_FOLDER}"
 
     xbb_activate
+    xbb_activate_installed_bin
     xbb_activate_installed_dev
 
     export CFLAGS="${XBB_CFLAGS} -Wno-discarded-qualifiers"
@@ -746,6 +758,7 @@ function do_patch()
     cd "${XBB_BUILD_FOLDER}/${XBB_PATCH_FOLDER}"
 
     xbb_activate
+    xbb_activate_installed_bin
     xbb_activate_installed_dev
 
     export CPPFLAGS="${XBB_CPPFLAGS}" 
@@ -796,6 +809,7 @@ function do_diffutils()
     cd "${XBB_BUILD_FOLDER}/${XBB_DIFFUTILS_FOLDER}"
 
     xbb_activate
+    xbb_activate_installed_bin
     xbb_activate_installed_dev
 
     export CPPFLAGS="${XBB_CPPFLAGS}" 
@@ -846,6 +860,7 @@ function do_bison()
     cd "${XBB_BUILD_FOLDER}/${XBB_BISON_FOLDER}"
 
     xbb_activate
+    xbb_activate_installed_bin
     xbb_activate_installed_dev
 
     export CPPFLAGS="${XBB_CPPFLAGS}" 
@@ -897,6 +912,7 @@ function do_make()
     cd "${XBB_BUILD_FOLDER}/${XBB_MAKE_FOLDER}"
 
     xbb_activate
+    xbb_activate_installed_bin
     xbb_activate_installed_dev
 
     export CPPFLAGS="${XBB_CPPFLAGS}" 
@@ -950,6 +966,7 @@ function do_pkg_config()
     cd "${XBB_BUILD_FOLDER}/${XBB_PKG_CONFIG_FOLDER}"
 
     xbb_activate
+    xbb_activate_installed_bin
     xbb_activate_installed_dev
 
     export CPPFLAGS="${XBB_CPPFLAGS}" 
@@ -1003,6 +1020,7 @@ function do_flex()
     cd "${XBB_BUILD_FOLDER}/${XBB_FLEX_FOLDER}"
 
     xbb_activate
+    xbb_activate_installed_bin
     xbb_activate_installed_dev
 
     export CPPFLAGS="${XBB_CPPFLAGS}" 
@@ -1060,6 +1078,7 @@ function do_perl()
     cd "${XBB_BUILD_FOLDER}/${XBB_PERL_FOLDER}"
 
     xbb_activate
+    xbb_activate_installed_bin
     xbb_activate_installed_dev
 
     export CPPFLAGS="${XBB_CPPFLAGS}" 
@@ -1126,6 +1145,7 @@ function do_cmake()
     cd "${XBB_BUILD_FOLDER}/${XBB_CMAKE_FOLDER}"
 
     xbb_activate
+    xbb_activate_installed_bin
     xbb_activate_installed_dev
 
     export CPPFLAGS="${XBB_CPPFLAGS}" 
@@ -1191,6 +1211,7 @@ function do_python()
     cd "${XBB_BUILD_FOLDER}/${XBB_PYTHON_FOLDER}"
 
     xbb_activate
+    xbb_activate_installed_bin
     xbb_activate_installed_dev 
 
     export CPPFLAGS="${XBB_CPPFLAGS}" 
@@ -1279,6 +1300,7 @@ function do_scons()
     cd "${XBB_BUILD_FOLDER}/${XBB_SCONS_FOLDER}"
 
     xbb_activate
+    xbb_activate_installed_bin
     xbb_activate_installed_dev
 
     export CPPFLAGS="${XBB_CPPFLAGS}" 

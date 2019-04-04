@@ -112,6 +112,8 @@ then
   do_m4 "1.4.18"
   do_gawk "4.2.0"
   do_autoconf "2.69"
+
+  # Requires autoconf 2.65 or better
   do_automake "1.15"
   do_libtool "2.4.6"
   do_gettext "0.19.8"
@@ -149,7 +151,7 @@ export CC="gcc${GCC_SUFFIX}"
 export CXX="g++${GCC_SUFFIX}"
 
 (
-  xbb_activate
+  xbb_activate_installed_bin
 
   echo
   ${CXX} --version
@@ -176,6 +178,6 @@ fi
 
 
 echo
-echo Done
+echo "Done"
 
 # -----------------------------------------------------------------------------
