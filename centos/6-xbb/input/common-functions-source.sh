@@ -53,7 +53,7 @@ function prepare_xbb_env()
   # Wihtout -static-libstdc++, the bootstrap lib folder is needed to 
   # find libstdc++.
   XBB_LDFLAGS_APP="${XBB_LDFLAGS} -Wl,--gc-sections -static-libstdc++"
-  XBB_LDFLAGS_APP_STATIC="${XBB_LDFLAGS_APP} -static -static-libgcc -static-libstdc++"
+  XBB_LDFLAGS_APP_STATIC="${XBB_LDFLAGS_APP} -static -static-libgcc"
 
   BUILD="${UNAME_ARCH}-linux-gnu"
 
