@@ -284,11 +284,7 @@ function do_mingw_all()
     xbb_activate
     xbb_activate_installed_dev
 
-    export CPPFLAGS="${XBB_CPPFLAGS}" 
-    export CFLAGS="${XBB_CFLAGS}"
-    export CXXFLAGS="${XBB_CXXFLAGS}"
-    # export LDFLAGS="-static-libstdc++ ${LDFLAGS}"
-    # export LDFLAGS="${XBB_LDFLAGS_APP}"
+    bash "${XBB_BUILD_FOLDER}/${XBB_MINGW_FOLDER_NAME}/mingw-w64-headers/configure" --help
 
     "${XBB_BUILD_FOLDER}/${XBB_MINGW_FOLDER_NAME}/mingw-w64-headers/configure" --help
     
@@ -402,9 +398,8 @@ function do_mingw_all()
     # {standard input}:7150: Error: can't resolve `.text' {.text section} - `.LFB5156' {.text$WinMainCRTStartup section}
     # {standard input}:8937: Error: can't resolve `.text' {.text section} - `.LFB5156' {.text$WinMainCRTStartup section}
 
-    export CPPFLAGS="${XBB_CPPFLAGS}" 
-    export CFLAGS="${XBB_CFLAGS} -Wno-unused-variable -Wno-implicit-fallthrough -Wno-implicit-function-declaration -Wno-cpp"
-    export CXXFLAGS="${XBB_CXXFLAGS}"
+    export CFLAGS="-O2 -pipe -Wno-unused-variable -Wno-implicit-fallthrough -Wno-implicit-function-declaration -Wno-cpp"
+    export CXXFLAGS="-O2 -pipe"
     export LDFLAGS=""
     
     # Without it, apparently a bug in autoconf/c.m4, function AC_PROG_CC, results in:
@@ -435,7 +430,9 @@ function do_mingw_all()
       ${_crt_configure_lib32} \
       ${_crt_configure_lib64}
 
-    make -j ${JOBS}
+    # Parallel builds fail.
+    # make -j ${JOBS}
+    make
     make install-strip
 
     ls -l "${XBB_FOLDER}" "${XBB_FOLDER}/${MINGW_TARGET}"
@@ -460,9 +457,9 @@ function do_mingw_all()
     xbb_activate_installed_bin
     xbb_activate_installed_dev
 
-    export CPPFLAGS="${XBB_CPPFLAGS}" 
-    export CFLAGS="${XBB_CFLAGS}"
-    export CXXFLAGS="${XBB_CXXFLAGS}"
+    export CPPFLAGS="" 
+    export CFLAGS="-O2 -pipe"
+    export CXXFLAGS="-O2 -pipe"
     export LDFLAGS=""
     
     export CC=""
