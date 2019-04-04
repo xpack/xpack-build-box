@@ -45,7 +45,7 @@ function prepare_xbb_env()
   XBB_LDFLAGS=""
   XBB_LDFLAGS_LIB="${XBB_LDFLAGS}"
   XBB_LDFLAGS_APP="${XBB_LDFLAGS} -Wl,--gc-sections  -static-libstdc++"
-  XBB_LDFLAGS_APP_STATIC="${XBB_LDFLAGS_APP} -static -static-libgcc -static-libstdc++"
+  XBB_LDFLAGS_APP_STATIC="${XBB_LDFLAGS_APP} -static -static-libgcc"
 
   BUILD="${UNAME_ARCH}-linux-gnu"
   GCC_SUFFIX="-7bs"
