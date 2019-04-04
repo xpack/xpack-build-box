@@ -1,9 +1,9 @@
-FROM ilegeul/centos:6-bootstrap-v2.1
+FROM ilegeul/centos:6-xbb-v2.3
 LABEL maintainer="Liviu Ionescu <ilg@livius.net>"
 WORKDIR /root
 
 ADD input /xbb-input
-RUN time bash -x /xbb-input/build-v2.1.sh
+RUN time bash -x /xbb-input/build-v2.4.sh
 
 CMD ["/bin/bash"]
 

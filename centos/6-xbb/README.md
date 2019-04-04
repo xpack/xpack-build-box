@@ -67,8 +67,11 @@ To test the image:
 
 ```console
 $ docker run --interactive --tty ilegeul/centos:6-xbb-v1
-$ docker run --interactive --tty ilegeul/centos:6-xbb-v2.1
 $ docker run --interactive --tty ilegeul/centos32:6-xbb-v1
+```
+
+```console
+$ docker run --interactive --tty ilegeul/centos:6-xbb-v2.1
 $ docker run --interactive --tty ilegeul/centos32:6-xbb-v2.1
 ```
 
@@ -84,16 +87,6 @@ $ docker push "ilegeul/centos32:6-xbb-v1"
 ```console
 $ docker push "ilegeul/centos:6-xbb-v2.1"
 $ docker push "ilegeul/centos32:6-xbb-v2.1"
-```
-
-#### Copy & Paste
-
-```bash
-caffeinate docker build --tag "ilegeul/centos:6-xbb-v1" -f Dockerfile-v1 .
-docker push "ilegeul/centos:6-xbb-v1"
-caffeinate docker build --tag "ilegeul/centos32:6-xbb-v1" -f Dockerfile32-v1 .
-docker push "ilegeul/centos32:6-xbb-v1"
-
 ```
 
 ### Credits

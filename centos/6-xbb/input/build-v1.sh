@@ -2870,6 +2870,7 @@ then
   # Libraries, required by gnutls.
   # depends=('glibc' 'gmp')
   do_nettle
+
   # depends=('glibc')
   do_tasn1
 
@@ -2899,22 +2900,31 @@ then
   # GNU tools.
   # depends=('glibc')
   do_m4
+
   # depends=('glibc' 'mpfr')
   do_gawk
+
   # depends=('sh' 'perl' 'awk' 'm4' 'texinfo')
   do_autoconf
+
   # depends=('sh' 'perl')
   do_automake
+
   # depends=('sh' 'tar' 'glibc')
   do_libtool
+
   # depends=('glibc' 'glib2' 'libunistring' 'ncurses')
   do_gettext
+
   # depends=('glibc' 'attr')
   do_patch
+
   # depends=('libsigsegv')
   do_diffutils
+
   # depends=('glibc')
   do_bison
+
   # depends=('glibc' 'guile')
   do_make
 
@@ -2948,11 +2958,13 @@ then
 
   # depends=('gdbm' 'db' 'glibc')
   do_perl
+  
   # depends=('curl' 'libarchive' 'shared-mime-info' 'jsoncpp' 'rhash')
   do_cmake
 
   # depends=('bzip2' 'gdbm' 'openssl' 'zlib' 'expat' 'sqlite' 'libffi')
   do_python
+
   # depends=('python2')
   do_scons
 

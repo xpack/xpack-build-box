@@ -18,12 +18,12 @@ function do_zlib()
 
   # 2017-01-15, "1.2.11"
 
-  XBB_ZLIB_VERSION="$1"
+  local XBB_ZLIB_VERSION="$1"
 
-  XBB_ZLIB_FOLDER="zlib-${XBB_ZLIB_VERSION}"
-  XBB_ZLIB_ARCHIVE="${XBB_ZLIB_FOLDER}.tar.gz"
-  XBB_ZLIB_URL="http://zlib.net/fossils/${XBB_ZLIB_ARCHIVE}"
-  # XBB_ZLIB_URL="https://github.com/gnu-mcu-eclipse/files/raw/master/libs/${XBB_ZLIB_ARCHIVE}"
+  local XBB_ZLIB_FOLDER="zlib-${XBB_ZLIB_VERSION}"
+  local XBB_ZLIB_ARCHIVE="${XBB_ZLIB_FOLDER}.tar.gz"
+  local XBB_ZLIB_URL="http://zlib.net/fossils/${XBB_ZLIB_ARCHIVE}"
+  # local XBB_ZLIB_URL="https://github.com/gnu-mcu-eclipse/files/raw/master/libs/${XBB_ZLIB_ARCHIVE}"
 
   echo
   echo "Building native zlib ${XBB_ZLIB_VERSION}..."
@@ -35,15 +35,21 @@ function do_zlib()
   (
     cd "${XBB_BUILD_FOLDER}/${XBB_ZLIB_FOLDER}"
 
-    xbb_activate_dev
+    xbb_activate
+    xbb_activate_installed_dev
+
+    # -fPIC makes possible to include static libs in shared libs.
+    export CPPFLAGS="${XBB_CPPFLAGS}" 
+    export CFLAGS="${XBB_CFLAGS} -fPIC"
+    export CXXFLAGS="${XBB_CXXFLAGS}"
+    export LDFLAGS="${XBB_LDFLAGS_LIB}"
 
     ./configure --help
 
     # Some apps (cmake) would be happier with shared libs.
     # Some apps (python) fail without shared libs. 
-    # -fPIC makes possible to include static libs in shared libs.
-    export CFLAGS="${CFLAGS} -fPIC"
-    ./configure \
+ 
+     ./configure \
       --prefix="${XBB_FOLDER}"
 
     make -j ${JOBS}
@@ -59,12 +65,12 @@ function do_gmp()
 
   # 16-Dec-2016, "6.1.2"
 
-  XBB_GMP_VERSION="$1"
+  local XBB_GMP_VERSION="$1"
 
-  XBB_GMP_FOLDER="gmp-${XBB_GMP_VERSION}"
-  XBB_GMP_ARCHIVE="${XBB_GMP_FOLDER}.tar.xz"
-  XBB_GMP_URL="https://gmplib.org/download/gmp/${XBB_GMP_ARCHIVE}"
-  # XBB_GMP_URL="https://github.com/gnu-mcu-eclipse/files/raw/master/libs/${XBB_GMP_ARCHIVE}"
+  local XBB_GMP_FOLDER="gmp-${XBB_GMP_VERSION}"
+  local XBB_GMP_ARCHIVE="${XBB_GMP_FOLDER}.tar.xz"
+  local XBB_GMP_URL="https://gmplib.org/download/gmp/${XBB_GMP_ARCHIVE}"
+  # local XBB_GMP_URL="https://github.com/gnu-mcu-eclipse/files/raw/master/libs/${XBB_GMP_ARCHIVE}"
 
   echo
   echo "Building gmp ${XBB_GMP_VERSION}..."
@@ -76,7 +82,13 @@ function do_gmp()
   (
     cd "${XBB_BUILD_FOLDER}/${XBB_GMP_FOLDER}"
 
-    xbb_activate_dev
+    xbb_activate
+    xbb_activate_installed_dev
+
+    export CPPFLAGS="${XBB_CPPFLAGS}" 
+    export CFLAGS="${XBB_CFLAGS}"
+    export CXXFLAGS="${XBB_CXXFLAGS}"
+    export LDFLAGS="${XBB_LDFLAGS_LIB}"
 
     # Mandatory, it fails on 32-bits. 
     export ABI="${BITS}"
@@ -99,12 +111,12 @@ function do_mpfr()
 
   # 7 September 2017, "3.1.6"
 
-  XBB_MPFR_VERSION="$1"
+  local XBB_MPFR_VERSION="$1"
 
-  XBB_MPFR_FOLDER="mpfr-${XBB_MPFR_VERSION}"
-  XBB_MPFR_ARCHIVE="${XBB_MPFR_FOLDER}.tar.xz"
-  XBB_MPFR_URL="http://www.mpfr.org/${XBB_MPFR_FOLDER}/${XBB_MPFR_ARCHIVE}"
-  # XBB_MPFR_URL="https://github.com/gnu-mcu-eclipse/files/raw/master/libs/${XBB_MPFR_ARCHIVE}"
+  local XBB_MPFR_FOLDER="mpfr-${XBB_MPFR_VERSION}"
+  local XBB_MPFR_ARCHIVE="${XBB_MPFR_FOLDER}.tar.xz"
+  local XBB_MPFR_URL="http://www.mpfr.org/${XBB_MPFR_FOLDER}/${XBB_MPFR_ARCHIVE}"
+  # local XBB_MPFR_URL="https://github.com/gnu-mcu-eclipse/files/raw/master/libs/${XBB_MPFR_ARCHIVE}"
 
   echo
   echo "Building mpfr ${XBB_MPFR_VERSION}..."
@@ -116,7 +128,13 @@ function do_mpfr()
   (
     cd "${XBB_BUILD_FOLDER}/${XBB_MPFR_FOLDER}"
 
-    xbb_activate_dev
+    xbb_activate
+    xbb_activate_installed_dev
+
+    export CPPFLAGS="${XBB_CPPFLAGS}" 
+    export CFLAGS="${XBB_CFLAGS}"
+    export CXXFLAGS="${XBB_CXXFLAGS}"
+    export LDFLAGS="${XBB_LDFLAGS_LIB}"
 
     ./configure --help
 
@@ -136,11 +154,11 @@ function do_mpc()
 
   # February 2015, "1.0.3"
 
-  XBB_MPC_VERSION="$1"
+  local XBB_MPC_VERSION="$1"
 
-  XBB_MPC_FOLDER="mpc-${XBB_MPC_VERSION}"
-  XBB_MPC_ARCHIVE="${XBB_MPC_FOLDER}.tar.gz"
-  XBB_MPC_URL="ftp://ftp.gnu.org/gnu/mpc/${XBB_MPC_ARCHIVE}"
+  local XBB_MPC_FOLDER="mpc-${XBB_MPC_VERSION}"
+  local XBB_MPC_ARCHIVE="${XBB_MPC_FOLDER}.tar.gz"
+  local XBB_MPC_URL="ftp://ftp.gnu.org/gnu/mpc/${XBB_MPC_ARCHIVE}"
 
   echo
   echo "Building mpc ${XBB_MPC_VERSION}..."
@@ -152,7 +170,13 @@ function do_mpc()
   (
     cd "${XBB_BUILD_FOLDER}/${XBB_MPC_FOLDER}"
 
-    xbb_activate_dev
+    xbb_activate
+    xbb_activate_installed_dev
+
+    export CPPFLAGS="${XBB_CPPFLAGS}" 
+    export CFLAGS="${XBB_CFLAGS}"
+    export CXXFLAGS="${XBB_CXXFLAGS}"
+    export LDFLAGS="${XBB_LDFLAGS_LIB}"
 
     ./configure --help
 
@@ -176,8 +200,8 @@ function do_isl()
 
   local XBB_ISL_FOLDER="isl-${XBB_ISL_VERSION}"
   local XBB_ISL_ARCHIVE="${XBB_ISL_FOLDER}.tar.xz"
-  XBB_ISL_URL="http://isl.gforge.inria.fr/${XBB_ISL_ARCHIVE}"
-  # XBB_ISL_URL="https://github.com/gnu-mcu-eclipse/files/raw/master/libs/${XBB_ISL_ARCHIVE}"
+  local XBB_ISL_URL="http://isl.gforge.inria.fr/${XBB_ISL_ARCHIVE}"
+  # local XBB_ISL_URL="https://github.com/gnu-mcu-eclipse/files/raw/master/libs/${XBB_ISL_ARCHIVE}"
 
   echo
   echo "Building isl ${XBB_ISL_VERSION}..."
@@ -189,7 +213,13 @@ function do_isl()
   (
     cd "${XBB_BUILD_FOLDER}/${XBB_ISL_FOLDER}"
 
-    xbb_activate_dev
+    xbb_activate
+    xbb_activate_installed_dev
+
+    export CPPFLAGS="${XBB_CPPFLAGS}" 
+    export CFLAGS="${XBB_CFLAGS}"
+    export CXXFLAGS="${XBB_CXXFLAGS}"
+    export LDFLAGS="${XBB_LDFLAGS_LIB}"
 
     ./configure --help
 
@@ -225,9 +255,13 @@ function do_nettle()
   (
     cd "${XBB_BUILD_FOLDER}/${XBB_NETTLE_FOLDER}"
 
-    xbb_activate_dev
+    xbb_activate
+    xbb_activate_installed_dev
 
-    export CFLAGS="${CFLAGS} -Wno-implicit-fallthrough -Wno-deprecated-declarations"
+    export CPPFLAGS="${XBB_CPPFLAGS}" 
+    export CFLAGS="${XBB_CFLAGS} -Wno-implicit-fallthrough -Wno-deprecated-declarations"
+    export CXXFLAGS="${XBB_CXXFLAGS}"
+    export LDFLAGS="${XBB_LDFLAGS_LIB}"
 
     ./configure --help
 
@@ -241,16 +275,16 @@ function do_nettle()
     # Make the other install targets.
     make install-headers install-static install-pkgconfig install-shared-nettle  install-shared-hogweed
 
-    if [ -f "${XBB_FOLDER}/${LIB_ARCH}"/pkgconfig/nettle.pc ]
+    if [ -f "${XBB_FOLDER}/${LIB_ARCH}/pkgconfig/nettle.pc" ]
     then
       echo
-      cat "${XBB_FOLDER}/${LIB_ARCH}"/pkgconfig/nettle.pc
+      cat "${XBB_FOLDER}/${LIB_ARCH}/pkgconfig/nettle.pc"
     fi
 
-    if [ -f "${XBB_FOLDER}/${LIB_ARCH}"/pkgconfig/hogweed.pc ]
+    if [ -f "${XBB_FOLDER}/${LIB_ARCH}/pkgconfig/hogweed.pc" ]
     then
       echo
-      cat "${XBB_FOLDER}/${LIB_ARCH}"/pkgconfig/hogweed.pc
+      cat "${XBB_FOLDER}/${LIB_ARCH}/pkgconfig/hogweed.pc"
     fi
   )
 }
@@ -280,9 +314,13 @@ function do_tasn1()
   (
     cd "${XBB_BUILD_FOLDER}/${XBB_TASN1_FOLDER}"
 
-    xbb_activate_dev
+    xbb_activate
+    xbb_activate_installed_dev
 
-    export CFLAGS="${CFLAGS} -Wno-logical-op -Wno-missing-prototypes -Wno-implicit-fallthrough -Wno-format-truncation"
+    export CPPFLAGS="${XBB_CPPFLAGS}" 
+    export CFLAGS="${XBB_CFLAGS} -Wno-logical-op -Wno-missing-prototypes -Wno-implicit-fallthrough -Wno-format-truncation"
+    export CXXFLAGS="${XBB_CXXFLAGS}"
+    export LDFLAGS="${XBB_LDFLAGS_LIB}"
 
     ./configure --help
 
@@ -292,10 +330,10 @@ function do_tasn1()
     make -j ${JOBS}
     make install
 
-    if [ -f "${XBB_FOLDER}"/lib/pkgconfig/libtasn1.pc ]
+    if [ -f "${XBB_FOLDER}/lib/pkgconfig/libtasn1.pc" ]
     then
       echo
-      cat "${XBB_FOLDER}"/lib/pkgconfig/libtasn1.pc
+      cat "${XBB_FOLDER}/lib/pkgconfig/libtasn1.pc"
     fi
   )
 }
@@ -308,12 +346,12 @@ function do_expat()
 
   # "2.2.5"
 
-  XBB_EXPAT_VERSION="$1"
+  local XBB_EXPAT_VERSION="$1"
 
-  XBB_EXPAT_FOLDER="expat-${XBB_EXPAT_VERSION}"
-  XBB_EXPAT_ARCHIVE="${XBB_EXPAT_FOLDER}.tar.bz2"
-  XBB_EXPAT_RELEASE="R_$(echo ${XBB_EXPAT_VERSION} | sed -e 's|[.]|_|g')"
-  XBB_EXPAT_URL="https://github.com/libexpat/libexpat/releases/download/${XBB_EXPAT_RELEASE}/${XBB_EXPAT_ARCHIVE}"
+  local XBB_EXPAT_FOLDER="expat-${XBB_EXPAT_VERSION}"
+  local XBB_EXPAT_ARCHIVE="${XBB_EXPAT_FOLDER}.tar.bz2"
+  local XBB_EXPAT_RELEASE="R_$(echo ${XBB_EXPAT_VERSION} | sed -e 's|[.]|_|g')"
+  local XBB_EXPAT_URL="https://github.com/libexpat/libexpat/releases/download/${XBB_EXPAT_RELEASE}/${XBB_EXPAT_ARCHIVE}"
 
   echo
   echo "Building expat ${XBB_EXPAT_VERSION}..."
@@ -325,7 +363,13 @@ function do_expat()
   (
     cd "${XBB_BUILD_FOLDER}/${XBB_EXPAT_FOLDER}"
 
-    xbb_activate_dev
+    xbb_activate
+    xbb_activate_installed_dev
+
+    export CPPFLAGS="${XBB_CPPFLAGS}" 
+    export CFLAGS="${XBB_CFLAGS}"
+    export CXXFLAGS="${XBB_CXXFLAGS}"
+    export LDFLAGS="${XBB_LDFLAGS_LIB}"
 
     ./configure --help
 
@@ -345,12 +389,12 @@ function do_libffi()
 
   # 12-Nov-2014, "3.2.1"
 
-  XBB_LIBFFI_VERSION="$1"
+  local XBB_LIBFFI_VERSION="$1"
 
-  XBB_LIBFFI_FOLDER="libffi-${XBB_LIBFFI_VERSION}"
+  local XBB_LIBFFI_FOLDER="libffi-${XBB_LIBFFI_VERSION}"
   # .gz only.
-  XBB_LIBFFI_ARCHIVE="${XBB_LIBFFI_FOLDER}.tar.gz"
-  XBB_LIBFFI_URL="https://sourceware.org/pub/libffi/${XBB_LIBFFI_ARCHIVE}"
+  local XBB_LIBFFI_ARCHIVE="${XBB_LIBFFI_FOLDER}.tar.gz"
+  local XBB_LIBFFI_URL="https://sourceware.org/pub/libffi/${XBB_LIBFFI_ARCHIVE}"
 
   echo
   echo "Building libffi ${XBB_LIBFFI_VERSION}..."
@@ -362,7 +406,13 @@ function do_libffi()
   (
     cd "${XBB_BUILD_FOLDER}/${XBB_LIBFFI_FOLDER}"
 
-    xbb_activate_dev
+    xbb_activate
+    xbb_activate_installed_dev
+
+    export CPPFLAGS="${XBB_CPPFLAGS}" 
+    export CFLAGS="${XBB_CFLAGS}"
+    export CXXFLAGS="${XBB_CXXFLAGS}"
+    export LDFLAGS="${XBB_LDFLAGS_LIB}"
 
     ./configure --help
 
@@ -373,10 +423,10 @@ function do_libffi()
     make -j ${JOBS}
     make install
 
-    if [ -f "${XBB_FOLDER}"/lib/pkgconfig/libffi.pc ]
+    if [ -f "${XBB_FOLDER}/lib/pkgconfig/libffi.pc" ]
     then
       echo
-      cat "${XBB_FOLDER}"/lib/pkgconfig/libffi.pc
+      cat "${XBB_FOLDER}/lib/pkgconfig/libffi.pc"
     fi
   )
 }
@@ -389,11 +439,11 @@ function do_libiconv()
 
   # 2017-02-02, "1.15"
 
-  XBB_LIBICONV_VERSION="$1"
+  local XBB_LIBICONV_VERSION="$1"
 
-  XBB_LIBICONV_FOLDER="libiconv-${XBB_LIBICONV_VERSION}"
-  XBB_LIBICONV_ARCHIVE="${XBB_LIBICONV_FOLDER}.tar.gz"
-  XBB_LIBICONV_URL="https://ftp.gnu.org/pub/gnu/libiconv/${XBB_LIBICONV_ARCHIVE}"
+  local XBB_LIBICONV_FOLDER="libiconv-${XBB_LIBICONV_VERSION}"
+  local XBB_LIBICONV_ARCHIVE="${XBB_LIBICONV_FOLDER}.tar.gz"
+  local XBB_LIBICONV_URL="https://ftp.gnu.org/pub/gnu/libiconv/${XBB_LIBICONV_ARCHIVE}"
 
   # Required by wget.
   echo
@@ -406,7 +456,13 @@ function do_libiconv()
   (
     cd "${XBB_BUILD_FOLDER}/${XBB_LIBICONV_FOLDER}"
 
-    xbb_activate_dev
+    xbb_activate
+    xbb_activate_installed_dev
+
+    export CPPFLAGS="${XBB_CPPFLAGS}" 
+    export CFLAGS="${XBB_CFLAGS}"
+    export CXXFLAGS="${XBB_CXXFLAGS}"
+    export LDFLAGS="${XBB_LDFLAGS_LIB}"
 
     ./configure --help
 
@@ -451,10 +507,14 @@ function do_gnutls()
   (
     cd "${XBB_BUILD_FOLDER}/${XBB_GNUTLS_FOLDER}"
 
-    xbb_activate_dev
+    xbb_activate
+    xbb_activate_installed_dev
 
-    export CFLAGS="${CFLAGS} -Wno-parentheses -Wno-bad-function-cast -Wno-unused-macros -Wno-bad-function-cast -Wno-unused-variable -Wno-pointer-sign -Wno-implicit-fallthrough -Wno-format-truncation -Wno-missing-prototypes -Wno-missing-declarations -Wno-shadow -Wno-sign-compare"
-  
+    export CPPFLAGS="${XBB_CPPFLAGS}" 
+    export CFLAGS="${XBB_CFLAGS} -Wno-parentheses -Wno-bad-function-cast -Wno-unused-macros -Wno-bad-function-cast -Wno-unused-variable -Wno-pointer-sign -Wno-implicit-fallthrough -Wno-format-truncation -Wno-missing-prototypes -Wno-missing-declarations -Wno-shadow -Wno-sign-compare"
+    export CXXFLAGS="${XBB_CXXFLAGS}"
+    export LDFLAGS="${XBB_LDFLAGS_LIB}"
+
     ./configure --help
 
     ./configure \
@@ -467,10 +527,10 @@ function do_gnutls()
     make -j ${JOBS}
     make install-strip
 
-    if [ -f "${XBB_FOLDER}"/lib/pkgconfig/gnutls.pc ]
+    if [ -f "${XBB_FOLDER}/lib/pkgconfig/gnutls.pc" ]
     then
       echo
-      cat "${XBB_FOLDER}"/lib/pkgconfig/gnutls.pc
+      cat "${XBB_FOLDER}/lib/pkgconfig/gnutls.pc"
     fi
   )
 }
@@ -500,9 +560,13 @@ function do_xz()
   (
     cd "${XBB_BUILD_FOLDER}/${XBB_XZ_FOLDER}"
 
-    xbb_activate_dev
+    xbb_activate
+    xbb_activate_installed_dev
 
-    export CFLAGS="${CFLAGS} -Wno-implicit-fallthrough"
+    export CPPFLAGS="${XBB_CPPFLAGS}" 
+    export CFLAGS="${XBB_CFLAGS} -Wno-implicit-fallthrough"
+    export CXXFLAGS="${XBB_CXXFLAGS}"
+    export LDFLAGS="${XBB_LDFLAGS_LIB}"
 
     ./configure --help
 
@@ -517,7 +581,7 @@ function do_xz()
   (
     xbb_activate
 
-    "${XBB_FOLDER}"/bin/xz --version
+    "${XBB_FOLDER}/bin/xz" --version
   )
 
   hash -r
@@ -542,13 +606,13 @@ function do_libpng()
   # 2017-09-16
   # 2018-12-01, "1.6.36"
 
-  XBB_LIBPNG_VERSION="$1" 
-  XBB_LIBPNG_SFOLDER="libpng16" 
+  local XBB_LIBPNG_VERSION="$1" 
+  local XBB_LIBPNG_SFOLDER="libpng16" 
 
-  XBB_LIBPNG_FOLDER_NAME="libpng-${XBB_LIBPNG_VERSION}"
-  XBB_LIBPNG_ARCHIVE="${XBB_LIBPNG_FOLDER_NAME}.tar.xz"
-   # XBB_LIBPNG_URL="https://sourceforge.net/projects/libpng/files/${XBB_LIBPNG_SFOLDER}/${XBB_LIBPNG_VERSION}/${XBB_LIBPNG_ARCHIVE}"
-  XBB_LIBPNG_URL="https://github.com/gnu-mcu-eclipse/files/raw/master/libs/${XBB_LIBPNG_ARCHIVE}"
+  local XBB_LIBPNG_FOLDER_NAME="libpng-${XBB_LIBPNG_VERSION}"
+  local XBB_LIBPNG_ARCHIVE="${XBB_LIBPNG_FOLDER_NAME}.tar.xz"
+  local XBB_LIBPNG_URL="https://sourceforge.net/projects/libpng/files/${XBB_LIBPNG_SFOLDER}/${XBB_LIBPNG_VERSION}/${XBB_LIBPNG_ARCHIVE}"
+  # local XBB_LIBPNG_URL="https://github.com/gnu-mcu-eclipse/files/raw/master/libs/${XBB_LIBPNG_ARCHIVE}"
 
   echo
   echo "Installing libpng ${XBB_LIBPNG_VERSION}..."
@@ -560,7 +624,13 @@ function do_libpng()
   (
     cd "${XBB_BUILD_FOLDER}/${XBB_LIBPNG_FOLDER_NAME}"
 
-    xbb_activate_dev
+    xbb_activate
+    xbb_activate_installed_dev
+
+    export CPPFLAGS="${XBB_CPPFLAGS}" 
+    export CFLAGS="${XBB_CFLAGS}"
+    export CXXFLAGS="${XBB_CXXFLAGS}"
+    export LDFLAGS="${XBB_LDFLAGS_LIB}"
 
     bash ./configure --help
 

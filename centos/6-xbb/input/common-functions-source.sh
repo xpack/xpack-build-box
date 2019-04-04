@@ -14,7 +14,7 @@
 # To split version into components:
 # local XBB_CMAKE_MAJOR_VERSION="$(echo ${XBB_CMAKE_MAJOR_VERSION} | sed -e 's|\([0-9][0-9]*\)\.\([0-9][0-9]*\)\.\([0-9][0-9]*\)|\1.\2|')"
 
-function prepare_env()
+function prepare_xbb_env()
 {
   XBB_DOWNLOAD_FOLDER="/tmp/xbb-download"
   XBB_TMP_FOLDER="/tmp/xbb"
@@ -23,9 +23,15 @@ function prepare_env()
   XBB_BOOTSTRAP_FOLDER="/opt/xbb-bootstrap"
   XBB_BUILD_FOLDER="${XBB_TMP_FOLDER}/xbb-build"
 
-  JOBS=${JOBS:-""}
+  mkdir -p "${XBB_TMP_FOLDER}"
+  mkdir -p "${XBB_DOWNLOAD_FOLDER}"
 
-  # x86_64 or i686
+  mkdir -p "${XBB_FOLDER}"
+  mkdir -p "${XBB_BUILD_FOLDER}"
+
+  # ---------------------------------------------------------------------------
+
+  # x86_64 or i686 (do not use -p)
   UNAME_ARCH="$(uname -m)"
   if [ "${UNAME_ARCH}" == "x86_64" ]
   then
@@ -37,22 +43,76 @@ function prepare_env()
     LIB_ARCH="lib"
   fi
 
+  XBB_CPPFLAGS=""
+
+  XBB_CFLAGS="-O2 -ffunction-sections -fdata-sections -m${BITS} -pipe"
+  XBB_CXXFLAGS="-O2 -ffunction-sections -fdata-sections -m${BITS} -pipe"
+
+  XBB_LDFLAGS=""
+  XBB_LDFLAGS_LIB="${XBB_LDFLAGS}"
+  # Wihtout -static-libstdc++, the bootstrap lib folder is needed to 
+  # find libstdc++.
+  XBB_LDFLAGS_APP="${XBB_LDFLAGS} -Wl,--gc-sections -static-libstdc++"
+  XBB_LDFLAGS_APP_STATIC="${XBB_LDFLAGS_APP} -static -static-libgcc -static-libstdc++"
+
   BUILD="${UNAME_ARCH}-linux-gnu"
 
   # x86_64-w64-mingw32 or i686-w64-mingw32
   MINGW_TARGET="${UNAME_ARCH}-w64-mingw32"
 
+  # Make all tools choose gcc, not the old cc.
+  CC="gcc-7bs"
+  CXX="g++-7bs"
+
+  PKG_CONFIG="${XBB_BOOTSTRAP_FOLDER}/bin/pkg-config-verbose"
+
+  # Leave an explicit file with the version.
+  echo "${XBB_VERSION}" > "${XBB_FOLDER}/VERSION"
+
   # ---------------------------------------------------------------------------
 
-  # Make all tools choose gcc, not the old cc.
-  export CC="gcc-7bs"
-  export CXX="g++-7bs"
+  # Default PATH.
+  PATH=${PATH:-""}
 
-  mkdir -p "${XBB_TMP_FOLDER}"
-  mkdir -p "${XBB_DOWNLOAD_FOLDER}"
+  # Default LD_LIBRARY_PATH.
+  LD_LIBRARY_PATH=${LD_LIBRARY_PATH:-""}
 
-  mkdir -p "${XBB_FOLDER}"
-  mkdir -p "${XBB_BUILD_FOLDER}"
+  # Default empty PKG_CONFIG_PATH.
+  PKG_CONFIG_PATH=${PKG_CONFIG_PATH:-":"}
+
+  JOBS=${JOBS:-""}
+
+  # ---------------------------------------------------------------------------
+  
+  export XBB_DOWNLOAD_FOLDER
+  export XBB_TMP_FOLDER
+  export XBB_FOLDER
+  export XBB_BOOTSTRAP_FOLDER
+  export XBB_BUILD_FOLDER
+
+  export UNAME_ARCH
+  export BITS
+  export LIB_ARCH
+
+  export XBB_CPPFLAGS
+  export XBB_CFLAGS
+  export XBB_CXXFLAGS
+  export XBB_LDFLAGS
+  export XBB_LDFLAGS_LIB
+  export XBB_LDFLAGS_APP
+  export XBB_LDFLAGS_APP_STATIC
+
+  export BUILD
+  export MINGW_TARGET
+  export JOBS
+
+  export PATH
+  export LD_LIBRARY_PATH
+  export PKG_CONFIG_PATH
+  export PKG_CONFIG
+
+  export CC
+  export CXX
 }
 
 function create_xbb_source()
@@ -69,32 +129,22 @@ function create_xbb_source()
 # -----------------------------------------------------------------------------
 
 export XBB_FOLDER="/opt/xbb"
-export XBB_VERSION="2"
+__EOF__
+# The above marker must start in the first column.
+
+echo "export XBB_VERSION=\"${XBB_VERSION}\"" >> "${XBB_FOLDER}/xbb-source.sh"
+
+# Note: __EOF__ is quoted to prevent substitutions here.
+cat <<'__EOF__' >> "${XBB_FOLDER}/xbb-source.sh"
 
 # Adjust PATH & LD_LIBRARY_PATH to prefer the XBB binaries.
 # This is enough to run the XBB binaries in the application script.
 # This **does not** provide access to the XBB libraries and headers,
 # which normally are internal to XBB and should not be used.
-xbb_activate()
+function xbb_activate()
 {
-  # Default PATH.
-  PATH=${PATH:-""}
-
-  # Add TeX to PATH.
-  if [ -d "/opt/texlive/bin/x86_64-linux" ]
-  then
-    PATH="/opt/texlive/bin/x86_64-linux:${PATH}"
-  elif [ -d "/opt/texlive/bin/i386-linux" ]
-  then
-    PATH="/opt/texlive/bin/i386-linux:${PATH}"
-  fi
-
-  # Add the XBB bin to PATH.
+  # Add the XBB bin to the bottom of the PATH.
   PATH="${XBB_FOLDER}/bin:${PATH}"
-  export PATH
-
-  # Default LD_LIBRARY_PATH.
-  LD_LIBRARY_PATH=${LD_LIBRARY_PATH:-""}
 
   # Add XBB lib to LD_LIBRARY_PATH.
   LD_LIBRARY_PATH="${XBB_FOLDER}/lib:${LD_LIBRARY_PATH}"
@@ -104,53 +154,86 @@ xbb_activate()
     # On 64-bit systems, add lib64 in front of LD_LIBRARY_PATH.
     LD_LIBRARY_PATH="${XBB_FOLDER}/lib64:${LD_LIBRARY_PATH}"
   fi
+
+  export PATH
   export LD_LIBRARY_PATH
 }
+
+function xbb_activate_tex()
+{
+  # Add TeX to PATH.
+  if [ -d "/opt/texlive/bin/x86_64-linux" ]
+  then
+    PATH="/opt/texlive/bin/x86_64-linux:${PATH}"
+  elif [ -d "/opt/texlive/bin/i386-linux" ]
+  then
+    PATH="/opt/texlive/bin/i386-linux:${PATH}"
+  fi
+}
+
 __EOF__
 # The above marker must start in the first column.
 }
 
-# This build uses the bootstrap binaries; redefine 
-# this function to add the bootstrap path.
-# The newly built binaries will be prefered.
-function xbb_activate_dev()
+
+# For the XBB builds, add the bootstrap folders.
+function xbb_activate()
 {
-  # Default PATH.
-  PATH=${PATH:-""}
-  # Default LD_LIBRARY_PATH.
-  LD_LIBRARY_PATH=${LD_LIBRARY_PATH:-""}
+  xbb_activate_bootstrap
+}
 
-  # Insert XBB bootstrap paths at the bottom.
+# For the XBB builds, add the freshly built binaries.
+function xbb_activate_installed_bin()
+{
+  # Add the XBB bin to the PATH.
+  PATH="${XBB_FOLDER}/bin:${PATH}"
 
-  # Add the XBB bootstrap bin to PATH.
-  PATH="${XBB_BOOTSTRAP_FOLDER}/bin:${PATH}"
+  # Add the XBB lib to the LD_LIBRARY_PATH.
+  LD_LIBRARY_PATH="${XBB_FOLDER}/lib:${LD_LIBRARY_PATH}"
 
-  # Add the XBB bootstrap lib to LD_LIBRARY_PATH.
-  LD_LIBRARY_PATH="${XBB_BOOTSTRAP_FOLDER}/lib:${LD_LIBRARY_PATH}"
+  if [ -d "${XBB_FOLDER}/lib64" ]
+  then
+    # On 64-bit systems, add lib64 to the LD_LIBRARY_PATH.
+    LD_LIBRARY_PATH="${XBB_FOLDER}/lib64:${LD_LIBRARY_PATH}"
+  fi
 
-  xbb_activate
+  export PATH
+  export LD_LIBRARY_PATH
+}
 
+# For the XBB builds, add the freshly built headrs and libraries.
+function xbb_activate_installed_dev()
+{
+  # Add XBB include in front of XBB_CPPFLAGS.
   XBB_CPPFLAGS="-I${XBB_FOLDER}/include ${XBB_CPPFLAGS}"
 
+  # Add XBB lib in front of XBB_LDFLAGS.
+  XBB_LDFLAGS="-L${XBB_FOLDER}/lib ${XBB_LDFLAGS}"
   XBB_LDFLAGS_LIB="-L${XBB_FOLDER}/lib ${XBB_LDFLAGS_LIB}"
   XBB_LDFLAGS_APP="-L${XBB_FOLDER}/lib ${XBB_LDFLAGS_APP}"
   XBB_LDFLAGS_APP_STATIC="-L${XBB_FOLDER}/lib ${XBB_LDFLAGS_APP_STATIC}"
 
+  # Add XBB lib in front of PKG_CONFIG_PATH.
   PKG_CONFIG_PATH="${XBB_FOLDER}/lib/pkgconfig:${PKG_CONFIG_PATH}"
 
-  if [ -d "${XBB_FOLDER}/lib" ]
+  LD_LIBRARY_PATH="${XBB_FOLDER}/lib:${LD_LIBRARY_PATH}"
+
+  if [ -d "${XBB_FOLDER}/lib64" ]
   then
+    # For 64-bit systems, add XBB lib64 in front of paths.
     XBB_LDFLAGS_LIB="-L${XBB_FOLDER}/lib64 ${XBB_LDFLAGS_LIB}"
     XBB_LDFLAGS_APP="-L${XBB_FOLDER}/lib64 ${XBB_LDFLAGS_APP}"
-    XBB_LDFLAGS_APP_STATIC="-L${XBB_FOLDER}/lib54 ${XBB_LDFLAGS_APP_STATIC}"
+    XBB_LDFLAGS_APP_STATIC="-L${XBB_FOLDER}/lib64 ${XBB_LDFLAGS_APP_STATIC}"
     PKG_CONFIG_PATH="${XBB_FOLDER}/lib64/pkgconfig:${PKG_CONFIG_PATH}"
+    LD_LIBRARY_PATH="${XBB_FOLDER}/lib64:${LD_LIBRARY_PATH}"
   fi
 
   export XBB_CPPFLAGS
+  export XBB_LDFLAGS
   export XBB_LDFLAGS_LIB
   export XBB_LDFLAGS_APP
   export XBB_LDFLAGS_APP_STATIC
-
+  export LD_LIBRARY_PATH
 }
 
 # -----------------------------------------------------------------------------

@@ -14,13 +14,14 @@ function do_native_binutils()
   # https://aur.archlinux.org/cgit/aur.git/tree/PKGBUILD?h=binutils-git
   # https://aur.archlinux.org/cgit/aur.git/tree/PKGBUILD?h=gdb-git
 
+  # cmake fails with Internal error; use 2.31.
   # 2019-02-02, "2.32"
 
-  XBB_BINUTILS_VERSION="$1"
+  local XBB_BINUTILS_VERSION="$1"
 
-  XBB_BINUTILS_FOLDER_NAME="binutils-${XBB_BINUTILS_VERSION}"
-  XBB_BINUTILS_ARCHIVE="${XBB_BINUTILS_FOLDER_NAME}.tar.xz"
-  XBB_BINUTILS_URL="https://ftp.gnu.org/gnu/binutils/${XBB_BINUTILS_ARCHIVE}"
+  local XBB_BINUTILS_FOLDER_NAME="binutils-${XBB_BINUTILS_VERSION}"
+  local XBB_BINUTILS_ARCHIVE="${XBB_BINUTILS_FOLDER_NAME}.tar.xz"
+  local XBB_BINUTILS_URL="https://ftp.gnu.org/gnu/binutils/${XBB_BINUTILS_ARCHIVE}"
 
   # Requires gmp, mpfr, mpc, isl.
   echo
@@ -34,11 +35,14 @@ function do_native_binutils()
     mkdir -p "${XBB_BUILD_FOLDER}/${XBB_BINUTILS_FOLDER_NAME}-native-build"
     cd "${XBB_BUILD_FOLDER}/${XBB_BINUTILS_FOLDER_NAME}-native-build"
 
-    xbb_activate_dev
+    xbb_activate
+    xbb_activate_installed_dev
 
-    export CFLAGS="${CFLAGS} -Wno-sign-compare"
-    export CXXFLAGS="${CXXFLAGS} -Wno-sign-compare"
+    export CPPFLAGS="${XBB_CPPFLAGS}" 
+    export CFLAGS="${XBB_CFLAGS} -Wno-sign-compare"
+    export CXXFLAGS="${XBB_CXXFLAGS} -Wno-sign-compare"
     # export LDFLAGS="-static-libstdc++ ${LDFLAGS}"
+    export LDFLAGS="${XBB_LDFLAGS_APP}"
 
     bash "${XBB_BUILD_FOLDER}/${XBB_BINUTILS_FOLDER_NAME}/configure" --help
 
@@ -56,7 +60,7 @@ function do_native_binutils()
   )
 
   (
-    xbb_activate
+    xbb_activate_installed_bin
 
     "${XBB_FOLDER}/bin/size" --version
   )
@@ -75,12 +79,12 @@ function do_native_gcc()
 
   # 2018-12-06, "7.4.0"
 
-  XBB_GCC_VERSION="$1"
+  local XBB_GCC_VERSION="$1"
 
-  XBB_GCC_FOLDER_NAME="gcc-${XBB_GCC_VERSION}"
-  XBB_GCC_ARCHIVE="${XBB_GCC_FOLDER_NAME}.tar.xz"
-  XBB_GCC_URL="https://ftp.gnu.org/gnu/gcc/gcc-${XBB_GCC_VERSION}/${XBB_GCC_ARCHIVE}"
-  XBB_GCC_BRANDING="xPack Build Box GCC\x2C ${BITS}-bit"
+  local XBB_GCC_FOLDER_NAME="gcc-${XBB_GCC_VERSION}"
+  local XBB_GCC_ARCHIVE="${XBB_GCC_FOLDER_NAME}.tar.xz"
+  local XBB_GCC_URL="https://ftp.gnu.org/gnu/gcc/gcc-${XBB_GCC_VERSION}/${XBB_GCC_ARCHIVE}"
+  local XBB_GCC_BRANDING="xPack Build Box GCC\x2C ${BITS}-bit"
 
   # Requires gmp, mpfr, mpc, isl.
   echo
@@ -94,11 +98,15 @@ function do_native_gcc()
     mkdir -p "${XBB_BUILD_FOLDER}/${XBB_GCC_FOLDER_NAME}-build"
     cd "${XBB_BUILD_FOLDER}/${XBB_GCC_FOLDER_NAME}-build"
 
-    xbb_activate_dev
+    xbb_activate
+    xbb_activate_installed_bin
+    xbb_activate_installed_dev
 
-    export CFLAGS="${CFLAGS} -Wno-sign-compare"
-    export CXXFLAGS="${CXXFLAGS} -Wno-sign-compare"
+    export CPPFLAGS="${XBB_CPPFLAGS}" 
+    export CFLAGS="${XBB_CFLAGS} -Wno-sign-compare"
+    export CXXFLAGS="${XBB_CXXFLAGS} -Wno-sign-compare"
     # export LDFLAGS="-static-libstdc++ ${LDFLAGS}"
+    export LDFLAGS="${XBB_LDFLAGS_APP}"
 
     bash "${XBB_BUILD_FOLDER}/${XBB_GCC_FOLDER_NAME}/configure" --help
 
@@ -126,14 +134,17 @@ function do_native_gcc()
       --enable-gnu-indirect-function \
       --disable-multilib \
       --disable-werror \
-      --enable-checking=release
+      --enable-checking=release \
+      --disable-bootstrap
     
-    make -j ${JOBS}
+    # Parallel builds fail while running build/genrecog.
+    # make -j ${JOBS}
+    make
     make install-strip
   )
 
   (
-    xbb_activate
+    xbb_activate_installed_bin
 
     "${XBB_FOLDER}/bin/g++" --version
 
@@ -180,11 +191,11 @@ function do_mingw_binutils()
 
   # 2019-02-02, "2.32"
 
-  XBB_MINGW_BINUTILS_VERSION="$1"
+  local XBB_MINGW_BINUTILS_VERSION="$1"
 
-  XBB_MINGW_BINUTILS_FOLDER_NAME="binutils-${XBB_MINGW_BINUTILS_VERSION}"
-  XBB_MINGW_BINUTILS_ARCHIVE="${XBB_MINGW_BINUTILS_FOLDER_NAME}.tar.xz"
-  XBB_MINGW_BINUTILS_URL="https://ftp.gnu.org/gnu/binutils/${XBB_MINGW_BINUTILS_ARCHIVE}"
+  local XBB_MINGW_BINUTILS_FOLDER_NAME="binutils-${XBB_MINGW_BINUTILS_VERSION}"
+  local XBB_MINGW_BINUTILS_ARCHIVE="${XBB_MINGW_BINUTILS_FOLDER_NAME}.tar.xz"
+  local XBB_MINGW_BINUTILS_URL="https://ftp.gnu.org/gnu/binutils/${XBB_MINGW_BINUTILS_ARCHIVE}"
 
   echo
   echo "Building mingw-w64 binutils ${XBB_MINGW_BINUTILS_VERSION}..."
@@ -197,10 +208,14 @@ function do_mingw_binutils()
     mkdir -p "${XBB_BUILD_FOLDER}/${XBB_MINGW_BINUTILS_FOLDER_NAME}-mingw-build"
     cd "${XBB_BUILD_FOLDER}/${XBB_MINGW_BINUTILS_FOLDER_NAME}-mingw-build"
 
-    xbb_activate_dev
+    xbb_activate
+    xbb_activate_installed_dev
 
-    export CFLAGS="${CFLAGS} -Wno-sign-compare"
+    export CPPFLAGS="${XBB_CPPFLAGS}" 
+    export CFLAGS="${XBB_CFLAGS} -Wno-sign-compare"
+    export CXXFLAGS="${XBB_CXXFLAGS} -Wno-sign-compare"
     # export LDFLAGS="-static-libstdc++ ${LDFLAGS}"
+    export LDFLAGS="${XBB_LDFLAGS_APP}"
 
     # --build used conservatively
     bash "${XBB_BUILD_FOLDER}/${XBB_MINGW_BINUTILS_FOLDER_NAME}/configure" --help
@@ -223,7 +238,7 @@ function do_mingw_binutils()
   )
 
   (
-    xbb_activate
+    xbb_activate_installed_bin
 
     "${XBB_FOLDER}/bin/${UNAME_ARCH}-w64-mingw32-size" --version
   )
@@ -238,13 +253,13 @@ function do_mingw_all()
 
   # 2018-06-03, "5.0.4"
 
-  XBB_MINGW_VERSION="$1"
+  local XBB_MINGW_VERSION="$1"
 
   # The original SourceForge location.
-  XBB_MINGW_FOLDER_NAME="mingw-w64-v${XBB_MINGW_VERSION}"
-  XBB_MINGW_ARCHIVE="${XBB_MINGW_FOLDER_NAME}.tar.bz2"
-  # XBB_MINGW_URL="https://sourceforge.net/projects/mingw-w64/files/mingw-w64/mingw-w64-release/${XBB_MINGW_ARCHIVE}"
-  XBB_MINGW_URL="https://github.com/gnu-mcu-eclipse/files/raw/master/libs/${XBB_MINGW_ARCHIVE}"
+  local XBB_MINGW_FOLDER_NAME="mingw-w64-v${XBB_MINGW_VERSION}"
+  local XBB_MINGW_ARCHIVE="${XBB_MINGW_FOLDER_NAME}.tar.bz2"
+  local XBB_MINGW_URL="https://sourceforge.net/projects/mingw-w64/files/mingw-w64/mingw-w64-release/${XBB_MINGW_ARCHIVE}"
+  # local XBB_MINGW_URL="https://github.com/gnu-mcu-eclipse/files/raw/master/libs/${XBB_MINGW_ARCHIVE}"
   
   # If SourceForge is down, there is also a GitHub mirror.
   # https://github.com/mirror/mingw-w64
@@ -266,10 +281,14 @@ function do_mingw_all()
     mkdir -p "${XBB_BUILD_FOLDER}/${XBB_MINGW_FOLDER_NAME}-headers-build"
     cd "${XBB_BUILD_FOLDER}/${XBB_MINGW_FOLDER_NAME}-headers-build"
 
-    xbb_activate_dev
+    xbb_activate
+    xbb_activate_installed_dev
 
-    export PATH="${XBB_FOLDER}/bin":${PATH}
+    export CPPFLAGS="${XBB_CPPFLAGS}" 
+    export CFLAGS="${XBB_CFLAGS}"
+    export CXXFLAGS="${XBB_CXXFLAGS}"
     # export LDFLAGS="-static-libstdc++ ${LDFLAGS}"
+    # export LDFLAGS="${XBB_LDFLAGS_APP}"
 
     "${XBB_BUILD_FOLDER}/${XBB_MINGW_FOLDER_NAME}/mingw-w64-headers/configure" --help
     
@@ -298,12 +317,12 @@ function do_mingw_all()
   # https://ftp.gnu.org/gnu/gcc/
   # 2018-12-06, "7.4.0"
 
-  XBB_MINGW_GCC_VERSION="$2"
+  local XBB_MINGW_GCC_VERSION="$2"
 
-  XBB_MINGW_GCC_FOLDER_NAME="gcc-${XBB_MINGW_GCC_VERSION}"
-  XBB_MINGW_GCC_ARCHIVE="${XBB_MINGW_GCC_FOLDER_NAME}.tar.xz"
-  XBB_MINGW_GCC_URL="https://ftp.gnu.org/gnu/gcc/gcc-${XBB_MINGW_GCC_VERSION}/${XBB_MINGW_GCC_ARCHIVE}"
-  XBB_MINGW_GCC_BRANDING="xPack Build Box Mingw-w64 GCC\x2C ${BITS}-bit"
+  local XBB_MINGW_GCC_FOLDER_NAME="gcc-${XBB_MINGW_GCC_VERSION}"
+  local XBB_MINGW_GCC_ARCHIVE="${XBB_MINGW_GCC_FOLDER_NAME}.tar.xz"
+  local XBB_MINGW_GCC_URL="https://ftp.gnu.org/gnu/gcc/gcc-${XBB_MINGW_GCC_VERSION}/${XBB_MINGW_GCC_ARCHIVE}"
+  local XBB_MINGW_GCC_BRANDING="xPack Build Box Mingw-w64 GCC\x2C ${BITS}-bit"
 
   echo
   echo "Building mingw-w64 gcc ${XBB_MINGW_GCC_VERSION}, step 1..."
@@ -316,11 +335,15 @@ function do_mingw_all()
     mkdir -p "${XBB_BUILD_FOLDER}/${XBB_MINGW_GCC_FOLDER_NAME}-mingw-build"
     cd "${XBB_BUILD_FOLDER}/${XBB_MINGW_GCC_FOLDER_NAME}-mingw-build"
 
-    xbb_activate_dev
+    xbb_activate
+    xbb_activate_installed_bin
+    xbb_activate_installed_dev
 
-    export CFLAGS="${CFLAGS} -Wno-sign-compare -Wno-implicit-function-declaration -Wno-missing-prototypes"
-    export CXXFLAGS="${CXXFLAGS} -Wno-sign-compare -Wno-type-limits"
+    export CPPFLAGS="${XBB_CPPFLAGS}" 
+    export CFLAGS="${XBB_CFLAGS} -Wno-sign-compare -Wno-implicit-function-declaration -Wno-missing-prototypes"
+    export CXXFLAGS="${XBB_CXXFLAGS} -Wno-sign-compare -Wno-type-limits"
     # export LDFLAGS="-static-libstdc++ ${LDFLAGS}"
+    export LDFLAGS="${XBB_LDFLAGS_APP}"
 
     # For the native build, --disable-shared failed with errors in libstdc++-v3
     "${XBB_BUILD_FOLDER}/${XBB_MINGW_GCC_FOLDER_NAME}/configure" --help
@@ -345,7 +368,9 @@ function do_mingw_all()
       --disable-multilib \
       --enable-checking=release
 
-    make all-gcc -j ${JOBS}
+    # Parallel builds fail.
+    # make all-gcc -j ${JOBS}
+    make all-gcc
     make install-gcc
   )
 
@@ -364,7 +389,9 @@ function do_mingw_all()
     mkdir -p "${XBB_BUILD_FOLDER}/${XBB_MINGW_FOLDER_NAME}-crt-build"
     cd "${XBB_BUILD_FOLDER}/${XBB_MINGW_FOLDER_NAME}-crt-build"
 
-    xbb_activate_dev
+    xbb_activate
+    xbb_activate_installed_bin
+    xbb_activate_installed_dev
 
     # Overwrite the flags, -ffunction-sections -fdata-sections result in
     # {standard input}: Assembler messages:
@@ -375,8 +402,9 @@ function do_mingw_all()
     # {standard input}:7150: Error: can't resolve `.text' {.text section} - `.LFB5156' {.text$WinMainCRTStartup section}
     # {standard input}:8937: Error: can't resolve `.text' {.text section} - `.LFB5156' {.text$WinMainCRTStartup section}
 
-    export CFLAGS="-g -O2 -pipe -Wno-unused-variable -Wno-implicit-fallthrough -Wno-implicit-function-declaration -Wno-cpp"
-    export CXXFLAGS="-g -O2 -pipe"
+    export CPPFLAGS="${XBB_CPPFLAGS}" 
+    export CFLAGS="${XBB_CFLAGS} -Wno-unused-variable -Wno-implicit-fallthrough -Wno-implicit-function-declaration -Wno-cpp"
+    export CXXFLAGS="${XBB_CXXFLAGS}"
     export LDFLAGS=""
     
     # Without it, apparently a bug in autoconf/c.m4, function AC_PROG_CC, results in:
@@ -428,10 +456,13 @@ function do_mingw_all()
     mkdir -p "${XBB_BUILD_FOLDER}/${XBB_MINGW_FOLDER_NAME}-winphreads-build"
     cd "${XBB_BUILD_FOLDER}/${XBB_MINGW_FOLDER_NAME}-winphreads-build"
 
-    xbb_activate_dev
+    xbb_activate
+    xbb_activate_installed_bin
+    xbb_activate_installed_dev
 
-    export CFLAGS="-g -O2 -pipe"
-    export CXXFLAGS="-g -O2 -pipe"
+    export CPPFLAGS="${XBB_CPPFLAGS}" 
+    export CFLAGS="${XBB_CFLAGS}"
+    export CXXFLAGS="${XBB_CXXFLAGS}"
     export LDFLAGS=""
     
     export CC=""
@@ -475,19 +506,25 @@ function do_mingw_all()
     mkdir -p "${XBB_BUILD_FOLDER}/${XBB_MINGW_GCC_FOLDER_NAME}-mingw-build"
     cd "${XBB_BUILD_FOLDER}/${XBB_MINGW_GCC_FOLDER_NAME}-mingw-build"
 
-    xbb_activate_dev
+    xbb_activate
+    xbb_activate_installed_bin
+    xbb_activate_installed_dev
 
-    export CFLAGS="${CFLAGS} -Wno-sign-compare -Wno-implicit-function-declaration -Wno-missing-prototypes"
-    export CXXFLAGS="${CXXFLAGS} -Wno-sign-compare -Wno-type-limits"
+    export CPPFLAGS="${XBB_CPPFLAGS}" 
+    export CFLAGS="${XBB_CFLAGS} -Wno-sign-compare -Wno-implicit-function-declaration -Wno-missing-prototypes"
+    export CXXFLAGS="${XBB_CXXFLAGS} -Wno-sign-compare -Wno-type-limits"
+    export LDFLAGS="${XBB_LDFLAGS_APP}"
 
-    make -j ${JOBS}
+    # Parallel builds fail.
+    # make -j ${JOBS}
+    make
     make install-strip
   )
 
   (
     cd "${XBB_FOLDER}"
 
-    xbb_activate
+    xbb_activate_installed_bin
 
     if true
     then
@@ -515,7 +552,7 @@ function do_mingw_all()
   )
 
   (
-    xbb_activate
+    xbb_activate_installed_bin
 
     "${XBB_FOLDER}/bin/${UNAME_ARCH}-w64-mingw32-g++" --version
 
@@ -557,6 +594,7 @@ function do_openssl()
   # /usr/lib64/python2.6/site-packages/pycurl.so: undefined symbol: CRYPTO_set_locking_callback
 
   # 2017-Dec-07, "1.0.2n"
+  # 2019-Feb-26, "1.0.2r"
 
   local XBB_OPENSSL_VERSION="$1"
 
@@ -576,7 +614,13 @@ function do_openssl()
   (
     cd "${XBB_BUILD_FOLDER}/${XBB_OPENSSL_FOLDER}"
 
-    xbb_activate_dev
+    xbb_activate
+    xbb_activate_installed_dev
+
+    export CPPFLAGS="${XBB_CPPFLAGS}" 
+    export CFLAGS="${XBB_CFLAGS}"
+    export CXXFLAGS="${XBB_CXXFLAGS}"
+    export LDFLAGS="${XBB_LDFLAGS_APP}"
 
     # This config does not use the standard GNU environment definitions.
     ./config --help
@@ -590,7 +634,7 @@ function do_openssl()
     # shared needed by libcurl
     ./config \
       --prefix="${XBB_FOLDER}" \
-      --openssldir="${XBB_FOLDER}"/openssl \
+      --openssldir="${XBB_FOLDER}/openssl" \
       shared \
       no-ssl3-method \
       ${optflags} \
@@ -602,17 +646,17 @@ function do_openssl()
 
     strip --strip-all "${XBB_FOLDER}/bin/openssl"
 
-    if [ ! -f "${XBB_FOLDER}"/openssl/cert.pem ]
+    if [ ! -f "${XBB_FOLDER}/openssl/cert.pem" ]
     then
-      mkdir -p "${XBB_FOLDER}"/openssl
-      ln -s /etc/pki/tls/certs/ca-bundle.crt "${XBB_FOLDER}"/openssl/cert.pem
+      mkdir -p "${XBB_FOLDER}/openssl"
+      ln -s /etc/pki/tls/certs/ca-bundle.crt "${XBB_FOLDER}/openssl/cert.pem"
     fi
   )
 
   (
-    xbb_activate
+    xbb_activate_installed_bin
 
-    "${XBB_FOLDER}"/bin/openssl version
+    "${XBB_FOLDER}/bin/openssl" version
   )
 
   hash -r
@@ -628,11 +672,11 @@ function do_tar()
   # 2017-12-17, "1.30"
   # "1.32"
 
-  XBB_TAR_VERSION="$1"
+  local XBB_TAR_VERSION="$1"
 
-  XBB_TAR_FOLDER="tar-${XBB_TAR_VERSION}"
-  XBB_TAR_ARCHIVE="${XBB_TAR_FOLDER}.tar.xz"
-  XBB_TAR_URL="https://ftp.gnu.org/gnu/tar/${XBB_TAR_ARCHIVE}"
+  local XBB_TAR_FOLDER="tar-${XBB_TAR_VERSION}"
+  local XBB_TAR_ARCHIVE="${XBB_TAR_FOLDER}.tar.xz"
+  local XBB_TAR_URL="https://ftp.gnu.org/gnu/tar/${XBB_TAR_ARCHIVE}"
 
   # Requires xz
   echo
@@ -645,7 +689,13 @@ function do_tar()
   (
     cd "${XBB_BUILD_FOLDER}/${XBB_TAR_FOLDER}"
 
-    xbb_activate_dev
+    xbb_activate
+    xbb_activate_installed_dev
+
+    export CPPFLAGS="${XBB_CPPFLAGS}" 
+    export CFLAGS="${XBB_CFLAGS}"
+    export CXXFLAGS="${XBB_CXXFLAGS}"
+    export LDFLAGS="${XBB_LDFLAGS_APP}"
 
     # Avoid 'configure: error: you should not run configure as root'.
     export FORCE_UNSAFE_CONFIGURE=1
@@ -660,9 +710,9 @@ function do_tar()
   )
 
   (
-    xbb_activate
+    xbb_activate_installed_bin
 
-    "${XBB_FOLDER}"/bin/tar --version
+    "${XBB_FOLDER}/bin/tar" --version
   )
 
   hash -r
@@ -678,12 +728,12 @@ function do_curl()
   # XBB_CURL_VERSION="7.56.1"
   # 2017-11-29, "7.57.0"
 
-  XBB_CURL_VERSION="$1"
+  local XBB_CURL_VERSION="$1"
 
-  XBB_CURL_FOLDER="curl-${XBB_CURL_VERSION}"
-  XBB_CURL_ARCHIVE="${XBB_CURL_FOLDER}.tar.xz"
-  XBB_CURL_URL="https://curl.haxx.se/download/${XBB_CURL_ARCHIVE}"
-  # XBB_CURL_URL="https://github.com/gnu-mcu-eclipse/files/raw/master/libs/${XBB_CURL_ARCHIVE}"
+  local XBB_CURL_FOLDER="curl-${XBB_CURL_VERSION}"
+  local XBB_CURL_ARCHIVE="${XBB_CURL_FOLDER}.tar.xz"
+  local XBB_CURL_URL="https://curl.haxx.se/download/${XBB_CURL_ARCHIVE}"
+  # local XBB_CURL_URL="https://github.com/gnu-mcu-eclipse/files/raw/master/libs/${XBB_CURL_ARCHIVE}"
 
   echo
   echo "Building curl ${XBB_CURL_VERSION}..."
@@ -695,7 +745,13 @@ function do_curl()
   (
     cd "${XBB_BUILD_FOLDER}/${XBB_CURL_FOLDER}"
 
-    xbb_activate_dev
+    xbb_activate
+    xbb_activate_installed_dev
+
+    export CPPFLAGS="${XBB_CPPFLAGS}" 
+    export CFLAGS="${XBB_CFLAGS}"
+    export CXXFLAGS="${XBB_CXXFLAGS}"
+    export LDFLAGS="${XBB_LDFLAGS_APP}"
 
     ./configure --help
 
@@ -715,13 +771,13 @@ function do_curl()
     make -j ${JOBS}
     make install
 
-    strip --strip-all "${XBB_FOLDER}"/bin/curl
+    strip --strip-all "${XBB_FOLDER}/bin/curl"
   )
 
   (
-    xbb_activate
+    xbb_activate_installed_bin
 
-    "${XBB_FOLDER}"/bin/curl --version
+    "${XBB_FOLDER}/bin/curl" --version
   )
 
   hash -r
@@ -735,12 +791,12 @@ function do_pkg_config()
 
   # 2017-03-20, "0.29.2"
 
-  XBB_PKG_CONFIG_VERSION="$1"
+  local XBB_PKG_CONFIG_VERSION="$1"
 
-  XBB_PKG_CONFIG_FOLDER="pkg-config-${XBB_PKG_CONFIG_VERSION}"
-  XBB_PKG_CONFIG_ARCHIVE="${XBB_PKG_CONFIG_FOLDER}.tar.gz"
-  # XBB_PKG_CONFIG_URL="https://pkgconfig.freedesktop.org/releases/${XBB_PKG_CONFIG_ARCHIVE}"
-  XBB_PKG_CONFIG_URL="https://github.com/gnu-mcu-eclipse/files/raw/master/libs/${XBB_PKG_CONFIG_ARCHIVE}"
+  local XBB_PKG_CONFIG_FOLDER="pkg-config-${XBB_PKG_CONFIG_VERSION}"
+  local XBB_PKG_CONFIG_ARCHIVE="${XBB_PKG_CONFIG_FOLDER}.tar.gz"
+  local XBB_PKG_CONFIG_URL="https://pkgconfig.freedesktop.org/releases/${XBB_PKG_CONFIG_ARCHIVE}"
+  # local XBB_PKG_CONFIG_URL="https://github.com/gnu-mcu-eclipse/files/raw/master/libs/${XBB_PKG_CONFIG_ARCHIVE}"
 
   echo
   echo "Building pkg-config ${XBB_PKG_CONFIG_VERSION}..."
@@ -752,9 +808,13 @@ function do_pkg_config()
   (
     cd "${XBB_BUILD_FOLDER}/${XBB_PKG_CONFIG_FOLDER}"
 
-    xbb_activate_dev
+    xbb_activate
+    xbb_activate_installed_dev
 
-    export CFLAGS="${CFLAGS} -Wno-unused-value"
+    export CPPFLAGS="${XBB_CPPFLAGS}" 
+    export CFLAGS="${XBB_CFLAGS} -Wno-unused-value"
+    export CXXFLAGS="${XBB_CXXFLAGS}"
+    export LDFLAGS="${XBB_LDFLAGS_APP}"
 
     ./configure --help
     glib/configure --help
@@ -770,9 +830,9 @@ function do_pkg_config()
   )
 
   (
-    xbb_activate
+    xbb_activate_installed_bin
 
-    "${XBB_FOLDER}"/bin/pkg-config --version
+    "${XBB_FOLDER}/bin/pkg-config" --version
   )
 
   hash -r
@@ -801,7 +861,13 @@ function do_coreutils()
   (
     cd "${XBB_BUILD_FOLDER}/${XBB_COREUTILS_FOLDER_NAME}"
 
-    xbb_activate_dev
+    xbb_activate
+    xbb_activate_installed_dev
+
+    export CPPFLAGS="${XBB_CPPFLAGS}" 
+    export CFLAGS="${XBB_CFLAGS}"
+    export CXXFLAGS="${XBB_CXXFLAGS}"
+    export LDFLAGS="${XBB_LDFLAGS_APP}"
 
     # error: you should not run configure as root (set FORCE_UNSAFE_CONFIGURE=1 
     # in environment to bypass this check
@@ -817,7 +883,7 @@ function do_coreutils()
   )
 
   (
-    xbb_activate
+    xbb_activate_installed_bin
 
     "${XBB_FOLDER}/bin/realpath" --version
   )
@@ -833,11 +899,11 @@ function do_m4()
 
   # 2016-12-31, "1.4.18"
 
-  XBB_M4_VERSION="$1"
+  local XBB_M4_VERSION="$1"
 
-  XBB_M4_FOLDER="m4-${XBB_M4_VERSION}"
-  XBB_M4_ARCHIVE="${XBB_M4_FOLDER}.tar.xz"
-  XBB_M4_URL="https://ftp.gnu.org/gnu/m4/${XBB_M4_ARCHIVE}"
+  local XBB_M4_FOLDER="m4-${XBB_M4_VERSION}"
+  local XBB_M4_ARCHIVE="${XBB_M4_FOLDER}.tar.xz"
+  local XBB_M4_URL="https://ftp.gnu.org/gnu/m4/${XBB_M4_ARCHIVE}"
 
   echo
   echo "Building m4 ${XBB_M4_VERSION}..."
@@ -849,7 +915,13 @@ function do_m4()
   (
     cd "${XBB_BUILD_FOLDER}/${XBB_M4_FOLDER}"
 
-    xbb_activate_dev
+    xbb_activate
+    xbb_activate_installed_dev
+
+    export CPPFLAGS="${XBB_CPPFLAGS}" 
+    export CFLAGS="${XBB_CFLAGS}"
+    export CXXFLAGS="${XBB_CXXFLAGS}"
+    export LDFLAGS="${XBB_LDFLAGS_APP}"
 
     ./configure --help
 
@@ -861,9 +933,9 @@ function do_m4()
   )
 
   (
-    xbb_activate
+    xbb_activate_installed_bin
 
-    "${XBB_FOLDER}"/bin/m4 --version
+    "${XBB_FOLDER}/bin/m4" --version
   )
 
   hash -r
@@ -877,11 +949,11 @@ function do_gawk()
 
   # 2017-10-19, "4.2.0"
 
-  XBB_GAWK_VERSION="$1"
+  local XBB_GAWK_VERSION="$1"
 
-  XBB_GAWK_FOLDER="gawk-${XBB_GAWK_VERSION}"
-  XBB_GAWK_ARCHIVE="${XBB_GAWK_FOLDER}.tar.xz"
-  XBB_GAWK_URL="https://ftp.gnu.org/gnu/gawk/${XBB_GAWK_ARCHIVE}"
+  local XBB_GAWK_FOLDER="gawk-${XBB_GAWK_VERSION}"
+  local XBB_GAWK_ARCHIVE="${XBB_GAWK_FOLDER}.tar.xz"
+  local XBB_GAWK_URL="https://ftp.gnu.org/gnu/gawk/${XBB_GAWK_ARCHIVE}"
 
   echo
   echo "Building gawk ${XBB_GAWK_VERSION}..."
@@ -893,7 +965,13 @@ function do_gawk()
   (
     cd "${XBB_BUILD_FOLDER}/${XBB_GAWK_FOLDER}"
 
-    xbb_activate_dev
+    xbb_activate
+    xbb_activate_installed_dev
+
+    export CPPFLAGS="${XBB_CPPFLAGS}" 
+    export CFLAGS="${XBB_CFLAGS}"
+    export CXXFLAGS="${XBB_CXXFLAGS}"
+    export LDFLAGS="${XBB_LDFLAGS_APP}"
 
     ./configure --help
 
@@ -906,9 +984,9 @@ function do_gawk()
   )
 
   (
-    xbb_activate
+    xbb_activate_installed_bin
 
-    "${XBB_FOLDER}"/bin/awk --version
+    "${XBB_FOLDER}/bin/awk" --version
   )
 
   hash -r
@@ -921,11 +999,11 @@ function do_sed()
 
   # 2018-12-21, "4.7"
 
-  XBB_SED_VERSION="$1"
+  local XBB_SED_VERSION="$1"
 
-  XBB_SED_FOLDER="sed-${XBB_SED_VERSION}"
-  XBB_SED_ARCHIVE="${XBB_SED_FOLDER}.tar.xz"
-  XBB_SED_URL="https://ftp.gnu.org/gnu/sed/${XBB_SED_ARCHIVE}"
+  local XBB_SED_FOLDER="sed-${XBB_SED_VERSION}"
+  local XBB_SED_ARCHIVE="${XBB_SED_FOLDER}.tar.xz"
+  local XBB_SED_URL="https://ftp.gnu.org/gnu/sed/${XBB_SED_ARCHIVE}"
 
   echo
   echo "Building sed ${XBB_SED_VERSION}..."
@@ -937,7 +1015,13 @@ function do_sed()
   (
     cd "${XBB_BUILD_FOLDER}/${XBB_SED_FOLDER}"
 
-    xbb_activate_dev
+    xbb_activate
+    xbb_activate_installed_dev
+
+    export CPPFLAGS="${XBB_CPPFLAGS}" 
+    export CFLAGS="${XBB_CFLAGS}"
+    export CXXFLAGS="${XBB_CXXFLAGS}"
+    export LDFLAGS="${XBB_LDFLAGS_APP}"
 
     ./configure --help
 
@@ -949,9 +1033,9 @@ function do_sed()
   )
 
   (
-    xbb_activate
+    xbb_activate_installed_bin
 
-    "${XBB_FOLDER}"/bin/sed --version
+    "${XBB_FOLDER}/bin/sed" --version
   )
 
   hash -r
@@ -965,11 +1049,11 @@ function do_autoconf()
 
   # 2012-04-24, "2.69"
 
-  XBB_AUTOCONF_VERSION="$1"
+  local XBB_AUTOCONF_VERSION="$1"
 
-  XBB_AUTOCONF_FOLDER="autoconf-${XBB_AUTOCONF_VERSION}"
-  XBB_AUTOCONF_ARCHIVE="${XBB_AUTOCONF_FOLDER}.tar.xz"
-  XBB_AUTOCONF_URL="https://ftp.gnu.org/gnu/autoconf/${XBB_AUTOCONF_ARCHIVE}"
+  local XBB_AUTOCONF_FOLDER="autoconf-${XBB_AUTOCONF_VERSION}"
+  local XBB_AUTOCONF_ARCHIVE="${XBB_AUTOCONF_FOLDER}.tar.xz"
+  local XBB_AUTOCONF_URL="https://ftp.gnu.org/gnu/autoconf/${XBB_AUTOCONF_ARCHIVE}"
 
   echo
   echo "Building autoconf ${XBB_AUTOCONF_VERSION}..."
@@ -981,7 +1065,13 @@ function do_autoconf()
   (
     cd "${XBB_BUILD_FOLDER}/${XBB_AUTOCONF_FOLDER}"
 
-    xbb_activate_dev
+    xbb_activate
+    xbb_activate_installed_dev
+
+    export CPPFLAGS="${XBB_CPPFLAGS}" 
+    export CFLAGS="${XBB_CFLAGS}"
+    export CXXFLAGS="${XBB_CXXFLAGS}"
+    export LDFLAGS="${XBB_LDFLAGS_APP}"
 
     ./configure --help
 
@@ -993,9 +1083,9 @@ function do_autoconf()
   )
 
   (
-    xbb_activate
+    xbb_activate_installed_bin
 
-    "${XBB_FOLDER}"/bin/autoconf --version
+    "${XBB_FOLDER}/bin/autoconf" --version
   )
 
   hash -r
@@ -1009,11 +1099,11 @@ function do_automake()
 
   # 2015-01-05, "1.15"
 
-  XBB_AUTOMAKE_VERSION="$1"
+  local XBB_AUTOMAKE_VERSION="$1"
 
-  XBB_AUTOMAKE_FOLDER="automake-${XBB_AUTOMAKE_VERSION}"
-  XBB_AUTOMAKE_ARCHIVE="${XBB_AUTOMAKE_FOLDER}.tar.xz"
-  XBB_AUTOMAKE_URL="https://ftp.gnu.org/gnu/automake/${XBB_AUTOMAKE_ARCHIVE}"
+  local XBB_AUTOMAKE_FOLDER="automake-${XBB_AUTOMAKE_VERSION}"
+  local XBB_AUTOMAKE_ARCHIVE="${XBB_AUTOMAKE_FOLDER}.tar.xz"
+  local XBB_AUTOMAKE_URL="https://ftp.gnu.org/gnu/automake/${XBB_AUTOMAKE_ARCHIVE}"
 
   echo
   echo "Building automake ${XBB_AUTOMAKE_VERSION}..."
@@ -1025,7 +1115,13 @@ function do_automake()
   (
     cd "${XBB_BUILD_FOLDER}/${XBB_AUTOMAKE_FOLDER}"
 
-    xbb_activate_dev
+    xbb_activate
+    xbb_activate_installed_dev
+
+    export CPPFLAGS="${XBB_CPPFLAGS}" 
+    export CFLAGS="${XBB_CFLAGS}"
+    export CXXFLAGS="${XBB_CXXFLAGS}"
+    export LDFLAGS="${XBB_LDFLAGS_APP}"
 
     ./configure --help
 
@@ -1037,9 +1133,9 @@ function do_automake()
   )
 
   (
-    xbb_activate
+    xbb_activate_installed_bin
 
-    "${XBB_FOLDER}"/bin/automake --version
+    "${XBB_FOLDER}/bin/automake" --version
   )
 
   hash -r
@@ -1053,12 +1149,12 @@ function do_libtool()
 
   # 15-Feb-2015, "2.4.6"
 
-  XBB_LIBTOOL_VERSION="$1"
+  local XBB_LIBTOOL_VERSION="$1"
 
-  XBB_LIBTOOL_FOLDER="libtool-${XBB_LIBTOOL_VERSION}"
-  XBB_LIBTOOL_ARCHIVE="${XBB_LIBTOOL_FOLDER}.tar.xz"
-  # XBB_LIBTOOL_URL="http://ftpmirror.gnu.org/libtool/${XBB_LIBTOOL_ARCHIVE}"
-  XBB_LIBTOOL_URL="https://github.com/gnu-mcu-eclipse/files/raw/master/libs/${XBB_LIBTOOL_ARCHIVE}"
+  local XBB_LIBTOOL_FOLDER="libtool-${XBB_LIBTOOL_VERSION}"
+  local XBB_LIBTOOL_ARCHIVE="${XBB_LIBTOOL_FOLDER}.tar.xz"
+  local XBB_LIBTOOL_URL="http://ftpmirror.gnu.org/libtool/${XBB_LIBTOOL_ARCHIVE}"
+  # local XBB_LIBTOOL_URL="https://github.com/gnu-mcu-eclipse/files/raw/master/libs/${XBB_LIBTOOL_ARCHIVE}"
 
   echo
   echo "Building libtool ${XBB_LIBTOOL_VERSION}..."
@@ -1070,7 +1166,13 @@ function do_libtool()
   (
     cd "${XBB_BUILD_FOLDER}/${XBB_LIBTOOL_FOLDER}"
 
-    xbb_activate_dev
+    xbb_activate
+    xbb_activate_installed_dev
+
+    export CPPFLAGS="${XBB_CPPFLAGS}" 
+    export CFLAGS="${XBB_CFLAGS}"
+    export CXXFLAGS="${XBB_CXXFLAGS}"
+    export LDFLAGS="${XBB_LDFLAGS_APP}"
 
     ./configure --help
 
@@ -1082,9 +1184,9 @@ function do_libtool()
   )
 
   (
-    xbb_activate
+    xbb_activate_installed_bin
 
-    "${XBB_FOLDER}"/bin/libtool --version
+    "${XBB_FOLDER}/bin/libtool" --version
   )
 
   hash -r
@@ -1098,11 +1200,11 @@ function do_gettext()
 
   # 2016-06-09, "0.19.8"
 
-  XBB_GETTEXT_VERSION="$1"
+  local XBB_GETTEXT_VERSION="$1"
 
-  XBB_GETTEXT_FOLDER="gettext-${XBB_GETTEXT_VERSION}"
-  XBB_GETTEXT_ARCHIVE="${XBB_GETTEXT_FOLDER}.tar.xz"
-  XBB_GETTEXT_URL="https://ftp.gnu.org/gnu/gettext/${XBB_GETTEXT_ARCHIVE}"
+  local XBB_GETTEXT_FOLDER="gettext-${XBB_GETTEXT_VERSION}"
+  local XBB_GETTEXT_ARCHIVE="${XBB_GETTEXT_FOLDER}.tar.xz"
+  local XBB_GETTEXT_URL="https://ftp.gnu.org/gnu/gettext/${XBB_GETTEXT_ARCHIVE}"
 
   echo
   echo "Building gettext ${XBB_GETTEXT_VERSION}..."
@@ -1114,9 +1216,13 @@ function do_gettext()
   (
     cd "${XBB_BUILD_FOLDER}/${XBB_GETTEXT_FOLDER}"
 
-    xbb_activate_dev
+    xbb_activate
+    xbb_activate_installed_dev
 
-    export CFLAGS="${CFLAGS} -Wno-discarded-qualifiers"
+    export CPPFLAGS="${XBB_CPPFLAGS}" 
+    export CFLAGS="${XBB_CFLAGS} -Wno-discarded-qualifiers"
+    export CXXFLAGS="${XBB_CXXFLAGS}"
+    export LDFLAGS="${XBB_LDFLAGS_APP}"
 
     ./configure --help
 
@@ -1128,9 +1234,9 @@ function do_gettext()
   )
 
   (
-    xbb_activate
+    xbb_activate_installed_bin
 
-    "${XBB_FOLDER}"/bin/gettext --version
+    "${XBB_FOLDER}/bin/gettext" --version
   )
 
   hash -r
@@ -1144,11 +1250,11 @@ function do_diffutils()
 
   # 2017-05-21, "3.6"
 
-  XBB_DIFFUTILS_VERSION="$1"
+  local XBB_DIFFUTILS_VERSION="$1"
 
-  XBB_DIFFUTILS_FOLDER="diffutils-${XBB_DIFFUTILS_VERSION}"
-  XBB_DIFFUTILS_ARCHIVE="${XBB_DIFFUTILS_FOLDER}.tar.xz"
-  XBB_DIFFUTILS_URL="https://ftp.gnu.org/gnu/diffutils/${XBB_DIFFUTILS_ARCHIVE}"
+  local XBB_DIFFUTILS_FOLDER="diffutils-${XBB_DIFFUTILS_VERSION}"
+  local XBB_DIFFUTILS_ARCHIVE="${XBB_DIFFUTILS_FOLDER}.tar.xz"
+  local XBB_DIFFUTILS_URL="https://ftp.gnu.org/gnu/diffutils/${XBB_DIFFUTILS_ARCHIVE}"
 
   echo
   echo "Building diffutils ${XBB_DIFFUTILS_VERSION}..."
@@ -1160,7 +1266,13 @@ function do_diffutils()
   (
     cd "${XBB_BUILD_FOLDER}/${XBB_DIFFUTILS_FOLDER}"
 
-    xbb_activate_dev
+    xbb_activate
+    xbb_activate_installed_dev
+
+    export CPPFLAGS="${XBB_CPPFLAGS}" 
+    export CFLAGS="${XBB_CFLAGS}"
+    export CXXFLAGS="${XBB_CXXFLAGS}"
+    export LDFLAGS="${XBB_LDFLAGS_APP}"
 
     ./configure --help
 
@@ -1172,9 +1284,9 @@ function do_diffutils()
   )
 
   (
-    xbb_activate
+    xbb_activate_installed_bin
 
-    "${XBB_FOLDER}"/bin/diff --version
+    "${XBB_FOLDER}/bin/diff" --version
   )
 
   hash -r
@@ -1188,11 +1300,11 @@ function do_patch()
 
   # 2015-03-06, "2.7.5"
 
-  XBB_PATCH_VERSION="$1"
+  local XBB_PATCH_VERSION="$1"
 
-  XBB_PATCH_FOLDER="patch-${XBB_PATCH_VERSION}"
-  XBB_PATCH_ARCHIVE="${XBB_PATCH_FOLDER}.tar.xz"
-  XBB_PATCH_URL="https://ftp.gnu.org/gnu/patch/${XBB_PATCH_ARCHIVE}"
+  local XBB_PATCH_FOLDER="patch-${XBB_PATCH_VERSION}"
+  local XBB_PATCH_ARCHIVE="${XBB_PATCH_FOLDER}.tar.xz"
+  local XBB_PATCH_URL="https://ftp.gnu.org/gnu/patch/${XBB_PATCH_ARCHIVE}"
 
   echo
   echo "Building patch ${XBB_PATCH_VERSION}..."
@@ -1204,7 +1316,13 @@ function do_patch()
   (
     cd "${XBB_BUILD_FOLDER}/${XBB_PATCH_FOLDER}"
 
-    xbb_activate_dev
+    xbb_activate
+    xbb_activate_installed_dev
+
+    export CPPFLAGS="${XBB_CPPFLAGS}" 
+    export CFLAGS="${XBB_CFLAGS}"
+    export CXXFLAGS="${XBB_CXXFLAGS}"
+    export LDFLAGS="${XBB_LDFLAGS_APP}"
 
     ./configure --help
 
@@ -1216,9 +1334,9 @@ function do_patch()
   )
 
   (
-    xbb_activate
+    xbb_activate_installed_bin
 
-    "${XBB_FOLDER}"/bin/patch --version
+    "${XBB_FOLDER}/bin/patch" --version
   )
 
   hash -r
@@ -1232,11 +1350,11 @@ function do_bison()
 
   # 2015-01-23, "3.0.4"
 
-  XBB_BISON_VERSION="$1"
+  local XBB_BISON_VERSION="$1"
 
-  XBB_BISON_FOLDER="bison-${XBB_BISON_VERSION}"
-  XBB_BISON_ARCHIVE="${XBB_BISON_FOLDER}.tar.xz"
-  XBB_BISON_URL="https://ftp.gnu.org/gnu/bison/${XBB_BISON_ARCHIVE}"
+  local XBB_BISON_FOLDER="bison-${XBB_BISON_VERSION}"
+  local XBB_BISON_ARCHIVE="${XBB_BISON_FOLDER}.tar.xz"
+  local XBB_BISON_URL="https://ftp.gnu.org/gnu/bison/${XBB_BISON_ARCHIVE}"
 
   echo
   echo "Building bison ${XBB_BISON_VERSION}..."
@@ -1248,7 +1366,13 @@ function do_bison()
   (
     cd "${XBB_BUILD_FOLDER}/${XBB_BISON_FOLDER}"
 
-    xbb_activate_dev
+    xbb_activate
+    xbb_activate_installed_dev
+
+    export CPPFLAGS="${XBB_CPPFLAGS}" 
+    export CFLAGS="${XBB_CFLAGS}"
+    export CXXFLAGS="${XBB_CXXFLAGS}"
+    export LDFLAGS="${XBB_LDFLAGS_APP}"
 
     ./configure --help
 
@@ -1260,9 +1384,9 @@ function do_bison()
   )
 
   (
-    xbb_activate
+    xbb_activate_installed_bin
 
-    "${XBB_FOLDER}"/bin/bison --version
+    "${XBB_FOLDER}/bin/bison" --version
   )
 
   hash -r
@@ -1276,12 +1400,12 @@ function do_make()
 
   # 2016-06-10, "4.2.1"
 
-  XBB_MAKE_VERSION="$1"
+  local XBB_MAKE_VERSION="$1"
 
-  XBB_MAKE_FOLDER="make-${XBB_MAKE_VERSION}"
+  local XBB_MAKE_FOLDER="make-${XBB_MAKE_VERSION}"
   # Only .bz2 available.
-  XBB_MAKE_ARCHIVE="${XBB_MAKE_FOLDER}.tar.bz2"
-  XBB_MAKE_URL="https://ftp.gnu.org/gnu/make/${XBB_MAKE_ARCHIVE}"
+  local XBB_MAKE_ARCHIVE="${XBB_MAKE_FOLDER}.tar.bz2"
+  local XBB_MAKE_URL="https://ftp.gnu.org/gnu/make/${XBB_MAKE_ARCHIVE}"
 
   echo
   echo "Building make ${XBB_MAKE_VERSION}..."
@@ -1293,7 +1417,13 @@ function do_make()
   (
     cd "${XBB_BUILD_FOLDER}/${XBB_MAKE_FOLDER}"
 
-    xbb_activate_dev
+    xbb_activate
+    xbb_activate_installed_dev
+
+    export CPPFLAGS="${XBB_CPPFLAGS}" 
+    export CFLAGS="${XBB_CFLAGS}"
+    export CXXFLAGS="${XBB_CXXFLAGS}"
+    export LDFLAGS="${XBB_LDFLAGS_APP}"
 
     ./configure --help
 
@@ -1306,9 +1436,9 @@ function do_make()
   )
 
   (
-    xbb_activate
+    xbb_activate_installed_bin
 
-    "${XBB_FOLDER}"/bin/make --version
+    "${XBB_FOLDER}/bin/make" --version
   )
 
   hash -r
@@ -1323,11 +1453,11 @@ function do_wget()
 
   # 2016-06-10, "1.19"
 
-  XBB_WGET_VERSION="$1"
+  local XBB_WGET_VERSION="$1"
 
-  XBB_WGET_FOLDER="wget-${XBB_WGET_VERSION}"
-  XBB_WGET_ARCHIVE="${XBB_WGET_FOLDER}.tar.gz"
-  XBB_WGET_URL="https://ftp.gnu.org/gnu/wget/${XBB_WGET_ARCHIVE}"
+  local XBB_WGET_FOLDER="wget-${XBB_WGET_VERSION}"
+  local XBB_WGET_ARCHIVE="${XBB_WGET_FOLDER}.tar.gz"
+  local XBB_WGET_URL="https://ftp.gnu.org/gnu/wget/${XBB_WGET_ARCHIVE}"
 
   # http://git.savannah.gnu.org/cgit/wget.git/tree/configure.ac
 
@@ -1344,11 +1474,13 @@ function do_wget()
   (
     cd "${XBB_BUILD_FOLDER}/${XBB_WGET_FOLDER}"
 
-    xbb_activate_dev
+    xbb_activate
+    xbb_activate_installed_dev
 
-    export CFLAGS="${CFLAGS} -Wno-implicit-function-declaration"
-    # export CXXFLAGS="${CXXFLAGS} "
-    export LDFLAGS="-L${XBB_FOLDER}/lib ${LDFLAGS}"
+    export CPPFLAGS="${XBB_CPPFLAGS}" 
+    export CFLAGS="${XBB_CFLAGS} -Wno-implicit-function-declaration"
+    export CXXFLAGS="${XBB_CXXFLAGS}"
+    export LDFLAGS="${XBB_LDFLAGS_APP}"
     export LIBS="-liconv"
 
     ./configure --help
@@ -1368,9 +1500,9 @@ function do_wget()
   )
 
   (
-    xbb_activate
+    xbb_activate_installed_bin
 
-    "${XBB_FOLDER}"/bin/wget --version
+    "${XBB_FOLDER}/bin/wget" --version
   )
 
   hash -r
@@ -1384,11 +1516,11 @@ function do_texinfo()
 
   # 2017-09-12, "6.5"
 
-  XBB_TEXINFO_VERSION="$1"
+  local XBB_TEXINFO_VERSION="$1"
 
-  XBB_TEXINFO_FOLDER="texinfo-${XBB_TEXINFO_VERSION}"
-  XBB_TEXINFO_ARCHIVE="${XBB_TEXINFO_FOLDER}.tar.gz"
-  XBB_TEXINFO_URL="https://ftp.gnu.org/gnu/texinfo/${XBB_TEXINFO_ARCHIVE}"
+  local XBB_TEXINFO_FOLDER="texinfo-${XBB_TEXINFO_VERSION}"
+  local XBB_TEXINFO_ARCHIVE="${XBB_TEXINFO_FOLDER}.tar.gz"
+  local XBB_TEXINFO_URL="https://ftp.gnu.org/gnu/texinfo/${XBB_TEXINFO_ARCHIVE}"
 
   # GCC: Texinfo version 4.8 or later is required by make pdf.
 
@@ -1403,7 +1535,13 @@ function do_texinfo()
   (
     cd "${XBB_BUILD_FOLDER}/${XBB_TEXINFO_FOLDER}"
 
-    xbb_activate_dev
+    xbb_activate
+    xbb_activate_installed_dev
+
+    export CPPFLAGS="${XBB_CPPFLAGS}" 
+    export CFLAGS="${XBB_CFLAGS}"
+    export CXXFLAGS="${XBB_CXXFLAGS}"
+    export LDFLAGS="${XBB_LDFLAGS_APP}"
 
     ./configure --help
 
@@ -1415,9 +1553,9 @@ function do_texinfo()
   )
 
   (
-    xbb_activate
+    xbb_activate_installed_bin
 
-    "${XBB_FOLDER}"/bin/texi2pdf --version
+    "${XBB_FOLDER}/bin/texi2pdf" --version
   )
 
   hash -r
@@ -1430,11 +1568,11 @@ function do_patchelf()
   
   # 2016-02-29, "0.9"
 
-  XBB_PATCHELF_VERSION="$1"
+  local XBB_PATCHELF_VERSION="$1"
 
-  XBB_PATCHELF_FOLDER="patchelf-${XBB_PATCHELF_VERSION}"
-  XBB_PATCHELF_ARCHIVE="${XBB_PATCHELF_FOLDER}.tar.bz2"
-  XBB_PATCHELF_URL="https://nixos.org/releases/patchelf/patchelf-${XBB_PATCHELF_VERSION}/${XBB_PATCHELF_ARCHIVE}"
+  local XBB_PATCHELF_FOLDER="patchelf-${XBB_PATCHELF_VERSION}"
+  local XBB_PATCHELF_ARCHIVE="${XBB_PATCHELF_FOLDER}.tar.bz2"
+  local XBB_PATCHELF_URL="https://nixos.org/releases/patchelf/patchelf-${XBB_PATCHELF_VERSION}/${XBB_PATCHELF_ARCHIVE}"
 
   echo
   echo "Building patchelf ${XBB_PATCHELF_VERSION}..."
@@ -1446,7 +1584,15 @@ function do_patchelf()
   (
     cd "${XBB_BUILD_FOLDER}/${XBB_PATCHELF_FOLDER}"
 
-    xbb_activate_dev
+    xbb_activate
+    xbb_activate_installed_dev
+
+    export CPPFLAGS="${XBB_CPPFLAGS}" 
+    export CFLAGS="${XBB_CFLAGS}"
+    export CXXFLAGS="${XBB_CXXFLAGS}"
+    # Wihtout -static-libstdc++, the bootstrap lib folder is needed to 
+    # find libstdc++.
+    export LDFLAGS="${XBB_LDFLAGS_APP}"
 
     ./configure --help
 
@@ -1458,9 +1604,9 @@ function do_patchelf()
   )
 
   (
-    xbb_activate
+    xbb_activate_installed_bin
 
-    "${XBB_FOLDER}"/bin/patchelf --version
+    "${XBB_FOLDER}/bin/patchelf" --version
   )
 
   hash -r
@@ -1474,11 +1620,11 @@ function do_dos2unix()
 
   # 30-Oct-2017, "7.4.0"
 
-  XBB_DOS2UNIX_VERSION="$1"
+  local XBB_DOS2UNIX_VERSION="$1"
 
-  XBB_DOS2UNIX_FOLDER="dos2unix-${XBB_DOS2UNIX_VERSION}"
-  XBB_DOS2UNIX_ARCHIVE="${XBB_DOS2UNIX_FOLDER}.tar.gz"
-  XBB_DOS2UNIX_URL="https://sourceforge.net/projects/dos2unix/files/dos2unix/${XBB_DOS2UNIX_VERSION}/${XBB_DOS2UNIX_ARCHIVE}"
+  local XBB_DOS2UNIX_FOLDER="dos2unix-${XBB_DOS2UNIX_VERSION}"
+  local XBB_DOS2UNIX_ARCHIVE="${XBB_DOS2UNIX_FOLDER}.tar.gz"
+  local XBB_DOS2UNIX_URL="https://sourceforge.net/projects/dos2unix/files/dos2unix/${XBB_DOS2UNIX_VERSION}/${XBB_DOS2UNIX_ARCHIVE}"
 
   echo
   echo "Installing dos2unix ${XBB_DOS2UNIX_VERSION}..."
@@ -1490,16 +1636,22 @@ function do_dos2unix()
   (
     cd "${XBB_BUILD_FOLDER}/${XBB_DOS2UNIX_FOLDER}"
 
-    xbb_activate_dev
+    xbb_activate
+    xbb_activate_installed_dev
+
+    export CPPFLAGS="${XBB_CPPFLAGS}" 
+    export CFLAGS="${XBB_CFLAGS}"
+    export CXXFLAGS="${XBB_CXXFLAGS}"
+    export LDFLAGS="${XBB_LDFLAGS_APP}"
 
     make prefix="${XBB_FOLDER}" -j ${JOBS} clean all
     make prefix="${XBB_FOLDER}" strip install
   )
 
   (
-    xbb_activate
+    xbb_activate_installed_bin
 
-    "${XBB_FOLDER}"/bin/unix2dos --version
+    "${XBB_FOLDER}/bin/unix2dos" --version
   )
 
   hash -r
@@ -1513,11 +1665,11 @@ function do_flex()
 
   # May 6, 2017, "2.6.4"
 
-  XBB_FLEX_VERSION="$1"
+  local XBB_FLEX_VERSION="$1"
 
-  XBB_FLEX_FOLDER="flex-${XBB_FLEX_VERSION}"
-  XBB_FLEX_ARCHIVE="${XBB_FLEX_FOLDER}.tar.gz"
-  XBB_FLEX_URL="https://github.com/westes/flex/releases/download/v${XBB_FLEX_VERSION}/${XBB_FLEX_ARCHIVE}"
+  local XBB_FLEX_FOLDER="flex-${XBB_FLEX_VERSION}"
+  local XBB_FLEX_ARCHIVE="${XBB_FLEX_FOLDER}.tar.gz"
+  local XBB_FLEX_URL="https://github.com/westes/flex/releases/download/v${XBB_FLEX_VERSION}/${XBB_FLEX_ARCHIVE}"
 
   # Requires gettext
   echo
@@ -1529,7 +1681,13 @@ function do_flex()
   (
     cd "${XBB_BUILD_FOLDER}/${XBB_FLEX_FOLDER}"
 
-    xbb_activate_dev
+    xbb_activate
+    xbb_activate_installed_dev
+
+    export CPPFLAGS="${XBB_CPPFLAGS}" 
+    export CFLAGS="${XBB_CFLAGS}"
+    export CXXFLAGS="${XBB_CXXFLAGS}"
+    export LDFLAGS="${XBB_LDFLAGS_APP}"
 
     ./autogen.sh
     ./configure --help
@@ -1542,9 +1700,9 @@ function do_flex()
   )
 
   (
-    xbb_activate
+    xbb_activate_installed_bin
 
-    "${XBB_FOLDER}"/bin/flex --version
+    "${XBB_FOLDER}/bin/flex" --version
   )
 
   hash -r
@@ -1558,12 +1716,12 @@ function do_perl()
 
   # 2017-09-22, "5.26.1"
 
-  XBB_PERL_VERSION="$1"
-  XBB_PERL_MAJOR_VERSION="5.0"
+  local XBB_PERL_VERSION="$1"
+  local XBB_PERL_MAJOR_VERSION="5.0"
 
-  XBB_PERL_FOLDER="perl-${XBB_PERL_VERSION}"
-  XBB_PERL_ARCHIVE="${XBB_PERL_FOLDER}.tar.gz"
-  XBB_PERL_URL="http://www.cpan.org/src/${XBB_PERL_MAJOR_VERSION}/${XBB_PERL_ARCHIVE}"
+  local XBB_PERL_FOLDER="perl-${XBB_PERL_VERSION}"
+  local XBB_PERL_ARCHIVE="${XBB_PERL_FOLDER}.tar.gz"
+  local XBB_PERL_URL="http://www.cpan.org/src/${XBB_PERL_MAJOR_VERSION}/${XBB_PERL_ARCHIVE}"
 
   echo
   echo "Building perl ${XBB_PERL_VERSION}..."
@@ -1575,7 +1733,13 @@ function do_perl()
   (
     cd "${XBB_BUILD_FOLDER}/${XBB_PERL_FOLDER}"
 
-    xbb_activate_dev
+    xbb_activate
+    xbb_activate_installed_dev
+
+    export CPPFLAGS="${XBB_CPPFLAGS}" 
+    export CFLAGS="${XBB_CFLAGS}"
+    export CXXFLAGS="${XBB_CXXFLAGS}"
+    export LDFLAGS="${XBB_LDFLAGS_APP}"
 
     set +e
     # Exits with error.
@@ -1588,7 +1752,7 @@ function do_perl()
     
     ./Configure -d -e -s \
       -Dprefix="${XBB_FOLDER}" \
-      -Dcc=gcc \
+      -Dcc=gcc-7bs \
       -Dccflags="${CFLAGS}"
     
     make -j ${JOBS}
@@ -1598,9 +1762,9 @@ function do_perl()
   )
 
   (
-    xbb_activate
+    xbb_activate_installed_bin
 
-    "${XBB_FOLDER}"/bin/perl --version
+    "${XBB_FOLDER}/bin/perl" --version
   )
 
   hash -r
@@ -1620,13 +1784,13 @@ function do_cmake()
   # XBB_CMAKE_MAJOR_VERSION="3.10"
   # XBB_CMAKE_VERSION="${XBB_CMAKE_MAJOR_VERSION}.1"
 
-  XBB_CMAKE_VERSION="$1"
+  local XBB_CMAKE_VERSION="$1"
  
   local XBB_CMAKE_MAJOR_VERSION="$(echo ${XBB_CMAKE_VERSION} | sed -e 's|\([0-9][0-9]*\)\.\([0-9][0-9]*\)\.\([0-9][0-9]*\)|\1.\2|')"
 
-  XBB_CMAKE_FOLDER="cmake-${XBB_CMAKE_VERSION}"
-  XBB_CMAKE_ARCHIVE="${XBB_CMAKE_FOLDER}.tar.gz"
-  XBB_CMAKE_URL="https://cmake.org/files/v${XBB_CMAKE_MAJOR_VERSION}/${XBB_CMAKE_ARCHIVE}"
+  local XBB_CMAKE_FOLDER="cmake-${XBB_CMAKE_VERSION}"
+  local XBB_CMAKE_ARCHIVE="${XBB_CMAKE_FOLDER}.tar.gz"
+  local XBB_CMAKE_URL="https://cmake.org/files/v${XBB_CMAKE_MAJOR_VERSION}/${XBB_CMAKE_ARCHIVE}"
 
   echo
   echo "Installing cmake ${XBB_CMAKE_VERSION}..."
@@ -1638,7 +1802,13 @@ function do_cmake()
   (
     cd "${XBB_BUILD_FOLDER}/${XBB_CMAKE_FOLDER}"
 
-    xbb_activate_dev
+    xbb_activate
+    xbb_activate_installed_dev
+
+    export CPPFLAGS="${XBB_CPPFLAGS}" 
+    export CFLAGS="${XBB_CFLAGS}"
+    export CXXFLAGS="${XBB_CXXFLAGS}"
+    export LDFLAGS="${XBB_LDFLAGS_APP}"
 
     # Normally it would be much happier with dynamic zlib and curl.
 
@@ -1650,16 +1820,19 @@ function do_cmake()
       -DCMAKE_INSTALL_PREFIX="${XBB_FOLDER}" \
       .
     
-    make -j ${JOBS}
+    # Parallel builds fail at about 72%.
+    # g++-7bs: internal compiler error: Killed (program cc1plus)
+    # make -j ${JOBS}
+    make
     make install
 
     strip --strip-all ${XBB_FOLDER}/bin/cmake
   )
 
   (
-    xbb_activate
+    xbb_activate_installed_bin
 
-    "${XBB_FOLDER}"/bin/cmake --version
+    "${XBB_FOLDER}/bin/cmake" --version
   )
 
   hash -r
@@ -1675,11 +1848,11 @@ function do_python()
 
   # 2017-09-16, "2.7.14"
 
-  XBB_PYTHON_VERSION="$1"
+  local XBB_PYTHON_VERSION="$1"
 
-  XBB_PYTHON_FOLDER="Python-${XBB_PYTHON_VERSION}"
-  XBB_PYTHON_ARCHIVE="${XBB_PYTHON_FOLDER}.tar.xz"
-  XBB_PYTHON_URL="https://www.python.org/ftp/python/${XBB_PYTHON_VERSION}/${XBB_PYTHON_ARCHIVE}"
+  local XBB_PYTHON_FOLDER="Python-${XBB_PYTHON_VERSION}"
+  local XBB_PYTHON_ARCHIVE="${XBB_PYTHON_FOLDER}.tar.xz"
+  local XBB_PYTHON_URL="https://www.python.org/ftp/python/${XBB_PYTHON_VERSION}/${XBB_PYTHON_ARCHIVE}"
 
   echo
   echo "Installing python ${XBB_PYTHON_VERSION}..."
@@ -1691,7 +1864,13 @@ function do_python()
   (
     cd "${XBB_BUILD_FOLDER}/${XBB_PYTHON_FOLDER}"
 
-    xbb_activate_dev
+    xbb_activate
+    xbb_activate_installed_dev
+
+    export CPPFLAGS="${XBB_CPPFLAGS}" 
+    export CFLAGS="${XBB_CFLAGS}"
+    export CXXFLAGS="${XBB_CXXFLAGS}"
+    export LDFLAGS="${XBB_LDFLAGS_APP}"
 
     ./configure --help
 
@@ -1722,13 +1901,13 @@ function do_python()
     make -j ${JOBS} 
     make install
 
-    strip --strip-all "${XBB_FOLDER}"/bin/python
+    strip --strip-all "${XBB_FOLDER}/bin/python"
   )
 
   (
-    xbb_activate
+    xbb_activate_installed_bin
 
-    "${XBB_FOLDER}"/bin/python --version
+    "${XBB_FOLDER}/bin/python" --version
 
     hash -r
  
@@ -1739,12 +1918,12 @@ function do_python()
     echo
     echo "Installing setuptools and pip..."
     set +e
-    "${XBB_FOLDER}"/bin/pip --version
+    "${XBB_FOLDER}/bin/pip" --version
     # pip: command not found
     set -e
-    "${XBB_FOLDER}"/bin/python -m ensurepip --default-pip
-    "${XBB_FOLDER}"/bin/python -m pip install --upgrade pip setuptools wheel
-    "${XBB_FOLDER}"/bin/pip --version
+    "${XBB_FOLDER}/bin/python" -m ensurepip --default-pip
+    "${XBB_FOLDER}/bin/python" -m pip install --upgrade pip setuptools wheel
+    "${XBB_FOLDER}/bin/pip" --version
   )
 
   hash -r
@@ -1776,7 +1955,13 @@ function do_python3()
   (
     cd "${XBB_BUILD_FOLDER}/${XBB_PYTHON_FOLDER_NAME}"
 
-    xbb_activate_dev
+    xbb_activate
+    xbb_activate_installed_dev
+
+    export CPPFLAGS="${XBB_CPPFLAGS}" 
+    export CFLAGS="${XBB_CFLAGS}"
+    export CXXFLAGS="${XBB_CXXFLAGS}"
+    export LDFLAGS="${XBB_LDFLAGS_APP}"
 
     bash ./configure --help
 
@@ -1813,7 +1998,7 @@ function do_python3()
   )
 
   (
-    xbb_activate
+    xbb_activate_installed_bin
 
     "${XBB_FOLDER}/bin/python3" --version
 
@@ -1839,10 +2024,12 @@ function do_python3()
 
 function do_meson
 {
+  # http://mesonbuild.com/
+  # https://pypi.org/project/meson/0.50.0/#description
   (
-    xbb_activate
+    xbb_activate_installed_bin
 
-    pip3 install meson
+    pip3 install meson==$1
 
     "${XBB_FOLDER}/bin/meson" --version
   )
@@ -1858,12 +2045,12 @@ function do_scons()
 
   # 2017-09-16, "3.0.1"
 
-  XBB_SCONS_VERSION="$1"
+  local XBB_SCONS_VERSION="$1"
 
-  XBB_SCONS_FOLDER="scons-${XBB_SCONS_VERSION}"
-  XBB_SCONS_ARCHIVE="${XBB_SCONS_FOLDER}.tar.gz"
-  # XBB_SCONS_URL="https://sourceforge.net/projects/scons/files/scons/${XBB_SCONS_VERSION}/${XBB_SCONS_ARCHIVE}"
-  XBB_SCONS_URL="https://github.com/gnu-mcu-eclipse/files/raw/master/libs/${XBB_SCONS_ARCHIVE}"
+  local XBB_SCONS_FOLDER="scons-${XBB_SCONS_VERSION}"
+  local XBB_SCONS_ARCHIVE="${XBB_SCONS_FOLDER}.tar.gz"
+  local XBB_SCONS_URL="https://sourceforge.net/projects/scons/files/scons/${XBB_SCONS_VERSION}/${XBB_SCONS_ARCHIVE}"
+  # local XBB_SCONS_URL="https://github.com/gnu-mcu-eclipse/files/raw/master/libs/${XBB_SCONS_ARCHIVE}"
 
   echo
   echo "Installing scons ${XBB_SCONS_VERSION}..."
@@ -1875,9 +2062,10 @@ function do_scons()
   (
     cd "${XBB_BUILD_FOLDER}/${XBB_SCONS_FOLDER}"
 
-    xbb_activate_dev
+    xbb_activate
+    xbb_activate_installed_dev
 
-    "${XBB_FOLDER}"/bin/python setup.py install \
+    "${XBB_FOLDER}/bin/python" setup.py install \
       --prefix="${XBB_FOLDER}" \
       --optimize=1
   )
@@ -1888,18 +2076,19 @@ function do_scons()
 function do_wine()
 {
   # https://www.winehq.org
+  # https://dl.winehq.org/wine/source/
   # https://dl.winehq.org/wine/source/4.x/wine-4.3.tar.xz
 
   # 2017-09-16, "4.3"
 
-  XBB_WINE_VERSION="$1"
+  local XBB_WINE_VERSION="$1"
 
-  local XBB_WINE_VERSION_MAJOR="$(echo ${XBB_WINE_VERSION} | sed -e 's|\([0-9][0-9]*\)\.\([0-9][0-9]*\)\.\([0-9][0-9]*\)|\1|')"
-  local XBB_WINE_VERSION_MAJOR="$(echo ${XBB_WINE_VERSION} | sed -e 's|\([0-9][0-9]*\)\.\([0-9][0-9]*\)\.\([0-9][0-9]*\)|\2|')"
+  local XBB_WINE_VERSION_MAJOR="$(echo ${XBB_WINE_VERSION} | sed -e 's|\([0-9][0-9]*\)\.\([0-9][0-9]*\)|\1|')"
+  local XBB_WINE_VERSION_MINOR="$(echo ${XBB_WINE_VERSION} | sed -e 's|\([0-9][0-9]*\)\.\([0-9][0-9]*\)|\2|')"
 
-  XBB_WINE_FOLDER_NAME="wine-${XBB_WINE_VERSION}"
-  XBB_WINE_ARCHIVE="${XBB_WINE_FOLDER_NAME}.tar.xz"
-  XBB_WINE_URL="https://dl.winehq.org/wine/source/${XBB_WINE_VERSION_MAJOR}.x/${XBB_WINE_ARCHIVE}"
+  local XBB_WINE_FOLDER_NAME="wine-${XBB_WINE_VERSION}"
+  local XBB_WINE_ARCHIVE="${XBB_WINE_FOLDER_NAME}.tar.xz"
+  local XBB_WINE_URL="https://dl.winehq.org/wine/source/${XBB_WINE_VERSION_MAJOR}.x/${XBB_WINE_ARCHIVE}"
 
   echo
   echo "Installing wine ${XBB_WINE_VERSION}..."
@@ -1911,9 +2100,13 @@ function do_wine()
   (
     cd "${XBB_BUILD_FOLDER}/${XBB_WINE_FOLDER_NAME}"
 
-    xbb_activate_dev
+    xbb_activate
+    xbb_activate_installed_dev
 
-    bash ./configure --help
+    export CPPFLAGS="${XBB_CPPFLAGS}" 
+    export CFLAGS="${XBB_CFLAGS}"
+    export CXXFLAGS="${XBB_CXXFLAGS}"
+    export LDFLAGS="${XBB_LDFLAGS_APP}"
 
     if [ "${BITS}" == "64" ]
     then
@@ -1921,6 +2114,8 @@ function do_wine()
     else
       ENABLE_64=""
     fi
+
+    bash ./configure --help
 
     bash ./configure \
       --prefix="${XBB_FOLDER}" \
@@ -1933,7 +2128,10 @@ function do_wine()
       --without-x \
       --with-png
     
-    make -j ${JOBS} STRIP=true
+    # Parallel builds fail with
+    # gcc-7bs: internal compiler error: Killed (program cc1)
+    # make -j ${JOBS} STRIP=true
+    make STRIP=true
     make install
 
     if [ "${BITS}" == "64" ]
@@ -1943,7 +2141,7 @@ function do_wine()
   )
 
   (
-    xbb_activate
+    xbb_activate_installed_bin
 
     # First check if the program is able to tell its version.
     "${XBB_FOLDER}/bin/wine" --version
@@ -1967,11 +2165,11 @@ function do_ninja()
 
   # "1.9.0"
 
-  XBB_NINJA_VERSION="$1"
+  local XBB_NINJA_VERSION="$1"
 
-  XBB_NINJA_FOLDER_NAME="ninja-${XBB_NINJA_VERSION}"
-  XBB_NINJA_ARCHIVE="v${XBB_NINJA_VERSION}.tar.gz"
-  XBB_NINJA_URL="https://github.com/ninja-build/ninja/archive/${XBB_NINJA_ARCHIVE}"
+  local XBB_NINJA_FOLDER_NAME="ninja-${XBB_NINJA_VERSION}"
+  local XBB_NINJA_ARCHIVE="v${XBB_NINJA_VERSION}.tar.gz"
+  local XBB_NINJA_URL="https://github.com/ninja-build/ninja/archive/${XBB_NINJA_ARCHIVE}"
 
   echo
   echo "Installing ninja ${XBB_NINJA_VERSION}..."
@@ -1983,7 +2181,13 @@ function do_ninja()
   (
     cd "${XBB_BUILD_FOLDER}/${XBB_NINJA_FOLDER_NAME}"
 
-    xbb_activate_dev
+    xbb_activate
+    xbb_activate_installed_dev
+
+    export CPPFLAGS="${XBB_CPPFLAGS}" 
+    export CFLAGS="${XBB_CFLAGS}"
+    export CXXFLAGS="${XBB_CXXFLAGS}"
+    export LDFLAGS="${XBB_LDFLAGS_APP}"
 
     ./configure.py --help
 
@@ -1997,7 +2201,7 @@ function do_ninja()
   )
 
   (
-    xbb_activate
+    xbb_activate_installed_bin
 
     "${XBB_FOLDER}/bin/ninja" --version
   )
@@ -2016,11 +2220,11 @@ function do_git()
 
   # 29-Nov-2017, "2.15.1"
 
-  XBB_GIT_VERSION="$1"
+  local XBB_GIT_VERSION="$1"
 
-  XBB_GIT_FOLDER="git-${XBB_GIT_VERSION}"
-  XBB_GIT_ARCHIVE="${XBB_GIT_FOLDER}.tar.xz"
-  XBB_GIT_URL="https://www.kernel.org/pub/software/scm/git/${XBB_GIT_ARCHIVE}"
+  local XBB_GIT_FOLDER="git-${XBB_GIT_VERSION}"
+  local XBB_GIT_ARCHIVE="${XBB_GIT_FOLDER}.tar.xz"
+  local XBB_GIT_URL="https://www.kernel.org/pub/software/scm/git/${XBB_GIT_ARCHIVE}"
 
   echo
   echo "Installing git ${XBB_GIT_VERSION}..."
@@ -2032,9 +2236,15 @@ function do_git()
   (
     cd "${XBB_BUILD_FOLDER}/${XBB_GIT_FOLDER}"
 
-    xbb_activate_dev
+    xbb_activate
+    xbb_activate_installed_dev
 
-    export LDFLAGS="-ldl -L${XBB_FOLDER}/lib ${LDFLAGS}"
+    # export LDFLAGS="-ldl -L${XBB_FOLDER}/lib ${LDFLAGS}"
+    export CPPFLAGS="${XBB_CPPFLAGS}" 
+    export CFLAGS="${XBB_CFLAGS}"
+    export CXXFLAGS="${XBB_CXXFLAGS}"
+    export LDFLAGS="${XBB_LDFLAGS_APP}"
+    export LIBS="-ldl"
 
     make configure 
     ./configure --help
@@ -2042,18 +2252,20 @@ function do_git()
 	  ./configure \
       --prefix="${XBB_FOLDER}"
 	  
-    make all -j ${JOBS} \
-      CFLAGS="$CFLAGS" LDFLAGS="$LDFLAGS"
+    # Parallel builds fail with
+    # gcc-7bs: internal compiler error: Killed (program cc1)
+    # make all -j ${JOBS} CFLAGS="$CFLAGS" LDFLAGS="$LDFLAGS"
+    make all CFLAGS="$CFLAGS" LDFLAGS="$LDFLAGS"
     make install
 
-    strip --strip-all "${XBB_FOLDER}/bin"/git 
+    strip --strip-all "${XBB_FOLDER}/bin/git" 
     strip --strip-all "${XBB_FOLDER}/bin"/git-[rsu]*
   )
 
   (
-    xbb_activate
+    xbb_activate_installed_bin
 
-    "${XBB_FOLDER}"/bin/git --version
+    "${XBB_FOLDER}/bin/git" --version
   )
 
   hash -r
@@ -2061,15 +2273,16 @@ function do_git()
 
 function do_p7zip()
 {
+  # https://sourceforge.net/projects/p7zip/
   # https://sourceforge.net/projects/p7zip/files/p7zip/16.02/p7zip_16.02_src_all.tar.bz2/download
 
   # "16.02"
 
-  XBB_P7ZIP_VERSION="$1"
+  local XBB_P7ZIP_VERSION="$1"
 
-  XBB_P7ZIP_FOLDER_NAME="p7zip_${XBB_P7ZIP_VERSION}"
-  XBB_P7ZIP_ARCHIVE="${XBB_P7ZIP_FOLDER_NAME}_src_all.tar.bz2"
-  XBB_P7ZIP_URL="https://sourceforge.net/projects/p7zip/files/p7zip/${XBB_P7ZIP_VERSION}/${XBB_P7ZIP_ARCHIVE}"
+  local XBB_P7ZIP_FOLDER_NAME="p7zip_${XBB_P7ZIP_VERSION}"
+  local XBB_P7ZIP_ARCHIVE="${XBB_P7ZIP_FOLDER_NAME}_src_all.tar.bz2"
+  local XBB_P7ZIP_URL="https://sourceforge.net/projects/p7zip/files/p7zip/${XBB_P7ZIP_VERSION}/${XBB_P7ZIP_ARCHIVE}"
 
   echo
   echo "Building p7zip ${XBB_P7ZIP_VERSION}..."
@@ -2081,19 +2294,36 @@ function do_p7zip()
   (
     cd "${XBB_BUILD_FOLDER}/${XBB_P7ZIP_FOLDER_NAME}"
 
-    xbb_activate_dev
+    xbb_activate
+    xbb_activate_installed_dev
 
-    # Make & test only 7za, the full 7z is problematic.
-    make test
+    export CPPFLAGS="${XBB_CPPFLAGS}" 
+    export CFLAGS="${XBB_CFLAGS}"
+    export CXXFLAGS="${XBB_CXXFLAGS}"
+    export LDFLAGS="${XBB_LDFLAGS_APP}"
+
+    # Override the hard-coded gcc & g++.
+    sed -i -e "s|CXX=g++|CXX=${CXX}|" makefile.machine
+    sed -i -e "s|CC=gcc|CC=${CC}|" makefile.machine
+
+    # make test test_7z V=1
+    make all_test V=1
 
     ls -lL bin
-    install -m755 -t "${XBB_FOLDER}/bin" bin/7za
+
+    # Override the hard-coded '/usr/local'.
+    sed -i -e "s|DEST_HOME=/usr/local|DEST_HOME=${XBB_FOLDER}|" install.sh
+
+    bash install.sh
   )
 
   (
-    xbb_activate
+    xbb_activate_installed_bin
 
+    echo
     "${XBB_FOLDER}/bin/7za" --help
+    echo
+    "${XBB_FOLDER}/bin/7z" --help
   )
 
   hash -r
