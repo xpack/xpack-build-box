@@ -268,8 +268,9 @@ function do_openssl()
       ${optflags} \
       "-Wa,--noexecstack ${CPPFLAGS} ${CFLAGS} ${LDFLAGS}"
     
-    make depend -j ${JOBS}
-    make -j ${JOBS}
+    # Parallel builds fail.
+    make depend 
+    make 
     make install_sw
 
     strip --strip-all "${XBB_FOLDER}/bin/openssl"
