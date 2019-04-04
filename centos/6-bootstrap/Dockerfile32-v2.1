@@ -1,9 +1,9 @@
 FROM ilegeul/centos32:6-tex-v1
-MAINTAINER Liviu Ionescu <ilg@livius.net>
+LABEL maintainer="Liviu Ionescu <ilg@livius.net>"
 ENTRYPOINT ["linux32"]
 WORKDIR /root
 
-ADD image /xbb-input
+ADD input /xbb-input
 RUN linux32 bash -x /xbb-input/build-v2.1.sh
 
 CMD ["/bin/bash"]

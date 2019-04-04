@@ -2,7 +2,7 @@ FROM ilegeul/centos:6-tex-v1
 MAINTAINER Liviu Ionescu <ilg@livius.net>
 WORKDIR /root
 
-ADD image /xbb-input
+ADD input /xbb-input
 RUN time bash -x /xbb-input/build-v1.sh
 
 CMD ["/bin/bash"]

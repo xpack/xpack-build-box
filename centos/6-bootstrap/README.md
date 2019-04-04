@@ -64,6 +64,13 @@ $ docker run --interactive --tty ilegeul/centos:6-bootstrap-v1
 $ docker run --interactive --tty ilegeul/centos32:6-bootstrap-v1
 ```
 
+To test the images:
+
+```console
+$ docker run --interactive --tty ilegeul/centos:6-bootstrap-v2.1
+$ docker run --interactive --tty ilegeul/centos32:6-bootstrap-v2.1
+```
+
 #### Publish
 
 To publish, use:
@@ -73,12 +80,7 @@ $ docker push "ilegeul/centos:6-bootstrap-v1"
 $ docker push "ilegeul/centos32:6-bootstrap-v1"
 ```
 
-#### Copy & Paste
-
-```
-caffeinate docker build --squash --tag "ilegeul/centos:6-bootstrap-v1" -f Dockerfile-v1 .
-docker push "ilegeul/centos:6-bootstrap-v1"
-caffeinate docker build --squash --tag "ilegeul/centos32:6-bootstrap-v1" -f Dockerfile32-v1 .
-docker push "ilegeul/centos32:6-bootstrap-v1"
-
+```console
+$ docker push "ilegeul/centos:6-bootstrap-v2.1"
+$ docker push "ilegeul/centos32:6-bootstrap-v2.1"
 ```
