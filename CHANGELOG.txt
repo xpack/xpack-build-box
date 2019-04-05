@@ -1,0 +1,10 @@
+The major changes and releases, in reverse chronological order:
+
+[2019-04-05]
+
+- update centos & macos to v2.1
+
+[2019-04-01]
+
+- upgrade CentOS XBB bootstrap to GCC 7.4.0
+
