@@ -2668,8 +2668,8 @@ function do_p7zip()
       sed -i -e "s|CXX=g++.*|CXX=${CXX}|" makefile.machine
       sed -i -e "s|CC=gcc.*|CC=${CC}|" makefile.machine
 
-      # test_7z fails while loading the library, 7z may not work properly.
-      make all3 test test_7zr
+      # 7z cannot load library on macOS.
+      make test
 
       ls -lL bin
 
@@ -2684,8 +2684,6 @@ function do_p7zip()
 
       echo
       "${XBB_FOLDER}/bin/7za" --help
-      echo
-      "${XBB_FOLDER}/bin/7z" --help
     )
 
     hash -r
