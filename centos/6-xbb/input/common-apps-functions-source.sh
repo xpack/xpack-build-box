@@ -2301,8 +2301,8 @@ function do_p7zip()
     sed -i -e "s|CXX=g++.*|CXX=${CXX}|" makefile.machine
     sed -i -e "s|CC=gcc.*|CC=${CC}|" makefile.machine
 
-    # make test test_7z V=1
-    make all_test V=1
+    # make test test_7z
+    make all_test
 
     ls -lL bin
 
