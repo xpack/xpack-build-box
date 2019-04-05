@@ -42,7 +42,8 @@ function do_zlib()
       fi
       cd "${LIBS_BUILD_FOLDER_PATH}/${zlib_folder_name}"
 
-      xbb_activate_this
+      xbb_activate
+      xbb_activate_installed_dev
 
       export CFLAGS="${XBB_CFLAGS} -fPIC"
 
@@ -103,7 +104,8 @@ function do_gmp()
       mkdir -p "${LIBS_BUILD_FOLDER_PATH}/${gmp_folder_name}"
       cd "${LIBS_BUILD_FOLDER_PATH}/${gmp_folder_name}"
 
-      xbb_activate_this
+      xbb_activate
+      xbb_activate_installed_dev
 
       export CPPFLAGS="${XBB_CPPFLAGS}"
       export CFLAGS="${XBB_CFLAGS}"
@@ -173,7 +175,8 @@ function do_mpfr()
       mkdir -p "${LIBS_BUILD_FOLDER_PATH}/${mpfr_folder_name}"
       cd "${LIBS_BUILD_FOLDER_PATH}/${mpfr_folder_name}"
 
-      xbb_activate_this
+      xbb_activate
+      xbb_activate_installed_dev
 
       export CPPFLAGS="${XBB_CPPFLAGS}"
       export CFLAGS="${XBB_CFLAGS}"
@@ -200,7 +203,8 @@ function do_mpfr()
         echo "Running mpfr make..."
 
         # Build.
-        make -j ${JOBS}
+        # make -j ${JOBS}
+        make
         make install-strip
       ) 2>&1 | tee "${LOGS_FOLDER_PATH}/make-mpfr-output.txt"
     )
@@ -239,7 +243,8 @@ function do_mpc()
       mkdir -p "${LIBS_BUILD_FOLDER_PATH}/${mpc_folder_name}"
       cd "${LIBS_BUILD_FOLDER_PATH}/${mpc_folder_name}"
 
-      xbb_activate_this
+      xbb_activate
+      xbb_activate_installed_dev
 
       export CPPFLAGS="${XBB_CPPFLAGS}"
       export CFLAGS="${XBB_CFLAGS}"
@@ -306,7 +311,8 @@ function do_isl()
       mkdir -p "${LIBS_BUILD_FOLDER_PATH}/${isl_folder_name}"
       cd "${LIBS_BUILD_FOLDER_PATH}/${isl_folder_name}"
 
-      xbb_activate_this
+      xbb_activate
+      xbb_activate_installed_dev
 
       export CPPFLAGS="${XBB_CPPFLAGS}"
       export CFLAGS="${XBB_CFLAGS}"
@@ -372,7 +378,8 @@ function do_nettle()
       mkdir -p "${LIBS_BUILD_FOLDER_PATH}/${nettle_folder_name}"
       cd "${LIBS_BUILD_FOLDER_PATH}/${nettle_folder_name}"
 
-      xbb_activate_this
+      xbb_activate
+      xbb_activate_installed_dev
 
       export CPPFLAGS="${XBB_CPPFLAGS}"
       export CFLAGS="${XBB_CFLAGS}"
@@ -444,7 +451,8 @@ function do_tasn1()
       mkdir -p "${LIBS_BUILD_FOLDER_PATH}/${tasn1_folder_name}"
       cd "${LIBS_BUILD_FOLDER_PATH}/${tasn1_folder_name}"
 
-      xbb_activate_this
+      xbb_activate
+      xbb_activate_installed_dev
 
       export CPPFLAGS="${XBB_CPPFLAGS}"
       export CFLAGS="${XBB_CFLAGS} -Wno-logical-op -Wno-missing-prototypes -Wno-implicit-fallthrough -Wno-format-truncation"
@@ -512,7 +520,8 @@ function do_expat()
       mkdir -p "${LIBS_BUILD_FOLDER_PATH}/${expat_folder_name}"
       cd "${LIBS_BUILD_FOLDER_PATH}/${expat_folder_name}"
 
-      xbb_activate_this
+      xbb_activate
+      xbb_activate_installed_dev
 
       export CPPFLAGS="${XBB_CPPFLAGS}"
       export CFLAGS="${XBB_CFLAGS}"
@@ -579,7 +588,8 @@ function do_libffi()
       mkdir -p "${LIBS_BUILD_FOLDER_PATH}/${libffi_folder_name}"
       cd "${LIBS_BUILD_FOLDER_PATH}/${libffi_folder_name}"
 
-      xbb_activate_this
+      xbb_activate
+      xbb_activate_installed_dev
 
       export CPPFLAGS="${XBB_CPPFLAGS}"
       export CFLAGS="${XBB_CFLAGS}"
@@ -645,7 +655,8 @@ function do_libiconv()
       mkdir -p "${LIBS_BUILD_FOLDER_PATH}/${libiconv_folder_name}"
       cd "${LIBS_BUILD_FOLDER_PATH}/${libiconv_folder_name}"
 
-      xbb_activate_this
+      xbb_activate
+      xbb_activate_installed_dev
 
       export CPPFLAGS="${XBB_CPPFLAGS}"
       export CFLAGS="${XBB_CFLAGS}"
@@ -716,7 +727,8 @@ function do_gnutls()
       mkdir -p "${LIBS_BUILD_FOLDER_PATH}/${gnutls_folder_name}"
       cd "${LIBS_BUILD_FOLDER_PATH}/${gnutls_folder_name}"
 
-      xbb_activate_this
+      xbb_activate
+      xbb_activate_installed_dev
 
       export CPPFLAGS="${XBB_CPPFLAGS}"
       export CFLAGS="${XBB_CFLAGS} -Wno-parentheses -Wno-bad-function-cast -Wno-unused-macros -Wno-bad-function-cast -Wno-unused-variable -Wno-pointer-sign -Wno-implicit-fallthrough -Wno-format-truncation -Wno-missing-prototypes -Wno-missing-declarations -Wno-shadow -Wno-sign-compare -Wno-unknown-warning-option -Wno-static-in-inline -Wno-implicit-function-declaration -Wno-strict-prototypes -Wno-tautological-pointer-compare"
@@ -784,7 +796,8 @@ function do_util_macros()
       mkdir -p "${LIBS_BUILD_FOLDER_PATH}/${util_macros_folder_name}"
       cd "${LIBS_BUILD_FOLDER_PATH}/${util_macros_folder_name}"
 
-      xbb_activate_this
+      xbb_activate
+      xbb_activate_installed_dev
 
       export CPPFLAGS="${XBB_CPPFLAGS}"
       export CFLAGS="${XBB_CFLAGS}"
@@ -846,7 +859,8 @@ function do_xorg_xproto()
       mkdir -p "${LIBS_BUILD_FOLDER_PATH}/${xorg_xproto_folder_name}"
       cd "${LIBS_BUILD_FOLDER_PATH}/${xorg_xproto_folder_name}"
 
-      xbb_activate_this
+      xbb_activate
+      xbb_activate_installed_dev
 
       export CPPFLAGS="${XBB_CPPFLAGS}"
       export CFLAGS="${XBB_CFLAGS}"

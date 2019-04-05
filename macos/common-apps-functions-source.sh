@@ -36,7 +36,9 @@ function do_gcc()
       mkdir -p "${BUILD_FOLDER_PATH}/${gcc_folder_name}"
       cd "${BUILD_FOLDER_PATH}/${gcc_folder_name}"
 
-      xbb_activate_this
+      xbb_activate
+      xbb_activate_installed_bin
+      xbb_activate_installed_dev
 
       export CPPFLAGS="${XBB_CPPFLAGS}"
       export CFLAGS="${XBB_CFLAGS} -Wno-sign-compare -Wno-varargs -Wno-tautological-compare  "
@@ -96,12 +98,16 @@ function do_gcc()
         echo "Running gcc make..."
 
         # Build.
-        make -j ${JOBS}
+        # Parallel builds fail.
+        # make -j ${JOBS}
+        make
         make install-strip
       ) 2>&1 | tee "${LOGS_FOLDER_PATH}/make-gcc-output.txt"
     )
 
     (
+      xbb_activate_installed_bin
+
       echo
       "${INSTALL_FOLDER_PATH}/bin/g++${GCC_SUFFIX}" --version
       "${INSTALL_FOLDER_PATH}/bin/g++${GCC_SUFFIX}" -dumpmachine
@@ -159,9 +165,9 @@ function do_openssl()
   # The new version deprecated CRYPTO_set_locking_callback, and yum fails with
   # /usr/lib64/python2.6/site-packages/pycurl.so: undefined symbol: CRYPTO_set_locking_callback
 
-  # 2017-Dec-07 "1.0.2n"
-  # local openssl_version="1.0.2n"
-  # 2019-Feb-26 "1.1.1b"
+  # 2017-Dec-07, "1.0.2n"
+  # 2019-Feb-26, "1.0.2r"
+  # 2019-Feb-26, "1.1.1b"
 
   local openssl_version="$1"
 
@@ -183,7 +189,9 @@ function do_openssl()
       mkdir -p "${BUILD_FOLDER_PATH}/${openssl_folder_name}"
       cd "${BUILD_FOLDER_PATH}/${openssl_folder_name}"
 
-      xbb_activate_this
+      xbb_activate
+      xbb_activate_installed_bin
+      xbb_activate_installed_dev
 
       # export CPPFLAGS="${XBB_CPPFLAGS} -I${BUILD_FOLDER_PATH}/${openssl_folder_name}/include"
       export CPPFLAGS="${XBB_CPPFLAGS}"
@@ -240,7 +248,7 @@ function do_openssl()
       ) 2>&1 | tee "${LOGS_FOLDER_PATH}/make-openssl-output.txt"
 
       (
-        xbb_activate
+        xbb_activate_installed_bin
 
         echo
         "${INSTALL_FOLDER_PATH}/bin/openssl" version
@@ -284,7 +292,9 @@ function do_curl()
       mkdir -p "${BUILD_FOLDER_PATH}/${curl_folder_name}"
       cd "${BUILD_FOLDER_PATH}/${curl_folder_name}"
 
-      xbb_activate_this
+      xbb_activate
+      xbb_activate_installed_bin
+      xbb_activate_installed_dev
 
       export CPPFLAGS="${XBB_CPPFLAGS}"
       export CFLAGS="${XBB_CFLAGS} -Wno-deprecated-declarations"
@@ -329,6 +339,8 @@ function do_curl()
     )
 
     (
+      xbb_activate_installed_bin
+
       echo
       "${INSTALL_FOLDER_PATH}/bin/curl" --version
     )
@@ -369,7 +381,9 @@ function do_xz()
       mkdir -p "${BUILD_FOLDER_PATH}/${xz_folder_name}"
       cd "${BUILD_FOLDER_PATH}/${xz_folder_name}"
 
-      xbb_activate_this
+      xbb_activate
+      xbb_activate_installed_bin
+      xbb_activate_installed_dev
 
       export CPPFLAGS="${XBB_CPPFLAGS}"
       export CFLAGS="${XBB_CFLAGS}"
@@ -403,6 +417,8 @@ function do_xz()
     )
 
     (
+      xbb_activate_installed_bin
+
       echo
       "${INSTALL_FOLDER_PATH}/bin/xz" --version
     )
@@ -444,7 +460,9 @@ function do_tar()
       mkdir -p "${BUILD_FOLDER_PATH}/${tar_folder_name}"
       cd "${BUILD_FOLDER_PATH}/${tar_folder_name}"
 
-      xbb_activate_this
+      xbb_activate
+      xbb_activate_installed_bin
+      xbb_activate_installed_dev
 
       export CPPFLAGS="${XBB_CPPFLAGS}"
       export CFLAGS="${XBB_CFLAGS}"
@@ -483,6 +501,8 @@ function do_tar()
     )
 
     (
+      xbb_activate_installed_bin
+
       echo
       "${INSTALL_FOLDER_PATH}/bin/tar" --version
     )
@@ -521,7 +541,9 @@ function do_coreutils()
       mkdir -p "${BUILD_FOLDER_PATH}/${coreutils_folder_name}"
       cd "${BUILD_FOLDER_PATH}/${coreutils_folder_name}"
 
-      xbb_activate_this
+      xbb_activate
+      xbb_activate_installed_bin
+      xbb_activate_installed_dev
 
       export CPPFLAGS="${XBB_CPPFLAGS}"
       export CFLAGS="${XBB_CFLAGS} -Wno-pointer-sign -Wno-incompatible-pointer-types"
@@ -561,6 +583,8 @@ function do_coreutils()
     )
 
     (
+      xbb_activate_installed_bin
+
       echo
       "${INSTALL_FOLDER_PATH}/bin/realpath" --version
     )
@@ -601,7 +625,9 @@ function do_pkg_config()
       mkdir -p "${BUILD_FOLDER_PATH}/${pkg_config_folder_name}"
       cd "${BUILD_FOLDER_PATH}/${pkg_config_folder_name}"
 
-      xbb_activate_this
+      xbb_activate
+      xbb_activate_installed_bin
+      xbb_activate_installed_dev
 
       export CPPFLAGS="${XBB_CPPFLAGS}"
       export CFLAGS="${XBB_CFLAGS} -Wno-int-conversion -Wno-unused-value -Wno-unused-function -Wno-deprecated-declarations -Wno-return-type -Wno-tautological-constant-out-of-range-compare -Wno-sometimes-uninitialized"
@@ -644,6 +670,8 @@ function do_pkg_config()
     )
 
     (
+      xbb_activate_installed_bin
+
       echo
       "${INSTALL_FOLDER_PATH}/bin/pkg-config" --version
     )
@@ -684,7 +712,9 @@ function do_m4()
       mkdir -p "${BUILD_FOLDER_PATH}/${m4_folder_name}"
       cd "${BUILD_FOLDER_PATH}/${m4_folder_name}"
 
-      xbb_activate_this
+      xbb_activate
+      xbb_activate_installed_bin
+      xbb_activate_installed_dev
 
       export CPPFLAGS="${XBB_CPPFLAGS}"
       export CFLAGS="${XBB_CFLAGS} -Wno-incompatible-pointer-types"
@@ -724,6 +754,8 @@ function do_m4()
     )
 
     (
+      xbb_activate_installed_bin
+
       echo
       "${INSTALL_FOLDER_PATH}/bin/m4" --version
     )
@@ -765,7 +797,9 @@ function do_gawk()
       mkdir -p "${BUILD_FOLDER_PATH}/${gawk_folder_name}"
       cd "${BUILD_FOLDER_PATH}/${gawk_folder_name}"
 
-      xbb_activate_this
+      xbb_activate
+      xbb_activate_installed_bin
+      xbb_activate_installed_dev
 
       export CPPFLAGS="${XBB_CPPFLAGS}"
       export CFLAGS="${XBB_CFLAGS}"
@@ -799,6 +833,8 @@ function do_gawk()
     )
 
     (
+      xbb_activate_installed_bin
+
       echo
       "${INSTALL_FOLDER_PATH}/bin/awk" --version
     )
@@ -837,7 +873,9 @@ function do_sed()
       mkdir -p "${BUILD_FOLDER_PATH}/${sed_folder_name}"
       cd "${BUILD_FOLDER_PATH}/${sed_folder_name}"
 
-      xbb_activate_this
+      xbb_activate
+      xbb_activate_installed_bin
+      xbb_activate_installed_dev
 
       export CPPFLAGS="${XBB_CPPFLAGS}"
       export CFLAGS="${XBB_CFLAGS}"
@@ -875,6 +913,8 @@ function do_sed()
     )
 
     (
+      xbb_activate_installed_bin
+
       echo
       "${INSTALL_FOLDER_PATH}/bin/sed" --version
     )
@@ -914,7 +954,9 @@ function do_autoconf()
       mkdir -p "${BUILD_FOLDER_PATH}/${autoconf_folder_name}"
       cd "${BUILD_FOLDER_PATH}/${autoconf_folder_name}"
 
-      xbb_activate_this
+      xbb_activate
+      xbb_activate_installed_bin
+      xbb_activate_installed_dev
 
       export CPPFLAGS="${XBB_CPPFLAGS}"
       export CFLAGS="${XBB_CFLAGS}"
@@ -947,6 +989,8 @@ function do_autoconf()
     )
 
     (
+      xbb_activate_installed_bin
+
       echo
       "${INSTALL_FOLDER_PATH}/bin/autoconf" --version
     )
@@ -987,7 +1031,9 @@ function do_automake()
       mkdir -p "${BUILD_FOLDER_PATH}/${automake_folder_name}"
       cd "${BUILD_FOLDER_PATH}/${automake_folder_name}"
 
-      xbb_activate_this
+      xbb_activate
+      xbb_activate_installed_bin
+      xbb_activate_installed_dev
 
       export CPPFLAGS="${XBB_CPPFLAGS}"
       export CFLAGS="${XBB_CFLAGS}"
@@ -1020,6 +1066,8 @@ function do_automake()
     )
 
     (
+      xbb_activate_installed_bin
+
       echo
       "${INSTALL_FOLDER_PATH}/bin/automake" --version
     )
@@ -1061,7 +1109,9 @@ function do_libtool()
       mkdir -p "${BUILD_FOLDER_PATH}/${libtool_folder_name}"
       cd "${BUILD_FOLDER_PATH}/${libtool_folder_name}"
 
-      xbb_activate_this
+      xbb_activate
+      xbb_activate_installed_bin
+      xbb_activate_installed_dev
 
       export CPPFLAGS="${XBB_CPPFLAGS}"
       export CFLAGS="${XBB_CFLAGS}"
@@ -1094,6 +1144,8 @@ function do_libtool()
     )
 
     (
+      xbb_activate_installed_bin
+
       echo
       "${INSTALL_FOLDER_PATH}/bin/libtool" --version
     )
@@ -1133,7 +1185,9 @@ function do_gettext()
       mkdir -p "${BUILD_FOLDER_PATH}/${gettext_folder_name}"
       cd "${BUILD_FOLDER_PATH}/${gettext_folder_name}"
 
-      xbb_activate_this
+      xbb_activate
+      xbb_activate_installed_bin
+      xbb_activate_installed_dev
 
       export CPPFLAGS="${XBB_CPPFLAGS}"
       export CFLAGS="${XBB_CFLAGS}"
@@ -1166,6 +1220,8 @@ function do_gettext()
     )
 
     (
+      xbb_activate_installed_bin
+
       echo
       "${INSTALL_FOLDER_PATH}/bin/gettext" --version
     )
@@ -1206,7 +1262,9 @@ function do_patch()
       mkdir -p "${BUILD_FOLDER_PATH}/${patch_folder_name}"
       cd "${BUILD_FOLDER_PATH}/${patch_folder_name}"
 
-      xbb_activate_this
+      xbb_activate
+      xbb_activate_installed_bin
+      xbb_activate_installed_dev
 
       export CPPFLAGS="${XBB_CPPFLAGS}"
       export CFLAGS="${XBB_CFLAGS}"
@@ -1239,6 +1297,8 @@ function do_patch()
     )
 
     (
+      xbb_activate_installed_bin
+
       echo
       "${INSTALL_FOLDER_PATH}/bin/patch" --version
     )
@@ -1279,7 +1339,9 @@ function do_diffutils()
       mkdir -p "${BUILD_FOLDER_PATH}/${diffutils_folder_name}"
       cd "${BUILD_FOLDER_PATH}/${diffutils_folder_name}"
 
-      xbb_activate_this
+      xbb_activate
+      xbb_activate_installed_bin
+      xbb_activate_installed_dev
 
       export CPPFLAGS="${XBB_CPPFLAGS}"
       export CFLAGS="${XBB_CFLAGS}"
@@ -1312,6 +1374,8 @@ function do_diffutils()
     )
 
     (
+      xbb_activate_installed_bin
+
       echo
       "${INSTALL_FOLDER_PATH}/bin/diff" --version
     )
@@ -1353,7 +1417,9 @@ function do_bison()
       mkdir -p "${BUILD_FOLDER_PATH}/${bison_folder_name}"
       cd "${BUILD_FOLDER_PATH}/${bison_folder_name}"
 
-      xbb_activate_this
+      xbb_activate
+      xbb_activate_installed_bin
+      xbb_activate_installed_dev
 
       export CPPFLAGS="${XBB_CPPFLAGS}"
       export CFLAGS="${XBB_CFLAGS}"
@@ -1386,6 +1452,8 @@ function do_bison()
     )
 
     (
+      xbb_activate_installed_bin
+
       echo
       "${INSTALL_FOLDER_PATH}/bin/bison" --version
     )
@@ -1436,7 +1504,9 @@ function do_flex()
       mkdir -p "${BUILD_FOLDER_PATH}/${flex_folder_name}"
       cd "${BUILD_FOLDER_PATH}/${flex_folder_name}"
 
-      xbb_activate_this
+      xbb_activate
+      xbb_activate_installed_bin
+      xbb_activate_installed_dev
 
       export CPPFLAGS="${XBB_CPPFLAGS}"
       export CFLAGS="${XBB_CFLAGS}"
@@ -1469,6 +1539,8 @@ function do_flex()
     )
 
     (
+      xbb_activate_installed_bin
+
       echo
       "${INSTALL_FOLDER_PATH}/bin/flex" --version
     )
@@ -1508,7 +1580,9 @@ function do_make()
       mkdir -p "${BUILD_FOLDER_PATH}/${make_folder_name}"
       cd "${BUILD_FOLDER_PATH}/${make_folder_name}"
 
-      xbb_activate_this
+      xbb_activate
+      xbb_activate_installed_bin
+      xbb_activate_installed_dev
 
       export CPPFLAGS="${XBB_CPPFLAGS}"
       export CFLAGS="${XBB_CFLAGS}"
@@ -1547,6 +1621,8 @@ function do_make()
     )
 
     (
+      xbb_activate_installed_bin
+
       echo
       "${INSTALL_FOLDER_PATH}/bin/make" --version
     )
@@ -1587,7 +1663,9 @@ function do_wget()
       mkdir -p "${BUILD_FOLDER_PATH}/${wget_folder_name}"
       cd "${BUILD_FOLDER_PATH}/${wget_folder_name}"
 
-      xbb_activate_this
+      xbb_activate
+      xbb_activate_installed_bin
+      xbb_activate_installed_dev
 
       export CPPFLAGS="${XBB_CPPFLAGS}"
       export CFLAGS="${XBB_CFLAGS} -Wno-implicit-function-declaration"
@@ -1631,6 +1709,8 @@ function do_wget()
     )
 
     (
+      xbb_activate_installed_bin
+
       echo
       "${INSTALL_FOLDER_PATH}/bin/wget" --version
     )
@@ -1671,7 +1751,9 @@ function do_texinfo()
       mkdir -p "${BUILD_FOLDER_PATH}/${texinfo_folder_name}"
       cd "${BUILD_FOLDER_PATH}/${texinfo_folder_name}"
 
-      xbb_activate_this
+      xbb_activate
+      xbb_activate_installed_bin
+      xbb_activate_installed_dev
 
       export CPPFLAGS="${XBB_CPPFLAGS}"
       export CFLAGS="${XBB_CFLAGS}"
@@ -1704,6 +1786,8 @@ function do_texinfo()
     )
 
     (
+      xbb_activate_installed_bin
+
       echo
       "${INSTALL_FOLDER_PATH}/bin/texi2pdf" --version
     )
@@ -1746,7 +1830,9 @@ function do_cmake()
       mkdir -p "${BUILD_FOLDER_PATH}/${cmake_folder_name}"
       cd "${BUILD_FOLDER_PATH}/${cmake_folder_name}"
 
-      xbb_activate_this
+      xbb_activate
+      xbb_activate_installed_bin
+      xbb_activate_installed_dev
 
       export CPPFLAGS="${XBB_CPPFLAGS}"
       export CFLAGS="${XBB_CFLAGS}"
@@ -1804,6 +1890,8 @@ function do_cmake()
     )
 
     (
+      xbb_activate_installed_bin
+
       echo
       "${INSTALL_FOLDER_PATH}/bin/cmake" --version
     )
@@ -1847,7 +1935,9 @@ function do_perl()
       mkdir -p "${BUILD_FOLDER_PATH}/${perl_folder_name}"
       cd "${BUILD_FOLDER_PATH}/${perl_folder_name}"
 
-      xbb_activate_this
+      xbb_activate
+      xbb_activate_installed_bin
+      xbb_activate_installed_dev
 
       export CPPFLAGS="${XBB_CPPFLAGS}"
       export CFLAGS="${XBB_CFLAGS} -Wno-implicit-fallthrough -Wno-nonnull -Wno-format -Wno-sign-compare -Wno-null-pointer-arithmetic"
@@ -1887,6 +1977,8 @@ function do_perl()
     )
 
     (
+      xbb_activate_installed_bin
+
       echo
       "${INSTALL_FOLDER_PATH}/bin/perl" --version
     )
@@ -1924,7 +2016,9 @@ function do_makedepend()
       mkdir -p "${BUILD_FOLDER_PATH}/${makedepend_folder_name}"
       cd "${BUILD_FOLDER_PATH}/${makedepend_folder_name}"
 
-      xbb_activate_this
+      xbb_activate
+      xbb_activate_installed_bin
+      xbb_activate_installed_dev
 
       export CPPFLAGS="${XBB_CPPFLAGS}"
       export CFLAGS="${XBB_CFLAGS}"
@@ -1958,6 +2052,8 @@ function do_makedepend()
     )
 
     (
+      xbb_activate_installed_bin
+
       echo
       "${INSTALL_FOLDER_PATH}/bin/makedepend" || true
     )
@@ -1999,7 +2095,9 @@ function do_patchelf()
       mkdir -p "${BUILD_FOLDER_PATH}/${patchelf_folder_name}"
       cd "${BUILD_FOLDER_PATH}/${patchelf_folder_name}"
 
-      xbb_activate_this
+      xbb_activate
+      xbb_activate_installed_bin
+      xbb_activate_installed_dev
 
       export CPPFLAGS="${XBB_CPPFLAGS}"
       export CFLAGS="${XBB_CFLAGS}"
@@ -2032,6 +2130,8 @@ function do_patchelf()
     )
 
     (
+      xbb_activate_installed_bin
+
       echo
       "${INSTALL_FOLDER_PATH}/bin/patchelf" --version
     )
@@ -2072,7 +2172,9 @@ function do_dos2unix()
       mkdir -p "${BUILD_FOLDER_PATH}/${dos2unix_folder_name}"
       cd "${BUILD_FOLDER_PATH}/${dos2unix_folder_name}"
 
-      xbb_activate_this
+      xbb_activate
+      xbb_activate_installed_bin
+      xbb_activate_installed_dev
 
       export CPPFLAGS="${XBB_CPPFLAGS}"
       export CFLAGS="${XBB_CFLAGS}"
@@ -2090,6 +2192,8 @@ function do_dos2unix()
     )
 
     (
+      xbb_activate_installed_bin
+
       echo
       "${INSTALL_FOLDER_PATH}/bin/unix2dos" --version
     )
@@ -2132,7 +2236,9 @@ function do_git()
       mkdir -p "${BUILD_FOLDER_PATH}/${git_folder_name}"
       cd "${BUILD_FOLDER_PATH}/${git_folder_name}"
 
-      xbb_activate_this
+      xbb_activate
+      xbb_activate_installed_bin
+      xbb_activate_installed_dev
 
       export CPPFLAGS="${XBB_CPPFLAGS}"
       export CFLAGS="${XBB_CFLAGS}"
@@ -2169,6 +2275,8 @@ function do_git()
     )
 
     (
+      xbb_activate_installed_bin
+
       echo
       "${INSTALL_FOLDER_PATH}/bin/git" --version
     )
@@ -2211,7 +2319,9 @@ function do_python()
       mkdir -p "${BUILD_FOLDER_PATH}/${python_folder_name}"
       cd "${BUILD_FOLDER_PATH}/${python_folder_name}"
 
-      xbb_activate_this
+      xbb_activate
+      xbb_activate_installed_bin
+      xbb_activate_installed_dev
 
       export CPPFLAGS="${XBB_CPPFLAGS}"
       export CFLAGS="${XBB_CFLAGS} -Wno-int-in-bool-context -Wno-maybe-uninitialized -Wno-nonnull -Wno-stringop-overflow"
@@ -2258,6 +2368,8 @@ function do_python()
     )
 
     (
+      xbb_activate_installed_bin
+
       echo
       "${INSTALL_FOLDER_PATH}/bin/python" --version
     )
@@ -2302,7 +2414,9 @@ function do_python3()
       mkdir -p "${BUILD_FOLDER_PATH}/${python3_folder_name}"
       cd "${BUILD_FOLDER_PATH}/${python3_folder_name}"
 
-      xbb_activate_this
+      xbb_activate
+      xbb_activate_installed_bin
+      xbb_activate_installed_dev
 
       export CPPFLAGS="${XBB_CPPFLAGS}"
       export CFLAGS="${XBB_CFLAGS} -Wno-int-in-bool-context -Wno-maybe-uninitialized -Wno-nonnull -Wno-stringop-overflow"
@@ -2349,6 +2463,8 @@ function do_python3()
     )
 
     (
+      xbb_activate_installed_bin
+
       echo
       "${INSTALL_FOLDER_PATH}/bin/python3" --version
     )
@@ -2392,7 +2508,9 @@ function do_scons()
       mkdir -p "${BUILD_FOLDER_PATH}/${scons_folder_name}"
       cd "${BUILD_FOLDER_PATH}/${scons_folder_name}"
 
-      xbb_activate_this
+      xbb_activate
+      xbb_activate_installed_bin
+      xbb_activate_installed_dev
 
       export CPPFLAGS="${XBB_CPPFLAGS}"
       export CFLAGS="${XBB_CFLAGS}"
@@ -2409,6 +2527,8 @@ function do_scons()
     ) 2>&1 | tee "${LOGS_FOLDER_PATH}/install-scons-output.txt"
 
     (
+      xbb_activate_installed_bin
+
       echo
       "${INSTALL_FOLDER_PATH}/bin/scons" --version
     )
@@ -2424,10 +2544,12 @@ function do_scons()
 
 function do_meson
 {
+  # http://mesonbuild.com/
+  # https://pypi.org/project/meson/0.50.0/#description
   (
-    xbb_activate
+    xbb_activate_installed_bin
 
-    pip3 install meson
+    pip3 install meson==$1
 
     "${INSTALL_FOLDER_PATH}/bin/meson" --version
   )
@@ -2464,7 +2586,9 @@ function do_ninja()
       mkdir -p "${BUILD_FOLDER_PATH}/${ninja_folder_name}"
       cd "${BUILD_FOLDER_PATH}/${ninja_folder_name}"
 
-      xbb_activate_this
+      xbb_activate
+      xbb_activate_installed_bin
+      xbb_activate_installed_dev
 
       export CPPFLAGS="${XBB_CPPFLAGS}"
       export CFLAGS="${XBB_CFLAGS}"
@@ -2489,6 +2613,8 @@ function do_ninja()
     )
 
     (
+      xbb_activate_installed_bin
+
       echo
       "${INSTALL_FOLDER_PATH}/bin/ninja" --version
     )
@@ -2508,38 +2634,67 @@ function do_p7zip()
 
   # "16.02"
 
-  XBB_P7ZIP_VERSION="$1"
+  local p7zip_version="$1"
 
-  XBB_P7ZIP_FOLDER_NAME="p7zip_${XBB_P7ZIP_VERSION}"
-  XBB_P7ZIP_ARCHIVE="${XBB_P7ZIP_FOLDER_NAME}_src_all.tar.bz2"
-  XBB_P7ZIP_URL="https://sourceforge.net/projects/p7zip/files/p7zip/${XBB_P7ZIP_VERSION}/${XBB_P7ZIP_ARCHIVE}"
+  local p7zip_folder_name="p7zip_${p7zip_version}"
+  local p7zip_archive="${p7zip_folder_name}_src_all.tar.bz2"
+  local p7zip_url="https://sourceforge.net/projects/p7zip/files/p7zip/${p7zip_version}/${p7zip_archive}"
 
-  echo
-  echo "Building p7zip ${XBB_P7ZIP_VERSION}..."
+  local p7zip_stamp_file_path="${STAMPS_FOLDER_PATH}/stamp-p7zip-${p7zip_version}-installed"
+  if [ ! -f "${p7zip_stamp_file_path}" -o ! -d "${BUILD_FOLDER_PATH}/${p7zip_folder_name}" ]
+  then
 
-  cd "${XBB_BUILD_FOLDER}"
+    cd "${BUILD_FOLDER_PATH}"
 
-  download_and_extract "${XBB_P7ZIP_ARCHIVE}" "${XBB_P7ZIP_URL}"
+    download_and_extract "${p7zip_url}" "${p7zip_archive}" "${p7zip_folder_name}"
 
-  (
-    cd "${XBB_BUILD_FOLDER}/${XBB_P7ZIP_FOLDER_NAME}"
+    (
+      cd "${BUILD_FOLDER_PATH}/${p7zip_folder_name}"
 
-    xbb_activate_dev
+      xbb_activate
+      xbb_activate_installed_bin
+      xbb_activate_installed_dev
 
-    # Make & test only 7za, the full 7z is problematic.
-    make test
+      export CPPFLAGS="${XBB_CPPFLAGS}"
+      export CFLAGS="${XBB_CFLAGS}"
+      export CXXFLAGS="${XBB_CXXFLAGS}"
+      export LDFLAGS="${XBB_LDFLAGS_APP}"
 
-    ls -lL bin
-    install -m755 -t "${XBB_FOLDER}/bin" bin/7za
-  )
+      echo
+      echo "Running p7zip make..."
 
-  (
-    xbb_activate
 
-    "${XBB_FOLDER}/bin/7za" --help
-  )
+      # Override the hard-coded gcc & g++.
+      sed -i -e "s|CXX=g++.*|CXX=${CXX}|" makefile.machine
+      sed -i -e "s|CC=gcc.*|CC=${CC}|" makefile.machine
 
-  hash -r
+      # test_7z fails while loading the library, 7z may not work properly.
+      make all3 test test_7zr
+
+      ls -lL bin
+
+      # Override the hard-coded '/usr/local'.
+      sed -i -e "s|DEST_HOME=/usr/local|DEST_HOME=${INSTALL_FOLDER_PATH}|" install.sh
+
+      bash install.sh
+    )
+
+    (
+      xbb_activate_installed_bin
+
+      echo
+      "${XBB_FOLDER}/bin/7za" --help
+      echo
+      "${XBB_FOLDER}/bin/7z" --help
+    )
+
+    hash -r
+
+    touch "${p7zip_stamp_file_path}"
+
+  else
+    echo "Component p7zip already installed."
+  fi
 }
 
 # -----------------------------------------------------------------------------

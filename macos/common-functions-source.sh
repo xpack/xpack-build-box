@@ -7,52 +7,200 @@
 # for any purpose is hereby granted, under the terms of the MIT license.
 # -----------------------------------------------------------------------------
 
+function prepare_xbb_env()
+{
+  DOWNLOAD_FOLDER_PATH="${HOME}/Library/Caches/XBB"
+
+  BUILD_FOLDER_PATH="${WORK_FOLDER_PATH}/build"
+  LIBS_BUILD_FOLDER_PATH="${WORK_FOLDER_PATH}/build/libs"
+  SOURCES_FOLDER_PATH="${WORK_FOLDER_PATH}/sources"
+  STAMPS_FOLDER_PATH="${WORK_FOLDER_PATH}/stamps"
+  LOGS_FOLDER_PATH="${WORK_FOLDER_PATH}/logs"
+
+  INSTALL_FOLDER_PATH="${XBB_FOLDER}"
+
+  # ---------------------------------------------------------------------------
+
+  mkdir -p "${INSTALL_FOLDER_PATH}"
+
+  mkdir -p "${DOWNLOAD_FOLDER_PATH}"
+  mkdir -p "${BUILD_FOLDER_PATH}"
+  mkdir -p "${LIBS_BUILD_FOLDER_PATH}"
+  mkdir -p "${SOURCES_FOLDER_PATH}"
+  mkdir -p "${STAMPS_FOLDER_PATH}"
+  mkdir -p "${LOGS_FOLDER_PATH}"
+
+  mkdir -p "${INSTALL_FOLDER_PATH}/bin"
+  mkdir -p "${INSTALL_FOLDER_PATH}/include"
+  mkdir -p "${INSTALL_FOLDER_PATH}/lib"
+
+
+  # ---------------------------------------------------------------------------
+
+  JOBS=${JOBS:-""}
+
+  XBB_CPPFLAGS=""
+
+  XBB_CFLAGS="-pipe"
+  XBB_CXXFLAGS="-pipe"
+
+  XBB_LDFLAGS=""
+  XBB_LDFLAGS_LIB="${XBB_LDFLAGS}"
+  XBB_LDFLAGS_APP="${XBB_LDFLAGS}"
+  XBB_LDFLAGS_APP_STATIC="${XBB_LDFLAGS_APP}"
+
+  # ---------------------------------------------------------------------------
+
+  macos_version=$(defaults read loginwindow SystemVersionStampAsString)
+  xcode_version=$(xcodebuild -version | grep Xcode | sed -e 's/Xcode //')
+  xclt_version=$(xcode-select --version | sed -e 's/xcode-select version \([0-9]*\)\./\1/')
+
+  # ---------------------------------------------------------------------------
+
+  install -m 755 -c "$(dirname "${script_folder_path}")/scripts/pkg-config-verbose" "${INSTALL_FOLDER_PATH}/bin/pkg-config-verbose" 
+
+  PKG_CONFIG="${INSTALL_FOLDER_PATH}/bin/pkg-config-verbose"
+
+  echo "${XBB_VERSION}" >  "${INSTALL_FOLDER_PATH}/VERSION"
+
+  # ---------------------------------------------------------------------------
+
+  PATH=${PATH:-""}
+
+  PKG_CONFIG_PATH=${PKG_CONFIG_PATH:-":"}
+
+  # Prevent pkg-config to search the system folders (configured in the
+  # pkg-config at build time).
+  PKG_CONFIG_LIBDIR=${PKG_CONFIG_LIBDIR:-":"}
+
+  # ---------------------------------------------------------------------------
+
+  export XBB_CPPFLAGS
+  export XBB_CFLAGS
+  export XBB_CXXFLAGS
+  export XBB_LDFLAGS
+  export XBB_LDFLAGS_LIB
+  export XBB_LDFLAGS_APP
+  export XBB_LDFLAGS_APP_STATIC
+
+  export PATH
+  export PKG_CONFIG_PATH
+  export PKG_CONFIG_LIBDIR
+  export PKG_CONFIG
+
+  export CC
+  export CXX
+
+  export SHELL="/bin/bash"
+  export CONFIG_SHELL="/bin/bash"
+}
+
 function create_xbb_source()
 {
   echo
-  echo "Creating ${XBB_FOLDER}/xbb-source.sh..."
+  echo "Creating ${INSTALL_FOLDER_PATH}/xbb-source.sh..."
   cat <<'__EOF__' > "${INSTALL_FOLDER_PATH}/xbb-source.sh"
+# -----------------------------------------------------------------------------
+# This file is part of the xPack distribution.
+#   (http://xpack.github.io)
+# Copyright (c) 2019 Liviu Ionescu.
+#
+# Permission to use, copy, modify, and/or distribute this software 
+# for any purpose is hereby granted, under the terms of the MIT license.
+# -----------------------------------------------------------------------------
 
-export XBB_FOLDER="${HOME}/opt/xbb"
-export TEXLIVE_FOLDER="${HOME}"/opt/texlive
+export TEXLIVE_FOLDER="${HOME}/opt/texlive"
+__EOF__
+# The above marker must start in the first column.
 
-# Allow binaries from XBB to be found before all other.
-# Includes and pkg_config should be enabled only when needed.
+  if [ "${IS_BOOTSTRAP}" == "y" ]
+  then
+    echo "export XBB_BOOTSTRAP_FOLDER=\"\${HOME}/opt/$(basename "${XBB_FOLDER}")\"" >> "${INSTALL_FOLDER_PATH}/xbb-source.sh"
+  else
+    echo "export XBB_FOLDER=\"\${HOME}/opt/$(basename "${XBB_FOLDER}")\"" >> "${INSTALL_FOLDER_PATH}/xbb-source.sh"
+  fi
+
+  echo "export XBB_VERSION=\"${XBB_VERSION}\"" >> "${INSTALL_FOLDER_PATH}/xbb-source.sh"
+
+  if [ "${IS_BOOTSTRAP}" == "y" ]
+  then
+
+    # Note: __EOF__ is quoted to prevent substitutions here.
+    cat <<'__EOF__' >> "${INSTALL_FOLDER_PATH}/xbb-source.sh"
+
+# Adjust PATH to prefer the XBB bootstrap binaries.
+function xbb_activate_bootstrap()
+{
+  PATH="${XBB_BOOTSTRAP_FOLDER}/bin:${PATH}"
+
+  export PATH
+}
+__EOF__
+# The above marker must start in the first column.
+
+  else
+
+    # Note: __EOF__ is quoted to prevent substitutions here.
+    cat <<'__EOF__' >> "${INSTALL_FOLDER_PATH}/xbb-source.sh"
+
+# Adjust PATH to prefer the XBB binaries.
 function xbb_activate()
 {
-  PATH=${PATH:-""}
+  PATH="${XBB_FOLDER}/bin:${PATH}"
 
+  export PATH
+}
+__EOF__
+# The above marker must start in the first column.
+
+  fi
+
+  # Note: __EOF__ is quoted to prevent substitutions here.
+  cat <<'__EOF__' >> "${INSTALL_FOLDER_PATH}/xbb-source.sh"
+
+# Add TeX to PATH.
+function xbb_activate_tex()
+{
   PATH="${TEXLIVE_FOLDER}/bin/$(uname -m)-darwin:${PATH}"
 
-  export PATH="${XBB_FOLDER}/bin:${PATH}"
-}
-
-# Allow for pkg_config files to be found before all other.
-function xbb_activate_pkgconfig()
-{
-  export PKG_CONFIG_PATH="${XBB_FOLDER}/lib/pkgconfig:${PKG_CONFIG_PATH}"
-
-  export PKG_CONFIG=pkg-config-verbose
-}
-
-# Add the XBB include folders to the preprocessor defs.
-function xbb_activate_includes()
-{
-  EXTRA_CPPFLAGS=${EXTRA_CPPFLAGS:-""}
-
-  export EXTRA_CPPFLAGS="-I${XBB_FOLDER}/include ${EXTRA_CPPFLAGS}"
-}
-
-# Make the build use the XBB libs & includes.
-function xbb_activate_dev()
-{
-  xbb_activate_pkgconfig
-  xbb_activate_includes
+  export PATH
 }
 
 __EOF__
 # The above marker must start in the first column.
+}
 
+# -----------------------------------------------------------------------------
+
+# For the XBB builds, add the freshly built binaries.
+function xbb_activate_installed_bin()
+{
+  # Add the XBB bin to the PATH.
+  PATH="${INSTALL_FOLDER_PATH}/bin:${PATH}"
+
+  export PATH
+}
+
+# For the XBB builds, add the freshly built headrs and libraries.
+function xbb_activate_installed_dev()
+{
+  # Add XBB include in front of XBB_CPPFLAGS.
+  XBB_CPPFLAGS="-I${INSTALL_FOLDER_PATH}/include ${XBB_CPPFLAGS}"
+
+  # Add XBB lib in front of XBB_LDFLAGS.
+  XBB_LDFLAGS="-L${INSTALL_FOLDER_PATH}/lib ${XBB_LDFLAGS}"
+  XBB_LDFLAGS_LIB="-L${INSTALL_FOLDER_PATH}/lib ${XBB_LDFLAGS_LIB}"
+  XBB_LDFLAGS_APP="-L${INSTALL_FOLDER_PATH}/lib ${XBB_LDFLAGS_APP}"
+  XBB_LDFLAGS_APP_STATIC="-L${INSTALL_FOLDER_PATH}/lib ${XBB_LDFLAGS_APP_STATIC}"
+
+  # Add XBB lib in front of PKG_CONFIG_PATH.
+  PKG_CONFIG_PATH="${INSTALL_FOLDER_PATH}/lib/pkgconfig:${PKG_CONFIG_PATH}"
+
+  export XBB_CPPFLAGS
+  export XBB_LDFLAGS
+  export XBB_LDFLAGS_LIB
+  export XBB_LDFLAGS_APP
+  export XBB_LDFLAGS_APP_STATIC
 }
 
 # -----------------------------------------------------------------------------
