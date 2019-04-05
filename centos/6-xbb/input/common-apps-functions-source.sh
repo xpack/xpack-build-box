@@ -2298,8 +2298,8 @@ function do_p7zip()
     export LDFLAGS="${XBB_LDFLAGS_APP}"
 
     # Override the hard-coded gcc & g++.
-    sed -i -e "s|CXX=g++|CXX=${CXX}|" makefile.machine
-    sed -i -e "s|CC=gcc|CC=${CC}|" makefile.machine
+    sed -i -e "s|CXX=g++.*|CXX=${CXX}|" makefile.machine
+    sed -i -e "s|CC=gcc.*|CC=${CC}|" makefile.machine
 
     # make test test_7z V=1
     make all_test V=1
