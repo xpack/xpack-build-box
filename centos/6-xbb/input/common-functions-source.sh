@@ -64,6 +64,8 @@ function prepare_xbb_env()
   CC="gcc-7bs"
   CXX="g++-7bs"
 
+  GCC_SUFFIX="-7"
+
   PKG_CONFIG="${XBB_BOOTSTRAP_FOLDER}/bin/pkg-config-verbose"
 
   # Leave an explicit file with the version.
