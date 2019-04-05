@@ -113,6 +113,9 @@ function prepare_xbb_env()
 
   export CC
   export CXX
+
+  export SHELL="/bin/bash"
+  export CONFIG_SHELL="/bin/bash"
 }
 
 function create_xbb_source()
