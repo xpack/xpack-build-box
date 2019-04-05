@@ -41,14 +41,16 @@ script_folder_name="$(basename "${script_folder_path}")"
 # =============================================================================
 
 # Script to build a subsequent version of a Docker image with the 
-# xPack Build Box (xbb).
+# xPack Build Box (XBB).
 
-# To activate the new build environment, use:
-#
-#   $ source /opt/xbb/xbb-source.sh
-#   $ xbb_activate
+# -----------------------------------------------------------------------------
 
 XBB_VERSION="2.1"
+echo
+echo "centOS XBB v${XBB_VERSION} script started..."
+
+# -----------------------------------------------------------------------------
+
 XBB_INPUT_FOLDER="/xbb-input"
 source "${XBB_INPUT_FOLDER}/common-functions-source.sh"
 source "${XBB_INPUT_FOLDER}/common-libs-functions-source.sh"
