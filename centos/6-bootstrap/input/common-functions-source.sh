@@ -168,9 +168,9 @@ xbb_activate_bootstrap()
   export LD_LIBRARY_PATH
 }
 
+# Add TeX to PATH.
 function xbb_activate_tex()
 {
-  # Add TeX to PATH.
   if [ -d "/opt/texlive/bin/x86_64-linux" ]
   then
     PATH="/opt/texlive/bin/x86_64-linux:${PATH}"
@@ -178,6 +178,8 @@ function xbb_activate_tex()
   then
     PATH="/opt/texlive/bin/i386-linux:${PATH}"
   fi
+
+  export PATH
 }
 
 __EOF__
