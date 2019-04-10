@@ -22,7 +22,6 @@ function do_gcc()
   local gcc_folder_name="gcc-${gcc_version}"
   local gcc_archive="${gcc_folder_name}.tar.xz"
   local gcc_url="https://ftp.gnu.org/gnu/gcc/gcc-${gcc_version}/${gcc_archive}"
-  local gcc_branding="xPack Build Box Bootstrap GCC\x2C 64-bit"
 
   local gcc_stamp_file_path="${STAMPS_FOLDER_PATH}/stamp-gcc-${gcc_version}-installed"
   if [ ! -f "${gcc_stamp_file_path}" -o ! -d "${BUILD_FOLDER_PATH}/${gcc_folder_name}" ]
@@ -69,8 +68,8 @@ function do_gcc()
 
           bash ${DEBUG} "${SOURCES_FOLDER_PATH}/${gcc_folder_name}/configure" \
             --prefix="${INSTALL_FOLDER_PATH}" \
-            --with-pkgversion="${gcc_branding}" \
             --program-suffix="${XBB_GCC_SUFFIX}" \
+            --with-pkgversion="${XBB_GCC_BRANDING}" \
             --with-native-system-header-dir="/usr/include" \
             --with-sysroot="${sdk_path}" \
             \
