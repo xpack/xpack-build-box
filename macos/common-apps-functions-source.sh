@@ -1139,6 +1139,11 @@ function do_libtool()
         # Build.
         make -j ${JOBS}
         make install-strip
+
+        echo
+        echo "Linking glibtool..."
+        cd "${INSTALL_FOLDER_PATH}/bin"
+        ln -s -v libtool glibtool
       ) 2>&1 | tee "${LOGS_FOLDER_PATH}/make-libtool-output.txt"
     )
 
