@@ -69,8 +69,8 @@ function do_gcc()
 
           bash ${DEBUG} "${SOURCES_FOLDER_PATH}/${gcc_folder_name}/configure" \
             --prefix="${INSTALL_FOLDER_PATH}" \
-            --program-suffix="${GCC_SUFFIX}" \
             --with-pkgversion="${gcc_branding}" \
+            --program-suffix="${XBB_GCC_SUFFIX}" \
             --with-native-system-header-dir="/usr/include" \
             --with-sysroot="${sdk_path}" \
             \
@@ -109,9 +109,9 @@ function do_gcc()
       xbb_activate_installed_bin
 
       echo
-      "${INSTALL_FOLDER_PATH}/bin/g++${GCC_SUFFIX}" --version
-      "${INSTALL_FOLDER_PATH}/bin/g++${GCC_SUFFIX}" -dumpmachine
-      "${INSTALL_FOLDER_PATH}/bin/g++${GCC_SUFFIX}" -dumpspecs | wc -l
+      "${INSTALL_FOLDER_PATH}/bin/g++${XBB_GCC_SUFFIX}" --version
+      "${INSTALL_FOLDER_PATH}/bin/g++${XBB_GCC_SUFFIX}" -dumpmachine
+      "${INSTALL_FOLDER_PATH}/bin/g++${XBB_GCC_SUFFIX}" -dumpspecs | wc -l
 
       mkdir -p "${HOME}"/tmp
       cd "${HOME}"/tmp
@@ -130,7 +130,7 @@ __EOF__
       if true
       then
 
-        "${INSTALL_FOLDER_PATH}/bin/g++${GCC_SUFFIX}" hello.cpp -o hello
+        "${INSTALL_FOLDER_PATH}/bin/g++${XBB_GCC_SUFFIX}" hello.cpp -o hello
 
         if [ "x$(./hello)x" != "xHellox" ]
         then

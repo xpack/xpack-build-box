@@ -78,7 +78,7 @@ xbb_activate()
 # -----------------------------------------------------------------------------
 
 # To differentiate the binaries from the XBB ones which use `-7`.
-GCC_SUFFIX="-7bs"
+XBB_GCC_SUFFIX="-7bs"
 
 # =============================================================================
 
