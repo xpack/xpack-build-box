@@ -73,7 +73,7 @@ function do_gcc()
             --with-native-system-header-dir="/usr/include" \
             --with-sysroot="${sdk_path}" \
             \
-            --enable-languages=c,c++ \
+            --enable-languages=c,c++,objc,obj-c++ \
             --enable-checking=release \
             --enable-static \
             --enable-threads=posix \
