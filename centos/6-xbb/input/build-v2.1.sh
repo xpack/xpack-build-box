@@ -88,6 +88,7 @@ mkdir -p "${XBB_FOLDER}/bin"
 
 # -----------------------------------------------------------------------------
 
+XBB_GCC_BRANDING="xPack Build Box GCC\x2C ${BITS}-bit"
 XBB_GCC_SUFFIX="-7"
 
 if true
