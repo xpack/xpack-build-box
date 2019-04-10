@@ -106,7 +106,6 @@ function do_native_gcc()
   local XBB_GCC_FOLDER="gcc-${XBB_GCC_VERSION}"
   local XBB_GCC_ARCHIVE="${XBB_GCC_FOLDER}.tar.xz"
   local XBB_GCC_URL="https://ftp.gnu.org/gnu/gcc/gcc-${XBB_GCC_VERSION}/${XBB_GCC_ARCHIVE}"
-  local XBB_GCC_BRANDING="xPack Build Box Bootstrap GCC\x2C ${BITS}-bit"
 
   # Requires gmp, mpfr, mpc, isl.
   echo

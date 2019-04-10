@@ -86,6 +86,8 @@ g++ --version
 
 # -----------------------------------------------------------------------------
 
+XBB_GCC_BRANDING="xPack Build Box Bootstrap GCC\x2C ${BITS}-bit"
+
 if true
 then
   # New zlib, it is used in most of the tools.
