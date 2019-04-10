@@ -243,6 +243,8 @@ function xbb_activate_installed_dev()
   export XBB_LDFLAGS_LIB
   export XBB_LDFLAGS_APP
   export XBB_LDFLAGS_APP_STATIC
+
+  export PKG_CONFIG_PATH
   export LD_LIBRARY_PATH
 }
 
