@@ -197,10 +197,13 @@ function xbb_activate_installed_dev()
   PKG_CONFIG_PATH="${INSTALL_FOLDER_PATH}/lib/pkgconfig:${PKG_CONFIG_PATH}"
 
   export XBB_CPPFLAGS
+
   export XBB_LDFLAGS
   export XBB_LDFLAGS_LIB
   export XBB_LDFLAGS_APP
   export XBB_LDFLAGS_APP_STATIC
+
+  export PKG_CONFIG_PATH
 }
 
 # -----------------------------------------------------------------------------
