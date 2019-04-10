@@ -87,6 +87,7 @@ g++ --version
 # -----------------------------------------------------------------------------
 
 XBB_GCC_BRANDING="xPack Build Box Bootstrap GCC\x2C ${BITS}-bit"
+XBB_GCC_SUFFIX="-7bs"
 
 if true
 then
@@ -149,8 +150,8 @@ then
 fi
 
 # Switch to the newly compiled GCC.
-export CC="gcc${GCC_SUFFIX}"
-export CXX="g++${GCC_SUFFIX}"
+export CC="gcc${XBB_GCC_SUFFIX}"
+export CXX="g++${XBB_GCC_SUFFIX}"
 
 (
   xbb_activate_installed_bin

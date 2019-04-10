@@ -48,7 +48,6 @@ function prepare_xbb_env()
   XBB_LDFLAGS_APP_STATIC="${XBB_LDFLAGS_APP} -static -static-libgcc"
 
   BUILD="${UNAME_ARCH}-linux-gnu"
-  GCC_SUFFIX="-7bs"
 
   # Make all tools choose gcc, not the old cc.
   CC="gcc"
