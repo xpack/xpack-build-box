@@ -115,7 +115,7 @@ function do_native_gcc()
     bash "${XBB_BUILD_FOLDER}/${XBB_GCC_FOLDER_NAME}/configure" \
       --prefix="${XBB_FOLDER}" \
       --build="${BUILD}" \
-      --program-suffix="${GCC_SUFFIX}" \
+      --program-suffix="${XBB_GCC_SUFFIX}" \
       --with-pkgversion="${XBB_GCC_BRANDING}" \
       --enable-languages=c,c++ \
       --enable-static \
@@ -147,7 +147,7 @@ function do_native_gcc()
   (
     xbb_activate_installed_bin
 
-    "${XBB_FOLDER}/bin/g++${GCC_SUFFIX}" --version
+    "${XBB_FOLDER}/bin/g++${XBB_GCC_SUFFIX}" --version
 
     mkdir -p "${HOME}/tmp"
     cd "${HOME}/tmp"
@@ -166,7 +166,7 @@ __EOF__
     if true
     then
 
-      "${XBB_FOLDER}/bin/g++${GCC_SUFFIX}" hello.cpp -o hello
+      "${XBB_FOLDER}/bin/g++${XBB_GCC_SUFFIX}" hello.cpp -o hello
       "${XBB_FOLDER}/bin/readelf" -d hello
 
       if [ "x$(./hello)x" != "xHellox" ]
