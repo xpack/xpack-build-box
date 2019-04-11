@@ -47,7 +47,7 @@ script_folder_name="$(basename "${script_folder_path}")"
 
 XBB_VERSION="2.1"
 echo
-echo "macOS XBB v${XBB_VERSION} script started..."
+echo "macOS XBB v${XBB_VERSION} build script started..."
 
 # -----------------------------------------------------------------------------
 
