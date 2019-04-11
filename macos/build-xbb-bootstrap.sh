@@ -80,7 +80,7 @@ xbb_activate()
 
 # To differentiate the binaries from the XBB ones which use `-7`.
 XBB_GCC_SUFFIX="-7bs"
-XBB_GCC_BRANDING="xPack Build Box Bootstrap GCC\x2C ${BITS}-bits"
+XBB_GCC_BRANDING="xPack Build Box Bootstrap GCC\x2C 64-bit"
 
 # =============================================================================
 

@@ -92,7 +92,7 @@ xbb_activate()
 # -----------------------------------------------------------------------------
 
 XBB_GCC_SUFFIX="-7"
-XBB_GCC_BRANDING="xPack Build Box GCC\x2C ${BITS}-bits"
+XBB_GCC_BRANDING="xPack Build Box GCC\x2C 64-bit"
 
 # =============================================================================
 
