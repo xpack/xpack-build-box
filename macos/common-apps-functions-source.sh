@@ -330,7 +330,9 @@ function do_curl()
         echo "Running curl make..."
 
         # Build.
-        make -j ${JOBS}
+        # Parallel builds fail
+        # make -j ${JOBS}
+        make
         make install
 
         strip -S "${INSTALL_FOLDER_PATH}/bin/curl"
@@ -488,7 +490,8 @@ function do_tar()
         echo "Running tar make..."
 
         # Build.
-        make -j ${JOBS}
+        # make -j ${JOBS}
+        make
         make install-strip
 
         echo
@@ -1218,7 +1221,8 @@ function do_gettext()
         echo "Running gettext make..."
 
         # Build.
-        make -j ${JOBS}
+        # make -j ${JOBS}
+        make
         make install-strip
       ) 2>&1 | tee "${LOGS_FOLDER_PATH}/make-gettext-output.txt"
     )
@@ -1450,7 +1454,8 @@ function do_bison()
         echo "Running bison make..."
 
         # Build.
-        make -j ${JOBS}
+        # make -j ${JOBS}
+        make
         make install-strip
       ) 2>&1 | tee "${LOGS_FOLDER_PATH}/make-bison-output.txt"
     )
@@ -1707,7 +1712,8 @@ function do_wget()
         echo "Running wget make..."
 
         # Build.
-        make -j ${JOBS}
+        # make -j ${JOBS}
+        make 
         make install-strip
       ) 2>&1 | tee "${LOGS_FOLDER_PATH}/make-wget-output.txt"
     )
@@ -1884,7 +1890,9 @@ function do_cmake()
         echo "Running cmake make..."
 
         # Build.
-        make -j ${JOBS}
+        # Parallel builds fail.
+        # make -j ${JOBS}
+        make
         # make install-strip
         make install
 
