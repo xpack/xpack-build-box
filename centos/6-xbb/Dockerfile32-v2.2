@@ -1,0 +1,10 @@
+FROM ilegeul/centos32:6-xbb-v2.1
+LABEL maintainer="Liviu Ionescu <ilg@livius.net>"
+ENTRYPOINT ["linux32"]
+WORKDIR /root
+
+ADD input /xbb-input
+RUN linux32 bash -x /xbb-input/build-v2.2.sh
+
+CMD ["/bin/bash"]
+
