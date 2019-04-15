@@ -44,6 +44,11 @@ function prepare_xbb_env()
   fi
 
   XBB_CPPFLAGS=""
+  if [ "${BITS}" == "32" ]
+  then
+    # To avoid "stat: Value too large for defined data type".
+    XBB_CPPFLAGS+=" -D_FILE_OFFSET_BITS=64"
+  fi
 
   XBB_CFLAGS="-O2 -ffunction-sections -fdata-sections -m${BITS} -pipe"
   XBB_CXXFLAGS="-O2 -ffunction-sections -fdata-sections -m${BITS} -pipe"
