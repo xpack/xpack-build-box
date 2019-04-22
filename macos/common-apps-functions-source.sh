@@ -1147,6 +1147,7 @@ function do_libtool()
         echo "Linking glibtool..."
         cd "${INSTALL_FOLDER_PATH}/bin"
         ln -s -v libtool glibtool
+        ln -s -v libtoolize glibtoolize
       ) 2>&1 | tee "${LOGS_FOLDER_PATH}/make-libtool-output.txt"
     )
 
