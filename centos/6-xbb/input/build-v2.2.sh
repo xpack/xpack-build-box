@@ -88,7 +88,10 @@ source "${XBB_BOOTSTRAP_FOLDER}/xbb-source.sh"
 
 # -----------------------------------------------------------------------------
 
-# TODO: add functions here.
+# Required by libSDL, without it QEMU does not start in graphical mode.
+# yum provides '*/X11/extensions/Xext.h'
+# yum provides '*/GL/gl.h'
+yum install -y libX11-devel libXext-devel mesa-libGL-devel
 
 # -----------------------------------------------------------------------------
 

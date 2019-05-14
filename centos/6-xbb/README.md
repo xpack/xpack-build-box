@@ -61,6 +61,11 @@ $ caffeinate docker build --tag "ilegeul/centos:6-xbb-v2.1" -f Dockerfile-v2.1 .
 $ caffeinate docker build --tag "ilegeul/centos32:6-xbb-v2.1" -f Dockerfile32-v2.1 .
 ```
 
+```console
+$ caffeinate docker build --tag "ilegeul/centos:6-xbb-v2.2" -f Dockerfile-v2.2 .
+$ caffeinate docker build --tag "ilegeul/centos32:6-xbb-v2.2" -f Dockerfile32-v2.2 .
+```
+
 #### Test
 
 To test the image:
@@ -87,6 +92,11 @@ $ docker push "ilegeul/centos32:6-xbb-v1"
 ```console
 $ docker push "ilegeul/centos:6-xbb-v2.1"
 $ docker push "ilegeul/centos32:6-xbb-v2.1"
+```
+
+```console
+$ docker push "ilegeul/centos:6-xbb-v2.2"
+$ docker push "ilegeul/centos32:6-xbb-v2.2"
 ```
 
 ### Credits

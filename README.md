@@ -31,8 +31,8 @@ Generally, xPack binaries are available for the following platforms:
 For a repetitive and controllable build process, the Windows and GNU/Linux 
 binaries are built using two Docker images (32/64-bit).
 
-- ilegeul/centos:6-xbb-v1
-- ilegeul/centos32:6-xbb-v1
+- ilegeul/centos:6-xbb-v2.2
+- ilegeul/centos32:6-xbb-v2.2
 
 The images are based on CentOS 6 (glibc 2.12), and the GNU/Linux binaries 
 should run on most modern distributions.
