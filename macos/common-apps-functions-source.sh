@@ -66,6 +66,17 @@ function do_gcc()
 
           bash "${SOURCES_FOLDER_PATH}/${gcc_folder_name}/configure" --help
 
+          # The Linux build also uses:
+          # --enable-__cxa_atexit \
+          # --enable-install-libiberty \
+          # --enable-libmpx \
+          # --disable-libstdcxx-pch \
+          # --enable-gnu-unique-object \
+          # --enable-linker-build-id \
+          # --enable-gnu-indirect-function \
+          # --enable-clocale=gnu \
+          # --disable-libssp \
+
           bash ${DEBUG} "${SOURCES_FOLDER_PATH}/${gcc_folder_name}/configure" \
             --prefix="${INSTALL_FOLDER_PATH}" \
             --program-suffix="${XBB_GCC_SUFFIX}" \
@@ -82,6 +93,8 @@ function do_gcc()
             --disable-werror \
             --disable-nls \
             --disable-bootstrap \
+            \
+            --disable-libunwind-exceptions \
             \
             --with-gmp="${INSTALL_FOLDER_PATH}" \
             --with-mpfr="${INSTALL_FOLDER_PATH}" \
