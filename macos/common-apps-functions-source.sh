@@ -625,7 +625,7 @@ function do_pkg_config()
 
   local pkg_config_folder_name="pkg-config-${pkg_config_version}"
   local pkg_config_archive="${pkg_config_folder_name}.tar.gz"
-  local pkg_config_url="https://ftp.gnu.org/gnu/pkg_config/${pkg_config_archive}"
+  local pkg_config_url="https://pkgconfig.freedesktop.org/releases/${pkg_config_archive}"
   # local pkg_config_url="https://github.com/gnu-mcu-eclipse/files/raw/master/libs/${pkg_config_archive}"
 
   local pkg_config_stamp_file_path="${STAMPS_FOLDER_PATH}/stamp-pkg_config-${pkg_config_version}-installed"
