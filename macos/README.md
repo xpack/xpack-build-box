@@ -1,32 +1,35 @@
-
 ## The macOS XBB
 
 ### Overview
 
 When running on macOS, the build scripts cannot use Docker, since there
 are no macOS Docker images; instead,
-a custom set of tools is expected in a specific folder 
-(`${HOME}/opt/xbb`), which includes the same tools as 
+a custom set of tools is expected in a specific folder
+(`${HOME}/opt/xbb`), which includes the same tools as
 packed in the Docker images.
 
-The reason for a separate folder is that, in order to achieve consistent and 
+The reason for a separate folder is that, in order to achieve consistent and
 reproducible results, the tools in the XBB folder must be locked to
-certain versions, and no updates should be performed. 
+certain versions, and no updates should be performed.
 
-To build the macOS XBB, clone the git, run the the bootstrap script and 
+To build the macOS XBB, clone the git, run the the bootstrap script and
 finally run the main XBB build script.
 
 ### Prerequisites
 
 As usual with macOS, the compiler and other development tools are not
 packed in the base system and need to be installed as part of the
-**Xcode Command Line Tools** package, available from Apple.
+**Command Line Tools** package, available from
+[Apple](https://developer.apple.com/downloads/index.action).
+
+Xcode itself is not needed, it is even harmful for the Homebrew builds, 
+and should not be installed.
 
 ### Remove macPorts or Homebrew from the PATH
 
-To avoid unwanted versions of different programs to be inadvertently 
-used during builds, it is highly recommended to remove any additional 
-tools from the system PATH while running the XBB build script or the 
+To avoid unwanted versions of different programs to be inadvertently
+used during builds, it is highly recommended to remove any additional
+tools from the system PATH while running the XBB build script or the
 later application build scripts.
 
 Preferably temporarily set the path to the minimum:
@@ -35,7 +38,7 @@ Preferably temporarily set the path to the minimum:
 $ export PATH=/usr/bin:/bin:/usr/sbin:/sbin
 ```
 
-Note: strict control of the path is a hard requirement and should not 
+Note: strict control of the path is a hard requirement and should not
 be treated lightly; failing to do so will probably result in broken
 builds.
 
@@ -47,22 +50,22 @@ $ git clone --recurse-submodules https://github.com/xpack/xpack-build-box.git \
   "${HOME}/Downloads/xpack-build-box.git"
 ```
 
-Note: the repository uses submodules, and if updated manually, the 
+Note: the repository uses submodules, and if updated manually, the
 submodules must also be updated.
 
 ### Build the XBB bootstrap
 
-For consistent results, the XBB tools are not compiled with the native Apple 
-compiler, but with a GCC 7. This first set of tools is called _the XBB 
+For consistent results, the XBB tools are not compiled with the native Apple
+compiler, but with a GCC 7. This first set of tools is called _the XBB
 bootstrap_.
 
 ```console
 $ caffeinate bash "${HOME}/Downloads/xpack-build-box.git/macos/build-xbb-bootstrap.sh"
 ```
 
-The build process takes quite a while. 
+The build process takes quite a while.
 
-The build is performed in a folder like `${HOME}/Work/darwin-xbb-bootstrap` 
+The build is performed in a folder like `${HOME}/Work/darwin-xbb-bootstrap`
 which can be removed after the build is completed.
 
 The result of this step is a folder in user home (`${HOME}/opt/xbb-bootstrap`).
@@ -80,7 +83,7 @@ $ caffeinate bash "${HOME}/Downloads/xpack-build-box.git/macos/build-xbb.sh"
 
 The build process takes quite a while. 
 
-The build is performed in a folder like `${HOME}/Work/darwin-xbb` 
+The build is performed in a folder like `${HOME}/Work/darwin-xbb`
 which can be removed after the build is completed.
 
 The result of this step is a folder in user home (`${HOME}/opt/xbb`).
@@ -122,8 +125,8 @@ See the parent [`README.md`](../README.md).
 
 ## Install TeX
 
-TeX is used to generate the documentation. For development builds, to 
-speed up things, creating the manuals can be skipped, so this step is 
+TeX is used to generate the documentation. For development builds, to
+speed up things, creating the manuals can be skipped, so this step is
 not mandatory.
 
 ```console
@@ -141,6 +144,18 @@ with new certificates, so it must be helped, by manually downloading
 the required files into `${HOME}/Library/Caches/Homebrew`.
  
 - https://curl.haxx.se/download/curl-7.64.0.tar.bz2
+
+## Xcode 10.[23] problems
+
+These versions include a reference to the C keyword `_Atomic` in `sys/ucred.h`,
+which fails when compiled with C++.
+
+It is not clear if/when Apple will fix it. 
+
+The solution is to patch the application and be sure this header is not included,
+and, if included, `_Atomic` is replaced by `volatile`.
+
+A simple workaround is to revert to Xcode 10.1.
 
 ## Deprecated Homebrew solution
 
@@ -179,11 +194,11 @@ file already fixed.
 #### SIP
 
 Recent systems do not allow changes to system files; to fix this file it is
-necessary to temporarily disable SIP by booting to the 
+necessary to temporarily disable SIP by booting to the
 Recovery System (hold down Apple-R while booting), and issuing
 `csrutil disable` in a terminal.
 
-After fixing the file, be sure you restore the secure SIP setting 
+After fixing the file, be sure you restore the secure SIP setting
 (`csrutil enable`).
 
 ### Prevent auto-update
@@ -223,22 +238,22 @@ The build process takes quite a while.
 The result of this step is a folder in user home (`${HOME}/opt/homebrew/xbb`).
 No files are stored in system locations.
 
-Since Homebrew does not allow to explicitly install a specific version of 
-a package, the workaround is to revert to a specific date which is known 
-to have functional packages. This is done by checking out a specific 
+Since Homebrew does not allow to explicitly install a specific version of
+a package, the workaround is to revert to a specific date which is known
+to have functional packages. This is done by checking out a specific
 commit id from the homebrew-core repository.
 
-Warning: Since `brew` automatically updates itself to the latest version, 
-it is not guaranteed that the build succeeds. This is 
+Warning: Since `brew` automatically updates itself to the latest version,
+it is not guaranteed that the build succeeds. This is
 one more reason why the non Homebrew version of the macOS XBB was preferred.
 
 ### Build a patched GCC 7
 
 This step is required only for building distribution builds on macOS 10.10;
-for native builds on macOS 10.13, like for QEMU, the Homebrew GCC 7 proved 
+for native builds on macOS 10.13, like for QEMU, the Homebrew GCC 7 proved
 to be ok.
 
-The current xPack build scripts are based on GCC 7.2. Unfortunately, 
+The current xPack build scripts are based on GCC 7.2. Unfortunately,
 the standard version provided by Homebrew has a problem, and requires a patch.
 
 To build the patched GCC 7, use the following script:
