@@ -45,15 +45,6 @@ function do_gcc()
       CXXFLAGS="${XBB_CXXFLAGS} -Wno-sign-compare -Wno-varargs -Wno-tautological-compare"
       LDFLAGS="${XBB_LDFLAGS_APP}"
 
-      # Workaround, on Xcode 10.[23] a system header wrongly uses _Atomic in C++, 
-      # and results in:
-      # /usr/include/sys/ucred.h:94:2: error: '_Atomic' does not name a type
-      if [[ "${xcode_version}" =~ 10\.[23] ]]
-      then
-        CPPFLAGS="${CPPFLAGS} -D_Atomic=volatile"
-        CPPFLAGS_FOR_TARGET="${CPPFLAGS_FOR_TARGET} -D_Atomic=volatile"
-      fi
-
       export CPPFLAGS
       export CPPFLAGS_FOR_TARGET
       export CFLAGS
@@ -61,12 +52,18 @@ function do_gcc()
       export LDFLAGS
 
       local sdk_path
-      local print_path = "$(xcode-select -print-path)"
-      if [ -d "${print_path}/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.11.sdk" ]
+      local print_path="$(xcode-select -print-path)"
+      if [ -d "${print_path}/SDKs/MacOSX10.11.sdk" ]
+      then
+        sdk_path="${print_path}/SDKs/MacOSX10.11.sdk"
+      elif [ -d "${print_path}/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.11.sdk" ]
       then
         sdk_path="${print_path}/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.11.sdk"
-      else if [ -d "${print_path}/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk" ]
-        # macOS 10.13, 10.14
+      elif [ -d "${print_path}/SDKs/MacOSX.sdk" ]
+      then
+        sdk_path="${print_path}/SDKs/MacOSX.sdk"
+      elif [ -d "${print_path}/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk" ]
+      then
         sdk_path="${print_path}/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk"
       else
         echo "Cannot find SDK in ${print_path}."
