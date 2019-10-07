@@ -39,22 +39,37 @@ function do_gcc()
       xbb_activate_installed_bin
       xbb_activate_installed_dev
 
-      export CPPFLAGS="${XBB_CPPFLAGS}"
-      export CFLAGS="${XBB_CFLAGS} -Wno-sign-compare -Wno-varargs -Wno-tautological-compare  "
-      export CXXFLAGS="${XBB_CXXFLAGS} -Wno-sign-compare -Wno-varargs -Wno-tautological-compare"
-      export LDFLAGS="${XBB_LDFLAGS_APP}"
+      CPPFLAGS="${XBB_CPPFLAGS}"
+      CPPFLAGS_FOR_TARGET="${XBB_CPPFLAGS}"
+      CFLAGS="${XBB_CFLAGS} -Wno-sign-compare -Wno-varargs -Wno-tautological-compare  "
+      CXXFLAGS="${XBB_CXXFLAGS} -Wno-sign-compare -Wno-varargs -Wno-tautological-compare"
+      LDFLAGS="${XBB_LDFLAGS_APP}"
+
+      # Workaround, on Xcode 10.[23] a system header wrongly uses _Atomic in C++, 
+      # and results in:
+      # /usr/include/sys/ucred.h:94:2: error: '_Atomic' does not name a type
+      if [[ "${xcode_version}" =~ 10\.[23] ]]
+      then
+        CPPFLAGS="${CPPFLAGS} -D_Atomic=volatile"
+        CPPFLAGS_FOR_TARGET="${CPPFLAGS_FOR_TARGET} -D_Atomic=volatile"
+      fi
+
+      export CPPFLAGS
+      export CPPFLAGS_FOR_TARGET
+      export CFLAGS
+      export CXXFLAGS
+      export LDFLAGS
 
       local sdk_path
-      if [ "${xcode_version}" == "7.2.1" ]
+      local print_path = "$(xcode-select -print-path)"
+      if [ -d "${print_path}/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.11.sdk" ]
       then
-        # macOS 10.10
-        sdk_path="$(xcode-select -print-path)/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.11.sdk"
-      elif [ "${xcode_version}" == "10.1" ]
-      then
-        # macOS 10.13
-        sdk_path="$(xcode-select -print-path)/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk"
+        sdk_path="${print_path}/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.11.sdk"
+      else if [ -d "${print_path}/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk" ]
+        # macOS 10.13, 10.14
+        sdk_path="${print_path}/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk"
       else
-        echo "Unsupported Xcode ${xcode_version}; edit the script to add new versions."
+        echo "Cannot find SDK in ${print_path}."
         exit 1
       fi
 
@@ -186,7 +201,6 @@ function do_openssl()
   local openssl_folder_name="openssl-${openssl_version}"
   local openssl_archive="${openssl_folder_name}.tar.gz"
   local openssl_url="https://www.openssl.org/source/${openssl_archive}"
-  # local openssl_url="https://github.com/gnu-mcu-eclipse/files/raw/master/libs/${openssl_archive}"
 
   local openssl_stamp_file_path="${STAMPS_FOLDER_PATH}/stamp-openssl-${openssl_version}-installed"
   if [ ! -f "${openssl_stamp_file_path}" -o ! -d "${BUILD_FOLDER_PATH}/${openssl_folder_name}" ]
@@ -290,7 +304,6 @@ function do_curl()
   local curl_folder_name="curl-${curl_version}"
   local curl_archive="${curl_folder_name}.tar.xz"
   local curl_url="https://curl.haxx.se/download/${curl_archive}"
-  # local curl_url="https://github.com/gnu-mcu-eclipse/files/raw/master/libs/${curl_archive}"
 
   local curl_stamp_file_path="${STAMPS_FOLDER_PATH}/stamp-curl-${curl_version}-installed"
   if [ ! -f "${curl_stamp_file_path}" -o ! -d "${BUILD_FOLDER_PATH}/${curl_folder_name}" ]
@@ -381,7 +394,6 @@ function do_xz()
   local xz_folder_name="xz-${xz_version}"
   local xz_archive="${xz_folder_name}.tar.xz"
   local xz_url="https://tukaani.org/xz/${xz_archive}"
-  # local xz_url="https://github.com/gnu-mcu-eclipse/files/raw/master/libs/${xz_archive}"
 
   local xz_stamp_file_path="${STAMPS_FOLDER_PATH}/stamp-xz-${xz_version}-installed"
   if [ ! -f "${xz_stamp_file_path}" -o ! -d "${BUILD_FOLDER_PATH}/${xz_folder_name}" ]
@@ -1110,7 +1122,6 @@ function do_libtool()
   local libtool_folder_name="libtool-${libtool_version}"
   local libtool_archive="${libtool_folder_name}.tar.xz"
   local libtool_url="http://mirrors.nav.ro/gnu/libtool/${libtool_archive}"
-  # local libtool_url="https://github.com/gnu-mcu-eclipse/files/raw/master/libs/${libtool_archive}"
 
   local libtool_stamp_file_path="${STAMPS_FOLDER_PATH}/stamp-libtool-installed"
   if [ ! -f "${libtool_stamp_file_path}" -o ! -d "${BUILD_FOLDER_PATH}/${libtool_folder_name}" ]
@@ -2107,7 +2118,6 @@ function do_patchelf()
   local patchelf_folder_name="patchelf-${patchelf_version}"
   local patchelf_archive="${patchelf_folder_name}.tar.bz2"
   local patchelf_url="https://nixos.org/releases/patchelf/${patchelf_folder_name}/${patchelf_archive}"
-  # local patchelf_url="https://github.com/gnu-mcu-eclipse/files/raw/master/libs/${patchelf_archive}"
 
   local patchelf_stamp_file_path="${STAMPS_FOLDER_PATH}/stamp-patchelf-${patchelf_version}-installed"
   if [ ! -f "${patchelf_stamp_file_path}" -o ! -d "${BUILD_FOLDER_PATH}/${patchelf_folder_name}" ]
@@ -2184,7 +2194,6 @@ function do_dos2unix()
   local dos2unix_folder_name="dos2unix-${dos2unix_version}"
   local dos2unix_archive="${dos2unix_folder_name}.tar.gz"
   local dos2unix_url="https://waterlan.home.xs4all.nl/dos2unix/${dos2unix_archive}"
-  # local dos2unix_url="https://github.com/gnu-mcu-eclipse/files/raw/master/libs/${dos2unix_archive}"
 
   local dos2unix_stamp_file_path="${STAMPS_FOLDER_PATH}/stamp-dos2unix-${dos2unix_version}-installed"
   if [ ! -f "${dos2unix_stamp_file_path}" -o ! -d "${BUILD_FOLDER_PATH}/${dos2unix_folder_name}" ]
@@ -2247,7 +2256,6 @@ function do_git()
   local git_folder_name="git-${git_version}"
   local git_archive="${git_folder_name}.tar.xz"
   local git_url="https://www.kernel.org/pub/software/scm/git/${git_archive}"
-  # local git_url="https://github.com/gnu-mcu-eclipse/files/raw/master/libs/${git_archive}"
 
   local git_stamp_file_path="${STAMPS_FOLDER_PATH}/stamp-git-${git_version}-installed"
   if [ ! -f "${git_stamp_file_path}" -o ! -d "${BUILD_FOLDER_PATH}/${git_folder_name}" ]
@@ -2331,7 +2339,6 @@ function do_python()
   local python_folder_name="Python-${python_version}"
   local python_archive="${python_folder_name}.tar.xz"
   local python_url="https://www.python.org/ftp/python/${python_version}/${python_archive}"
-  # local python_url="https://github.com/gnu-mcu-eclipse/files/raw/master/libs/${python_archive}"
 
   local python_stamp_file_path="${STAMPS_FOLDER_PATH}/stamp-python-${python_version}-installed"
   if [ ! -f "${python_stamp_file_path}" -o ! -d "${BUILD_FOLDER_PATH}/${python_folder_name}" ]
@@ -2426,7 +2433,6 @@ function do_python3()
   local python3_folder_name="Python-${python3_version}"
   local python3_archive="${python3_folder_name}.tar.xz"
   local python3_url="https://www.python.org/ftp/python/${python3_version}/${python3_archive}"
-  # local python3_url="https://github.com/gnu-mcu-eclipse/files/raw/master/libs/${python3_archive}"
 
   local python3_stamp_file_path="${STAMPS_FOLDER_PATH}/stamp-python3-${python3_version}-installed"
   if [ ! -f "${python3_stamp_file_path}" -o ! -d "${BUILD_FOLDER_PATH}/${python3_folder_name}" ]
@@ -2519,7 +2525,6 @@ function do_scons()
   local scons_folder_name="scons-${scons_version}"
   local scons_archive="${scons_folder_name}.tar.gz"
   local scons_url="https://sourceforge.net/projects/scons/files/scons/${scons_version}/${scons_archive}"
-  # local scons_url="https://github.com/gnu-mcu-eclipse/files/raw/master/libs/${scons_archive}"
 
   local scons_stamp_file_path="${STAMPS_FOLDER_PATH}/stamp-scons-${scons_version}-installed"
   if [ ! -f "${scons_stamp_file_path}" -o ! -d "${BUILD_FOLDER_PATH}/${scons_folder_name}" ]
@@ -2597,7 +2602,6 @@ function do_ninja()
   local ninja_folder_name="ninja-${ninja_version}"
   local ninja_archive="v${ninja_version}.tar.gz"
   local ninja_url="https://github.com/ninja-build/ninja/archive/${ninja_archive}"
-  # local ninja_url="https://github.com/gnu-mcu-eclipse/files/raw/master/libs/${ninja_archive}"
 
   local ninja_stamp_file_path="${STAMPS_FOLDER_PATH}/stamp-ninja-${ninja_version}-installed"
   if [ ! -f "${ninja_stamp_file_path}" -o ! -d "${BUILD_FOLDER_PATH}/${ninja_folder_name}" ]
@@ -2620,6 +2624,11 @@ function do_ninja()
       export CFLAGS="${XBB_CFLAGS}"
       export CXXFLAGS="${XBB_CXXFLAGS}"
       export LDFLAGS="${XBB_LDFLAGS_APP}"
+
+      if [[ "${xcode_version}" =~ 10\.[23] ]]
+      then
+        export CXXFLAGS="${CXXFLAGS} -D_Atomic=volatile"
+      fi
 
       (
         echo
@@ -2693,6 +2702,10 @@ function do_p7zip()
       # Override the hard-coded gcc & g++.
       sed -i -e "s|CXX=g++.*|CXX=${CXX}|" makefile.machine
       sed -i -e "s|CC=gcc.*|CC=${CC}|" makefile.machine
+
+      # Do not override the environment variables, append to them.
+      sed -i -e "s|CFLAGS=|CFLAGS+=|" makefile.glb
+      sed -i -e "s|CXXFLAGS=|CXXFLAGS+=|" makefile.glb
 
       # 7z cannot load library on macOS.
       make test

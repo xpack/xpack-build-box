@@ -184,7 +184,7 @@ do_p7zip "16.02"
 
 echo
 echo "macOS version ${macos_version}"
-echo "Xcode version ${xcode_version}"
+# echo "Xcode version ${xcode_version}"
 echo "XCode Command Line Tools version ${xclt_version}"
 
 echo

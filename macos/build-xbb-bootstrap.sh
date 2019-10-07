@@ -142,7 +142,7 @@ check_binaries
 
 echo
 echo "macOS version ${macos_version}"
-echo "Xcode version ${xcode_version}"
+# echo "Xcode version ${xcode_version}"
 echo "XCode Command Line Tools version ${xclt_version}"
 
 echo

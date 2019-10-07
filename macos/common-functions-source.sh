@@ -9,7 +9,8 @@
 
 function prepare_xbb_env()
 {
-  DOWNLOAD_FOLDER_PATH="${HOME}/Library/Caches/XBB"
+  # DOWNLOAD_FOLDER_PATH="${HOME}/Library/Caches/XBB"
+  DOWNLOAD_FOLDER_PATH="$(dirname "${WORK_FOLDER_PATH}")/cache"
 
   BUILD_FOLDER_PATH="${WORK_FOLDER_PATH}/build"
   LIBS_BUILD_FOLDER_PATH="${WORK_FOLDER_PATH}/build/libs"
@@ -18,6 +19,12 @@ function prepare_xbb_env()
   LOGS_FOLDER_PATH="${WORK_FOLDER_PATH}/logs"
 
   INSTALL_FOLDER_PATH="${XBB_FOLDER}"
+
+  # ---------------------------------------------------------------------------
+
+  macos_version=$(defaults read loginwindow SystemVersionStampAsString)
+  xcode_version="" # $(xcodebuild -version | grep Xcode | sed -e 's/Xcode //')
+  xclt_version=$(xcode-select --version | sed -e 's/xcode-select version \([0-9]*\)\./\1/')
 
   # ---------------------------------------------------------------------------
 
@@ -34,7 +41,6 @@ function prepare_xbb_env()
   mkdir -p "${INSTALL_FOLDER_PATH}/include"
   mkdir -p "${INSTALL_FOLDER_PATH}/lib"
 
-
   # ---------------------------------------------------------------------------
 
   JOBS=${JOBS:-""}
@@ -48,12 +54,6 @@ function prepare_xbb_env()
   XBB_LDFLAGS_LIB="${XBB_LDFLAGS}"
   XBB_LDFLAGS_APP="${XBB_LDFLAGS}"
   XBB_LDFLAGS_APP_STATIC="${XBB_LDFLAGS_APP}"
-
-  # ---------------------------------------------------------------------------
-
-  macos_version=$(defaults read loginwindow SystemVersionStampAsString)
-  xcode_version=$(xcodebuild -version | grep Xcode | sed -e 's/Xcode //')
-  xclt_version=$(xcode-select --version | sed -e 's/xcode-select version \([0-9]*\)\./\1/')
 
   # ---------------------------------------------------------------------------
 
