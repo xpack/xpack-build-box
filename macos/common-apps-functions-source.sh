@@ -51,24 +51,8 @@ function do_gcc()
       export CXXFLAGS
       export LDFLAGS
 
-      local sdk_path
-      local print_path="$(xcode-select -print-path)"
-      if [ -d "${print_path}/SDKs/MacOSX10.11.sdk" ]
-      then
-        sdk_path="${print_path}/SDKs/MacOSX10.11.sdk"
-      elif [ -d "${print_path}/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.11.sdk" ]
-      then
-        sdk_path="${print_path}/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.11.sdk"
-      elif [ -d "${print_path}/SDKs/MacOSX.sdk" ]
-      then
-        sdk_path="${print_path}/SDKs/MacOSX.sdk"
-      elif [ -d "${print_path}/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk" ]
-      then
-        sdk_path="${print_path}/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk"
-      else
-        echo "Cannot find SDK in ${print_path}."
-        exit 1
-      fi
+      # Without Xcode, there is no SDK, use the root.
+      local sdk_path="/"
 
       if [ ! -f "config.status" ]
       then
