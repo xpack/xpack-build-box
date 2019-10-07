@@ -145,14 +145,34 @@ According to the
 [CentOS schedule](https://en.wikipedia.org/wiki/CentOS#End-of-support_schedule),
 version 6 will be supported up to Nov. 2020.
 
-After this date XBB will be updated, probably to CentOS 7.
+After this date XBB will be updated, probably to CentOS 7 or Debian 8.
 
 ## 32-bit support
 
 Existing support for 32-bit builds will be preserved for the moment, 
 but will probably be dropped in one of the future version, possibly
-after the upgrade to CentOS 7.
+after the upgrade to CentOS 7 or Debian 8.
 
 If you still need the 32-bit binaries after 2020, please open an issue 
 in the specific build script repository, and the request will be
 analysed. 
+
+A multi-step approach would be to drop only support for GNU/Linux,
+and keep support for Windows 32, at least while Node.js still supports it.
+
+This would require the mingw-w64 to be compiled with multilib support, and
+the build scripts to be slightly reworked, especially the GCC ones.
+
+## Debian?
+
+A possible alternate solution is Debian 8 Jessie,
+discontinued as of June 17th, 2018, and supported until the end of June 2020. 
+
+It provides GCC 4.9, thus a bootstrap will most probably be needed to
+compile GCC 8.3 and the latest tools.
+
+https://www.debian.org/releases/jessie/
+https://packages.debian.org/jessie/
+https://wiki.debian.org/LTS
+
+
