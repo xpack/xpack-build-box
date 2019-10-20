@@ -23,7 +23,6 @@ function prepare_xbb_env()
   # ---------------------------------------------------------------------------
 
   macos_version=$(defaults read loginwindow SystemVersionStampAsString)
-  xcode_version="" # $(xcodebuild -version | grep Xcode | sed -e 's/Xcode //')
   xclt_version=$(xcode-select --version | sed -e 's/xcode-select version \([0-9]*\)\./\1/')
 
   # ---------------------------------------------------------------------------

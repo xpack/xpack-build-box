@@ -158,10 +158,10 @@ do_texinfo "6.6"
 do_patchelf "0.10"
 do_dos2unix "7.4.0"
 
-# Apple uses 2.5.3, an update is not mandatory.
+# macOS 10.10 uses 2.5.3, an update is not mandatory.
 # do_flex "2.6.4"
 
-# Apple uses 5.18.2, an update is not mandatory.
+# macOS 10.10 uses 5.18.2, an update is not mandatory.
 # do_perl "5.28.1"
 
 do_cmake "3.13.4"
@@ -184,7 +184,6 @@ do_p7zip "16.02"
 
 echo
 echo "macOS version ${macos_version}"
-# echo "Xcode version ${xcode_version}"
 echo "XCode Command Line Tools version ${xclt_version}"
 
 echo

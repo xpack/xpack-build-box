@@ -51,8 +51,24 @@ function do_gcc()
       export CXXFLAGS
       export LDFLAGS
 
-      # Without Xcode, there is no SDK, use the root.
-      local sdk_path="/"
+      local sdk_path=""
+      local print_path="$(xcode-select -print-path)"
+      if [ -d "${print_path}/SDKs/MacOSX.sdk" ]
+      then
+        # Without Xcode, use the SDK that comes with the CLT.
+        sdk_path="${print_path}/SDKs/MacOSX.sdk"
+      elif [ -d "${print_path}/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk" ]
+      then
+        # With Xcode, chose the SDK from the macOS platform.
+        sdk_path="${print_path}/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk"
+      elif [ -d "/usr/include" ]
+      then
+        # Without Xcode, on 10.10 there is no SDK, use the root.
+        sdk_path="/"
+      else
+        echo "Cannot find SDK in ${print_path}."
+        exit 1
+      fi
 
       if [ ! -f "config.status" ]
       then
@@ -2605,11 +2621,6 @@ function do_ninja()
       export CFLAGS="${XBB_CFLAGS}"
       export CXXFLAGS="${XBB_CXXFLAGS}"
       export LDFLAGS="${XBB_LDFLAGS_APP}"
-
-      if [[ "${xcode_version}" =~ 10\.[23] ]]
-      then
-        export CXXFLAGS="${CXXFLAGS} -D_Atomic=volatile"
-      fi
 
       (
         echo

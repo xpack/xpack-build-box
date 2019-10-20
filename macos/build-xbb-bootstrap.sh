@@ -112,12 +112,12 @@ do_patch "2.7.6"
 
 do_bison "3.3.2"
 
-# Apple uses 2.5.3, an update is not mandatory.
+# macOS 10.10 uses 2.5.3, an update is not mandatory.
 # do_flex "2.6.4"
 
 do_make "4.2.1"
 
-# Apple uses 5.18.2, an update is not mandatory.
+# macOS 10.10 uses 5.18.2, an update is not mandatory.
 # do_perl "5.28.1"
 
 do_cmake "3.13.4"
@@ -142,11 +142,10 @@ check_binaries
 
 echo
 echo "macOS version ${macos_version}"
-# echo "Xcode version ${xcode_version}"
 echo "XCode Command Line Tools version ${xclt_version}"
 
 echo
-echo "You may want to 'chmod -R -w \"${INSTALL_FOLDER_PATH}\"'"
+echo "You may want to ' chmod -R -w \"${INSTALL_FOLDER_PATH}\" '"
 
 echo
 echo "macOS XBB Bootstrap v${XBB_VERSION} created in \"${INSTALL_FOLDER_PATH}\""
