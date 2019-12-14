@@ -177,7 +177,7 @@ The base distribution for building the Arm binaries will be Ubuntu 16.04 LTS
 
 ## Distro versions
 
-To better decide whch versions to support, below is a list of exisitng versions.
+To better decide whch versions to support, below is a list of existing versions.
 
 The names are in fact docker image names, and can be used directly to query 
 the `ldd --version`:
