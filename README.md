@@ -24,9 +24,9 @@ Generally, xPack binaries are available for the following platforms:
 
 - Windows 32-bit
 - Windows 64-bit
-- GNU/Linux 32-bit
-- GNU/Linux 64-bit
-- macOS (Intel, 64-bit)
+- GNU/Linux 32-bit (ldd >= 2.13)
+- GNU/Linux 64-bit (ldd >= 2.13)
+- macOS (Intel, 64-bit, >= 10.10)
 
 For a repetitive and controllable build process, the Windows and GNU/Linux
 binaries are built using two Docker images (32/64-bit).
@@ -34,14 +34,14 @@ binaries are built using two Docker images (32/64-bit).
 - ilegeul/centos:6-xbb-v2.2
 - ilegeul/centos32:6-xbb-v2.2
 
-The images are based on CentOS 6 (glibc 2.12), and the GNU/Linux binaries
+The images are based on CentOS 6.9 (ldd 2.12), and the GNU/Linux binaries
 should run on most modern distributions.
 
 The Windows executables are created with mingw-w64 v5.0.4 and the
 mingw-w64 GCC 7.4, available from the same Docker images.
 
 The macOS binaries are generated on a macOS 10.10.5, plus a set of new
-GNU tools, installed in a separate folder. The TeX tools
+GNU tools, installed in a separate folder. The TeX tools (from 2018)
 are also installed in a custom folder.
 
 ## How to use?
@@ -145,37 +145,86 @@ According to the
 [CentOS schedule](https://en.wikipedia.org/wiki/CentOS#End-of-support_schedule),
 version 6 will be supported up to Nov. 2020.
 
-After this date XBB will be updated, probably to CentOS 7.
+However, RHEL releases have a longer
+[life cycle](https://access.redhat.com/support/policy/updates/errata/#Life_Cycle_Dates)
+and RHEL6 end of extended life-cycle support is 2024.
+
+It is still debatable if supporting CentOS/RHEL 6 is it still worth the effort.
+
+However support for RHEL 7 is very important, so the ldd version must be
+2.17 or lower.
 
 ## 32-bit support
 
 Existing support for 32-bit builds will be preserved for the moment,
-but will be dropped in one of the future version; for consistency
+but might be dropped in one of the future version; for consistency
 reasons, it is expected to continue to generate 32-bit binares
 as long as Node.js still supports them via the
 [unofficial builds](https://unofficial-builds.nodejs.org/download/).
 
-If you still need the 32-bit binaries after 2020, please open an issue
-in the specific binary xBack repository, and the request will be
-analysed.
+## Arm binaries
 
-## Debian?
+Support for Arm binaries is underway, and it is planned to be available
+starting early 2020.
 
-While searching for alternate solution to CentOS, the much prefered
-Debian distribution was also considered, with a possible winner as
-Debian 8 Jessie, discontinued as of June 17th, 2018, and supported
-until the end of June 2020.
+The supported architectures will be:
 
-It provides GCC 4.9, thus a bootstrap will most probably be needed to
-compile GCC 8.3 and the latest tools.
+- `arm64` - the ARMv8 64-bit architecture Aarch64
+- `armhl` - the ARMv7 32-bit architecture with hardware float
 
-https://www.debian.org/releases/jessie/
-https://packages.debian.org/jessie/
-https://wiki.debian.org/LTS
+The base distribution for building the Arm binaries will be Ubuntu 16.06 LTS
+(xenial), ldd 2.24.
 
-Unfortunately, binaries created with Debian 8 refer to libc 2.19, not
-available on the legacy RHEL 7 (libc 2.17), which is a major limitation.
+## Distro versions
 
-And, if support for RHEL is to be preserved, its life cycle is quite long:
+To better decide whch versions to support, below is a list of exisitng versions.
 
-https://access.redhat.com/support/policy/updates/errata#Life_Cycle_Dates
+The names are in fact docker image names, and can be used directly to query 
+the `ldd --version`:
+
+```console
+$ docker run -it <image> ldd --version
+```
+
+### [Debian](https://en.wikipedia.org/wiki/Debian_version_history)
+
+- `debian:6` - squeeze - 2011-2016, 2.11.3
+- `debian:7` - wheezy - 2013-2016, 2.13, kernel 3.10
+- `debian:8` - jessie - 2015-2018, 2.19 (too new for centos:7, no official arm64)
+- `debian:9` - stretch - 2017-2020, 2.24 (first with arm64)
+- `debian:10` - buster - 2019-2022, 2.28
+
+### [Ubuntu](https://en.wikipedia.org/wiki/Ubuntu_version_history)
+
+- `ubuntu:10.04` - lucy - 2010-2015, 2.11.1
+- `ubuntu:12.04` - precise - 2012-2019, 2.15 <-- ? possible candidate, older than centos:7
+- `ubuntu:14.04` - trusty - 2014-2022, 2.19  (too new for centos:7)
+- `ubuntu:16.04` - xenial - 2016-2024, 2.23 <-- reference for Arm
+- `ubuntu:18.04` - bionic - 2018-2028, 2.27
+- `ubuntu:20.04` - focal - 2020-2-30, ?
+
+### [RHEL](https://access.redhat.com/support/policy/updates/errata/#Life_Cycle_Dates)
+
+- `registry.access.redhat.com/rhel6` - 2.12
+- `registry.access.redhat.com/rhel7` - 2.17
+
+### [CentOS](https://en.wikipedia.org/wiki/CentOS)
+
+- `centos:6` - 2011-2020, 2.12
+- `centos:7` - 2014-2024, 2.17, kernel 3.10
+- `centos:8` - 2019-2029, 2.28
+
+### Conclusions
+
+To preserve support for RHEL 6, the only reasonable distribution is CentOS 6,
+with all its problems and incompatibilities with modern systems (like the
+issue with gdb-py, running on CentOS/Arch and failing on Debian/Ubuntu).
+
+To preserve support for RHEL 7, **the ldd version must be <= 2.17**.
+
+Apart from CentOS 7, other possible distributions are
+**Debian 7 (2.13)**, the prefered one, and Ubuntu 12 (2.15),
+the second choice.
+
+For Arm binaries, the base distribution will be Ubuntu 16.06 LTS xenial,
+(2.24).
