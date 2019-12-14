@@ -189,17 +189,17 @@ $ docker run -it <image> ldd --version
 ### [Debian](https://en.wikipedia.org/wiki/Debian_version_history)
 
 - `debian:6` - squeeze - 2011-2016, 2.11.3
-- `debian:7` - wheezy - 2013-2016, 2.13, kernel 3.10
-- `debian:8` - jessie - 2015-2018, 2.19 (too new for centos:7, no official arm64)
+- `debian:7` - wheezy - 2013-2016, 2.13, kernel 3.10 <--- prefered candidate
+- `debian:8` - jessie - 2015-2018, 2.19
 - `debian:9` - stretch - 2017-2020, 2.24 (first with arm64)
 - `debian:10` - buster - 2019-2022, 2.28
 
 ### [Ubuntu](https://en.wikipedia.org/wiki/Ubuntu_version_history)
 
 - `ubuntu:10.04` - lucy - 2010-2015, 2.11.1
-- `ubuntu:12.04` - precise - 2012-2019, 2.15 <-- ? possible candidate, older than centos:7
-- `ubuntu:14.04` - trusty - 2014-2022, 2.19  (too new for centos:7)
-- `ubuntu:16.04` - xenial - 2016-2024, 2.23 <-- reference for Arm
+- `ubuntu:12.04` - precise - 2012-2019, 2.15 <--- second choice
+- `ubuntu:14.04` - trusty - 2014-2022, 2.19
+- `ubuntu:16.04` - xenial - 2016-2024, 2.23 <--- reference for Arm
 - `ubuntu:18.04` - bionic - 2018-2028, 2.27
 - `ubuntu:20.04` - focal - 2020-2-30, ?
 
@@ -211,7 +211,7 @@ $ docker run -it <image> ldd --version
 ### [CentOS](https://en.wikipedia.org/wiki/CentOS)
 
 - `centos:6` - 2011-2020, 2.12
-- `centos:7` - 2014-2024, 2.17, kernel 3.10
+- `centos:7` - 2014-2024, 2.17, kernel 3.10 <--- must be supported
 - `centos:8` - 2019-2029, 2.28
 
 ### Conclusions
