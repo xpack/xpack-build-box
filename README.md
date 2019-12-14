@@ -172,7 +172,7 @@ The supported architectures will be:
 - `arm64` - the ARMv8 64-bit architecture Aarch64
 - `armhl` - the ARMv7 32-bit architecture with hardware float
 
-The base distribution for building the Arm binaries will be Ubuntu 16.06 LTS
+The base distribution for building the Arm binaries will be Ubuntu 16.04 LTS
 (xenial), ldd 2.24.
 
 ## Distro versions
@@ -226,5 +226,5 @@ Apart from CentOS 7, other possible distributions are
 **Debian 7 (2.13)**, the prefered one, and Ubuntu 12 (2.15),
 the second choice.
 
-For Arm binaries, the base distribution will be Ubuntu 16.06 LTS xenial,
+For Arm binaries, the base distribution will be Ubuntu 16.04 LTS xenial,
 (2.24).
