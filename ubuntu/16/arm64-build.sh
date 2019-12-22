@@ -38,7 +38,7 @@ source "../../helper/common-functions-source.sh"
 
 # -----------------------------------------------------------------------------
 
-docker_build "arm64" "ubu16 "ilegeul/ubuntu:arm64-16.04"
+docker_build "arm64" "ubu16" "ilegeul/ubuntu:arm64-16.04"
 
 echo 
 echo "Done."

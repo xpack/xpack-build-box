@@ -40,7 +40,7 @@ docker build --tag "ilegeul/ubuntu:arm64-16" -f arm64-Dockerfile .
 
 # -----------------------------------------------------------------------------
 
-docker_build "armhf" "ubu16 "ilegeul/ubuntu:armhf-16.04"
+docker_build "armhf" "ubu16" "ilegeul/ubuntu:armhf-16.04"
 
 echo 
 echo "Done."
