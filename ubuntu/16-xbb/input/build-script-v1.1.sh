@@ -59,11 +59,11 @@ cmake \
 python python3 \
 g++-7 
 
-apt install --yes \
+apt-get install --yes \
 libpython-dev \
 libpython3-dev 
 
-apt install --yes \
+apt-get install --yes \
 texlive \
 texlive-generic-recommended \
 texlive-extra-utils
