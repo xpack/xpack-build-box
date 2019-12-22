@@ -34,6 +34,8 @@ script_folder_name="$(basename "${script_folder_path}")"
 
 # =============================================================================
 
+env
+
 echo "deb http://ports.ubuntu.com xenial-updates main" >"/etc/apt/sources.list"
 
 apt-get update 
