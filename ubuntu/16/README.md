@@ -38,6 +38,8 @@ There are two scripts:
 ```console
 $ bash ~/Downloads/xpack-build-box.git/ubuntu/16/arm64-build.sh
 $ bash ~/Downloads/xpack-build-box.git/ubuntu/16/armhf-build.sh
+
+$ docker images
 ```
 
 ## Test
@@ -46,12 +48,30 @@ The test was performed on a macOS.
 
 ```console
 $ docker run --interactive --tty ilegeul/ubuntu:arm64-16.04
-...
+root@8794a63812ce:/# lsb_release -a
+No LSB modules are available.
+Distributor ID:	Ubuntu
+Description:	Ubuntu 16.04 LTS
+Release:	16.04
+Codename:	xenial
+root@8794a63812ce:/# uname -a
+Linux 8794a63812ce 5.3.0-1014-raspi2 #16-Ubuntu SMP Tue Nov 26 11:18:23 UTC 2019 aarch64 aarch64 aarch64 GNU/Linux
+root@8794a63812ce:/# exit
+exit
 ```
 
 ```console
 $ docker run --interactive --tty ilegeul/ubuntu:armhf-16.04
-...
+root@8c51e141d37f:/# lsb_release -a
+No LSB modules are available.
+Distributor ID:	Ubuntu
+Description:	Ubuntu 16.04 LTS
+Release:	16.04
+Codename:	xenial
+root@8c51e141d37f:/# uname -a
+Linux 8c51e141d37f 5.3.0-1014-raspi2 #16-Ubuntu SMP Tue Nov 26 11:18:23 UTC 2019 armv8l armv8l armv8l GNU/Linux
+root@8c51e141d37f:/# exit
+exit
 ```
 
 ## Publish
