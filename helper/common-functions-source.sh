@@ -46,6 +46,7 @@ function docker_build()
   then
     download_rootfs "${archive_name}"
 
+    mkdir -p "input"
     cp "${CACHE_FOLDER_PATH}/${archive_name}" "input"
   fi
 
