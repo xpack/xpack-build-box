@@ -36,8 +36,6 @@ cd "${script_folder_path}"
 
 source "../../helper/common-functions-source.sh"
 
-docker build --tag "ilegeul/ubuntu:arm64-16" -f arm64-Dockerfile .
-
 # -----------------------------------------------------------------------------
 
 docker_build "armhf" "ubu16" "ilegeul/ubuntu:armhf-16.04"
