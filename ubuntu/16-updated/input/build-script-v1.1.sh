@@ -36,5 +36,5 @@ script_folder_name="$(basename "${script_folder_path}")"
 
 echo "deb http://ports.ubuntu.com xenial-updates main" >"/etc/apt/sources.list"
 
-apt update 
-apt --yes upgrade
+apt-get update 
+apt-get upgrade --yes 
