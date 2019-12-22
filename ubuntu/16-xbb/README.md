@@ -7,8 +7,8 @@ There are two scripts:
 - `armhf-build-v1.1.sh` -> `ilegeul/ubuntu:armhf-16.04-xbb-v1.1`
 
 ```console
-$ bash ~/Downloads/xpack-build-box.git/ubuntu/16-updated/arm64-build-v1.1.sh
-$ bash ~/Downloads/xpack-build-box.git/ubuntu/16-updated/armhf-build-v1.1.sh
+$ bash ~/Downloads/xpack-build-box.git/ubuntu/16-xbb/arm64-build-v1.1.sh
+$ bash ~/Downloads/xpack-build-box.git/ubuntu/16-xbb/armhf-build-v1.1.sh
 
 $ docker images
 ```
