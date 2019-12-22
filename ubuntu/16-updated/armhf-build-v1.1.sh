@@ -41,7 +41,7 @@ source "../../helper/common-functions-source.sh"
 # -----------------------------------------------------------------------------
 
 arch="armhf"
-tag="ilegeul/ubuntu:armhf-16.04-updated"
+tag="ilegeul/ubuntu:armhf-16.04-updated-v1.1"
 
 echo 
 echo "Building Docker image..."
