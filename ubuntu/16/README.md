@@ -35,6 +35,11 @@ There are two scripts:
 - `arm64-build.sh` -> `ilegeul/ubuntu:arm64-16.04`
 - `armhf-build.sh` -> `ilegeul/ubuntu:armhf-16.04`
 
+```console
+$ bash ~/Downloads/xpack-build-box.git/ubuntu/16/arm64-build.sh
+$ bash ~/Downloads/xpack-build-box.git/ubuntu/16/armhf-build.sh
+```
+
 ## Test
 
 The test was performed on a macOS.
