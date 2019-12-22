@@ -36,7 +36,6 @@ script_folder_name="$(basename "${script_folder_path}")"
 
 env
 
-apt-get install -y software-properties-common
 add-apt-repository ppa:ubuntu-toolchain-r/test
 apt update
 
