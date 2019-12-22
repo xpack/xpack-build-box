@@ -5,6 +5,7 @@ LABEL docs="https://github.com/xpack/xpack-build-box/tree/master/ubuntu/16/READM
 ENTRYPOINT ["linux32"]
 
 ADD input/armhf-ubu16-rootfs.xz /
+ADD input /input
 RUN DEBUG=-x bash /input/build-script.sh
 
 CMD ["/bin/bash"]

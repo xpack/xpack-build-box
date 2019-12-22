@@ -4,6 +4,7 @@ LABEL repository="https://github.com/xpack/xpack-build-box.git"
 LABEL docs="https://github.com/xpack/xpack-build-box/tree/master/ubuntu/16/README.md"
 
 ADD input/arm64-ubu16-rootfs.xz /
+ADD input /input
 RUN DEBUG=-x bash /input/build-script.sh
 
 CMD ["/bin/bash"]
