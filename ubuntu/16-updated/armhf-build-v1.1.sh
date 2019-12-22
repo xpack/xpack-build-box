@@ -45,7 +45,7 @@ tag="ilegeul/ubuntu:armhf-16.04-updated"
 
 echo 
 echo "Building Docker image..."
-docker build --tag "${tag}" -f "${arch}-Dockerfile" .
+docker build --tag "${tag}" -f "${arch}-Dockerfile-v1.1" .
 
 echo 
 echo "Done."
