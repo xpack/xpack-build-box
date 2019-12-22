@@ -39,7 +39,7 @@ env
 add-apt-repository ppa:ubuntu-toolchain-r/test
 apt update
 
-apt install --yes \
+apt-get install --yes \
 git \
 curl \
 make \
