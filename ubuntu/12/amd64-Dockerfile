@@ -1,0 +1,9 @@
+FROM scratch
+LABEL maintainer="Liviu Ionescu <ilg@livius.net>"
+LABEL repository="https://github.com/xpack/xpack-build-box.git"
+LABEL docs="https://github.com/xpack/xpack-build-box/tree/master/ubuntu/12/README.md"
+
+ADD input/amd64-ubu12-rootfs.xz /
+RUN apt-get update && apt-get -y upgrade
+
+CMD ["/bin/bash"]
