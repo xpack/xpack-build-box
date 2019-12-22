@@ -216,6 +216,15 @@ $ docker run -it <image> ldd --version
 - `centos:7` - 2014-2024, 2.17, kernel 3.10 <--- must be supported
 - `centos:8` - 2019-2029, 2.28
 
+### Maintainer info
+
+```console
+$ rm -rf ~/Downloads/xpack-build-box.git
+$ git clone https://github.com/xpack/xpack-build-box.git \
+  ~/Downloads/xpack-build-box.git
+
+```
+
 ### Conclusions
 
 To preserve support for RHEL 6, the only reasonable distribution is CentOS 6,
