@@ -24,8 +24,10 @@ Generally, xPack binaries are available for the following platforms:
 
 - Windows 32-bit
 - Windows 64-bit
-- GNU/Linux 32-bit (ldd >= 2.13)
-- GNU/Linux 64-bit (ldd >= 2.13)
+- GNU/Linux Intel 32-bit (ldd >= 2.15)
+- GNU/Linux Intel 64-bit (ldd >= 2.15)
+- GNU/Linux Arm 32-bit (ldd >= 2.23)
+- GNU/Linux Arm 64-bit (ldd >= 2.23)
 - macOS (Intel, 64-bit, >= 10.10)
 
 For a repetitive and controllable build process, the Windows and GNU/Linux
