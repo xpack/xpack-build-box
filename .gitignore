@@ -1,1 +1,4 @@
 .vscode
+
+# Archives are no longer checked in, must bedownloaded from the GitHub Releases.
+*.xz
