@@ -4,6 +4,19 @@ CACHE_FOLDER_PATH="${HOME}/Work/cache"
 
 # =============================================================================
 
+function init_input()
+{
+  rm -rf "input"
+  mkdir -p "input"
+
+  if [ -d "container-scripts" ]
+  then
+    cp "container-scripts"/*.sh "input"
+  fi
+}
+
+# =============================================================================
+
 function download()
 {
   local url="$1"
@@ -35,20 +48,16 @@ function download_rootfs()
 
 # =============================================================================
 
-function docker_build()
+function docker_build_from_archive()
 {
   arch="$1"
-  distro_nickname="$2"
+  archive_name="$2"
   tag="$3"
 
-  archive_name="${arch}-${distro_nickname}-rootfs.xz"
-  if [ ! -f "input/${archive_name}" ]
-  then
-    download_rootfs "${archive_name}"
+  download_rootfs "${archive_name}"
 
-    mkdir -p "input"
-    cp "${CACHE_FOLDER_PATH}/${archive_name}" "input"
-  fi
+  # Assume "input" was created by init_input().
+  cp "${CACHE_FOLDER_PATH}/${archive_name}" "input"
 
   echo 
   echo "Building Docker image..."

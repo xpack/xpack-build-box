@@ -40,7 +40,7 @@ source "../../helper/common-functions-source.sh"
 
 # -----------------------------------------------------------------------------
 
-docker_build "armhf" "ubu16" "ilegeul/ubuntu:armhf-16.04"
+docker_build_from_archive "armhf" "armhf-ubu16-rootfs.xz" "ilegeul/ubuntu:armhf-16.04"
 
 echo 
 echo "Done."

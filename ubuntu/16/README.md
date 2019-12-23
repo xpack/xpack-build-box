@@ -22,6 +22,7 @@ $ mkdir -p $HOME/tmp/armhf-ubu16-rootfs
 $ sudo debootstrap --verbose --arch=armhf xenial $HOME/tmp/armhf-ubu16-rootfs http://ports.ubuntu.com/
 $ sudo tar cJvf $HOME/tmp/armhf-ubu16-rootfs.xz -C $HOME/tmp/armhf-ubu16-rootfs .
 ```
+
 The result are two archives that were published at 
 https://github.com/xpack/xpack-build-box/releases/download/rootfs/:
 

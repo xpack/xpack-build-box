@@ -40,7 +40,9 @@ source "../../helper/common-functions-source.sh"
 
 # -----------------------------------------------------------------------------
 
-docker_build "arm64" "ubu16" "ilegeul/ubuntu:arm64-16.04"
+init_input
+
+docker_build_from_archive "arm64" "arm64-ubu16-rootfs.xz" "ilegeul/ubuntu:arm64-16.04"
 
 echo 
 echo "Done."

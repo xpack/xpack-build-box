@@ -40,6 +40,8 @@ source "../../helper/common-functions-source.sh"
 
 # -----------------------------------------------------------------------------
 
+init_input
+
 arch="armhf"
 tag="ilegeul/ubuntu:armhf-16.04-updated-v1.1"
 

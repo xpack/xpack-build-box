@@ -97,3 +97,9 @@ __EOF__
 
 apt-get update 
 apt-get upgrade --yes 
+
+apt-get install --yes time
+
+echo
+uname -a
+lsb_release -a

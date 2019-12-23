@@ -40,6 +40,8 @@ source "../../helper/common-functions-source.sh"
 
 # -----------------------------------------------------------------------------
 
+init_input
+
 arch="arm64"
 tag="ilegeul/ubuntu:arm64-16.04-xbb-v1.1"
 

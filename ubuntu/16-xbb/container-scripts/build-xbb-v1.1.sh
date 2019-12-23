@@ -36,8 +36,11 @@ script_folder_name="$(basename "${script_folder_path}")"
 
 env
 
+apt-get install --yes software-properties-common
+
+# Use this ppa to get GCC 7.x.
 add-apt-repository ppa:ubuntu-toolchain-r/test
-apt update
+apt-get update
 
 apt-get install --yes \
 git \
