@@ -40,6 +40,8 @@ source "../../helper/common-functions-source.sh"
 
 # -----------------------------------------------------------------------------
 
+init_input
+
 docker_build_from_archive "armhf" "armhf-ubu16-rootfs.xz" "ilegeul/ubuntu:armhf-16.04"
 
 echo 
