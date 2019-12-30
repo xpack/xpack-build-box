@@ -66,6 +66,16 @@ apt-get install --yes \
 libpython-dev \
 libpython3-dev 
 
+# For QEMU
+apt-get install --yes \
+libx11-dev \
+libxext-dev \
+mesa-common-dev
+
+# For QEMU & OpenOCD
+apt-get install --yes \
+libudev-dev
+
 apt-get install --yes \
 texlive \
 texlive-generic-recommended \
