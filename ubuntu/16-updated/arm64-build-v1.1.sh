@@ -49,6 +49,8 @@ echo
 echo "Building Docker image..."
 docker build --tag "${tag}" -f "${arch}-Dockerfile-v1.1" .
 
+clean_input
+
 echo 
 echo "Done."
 

@@ -15,6 +15,11 @@ function init_input()
   fi
 }
 
+function clean_input()
+{
+  rm -rf "input"
+}
+
 # =============================================================================
 
 function download()
