@@ -1,4 +1,6 @@
 .vscode
 
-# Archives are no longer checked in, must bedownloaded from the GitHub Releases.
+# Archives are no longer checked in, must be downloaded from the GitHub Releases.
 *.xz
+
+ubuntu/*/input
