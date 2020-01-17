@@ -161,7 +161,7 @@ echo
 echo "You may want to ' chmod -R -w \"${INSTALL_FOLDER_PATH}\" '"
 
 echo
-echo "mcOS XBB Bootstrap v${XBB_VERSION} created in \"${INSTALL_FOLDER_PATH}\""
+echo "macOS XBB Bootstrap v${XBB_VERSION} created in \"${INSTALL_FOLDER_PATH}\""
 
 say done
 

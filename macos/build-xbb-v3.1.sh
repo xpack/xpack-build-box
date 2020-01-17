@@ -202,7 +202,7 @@ echo
 echo "You may want to ' chmod -R -w \"${INSTALL_FOLDER_PATH}\" '"
 
 echo
-echo "${HOST_DISTRO_NAME} XBB v${XBB_VERSION} created in \"${INSTALL_FOLDER_PATH}\""
+echo "macOS XBB v${XBB_VERSION} created in \"${INSTALL_FOLDER_PATH}\""
 
 say done
 
