@@ -26,7 +26,7 @@ xcode-select -p
 # -----------------------------------------------------------------------------
 # This script installs a local instance of TeX Live (https://tug.org/texlive/).
 
-tl_edition="2016"
+tl_edition="2018"
 tl_archive_name="install-tl-unx.tar.gz"
 tl_archive_path="$HOME/Downloads/${tl_edition}-${tl_archive_name}"
 tl_folder="/tmp/install-tl"
@@ -41,7 +41,7 @@ tl_repo_url="${tl_url}/systems/texlive/${tl_edition}/tlnet-final"
 tl_archive_url="${tl_url}/systems/texlive/${tl_edition}/${tl_archive_name}"
 
 # The install destination folder.
-texlive_prefix="${HOME}/opt/texlive"
+texlive_prefix="${HOME}/opt/texlive-2018"
 
 # -----------------------------------------------------------------------------
 
