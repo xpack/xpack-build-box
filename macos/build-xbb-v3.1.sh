@@ -195,12 +195,8 @@ do_p7zip "16.02"
 # -----------------------------------------------------------------------------
 
 
-if [ "${HOST_UNAME}" == "Darwin" ]
-then
-  echo
-  echo "macOS version ${macos_version}"
-  echo "XCode Command Line Tools version ${xclt_version}"
-fi
+echo "macOS version ${macos_version}"
+echo "XCode Command Line Tools version ${xclt_version}"
 
 echo
 echo "You may want to ' chmod -R -w \"${INSTALL_FOLDER_PATH}\" '"
@@ -208,9 +204,6 @@ echo "You may want to ' chmod -R -w \"${INSTALL_FOLDER_PATH}\" '"
 echo
 echo "${HOST_DISTRO_NAME} XBB v${XBB_VERSION} created in \"${INSTALL_FOLDER_PATH}\""
 
-if [ "${HOST_UNAME}" == "Darwin" ]
-then
-  say done
-fi
+say done
 
 # -----------------------------------------------------------------------------
