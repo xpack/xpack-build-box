@@ -49,17 +49,16 @@ script_folder_name="$(basename "${script_folder_path}")"
 # -----------------------------------------------------------------------------
 
 XBB_VERSION="3.1"
-echo
-echo "macOS XBB Bootstrap v${XBB_VERSION} build script started..."
 
-# -----------------------------------------------------------------------------
+# XBB_FOLDER="${HOME}/opt/xbb-bootstrap-${XBB_VERSION}"
+XBB_FOLDER="${HOME}/opt/xbb-bootstrap"
 
-XBB_FOLDER="${HOME}/opt/xbb-bootstrap-${XBB_VERSION}"
-# XBB_FOLDER="${HOME}/opt/xbb-bootstrap"
-
-WORK_FOLDER_PATH="${HOME}/Work/darwin-$(basename "${XBB_FOLDER}")"
+WORK_FOLDER_PATH="${HOME}/Work/$(basename "${XBB_FOLDER}")"
 
 IS_BOOTSTRAP="y"
+
+echo
+echo "macOS XBB Bootstrap v${XBB_VERSION} build script started..."
 
 # -----------------------------------------------------------------------------
 
@@ -68,6 +67,8 @@ helper_folder_path="$(dirname "${script_folder_path}")/helper"
 source "${helper_folder_path}/common-functions-source.sh"
 source "${helper_folder_path}/common-libs-functions-source.sh"
 source "${helper_folder_path}/common-apps-functions-source.sh"
+
+source "${helper_folder_path}/common-versions-bootstrap-source.sh"
 
 # -----------------------------------------------------------------------------
 
@@ -86,68 +87,7 @@ function xbb_activate()
 
 # -----------------------------------------------------------------------------
 
-# To differentiate the binaries from the XBB ones which use `-7`.
-XBB_GCC_SUFFIX="-7bs"
-XBB_GCC_BRANDING="xPack Build Box Bootstrap GCC\x2C 64-bit"
-
-# =============================================================================
-
-# Libraries
-
-do_zlib "1.2.11"
-
-do_gmp "6.1.2"
-do_mpfr "3.1.6"
-do_mpc "1.1.0" # "1.0.3"
-do_isl "0.21"
-
-if true
-then
-
-# Applications
-
-do_coreutils "8.31"
-
-do_pkg_config "0.29.2"
-
-do_m4 "1.4.18"
-
-do_gawk "4.2.1"
-do_sed "4.7"
-do_autoconf "2.69"
-do_automake "1.16"
-do_libtool "2.4.6"
-
-do_diffutils "3.7"
-do_patch "2.7.6"
-
-do_bison "3.4.2" # "3.3.2"
-
-# macOS 10.10 uses 2.5.3, an update is not mandatory.
-do_flex "2.6.4"
-
-do_make "4.2.1"
-
-# macOS 10.10 uses 5.18.2, an update is not mandatory.
-do_perl "5.28.2"
-
-do_cmake "3.15.6" # "3.13.4"
-
-# makedepend is needed by openssl
-do_util_macros "1.19.2" # "1.17.1"
-do_xorg_xproto "7.0.31"
-do_makedepend "1.0.6" # "1.0.5"
-
-fi
-
-# By all means DO NOT build binutils, since this will override Apple 
-# specific tools (ar, strip, etc) and break the build in multiple ways.
-
-# Preferably leave it to the end, to benefit from all the goodies 
-# compiled so far.
-do_gcc "7.5.0" # "7.4.0"
-
-# -----------------------------------------------------------------------------
+do_build_versions
 
 # check_binaries
 
