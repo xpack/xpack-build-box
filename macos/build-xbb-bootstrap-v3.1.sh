@@ -82,7 +82,8 @@ create_xbb_source
 
 function xbb_activate()
 {
-  :
+  xbb_activate_installed_bin  # Use bootstrap binaries
+  xbb_activate_installed_dev  # Use bootstrap libraries and headers
 }
 
 # -----------------------------------------------------------------------------

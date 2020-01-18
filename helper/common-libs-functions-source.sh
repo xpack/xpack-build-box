@@ -43,9 +43,12 @@ function do_zlib()
       cd "${LIBS_BUILD_FOLDER_PATH}/${zlib_folder_name}"
 
       xbb_activate
-      xbb_activate_installed_dev
 
+      # -fPIC makes possible to include static libs in shared libs.
+      export CPPFLAGS="${XBB_CPPFLAGS}" 
       export CFLAGS="${XBB_CFLAGS} -fPIC"
+      export CXXFLAGS="${XBB_CXXFLAGS}"
+      export LDFLAGS="${XBB_LDFLAGS_LIB}"
 
       (
         echo
@@ -107,13 +110,13 @@ function do_gmp()
       cd "${LIBS_BUILD_FOLDER_PATH}/${gmp_folder_name}"
 
       xbb_activate
-      xbb_activate_installed_dev
 
       export CPPFLAGS="${XBB_CPPFLAGS}"
-      export CFLAGS="${XBB_CFLAGS}"
+      export CFLAGS="${XBB_CFLAGS} -Wno-unused-value -Wno-empty-translation-unit -Wno-tautological-compare -Wno-overflow"
       export CXXFLAGS="${XBB_CXXFLAGS}"
       export LDFLAGS="${XBB_LDFLAGS_LIB}"
-      export ABI="64"
+      # Mandatory, it fails on 32-bits. 
+      export ABI="${HOST_BITS}"
 
       if [ ! -f "config.status" ]
       then
@@ -180,7 +183,6 @@ function do_mpfr()
       cd "${LIBS_BUILD_FOLDER_PATH}/${mpfr_folder_name}"
 
       xbb_activate
-      xbb_activate_installed_dev
 
       export CPPFLAGS="${XBB_CPPFLAGS}"
       export CFLAGS="${XBB_CFLAGS}"
@@ -250,7 +252,6 @@ function do_mpc()
       cd "${LIBS_BUILD_FOLDER_PATH}/${mpc_folder_name}"
 
       xbb_activate
-      xbb_activate_installed_dev
 
       export CPPFLAGS="${XBB_CPPFLAGS}"
       export CFLAGS="${XBB_CFLAGS}"
@@ -320,7 +321,6 @@ function do_isl()
       cd "${LIBS_BUILD_FOLDER_PATH}/${isl_folder_name}"
 
       xbb_activate
-      xbb_activate_installed_dev
 
       export CPPFLAGS="${XBB_CPPFLAGS}"
       export CFLAGS="${XBB_CFLAGS}"
@@ -390,10 +390,9 @@ function do_nettle()
       cd "${LIBS_BUILD_FOLDER_PATH}/${nettle_folder_name}"
 
       xbb_activate
-      xbb_activate_installed_dev
 
       export CPPFLAGS="${XBB_CPPFLAGS}"
-      export CFLAGS="${XBB_CFLAGS}"
+      export CFLAGS="${XBB_CFLAGS} -Wno-implicit-fallthrough -Wno-deprecated-declarations"
       export CXXFLAGS="${XBB_CXXFLAGS}"
       export LDFLAGS="${XBB_LDFLAGS_LIB}"
 
@@ -425,7 +424,7 @@ function do_nettle()
         # For unknown reasons, on 32-bits make install-info fails 
         # (`install-info --info-dir="/opt/xbb/share/info" nettle.info` returns 1)
         # Make the other install targets.
-        make install-headers install-static install-pkgconfig install-shared-nettle  install-shared-hogweed
+        make install-headers install-static install-pkgconfig install-shared-nettle install-shared-hogweed
       ) 2>&1 | tee "${LOGS_FOLDER_PATH}/make-nettle-output.txt"
     )
 
@@ -466,7 +465,6 @@ function do_tasn1()
       cd "${LIBS_BUILD_FOLDER_PATH}/${tasn1_folder_name}"
 
       xbb_activate
-      xbb_activate_installed_dev
 
       export CPPFLAGS="${XBB_CPPFLAGS}"
       export CFLAGS="${XBB_CFLAGS} -Wno-logical-op -Wno-missing-prototypes -Wno-implicit-fallthrough -Wno-format-truncation"
@@ -537,7 +535,6 @@ function do_expat()
       cd "${LIBS_BUILD_FOLDER_PATH}/${expat_folder_name}"
 
       xbb_activate
-      xbb_activate_installed_dev
 
       export CPPFLAGS="${XBB_CPPFLAGS}"
       export CFLAGS="${XBB_CFLAGS}"
@@ -606,7 +603,6 @@ function do_libffi()
       cd "${LIBS_BUILD_FOLDER_PATH}/${libffi_folder_name}"
 
       xbb_activate
-      xbb_activate_installed_dev
 
       export CPPFLAGS="${XBB_CPPFLAGS}"
       export CFLAGS="${XBB_CFLAGS}"
@@ -675,7 +671,6 @@ function do_libiconv()
       cd "${LIBS_BUILD_FOLDER_PATH}/${libiconv_folder_name}"
 
       xbb_activate
-      xbb_activate_installed_dev
 
       export CPPFLAGS="${XBB_CPPFLAGS}"
       export CFLAGS="${XBB_CFLAGS}"
@@ -749,15 +744,18 @@ function do_gnutls()
       cd "${LIBS_BUILD_FOLDER_PATH}/${gnutls_folder_name}"
 
       xbb_activate
-      xbb_activate_installed_dev
 
       export CPPFLAGS="${XBB_CPPFLAGS}"
       export CFLAGS="${XBB_CFLAGS} -Wno-parentheses -Wno-bad-function-cast -Wno-unused-macros -Wno-bad-function-cast -Wno-unused-variable -Wno-pointer-sign -Wno-implicit-fallthrough -Wno-format-truncation -Wno-missing-prototypes -Wno-missing-declarations -Wno-shadow -Wno-sign-compare -Wno-unknown-warning-option -Wno-static-in-inline -Wno-implicit-function-declaration -Wno-strict-prototypes -Wno-tautological-pointer-compare"
       export CXXFLAGS="${XBB_CXXFLAGS}"
       export LDFLAGS="${XBB_LDFLAGS_LIB}"
 
-      export CC=clang
-      export CXX=clang++
+      if [ "${HOST_UNAME}" == "Darwin" ]
+      then
+        # lib/system/certs.c:49 error: variably modified 'bytes' at file scope
+        export CC=clang
+        export CXX=clang++
+      fi
       
       if [ ! -f "config.status" ]
       then
@@ -771,6 +769,7 @@ function do_gnutls()
             --prefix="${INSTALL_FOLDER_PATH}" \
             --without-p11-kit \
             --enable-guile \
+            --with-guile-site-dir=no \
             --with-included-unistring
 
           cp "config.log" "${LOGS_FOLDER_PATH}/config-gnutls-log.txt"
@@ -825,7 +824,6 @@ function do_util_macros()
       cd "${LIBS_BUILD_FOLDER_PATH}/${util_macros_folder_name}"
 
       xbb_activate
-      xbb_activate_installed_dev
 
       export CPPFLAGS="${XBB_CPPFLAGS}"
       export CFLAGS="${XBB_CFLAGS}"
@@ -891,7 +889,6 @@ function do_xorg_xproto()
       cd "${LIBS_BUILD_FOLDER_PATH}/${xorg_xproto_folder_name}"
 
       xbb_activate
-      xbb_activate_installed_dev
 
       export CPPFLAGS="${XBB_CPPFLAGS}"
       export CFLAGS="${XBB_CFLAGS}"
@@ -931,3 +928,6 @@ function do_xorg_xproto()
   fi
 }
 
+# function do_libpng()
+
+# -----------------------------------------------------------------------------

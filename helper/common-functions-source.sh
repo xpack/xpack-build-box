@@ -122,6 +122,15 @@ function detect_host()
 
 function prepare_xbb_env()
 {
+  if [ "${IS_BOOTSTRAP}" != "y" ]
+  then
+    if [ ! -d "${XBB_BOOTSTRAP_FOLDER}" -o ! -x "${XBB_BOOTSTRAP_FOLDER}/bin/${CXX}" ]
+    then
+      echo "XBB Bootstrap not found in \"${XBB_BOOTSTRAP_FOLDER}\""
+      exit 1
+    fi
+  fi
+  
   CACHE_FOLDER_PATH="$(dirname "${WORK_FOLDER_PATH}")/cache"
 
   BUILD_FOLDER_PATH="${WORK_FOLDER_PATH}/build"

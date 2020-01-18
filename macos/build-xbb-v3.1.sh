@@ -63,11 +63,6 @@ IS_BOOTSTRAP="n"
 CC="gcc-7bs"
 CXX="g++-7bs"
 
-if [ ! -d "${XBB_BOOTSTRAP_FOLDER}" -o ! -x "${XBB_BOOTSTRAP_FOLDER}/bin/g++-7bs" ]
-then
-  echo "XBB Bootstrap not found in \"${XBB_BOOTSTRAP_FOLDER}\""
-  exit 1
-fi
 echo
 echo "macOS XBB v${XBB_VERSION} build script started..."
 
@@ -87,11 +82,6 @@ cd "${script_folder_path}"
 
 detect_host
 
-# Build the XBB tools with the bootstrap compiler.
-# Some packages fail, and have to revert to the Apple clang.
-CC="gcc-7bs"
-CXX="g++-7bs"
-
 prepare_xbb_env
 
 source "${XBB_BOOTSTRAP_FOLDER}/xbb-source.sh"
@@ -100,7 +90,8 @@ create_xbb_source
 
 xbb_activate()
 {
-  xbb_activate_bootstrap
+  xbb_activate_bootstrap      # Use only bootstrap binaries, not xbb
+  xbb_activate_installed_dev  # Use xbb libraries and headers
 }
 
 # -----------------------------------------------------------------------------

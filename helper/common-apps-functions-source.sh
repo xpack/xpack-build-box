@@ -7,7 +7,7 @@
 # for any purpose is hereby granted, under the terms of the MIT license.
 # -----------------------------------------------------------------------------
 
-function do_gcc() 
+function do_native_gcc() 
 {
   # https://gcc.gnu.org
   # https://ftp.gnu.org/gnu/gcc/
@@ -39,8 +39,6 @@ function do_gcc()
       cd "${BUILD_FOLDER_PATH}/${gcc_folder_name}"
 
       xbb_activate
-      xbb_activate_installed_bin
-      xbb_activate_installed_dev
 
       CPPFLAGS="${XBB_CPPFLAGS}"
       CPPFLAGS_FOR_TARGET="${XBB_CPPFLAGS}"
@@ -92,6 +90,11 @@ function do_gcc()
           # --enable-clocale=gnu \
           # --disable-libssp \
 
+          # Fail on macOS
+          # --with-linker-hash-style=gnu 
+          # --enable-libmpx 
+          # --enable-clocale=gnu
+
           bash ${DEBUG} "${SOURCES_FOLDER_PATH}/${gcc_folder_name}/configure" \
             --prefix="${INSTALL_FOLDER_PATH}" \
             --program-suffix="${XBB_GCC_SUFFIX}" \
@@ -100,21 +103,24 @@ function do_gcc()
             --with-sysroot="${sdk_path}" \
             \
             --enable-languages=c,c++,objc,obj-c++ \
+            \
             --enable-checking=release \
             --enable-static \
             --enable-threads=posix \
-            \
+            --enable-__cxa_atexit \
+            --disable-libunwind-exceptions \
+            --disable-libstdcxx-pch \
+            --disable-libssp \
+            --enable-gnu-unique-object \
+            --enable-linker-build-id \
+            --enable-lto \
+            --enable-plugin \
+            --enable-install-libiberty \
+            --enable-gnu-indirect-function \
             --disable-multilib \
             --disable-werror \
             --disable-nls \
             --disable-bootstrap \
-            \
-            --disable-libunwind-exceptions \
-            \
-            --with-gmp="${INSTALL_FOLDER_PATH}" \
-            --with-mpfr="${INSTALL_FOLDER_PATH}" \
-            --with-mpc="${INSTALL_FOLDER_PATH}" \
-            --with-isl="${INSTALL_FOLDER_PATH}" \
 
           cp "config.log" "${LOGS_FOLDER_PATH}/config-gcc-log.txt"
         ) 2>&1 | tee "${LOGS_FOLDER_PATH}/configure-gcc-output.txt"
@@ -217,8 +223,6 @@ function do_openssl()
       cd "${BUILD_FOLDER_PATH}/${openssl_folder_name}"
 
       xbb_activate
-      xbb_activate_installed_bin
-      xbb_activate_installed_dev
 
       # export CPPFLAGS="${XBB_CPPFLAGS} -I${BUILD_FOLDER_PATH}/${openssl_folder_name}/include"
       export CPPFLAGS="${XBB_CPPFLAGS}"
@@ -236,10 +240,27 @@ function do_openssl()
           # `Configure` is a Perl script.
           "./Configure" --help || true
 
-          "./Configure" darwin64-x86_64-cc \
+          if [ "${HOST_MACHINE}" == 'x86_64' ]; then
+            optflags='enable-ec_nistp_64_gcc_128'
+          elif [ "${HOST_MACHINE}" == 'i686' ]; then
+            optflags=''
+          fi
+
+          local configure_target=""
+          if [ "${HOST_UNAME}" == "Darwin" ]
+          then
+            configure_target=darwin64-x86_64-cc
+          fi
+
+          # -Wa,--noexecstack on Linux
+
+          "./Configure" ${configure_target} \
             --prefix="${INSTALL_FOLDER_PATH}" \
             --openssldir="${INSTALL_FOLDER_PATH}/openssl" \
-            no-ssl3-method 
+            shared \
+            no-ssl3-method \
+            ${optflags} \
+            "${CPPFLAGS} ${CFLAGS} ${LDFLAGS}"
 
           make depend 
           make -j ${JOBS}
@@ -321,8 +342,6 @@ function do_curl()
       cd "${BUILD_FOLDER_PATH}/${curl_folder_name}"
 
       xbb_activate
-      xbb_activate_installed_bin
-      xbb_activate_installed_dev
 
       export CPPFLAGS="${XBB_CPPFLAGS}"
       export CFLAGS="${XBB_CFLAGS} -Wno-deprecated-declarations"
@@ -411,11 +430,9 @@ function do_xz()
       cd "${BUILD_FOLDER_PATH}/${xz_folder_name}"
 
       xbb_activate
-      xbb_activate_installed_bin
-      xbb_activate_installed_dev
 
       export CPPFLAGS="${XBB_CPPFLAGS}"
-      export CFLAGS="${XBB_CFLAGS}"
+      export CFLAGS="${XBB_CFLAGS} -Wno-implicit-fallthrough"
       export CXXFLAGS="${XBB_CXXFLAGS}"
       export LDFLAGS="${XBB_LDFLAGS_APP}"
 
@@ -491,13 +508,14 @@ function do_tar()
       cd "${BUILD_FOLDER_PATH}/${tar_folder_name}"
 
       xbb_activate
-      xbb_activate_installed_bin
-      xbb_activate_installed_dev
 
       export CPPFLAGS="${XBB_CPPFLAGS}"
       export CFLAGS="${XBB_CFLAGS}"
       export CXXFLAGS="${XBB_CXXFLAGS}"
       export LDFLAGS="${XBB_LDFLAGS_APP}"
+
+      # Avoid 'configure: error: you should not run configure as root'.
+      export FORCE_UNSAFE_CONFIGURE=1
 
       if [ ! -f "config.status" ]
       then
@@ -527,8 +545,8 @@ function do_tar()
         echo
         echo "Linking gnutar..."
         cd "${INSTALL_FOLDER_PATH}/bin"
+        rm -f gnutar
         ln -s -v tar gnutar
-        
       ) 2>&1 | tee "${LOGS_FOLDER_PATH}/make-tar-output.txt"
     )
 
@@ -574,17 +592,23 @@ function do_coreutils()
       cd "${BUILD_FOLDER_PATH}/${coreutils_folder_name}"
 
       xbb_activate
-      xbb_activate_installed_bin
-      xbb_activate_installed_dev
 
       export CPPFLAGS="${XBB_CPPFLAGS}"
       export CFLAGS="${XBB_CFLAGS} -Wno-pointer-sign -Wno-incompatible-pointer-types"
       export CXXFLAGS="${XBB_CXXFLAGS}"
       export LDFLAGS="${XBB_LDFLAGS_APP}"
 
+      local darwin_options=""
       # Use Apple GCC, since with GNU GCC it fails with some undefined symbols.
-      export CC=clang
-      export CXX=clang++
+      if [ "${HOST_UNAME}" == "Darwin" ]
+      then
+        # Undefined symbols for architecture x86_64:
+        # "_rpl_fchownat", referenced from:
+        export CC=clang
+        export CXX=clang++
+
+        darwin_options="--enable-no-install-program=ar"
+      fi
 
       if [ ! -f "config.status" ]
       then
@@ -597,7 +621,7 @@ function do_coreutils()
           # `ar` must be excluded, it interferes with Apple similar program.
           bash ${DEBUG} "${SOURCES_FOLDER_PATH}/${coreutils_folder_name}/configure" \
             --prefix="${INSTALL_FOLDER_PATH}" \
-            --enable-no-install-program=ar
+            ${darwin_options}
 
           cp "config.log" "${LOGS_FOLDER_PATH}/config-coreutils-log.txt"
         ) 2>&1 | tee "${LOGS_FOLDER_PATH}/configure-coreutils-output.txt"
@@ -659,16 +683,18 @@ function do_pkg_config()
       cd "${BUILD_FOLDER_PATH}/${pkg_config_folder_name}"
 
       xbb_activate
-      xbb_activate_installed_bin
-      xbb_activate_installed_dev
 
       export CPPFLAGS="${XBB_CPPFLAGS}"
       export CFLAGS="${XBB_CFLAGS} -Wno-int-conversion -Wno-unused-value -Wno-unused-function -Wno-deprecated-declarations -Wno-return-type -Wno-tautological-constant-out-of-range-compare -Wno-sometimes-uninitialized"
       export CXXFLAGS="${XBB_CXXFLAGS}"
       export LDFLAGS="${XBB_LDFLAGS_APP}"
 
-      export CC=clang
-      export CXX=clang++
+      if [ "${HOST_UNAME}" == "Darwin" ]
+      then
+        # error: variably modified 'bytes' at file scope
+        export CC=clang
+        export CXX=clang++
+      fi
 
       if [ ! -f "config.status" ]
       then
@@ -686,7 +712,8 @@ function do_pkg_config()
             --with-internal-glib \
             --disable-debug \
             --disable-host-tool \
-            --with-pc-path=""
+            --with-pc-path="" \
+            --with-libiconv=gnu
 
           cp "config.log" "${LOGS_FOLDER_PATH}/config-pkg_config-log.txt"
         ) 2>&1 | tee "${LOGS_FOLDER_PATH}/configure-pkg_config-output.txt"
@@ -747,8 +774,6 @@ function do_m4()
       cd "${BUILD_FOLDER_PATH}/${m4_folder_name}"
 
       xbb_activate
-      xbb_activate_installed_bin
-      xbb_activate_installed_dev
 
       export CPPFLAGS="${XBB_CPPFLAGS}"
       export CFLAGS="${XBB_CFLAGS} -Wno-incompatible-pointer-types"
@@ -783,8 +808,8 @@ function do_m4()
         echo
         echo "Linking gm4..."
         cd "${INSTALL_FOLDER_PATH}/bin"
+        rm -f gm4
         ln -s -v m4 gm4
-
       ) 2>&1 | tee "${LOGS_FOLDER_PATH}/make-m4-output.txt"
     )
 
@@ -834,8 +859,6 @@ function do_gawk()
       cd "${BUILD_FOLDER_PATH}/${gawk_folder_name}"
 
       xbb_activate
-      xbb_activate_installed_bin
-      xbb_activate_installed_dev
 
       export CPPFLAGS="${XBB_CPPFLAGS}"
       export CFLAGS="${XBB_CFLAGS}"
@@ -912,8 +935,6 @@ function do_sed()
       cd "${BUILD_FOLDER_PATH}/${sed_folder_name}"
 
       xbb_activate
-      xbb_activate_installed_bin
-      xbb_activate_installed_dev
 
       export CPPFLAGS="${XBB_CPPFLAGS}"
       export CFLAGS="${XBB_CFLAGS}"
@@ -947,6 +968,7 @@ function do_sed()
         echo
         echo "Linking gsed..."
         cd "${INSTALL_FOLDER_PATH}/bin"
+        rm -f gsed
         ln -s -v sed gsed
       ) 2>&1 | tee "${LOGS_FOLDER_PATH}/make-sed-output.txt"
     )
@@ -994,8 +1016,6 @@ function do_autoconf()
       cd "${BUILD_FOLDER_PATH}/${autoconf_folder_name}"
 
       xbb_activate
-      xbb_activate_installed_bin
-      xbb_activate_installed_dev
 
       export CPPFLAGS="${XBB_CPPFLAGS}"
       export CFLAGS="${XBB_CFLAGS}"
@@ -1071,8 +1091,6 @@ function do_automake()
       cd "${BUILD_FOLDER_PATH}/${automake_folder_name}"
 
       xbb_activate
-      xbb_activate_installed_bin
-      xbb_activate_installed_dev
 
       export CPPFLAGS="${XBB_CPPFLAGS}"
       export CFLAGS="${XBB_CFLAGS}"
@@ -1149,8 +1167,6 @@ function do_libtool()
       cd "${BUILD_FOLDER_PATH}/${libtool_folder_name}"
 
       xbb_activate
-      xbb_activate_installed_bin
-      xbb_activate_installed_dev
 
       export CPPFLAGS="${XBB_CPPFLAGS}"
       export CFLAGS="${XBB_CFLAGS}"
@@ -1184,6 +1200,7 @@ function do_libtool()
         echo
         echo "Linking glibtool..."
         cd "${INSTALL_FOLDER_PATH}/bin"
+        rm -f glibtool glibtoolize
         ln -s -v libtool glibtool
         ln -s -v libtoolize glibtoolize
       ) 2>&1 | tee "${LOGS_FOLDER_PATH}/make-libtool-output.txt"
@@ -1233,8 +1250,6 @@ function do_gettext()
       cd "${BUILD_FOLDER_PATH}/${gettext_folder_name}"
 
       xbb_activate
-      xbb_activate_installed_bin
-      xbb_activate_installed_dev
 
       export CPPFLAGS="${XBB_CPPFLAGS}"
       export CFLAGS="${XBB_CFLAGS}"
@@ -1312,8 +1327,6 @@ function do_patch()
       cd "${BUILD_FOLDER_PATH}/${patch_folder_name}"
 
       xbb_activate
-      xbb_activate_installed_bin
-      xbb_activate_installed_dev
 
       export CPPFLAGS="${XBB_CPPFLAGS}"
       export CFLAGS="${XBB_CFLAGS}"
@@ -1390,8 +1403,6 @@ function do_diffutils()
       cd "${BUILD_FOLDER_PATH}/${diffutils_folder_name}"
 
       xbb_activate
-      xbb_activate_installed_bin
-      xbb_activate_installed_dev
 
       export CPPFLAGS="${XBB_CPPFLAGS}"
       export CFLAGS="${XBB_CFLAGS}"
@@ -1470,8 +1481,6 @@ function do_bison()
       cd "${BUILD_FOLDER_PATH}/${bison_folder_name}"
 
       xbb_activate
-      xbb_activate_installed_bin
-      xbb_activate_installed_dev
 
       export CPPFLAGS="${XBB_CPPFLAGS}"
       export CFLAGS="${XBB_CFLAGS}"
@@ -1559,8 +1568,6 @@ function do_flex()
       cd "${BUILD_FOLDER_PATH}/${flex_folder_name}"
 
       xbb_activate
-      xbb_activate_installed_bin
-      xbb_activate_installed_dev
 
       export CPPFLAGS="${XBB_CPPFLAGS}"
       export CFLAGS="${XBB_CFLAGS}"
@@ -1636,8 +1643,6 @@ function do_make()
       cd "${BUILD_FOLDER_PATH}/${make_folder_name}"
 
       xbb_activate
-      xbb_activate_installed_bin
-      xbb_activate_installed_dev
 
       export CPPFLAGS="${XBB_CPPFLAGS}"
       export CFLAGS="${XBB_CFLAGS}"
@@ -1672,6 +1677,7 @@ function do_make()
         echo
         echo "Linking gmake..."
         cd "${INSTALL_FOLDER_PATH}/bin"
+        rm -f gmake
         ln -s -v make gmake
       ) 2>&1 | tee "${LOGS_FOLDER_PATH}/make-make-output.txt"
     )
@@ -1721,8 +1727,6 @@ function do_wget()
       cd "${BUILD_FOLDER_PATH}/${wget_folder_name}"
 
       xbb_activate
-      xbb_activate_installed_bin
-      xbb_activate_installed_dev
 
       export CPPFLAGS="${XBB_CPPFLAGS}"
       export CFLAGS="${XBB_CFLAGS} -Wno-implicit-function-declaration"
@@ -1812,8 +1816,6 @@ function do_texinfo()
       cd "${BUILD_FOLDER_PATH}/${texinfo_folder_name}"
 
       xbb_activate
-      xbb_activate_installed_bin
-      xbb_activate_installed_dev
 
       export CPPFLAGS="${XBB_CPPFLAGS}"
       export CFLAGS="${XBB_CFLAGS}"
@@ -1894,16 +1896,18 @@ function do_cmake()
       cd "${BUILD_FOLDER_PATH}/${cmake_folder_name}"
 
       xbb_activate
-      xbb_activate_installed_bin
-      xbb_activate_installed_dev
 
       export CPPFLAGS="${XBB_CPPFLAGS}"
       export CFLAGS="${XBB_CFLAGS}"
       export CXXFLAGS="${XBB_CXXFLAGS}"
       export LDFLAGS="${XBB_LDFLAGS_APP}"
 
-      export CC=clang
-      export CXX=clang++
+      if [ "${HOST_UNAME}" == "Darwin" ]
+      then
+        # error: variably modified 'bytes' at file scope
+        export CC=clang
+        export CXX=clang++
+      fi
 
       local which_cmake="$(which cmake)"
       if [ -z "${which_cmake}" ]
@@ -2004,8 +2008,6 @@ function do_perl()
       cd "${BUILD_FOLDER_PATH}/${perl_folder_name}"
 
       xbb_activate
-      xbb_activate_installed_bin
-      xbb_activate_installed_dev
 
       export CPPFLAGS="${XBB_CPPFLAGS}"
       export CFLAGS="${XBB_CFLAGS} -Wno-implicit-fallthrough -Wno-nonnull -Wno-format -Wno-sign-compare -Wno-null-pointer-arithmetic"
@@ -2089,8 +2091,6 @@ function do_makedepend()
       cd "${BUILD_FOLDER_PATH}/${makedepend_folder_name}"
 
       xbb_activate
-      xbb_activate_installed_bin
-      xbb_activate_installed_dev
 
       export CPPFLAGS="${XBB_CPPFLAGS}"
       export CFLAGS="${XBB_CFLAGS}"
@@ -2168,12 +2168,12 @@ function do_patchelf()
       cd "${BUILD_FOLDER_PATH}/${patchelf_folder_name}"
 
       xbb_activate
-      xbb_activate_installed_bin
-      xbb_activate_installed_dev
 
       export CPPFLAGS="${XBB_CPPFLAGS}"
       export CFLAGS="${XBB_CFLAGS}"
       export CXXFLAGS="${XBB_CXXFLAGS}"
+      # Wihtout -static-libstdc++, the bootstrap lib folder is needed to 
+      # find libstdc++.
       export LDFLAGS="${XBB_LDFLAGS_APP}"
 
       if [ ! -f "config.status" ]
@@ -2246,8 +2246,6 @@ function do_dos2unix()
       cd "${BUILD_FOLDER_PATH}/${dos2unix_folder_name}"
 
       xbb_activate
-      xbb_activate_installed_bin
-      xbb_activate_installed_dev
 
       export CPPFLAGS="${XBB_CPPFLAGS}"
       export CFLAGS="${XBB_CFLAGS}"
@@ -2310,13 +2308,12 @@ function do_git()
       cd "${BUILD_FOLDER_PATH}/${git_folder_name}"
 
       xbb_activate
-      xbb_activate_installed_bin
-      xbb_activate_installed_dev
 
       export CPPFLAGS="${XBB_CPPFLAGS}"
       export CFLAGS="${XBB_CFLAGS}"
       export CXXFLAGS="${XBB_CXXFLAGS}"
       export LDFLAGS="${XBB_LDFLAGS_APP}"
+      export LIBS="-ldl"
 
       if [ ! -f "config.status" ]
       then
@@ -2344,6 +2341,7 @@ function do_git()
         # make install-strip
         make install
         strip -S "${INSTALL_FOLDER_PATH}/bin/git"
+        strip -S "${INSTALL_FOLDER_PATH}/bin"/git-[rsu]*
       ) 2>&1 | tee "${LOGS_FOLDER_PATH}/make-git-output.txt"
     )
 
@@ -2393,16 +2391,19 @@ function do_python()
       cd "${BUILD_FOLDER_PATH}/${python_folder_name}"
 
       xbb_activate
-      xbb_activate_installed_bin
-      xbb_activate_installed_dev
 
       export CPPFLAGS="${XBB_CPPFLAGS}"
-      export CFLAGS="${XBB_CFLAGS} -Wno-int-in-bool-context -Wno-maybe-uninitialized -Wno-nonnull -Wno-stringop-overflow"
+      # export CFLAGS="${XBB_CFLAGS} -Wno-int-in-bool-context -Wno-maybe-uninitialized -Wno-nonnull -Wno-stringop-overflow"
+      export CFLAGS="${XBB_CFLAGS} -Wno-nonnull"
       export CXXFLAGS="${XBB_CXXFLAGS}"
       export LDFLAGS="${XBB_LDFLAGS_APP}"
 
-      export CC=clang
-      export CXX=clang++
+      if [ "${HOST_UNAME}" == "Darwin" ]
+      then
+        # error: variably modified 'bytes' at file scope
+        export CC=clang
+        export CXX=clang++
+      fi
 
       if [ ! -f "config.status" ]
       then
@@ -2412,9 +2413,20 @@ function do_python()
 
           bash "${SOURCES_FOLDER_PATH}/${python_folder_name}/configure" --help
 
+          # Fail on macOS:
+          # --enable-universalsdk 
+
           bash ${DEBUG} "${SOURCES_FOLDER_PATH}/${python_folder_name}/configure" \
             --prefix="${INSTALL_FOLDER_PATH}" \
             \
+            --enable-shared \
+            --with-universal-archs=${HOST_BITS}-bit \
+            --enable-optimizations \
+            --with-threads \
+            --enable-unicode=ucs4 \
+            --with-system-expat \
+            --with-system-ffi \
+            --with-dbmliborder=gdbm:ndbm \
             --without-ensurepip
 
           cp "config.log" "${LOGS_FOLDER_PATH}/config-python-log.txt"
@@ -2489,16 +2501,19 @@ function do_python3()
       cd "${BUILD_FOLDER_PATH}/${python3_folder_name}"
 
       xbb_activate
-      xbb_activate_installed_bin
-      xbb_activate_installed_dev
 
       export CPPFLAGS="${XBB_CPPFLAGS}"
-      export CFLAGS="${XBB_CFLAGS} -Wno-int-in-bool-context -Wno-maybe-uninitialized -Wno-nonnull -Wno-stringop-overflow"
+      # export CFLAGS="${XBB_CFLAGS} -Wno-int-in-bool-context -Wno-maybe-uninitialized -Wno-nonnull -Wno-stringop-overflow"
+      export CFLAGS="${XBB_CFLAGS} -Wno-nonnull"
       export CXXFLAGS="${XBB_CXXFLAGS}"
       export LDFLAGS="${XBB_LDFLAGS_APP}"
 
-      export CC=clang
-      export CXX=clang++
+      if [ "${HOST_UNAME}" == "Darwin" ]
+      then
+        # error: variably modified 'bytes' at file scope
+        export CC=clang
+        export CXX=clang++
+      fi
 
       if [ ! -f "config.status" ]
       then
@@ -2508,9 +2523,22 @@ function do_python3()
 
           bash "${SOURCES_FOLDER_PATH}/${python3_folder_name}/configure" --help
 
+          # Fail on macOS:
+          # --enable-universalsdk
+          # --with-lto
+
           bash ${DEBUG} "${SOURCES_FOLDER_PATH}/${python3_folder_name}/configure" \
             --prefix="${INSTALL_FOLDER_PATH}" \
             \
+            --enable-shared \
+            --with-universal-archs=${HOST_BITS}-bit \
+            --with-computed-gotos \
+            --enable-optimizations \
+            --with-system-expat \
+            --with-dbmliborder=gdbm:ndbm \
+            --with-system-ffi \
+            --with-system-libmpdec \
+            --enable-loadable-sqlite-extensions \
             --without-ensurepip
             
           cp "config.log" "${LOGS_FOLDER_PATH}/config-python3-log.txt"
@@ -2584,8 +2612,6 @@ function do_scons()
       cd "${BUILD_FOLDER_PATH}/${scons_folder_name}"
 
       xbb_activate
-      xbb_activate_installed_bin
-      xbb_activate_installed_dev
 
       export CPPFLAGS="${XBB_CPPFLAGS}"
       export CFLAGS="${XBB_CFLAGS}"
@@ -2628,6 +2654,10 @@ function do_meson
     xbb_activate_installed_bin
 
     pip3 install meson==$1
+  )
+
+  (
+    xbb_activate_installed_bin
 
     "${INSTALL_FOLDER_PATH}/bin/meson" --version
   )
@@ -2664,8 +2694,6 @@ function do_ninja()
       cd "${BUILD_FOLDER_PATH}/${ninja_folder_name}"
 
       xbb_activate
-      xbb_activate_installed_bin
-      xbb_activate_installed_dev
 
       export CPPFLAGS="${XBB_CPPFLAGS}"
       export CFLAGS="${XBB_CFLAGS}"
@@ -2680,6 +2708,8 @@ function do_ninja()
 
         echo "Patience..."
         
+        # --platform=linux ?
+
         ./configure.py \
           --bootstrap \
           --verbose \
@@ -2730,8 +2760,6 @@ function do_p7zip()
       cd "${BUILD_FOLDER_PATH}/${p7zip_folder_name}"
 
       xbb_activate
-      xbb_activate_installed_bin
-      xbb_activate_installed_dev
 
       export CPPFLAGS="${XBB_CPPFLAGS}"
       export CFLAGS="${XBB_CFLAGS}"
@@ -2741,7 +2769,6 @@ function do_p7zip()
       echo
       echo "Running p7zip make..."
 
-
       # Override the hard-coded gcc & g++.
       sed -i -e "s|CXX=g++.*|CXX=${CXX}|" makefile.machine
       sed -i -e "s|CC=gcc.*|CC=${CC}|" makefile.machine
@@ -2750,8 +2777,14 @@ function do_p7zip()
       sed -i -e "s|CFLAGS=|CFLAGS+=|" makefile.glb
       sed -i -e "s|CXXFLAGS=|CXXFLAGS+=|" makefile.glb
 
-      # 7z cannot load library on macOS.
-      make test
+      if [ "${HOST_UNAME}" == "Darwin" ]
+      then
+        # 7z cannot load library on macOS.
+        make test
+      else
+        # make test test_7z
+        make all_test
+      fi
 
       ls -lL bin
 
@@ -2766,6 +2799,12 @@ function do_p7zip()
 
       echo
       "${XBB_FOLDER}/bin/7za" --help
+
+      if [ "${HOST_UNAME}" == "Linux" ]
+      then
+        echo
+        "${XBB_FOLDER}/bin/7z" --help
+      fi
     )
 
     hash -r
