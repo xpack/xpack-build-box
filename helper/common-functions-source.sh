@@ -66,6 +66,8 @@ function detect_host()
     HOST_NODE_ARCH="x64" # For now.
     HOST_NODE_PLATFORM="darwin"
 
+    BUILD="$(gcc -print-effective-triple)"
+
   elif [ "${HOST_UNAME}" == "Linux" ]
   then
     # ----- Determine distribution name and word size -----
@@ -106,10 +108,15 @@ function detect_host()
     HOST_DISTRO_NAME=$(lsb_release -si)
     HOST_DISTRO_LC_NAME=$(echo ${HOST_DISTRO_NAME} | tr "[:upper:]" "[:lower:]")
 
+    BUILD="$(gcc -dumpmachine)"
+
   else
     echo "Unsupported uname ${HOST_UNAME}"
     exit 1
   fi
+
+  # x86_64-w64-mingw32 or i686-w64-mingw32
+  MINGW_TARGET="${HOST_MACHINE}-w64-mingw32"
 
   echo
   echo "Running on ${HOST_DISTRO_NAME} ${HOST_NODE_ARCH} (${HOST_BITS}-bit)."
