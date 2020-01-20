@@ -16,62 +16,118 @@ function do_build_versions()
 
     # To differentiate the binaries from the XBB ones which use `-7`.
     XBB_GCC_SUFFIX="-7bs"
-    XBB_GCC_BRANDING="xPack Build Box Bootstrap GCC\x2C 64-bit"
+    XBB_BRANDING="xPack Build Box Bootstrap\x2C ${HOST_BITS}-bit"
 
     # -------------------------------------------------------------------------
-    # Libraries
 
+    # New zlib, it is used in most of the tools.
+    # depends=('glibc')
     do_zlib "1.2.11"
 
-    do_gmp "6.1.2"
-    do_mpfr "3.1.6"
-    do_mpc "1.1.0" # "1.0.3"
-    do_isl "0.21"
+    # Library, required by tar. 
+    # depends=('sh')
+    do_xz "5.2.3"
 
-    do_libiconv "1.16" # "1.15"
+    # New tar, with xz support.
+    # depends=('glibc')
+    do_tar "1.30" # Requires xz.
 
-    # -------------------------------------------------------------------------
-    # Applications
+    # From this moment on, .xz archives can be processed.
+
+    # New openssl, required by curl, cmake, python, etc.
+    # depends=('perl')
+    do_openssl "1.0.2u" # "1.0.2r"
+
+    # New curl, that better understands all protocols.
+    # depends=('ca-certificates' 'krb5' 'libssh2' 'openssl' 'zlib' 'libpsl' 'libnghttp2')
+    do_curl "7.64.1" # "7.57.0"
 
     do_coreutils "8.31"
 
-    do_pkg_config "0.29.2"
-
+    # depends=('glibc')
     do_m4 "1.4.18"
 
+    # depends=('glibc' 'mpfr')
     do_gawk "4.2.1"
+
+    # depends ?
     do_sed "4.7"
+
+    # depends=('sh' 'perl' 'awk' 'm4' 'texinfo')
     do_autoconf "2.69"
+    # depends=('sh' 'perl')
     do_automake "1.16"
+
+    # depends=('sh' 'tar' 'glibc')
     do_libtool "2.4.6"
 
+    # depends=('glibc' 'glib2' 'libunistring' 'ncurses')
     do_gettext "0.19.8"
 
+    # depends=('libsigsegv')
     do_diffutils "3.7"
+    # depends=('glibc' 'attr')
     do_patch "2.7.6"
 
+    # depends=('glibc')
     do_bison "3.4.2" # "3.3.2"
 
     # macOS 10.10 uses 2.5.3, an update is not mandatory.
+    # depends=('glibc' 'm4' 'sh')
     do_flex "2.6.4"
 
+    # depends=('glibc' 'guile')
     do_make "4.2.1"
 
+    # depends=()
+    do_libiconv "1.16" # "1.15"
+
+    # requires libiconv
+    # depends=('glibc' 'glib2 (internal)')
+    do_pkg_config "0.29.2"
+
     # macOS 10.10 uses 5.18.2, an update is not mandatory.
+    # depends=('gdbm' 'db' 'glibc')
     do_perl "5.28.2"
 
+    # Libraries, required by gcc.
+    # depends=('gcc-libs' 'sh')
+    do_gmp "6.1.2"
+    # depends=('gmp>=5.0')
+    do_mpfr "3.1.6"
+    # depends=('mpfr')
+    do_mpc "1.1.0" # "1.0.3"
+    # depends=('gmp')
+    do_isl "0.21"
+ 
+    # -------------------------------------------------------------------------
+
+    # depends=('curl' 'libarchive' 'shared-mime-info' 'jsoncpp' 'rhash')
     do_cmake "3.15.6" # "3.13.4"
+
+    # depends=('bzip2' 'gdbm' 'openssl' 'zlib' 'expat' 'sqlite' 'libffi')
+    do_python "2.7.16" # "2.7.14"
+    # depends=('python2')
+    do_scons "3.0.5" # "3.0.1"
 
     # makedepend is needed by openssl
     do_util_macros "1.19.2" # "1.17.1"
     do_xorg_xproto "7.0.31"
     do_makedepend "1.0.6" # "1.0.5"
 
-    # By all means DO NOT build binutils, since this will override Apple 
-    # specific tools (ar, strip, etc) and break the build in multiple ways.
+    # -------------------------------------------------------------------------
+    # Native binutils and gcc.
 
-    # Preferably leave it to the end, to benefit from all the goodies 
-    # compiled so far.
+    # By all means DO NOT build binutils on macOS, since this will 
+    # override Apple specific tools (ar, strip, etc) and break the
+    # build in multiple ways.
+    if [ "${HOST_UNAME}" != "Darwin" ]
+    then
+      # Requires gmp, mpfr, mpc, isl.
+      do_native_binutils "2.31" 
+    fi
+
+    # Requires gmp, mpfr, mpc, isl.
     do_native_gcc "7.5.0" # "7.4.0"
 
     # -------------------------------------------------------------------------
