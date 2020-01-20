@@ -7,6 +7,92 @@
 # for any purpose is hereby granted, under the terms of the MIT license.
 # -----------------------------------------------------------------------------
 
+function do_native_binutils() 
+{
+  # https://www.gnu.org/software/binutils/
+  # https://ftp.gnu.org/gnu/binutils/
+  # https://aur.archlinux.org/cgit/aur.git/tree/PKGBUILD?h=gdb-git
+
+  # 2017-07-24, "2.29"
+  # 2018-07-14, "2.31"
+  # 2019-02-02, "2.32"
+  # 2019-10-12, "2.33.1"
+
+  local native_binutils_version="$1"
+
+  local native_binutils_folder_name="binutils-${native_binutils_version}"
+  local native_binutils_archive="${native_binutils_folder_name}.tar.xz"
+  local native_binutils_url="https://ftp.gnu.org/gnu/binutils/${native_binutils_archive}"
+
+  local native_binutils_build_folder_name="native-binutils-${native_binutils_version}"
+
+  local native_binutils_stamp_file_path="${STAMPS_FOLDER_PATH}/stamp-${native_binutils_build_folder_name}-installed"
+  if [ ! -f "${native_binutils_stamp_file_path}" -o ! -d "${BUILD_FOLDER_PATH}/${native_binutils_build_folder_name}" ]
+  then
+
+    cd "${SOURCES_FOLDER_PATH}"
+
+    download_and_extract "${native_binutils_url}" "${native_binutils_archive}" "${native_binutils_folder_name}"
+
+    (
+      mkdir -p "${BUILD_FOLDER_PATH}/${native_binutils_build_folder_name}"
+      cd "${BUILD_FOLDER_PATH}/${native_binutils_build_folder_name}"
+
+      xbb_activate
+
+      export CPPFLAGS="${XBB_CPPFLAGS}" 
+      export CFLAGS="${XBB_CFLAGS} -Wno-sign-compare"
+      export CXXFLAGS="${XBB_CXXFLAGS} -Wno-sign-compare"
+      export LDFLAGS="${XBB_LDFLAGS_APP}"
+
+      if [ ! -f "config.status" ]
+      then
+        (
+          echo
+          echo "Running native binutils configure..."
+
+          bash "${SOURCES_FOLDER_PATH}/${native_binutils_folder_name}/configure" --help
+
+          # --with-sysroot failed.
+          echo bash ${DEBUG} "${SOURCES_FOLDER_PATH}/${native_binutils_folder_name}/configure" \
+            --prefix="${INSTALL_FOLDER_PATH}" \
+            --with-pkgversion="${XBB_BRANDING}" \
+            \
+            --disable-shared \
+            --enable-static \
+            --enable-threads \
+            --enable-deterministic-archives \
+            --disable-gdb
+
+          cp "config.log" "${LOGS_FOLDER_PATH}/config-native-binutils-log.txt"
+        ) 2>&1 | tee "${LOGS_FOLDER_PATH}/configure-native-binutils-output.txt"
+      fi
+      (
+        echo
+        echo "Running native binutils make..."
+
+        # Build.
+        make -j ${JOBS}
+
+        make install-strip
+      ) 2>&1 | tee "${LOGS_FOLDER_PATH}/make-native-binutils-output.txt"
+    )
+
+    (
+      xbb_activate_installed_bin
+
+      "${XBB_FOLDER}/bin/size" --version
+    )
+
+    hash -r
+
+    touch "${native_binutils_stamp_file_path}" 
+
+  else
+    echo "Component native binutils already installed."
+  fi
+}
+
 function do_native_gcc() 
 {
   # https://gcc.gnu.org
@@ -20,23 +106,25 @@ function do_native_gcc()
   # 2019-02-22, "8.3.0"
   # 2019-08-12, "9.2.0"
 
-  local gcc_version="$1"
+  local native_gcc_version="$1"
   
-  local gcc_folder_name="gcc-${gcc_version}"
-  local gcc_archive="${gcc_folder_name}.tar.xz"
-  local gcc_url="https://ftp.gnu.org/gnu/gcc/gcc-${gcc_version}/${gcc_archive}"
+  local native_gcc_folder_name="gcc-${native_gcc_version}"
+  local native_gcc_archive="${native_gcc_folder_name}.tar.xz"
+  local native_gcc_url="https://ftp.gnu.org/gnu/gcc/gcc-${native_gcc_version}/${native_gcc_archive}"
 
-  local gcc_stamp_file_path="${STAMPS_FOLDER_PATH}/stamp-gcc-${gcc_version}-installed"
-  if [ ! -f "${gcc_stamp_file_path}" -o ! -d "${BUILD_FOLDER_PATH}/${gcc_folder_name}" ]
+  local native_gcc_build_folder_name="native-gcc-${native_gcc_version}"
+
+  local native_gcc_stamp_file_path="${STAMPS_FOLDER_PATH}/stamp-${native_gcc_build_folder_name}-installed"
+  if [ ! -f "${native_gcc_stamp_file_path}" -o ! -d "${BUILD_FOLDER_PATH}/${native_gcc_build_folder_name}" ]
   then
 
     cd "${SOURCES_FOLDER_PATH}"
 
-    download_and_extract "${gcc_url}" "${gcc_archive}" "${gcc_folder_name}" 
+    download_and_extract "${native_gcc_url}" "${native_gcc_archive}" "${native_gcc_folder_name}" 
 
     (
-      mkdir -p "${BUILD_FOLDER_PATH}/${gcc_folder_name}"
-      cd "${BUILD_FOLDER_PATH}/${gcc_folder_name}"
+      mkdir -p "${BUILD_FOLDER_PATH}/${native_gcc_build_folder_name}"
+      cd "${BUILD_FOLDER_PATH}/${native_gcc_build_folder_name}"
 
       xbb_activate
 
@@ -52,53 +140,46 @@ function do_native_gcc()
       export CXXFLAGS
       export LDFLAGS
 
-      local sdk_path=""
-      local print_path="$(xcode-select -print-path)"
-      if [ -d "${print_path}/SDKs/MacOSX.sdk" ]
-      then
-        # Without Xcode, use the SDK that comes with the CLT.
-        sdk_path="${print_path}/SDKs/MacOSX.sdk"
-      elif [ -d "${print_path}/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk" ]
-      then
-        # With Xcode, chose the SDK from the macOS platform.
-        sdk_path="${print_path}/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk"
-      elif [ -d "/usr/include" ]
-      then
-        # Without Xcode, on 10.10 there is no SDK, use the root.
-        sdk_path="/"
-      else
-        echo "Cannot find SDK in ${print_path}."
-        exit 1
-      fi
-
       if [ ! -f "config.status" ]
       then
         (
           echo
-          echo "Running gcc configure..."
+          echo "Running native gcc configure..."
 
-          bash "${SOURCES_FOLDER_PATH}/${gcc_folder_name}/configure" --help
+          bash "${SOURCES_FOLDER_PATH}/${native_gcc_folder_name}/configure" --help
 
-          # The Linux build also uses:
-          # --enable-__cxa_atexit \
-          # --enable-install-libiberty \
-          # --enable-libmpx \
-          # --disable-libstdcxx-pch \
-          # --enable-gnu-unique-object \
-          # --enable-linker-build-id \
-          # --enable-gnu-indirect-function \
-          # --enable-clocale=gnu \
-          # --disable-libssp \
+
+          if [ "${HOST_UNAME}" == "Darwin" ]
+          then
+            local sdk_path=""
+            local print_path="$(xcode-select -print-path)"
+            if [ -d "${print_path}/SDKs/MacOSX.sdk" ]
+            then
+              # Without Xcode, use the SDK that comes with the CLT.
+              sdk_path="${print_path}/SDKs/MacOSX.sdk"
+            elif [ -d "${print_path}/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk" ]
+            then
+              # With Xcode, chose the SDK from the macOS platform.
+              sdk_path="${print_path}/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk"
+            elif [ -d "/usr/include" ]
+            then
+              # Without Xcode, on 10.10 there is no SDK, use the root.
+              sdk_path="/"
+            else
+              echo "Cannot find SDK in ${print_path}."
+              exit 1
+            fi
 
           # Fail on macOS
           # --with-linker-hash-style=gnu 
           # --enable-libmpx 
           # --enable-clocale=gnu
 
-          bash ${DEBUG} "${SOURCES_FOLDER_PATH}/${gcc_folder_name}/configure" \
+          bash ${DEBUG} "${SOURCES_FOLDER_PATH}/${native_gcc_folder_name}/configure" \
             --prefix="${INSTALL_FOLDER_PATH}" \
             --program-suffix="${XBB_GCC_SUFFIX}" \
-            --with-pkgversion="${XBB_GCC_BRANDING}" \
+            --with-pkgversion="${XBB_BRANDING}" \
+            \
             --with-native-system-header-dir="/usr/include" \
             --with-sysroot="${sdk_path}" \
             \
@@ -122,20 +203,58 @@ function do_native_gcc()
             --disable-nls \
             --disable-bootstrap \
 
-          cp "config.log" "${LOGS_FOLDER_PATH}/config-gcc-log.txt"
-        ) 2>&1 | tee "${LOGS_FOLDER_PATH}/configure-gcc-output.txt"
+          else [ "${HOST_UNAME}" == "Linux" ]
+
+            # The Linux build also uses:
+            # --with-linker-hash-style=gnu
+            # --enable-libmpx 
+            # --enable-clocale=gnu 
+
+            bash ${DEBUG} "${SOURCES_FOLDER_PATH}/${native_gcc_folder_name}/configure" \
+              --prefix="${INSTALL_FOLDER_PATH}" \
+              --program-suffix="${XBB_GCC_SUFFIX}" \
+              --with-pkgversion="${XBB_BRANDING}" \
+              \
+              --enable-languages=c,c++ \
+              \
+              --with-linker-hash-style=gnu \
+              --enable-libmpx \
+              --enable-clocale=gnu \
+              \
+              --enable-checking=release \
+              --enable-static \
+              --enable-threads=posix \
+              --enable-__cxa_atexit \
+              --disable-libunwind-exceptions \
+              --disable-libstdcxx-pch \
+              --disable-libssp \
+              --enable-gnu-unique-object \
+              --enable-linker-build-id \
+              --enable-lto \
+              --enable-plugin \
+              --enable-install-libiberty \
+              --enable-gnu-indirect-function \
+              --disable-multilib \
+              --disable-werror \
+              --disable-nls \
+              --disable-bootstrap \
+
+          fi
+
+          cp "config.log" "${LOGS_FOLDER_PATH}/config-native-gcc-log.txt"
+        ) 2>&1 | tee "${LOGS_FOLDER_PATH}/configure-native-gcc-output.txt"
       fi
 
       (
         echo
-        echo "Running gcc make..."
+        echo "Running native gcc make..."
 
         # Build.
         # Parallel builds may fail.
         make -j ${JOBS}
 
         make install-strip
-      ) 2>&1 | tee "${LOGS_FOLDER_PATH}/make-gcc-output.txt"
+      ) 2>&1 | tee "${LOGS_FOLDER_PATH}/make-native-gcc-output.txt"
     )
 
     (
@@ -177,11 +296,435 @@ __EOF__
 
     hash -r
 
-    touch "${gcc_stamp_file_path}"
+    touch "${native_gcc_stamp_file_path}"
 
   else
-    echo "Component gcc already installed."
+    echo "Component gcc native already installed."
   fi
+}
+
+# -----------------------------------------------------------------------------
+# mingw-w64
+
+function do_mingw_binutils() 
+{
+  # https://ftp.gnu.org/gnu/binutils/
+  # https://aur.archlinux.org/cgit/aur.git/tree/PKGBUILD?h=mingw-w64-binutils-weak
+
+  # 2017-07-24, "2.29"
+  # 2018-07-14, "2.31"
+  # 2019-02-02, "2.32"
+  # 2019-10-12, "2.33.1"
+
+  local mingw_binutils_version="$1"
+
+  local mingw_binutils_folder_name="binutils-${mingw_binutils_version}"
+  local mingw_binutils_archive="${mingw_binutils_folder_name}.tar.xz"
+  local mingw_binutils_url="https://ftp.gnu.org/gnu/binutils/${mingw_binutils_archive}"
+
+  local mingw_binutils_build_folder_name="mingw-binutils-${mingw_binutils_version}"
+
+  local mingw_binutils_stamp_file_path="${STAMPS_FOLDER_PATH}/stamp-${mingw_binutils_build_folder_name}-installed"
+  if [ ! -f "${mingw_binutils_stamp_file_path}" -o ! -d "${BUILD_FOLDER_PATH}/${mingw_binutils_build_folder_name}" ]
+  then
+
+    cd "${SOURCES_FOLDER_PATH}"
+
+    download_and_extract "${mingw_binutils_url}" "${mingw_binutils_archive}" "${mingw_binutils_folder_name}"
+
+    (
+      mkdir -p "${BUILD_FOLDER_PATH}/${mingw_binutils_build_folder_name}"
+      cd "${BUILD_FOLDER_PATH}/${mingw_binutils_build_folder_name}"
+
+      xbb_activate
+
+      export CPPFLAGS="${XBB_CPPFLAGS}" 
+      export CFLAGS="${XBB_CFLAGS} -Wno-sign-compare"
+      export CXXFLAGS="${XBB_CXXFLAGS} -Wno-sign-compare"
+      # export LDFLAGS="-static-libstdc++ ${LDFLAGS}"
+      export LDFLAGS="${XBB_LDFLAGS_APP}"
+
+      if [ ! -f "config.status" ]
+      then
+        (
+          echo
+          echo "Running mingw-w64 binutils configure..."
+
+          # --build used conservatively
+          bash "${SOURCES_FOLDER_PATH}/${mingw_binutils_folder_name}/configure" --help
+
+          bash "${SOURCES_FOLDER_PATH}/${mingw_binutils_folder_name}/configure" \
+            --prefix="${INSTALL_FOLDER_PATH}" \
+            --with-sysroot="${INSTALL_FOLDER_PATH}" \
+            \
+            --build="${BUILD}" \
+            --target="${MINGW_TARGET}" \
+            \
+            --disable-shared \
+            --enable-static \
+            --disable-multilib \
+            --enable-lto \
+            --enable-plugins \
+            --disable-nls \
+            --disable-werror
+
+          cp "config.log" "${LOGS_FOLDER_PATH}/config-mingw-binutils-log.txt"
+        ) 2>&1 | tee "${LOGS_FOLDER_PATH}/configure-mingw-binutils-output.txt"
+      fi
+
+      (
+        echo
+        echo "Running mingw-w64 binutils make..."
+
+        # Build.
+        make -j ${JOBS}
+
+        make install-strip
+      ) 2>&1 | tee "${LOGS_FOLDER_PATH}/make-mingw-binutils-output.txt"
+
+    )
+
+    (
+      xbb_activate_installed_bin
+
+    "${XBB_FOLDER}/bin/${UNAME_ARCH}-w64-mingw32-size" --version
+    )
+
+    hash -r
+
+    touch "${mingw_binutils_stamp_file_path}" 
+
+  else
+    echo "Component mingw-w64 binutils already installed."
+  fi
+
+}
+
+function do_mingw_all() 
+{
+  # http://mingw-w64.org/doku.php/start
+  # https://sourceforge.net/projects/mingw-w64/files/mingw-w64/mingw-w64-release/
+
+  # 2018-06-03, "5.0.4"
+
+  local XBB_MINGW_VERSION="$1"
+
+  # The original SourceForge location.
+  local XBB_MINGW_FOLDER_NAME="mingw-w64-v${XBB_MINGW_VERSION}"
+  local XBB_MINGW_ARCHIVE="${XBB_MINGW_FOLDER_NAME}.tar.bz2"
+  local XBB_MINGW_URL="https://sourceforge.net/projects/mingw-w64/files/mingw-w64/mingw-w64-release/${XBB_MINGW_ARCHIVE}"
+  # local XBB_MINGW_URL="https://github.com/gnu-mcu-eclipse/files/raw/master/libs/${XBB_MINGW_ARCHIVE}"
+  
+  # If SourceForge is down, there is also a GitHub mirror.
+  # https://github.com/mirror/mingw-w64
+  # XBB_MINGW_FOLDER_NAME="mingw-w64-${XBB_MINGW_VERSION}"
+  # XBB_MINGW_ARCHIVE="v${XBB_MINGW_VERSION}.tar.gz"
+  # XBB_MINGW_URL="https://github.com/mirror/mingw-w64/archive/${XBB_MINGW_ARCHIVE}"
+ 
+  # https://sourceforge.net/p/mingw-w64/wiki2/Cross%20Win32%20and%20Win64%20compiler/
+  # https://sourceforge.net/p/mingw-w64/mingw-w64/ci/master/tree/configure
+
+  echo
+  echo "Building mingw-w64 headers ${XBB_MINGW_VERSION}..."
+
+  cd "${XBB_BUILD_FOLDER}"
+
+  download_and_extract "${XBB_MINGW_ARCHIVE}" "${XBB_MINGW_URL}"
+
+  (
+    mkdir -p "${XBB_BUILD_FOLDER}/${XBB_MINGW_FOLDER_NAME}-headers-build"
+    cd "${XBB_BUILD_FOLDER}/${XBB_MINGW_FOLDER_NAME}-headers-build"
+
+    xbb_activate
+    xbb_activate_installed_dev
+
+    bash "${XBB_BUILD_FOLDER}/${XBB_MINGW_FOLDER_NAME}/mingw-w64-headers/configure" --help
+    
+    bash "${XBB_BUILD_FOLDER}/${XBB_MINGW_FOLDER_NAME}/mingw-w64-headers/configure" \
+      --prefix="${XBB_FOLDER}/${MINGW_TARGET}" \
+      --build="${BUILD}" \
+      --host="${MINGW_TARGET}"
+
+    make -j ${JOBS}
+    make install-strip
+
+    # GCC requires the `x86_64-w64-mingw32` folder be mirrored as `mingw` 
+    # in the same root. 
+    (cd "${XBB_FOLDER}"; ln -s "${MINGW_TARGET}" "mingw")
+
+    # For non-multilib builds, links to "lib32" and "lib64" are no longer 
+    # needed, "lib" is enough.
+  )
+
+  hash -r
+
+  # https://gcc.gnu.org
+  # https://gcc.gnu.org/wiki/InstallingGCC
+  # https://aur.archlinux.org/cgit/aur.git/tree/PKGBUILD?h=mingw-w64-gcc
+
+  # https://ftp.gnu.org/gnu/gcc/
+  # 2018-12-06, "7.4.0"
+
+  local XBB_MINGW_GCC_VERSION="$2"
+
+  local XBB_MINGW_GCC_FOLDER_NAME="gcc-${XBB_MINGW_GCC_VERSION}"
+  local XBB_MINGW_GCC_ARCHIVE="${XBB_MINGW_GCC_FOLDER_NAME}.tar.xz"
+  local XBB_MINGW_GCC_URL="https://ftp.gnu.org/gnu/gcc/gcc-${XBB_MINGW_GCC_VERSION}/${XBB_MINGW_GCC_ARCHIVE}"
+  local XBB_MINGW_GCC_BRANDING="xPack Build Box Mingw-w64 GCC\x2C ${BITS}-bit"
+
+  echo
+  echo "Building mingw-w64 gcc ${XBB_MINGW_GCC_VERSION}, step 1..."
+
+  cd "${XBB_BUILD_FOLDER}"
+
+  download_and_extract "${XBB_MINGW_GCC_ARCHIVE}" "${XBB_MINGW_GCC_URL}"
+
+  (
+    mkdir -p "${XBB_BUILD_FOLDER}/${XBB_MINGW_GCC_FOLDER_NAME}-mingw-build"
+    cd "${XBB_BUILD_FOLDER}/${XBB_MINGW_GCC_FOLDER_NAME}-mingw-build"
+
+    xbb_activate
+    xbb_activate_installed_bin
+    xbb_activate_installed_dev
+
+    export CPPFLAGS="${XBB_CPPFLAGS}" 
+    export CFLAGS="${XBB_CFLAGS} -Wno-sign-compare -Wno-implicit-function-declaration -Wno-missing-prototypes"
+    export CXXFLAGS="${XBB_CXXFLAGS} -Wno-sign-compare -Wno-type-limits"
+    # export LDFLAGS="-static-libstdc++ ${LDFLAGS}"
+    export LDFLAGS="${XBB_LDFLAGS_APP}"
+
+    # For the native build, --disable-shared failed with errors in libstdc++-v3
+    bash "${XBB_BUILD_FOLDER}/${XBB_MINGW_GCC_FOLDER_NAME}/configure" --help
+
+    bash "${XBB_BUILD_FOLDER}/${XBB_MINGW_GCC_FOLDER_NAME}/configure" \
+      --prefix="${XBB_FOLDER}" \
+      --with-sysroot="${XBB_FOLDER}" \
+      --build="${BUILD}" \
+      --target=${MINGW_TARGET} \
+      --with-pkgversion="${XBB_MINGW_GCC_BRANDING}" \
+      --enable-languages=c,c++ \
+      --enable-shared \
+      --enable-static \
+      --enable-threads=posix \
+      --enable-fully-dynamic-string \
+      --enable-libstdcxx-time=yes \
+      --with-system-zlib \
+      --enable-cloog-backend=isl \
+      --enable-lto \
+      --disable-dw2-exceptions \
+      --enable-libgomp \
+      --disable-multilib \
+      --enable-checking=release
+
+    # Parallel builds fail.
+    # make all-gcc -j ${JOBS}
+    make all-gcc
+    make install-gcc
+  )
+
+  hash -r
+
+  # https://aur.archlinux.org/cgit/aur.git/tree/PKGBUILD?h=mingw-w64-crt-git
+
+  echo
+  echo "Building mingw-w64 crt ${XBB_MINGW_VERSION}..."
+
+  cd "${XBB_BUILD_FOLDER}"
+
+  download_and_extract "${XBB_MINGW_ARCHIVE}" "${XBB_MINGW_URL}"
+
+  (
+    mkdir -p "${XBB_BUILD_FOLDER}/${XBB_MINGW_FOLDER_NAME}-crt-build"
+    cd "${XBB_BUILD_FOLDER}/${XBB_MINGW_FOLDER_NAME}-crt-build"
+
+    xbb_activate
+    xbb_activate_installed_bin
+    xbb_activate_installed_dev
+
+    # Overwrite the flags, -ffunction-sections -fdata-sections result in
+    # {standard input}: Assembler messages:
+    # {standard input}:693: Error: CFI instruction used without previous .cfi_startproc
+    # {standard input}:695: Error: .cfi_endproc without corresponding .cfi_startproc
+    # {standard input}:697: Error: .seh_endproc used in segment '.text' instead of expected '.text$WinMainCRTStartup'
+    # {standard input}: Error: open CFI at the end of file; missing .cfi_endproc directive
+    # {standard input}:7150: Error: can't resolve `.text' {.text section} - `.LFB5156' {.text$WinMainCRTStartup section}
+    # {standard input}:8937: Error: can't resolve `.text' {.text section} - `.LFB5156' {.text$WinMainCRTStartup section}
+
+    export CFLAGS="-O2 -pipe -Wno-unused-variable -Wno-implicit-fallthrough -Wno-implicit-function-declaration -Wno-cpp"
+    export CXXFLAGS="-O2 -pipe"
+    export LDFLAGS=""
+    
+    # Without it, apparently a bug in autoconf/c.m4, function AC_PROG_CC, results in:
+    # checking for _mingw_mac.h... no
+    # configure: error: Please check if the mingw-w64 header set and the build/host option are set properly.
+    # (https://github.com/henry0312/build_gcc/issues/1)
+    export CC=""
+
+    "${XBB_BUILD_FOLDER}/${XBB_MINGW_FOLDER_NAME}/mingw-w64-crt/configure" --help
+    if [ "${BITS}" == "64" ]
+    then
+      _crt_configure_lib32="--disable-lib32"
+      _crt_configure_lib64="--enable-lib64"
+    elif [ "${BITS}" == "32" ]
+    then
+      _crt_configure_lib32="--enable-lib32"
+      _crt_configure_lib64="--disable-lib64"
+    else
+      exit 1
+    fi
+
+    bash "${XBB_BUILD_FOLDER}/${XBB_MINGW_FOLDER_NAME}/mingw-w64-crt/configure" \
+      --prefix="${XBB_FOLDER}/${MINGW_TARGET}" \
+      --with-sysroot="${XBB_FOLDER}" \
+      --build="${BUILD}" \
+      --host="${MINGW_TARGET}" \
+      --enable-wildcard \
+      ${_crt_configure_lib32} \
+      ${_crt_configure_lib64}
+
+    # Parallel builds fail.
+    # make -j ${JOBS}
+    make
+    make install-strip
+
+    ls -l "${XBB_FOLDER}" "${XBB_FOLDER}/${MINGW_TARGET}"
+  )
+
+  hash -r
+
+  # https://aur.archlinux.org/cgit/aur.git/tree/PKGBUILD?h=mingw-w64-winpthreads-git
+
+  echo
+  echo "Building mingw-w64 winpthreads ${XBB_MINGW_VERSION}..."
+
+  cd "${XBB_BUILD_FOLDER}"
+
+  download_and_extract "${XBB_MINGW_ARCHIVE}" "${XBB_MINGW_URL}"
+
+  (
+    mkdir -p "${XBB_BUILD_FOLDER}/${XBB_MINGW_FOLDER_NAME}-winphreads-build"
+    cd "${XBB_BUILD_FOLDER}/${XBB_MINGW_FOLDER_NAME}-winphreads-build"
+
+    xbb_activate
+    xbb_activate_installed_bin
+    xbb_activate_installed_dev
+
+    export CPPFLAGS="" 
+    export CFLAGS="-O2 -pipe"
+    export CXXFLAGS="-O2 -pipe"
+    export LDFLAGS=""
+    
+    export CC=""
+
+    bash "${XBB_BUILD_FOLDER}/${XBB_MINGW_FOLDER_NAME}/mingw-w64-crt/configure" --help
+    if [ "${BITS}" == "64" ]
+    then
+      _crt_configure_lib32="--disable-lib32"
+      _crt_configure_lib64="--enable-lib64"
+    elif [ "${BITS}" == "32" ]
+    then
+      _crt_configure_lib32="--enable-lib32"
+      _crt_configure_lib64="--disable-lib64"
+    else
+      exit 1
+    fi
+
+    bash "${XBB_BUILD_FOLDER}/${XBB_MINGW_FOLDER_NAME}/mingw-w64-libraries/winpthreads/configure" \
+      --prefix="${XBB_FOLDER}/${MINGW_TARGET}" \
+      --build="${BUILD}" \
+      --host="${MINGW_TARGET}" \
+      --enable-static \
+      --enable-shared
+
+    make -j ${JOBS}
+    make install-strip
+
+    ls -l "${XBB_FOLDER}" "${XBB_FOLDER}/${MINGW_TARGET}"
+  )
+
+  hash -r
+
+  echo
+  echo "Building mingw-w64 gcc ${XBB_MINGW_GCC_VERSION}, step 2..."
+
+  cd "${XBB_BUILD_FOLDER}"
+
+  # download_and_extract "${XBB_MINGW_GCC_ARCHIVE}" "${XBB_MINGW_GCC_URL}"
+
+  (
+    mkdir -p "${XBB_BUILD_FOLDER}/${XBB_MINGW_GCC_FOLDER_NAME}-mingw-build"
+    cd "${XBB_BUILD_FOLDER}/${XBB_MINGW_GCC_FOLDER_NAME}-mingw-build"
+
+    xbb_activate
+    xbb_activate_installed_bin
+    xbb_activate_installed_dev
+
+    export CPPFLAGS="${XBB_CPPFLAGS}" 
+    export CFLAGS="${XBB_CFLAGS} -Wno-sign-compare -Wno-implicit-function-declaration -Wno-missing-prototypes"
+    export CXXFLAGS="${XBB_CXXFLAGS} -Wno-sign-compare -Wno-type-limits"
+    export LDFLAGS="${XBB_LDFLAGS_APP}"
+
+    # Parallel builds fail.
+    # make -j ${JOBS}
+    make
+    make install-strip
+  )
+
+  (
+    cd "${XBB_FOLDER}"
+
+    xbb_activate_installed_bin
+
+    if true
+    then
+
+      set +e
+      find ${MINGW_TARGET} \
+        -name '*.so' -type f \
+        -print \
+        -exec "${XBB_FOLDER}/bin/${UNAME_ARCH}-w64-mingw32-strip" --strip-debug {} \;
+      find ${MINGW_TARGET} \
+        -name '*.so.*'  \
+        -type f \
+        -print \
+        -exec "${XBB_FOLDER}/bin/${UNAME_ARCH}-w64-mingw32-strip" --strip-debug {} \;
+      # Note: without ranlib, windows builds failed.
+      find ${MINGW_TARGET} lib/gcc/${MINGW_TARGET} \
+        -name '*.a'  \
+        -type f  \
+        -print \
+        -exec "${XBB_FOLDER}/bin/${UNAME_ARCH}-w64-mingw32-strip" --strip-debug {} \; \
+        -exec "${XBB_FOLDER}/bin/${UNAME_ARCH}-w64-mingw32-ranlib" {} \;
+      set -e
+    
+    fi
+  )
+
+  (
+    xbb_activate_installed_bin
+
+    "${XBB_FOLDER}/bin/${UNAME_ARCH}-w64-mingw32-g++" --version
+
+    mkdir -p "${HOME}/tmp"
+    cd "${HOME}/tmp"
+
+    # Note: __EOF__ is quoted to prevent substitutions here.
+    cat <<'__EOF__' > hello.cpp
+#include <iostream>
+
+int
+main(int argc, char* argv[])
+{
+  std::cout << "Hello" << std::endl;
+}
+__EOF__
+
+    "${XBB_FOLDER}/bin/${UNAME_ARCH}-w64-mingw32-g++" hello.cpp -o hello
+
+    rm -rf hello.cpp hello
+  )
+
+  hash -r
 }
 
 # -----------------------------------------------------------------------------
@@ -202,6 +745,7 @@ function do_openssl()
   # 2019-Feb-26, "1.0.2r"
   # 2019-Feb-26, "1.1.1b"
   # 2019-Sep-10, "1.1.1d"
+  # 20 Dec 2019, "1.0.2u"
 
   local openssl_version="$1"
 
@@ -225,7 +769,7 @@ function do_openssl()
       xbb_activate
 
       # export CPPFLAGS="${XBB_CPPFLAGS} -I${BUILD_FOLDER_PATH}/${openssl_folder_name}/include"
-      export CPPFLAGS="${XBB_CPPFLAGS}"
+      export CPPFLAGS="${XBB_CPPFLAGS} -Wno-unused-command-line-argument"
       export CFLAGS="${XBB_CFLAGS}"
       export CXXFLAGS="${XBB_CXXFLAGS}"
       export LDFLAGS="${XBB_LDFLAGS_APP}"
@@ -239,12 +783,10 @@ function do_openssl()
           # This config does not use the standard GNU environment definitions.
           # `Configure` is a Perl script.
           "./Configure" --help || true
+          # ./config --help
 
-          if [ "${HOST_MACHINE}" == 'x86_64' ]; then
-            optflags='enable-ec_nistp_64_gcc_128'
-          elif [ "${HOST_MACHINE}" == 'i686' ]; then
-            optflags=''
-          fi
+          # WARNING! If you wish to build 64-bit library, then you have to
+          # invoke './Configure darwin64-x86_64-cc' *manually*.
 
           local configure_target=""
           if [ "${HOST_UNAME}" == "Darwin" ]
@@ -252,14 +794,14 @@ function do_openssl()
             configure_target=darwin64-x86_64-cc
           fi
 
-          # -Wa,--noexecstack on Linux
+          # linux-x86_64, linux-elf
 
-          "./Configure" ${configure_target} \
+          echo
+          "./Configure" \
             --prefix="${INSTALL_FOLDER_PATH}" \
             --openssldir="${INSTALL_FOLDER_PATH}/openssl" \
             shared \
-            no-ssl3-method \
-            ${optflags} \
+            ${configure_target} \
             "${CPPFLAGS} ${CFLAGS} ${LDFLAGS}"
 
           make depend 
@@ -409,12 +951,17 @@ function do_xz()
   # https://aur.archlinux.org/cgit/aur.git/tree/PKGBUILD?h=xz-git
 
   # 2016-12-30 "5.2.3"
-  # 2018-04-29 "5.2.4"
+  # 2018-04-29 "5.2.4" (latest)
 
   local xz_version="$1"
 
   local xz_folder_name="xz-${xz_version}"
-  local xz_archive="${xz_folder_name}.tar.xz"
+  if [ "${IS_BOOTSTRAP}" == "y" ]
+  then
+    local xz_archive="${xz_folder_name}.tar.gz"
+  else
+    local xz_archive="${xz_folder_name}.tar.xz"
+  fi
   local xz_url="https://tukaani.org/xz/${xz_archive}"
 
   local xz_stamp_file_path="${STAMPS_FOLDER_PATH}/stamp-xz-${xz_version}-installed"
@@ -492,7 +1039,12 @@ function do_tar()
   local tar_version="$1"
 
   local tar_folder_name="tar-${tar_version}"
-  local tar_archive="${tar_folder_name}.tar.xz"
+  if [ "${IS_BOOTSTRAP}" == "y" ]
+  then
+    local tar_archive="${tar_folder_name}.tar.gz"
+  else
+    local tar_archive="${tar_folder_name}.tar.xz"
+  fi
   local tar_url="https://ftp.gnu.org/gnu/tar/${tar_archive}"
   
   local tar_stamp_file_path="${STAMPS_FOLDER_PATH}/stamp-tar-${tar_version}-installed"
@@ -571,6 +1123,7 @@ function do_coreutils()
   # https://www.gnu.org/software/coreutils/
   # https://ftp.gnu.org/gnu/coreutils/
 
+  # 2018-07-01, "8.30"
   # 2019-03-10 "8.31"
 
   local coreutils_version="$1"
@@ -1070,7 +1623,7 @@ function do_automake()
   # https://aur.archlinux.org/cgit/aur.git/tree/PKGBUILD?h=automake-git
 
   # 2015-01-05, "1.15"
-  # 2018-02-25, "1.16"
+  # 2018-02-25, "1.16" (latest)
 
   local automake_version="$1"
 
@@ -1306,7 +1859,7 @@ function do_patch()
   # https://aur.archlinux.org/cgit/aur.git/tree/PKGBUILD?h=patch-git
 
   # 2015-03-06, "2.7.5"
-  # 2018-02-06, "2.7.6"
+  # 2018-02-06, "2.7.6" (latest)
 
   local patch_version="$1"
 
@@ -1538,7 +2091,7 @@ function do_flex()
   # https://github.com/westes/flex/releases/download/v2.6.4/flex-2.6.4.tar.gz
 
   # Apple uses 2.5.3
-  # May 6, 2017, "2.6.4"
+  # May 6, 2017, "2.6.4" (latest)
 
   local flex_version="$1"
 
@@ -2504,7 +3057,7 @@ function do_python3()
 
       export CPPFLAGS="${XBB_CPPFLAGS}"
       # export CFLAGS="${XBB_CFLAGS} -Wno-int-in-bool-context -Wno-maybe-uninitialized -Wno-nonnull -Wno-stringop-overflow"
-      export CFLAGS="${XBB_CFLAGS} -Wno-nonnull"
+      export CFLAGS="${XBB_CFLAGS} -Wno-nonnull -Wno-deprecated-declarations"
       export CXXFLAGS="${XBB_CXXFLAGS}"
       export LDFLAGS="${XBB_LDFLAGS_APP}"
 
@@ -2535,9 +3088,9 @@ function do_python3()
             --with-computed-gotos \
             --enable-optimizations \
             --with-system-expat \
-            --with-dbmliborder=gdbm:ndbm \
             --with-system-ffi \
             --with-system-libmpdec \
+            --with-dbmliborder=gdbm:ndbm \
             --enable-loadable-sqlite-extensions \
             --without-ensurepip
             
@@ -2650,19 +3203,32 @@ function do_meson
   # https://pypi.org/project/meson/0.50.0/#description
 
   # Jan 7, 2020, "0.53.0"
-  (
-    xbb_activate_installed_bin
 
-    pip3 install meson==$1
-  )
+  local meson_version="$1"
 
-  (
-    xbb_activate_installed_bin
+  local meson_stamp_file_path="${STAMPS_FOLDER_PATH}/stamp-meson-${meson_version}-installed"
+  if [ ! -f "${meson_stamp_file_path}" ]
+  then
 
-    "${INSTALL_FOLDER_PATH}/bin/meson" --version
-  )
+    (
+      xbb_activate_installed_bin
 
-  hash -r
+      pip3 install meson==${meson_version}
+    )
+
+    (
+      xbb_activate_installed_bin
+
+      "${INSTALL_FOLDER_PATH}/bin/meson" --version
+    )
+
+    hash -r
+
+    touch "${meson_stamp_file_path}"
+
+  else
+    echo "Component meson already installed."
+  fi
 }
 
 function do_ninja() 
