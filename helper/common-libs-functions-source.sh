@@ -928,6 +928,75 @@ function do_xorg_xproto()
   fi
 }
 
-# function do_libpng()
+function do_libpng()
+{
+  # To ensure builds stability, use slightly older releases.
+  # https://sourceforge.net/projects/libpng/files/libpng16/
+  # https://sourceforge.net/projects/libpng/files/libpng16/older-releases/
+
+  # https://aur.archlinux.org/cgit/aur.git/tree/PKGBUILD?h=libpng-git
+  # https://aur.archlinux.org/cgit/aur.git/tree/PKGBUILD?h=mingw-w64-libpng
+
+  # 2017-09-16
+  # 2018-12-01, "1.6.36"
+  # 2019-04-14, "1.6.3"
+
+  local libpng_version="$1"
+
+  local libpng_folder_name="libpng-${libpng_version}"
+  local libpng_archive="${libpng_folder_name}.tar.gz"
+  local libpng_url="https://sourceforge.net/projects/libpng/files/libpng16/${libpng_version}/${libpng_archive}"
+
+  local libpng_stamp_file_path="${STAMPS_FOLDER_PATH}/stamp-libpng-${libpng_version}-installed"
+  if [ ! -f "${libpng_stamp_file_path}" -o ! -d "${LIBS_BUILD_FOLDER_PATH}/${libpng_folder_name}" ]
+  then
+
+    cd "${SOURCES_FOLDER_PATH}"
+
+    download_and_extract "${libpng_url}" "${libpng_archive}" "${libpng_folder_name}"
+
+    (
+      mkdir -p "${LIBS_BUILD_FOLDER_PATH}/${libpng_folder_name}"
+      cd "${LIBS_BUILD_FOLDER_PATH}/${libpng_folder_name}"
+
+      xbb_activate
+
+      export CPPFLAGS="${XBB_CPPFLAGS}"
+      export CFLAGS="${XBB_CFLAGS}"
+      export CXXFLAGS="${XBB_CXXFLAGS}"
+      export LDFLAGS="${XBB_LDFLAGS_LIB}"
+
+      if [ ! -f "config.status" ]
+      then
+        (
+          echo
+          echo "Running libpng configure..."
+
+          bash "${SOURCES_FOLDER_PATH}/${libpng_folder_name}/configure" --help
+
+          bash ${DEBUG} "${SOURCES_FOLDER_PATH}/${libpng_folder_name}/configure" \
+            --prefix="${INSTALL_FOLDER_PATH}" 
+
+          cp "config.log" "${LOGS_FOLDER_PATH}/config-libpng-log.txt"
+        ) 2>&1 | tee "${LOGS_FOLDER_PATH}/configure-libpng-output.txt"
+      fi
+
+      (
+        echo
+        echo "Running libpng make..."
+
+        # Build.
+        make -j ${JOBS}
+
+        make install-strip
+      ) 2>&1 | tee "${LOGS_FOLDER_PATH}/make-libpng-output.txt"
+    )
+
+    touch "${libpng_stamp_file_path}"
+
+  else
+    echo "Library libpng already installed."
+  fi
+}
 
 # -----------------------------------------------------------------------------
