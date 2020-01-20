@@ -60,7 +60,7 @@ compiler, but with a GCC 7. This first set of tools is called _the XBB
 bootstrap_.
 
 ```console
-$ caffeinate bash "${HOME}/Downloads/xpack-build-box.git/macos/build-xbb-bootstrap.sh"
+$ JOBS=10 caffeinate bash "${HOME}/Downloads/xpack-build-box.git/macos/build-xbb-bootstrap-v4.1.sh"
 ```
 
 The build process takes quite a while.
@@ -78,7 +78,7 @@ This folder can also be removed after the final XBB tools are built.
 The final XBB tools are compiled with the bootstrapped compiler.
 
 ```console
-$ caffeinate bash "${HOME}/Downloads/xpack-build-box.git/macos/build-xbb.sh"
+$ JOBS=10 caffeinate bash "${HOME}/Downloads/xpack-build-box.git/macos/build-xbb-v3.1.sh"
 ```
 
 The build process takes quite a while. 

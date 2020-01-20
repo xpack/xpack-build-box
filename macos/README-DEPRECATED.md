@@ -1,4 +1,5 @@
-## The macOS XBB
+# The macOS XBB
+
 ## Deprecated Homebrew solution
 
 The first version of the macOS XBB used Homebrew, but it was soon discovered
