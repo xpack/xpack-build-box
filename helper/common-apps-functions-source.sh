@@ -407,57 +407,94 @@ function do_mingw_all()
   # https://sourceforge.net/projects/mingw-w64/files/mingw-w64/mingw-w64-release/
 
   # 2018-06-03, "5.0.4"
+  # 2018-09-16, "6.0.0"
+  # 2019-11-11, "7.0.0"
 
-  local XBB_MINGW_VERSION="$1"
+  local mingw_version="$1"
+  local mingw_gcc_version="$2"
+
 
   # The original SourceForge location.
-  local XBB_MINGW_FOLDER_NAME="mingw-w64-v${XBB_MINGW_VERSION}"
-  local XBB_MINGW_ARCHIVE="${XBB_MINGW_FOLDER_NAME}.tar.bz2"
-  local XBB_MINGW_URL="https://sourceforge.net/projects/mingw-w64/files/mingw-w64/mingw-w64-release/${XBB_MINGW_ARCHIVE}"
-  # local XBB_MINGW_URL="https://github.com/gnu-mcu-eclipse/files/raw/master/libs/${XBB_MINGW_ARCHIVE}"
+  local mingw_folder_name="mingw-w64-v${mingw_version}"
+  local mingw_folder_archive="${mingw_folder_name}.tar.bz2"
+  local mingw_url="https://sourceforge.net/projects/mingw-w64/files/mingw-w64/mingw-w64-release/${mingw_folder_archive}"
+  # local mingw_url="https://github.com/gnu-mcu-eclipse/files/raw/master/libs/${mingw_folder_archive}"
   
   # If SourceForge is down, there is also a GitHub mirror.
   # https://github.com/mirror/mingw-w64
-  # XBB_MINGW_FOLDER_NAME="mingw-w64-${XBB_MINGW_VERSION}"
-  # XBB_MINGW_ARCHIVE="v${XBB_MINGW_VERSION}.tar.gz"
-  # XBB_MINGW_URL="https://github.com/mirror/mingw-w64/archive/${XBB_MINGW_ARCHIVE}"
+  # mingw_folder_name="mingw-w64-${mingw_version}"
+  # mingw_folder_archive="v${mingw_version}.tar.gz"
+  # mingw_url="https://github.com/mirror/mingw-w64/archive/${mingw_folder_archive}"
  
   # https://sourceforge.net/p/mingw-w64/wiki2/Cross%20Win32%20and%20Win64%20compiler/
   # https://sourceforge.net/p/mingw-w64/mingw-w64/ci/master/tree/configure
 
-  echo
-  echo "Building mingw-w64 headers ${XBB_MINGW_VERSION}..."
+  # ---------------------------------------------------------------------------
 
-  cd "${XBB_BUILD_FOLDER}"
+  local mingw_build_headers_folder_name="mingw-${mingw_version}-headers"
 
-  download_and_extract "${XBB_MINGW_ARCHIVE}" "${XBB_MINGW_URL}"
+  local mingw_headers_stamp_file_path="${STAMPS_FOLDER_PATH}/stamp-${mingw_build_headers_folder_name}-installed"
+  if [ ! -f "${mingw_headers_stamp_file_path}" -o ! -d "${BUILD_FOLDER_PATH}/${mingw_build_headers_folder_name}" ]
+  then
 
-  (
-    mkdir -p "${XBB_BUILD_FOLDER}/${XBB_MINGW_FOLDER_NAME}-headers-build"
-    cd "${XBB_BUILD_FOLDER}/${XBB_MINGW_FOLDER_NAME}-headers-build"
+    cd "${SOURCES_FOLDER_PATH}"
 
-    xbb_activate
-    xbb_activate_installed_dev
+    download_and_extract "${mingw_url}" "${mingw_folder_archive}" "{mingw_folder_name}"
 
-    bash "${XBB_BUILD_FOLDER}/${XBB_MINGW_FOLDER_NAME}/mingw-w64-headers/configure" --help
-    
-    bash "${XBB_BUILD_FOLDER}/${XBB_MINGW_FOLDER_NAME}/mingw-w64-headers/configure" \
-      --prefix="${XBB_FOLDER}/${MINGW_TARGET}" \
-      --build="${BUILD}" \
-      --host="${MINGW_TARGET}"
+    (
+      mkdir -p "${BUILD_FOLDER_PATH}/${mingw_build_headers_folder_name}"
+      cd "${BUILD_FOLDER_PATH}/${mingw_build_headers_folder_name}"
 
-    make -j ${JOBS}
-    make install-strip
+      xbb_activate
 
-    # GCC requires the `x86_64-w64-mingw32` folder be mirrored as `mingw` 
-    # in the same root. 
-    (cd "${XBB_FOLDER}"; ln -s "${MINGW_TARGET}" "mingw")
+      if [ ! -f "config.status" ]
+      then
+        (
+          echo
+          echo "Running mingw-w64 headers configure..."
 
-    # For non-multilib builds, links to "lib32" and "lib64" are no longer 
-    # needed, "lib" is enough.
-  )
+          bash "${SOURCES_FOLDER_PATH}/${mingw_folder_name}/mingw-w64-headers/configure" --help
+          
+          bash ${DEBUG} "${SOURCES_FOLDER_PATH}/${mingw_folder_name}/mingw-w64-headers/configure" \
+            --prefix="${INSTALL_FOLDER_PATH}/${MINGW_TARGET}" \
+            \
+            --build="${BUILD}" \
+            --host="${MINGW_TARGET}"
 
-  hash -r
+          cp "config.log" "${LOGS_FOLDER_PATH}/config-mingw-headers-log.txt"
+        ) 2>&1 | tee "${LOGS_FOLDER_PATH}/configure-mingw-headers-output.txt"
+      fi
+
+      (
+        echo
+        echo "Running mingw-w64 headers make..."
+
+        make -j ${JOBS}
+
+        make install-strip
+
+        # GCC requires the `x86_64-w64-mingw32` folder be mirrored as `mingw` 
+        # in the same root. 
+        (
+          cd "${INSTALL_FOLDER_PATH}"
+          rm -f "mingw"
+          ln -s "${MINGW_TARGET}" "mingw"
+        )
+
+        # For non-multilib builds, links to "lib32" and "lib64" are no longer 
+        # needed, "lib" is enough.
+      ) 2>&1 | tee "${LOGS_FOLDER_PATH}/make-mingw-headers-output.txt"
+    )
+
+    hash -r
+
+    touch "${mingw_headers_stamp_file_path}"
+
+  else
+    echo "Component mingw-w64 headers already installed."
+  fi
+
+  # ---------------------------------------------------------------------------
 
   # https://gcc.gnu.org
   # https://gcc.gnu.org/wiki/InstallingGCC
@@ -465,252 +502,315 @@ function do_mingw_all()
 
   # https://ftp.gnu.org/gnu/gcc/
   # 2018-12-06, "7.4.0"
+  # 2019-11-14, "7.5.0"
+  # 2019-02-22, "8.3.0"
+  # 2019-08-12, "9.2.0"
 
-  local XBB_MINGW_GCC_VERSION="$2"
+  local mingw_gcc_folder_name="gcc-${mingw_gcc_version}"
+  local mingw_gcc_archive="${mingw_gcc_folder_name}.tar.xz"
+  local mingw_gcc_url="https://ftp.gnu.org/gnu/gcc/gcc-${mingw_gcc_version}/${mingw_gcc_archive}"
 
-  local XBB_MINGW_GCC_FOLDER_NAME="gcc-${XBB_MINGW_GCC_VERSION}"
-  local XBB_MINGW_GCC_ARCHIVE="${XBB_MINGW_GCC_FOLDER_NAME}.tar.xz"
-  local XBB_MINGW_GCC_URL="https://ftp.gnu.org/gnu/gcc/gcc-${XBB_MINGW_GCC_VERSION}/${XBB_MINGW_GCC_ARCHIVE}"
-  local XBB_MINGW_GCC_BRANDING="xPack Build Box Mingw-w64 GCC\x2C ${BITS}-bit"
+  local mingw_build_gcc_folder_name="mingw-gcc-${mingw_gcc_version}"
 
-  echo
-  echo "Building mingw-w64 gcc ${XBB_MINGW_GCC_VERSION}, step 1..."
+  local mingw_gcc_step1_stamp_file_path="${STAMPS_FOLDER_PATH}/stamp-mingw-gcc-step1-${mingw_gcc_version}-installed"
+  if [ ! -f "${mingw_gcc_step1_stamp_file_path}" -o ! -d "${BUILD_FOLDER_PATH}/${mingw_build_gcc_folder_name}" ]
+  then
 
-  cd "${XBB_BUILD_FOLDER}"
+    cd "${BUILD_FOLDER_PATH}"
 
-  download_and_extract "${XBB_MINGW_GCC_ARCHIVE}" "${XBB_MINGW_GCC_URL}"
+    download_and_extract "${mingw_gcc_url}" "${mingw_gcc_archive}" "${mingw_gcc_folder_name}"
 
-  (
-    mkdir -p "${XBB_BUILD_FOLDER}/${XBB_MINGW_GCC_FOLDER_NAME}-mingw-build"
-    cd "${XBB_BUILD_FOLDER}/${XBB_MINGW_GCC_FOLDER_NAME}-mingw-build"
+    (
+      mkdir -p "${BUILD_FOLDER_PATH}/${mingw_build_gcc_folder_name}"
+      cd "${BUILD_FOLDER_PATH}/${mingw_build_gcc_folder_name}"
 
-    xbb_activate
-    xbb_activate_installed_bin
-    xbb_activate_installed_dev
+      xbb_activate
 
-    export CPPFLAGS="${XBB_CPPFLAGS}" 
-    export CFLAGS="${XBB_CFLAGS} -Wno-sign-compare -Wno-implicit-function-declaration -Wno-missing-prototypes"
-    export CXXFLAGS="${XBB_CXXFLAGS} -Wno-sign-compare -Wno-type-limits"
-    # export LDFLAGS="-static-libstdc++ ${LDFLAGS}"
-    export LDFLAGS="${XBB_LDFLAGS_APP}"
+      export CPPFLAGS="${XBB_CPPFLAGS}" 
+      export CFLAGS="${XBB_CFLAGS} -Wno-sign-compare -Wno-implicit-function-declaration -Wno-missing-prototypes"
+      export CXXFLAGS="${XBB_CXXFLAGS} -Wno-sign-compare -Wno-type-limits"
+      # export LDFLAGS="-static-libstdc++ ${LDFLAGS}"
+      export LDFLAGS="${XBB_LDFLAGS_APP}"
 
-    # For the native build, --disable-shared failed with errors in libstdc++-v3
-    bash "${XBB_BUILD_FOLDER}/${XBB_MINGW_GCC_FOLDER_NAME}/configure" --help
+      if [ ! -f "config.status" ]
+      then
+        (
+          echo
+          echo "Running mingw gcc step 1 configure..."
 
-    bash "${XBB_BUILD_FOLDER}/${XBB_MINGW_GCC_FOLDER_NAME}/configure" \
-      --prefix="${XBB_FOLDER}" \
-      --with-sysroot="${XBB_FOLDER}" \
-      --build="${BUILD}" \
-      --target=${MINGW_TARGET} \
-      --with-pkgversion="${XBB_MINGW_GCC_BRANDING}" \
-      --enable-languages=c,c++ \
-      --enable-shared \
-      --enable-static \
-      --enable-threads=posix \
-      --enable-fully-dynamic-string \
-      --enable-libstdcxx-time=yes \
-      --with-system-zlib \
-      --enable-cloog-backend=isl \
-      --enable-lto \
-      --disable-dw2-exceptions \
-      --enable-libgomp \
-      --disable-multilib \
-      --enable-checking=release
+          # For the native build, --disable-shared failed with errors in libstdc++-v3
+          bash "${SOURCES_FOLDER_PATH}/${mingw_gcc_folder_name}/configure" --help
 
-    # Parallel builds fail.
-    # make all-gcc -j ${JOBS}
-    make all-gcc
-    make install-gcc
-  )
+          bash ${DEBUG} "${SOURCES_FOLDER_PATH}/${mingw_gcc_folder_name}/configure" \
+            --prefix="${INSTALL_FOLDER_PATH}" \
+            --with-sysroot="${XBB_FOLDER}" \
+            --with-pkgversion="${XBB_MINGW_GCC_BRANDING}" \
+            \
+            --build="${BUILD}" \
+            --target=${MINGW_TARGET} \
+            \
+            --enable-languages=c,c++ \
+            --enable-shared \
+            --enable-static \
+            --enable-threads=posix \
+            --enable-fully-dynamic-string \
+            --enable-libstdcxx-time=yes \
+            --with-system-zlib \
+            --enable-cloog-backend=isl \
+            --enable-lto \
+            --disable-dw2-exceptions \
+            --enable-libgomp \
+            --disable-multilib \
+            --enable-checking=release
 
-  hash -r
+          cp "config.log" "${LOGS_FOLDER_PATH}/config-mingw-gcc-step1-log.txt"
+        ) 2>&1 | tee "${LOGS_FOLDER_PATH}/configure-mingw-gcc-step1-output.txt"
+      fi
+
+      (
+        echo
+        echo "Running mingw gcc step 1 make..."
+
+        # Parallel builds may fail.
+        make all-gcc -j ${JOBS}
+        # make all-gcc
+
+        make install-gcc
+      ) 2>&1 | tee "${LOGS_FOLDER_PATH}/make-mingw-gcc-step1-output.txt"
+    )
+
+    hash -r
+
+    touch "${mingw_gcc_step1_stamp_file_path}"
+
+  else
+    echo "Component mingw-w64 gcc step 1 already installed."
+  fi
+
+  # ---------------------------------------------------------------------------
 
   # https://aur.archlinux.org/cgit/aur.git/tree/PKGBUILD?h=mingw-w64-crt-git
 
-  echo
-  echo "Building mingw-w64 crt ${XBB_MINGW_VERSION}..."
+  local mingw_build_crt_folder_name="mingw-${mingw_version}-crt"
 
-  cd "${XBB_BUILD_FOLDER}"
+  local mingw_crt_stamp_file_path="${STAMPS_FOLDER_PATH}/stamp-${mingw_build_crt_folder_name}-installed"
+  if [ ! -f "${mingw_crt_stamp_file_path}" -o ! -d "${BUILD_FOLDER_PATH}/${mingw_build_crt_folder_name}" ]
+  then
 
-  download_and_extract "${XBB_MINGW_ARCHIVE}" "${XBB_MINGW_URL}"
+    (
+      mkdir -p "${BUILD_FOLDER_PATH}/${mingw_build_crt_folder_name}"
+      cd "${BUILD_FOLDER_PATH}/${mingw_build_crt_folder_name}"
 
-  (
-    mkdir -p "${XBB_BUILD_FOLDER}/${XBB_MINGW_FOLDER_NAME}-crt-build"
-    cd "${XBB_BUILD_FOLDER}/${XBB_MINGW_FOLDER_NAME}-crt-build"
+      xbb_activate
+      xbb_activate_installed_bin
 
-    xbb_activate
-    xbb_activate_installed_bin
-    xbb_activate_installed_dev
+      # Overwrite the flags, -ffunction-sections -fdata-sections result in
+      # {standard input}: Assembler messages:
+      # {standard input}:693: Error: CFI instruction used without previous .cfi_startproc
+      # {standard input}:695: Error: .cfi_endproc without corresponding .cfi_startproc
+      # {standard input}:697: Error: .seh_endproc used in segment '.text' instead of expected '.text$WinMainCRTStartup'
+      # {standard input}: Error: open CFI at the end of file; missing .cfi_endproc directive
+      # {standard input}:7150: Error: can't resolve `.text' {.text section} - `.LFB5156' {.text$WinMainCRTStartup section}
+      # {standard input}:8937: Error: can't resolve `.text' {.text section} - `.LFB5156' {.text$WinMainCRTStartup section}
 
-    # Overwrite the flags, -ffunction-sections -fdata-sections result in
-    # {standard input}: Assembler messages:
-    # {standard input}:693: Error: CFI instruction used without previous .cfi_startproc
-    # {standard input}:695: Error: .cfi_endproc without corresponding .cfi_startproc
-    # {standard input}:697: Error: .seh_endproc used in segment '.text' instead of expected '.text$WinMainCRTStartup'
-    # {standard input}: Error: open CFI at the end of file; missing .cfi_endproc directive
-    # {standard input}:7150: Error: can't resolve `.text' {.text section} - `.LFB5156' {.text$WinMainCRTStartup section}
-    # {standard input}:8937: Error: can't resolve `.text' {.text section} - `.LFB5156' {.text$WinMainCRTStartup section}
+      export CFLAGS="-O2 -pipe -Wno-unused-variable -Wno-implicit-fallthrough -Wno-implicit-function-declaration -Wno-cpp"
+      export CXXFLAGS="-O2 -pipe"
+      export LDFLAGS=""
+      
+      # Without it, apparently a bug in autoconf/c.m4, function AC_PROG_CC, results in:
+      # checking for _mingw_mac.h... no
+      # configure: error: Please check if the mingw-w64 header set and the build/host option are set properly.
+      # (https://github.com/henry0312/build_gcc/issues/1)
+      export CC=""
 
-    export CFLAGS="-O2 -pipe -Wno-unused-variable -Wno-implicit-fallthrough -Wno-implicit-function-declaration -Wno-cpp"
-    export CXXFLAGS="-O2 -pipe"
-    export LDFLAGS=""
-    
-    # Without it, apparently a bug in autoconf/c.m4, function AC_PROG_CC, results in:
-    # checking for _mingw_mac.h... no
-    # configure: error: Please check if the mingw-w64 header set and the build/host option are set properly.
-    # (https://github.com/henry0312/build_gcc/issues/1)
-    export CC=""
+      if [ ! -f "config.status" ]
+      then
+        (
+          echo
+          echo "Running mingw-w64 crt configure..."
 
-    "${XBB_BUILD_FOLDER}/${XBB_MINGW_FOLDER_NAME}/mingw-w64-crt/configure" --help
-    if [ "${BITS}" == "64" ]
-    then
-      _crt_configure_lib32="--disable-lib32"
-      _crt_configure_lib64="--enable-lib64"
-    elif [ "${BITS}" == "32" ]
-    then
-      _crt_configure_lib32="--enable-lib32"
-      _crt_configure_lib64="--disable-lib64"
-    else
-      exit 1
-    fi
+          bash "${SOURCES_FOLDER_PATH}/${mingw_folder_name}/mingw-w64-crt/configure" --help
 
-    bash "${XBB_BUILD_FOLDER}/${XBB_MINGW_FOLDER_NAME}/mingw-w64-crt/configure" \
-      --prefix="${XBB_FOLDER}/${MINGW_TARGET}" \
-      --with-sysroot="${XBB_FOLDER}" \
-      --build="${BUILD}" \
-      --host="${MINGW_TARGET}" \
-      --enable-wildcard \
-      ${_crt_configure_lib32} \
-      ${_crt_configure_lib64}
+          if [ "${HOST_BITS}" == "64" ]
+          then
+            _crt_configure_lib32="--disable-lib32"
+            _crt_configure_lib64="--enable-lib64"
+          elif [ "${HOST_BITS}" == "32" ]
+          then
+            _crt_configure_lib32="--enable-lib32"
+            _crt_configure_lib64="--disable-lib64"
+          else
+            exit 1
+          fi
 
-    # Parallel builds fail.
-    # make -j ${JOBS}
-    make
-    make install-strip
+          bash ${DEBUG} "${SOURCES_FOLDER_PATH}/${mingw_folder_name}/mingw-w64-crt/configure" \
+            --prefix="${INSTALL_FOLDER_PATH}/${MINGW_TARGET}" \
+            --with-sysroot="${XBB_FOLDER}" \
+            \
+            --build="${BUILD}" \
+            --host="${MINGW_TARGET}" \
+            \
+            --enable-wildcard \
+            ${_crt_configure_lib32} \
+            ${_crt_configure_lib64}
 
-    ls -l "${XBB_FOLDER}" "${XBB_FOLDER}/${MINGW_TARGET}"
-  )
+          cp "config.log" "${LOGS_FOLDER_PATH}/config-mingw-crt-log.txt"
+        ) 2>&1 | tee "${LOGS_FOLDER_PATH}/configure-mingw-crt-output.txt"
+      fi
 
-  hash -r
+      (
+        echo
+        echo "Running mingw-w64 crt make..."
+
+        # Parallel builds may fail.
+        make -j ${JOBS}
+        # make
+
+        make install-strip
+
+        ls -l "${XBB_FOLDER}" "${XBB_FOLDER}/${MINGW_TARGET}"
+      ) 2>&1 | tee "${LOGS_FOLDER_PATH}/make-mingw-crt-output.txt"
+    )
+
+    hash -r
+
+    touch "${mingw_crt_stamp_file_path}"
+
+  else
+    echo "Component mingw-w64 crt already installed."
+  fi
+
+  # ---------------------------------------------------------------------------
 
   # https://aur.archlinux.org/cgit/aur.git/tree/PKGBUILD?h=mingw-w64-winpthreads-git
 
-  echo
-  echo "Building mingw-w64 winpthreads ${XBB_MINGW_VERSION}..."
+  local mingw_build_winpthreads_folder_name="mingw-${mingw_version}-winpthreads"
 
-  cd "${XBB_BUILD_FOLDER}"
+  local mingw_winpthreads_stamp_file_path="${STAMPS_FOLDER_PATH}/stamp-${mingw_build_winpthreads_folder_name}-installed"
+  if [ ! -f "${mingw_winpthreads_stamp_file_path}" -o ! -d "${BUILD_FOLDER_PATH}/${mingw_build_winpthreads_folder_name}" ]
+  then
 
-  download_and_extract "${XBB_MINGW_ARCHIVE}" "${XBB_MINGW_URL}"
+    (
+      mkdir -p "${BUILD_FOLDER_PATH}/${mingw_build_winpthreads_folder_name}"
+      cd "${BUILD_FOLDER_PATH}/${mingw_build_winpthreads_folder_name}"
 
-  (
-    mkdir -p "${XBB_BUILD_FOLDER}/${XBB_MINGW_FOLDER_NAME}-winphreads-build"
-    cd "${XBB_BUILD_FOLDER}/${XBB_MINGW_FOLDER_NAME}-winphreads-build"
+      xbb_activate
+      xbb_activate_installed_bin
 
-    xbb_activate
-    xbb_activate_installed_bin
-    xbb_activate_installed_dev
+      export CPPFLAGS="" 
+      export CFLAGS="-O2 -pipe"
+      export CXXFLAGS="-O2 -pipe"
+      export LDFLAGS=""
+      
+      export CC=""
 
-    export CPPFLAGS="" 
-    export CFLAGS="-O2 -pipe"
-    export CXXFLAGS="-O2 -pipe"
-    export LDFLAGS=""
-    
-    export CC=""
+      if [ ! -f "config.status" ]
+      then
+        (
+          echo
+          echo "Running mingw-w64 winpthreads configure..."
 
-    bash "${XBB_BUILD_FOLDER}/${XBB_MINGW_FOLDER_NAME}/mingw-w64-crt/configure" --help
-    if [ "${BITS}" == "64" ]
-    then
-      _crt_configure_lib32="--disable-lib32"
-      _crt_configure_lib64="--enable-lib64"
-    elif [ "${BITS}" == "32" ]
-    then
-      _crt_configure_lib32="--enable-lib32"
-      _crt_configure_lib64="--disable-lib64"
-    else
-      exit 1
-    fi
+          bash "${SOURCES_FOLDER_PATH}/${mingw_folder_name}/mingw-w64-crt/configure" --help
 
-    bash "${XBB_BUILD_FOLDER}/${XBB_MINGW_FOLDER_NAME}/mingw-w64-libraries/winpthreads/configure" \
-      --prefix="${XBB_FOLDER}/${MINGW_TARGET}" \
-      --build="${BUILD}" \
-      --host="${MINGW_TARGET}" \
-      --enable-static \
-      --enable-shared
+          bash ${DEBUG} "${SOURCES_FOLDER_PATH}/${mingw_folder_name}/mingw-w64-libraries/winpthreads/configure" \
+            --prefix="${INSTALL_FOLDER_PATH}/${MINGW_TARGET}" \
+            \
+            --build="${BUILD}" \
+            --host="${MINGW_TARGET}" \
+            \
+            --enable-static \
+            --enable-shared
 
-    make -j ${JOBS}
-    make install-strip
+         cp "config.log" "${LOGS_FOLDER_PATH}/config-mingw-winpthreads-log.txt"
+        ) 2>&1 | tee "${LOGS_FOLDER_PATH}/configure-mingw-winpthreads-output.txt"
+      fi
+      
+      (
+        echo
+        echo "Running mingw-w64 winpthreads make..."
 
-    ls -l "${XBB_FOLDER}" "${XBB_FOLDER}/${MINGW_TARGET}"
-  )
+        make -j ${JOBS}
 
-  hash -r
+        make install-strip
+        ls -l "${INSTALL_FOLDER_PATH}" "${INSTALL_FOLDER_PATH}/${MINGW_TARGET}"
+      ) 2>&1 | tee "${LOGS_FOLDER_PATH}/make-mingw-winpthreads-output.txt"
+    )
 
-  echo
-  echo "Building mingw-w64 gcc ${XBB_MINGW_GCC_VERSION}, step 2..."
+    hash -r
 
-  cd "${XBB_BUILD_FOLDER}"
+    touch "${mingw_winpthreads_stamp_file_path}"
 
-  # download_and_extract "${XBB_MINGW_GCC_ARCHIVE}" "${XBB_MINGW_GCC_URL}"
+  else
+    echo "Component mingw-w64 winpthreads already installed."
+  fi
 
-  (
-    mkdir -p "${XBB_BUILD_FOLDER}/${XBB_MINGW_GCC_FOLDER_NAME}-mingw-build"
-    cd "${XBB_BUILD_FOLDER}/${XBB_MINGW_GCC_FOLDER_NAME}-mingw-build"
+  # ---------------------------------------------------------------------------
 
-    xbb_activate
-    xbb_activate_installed_bin
-    xbb_activate_installed_dev
+  local mingw_gcc_step2_stamp_file_path="${STAMPS_FOLDER_PATH}/stamp-mingw-gcc-step2-${mingw_gcc_version}-installed"
+  if [ ! -f "${mingw_gcc_step2_stamp_file_path}" -o ! -d "${BUILD_FOLDER_PATH}/${mingw_build_gcc_folder_name}" ]
+  then
 
-    export CPPFLAGS="${XBB_CPPFLAGS}" 
-    export CFLAGS="${XBB_CFLAGS} -Wno-sign-compare -Wno-implicit-function-declaration -Wno-missing-prototypes"
-    export CXXFLAGS="${XBB_CXXFLAGS} -Wno-sign-compare -Wno-type-limits"
-    export LDFLAGS="${XBB_LDFLAGS_APP}"
+    (
+      echo
+      echo "Running mingw-w64 gcc step 2 make..."
 
-    # Parallel builds fail.
-    # make -j ${JOBS}
-    make
-    make install-strip
-  )
+      mkdir -p "${BUILD_FOLDER_PATH}/${mingw_build_gcc_folder_name}"
+      cd "${BUILD_FOLDER_PATH}/${mingw_build_gcc_folder_name}"
 
-  (
-    cd "${XBB_FOLDER}"
+      xbb_activate
 
-    xbb_activate_installed_bin
+      export CPPFLAGS="${XBB_CPPFLAGS}" 
+      export CFLAGS="${XBB_CFLAGS} -Wno-sign-compare -Wno-implicit-function-declaration -Wno-missing-prototypes"
+      export CXXFLAGS="${XBB_CXXFLAGS} -Wno-sign-compare -Wno-type-limits"
+      export LDFLAGS="${XBB_LDFLAGS_APP}"
 
-    if true
-    then
+      # Parallel builds may fail.
+      make -j ${JOBS}
+      # make
 
-      set +e
-      find ${MINGW_TARGET} \
-        -name '*.so' -type f \
-        -print \
-        -exec "${XBB_FOLDER}/bin/${UNAME_ARCH}-w64-mingw32-strip" --strip-debug {} \;
-      find ${MINGW_TARGET} \
-        -name '*.so.*'  \
-        -type f \
-        -print \
-        -exec "${XBB_FOLDER}/bin/${UNAME_ARCH}-w64-mingw32-strip" --strip-debug {} \;
-      # Note: without ranlib, windows builds failed.
-      find ${MINGW_TARGET} lib/gcc/${MINGW_TARGET} \
-        -name '*.a'  \
-        -type f  \
-        -print \
-        -exec "${XBB_FOLDER}/bin/${UNAME_ARCH}-w64-mingw32-strip" --strip-debug {} \; \
-        -exec "${XBB_FOLDER}/bin/${UNAME_ARCH}-w64-mingw32-ranlib" {} \;
-      set -e
-    
-    fi
-  )
+      make install-strip
+    ) 2>&1 | tee "${LOGS_FOLDER_PATH}/make-mingw-gcc-step2-output.txt"
 
-  (
-    xbb_activate_installed_bin
+    (
+      xbb_activate_installed_bin
 
-    "${XBB_FOLDER}/bin/${UNAME_ARCH}-w64-mingw32-g++" --version
+      if true
+      then
 
-    mkdir -p "${HOME}/tmp"
-    cd "${HOME}/tmp"
+        cd "${INSTALL_FOLDER_PATH}"
 
-    # Note: __EOF__ is quoted to prevent substitutions here.
-    cat <<'__EOF__' > hello.cpp
+        set +e
+        find ${MINGW_TARGET} \
+          -name '*.so' -type f \
+          -print \
+          -exec "${INSTALL_FOLDER_PATH}/bin/${MINGW_TARGET}-strip" --strip-debug {} \;
+        find ${MINGW_TARGET} \
+          -name '*.so.*'  \
+          -type f \
+          -print \
+          -exec "${INSTALL_FOLDER_PATH}/bin/${MINGW_TARGET}-strip" --strip-debug {} \;
+        # Note: without ranlib, windows builds failed.
+        find ${MINGW_TARGET} lib/gcc/${MINGW_TARGET} \
+          -name '*.a'  \
+          -type f  \
+          -print \
+          -exec "${INSTALL_FOLDER_PATH}/bin/${MINGW_TARGET}-strip" --strip-debug {} \; \
+          -exec "${INSTALL_FOLDER_PATH}/bin/${MINGW_TARGET}-ranlib" {} \;
+        set -e
+      
+      fi
+    )
+
+    (
+      xbb_activate_installed_bin
+
+      "${INSTALL_FOLDER_PATH}/bin/${MINGW_TARGET}-g++" --version
+
+      mkdir -p "${HOME}/tmp"
+      cd "${HOME}/tmp"
+
+      # Note: __EOF__ is quoted to prevent substitutions here.
+      cat <<'__EOF__' > hello.cpp
 #include <iostream>
 
 int
@@ -720,12 +820,21 @@ main(int argc, char* argv[])
 }
 __EOF__
 
-    "${XBB_FOLDER}/bin/${UNAME_ARCH}-w64-mingw32-g++" hello.cpp -o hello
+      "${INSTALL_FOLDER_PATH}/bin/${MINGW_TARGET}-g++" hello.cpp -o hello
 
-    rm -rf hello.cpp hello
-  )
+      rm -rf hello.cpp hello
+    )
 
-  hash -r
+    hash -r
+
+    touch "${mingw_gcc_step2_stamp_file_path}"
+
+  else
+    echo "Component mingw-w64 gcc step 2 already installed."
+  fi
+
+  # ---------------------------------------------------------------------------
+
 }
 
 # -----------------------------------------------------------------------------
