@@ -274,6 +274,17 @@ function xbb_activate_installed_dev()
   # Add XBB lib in front of PKG_CONFIG_PATH.
   PKG_CONFIG_PATH="${INSTALL_FOLDER_PATH}/lib/pkgconfig:${PKG_CONFIG_PATH}"
 
+  # If lib64 present, add it in front of lib.
+  if [ -d "${XBB_FOLDER}/lib64" ]
+  then
+    XBB_LDFLAGS="-L${INSTALL_FOLDER_PATH}/lib64 ${XBB_LDFLAGS}"
+    XBB_LDFLAGS_LIB="-L${INSTALL_FOLDER_PATH}/lib64 ${XBB_LDFLAGS_LIB}"
+    XBB_LDFLAGS_APP="-L${INSTALL_FOLDER_PATH}/lib64 ${XBB_LDFLAGS_APP}"
+    XBB_LDFLAGS_APP_STATIC="-L${INSTALL_FOLDER_PATH}/lib64 ${XBB_LDFLAGS_APP_STATIC}"
+
+    # Add XBB lib in front of PKG_CONFIG_PATH.
+    PKG_CONFIG_PATH="${INSTALL_FOLDER_PATH}/lib64/pkgconfig:${PKG_CONFIG_PATH}"
+  fi
 
   export XBB_CPPFLAGS
 
