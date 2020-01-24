@@ -54,7 +54,7 @@ function do_native_binutils()
           bash "${SOURCES_FOLDER_PATH}/${native_binutils_folder_name}/configure" --help
 
           # --with-sysroot failed.
-          echo bash ${DEBUG} "${SOURCES_FOLDER_PATH}/${native_binutils_folder_name}/configure" \
+          bash ${DEBUG} "${SOURCES_FOLDER_PATH}/${native_binutils_folder_name}/configure" \
             --prefix="${INSTALL_FOLDER_PATH}" \
             --with-pkgversion="${XBB_BINUTILS_BRANDING}" \
             \
@@ -147,7 +147,6 @@ function do_native_gcc()
           echo "Running native gcc configure..."
 
           bash "${SOURCES_FOLDER_PATH}/${native_gcc_folder_name}/configure" --help
-
 
           if [ "${HOST_UNAME}" == "Darwin" ]
           then
@@ -388,7 +387,7 @@ function do_mingw_binutils()
     (
       xbb_activate_installed_bin
 
-    "${XBB_FOLDER}/bin/${UNAME_ARCH}-w64-mingw32-size" --version
+      "${XBB_FOLDER}/bin/${MINGW_TARGET}-size" --version
     )
 
     hash -r
@@ -973,6 +972,7 @@ function do_curl()
   # 2017-10-23, "7.56.1"
   # 2017-11-29, "7.57.0"
   # 2019-03-27, "7.64.1"
+  # 2019-11-06, "7.67.0"
   # 2020-01-08, "7.68.0"
 
   local curl_version="$1"
@@ -1106,6 +1106,7 @@ function do_xz()
 
           bash ${DEBUG} "${SOURCES_FOLDER_PATH}/${xz_folder_name}/configure" \
             --prefix="${INSTALL_FOLDER_PATH}" \
+            \
             --disable-rpath
 
           cp "config.log" "${LOGS_FOLDER_PATH}/config-xz-log.txt"
@@ -1287,6 +1288,7 @@ function do_coreutils()
           # `ar` must be excluded, it interferes with Apple similar program.
           bash ${DEBUG} "${SOURCES_FOLDER_PATH}/${coreutils_folder_name}/configure" \
             --prefix="${INSTALL_FOLDER_PATH}" \
+            \
             ${darwin_options}
 
           cp "config.log" "${LOGS_FOLDER_PATH}/config-coreutils-log.txt"
@@ -1375,6 +1377,7 @@ function do_pkg_config()
           # gconvert.c:61:2: error: #error GNU libiconv not in use but included iconv.h is from libiconv          
           bash ${DEBUG} "${SOURCES_FOLDER_PATH}/${pkg_config_folder_name}/configure" \
             --prefix="${INSTALL_FOLDER_PATH}" \
+            \
             --with-internal-glib \
             --disable-debug \
             --disable-host-tool \
@@ -1542,6 +1545,7 @@ function do_gawk()
 
           bash ${DEBUG} "${SOURCES_FOLDER_PATH}/${gawk_folder_name}/configure" \
             --prefix="${INSTALL_FOLDER_PATH}" \
+            \
             --without-libsigsegv
 
           cp "config.log" "${LOGS_FOLDER_PATH}/config-gawk-log.txt"
@@ -2203,10 +2207,17 @@ function do_flex()
   # https://www.gnu.org/software/flex/
   # https://github.com/westes/flex/releases
   # https://github.com/westes/flex/releases/download/v2.6.4/flex-2.6.4.tar.gz
+  # https://aur.archlinux.org/cgit/aur.git/tree/PKGBUILD?h=flex-git
 
   # Apple uses 2.5.3
-  # May 6, 2017, "2.6.4" (latest)
+  # Ubuntu 12 uses 2.5.35
 
+  # 30 Dec 2016, "2.6.3"
+  # May 6, 2017, "2.6.4" (latest)
+  # On Ubuntu 18 it crashes (due to an autotool issue) with 
+  # ./stage1flex   -o stage1scan.c /home/ilg/Work/xbb-bootstrap/sources/flex-2.6.4/src/scan.l
+  # make[2]: *** [Makefile:1696: stage1scan.c] Segmentation fault (core dumped)
+  
   local flex_version="$1"
 
   local flex_folder_name="flex-${flex_version}"
@@ -2250,7 +2261,7 @@ function do_flex()
           bash "${SOURCES_FOLDER_PATH}/${flex_folder_name}/configure" --help
 
           bash ${DEBUG} "${SOURCES_FOLDER_PATH}/${flex_folder_name}/configure" \
-            --prefix="${INSTALL_FOLDER_PATH}" 
+            --prefix="${INSTALL_FOLDER_PATH}"
 
           cp "config.log" "${LOGS_FOLDER_PATH}/config-flex-log.txt"
         ) 2>&1 | tee "${LOGS_FOLDER_PATH}/configure-flex-output.txt"
@@ -2262,8 +2273,10 @@ function do_flex()
 
         # Build.
         make -j ${JOBS}
+        # make
 
-        make install-strip
+        # make install-strip
+        make install
       ) 2>&1 | tee "${LOGS_FOLDER_PATH}/make-flex-output.txt"
     )
 
@@ -2674,7 +2687,6 @@ function do_perl()
     download_and_extract "${perl_url}" "${perl_archive}" "${perl_folder_name}"
 
     (
-      mkdir -p "${BUILD_FOLDER_PATH}/${perl_folder_name}"
       cd "${BUILD_FOLDER_PATH}/${perl_folder_name}"
 
       xbb_activate
@@ -2974,7 +2986,6 @@ function do_git()
     download_and_extract "${git_url}" "${git_archive}" "${git_folder_name}"
 
     (
-      mkdir -p "${BUILD_FOLDER_PATH}/${git_folder_name}"
       cd "${BUILD_FOLDER_PATH}/${git_folder_name}"
 
       xbb_activate
@@ -3278,7 +3289,6 @@ function do_scons()
     download_and_extract "${scons_url}" "${scons_archive}" "${scons_folder_name}"
 
     (
-      mkdir -p "${BUILD_FOLDER_PATH}/${scons_folder_name}"
       cd "${BUILD_FOLDER_PATH}/${scons_folder_name}"
 
       xbb_activate
@@ -3373,7 +3383,6 @@ function do_ninja()
     download_and_extract "${ninja_url}" "${ninja_archive}" "${ninja_folder_name}"
 
     (
-      mkdir -p "${BUILD_FOLDER_PATH}/${ninja_folder_name}"
       cd "${BUILD_FOLDER_PATH}/${ninja_folder_name}"
 
       xbb_activate
