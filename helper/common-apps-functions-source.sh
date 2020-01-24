@@ -3009,7 +3009,7 @@ function do_git()
       export CFLAGS="${XBB_CFLAGS}"
       export CXXFLAGS="${XBB_CXXFLAGS}"
       export LDFLAGS="${XBB_LDFLAGS_APP}"
-      export LIBS="-ldl"
+      # export LIBS="-ldl"
 
       if [ ! -f "config.status" ]
       then
