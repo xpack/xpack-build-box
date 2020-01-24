@@ -94,7 +94,7 @@ function do_build_versions()
 
     # macOS 10.10 uses 5.18.2, an update is not mandatory.
     # depends=('gdbm' 'db' 'glibc')
-    do_perl "5.28.2"
+    do_perl "5.26.3" # "5.28.2"
 
     # Libraries, required by gcc.
     # depends=('gcc-libs' 'sh')
