@@ -2291,7 +2291,8 @@ function do_wget()
       export CFLAGS="${XBB_CFLAGS} -Wno-implicit-function-declaration"
       export CXXFLAGS="${XBB_CXXFLAGS}"
       export LDFLAGS="${XBB_LDFLAGS_APP}"
-      export LIBS="-liconv"
+      # Might be needed on Mac
+      # export LIBS="-liconv"
 
       if [ ! -f "config.status" ]
       then
