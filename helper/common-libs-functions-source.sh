@@ -999,4 +999,71 @@ function do_libpng()
   fi
 }
 
+function do_libmpdec()
+{
+  # http://www.bytereef.org/mpdecimal/index.html
+  # https://www.bytereef.org/mpdecimal/download.html
+  # https://www.bytereef.org/software/mpdecimal/releases/mpdecimal-2.4.2.tar.gz
+
+  # 2016-02-28, "2.4.2"
+
+  local libmpdec_version="$1"
+
+  local libmpdec_folder_name="mpdecimal-${libmpdec_version}"
+  local libmpdec_archive="${libmpdec_folder_name}.tar.gz"
+  local libmpdec_url="https://www.bytereef.org/software/mpdecimal/releases/${libmpdec_archive}"
+
+  local libmpdec_stamp_file_path="${STAMPS_FOLDER_PATH}/stamp-libmpdec-${libmpdec_version}-installed"
+  if [ ! -f "${libmpdec_stamp_file_path}" -o ! -d "${LIBS_BUILD_FOLDER_PATH}/${libmpdec_folder_name}" ]
+  then
+
+    # In-source build
+    cd "${LIBS_BUILD_FOLDER_PATH}"
+
+    download_and_extract "${libmpdec_url}" "${libmpdec_archive}" "${libmpdec_folder_name}"
+
+    (
+      cd "${LIBS_BUILD_FOLDER_PATH}/${libmpdec_folder_name}"
+
+      xbb_activate
+
+      export CPPFLAGS="${XBB_CPPFLAGS}"
+      export CFLAGS="${XBB_CFLAGS}"
+      export CXXFLAGS="${XBB_CXXFLAGS}"
+      export LDFLAGS="${XBB_LDFLAGS_LIB}"
+
+      if [ ! -f "config.status" ]
+      then
+        (
+          echo
+          echo "Running libmpdec configure..."
+
+          bash "configure" --help
+
+          bash ${DEBUG} "configure" \
+            --prefix="${INSTALL_FOLDER_PATH}" 
+
+          cp "config.log" "${LOGS_FOLDER_PATH}/config-libmpdec-log.txt"
+        ) 2>&1 | tee "${LOGS_FOLDER_PATH}/configure-libmpdec-output.txt"
+      fi
+
+      (
+        echo
+        echo "Running libmpdec make..."
+
+        # Build.
+        make -j ${JOBS}
+
+        # make install-strip
+        make install
+      ) 2>&1 | tee "${LOGS_FOLDER_PATH}/make-libmpdec-output.txt"
+    )
+
+    touch "${libmpdec_stamp_file_path}"
+
+  else
+    echo "Library libmpdec already installed."
+  fi
+}
+
 # -----------------------------------------------------------------------------
