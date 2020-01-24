@@ -464,62 +464,65 @@ function download_and_extract()
 
 # -----------------------------------------------------------------------------
 
-do_strip_libs() 
+do_strip_debug_libs() 
 {
   echo
-  echo "Stipping libraries..."
+  echo "Stripping debug info from libraries..."
 
-  (
-    cd "${XBB_FOLDER}"
+  if [ "${HOST_UNAME}" != "Darwin" ]
+  then
+    (
+      cd "${XBB_FOLDER}"
 
-    xbb_activate
+      xbb_activate
 
-    local strip
-    if [ -f "${XBB_FOLDER}/bin/strip" ]
-    then
-      strip="${XBB_FOLDER}/bin/strip"
-    elif [ -f "${XBB_BOOTSTRAP_FOLDER}/bin/strip" ]
-    then
-      strip="${XBB_BOOTSTRAP_FOLDER}/bin/strip"
-    else
-      strip="strip"
-    fi
+      local strip
+      if [ -x "${XBB_FOLDER}/bin/strip" ]
+      then
+        strip="${XBB_FOLDER}/bin/strip"
+      elif [ -x "${XBB_BOOTSTRAP_FOLDER}/bin/strip" ]
+      then
+        strip="${XBB_BOOTSTRAP_FOLDER}/bin/strip"
+      else
+        strip="strip"
+      fi
 
-    local ranlib
-    if [ -f "${XBB_FOLDER}/bin/ranlib" ]
-    then
-      ranlib="${XBB_FOLDER}/bin/ranlib"
-    elif [ -f "${XBB_BOOTSTRAP_FOLDER}/bin/ranlib" ]
-    then
-      ranlib="${XBB_BOOTSTRAP_FOLDER}/bin/ranlib"
-    else
-      ranlib="ranlib"
-    fi
+      local ranlib
+      if [ -x "${XBB_FOLDER}/bin/ranlib" ]
+      then
+        ranlib="${XBB_FOLDER}/bin/ranlib"
+      elif [ -x "${XBB_BOOTSTRAP_FOLDER}/bin/ranlib" ]
+      then
+        ranlib="${XBB_BOOTSTRAP_FOLDER}/bin/ranlib"
+      else
+        ranlib="ranlib"
+      fi
 
-    set +e
-    # -type f to skip links.
-    find lib* \
-      -type f \
-      -name '*.so' \
-      -print \
-      -exec chmod +w {} \; \
-      -exec "${strip}" --strip-debug {} \;
-    find lib* \
-      -type f \
-      -name '*.so.*' \
-      -print \
-      -exec chmod +w {} \; \
-      -exec "${strip}" --strip-debug {} \;
-    find lib* \
-      -type f \
-      -name '*.a' \
-      -not -path 'lib/gcc/*-w64-mingw32/*'  \
-      -print \
-      -exec chmod +w {} \; \
-      -exec "${strip}" --strip-debug {} \; \
-      -exec "${ranlib}" {} \;
-    set -e
-  )
+      set +e
+      # -type f to skip links.
+      find lib* \
+        -type f \
+        -name '*.so' \
+        -print \
+        -exec chmod +w {} \; \
+        -exec "${strip}" --strip-debug {} \;
+      find lib* \
+        -type f \
+        -name '*.so.*' \
+        -print \
+        -exec chmod +w {} \; \
+        -exec "${strip}" --strip-debug {} \;
+      find lib* \
+        -type f \
+        -name '*.a' \
+        -not -path 'lib/gcc/*-w64-mingw32/*'  \
+        -print \
+        -exec chmod +w {} \; \
+        -exec "${strip}" --strip-debug {} \; \
+        -exec "${ranlib}" {} \;
+      set -e
+    )
+  fi
 }
 
 # -----------------------------------------------------------------------------
