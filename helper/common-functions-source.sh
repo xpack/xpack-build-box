@@ -157,6 +157,9 @@ function prepare_xbb_env()
 
     CC=${CC:-"clang"}
     CXX=${CXX:-"clang++"}
+  else
+    CC=${CC:-"gcc"}
+    CXX=${CXX:-"g++"}
   fi
 
   # ---------------------------------------------------------------------------
