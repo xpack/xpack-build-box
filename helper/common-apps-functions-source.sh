@@ -3551,6 +3551,7 @@ function do_wine()
 
   # 2017-09-16, "4.3"
   # 2019-11-29, "4.21"
+  # Fails with a missing yywrap
   # 2020-01-21, "5.0"
 
   local wine_version="$1"
@@ -3560,7 +3561,12 @@ function do_wine()
 
   local wine_folder_name="wine-${wine_version}"
   local wine_archive="${wine_folder_name}.tar.xz"
-  local wine_url="https://dl.winehq.org/wine/source/${wine_version_major}.x/${wine_archive}"
+
+  if [ "${wine_version_major}" != "5" ]
+  then
+    wine_version_minor="x"
+  fi
+  local wine_url="https://dl.winehq.org/wine/source/${wine_version_major}.${wine_version_minor}/${wine_archive}"
 
   local wine_stamp_file_path="${STAMPS_FOLDER_PATH}/stamp-wine-${wine_version}-installed"
   if [ ! -f "${wine_stamp_file_path}" -o ! -d "${BUILD_FOLDER_PATH}/${wine_folder_name}" ]
@@ -3575,6 +3581,8 @@ function do_wine()
       cd "${BUILD_FOLDER_PATH}/${wine_folder_name}"
 
       xbb_activate
+      # Required to find the newly compiled mingw-w46.
+      xbb_activate_installed_bin
 
       export CPPFLAGS="${XBB_CPPFLAGS}" 
       export CFLAGS="${XBB_CFLAGS}"
@@ -3613,7 +3621,7 @@ function do_wine()
 
       (
         echo
-        echo "Running xz make..."
+        echo "Running wine make..."
 
         # Parallel builds may fail 
         make -j ${JOBS} STRIP=true
