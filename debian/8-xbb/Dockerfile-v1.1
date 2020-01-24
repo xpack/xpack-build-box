@@ -1,0 +1,9 @@
+FROM ilegeul/debian:8-tex-v1.1
+MAINTAINER Liviu Ionescu <ilg@livius.net>
+WORKDIR /root
+
+ADD input /xbb-input
+RUN bash -x /xbb-input/build-v1.1.sh
+
+CMD ["/bin/bash"]
+
