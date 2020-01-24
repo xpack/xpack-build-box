@@ -3235,6 +3235,7 @@ function do_python3()
             --with-system-libmpdec \
             --with-dbmliborder=gdbm:ndbm \
             --enable-loadable-sqlite-extensions \
+            --with-openssl="${INSTALL_FOLDER_PATH}" \
             --without-ensurepip
             
           cp "config.log" "${LOGS_FOLDER_PATH}/config-python3-log.txt"
