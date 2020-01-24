@@ -900,12 +900,15 @@ function do_curl()
 
           bash ${DEBUG} "${SOURCES_FOLDER_PATH}/${curl_folder_name}/configure" \
             --prefix="${INSTALL_FOLDER_PATH}" \
+            \
             --disable-debug \
             --with-ssl \
             --enable-optimize \
             --disable-manual \
             --disable-ldap \
             --disable-ldaps \
+            --disable-werror \
+            --disable-warnings \
             --enable-versioned-symbols \
             --enable-threaded-resolver \
             --with-gssapi \
