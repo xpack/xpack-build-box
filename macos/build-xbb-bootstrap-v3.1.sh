@@ -53,12 +53,12 @@ XBB_VERSION="3.1"
 # XBB_FOLDER="${HOME}/opt/xbb-bootstrap-${XBB_VERSION}"
 XBB_FOLDER="${HOME}/opt/xbb-bootstrap"
 
-WORK_FOLDER_PATH="${HOME}/Work/$(basename "${XBB_FOLDER}")"
+WORK_FOLDER_PATH="${HOME}/Work"
 
 IS_BOOTSTRAP="y"
 
 echo
-echo "macOS XBB Bootstrap v${XBB_VERSION} build script started..."
+echo "$(uname) XBB Bootstrap v${XBB_VERSION} build script started..."
 
 # -----------------------------------------------------------------------------
 
@@ -90,20 +90,26 @@ function xbb_activate()
 
 do_build_versions
 
-# check_binaries
+do_strip_libs
 
 # -----------------------------------------------------------------------------
 
-echo
-echo "macOS version ${macos_version}"
-echo "XCode Command Line Tools version ${xclt_version}"
+if [ "${HOST_UNAME}" == "Darwin" ]
+then
+  echo
+  echo "macOS version ${macos_version}"
+  echo "XCode Command Line Tools version ${xclt_version}"
+fi
 
 echo
 echo "You may want to ' chmod -R -w \"${INSTALL_FOLDER_PATH}\" '"
 
 echo
-echo "macOS XBB Bootstrap v${XBB_VERSION} created in \"${INSTALL_FOLDER_PATH}\""
+echo "$(uname) XBB Bootstrap v${XBB_VERSION} created in \"${INSTALL_FOLDER_PATH}\""
 
-say done
+if [ "${HOST_UNAME}" == "Darwin" ]
+then
+  say done
+fi
 
 # -----------------------------------------------------------------------------
