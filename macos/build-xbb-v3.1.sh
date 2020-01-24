@@ -98,7 +98,7 @@ xbb_activate()
 
 do_build_versions
 
-do_strip_libs
+do_strip_debug_libs
 
 # Only in final Docker image
 # do_cleanup
