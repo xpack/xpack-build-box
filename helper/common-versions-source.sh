@@ -50,12 +50,15 @@ function do_build_versions()
     # depends=('glibc')
     do_libffi "3.2.1"
 
+    # Required by Python
+    do_libmpdec "2.4.2"
+
     # Libary, required by tar. 
     # depends=('sh')
     do_xz "5.2.4"
 
     # depends=('perl')
-    do_openssl "1.1.1d" # "1.0.2r" # "1.1.1b"
+    do_openssl "1.1.1d" # "1.0.2u" # "1.1.1d" # "1.0.2r" # "1.1.1b"
 
     # Needed by wine.
     do_libpng "1.6.37"
@@ -141,9 +144,19 @@ function do_build_versions()
 
     # depends=('bzip2' 'gdbm' 'openssl' 'zlib' 'expat' 'sqlite' 'libffi')
     do_python "2.7.17" # "2.7.16"
+    # Python build finished, but the necessary bits to build these modules were not found:
+    # _bsddb             _curses            _curses_panel   
+    # _sqlite3           _tkinter           bsddb185        
+    # bz2                dbm                dl              
+    # gdbm               imageop            readline        
+    # sunaudiodev                                           
 
     # require xz, openssl
     do_python3 "3.8.1" # "3.7.3"
+    # The necessary bits to build these optional modules were not found:
+    # _bz2                  _curses               _curses_panel      
+    # _dbm                  _gdbm                 _sqlite3           
+    # _tkinter              _uuid                 readline           
 
     # depends=('python2')
     do_scons "3.1.2" # "3.0.5"
@@ -158,12 +171,6 @@ function do_build_versions()
     do_git "2.25.0" # "2.21.0"
 
     do_p7zip "16.02"
-
-    if [ "${HOST_UNAME}" != "Darwin" ]
-    then
-      # depends=('libpng')
-      : # do_wine "4.3"
-    fi
 
     # -------------------------------------------------------------------------
     # Compilers, native & mingw
@@ -184,14 +191,49 @@ function do_build_versions()
     if [ "${HOST_UNAME}" != "Darwin" ]
     then
       # depends=('zlib')
-      : # do_mingw_binutils "2.33.1"
+      do_mingw_binutils "2.33.1"
       # depends=('zlib' 'libmpc' 'mingw-w64-crt' 'mingw-w64-binutils' 'mingw-w64-winpthreads' 'mingw-w64-headers')
-      # do_mingw_all "5.0.4" "7.4.0"
+      do_mingw_all "7.0.0" "${XBB_GCC_VERSION}" # "5.0.4" "7.4.0"
     fi
 
-    # do_strip_libs
+    # Benefits from mingw
+    if [ "${HOST_UNAME}" != "Darwin" ]
+    then
+      # depends=('libpng')
+      do_wine "5.0" # "4.3"
 
-    # do_cleaunup
+      # configure: OpenCL 64-bit development files not found, OpenCL won't be supported.
+      # configure: pcap 64-bit development files not found, wpcap won't be supported.
+      # configure: libdbus 64-bit development files not found, no dynamic device support.
+      # configure: lib(n)curses 64-bit development files not found, curses won't be supported.
+      # configure: libsane 64-bit development files not found, scanners won't be supported.
+      # configure: libv4l2 64-bit development files not found.
+      # configure: libgphoto2 64-bit development files not found, digital cameras won't be supported.
+      # configure: libgphoto2_port 64-bit development files not found, digital cameras won't be auto-detected.
+      # configure: liblcms2 64-bit development files not found, Color Management won't be supported.
+      # configure: libpulse 64-bit development files not found or too old, Pulse won't be supported.
+      # configure: gstreamer-1.0 base plugins 64-bit development files not found, GStreamer won't be supported.
+      # configure: OSS sound system found but too old (OSSv4 needed), OSS won't be supported.
+      # configure: libudev 64-bit development files not found, plug and play won't be supported.
+      # configure: libSDL2 64-bit development files not found, SDL2 won't be supported.
+      # configure: libFAudio 64-bit development files not found, XAudio2 won't be supported.
+      # configure: libcapi20 64-bit development files not found, ISDN won't be supported.
+      # configure: libcups 64-bit development files not found, CUPS won't be supported.
+      # configure: fontconfig 64-bit development files not found, fontconfig won't be supported.
+      # configure: libgsm 64-bit development files not found, gsm 06.10 codec won't be supported.
+      # configure: libkrb5 64-bit development files not found (or too old), Kerberos won't be supported.
+      # configure: libtiff 64-bit development files not found, TIFF won't be supported.
+      # configure: libmpg123 64-bit development files not found (or too old), mp3 codec won't be supported.
+      # configure: libopenal 64-bit development files not found (or too old), OpenAL won't be supported.
+      # configure: libvulkan and libMoltenVK 64-bit development files not found, Vulkan won't be supported.
+      # configure: vkd3d 64-bit development files not found (or too old), Direct3D 12 won't be supported.
+      # configure: libldap (OpenLDAP) 64-bit development files not found, LDAP won't be supported.
+
+      # configure: WARNING: libxml2 64-bit development files not found (or too old), XML won't be supported.
+      # configure: WARNING: libxslt 64-bit development files not found, xslt won't be supported.
+      # configure: WARNING: libjpeg 64-bit development files not found, JPEG won't be supported.
+      # configure: WARNING: No sound system was found. Windows applications will be silent.
+    fi
 
     # -----------------------------------------------------------------------------
 
