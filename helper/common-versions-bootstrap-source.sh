@@ -16,7 +16,8 @@ function do_build_versions()
 
     # To differentiate the binaries from the XBB ones which use `-7`.
     XBB_GCC_SUFFIX="-7bs"
-    XBB_BRANDING="xPack Build Box Bootstrap\x2C ${HOST_BITS}-bit"
+    XBB_BINUTILS_BRANDING="xPack Build Box Bootstrap Binutils\x2C ${HOST_BITS}-bit"
+    XBB_GCC_BRANDING="xPack Build Box Bootstrap GCC\x2C ${HOST_BITS}-bit"
 
     # -------------------------------------------------------------------------
 
@@ -32,6 +33,7 @@ function do_build_versions()
     # depends=('glibc')
     do_tar "1.30" # Requires xz.
 
+    # -------------------------------------------------------------------------
     # From this moment on, .xz archives can be processed.
 
     # New openssl, required by curl, cmake, python, etc.
@@ -41,6 +43,9 @@ function do_build_versions()
     # New curl, that better understands all protocols.
     # depends=('ca-certificates' 'krb5' 'libssh2' 'openssl' 'zlib' 'libpsl' 'libnghttp2')
     do_curl "7.64.1" # "7.57.0"
+
+    # -------------------------------------------------------------------------
+    # From this moment on, new https sites can be accessed.
 
     do_coreutils "8.31"
 
@@ -72,12 +77,13 @@ function do_build_versions()
     # depends=('glibc')
     do_bison "3.4.2" # "3.3.2"
 
-    # macOS 10.10 uses 2.5.3, an update is not mandatory.
-    # depends=('glibc' 'm4' 'sh')
-    do_flex "2.6.4"
-
     # depends=('glibc' 'guile')
     do_make "4.2.1"
+
+    # macOS 10.10 uses 2.5.3, an update is not mandatory.
+    # Ubuntu 12 uses 2.5.35, an update is not mandatory.
+    # depends=('glibc' 'm4' 'sh')
+    do_flex "2.6.3" # "2.6.4" fails
 
     # depends=()
     do_libiconv "1.16" # "1.15"
