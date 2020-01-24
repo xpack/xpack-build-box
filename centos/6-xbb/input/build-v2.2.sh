@@ -45,6 +45,22 @@ script_folder_name="$(basename "${script_folder_path}")"
 
 # -----------------------------------------------------------------------------
 
+# apt-get install --yes bzip2
+# bzip2 --version
+# tar --version
+
+# apt-get install --yes autoconf automake
+# autoconf --version
+# automake --version
+
+# apt-get install --yes patch diffutils
+# patch --version
+# diff --version
+
+# libxext-dev libx11-dev 
+
+# -----------------------------------------------------------------------------
+
 XBB_VERSION="2.2"
 echo
 echo "centOS XBB v${XBB_VERSION} script started..."
@@ -58,7 +74,7 @@ source "${XBB_INPUT_FOLDER}/common-apps-functions-source.sh"
 
 prepare_xbb_env
 
-source "${XBB_BOOTSTRAP_FOLDER}/xbb-source.sh"
+# source "${XBB_BOOTSTRAP_FOLDER}/xbb-source.sh"
 
 # Create the xbb-source.sh file. Will be used by applications.
 # create_xbb_source
@@ -83,7 +99,7 @@ source "${XBB_BOOTSTRAP_FOLDER}/xbb-source.sh"
 
   echo
   g++ --version
-  g++-7bs --version
+  # g++-7bs --version
 )
 
 # -----------------------------------------------------------------------------
