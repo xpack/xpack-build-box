@@ -181,8 +181,6 @@ function prepare_xbb_env()
 
   # ---------------------------------------------------------------------------
 
-  JOBS=${JOBS:-"1"}
-
   XBB_CPPFLAGS=""
 
   XBB_CFLAGS="-pipe"
@@ -203,8 +201,15 @@ function prepare_xbb_env()
 
   # ---------------------------------------------------------------------------
 
+  JOBS=${JOBS:-"1"}
+
+  # Default PATH.
   PATH=${PATH:-""}
 
+  # Default LD_LIBRARY_PATH.
+  LD_LIBRARY_PATH=${LD_LIBRARY_PATH:-""}
+
+  # Default empty PKG_CONFIG_PATH.
   PKG_CONFIG_PATH=${PKG_CONFIG_PATH:-":"}
 
   # Prevent pkg-config to search the system folders (configured in the
@@ -241,7 +246,17 @@ function xbb_activate_installed_bin()
   # Add the XBB bin to the PATH.
   PATH="${INSTALL_FOLDER_PATH}/bin:${PATH}"
 
+  # Add XBB lib to LD_LIBRARY_PATH.
+  LD_LIBRARY_PATH="${XBB_FOLDER}/lib:${LD_LIBRARY_PATH}"
+
+  if [ -d "${XBB_FOLDER}/lib64" ]
+  then
+    # On 64-bit systems, add lib64 in front of LD_LIBRARY_PATH.
+    LD_LIBRARY_PATH="${XBB_FOLDER}/lib64:${LD_LIBRARY_PATH}"
+  fi
+
   export PATH
+  export LD_LIBRARY_PATH
 }
 
 # For the XBB builds, add the freshly built headrs and libraries.
@@ -258,6 +273,7 @@ function xbb_activate_installed_dev()
 
   # Add XBB lib in front of PKG_CONFIG_PATH.
   PKG_CONFIG_PATH="${INSTALL_FOLDER_PATH}/lib/pkgconfig:${PKG_CONFIG_PATH}"
+
 
   export XBB_CPPFLAGS
 
@@ -319,12 +335,22 @@ __EOF__
     # Note: __EOF__ is quoted to prevent substitutions here.
     cat <<'__EOF__' >> "${INSTALL_FOLDER_PATH}/xbb-source.sh"
 
-# Adjust PATH to prefer the XBB binaries.
+# Adjust PATH and LD_LIBRARY_PATH to prefer the XBB binaries with their libs.
 function xbb_activate()
 {
   PATH="${XBB_FOLDER}/bin:${PATH}"
 
+  # Add XBB lib to LD_LIBRARY_PATH.
+  LD_LIBRARY_PATH="${XBB_FOLDER}/lib:${LD_LIBRARY_PATH}"
+
+  if [ -d "${XBB_FOLDER}/lib64" ]
+  then
+    # On 64-bit systems, add lib64 in front of LD_LIBRARY_PATH.
+    LD_LIBRARY_PATH="${XBB_FOLDER}/lib64:${LD_LIBRARY_PATH}"
+  fi
+
   export PATH
+  export LD_LIBRARY_PATH
 }
 __EOF__
 # The above marker must start in the first column.
