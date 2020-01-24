@@ -1312,7 +1312,8 @@ function do_m4()
   local m4_folder_name="m4-${m4_version}"
   local m4_archive="${m4_folder_name}.tar.xz"
   local m4_url="https://ftp.gnu.org/gnu/m4/${m4_archive}"
-  local m4_patch="m4-${m4_version}.patch"
+
+  local m4_patch_file_path="${helper_folder_path}/patches/${m4_folder_name}.patch"
 
   local m4_stamp_file_path="${STAMPS_FOLDER_PATH}/stamp-m4-${m4_version}-installed"
   if [ ! -f "${m4_stamp_file_path}" -o ! -d "${BUILD_FOLDER_PATH}/${m4_folder_name}" ]
@@ -1320,7 +1321,7 @@ function do_m4()
 
     cd "${SOURCES_FOLDER_PATH}"
 
-    download_and_extract "${m4_url}" "${m4_archive}" "${m4_folder_name}" "${m4_patch}"
+    download_and_extract "${m4_url}" "${m4_archive}" "${m4_folder_name}" "${m4_patch_file_path}"
 
     (
       mkdir -p "${BUILD_FOLDER_PATH}/${m4_folder_name}"
@@ -2183,13 +2184,15 @@ function do_make()
   local make_archive="${make_folder_name}.tar.bz2"
   local make_url="https://ftp.gnu.org/gnu/make/${make_archive}"
 
+  local make_patch_file_path="${helper_folder_path}/patches/${make_folder_name}.patch"
+
   local make_stamp_file_path="${STAMPS_FOLDER_PATH}/stamp-make-${make_version}-installed"
   if [ ! -f "${make_stamp_file_path}" -o ! -d "${BUILD_FOLDER_PATH}/${make_folder_name}" ]
   then
 
     cd "${SOURCES_FOLDER_PATH}"
 
-    download_and_extract "${make_url}" "${make_archive}" "${make_folder_name}"
+    download_and_extract "${make_url}" "${make_archive}" "${make_folder_name}" "${make_patch_file_path}"
 
     (
       mkdir -p "${BUILD_FOLDER_PATH}/${make_folder_name}"

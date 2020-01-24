@@ -368,8 +368,7 @@ function extract()
       then
         if [ ! -z "$3" ]
         then
-          local patch_file_name="$3"
-          local patch_path="${script_folder_path}/patches/${patch_file_name}"
+          local patch_path="$3"
           if [ -f "${patch_path}" ]
           then
             echo "Patching..."
