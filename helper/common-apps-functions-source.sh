@@ -3145,7 +3145,12 @@ function do_python()
         # make install-strip
         make install
 
-        strip --strip-all "${XBB_FOLDER}/bin/python"
+        if [ "${HOST_UNAME}" == "Darwin" ]
+        then
+          strip "${XBB_FOLDER}/bin/python"
+        else
+          strip --strip-all "${XBB_FOLDER}/bin/python"
+        fi
       ) 2>&1 | tee "${LOGS_FOLDER_PATH}/make-python-output.txt"
     )
 
@@ -3271,7 +3276,12 @@ function do_python3()
         # make install-strip
         make install
 
-        strip --strip-all "${XBB_FOLDER}/bin/python3"
+        if [ "${HOST_UNAME}" == "Darwin" ]
+        then
+          strip "${XBB_FOLDER}/bin/python3"
+        else
+          strip --strip-all "${XBB_FOLDER}/bin/python3"
+        fi
       ) 2>&1 | tee "${LOGS_FOLDER_PATH}/make-python3-output.txt"
     )
 
