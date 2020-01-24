@@ -872,7 +872,6 @@ function do_openssl()
     download_and_extract "${openssl_url}" "${openssl_archive}" "${openssl_folder_name}"
 
     (
-      mkdir -p "${BUILD_FOLDER_PATH}/${openssl_folder_name}"
       cd "${BUILD_FOLDER_PATH}/${openssl_folder_name}"
 
       xbb_activate
@@ -889,32 +888,48 @@ function do_openssl()
           echo
           echo "Running openssl configure..."
 
-          # This config does not use the standard GNU environment definitions.
-          # `Configure` is a Perl script.
-          "./Configure" --help || true
-          # ./config --help
-
-          # WARNING! If you wish to build 64-bit library, then you have to
-          # invoke './Configure darwin64-x86_64-cc' *manually*.
-
-          local configure_target=""
+          echo
           if [ "${HOST_UNAME}" == "Darwin" ]
           then
-            configure_target=darwin64-x86_64-cc
+
+            # This config does not use the standard GNU environment definitions.
+            # `Configure` is a Perl script.
+            "./Configure" --help || true
+
+            # WARNING! If you wish to build 64-bit library, then you have to
+            # invoke './Configure darwin64-x86_64-cc' *manually*.
+
+            local configure_target="darwin64-x86_64-cc"
+
+            "./Configure" \
+              --prefix="${INSTALL_FOLDER_PATH}" \
+              --openssldir="${INSTALL_FOLDER_PATH}/openssl" \
+              shared \
+              enable-md2 enable-rc5 enable-tls enable-tls1_3 enable-tls1_2 enable-tls1_1 \
+              ${configure_target} \
+              "${CPPFLAGS} ${CFLAGS} ${LDFLAGS}"
+
+          else
+
+            "./config" --help
+
+            local optflags=""
+            if [ "${HOST_MACHINE}" == "x86_64" ]
+            then
+              optflags="enable-ec_nistp_64_gcc_128"
+            fi
+
+            "./config" \
+              --prefix="${INSTALL_FOLDER_PATH}" \
+              --openssldir="${INSTALL_FOLDER_PATH}/openssl" \
+              shared \
+              enable-md2 enable-rc5 enable-tls enable-tls1_3 enable-tls1_2 enable-tls1_1 \
+              ${optflags} \
+              "-Wa,--noexecstack ${CPPFLAGS} ${CFLAGS} ${LDFLAGS}"
+
           fi
 
-          # linux-x86_64, linux-elf
-
-          echo
-          "./Configure" \
-            --prefix="${INSTALL_FOLDER_PATH}" \
-            --openssldir="${INSTALL_FOLDER_PATH}/openssl" \
-            shared \
-            ${configure_target} \
-            "${CPPFLAGS} ${CFLAGS} ${LDFLAGS}"
-
           make depend 
-          make -j ${JOBS}
 
           touch config.stamp
 
