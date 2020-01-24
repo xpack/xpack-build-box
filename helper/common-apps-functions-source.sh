@@ -3388,4 +3388,117 @@ function do_p7zip()
   fi
 }
 
+function do_wine()
+{
+  # https://www.winehq.org
+  # https://dl.winehq.org/wine/source/
+  # https://dl.winehq.org/wine/source/4.x/wine-4.3.tar.xz
+
+  # 2017-09-16, "4.3"
+  # 2019-11-29, "4.21"
+  # 2020-01-21, "5.0"
+
+  local wine_version="$1"
+
+  local wine_version_major="$(echo ${wine_version} | sed -e 's|\([0-9][0-9]*\)\.\([0-9][0-9]*\)|\1|')"
+  local wine_version_minor="$(echo ${wine_version} | sed -e 's|\([0-9][0-9]*\)\.\([0-9][0-9]*\)|\2|')"
+
+  local wine_folder_name="wine-${wine_version}"
+  local wine_archive="${wine_folder_name}.tar.xz"
+  local wine_url="https://dl.winehq.org/wine/source/${wine_version_major}.x/${wine_archive}"
+
+  local wine_stamp_file_path="${STAMPS_FOLDER_PATH}/stamp-wine-${wine_version}-installed"
+  if [ ! -f "${wine_stamp_file_path}" -o ! -d "${BUILD_FOLDER_PATH}/${wine_folder_name}" ]
+  then
+
+    # In-source build.
+    cd "${BUILD_FOLDER_PATH}"
+
+    download_and_extract "${wine_url}" "${wine_archive}" "${wine_folder_name}"
+
+    (
+      cd "${BUILD_FOLDER_PATH}/${wine_folder_name}"
+
+      xbb_activate
+
+      export CPPFLAGS="${XBB_CPPFLAGS}" 
+      export CFLAGS="${XBB_CFLAGS}"
+      export CXXFLAGS="${XBB_CXXFLAGS}"
+      export LDFLAGS="${XBB_LDFLAGS_APP}"
+
+      if [ ! -f "config.status" ]
+      then
+        (
+          echo
+          echo "Running wine configure..."
+
+          if [ "${HOST_BITS}" == "64" ]
+          then
+            ENABLE_64="--enable-win64"
+          else
+            ENABLE_64=""
+          fi
+
+          bash configure --help
+
+          bash configure \
+            --prefix="${INSTALL_FOLDER_PATH}" \
+            \
+            ${ENABLE_64} \
+            --disable-win16 \
+            --disable-tests \
+            \
+            --without-freetype \
+            --without-x \
+            --with-png
+
+          cp "config.log" "${LOGS_FOLDER_PATH}/config-wine-log.txt"
+        ) 2>&1 | tee "${LOGS_FOLDER_PATH}/configure-wine-output.txt"
+      fi
+
+      (
+        echo
+        echo "Running xz make..."
+
+        # Parallel builds may fail 
+        make -j ${JOBS} STRIP=true
+        # make STRIP=true
+
+        make install
+
+        if [ "${HOST_BITS}" == "64" ]
+        then
+          (
+            cd "${INSTALL_FOLDER_PATH}/bin"
+            rm -f wine
+            ln -s wine64 wine
+          )
+        fi
+      ) 2>&1 | tee "${LOGS_FOLDER_PATH}/make-wine-output.txt"
+    )
+
+    (
+      xbb_activate_installed_bin
+
+      echo
+      # First check if the program is able to tell its version.
+      "${INSTALL_FOLDER_PATH}/bin/wine" --version
+
+      # This test should check if the program is able to start
+      # a simple executable.
+      # As a side effect, the "${HOME}/.wine" folder is created
+      # and populated with lots of files., so subsequent runs
+      # will no longer have to do it.
+      "${XBB_FOLDER}/bin/wine" "${XBB_FOLDER}"/lib*/wine/fakedlls/netstat.exe
+    )
+
+    hash -r
+
+    touch "${wine_stamp_file_path}"
+
+  else
+    echo "Component wine already installed."
+  fi
+}
+
 # -----------------------------------------------------------------------------
