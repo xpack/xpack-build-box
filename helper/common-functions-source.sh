@@ -420,4 +420,78 @@ function download_and_extract()
   fi
 }
 
+# -----------------------------------------------------------------------------
+
+do_strip_libs() 
+{
+  echo
+  echo "Stipping libraries..."
+
+  (
+    cd "${XBB_FOLDER}"
+
+    xbb_activate
+
+    local strip
+    if [ -f "${XBB_FOLDER}/bin/strip" ]
+    then
+      strip="${XBB_FOLDER}/bin/strip"
+    elif [ -f "${XBB_BOOTSTRAP_FOLDER}/bin/strip" ]
+    then
+      strip="${XBB_BOOTSTRAP_FOLDER}/bin/strip"
+    else
+      strip="strip"
+    fi
+
+    local ranlib
+    if [ -f "${XBB_FOLDER}/bin/ranlib" ]
+    then
+      ranlib="${XBB_FOLDER}/bin/ranlib"
+    elif [ -f "${XBB_BOOTSTRAP_FOLDER}/bin/ranlib" ]
+    then
+      ranlib="${XBB_BOOTSTRAP_FOLDER}/bin/ranlib"
+    else
+      ranlib="ranlib"
+    fi
+
+    set +e
+    # -type f to skip links.
+    find lib* \
+      -type f \
+      -name '*.so' \
+      -print \
+      -exec chmod +w {} \; \
+      -exec "${strip}" --strip-debug {} \;
+    find lib* \
+      -type f \
+      -name '*.so.*' \
+      -print \
+      -exec chmod +w {} \; \
+      -exec "${strip}" --strip-debug {} \;
+    find lib* \
+      -type f \
+      -name '*.a' \
+      -not -path 'lib/gcc/*-w64-mingw32/*'  \
+      -print \
+      -exec chmod +w {} \; \
+      -exec "${strip}" --strip-debug {} \; \
+      -exec "${ranlib}" {} \;
+    set -e
+  )
+}
+
+# -----------------------------------------------------------------------------
+
+do_cleaunup() 
+{
+  # In bootstrap preserve download, it'll be used by xbb and removed later.
+  if [ "${IS_BOOTSTRAP}" != "y" ]
+  then
+    rm -rf "${CACHE_FOLDER_PATH}"
+  fi
+
+  # All other can go.
+  rm -rf "${XBB_WORK_FOLDER_PATH}"
+}
+
 # =============================================================================
