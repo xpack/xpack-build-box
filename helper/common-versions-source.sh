@@ -17,7 +17,11 @@ function do_build_versions()
     XBB_GCC_VERSION="8.3.0" # "7.4.0"
     XBB_GCC_SUFFIX="-8"
 
-    XBB_BRANDING="xPack Build Box\x2C ${HOST_BITS}-bit"
+    XBB_BINUTILS_BRANDING="xPack Build Box Binutils\x2C ${HOST_BITS}-bit"
+    XBB_GCC_BRANDING="xPack Build Box GCC\x2C ${HOST_BITS}-bit"
+
+    XBB_MINGW_BINUTILS_BRANDING="xPack Build Box Mingw-w64 Binutils\x2C ${HOST_BITS}-bit"
+    XBB_MINGW_GCC_BRANDING="xPack Build Box Mingw-w64 GCC\x2C ${HOST_BITS}-bit"
 
     # -------------------------------------------------------------------------
 
