@@ -56,7 +56,7 @@ function do_native_binutils()
           # --with-sysroot failed.
           echo bash ${DEBUG} "${SOURCES_FOLDER_PATH}/${native_binutils_folder_name}/configure" \
             --prefix="${INSTALL_FOLDER_PATH}" \
-            --with-pkgversion="${XBB_BRANDING}" \
+            --with-pkgversion="${XBB_BINUTILS_BRANDING}" \
             \
             --disable-shared \
             --enable-static \
@@ -178,7 +178,7 @@ function do_native_gcc()
           bash ${DEBUG} "${SOURCES_FOLDER_PATH}/${native_gcc_folder_name}/configure" \
             --prefix="${INSTALL_FOLDER_PATH}" \
             --program-suffix="${XBB_GCC_SUFFIX}" \
-            --with-pkgversion="${XBB_BRANDING}" \
+            --with-pkgversion="${XBB_GCC_BRANDING}" \
             \
             --with-native-system-header-dir="/usr/include" \
             --with-sysroot="${sdk_path}" \
@@ -213,7 +213,7 @@ function do_native_gcc()
             bash ${DEBUG} "${SOURCES_FOLDER_PATH}/${native_gcc_folder_name}/configure" \
               --prefix="${INSTALL_FOLDER_PATH}" \
               --program-suffix="${XBB_GCC_SUFFIX}" \
-              --with-pkgversion="${XBB_BRANDING}" \
+              --with-pkgversion="${XBB_GCC_BRANDING}" \
               \
               --enable-languages=c,c++ \
               \
@@ -356,6 +356,7 @@ function do_mingw_binutils()
           bash "${SOURCES_FOLDER_PATH}/${mingw_binutils_folder_name}/configure" \
             --prefix="${INSTALL_FOLDER_PATH}" \
             --with-sysroot="${INSTALL_FOLDER_PATH}" \
+            --with-pkgversion="${XBB_MINGW_BINUTILS_BRANDING}" \
             \
             --build="${BUILD}" \
             --target="${MINGW_TARGET}" \
