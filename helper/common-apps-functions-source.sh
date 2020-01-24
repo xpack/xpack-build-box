@@ -2681,8 +2681,8 @@ function do_perl()
   # 2017-09-22
   local perl_version_major="5.0"
   # local perl_version="5.26.1"
-  # 2018-11-29
-  # 2019-04-19, "5.28.2"
+  # 2018-11-29, "5.26.3"
+  # 2019-04-19, "5.28.2" # Fails in bootstrap on mac.
   # 2019-11-10, "5.30.1"
 
   local perl_version="$1"
@@ -2738,7 +2738,10 @@ function do_perl()
         make install-strip
 
         # https://www.cpan.org/modules/INSTALL.html
-        # cpan App::cpanminus
+        # Convince cpan not to ask confirmations.
+        export PERL_MM_USE_DEFAULT=true
+        # cpanminus is a quiet version of cpan.
+        cpan App::cpanminus
 
       ) 2>&1 | tee "${LOGS_FOLDER_PATH}/make-perl-output.txt"
     )
