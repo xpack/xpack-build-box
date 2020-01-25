@@ -150,57 +150,37 @@ function do_native_gcc()
 
           if [ "${HOST_UNAME}" == "Darwin" ]
           then
-            local sdk_path=""
-            local print_path="$(xcode-select -print-path)"
-            if [ -d "${print_path}/SDKs/MacOSX.sdk" ]
-            then
-              # Without Xcode, use the SDK that comes with the CLT.
-              sdk_path="${print_path}/SDKs/MacOSX.sdk"
-            elif [ -d "${print_path}/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk" ]
-            then
-              # With Xcode, chose the SDK from the macOS platform.
-              sdk_path="${print_path}/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk"
-            elif [ -d "/usr/include" ]
-            then
-              # Without Xcode, on 10.10 there is no SDK, use the root.
-              sdk_path="/"
-            else
-              echo "Cannot find SDK in ${print_path}."
-              exit 1
-            fi
 
-          # Fail on macOS
-          # --with-linker-hash-style=gnu 
-          # --enable-libmpx 
-          # --enable-clocale=gnu
+            # Fail on macOS
+            # --with-linker-hash-style=gnu 
+            # --enable-libmpx 
+            # --enable-clocale=gnu
+            echo "${MACOS_SDK_PATH}"
 
-          bash ${DEBUG} "${SOURCES_FOLDER_PATH}/${native_gcc_folder_name}/configure" \
-            --prefix="${INSTALL_FOLDER_PATH}" \
-            --program-suffix="${XBB_GCC_SUFFIX}" \
-            --with-pkgversion="${XBB_GCC_BRANDING}" \
-            \
-            --with-native-system-header-dir="/usr/include" \
-            --with-sysroot="${sdk_path}" \
-            \
-            --enable-languages=c,c++,objc,obj-c++ \
-            \
-            --enable-checking=release \
-            --enable-static \
-            --enable-threads=posix \
-            --enable-__cxa_atexit \
-            --disable-libunwind-exceptions \
-            --disable-libstdcxx-pch \
-            --disable-libssp \
-            --enable-gnu-unique-object \
-            --enable-linker-build-id \
-            --enable-lto \
-            --enable-plugin \
-            --enable-install-libiberty \
-            --enable-gnu-indirect-function \
-            --disable-multilib \
-            --disable-werror \
-            --disable-nls \
-            --disable-bootstrap \
+            bash ${DEBUG} "${SOURCES_FOLDER_PATH}/${native_gcc_folder_name}/configure" \
+              --prefix="${INSTALL_FOLDER_PATH}" \
+              --program-suffix="${XBB_GCC_SUFFIX}" \
+              --with-pkgversion="${XBB_GCC_BRANDING}" \
+              \
+              --enable-languages=c,c++,objc,obj-c++ \
+              \
+              --enable-checking=release \
+              --enable-static \
+              --enable-threads=posix \
+              --enable-__cxa_atexit \
+              --disable-libunwind-exceptions \
+              --disable-libstdcxx-pch \
+              --disable-libssp \
+              --enable-gnu-unique-object \
+              --enable-linker-build-id \
+              --enable-lto \
+              --enable-plugin \
+              --enable-install-libiberty \
+              --enable-gnu-indirect-function \
+              --disable-multilib \
+              --disable-werror \
+              --disable-nls \
+              --disable-bootstrap \
 
           else [ "${HOST_UNAME}" == "Linux" ]
 
@@ -2678,10 +2658,13 @@ function do_perl()
   # http://www.cpan.org/src/
   # https://git.archlinux.org/svntogit/packages.git/tree/trunk/PKGBUILD?h=packages/perl
 
-  # 2017-09-22
-  local perl_version_major="5.0"
-  # local perl_version="5.26.1"
-  # 2018-11-29, "5.26.3"
+  # Fails to build on macOS
+
+  # 2014-10-02, "5.18.4" (10.10 uses 5.18.2)
+  # 2015-09-12, "5.20.3"
+  # 2017-07-15, "5.22.4"
+  # 2018-04-14, "5.24.4" # Fails in bootstrap on mac.
+  # 2018-11-29, "5.26.3" # Fails in bootstrap on mac.
   # 2019-04-19, "5.28.2" # Fails in bootstrap on mac.
   # 2019-11-10, "5.30.1"
 
@@ -2722,7 +2705,10 @@ function do_perl()
           bash ${DEBUG} "./Configure" -d -e -s \
             -Dprefix="${INSTALL_FOLDER_PATH}" \
             -Dcc="${CC}" \
-            -Dccflags="${CFLAGS}"
+            -Dccflags="${CFLAGS}" \
+            -Duseshrplib \
+            -Duselargefiles \
+            -Dusethreads
 
         ) 2>&1 | tee "${LOGS_FOLDER_PATH}/configure-perl-output.txt"
       fi
@@ -3067,8 +3053,10 @@ function do_python()
   # https://www.python.org/ftp/python/2.7.16/Python-2.7.16.tar.xz
   # https://git.archlinux.org/svntogit/packages.git/tree/trunk/PKGBUILD?h=packages/python2
 
-  # 2017-09-16, "2.7.14"
-  # March 4, 2019, "2.7.16"
+  # macOS 10.10 uses 2.7.10
+  # "2.7.12" # Fails on macOS in bootstrap
+  # 2017-09-16, "2.7.14" # Fails on macOS in bootstrap
+  # March 4, 2019, "2.7.16" # Fails on macOS in bootstrap
   # Oct. 19, 2019, "2.7.17"
 
   local python_version="$1"
@@ -3114,6 +3102,7 @@ function do_python()
 
           # Fail on macOS:
           # --enable-universalsdk 
+          # --with-universal-archs=${HOST_BITS}-bit
 
           # "... you should not skip tests when using --enable-optimizations as 
           # the data required for profiling is generated by running tests".
@@ -3122,7 +3111,6 @@ function do_python()
             --prefix="${INSTALL_FOLDER_PATH}" \
             \
             --enable-shared \
-            --with-universal-archs=${HOST_BITS}-bit \
             --enable-optimizations \
             --with-threads \
             --enable-unicode=ucs4 \
@@ -3340,6 +3328,7 @@ function do_scons()
       cd "${BUILD_FOLDER_PATH}/${scons_folder_name}"
 
       xbb_activate
+      xbb_activate_installed_bin
 
       export CPPFLAGS="${XBB_CPPFLAGS}"
       export CFLAGS="${XBB_CFLAGS}"
@@ -3349,9 +3338,10 @@ function do_scons()
       echo
       echo "Running scons install..."
 
-      "${INSTALL_FOLDER_PATH}/bin/python" setup.py install \
-      --prefix="${INSTALL_FOLDER_PATH}" \
-      --optimize=1
+      # On macOS it uses the system python.
+      python setup.py install \
+        --prefix="${INSTALL_FOLDER_PATH}" \
+        --optimize=1
 
     ) 2>&1 | tee "${LOGS_FOLDER_PATH}/install-scons-output.txt"
 
@@ -3520,10 +3510,10 @@ function do_p7zip()
       if [ "${HOST_UNAME}" == "Darwin" ]
       then
         # 7z cannot load library on macOS.
-        make test
+        make -j ${JOBS} test
       else
         # make test test_7z
-        make all_test
+        make -j ${JOBS} all_test
       fi
 
       ls -lL bin

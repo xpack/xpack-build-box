@@ -16,6 +16,7 @@ function do_build_versions()
 
     XBB_GCC_VERSION="8.3.0" # "7.4.0"
     XBB_GCC_SUFFIX="-8"
+    XBB_BINUTILS_VERSION="2.33.1"
 
     XBB_BINUTILS_BRANDING="xPack Build Box Binutils\x2C ${HOST_BITS}-bit"
     XBB_GCC_BRANDING="xPack Build Box GCC\x2C ${HOST_BITS}-bit"
@@ -40,8 +41,6 @@ function do_build_versions()
     do_isl "0.22" # "0.21"
 
     # Libraries, required by gnutls.
-    # depends=('glibc' 'gmp')
-    do_nettle "3.5.1" # "3.4.1"
     # depends=('glibc')
     do_tasn1 "4.15.0" # "4.13"
     # Library, required by Python.
@@ -59,6 +58,10 @@ function do_build_versions()
 
     # depends=('perl')
     do_openssl "1.1.1d" # "1.0.2u" # "1.1.1d" # "1.0.2r" # "1.1.1b"
+
+    # Requires openssl.
+    # depends=('glibc' 'gmp')
+    do_nettle "3.5.1" # "3.4.1"
 
     # Needed by wine.
     do_libpng "1.6.37"
@@ -135,21 +138,30 @@ function do_build_versions()
     # depends=('glibc' 'm4' 'sh')
     do_flex "2.6.4"
 
-    # macOS 10.10 uses 5.18.2, an update is not mandatory.
-    # depends=('gdbm' 'db' 'glibc')
-    do_perl "5.30.1" # "5.28.1"
+    if [ "${HOST_UNAME}" != "Darwin" ]
+    then
+      # macOS 10.10 uses 5.18.2, an update is not mandatory.
+      # depends=('gdbm' 'db' 'glibc')
+      # For Linux, go back to the same version supported by macOS 10.10.
+      do_perl "5.18.2" # "5.30.1" # "5.28.1"
+    fi
 
     # depends=('curl' 'libarchive' 'shared-mime-info' 'jsoncpp' 'rhash')
     do_cmake "3.16.2" # "3.13.4"
 
-    # depends=('bzip2' 'gdbm' 'openssl' 'zlib' 'expat' 'sqlite' 'libffi')
-    do_python "2.7.17" # "2.7.16"
-    # Python build finished, but the necessary bits to build these modules were not found:
-    # _bsddb             _curses            _curses_panel   
-    # _sqlite3           _tkinter           bsddb185        
-    # bz2                dbm                dl              
-    # gdbm               imageop            readline        
-    # sunaudiodev                                           
+    if [ "${HOST_UNAME}" != "Darwin" ]
+    then
+      # There are several errors on macOS 10.10 and some tests fail.
+                                               
+      # depends=('bzip2' 'gdbm' 'openssl' 'zlib' 'expat' 'sqlite' 'libffi')
+      do_python "2.7.17" # "2.7.16"
+      # Python build finished, but the necessary bits to build these modules were not found:
+      # _bsddb             _curses            _curses_panel   
+      # _sqlite3           _tkinter           bsddb185        
+      # bz2                dbm                dl              
+      # gdbm               imageop            readline        
+      # sunaudiodev  
+    fi
 
     # require xz, openssl
     do_python3 "3.8.1" # "3.7.3"
@@ -181,7 +193,7 @@ function do_build_versions()
     if [ "${HOST_UNAME}" != "Darwin" ]
     then
       # Requires gmp, mpfr, mpc, isl.
-      do_native_binutils "2.33.1" 
+      do_native_binutils "${XBB_BINUTILS_VERSION}" 
     fi
 
     # makedepends=('binutils>=2.26' 'libmpc' 'gcc-ada' 'doxygen' 'git')
@@ -191,7 +203,7 @@ function do_build_versions()
     if [ "${HOST_UNAME}" != "Darwin" ]
     then
       # depends=('zlib')
-      do_mingw_binutils "2.33.1"
+      do_mingw_binutils "${XBB_BINUTILS_VERSION}"
       # depends=('zlib' 'libmpc' 'mingw-w64-crt' 'mingw-w64-binutils' 'mingw-w64-winpthreads' 'mingw-w64-headers')
       do_mingw_all "7.0.0" "${XBB_GCC_VERSION}" # "5.0.4" "7.4.0"
     fi

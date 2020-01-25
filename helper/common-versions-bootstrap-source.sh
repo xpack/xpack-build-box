@@ -92,9 +92,13 @@ function do_build_versions()
     # depends=('glibc' 'glib2 (internal)')
     do_pkg_config "0.29.2"
 
-    # macOS 10.10 uses 5.18.2, an update is not mandatory.
-    # depends=('gdbm' 'db' 'glibc')
-    do_perl "5.26.3" # "5.28.2"
+    if [ "${HOST_UNAME}" != "Darwin" ]
+    then
+      # macOS 10.10 uses 5.18.2, an update is not mandatory.
+      # depends=('gdbm' 'db' 'glibc')
+      # On macOS 10.10 newer versions fail with clang, due to a missing clock_gettime()
+      do_perl "5.18.2" # "5.24.4" # "5.26.3" # "5.28.2"
+    fi
 
     # Libraries, required by gcc.
     # depends=('gcc-libs' 'sh')
@@ -111,8 +115,12 @@ function do_build_versions()
     # depends=('curl' 'libarchive' 'shared-mime-info' 'jsoncpp' 'rhash')
     do_cmake "3.15.6" # "3.13.4"
 
-    # depends=('bzip2' 'gdbm' 'openssl' 'zlib' 'expat' 'sqlite' 'libffi')
-    do_python "2.7.16" # "2.7.14"
+    if [ "${HOST_UNAME}" != "Darwin" ]
+    then
+      # depends=('bzip2' 'gdbm' 'openssl' 'zlib' 'expat' 'sqlite' 'libffi')
+      # macOS 10.10 uses 2.7.10, bring it in sync.
+      do_python "2.7.10" # "2.7.12" # "2.7.14" # "2.7.16" # "2.7.14"
+    fi
     # depends=('python2')
     do_scons "3.0.5" # "3.0.1"
 

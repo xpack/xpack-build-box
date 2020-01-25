@@ -66,7 +66,7 @@ function detect_host()
     HOST_NODE_ARCH="x64" # For now.
     HOST_NODE_PLATFORM="darwin"
 
-    BUILD="$(gcc -print-effective-triple)"
+    BUILD="$(gcc --version 2>&1 | grep 'Target:' | sed -e 's/Target: //')"
 
   elif [ "${HOST_UNAME}" == "Linux" ]
   then
@@ -115,6 +115,29 @@ function detect_host()
     exit 1
   fi
 
+  MACOS_SDK_PATH=""
+  if [ "${HOST_UNAME}" == "Darwin" ]
+  then
+    local print_path="$(xcode-select -print-path)"
+    if [ -d "${print_path}/SDKs/MacOSX.sdk" ]
+    then
+      # Without Xcode, use the SDK that comes with the CLT.
+      MACOS_SDK_PATH="${print_path}/SDKs/MacOSX.sdk"
+    elif [ -d "${print_path}/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk" ]
+    then
+      # With Xcode, chose the SDK from the macOS platform.
+      MACOS_SDK_PATH="${print_path}/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk"
+    elif [ -d "/usr/include" ]
+    then
+      # Without Xcode, on 10.10 there is no SDK, use the root.
+      MACOS_SDK_PATH="/"
+    else
+      echo "Cannot find SDK in ${print_path}."
+      exit 1
+    fi
+  fi
+  export MACOS_SDK_PATH
+
   # x86_64-w64-mingw32 or i686-w64-mingw32
   MINGW_TARGET="${HOST_MACHINE}-w64-mingw32"
 
@@ -140,7 +163,7 @@ function prepare_xbb_env()
   
   CACHE_FOLDER_PATH="${WORK_FOLDER_PATH}/cache"
 
-  XBB_WORK_FOLDER_PATH="${WORK_FOLDER_PATH}/$(basename "${XBB_FOLDER}")"
+  XBB_WORK_FOLDER_PATH="${WORK_FOLDER_PATH}/$(basename "${XBB_FOLDER}")-${XBB_VERSION}-${HOST_DISTRO_LC_NAME}-${HOST_MACHINE}"
 
   BUILD_FOLDER_PATH="${XBB_WORK_FOLDER_PATH}/build"
   LIBS_BUILD_FOLDER_PATH="${XBB_WORK_FOLDER_PATH}/build/libs"
