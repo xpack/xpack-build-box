@@ -41,8 +41,6 @@ function do_build_versions()
     do_isl "0.22" # "0.21"
 
     # Libraries, required by gnutls.
-    # depends=('glibc' 'gmp')
-    do_nettle "3.5.1" # "3.4.1"
     # depends=('glibc')
     do_tasn1 "4.15.0" # "4.13"
     # Library, required by Python.
@@ -60,6 +58,10 @@ function do_build_versions()
 
     # depends=('perl')
     do_openssl "1.1.1d" # "1.0.2u" # "1.1.1d" # "1.0.2r" # "1.1.1b"
+
+    # Requires openssl.
+    # depends=('glibc' 'gmp')
+    do_nettle "3.5.1" # "3.4.1"
 
     # Needed by wine.
     do_libpng "1.6.37"
