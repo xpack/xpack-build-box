@@ -138,21 +138,30 @@ function do_build_versions()
     # depends=('glibc' 'm4' 'sh')
     do_flex "2.6.4"
 
-    # macOS 10.10 uses 5.18.2, an update is not mandatory.
-    # depends=('gdbm' 'db' 'glibc')
-    do_perl "5.30.1" # "5.28.1"
+    if [ "${HOST_UNAME}" != "Darwin" ]
+    then
+      # macOS 10.10 uses 5.18.2, an update is not mandatory.
+      # depends=('gdbm' 'db' 'glibc')
+      # For Linux, go back to the same version supported by macOS 10.10.
+      do_perl "5.18.2" # "5.30.1" # "5.28.1"
+    fi
 
     # depends=('curl' 'libarchive' 'shared-mime-info' 'jsoncpp' 'rhash')
     do_cmake "3.16.2" # "3.13.4"
 
-    # depends=('bzip2' 'gdbm' 'openssl' 'zlib' 'expat' 'sqlite' 'libffi')
-    do_python "2.7.17" # "2.7.16"
-    # Python build finished, but the necessary bits to build these modules were not found:
-    # _bsddb             _curses            _curses_panel   
-    # _sqlite3           _tkinter           bsddb185        
-    # bz2                dbm                dl              
-    # gdbm               imageop            readline        
-    # sunaudiodev                                           
+    if [ "${HOST_UNAME}" != "Darwin" ]
+    then
+      # There are several errors on macOS 10.10 and some tests fail.
+                                               
+      # depends=('bzip2' 'gdbm' 'openssl' 'zlib' 'expat' 'sqlite' 'libffi')
+      do_python "2.7.17" # "2.7.16"
+      # Python build finished, but the necessary bits to build these modules were not found:
+      # _bsddb             _curses            _curses_panel   
+      # _sqlite3           _tkinter           bsddb185        
+      # bz2                dbm                dl              
+      # gdbm               imageop            readline        
+      # sunaudiodev  
+    fi
 
     # require xz, openssl
     do_python3 "3.8.1" # "3.7.3"
