@@ -16,6 +16,7 @@ function do_build_versions()
 
     XBB_GCC_VERSION="8.3.0" # "7.4.0"
     XBB_GCC_SUFFIX="-8"
+    XBB_BINUTILS_VERSION="2.33.1"
 
     XBB_BINUTILS_BRANDING="xPack Build Box Binutils\x2C ${HOST_BITS}-bit"
     XBB_GCC_BRANDING="xPack Build Box GCC\x2C ${HOST_BITS}-bit"
@@ -181,7 +182,7 @@ function do_build_versions()
     if [ "${HOST_UNAME}" != "Darwin" ]
     then
       # Requires gmp, mpfr, mpc, isl.
-      do_native_binutils "2.33.1" 
+      do_native_binutils "${XBB_BINUTILS_VERSION}" 
     fi
 
     # makedepends=('binutils>=2.26' 'libmpc' 'gcc-ada' 'doxygen' 'git')
@@ -191,7 +192,7 @@ function do_build_versions()
     if [ "${HOST_UNAME}" != "Darwin" ]
     then
       # depends=('zlib')
-      do_mingw_binutils "2.33.1"
+      do_mingw_binutils "${XBB_BINUTILS_VERSION}"
       # depends=('zlib' 'libmpc' 'mingw-w64-crt' 'mingw-w64-binutils' 'mingw-w64-winpthreads' 'mingw-w64-headers')
       do_mingw_all "7.0.0" "${XBB_GCC_VERSION}" # "5.0.4" "7.4.0"
     fi
