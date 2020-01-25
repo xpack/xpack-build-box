@@ -2678,10 +2678,13 @@ function do_perl()
   # http://www.cpan.org/src/
   # https://git.archlinux.org/svntogit/packages.git/tree/trunk/PKGBUILD?h=packages/perl
 
-  # 2017-09-22
-  local perl_version_major="5.0"
-  # local perl_version="5.26.1"
-  # 2018-11-29, "5.26.3"
+  # Fails to build on macOS
+
+  # 2014-10-02, "5.18.4" (10.10 uses 5.18.2)
+  # 2015-09-12, "5.20.3"
+  # 2017-07-15, "5.22.4"
+  # 2018-04-14, "5.24.4" # Fails in bootstrap on mac.
+  # 2018-11-29, "5.26.3" # Fails in bootstrap on mac.
   # 2019-04-19, "5.28.2" # Fails in bootstrap on mac.
   # 2019-11-10, "5.30.1"
 
@@ -2722,7 +2725,10 @@ function do_perl()
           bash ${DEBUG} "./Configure" -d -e -s \
             -Dprefix="${INSTALL_FOLDER_PATH}" \
             -Dcc="${CC}" \
-            -Dccflags="${CFLAGS}"
+            -Dccflags="${CFLAGS}" \
+            -Duseshrplib \
+            -Duselargefiles \
+            -Dusethreads
 
         ) 2>&1 | tee "${LOGS_FOLDER_PATH}/configure-perl-output.txt"
       fi
