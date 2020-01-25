@@ -150,57 +150,37 @@ function do_native_gcc()
 
           if [ "${HOST_UNAME}" == "Darwin" ]
           then
-            local sdk_path=""
-            local print_path="$(xcode-select -print-path)"
-            if [ -d "${print_path}/SDKs/MacOSX.sdk" ]
-            then
-              # Without Xcode, use the SDK that comes with the CLT.
-              sdk_path="${print_path}/SDKs/MacOSX.sdk"
-            elif [ -d "${print_path}/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk" ]
-            then
-              # With Xcode, chose the SDK from the macOS platform.
-              sdk_path="${print_path}/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk"
-            elif [ -d "/usr/include" ]
-            then
-              # Without Xcode, on 10.10 there is no SDK, use the root.
-              sdk_path="/"
-            else
-              echo "Cannot find SDK in ${print_path}."
-              exit 1
-            fi
 
-          # Fail on macOS
-          # --with-linker-hash-style=gnu 
-          # --enable-libmpx 
-          # --enable-clocale=gnu
+            # Fail on macOS
+            # --with-linker-hash-style=gnu 
+            # --enable-libmpx 
+            # --enable-clocale=gnu
+            echo "${MACOS_SDK_PATH}"
 
-          bash ${DEBUG} "${SOURCES_FOLDER_PATH}/${native_gcc_folder_name}/configure" \
-            --prefix="${INSTALL_FOLDER_PATH}" \
-            --program-suffix="${XBB_GCC_SUFFIX}" \
-            --with-pkgversion="${XBB_GCC_BRANDING}" \
-            \
-            --with-native-system-header-dir="/usr/include" \
-            --with-sysroot="${sdk_path}" \
-            \
-            --enable-languages=c,c++,objc,obj-c++ \
-            \
-            --enable-checking=release \
-            --enable-static \
-            --enable-threads=posix \
-            --enable-__cxa_atexit \
-            --disable-libunwind-exceptions \
-            --disable-libstdcxx-pch \
-            --disable-libssp \
-            --enable-gnu-unique-object \
-            --enable-linker-build-id \
-            --enable-lto \
-            --enable-plugin \
-            --enable-install-libiberty \
-            --enable-gnu-indirect-function \
-            --disable-multilib \
-            --disable-werror \
-            --disable-nls \
-            --disable-bootstrap \
+            bash ${DEBUG} "${SOURCES_FOLDER_PATH}/${native_gcc_folder_name}/configure" \
+              --prefix="${INSTALL_FOLDER_PATH}" \
+              --program-suffix="${XBB_GCC_SUFFIX}" \
+              --with-pkgversion="${XBB_GCC_BRANDING}" \
+              \
+              --enable-languages=c,c++,objc,obj-c++ \
+              \
+              --enable-checking=release \
+              --enable-static \
+              --enable-threads=posix \
+              --enable-__cxa_atexit \
+              --disable-libunwind-exceptions \
+              --disable-libstdcxx-pch \
+              --disable-libssp \
+              --enable-gnu-unique-object \
+              --enable-linker-build-id \
+              --enable-lto \
+              --enable-plugin \
+              --enable-install-libiberty \
+              --enable-gnu-indirect-function \
+              --disable-multilib \
+              --disable-werror \
+              --disable-nls \
+              --disable-bootstrap \
 
           else [ "${HOST_UNAME}" == "Linux" ]
 
