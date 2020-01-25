@@ -3340,6 +3340,7 @@ function do_scons()
       cd "${BUILD_FOLDER_PATH}/${scons_folder_name}"
 
       xbb_activate
+      xbb_activate_installed_bin
 
       export CPPFLAGS="${XBB_CPPFLAGS}"
       export CFLAGS="${XBB_CFLAGS}"
@@ -3349,9 +3350,10 @@ function do_scons()
       echo
       echo "Running scons install..."
 
-      "${INSTALL_FOLDER_PATH}/bin/python" setup.py install \
-      --prefix="${INSTALL_FOLDER_PATH}" \
-      --optimize=1
+      # On macOS it uses the system python.
+      python setup.py install \
+        --prefix="${INSTALL_FOLDER_PATH}" \
+        --optimize=1
 
     ) 2>&1 | tee "${LOGS_FOLDER_PATH}/install-scons-output.txt"
 
