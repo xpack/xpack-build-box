@@ -3520,10 +3520,10 @@ function do_p7zip()
       if [ "${HOST_UNAME}" == "Darwin" ]
       then
         # 7z cannot load library on macOS.
-        make test
+        make -j ${JOBS} test
       else
         # make test test_7z
-        make all_test
+        make -j ${JOBS} all_test
       fi
 
       ls -lL bin
