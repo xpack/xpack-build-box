@@ -66,7 +66,7 @@ function detect_host()
     HOST_NODE_ARCH="x64" # For now.
     HOST_NODE_PLATFORM="darwin"
 
-    BUILD="$(gcc -print-effective-triple)"
+    BUILD="$(gcc --version 2>&1 | grep 'Target:' | sed -e 's/Target: //')"
 
   elif [ "${HOST_UNAME}" == "Linux" ]
   then
