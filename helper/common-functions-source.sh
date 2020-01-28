@@ -391,13 +391,13 @@ __EOF__
 
   fi
 
-  # Note: __EOF__ is quoted to prevent substitutions here.
-  cat <<'__EOF__' >> "${INSTALL_FOLDER_PATH}/xbb-source.sh"
+  # Note: __EOF__ is NOT quoted to allow substitutions.
+  cat <<__EOF__ >> "${INSTALL_FOLDER_PATH}/xbb-source.sh"
 
 # Add TeX to PATH.
 function xbb_activate_tex()
 {
-  PATH="${TEXLIVE_FOLDER}/bin/$(uname -m)-${HOST_DISTRO_LC_NAME}:${PATH}"
+  PATH="\${TEXLIVE_FOLDER}/bin/$(uname -m)-${HOST_DISTRO_LC_NAME}:\${PATH}"
 
   export PATH
 }
