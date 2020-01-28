@@ -149,10 +149,16 @@ function do_build_versions()
     # depends=('curl' 'libarchive' 'shared-mime-info' 'jsoncpp' 'rhash')
     do_cmake "3.16.2" # "3.13.4"
 
+    # On macOS use the official binaries, which install in:
+    # 2.7.17 -> /Library/Frameworks/Python.framework/Versions/2.7
+    # 3.7.6 -> /Library/Frameworks/Python.framework/Versions/3.7
+    # 3.8.1 -> /Library/Frameworks/Python.framework/Versions/3.8 (too new)
+    
+    # pip3 install meson=="0.53.1"
+
     if [ "${HOST_UNAME}" != "Darwin" ]
     then
-      # There are several errors on macOS 10.10 and some tests fail.
-                                               
+      # There are several errors on macOS 10.10 and some tests fail.                                           
       # depends=('bzip2' 'gdbm' 'openssl' 'zlib' 'expat' 'sqlite' 'libffi')
       do_python "2.7.17" # "2.7.16"
       # Python build finished, but the necessary bits to build these modules were not found:
@@ -163,21 +169,25 @@ function do_build_versions()
       # sunaudiodev  
     fi
 
-    # require xz, openssl
-    do_python3 "3.8.1" # "3.7.3"
-    # The necessary bits to build these optional modules were not found:
-    # _bz2                  _curses               _curses_panel      
-    # _dbm                  _gdbm                 _sqlite3           
-    # _tkinter              _uuid                 readline           
+    if [ "${HOST_UNAME}" != "Darwin" ]
+    then
+      # require xz, openssl
+      do_python3 "3.7.6" # "3.8.1" # "3.7.3"
+      # The necessary bits to build these optional modules were not found:
+      # _bz2                  _curses               _curses_panel      
+      # _dbm                  _gdbm                 _sqlite3           
+      # _tkinter              _uuid                 readline 
+                
+      # depends=('python3')
+      do_meson "0.53.1" # "0.50.0"
+    fi
 
     # depends=('python2')
     do_scons "3.1.2" # "3.0.5"
 
+    # Requires scons
     # depends=('python2')
     do_ninja "1.9.0"
-
-    # depends=('python3')
-    do_meson "0.53.0" # "0.50.0"
 
     # depends=('curl' 'expat>=2.0' 'perl-error' 'perl>=5.14.0' 'openssl' 'pcre2' 'grep' 'shadow')
     do_git "2.25.0" # "2.21.0"
