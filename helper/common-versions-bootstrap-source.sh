@@ -95,9 +95,11 @@ function do_build_versions()
     if [ "${HOST_UNAME}" != "Darwin" ]
     then
       # macOS 10.10 uses 5.18.2, an update is not mandatory.
+      # 5.18.2 fails to build automake 1.16 on Linux
       # depends=('gdbm' 'db' 'glibc')
       # On macOS 10.10 newer versions fail with clang, due to a missing clock_gettime()
-      do_perl "5.18.2" # "5.24.4" # "5.26.3" # "5.28.2"
+      # Warning: macOS divergence!
+      do_perl "5.28.2" # "5.18.2" # "5.24.4" # "5.26.3" # "5.28.2"
     fi
 
     # Libraries, required by gcc.
