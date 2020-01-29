@@ -3507,13 +3507,16 @@ function do_p7zip()
       sed -i -e "s|CFLAGS=|CFLAGS+=|" makefile.glb
       sed -i -e "s|CXXFLAGS=|CXXFLAGS+=|" makefile.glb
 
+      make -j ${JOBS}
       if [ "${HOST_UNAME}" == "Darwin" ]
       then
         # 7z cannot load library on macOS.
-        make -j ${JOBS} test
+        make test
       else
         # make test test_7z
-        make -j ${JOBS} all_test
+        # Parallel build failed on Ubuntu.
+        # make -j ${JOBS} all_test
+        make all_test
       fi
 
       ls -lL bin
