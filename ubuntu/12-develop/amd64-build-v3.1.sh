@@ -41,6 +41,7 @@ source "../../helper/common-docker-functions-source.sh"
 
 # -----------------------------------------------------------------------------
 
+host_init_docker_env
 host_init_docker_input
 
 arch="amd64"

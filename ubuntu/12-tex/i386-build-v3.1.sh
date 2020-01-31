@@ -41,6 +41,7 @@ source "../../helper/common-docker-functions-source.sh"
 
 # -----------------------------------------------------------------------------
 
+host_init_docker_env
 host_init_docker_input
 
 cp "${script_folder_path}/../../helper/common-functions-source.sh" "input/helper"

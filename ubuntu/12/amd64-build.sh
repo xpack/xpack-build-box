@@ -41,9 +41,7 @@ source "../../helper/common-docker-functions-source.sh"
 
 # -----------------------------------------------------------------------------
 
-WORK_FOLDER_PATH="${HOME}/Work"
-CACHE_FOLDER_PATH="${WORK_FOLDER_PATH}/cache"
-
+host_init_docker_env
 host_init_docker_input
 
 docker_build_from_archive "amd64" "amd64-ubu12-rootfs.xz" "ilegeul/ubuntu:amd64-12.04"
