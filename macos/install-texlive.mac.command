@@ -37,4 +37,4 @@ script_name="$(basename "${script_path}")"
 script_base=$(echo "${script_name}" | sed -e 's/\(.*\)[.]mac[.]command/\1/')
 # echo "${script_base}"
 
-bash ${DEBUG} -x "${script_folder_path}/${script_base}.sh"
+caffeinate bash${DEBUG} -x "${script_folder_path}/${script_base}.sh"
