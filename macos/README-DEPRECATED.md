@@ -106,3 +106,23 @@ $ caffeinate bash "${HOME}/Downloads/xpack-build-box.git/macos/install-patched-g
 ```
 
 The result is also stored in the `${HOME}/opt/homebrew/xbb` folder.
+
+## macOS 10.10 problems
+
+The `curl` program on this old system cannot download files from sites
+with new certificates, so it must be helped, by manually downloading
+the required files into `${HOME}/Library/Caches/Homebrew`.
+
+- https://curl.haxx.se/download/curl-7.64.0.tar.bz2
+
+## Xcode 10.[23] problems
+
+These versions include a reference to the C keyword `_Atomic` in `sys/ucred.h`,
+which fails when compiled with C++.
+
+It is not clear if/when Apple will fix it.
+
+The solution is to patch the application and be sure this header is not included,
+and, if included, `_Atomic` is replaced by `volatile`.
+
+A simple workaround is to revert to Xcode 10.1.
