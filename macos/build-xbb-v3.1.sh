@@ -88,7 +88,7 @@ source "${XBB_BOOTSTRAP_FOLDER}/xbb-source.sh"
 
 create_xbb_source
 
-xbb_activate()
+function xbb_activate()
 {
   xbb_activate_bootstrap      # Use only bootstrap binaries, not xbb
   xbb_activate_installed_dev  # Use xbb libraries and headers
