@@ -64,7 +64,7 @@ function detect_host()
     HOST_BITS="64"
 
     HOST_DISTRO_NAME="$(sw_vers -productName)"
-    HOST_DISTRO_LC_NAME=$(echo ${HOST_DISTRO_NAME} | sed -e s/ //g | tr "[:upper:]" "[:lower:]")
+    HOST_DISTRO_LC_NAME=$(echo ${HOST_DISTRO_NAME} | sed -e 's/ //g' | tr "[:upper:]" "[:lower:]")
     HOST_DISTRO_RELEASE="$(sw_vers -productVersion)"
 
     HOST_NODE_ARCH="x64" # For now.
