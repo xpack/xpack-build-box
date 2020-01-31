@@ -5,7 +5,7 @@
 
 if [[ ! -z ${DEBUG} ]]
 then
-  set ${DEBUG} # Activate the expand mode if DEBUG is -x.
+  set ${DEBUG} # Activate the expand mode if DEBUG is anything but empty.
 else
   DEBUG=""
 fi
@@ -18,6 +18,21 @@ set -o nounset # Exit if variable not set.
 IFS=$'\n\t'
 
 # -----------------------------------------------------------------------------
+# Identify the script location, to reach, for example, the helper scripts.
+
+script_path="$0"
+if [[ "${script_path}" != /* ]]
+then
+  # Make relative path absolute.
+  script_path="$(pwd)/$0"
+fi
+
+script_name="$(basename "${script_path}")"
+
+script_folder_path="$(dirname "${script_path}")"
+script_folder_name="$(basename "${script_folder_path}")"
+
+# =============================================================================
 
 echo
 echo "Checking if Xcode Command Line Tools are installed..."
@@ -26,9 +41,9 @@ xcode-select -p
 # -----------------------------------------------------------------------------
 # This script installs a local instance of TeX Live (https://tug.org/texlive/).
 
-tl_edition="2016"
+tl_edition="2018"
 tl_archive_name="install-tl-unx.tar.gz"
-tl_archive_path="$HOME/Downloads/${tl_edition}-${tl_archive_name}"
+tl_archive_path="${HOME}/Downloads/${tl_edition}-${tl_archive_name}"
 tl_folder="/tmp/install-tl"
 
 # tl_url="http://mirror.ctan.org/"
@@ -44,6 +59,9 @@ tl_archive_url="${tl_url}/systems/texlive/${tl_edition}/${tl_archive_name}"
 texlive_prefix="${HOME}/opt/texlive"
 
 # -----------------------------------------------------------------------------
+
+mkdir -p "${HOME}/tmp"
+cd "${HOME}/tmp"
 
 # Download the install tools.
 echo
@@ -73,7 +91,8 @@ mkdir -p "${texlive_prefix}"
 
 # Create the texlive.profile used to automate the install.
 # These definitions are specific to TeX Live 2016.
-tmp_profile=$(mktemp)
+tmp_profile="$(mktemp)"
+
 echo
 echo "Profile file '${tmp_profile}'"
 
