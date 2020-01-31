@@ -79,7 +79,7 @@ For macOS the recommended use case is similar, except the XBB tools
 are installed in the user HOME folder:
 
 ```bash
-source "${HOME}"/opt/xbb/xbb-source.sh
+source "${HOME}/opt/xbb/xbb-source.sh"
 ...
 (
   xbb_activate
@@ -239,8 +239,8 @@ issue with gdb-py, running on CentOS/Arch and failing on Debian/Ubuntu).
 To preserve support for RHEL 7, **the ldd version must be <= 2.17**.
 
 Apart from CentOS 7, other possible distributions are
-**Debian 7 (2.13)**, the prefered one, and Ubuntu 12 (2.15),
+**Debian 7** (2.13), the prefered one, and **Ubuntu 12** (2.15),
 the second choice.
 
-For Arm binaries, the base distribution will be Ubuntu 16.04 LTS xenial,
+For Arm binaries, the base distribution will be **Ubuntu 16.04 LTS xenial**,
 (2.24).
