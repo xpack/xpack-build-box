@@ -162,6 +162,9 @@ function do_native_gcc()
               --program-suffix="${XBB_GCC_SUFFIX}" \
               --with-pkgversion="${XBB_GCC_BRANDING}" \
               \
+              --with-native-system-header-dir="/usr/include" \
+              --with-sysroot="${MACOS_SDK_PATH}" \
+              \
               --enable-languages=c,c++,objc,obj-c++ \
               \
               --enable-checking=release \
