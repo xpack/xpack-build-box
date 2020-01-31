@@ -38,7 +38,7 @@ script_folder_name="$(basename "${script_folder_path}")"
 TL_EDITION_YEAR="2018"
 TL_EDITION_FOLDER_NAME="install-tl-20180414"
 # Schemes: basic (~80 packs), medium (~1000 packs), full (~3400)
-TL_SCHEME="basic"
+TL_SCHEME="medium"
 
 WORK_FOLDER_PATH="${HOME}/Work"
 

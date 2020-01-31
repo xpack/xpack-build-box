@@ -38,14 +38,14 @@ script_folder_name="$(basename "${script_folder_path}")"
 TL_EDITION_YEAR="2018"
 TL_EDITION_FOLDER_NAME="install-tl-20180414"
 # Schemes: basic (~80 packs), medium (~1000 packs), full (~3400)
-TL_SCHEME="basic"
+TL_SCHEME="medium"
 
 WORK_FOLDER_PATH="${HOME}/Work"
 
 # The place where files are downloaded.
 CACHE_FOLDER_PATH="${WORK_FOLDER_PATH}/cache"
 # The install destination folder.
-INSTALL_FOLDER_PATH="${HOME}/opt/texlive-x"
+INSTALL_FOLDER_PATH="${HOME}/opt/texlive"
 
 # Make all tools choose gcc, not the old cc.
 export CC=gcc
