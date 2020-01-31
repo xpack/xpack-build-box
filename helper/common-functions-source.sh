@@ -148,7 +148,7 @@ function detect_host()
   MINGW_TARGET="${HOST_MACHINE}-w64-mingw32"
 
   echo
-  echo "Running on ${HOST_DISTRO_NAME} ${HOST_DISTRO_RELEASE} ${HOST_NODE_ARCH} (${HOST_BITS}-bit)."
+  echo "Running on ${HOST_DISTRO_NAME} ${HOST_DISTRO_RELEASE} ${HOST_MACHINE} (${HOST_BITS}-bit)."
 
   USER_ID=$(id -u)
   USER_NAME="$(id -u -n)"
