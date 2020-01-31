@@ -22,6 +22,12 @@ function host_init_docker_input()
   fi
 }
 
+function host_init_docker_env()
+{
+  WORK_FOLDER_PATH="${HOME}/Work"
+  CACHE_FOLDER_PATH="${WORK_FOLDER_PATH}/cache"
+}
+
 # =============================================================================
 
 function docker_prepare_env()
