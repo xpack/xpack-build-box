@@ -37,10 +37,11 @@ script_folder_name="$(basename "${script_folder_path}")"
 cd "${script_folder_path}"
 
 source "../../helper/common-functions-source.sh"
+source "../../helper/common-docker-functions-source.sh"
 
 # -----------------------------------------------------------------------------
 
-init_input
+host_init_docker_input
 
 arch="armhf"
 tag="ilegeul/ubuntu:armhf-16.04-xbb-v3.1"

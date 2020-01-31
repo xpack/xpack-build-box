@@ -6,6 +6,6 @@ LABEL repository="https://github.com/xpack/xpack-build-box.git"
 LABEL docs="https://github.com/xpack/xpack-build-box/tree/master/ubuntu/16-updated/README.md"
 
 ADD input /input
-RUN DEBUG=-x bash /input/build-updated-v3.1.sh
+RUN DEBUG=-x bash /input/build-v3.1.sh
 
 CMD ["/bin/bash"]

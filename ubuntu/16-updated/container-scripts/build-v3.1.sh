@@ -36,6 +36,15 @@ script_folder_name="$(basename "${script_folder_path}")"
 
 env
 
+# -----------------------------------------------------------------------------
+
+echo
+echo "The orginal /etc/apt/sources.list"
+cat "/etc/apt/sources.list"
+echo "---"
+
+# -----------------------------------------------------------------------------
+
 # Copied from a system installed directly from updates.
 # Note: __EOF__ is quoted to prevent substitutions here.
 cat <<'__EOF__'  >"/etc/apt/sources.list"
@@ -100,6 +109,14 @@ apt-get upgrade --yes
 
 apt-get install --yes time
 
+apt-get clean
+apt-get autoclean
+apt-get autoremove
+
+# -----------------------------------------------------------------------------
+
 echo
 uname -a
 lsb_release -a
+
+# -----------------------------------------------------------------------------

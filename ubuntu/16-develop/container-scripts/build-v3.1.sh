@@ -34,25 +34,49 @@ script_folder_name="$(basename "${script_folder_path}")"
 
 # =============================================================================
 
-cd "${script_folder_path}"
-
-source "../../helper/common-functions-source.sh"
-source "../../helper/common-docker-functions-source.sh"
+env
 
 # -----------------------------------------------------------------------------
 
-host_init_docker_input
+# These tools should be enough to build the bootstrap tools.
 
-arch="armhf"
-tag="ilegeul/ubuntu:armhf-16.04-updated-v3.1"
+apt-get install --yes \
+\
+build-essential \
+\
+gcc++ \
+make \
+automake \
+pkg-config \
+curl \
+xz-utils \
+zip \
+unzip \
+bzip2 \
+libtool \
+gettext \
+texinfo \
+bison \
+flex \
+dos2unix \
+patch \
+perl \
+zlib1g-dev \
+file \
+diffutils \
+cmake \
+libudev-dev \
+tcl \
+wget \
 
-echo 
-echo "Building Docker image..."
-docker build --tag "${tag}" -f "${arch}-Dockerfile-v3.1" .
+apt-get clean
+apt-get autoclean
+apt-get autoremove
 
-clean_input
+# -----------------------------------------------------------------------------
 
-echo 
-echo "Done."
+echo
+uname -a
+lsb_release -a
 
 # -----------------------------------------------------------------------------

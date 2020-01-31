@@ -36,11 +36,13 @@ script_folder_name="$(basename "${script_folder_path}")"
 
 cd "${script_folder_path}"
 
+source "../../helper/common-functions-source.sh"
 source "../../helper/common-docker-functions-source.sh"
 
 # -----------------------------------------------------------------------------
 
-init_input
+host_init_docker_env
+host_init_docker_input
 
 docker_build_from_archive "arm64" "arm64-ubu16-rootfs.xz" "ilegeul/ubuntu:arm64-16.04"
 
