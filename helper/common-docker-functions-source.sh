@@ -11,10 +11,10 @@
 
 # =============================================================================
 
-function docker_init_input()
+function host_init_docker_input()
 {
   rm -rf "input"
-  mkdir -p "input"
+  mkdir -p "input/helper"
 
   if [ -d "container-scripts" ]
   then
