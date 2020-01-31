@@ -45,10 +45,13 @@ function detect_host()
   uname -a
 
   HOST_UNAME="$(uname)"
+  HOST_LC_UNAME=$(echo ${HOST_UNAME} | tr "[:upper:]" "[:lower:]")
+
   HOST_MACHINE="$(uname -m)"
 
   HOST_DISTRO_NAME="?" # Linux distribution name (Ubuntu|CentOS|...)
   HOST_DISTRO_LC_NAME="?" # Same, in lower case.
+  HOST_DISTRO_RELEASE="?"
 
   HOST_NODE_ARCH="?" # Node.js process.arch (x32|x64|arm|arm64)
   HOST_NODE_PLATFORM="?" # Node.js process.platform (darwin|linux|win32)
@@ -60,8 +63,9 @@ function detect_host()
 
     HOST_BITS="64"
 
-    HOST_DISTRO_NAME=Darwin
-    HOST_DISTRO_LC_NAME=darwin
+    HOST_DISTRO_NAME="$(sw_vers -productName)"
+    HOST_DISTRO_LC_NAME=$(echo ${HOST_DISTRO_NAME} | sed -e s/ //g | tr "[:upper:]" "[:lower:]")
+    HOST_DISTRO_RELEASE="$(sw_vers -productVersion)"
 
     HOST_NODE_ARCH="x64" # For now.
     HOST_NODE_PLATFORM="darwin"
@@ -108,6 +112,8 @@ function detect_host()
     HOST_DISTRO_NAME=$(lsb_release -si)
     HOST_DISTRO_LC_NAME=$(echo ${HOST_DISTRO_NAME} | tr "[:upper:]" "[:lower:]")
 
+    HOST_DISTRO_RELEASE=$(lsb_release -sr)
+
     BUILD="$(gcc -dumpmachine)"
 
   else
@@ -142,7 +148,7 @@ function detect_host()
   MINGW_TARGET="${HOST_MACHINE}-w64-mingw32"
 
   echo
-  echo "Running on ${HOST_DISTRO_NAME} ${HOST_NODE_ARCH} (${HOST_BITS}-bit)."
+  echo "Running on ${HOST_DISTRO_NAME} ${HOST_DISTRO_RELEASE} ${HOST_NODE_ARCH} (${HOST_BITS}-bit)."
 
   USER_ID=$(id -u)
   USER_NAME="$(id -u -n)"
@@ -487,7 +493,7 @@ function download_and_extract()
 
 # -----------------------------------------------------------------------------
 
-do_strip_debug_libs() 
+function do_strip_debug_libs() 
 {
   echo
   echo "Stripping debug info from libraries..."
@@ -550,7 +556,7 @@ do_strip_debug_libs()
 
 # -----------------------------------------------------------------------------
 
-do_cleaunup() 
+function do_cleaunup() 
 {
   # In bootstrap preserve download, it'll be used by xbb and removed later.
   if [ "${IS_BOOTSTRAP}" != "y" ]
