@@ -26,7 +26,18 @@ function host_init_docker_input()
 
 function docker_prepare_env()
 {
-  CACHE_FOLDER_PATH="${HOME}/Work/cache"
+  if [ ! -d "${WORK_FOLDER_PATH}" ]
+  then
+    mkdir -p "${WORK_FOLDER_PATH}"
+    touch "${WORK_FOLDER_PATH}/.dockerenv"
+  fi
+  
+  # The place where files are downloaded.
+  CACHE_FOLDER_PATH="${WORK_FOLDER_PATH}/cache"
+
+  # Make all tools choose gcc, not the old cc.
+  export CC=gcc
+  export CXX=g++
 }
 
 function docker_download_rootfs()
@@ -45,7 +56,7 @@ function docker_build_from_archive()
   archive_name="$2"
   tag="$3"
 
-  download_rootfs "${archive_name}"
+  docker_download_rootfs "${archive_name}"
 
   # Assume "input" was created by init_input().
   cp "${CACHE_FOLDER_PATH}/${archive_name}" "input"
