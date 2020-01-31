@@ -40,13 +40,13 @@ To create the Docker image locally, use:
 
 ```console
 $ cd ...
-$ docker build --tag "ilegeul/debian:8-xbb-v1.1" -f Dockerfile-v1.1 .
+$ docker build --tag "ilegeul/debian:8-xbb-v3.1" -f Dockerfile-v3.1 .
 ```
 
 On macOS, to prevent entering sleep, use:
 
 ```console
-$ caffeinate docker build --tag "ilegeul/debian:8-xbb-v1.1" -f Dockerfile-v1.1 .
+$ caffeinate docker build --tag "ilegeul/debian:8-xbb-v3.1" -f Dockerfile-v3.1 .
 ```
 
 #### Test
@@ -54,7 +54,7 @@ $ caffeinate docker build --tag "ilegeul/debian:8-xbb-v1.1" -f Dockerfile-v1.1 .
 To test the image:
 
 ```console
-$ docker run --interactive --tty ilegeul/debian:8-xbb-v1.1
+$ docker run --interactive --tty ilegeul/debian:8-xbb-v3.1
 ```
 
 #### Publish
@@ -62,15 +62,15 @@ $ docker run --interactive --tty ilegeul/debian:8-xbb-v1.1
 To publish, use:
 
 ```console
-$ docker push "ilegeul/debian:8-xbb-v1.1"
+$ docker push "ilegeul/debian:8-xbb-v3.1"
 ```
 
 #### Copy & Paste
 
 ```bash
-caffeinate docker build --tag "ilegeul/debian:8-xbb-v1.1" -f Dockerfile-v1.1 .
+caffeinate docker build --tag "ilegeul/debian:8-xbb-v3.1" -f Dockerfile-v3.1 .
 
-docker push "ilegeul/debian:8-xbb-v1.1"
+docker push "ilegeul/debian:8-xbb-v3.1"
 ```
 
 ### Credits
