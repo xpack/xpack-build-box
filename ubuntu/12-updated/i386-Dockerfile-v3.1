@@ -8,6 +8,6 @@ LABEL docs="https://github.com/xpack/xpack-build-box/tree/master/ubuntu/12-updat
 ENTRYPOINT ["linux32"]
 
 ADD input /input
-RUN DEBUG=-x bash /input/build-v3.1.sh
+RUN DEBUG=-x linux32 bash /input/build-v3.1.sh
 
 CMD ["/bin/bash"]

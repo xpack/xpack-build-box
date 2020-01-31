@@ -5,6 +5,6 @@ LABEL docs="https://github.com/xpack/xpack-build-box/tree/master/ubuntu/16-updat
 ENTRYPOINT ["linux32"]
 
 ADD input /input
-RUN DEBUG=-x /usr/bin/time bash /input/build-xbb-v3.1.sh
+RUN DEBUG=-x linux32 bash /input/build-xbb-v3.1.sh
 
 CMD ["/bin/bash"]
