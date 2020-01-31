@@ -85,7 +85,15 @@ __EOF__
   # https://www.tug.org/texlive/doc/install-tl.html
 
   (    
-    export PATH="${INSTALL_FOLDER_PATH}/bin/${HOST_MACHINE}-${HOST_LC_UNAME}:${PATH}"
+    # Adjust to TexLive conventions.
+    tl_machine="${HOST_MACHINE}"
+    if [ "${HOST_MACHINE}" == "i686" ]
+    then
+       tl_machine="i386"
+    fi
+    tl_uname="${HOST_LC_UNAME}"
+
+    export PATH="${INSTALL_FOLDER_PATH}/bin/${tl_machine}-${tl_uname}:${PATH}"
 
     # Schemes: basic (~80 packs), medium (~1000 packs), full (~3400)
 
@@ -99,7 +107,7 @@ __EOF__
       -scheme "${tl_scheme}"
 
     ls -l "${INSTALL_FOLDER_PATH}/bin/"
-    if [ ! -d "${INSTALL_FOLDER_PATH}/bin/${HOST_MACHINE}-${HOST_LC_UNAME}" ]
+    if [ ! -d "${INSTALL_FOLDER_PATH}/bin/${tl_machine}-${tl_uname}" ]
     then 
       echo "Cannot configure PATH"
       exit 1
