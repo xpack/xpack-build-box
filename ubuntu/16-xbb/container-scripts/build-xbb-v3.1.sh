@@ -34,19 +34,52 @@ script_folder_name="$(basename "${script_folder_path}")"
 
 # =============================================================================
 
-cd "${script_folder_path}"
+env
 
-source "../../helper/common-docker-functions-source.sh"
+apt-get install --yes software-properties-common
 
-# -----------------------------------------------------------------------------
+# Use this ppa to get GCC 7.x.
+add-apt-repository ppa:ubuntu-toolchain-r/test
+apt-get update
 
-init_input
+apt-get install --yes \
+git \
+curl \
+make \
+pkg-config \
+m4 \
+gawk \
+autoconf automake \
+libtool libtool-bin \
+gettext \
+bison \
+texinfo \
+patchelf \
+dos2unix \
+flex \
+perl \
+cmake \
+python python3 \
+g++-7 
 
-docker_build_from_archive "arm64" "arm64-ubu16-rootfs.xz" "ilegeul/ubuntu:arm64-16.04"
+apt-get install --yes \
+libpython-dev \
+libpython3-dev 
 
-clean_input
+# For QEMU
+apt-get install --yes \
+libx11-dev \
+libxext-dev \
+mesa-common-dev
 
-echo 
-echo "Done."
+# For QEMU & OpenOCD
+apt-get install --yes \
+libudev-dev
 
-# -----------------------------------------------------------------------------
+apt-get install --yes \
+texlive \
+texlive-generic-recommended \
+texlive-extra-utils
+
+echo
+gcc-7 --version

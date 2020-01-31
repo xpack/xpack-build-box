@@ -36,13 +36,18 @@ script_folder_name="$(basename "${script_folder_path}")"
 
 cd "${script_folder_path}"
 
-source "../../helper/common-docker-functions-source.sh"
+source "../../helper/common-functions-source.sh"
 
 # -----------------------------------------------------------------------------
 
 init_input
 
-docker_build_from_archive "arm64" "arm64-ubu16-rootfs.xz" "ilegeul/ubuntu:arm64-16.04"
+arch="arm64"
+tag="ilegeul/ubuntu:arm64-16.04-xbb-v3.1"
+
+echo 
+echo "Building Docker image..."
+docker build --tag "${tag}" -f "${arch}-Dockerfile-v3.1" .
 
 clean_input
 
