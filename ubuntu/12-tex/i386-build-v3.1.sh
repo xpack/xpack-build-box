@@ -41,12 +41,18 @@ source "../../helper/common-docker-functions-source.sh"
 
 # -----------------------------------------------------------------------------
 
-WORK_FOLDER_PATH="${HOME}/Work"
-CACHE_FOLDER_PATH="${WORK_FOLDER_PATH}/cache"
-
 host_init_docker_input
 
-docker_build_from_archive "i386" "i386-ubu12-rootfs.xz" "ilegeul/ubuntu:i386-12.04"
+cp "${script_folder_path}/../../helper/common-functions-source.sh" "input/helper"
+cp "${script_folder_path}/../../helper/common-docker-functions-source.sh" "input/helper"
+cp "${script_folder_path}/../../helper/common-texlive-functions-source.sh" "input/helper"
+
+arch="i386"
+tag="ilegeul/ubuntu:i386-12.04-tex-v3.1"
+
+echo 
+echo "Building Docker image..."
+docker build --tag "${tag}" -f "${arch}-Dockerfile-v3.1" .
 
 clean_input
 

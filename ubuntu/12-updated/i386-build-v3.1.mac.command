@@ -27,30 +27,14 @@ then
   script_path="$(pwd)/$0"
 fi
 
-script_name="$(basename "${script_path}")"
-
 script_folder_path="$(dirname "${script_path}")"
 script_folder_name="$(basename "${script_folder_path}")"
 
 # =============================================================================
 
-cd "${script_folder_path}"
+script_name="$(basename "${script_path}")"
 
-source "../../helper/common-functions-source.sh"
-source "../../helper/common-docker-functions-source.sh"
+script_base=$(echo "${script_name}" | sed -e 's/\(.*\)[.]mac[.]command/\1/')
+# echo "${script_base}"
 
-# -----------------------------------------------------------------------------
-
-WORK_FOLDER_PATH="${HOME}/Work"
-CACHE_FOLDER_PATH="${WORK_FOLDER_PATH}/cache"
-
-host_init_docker_input
-
-docker_build_from_archive "i386" "i386-ubu12-rootfs.xz" "ilegeul/ubuntu:i386-12.04"
-
-clean_input
-
-echo 
-echo "Done."
-
-# -----------------------------------------------------------------------------
+bash ${DEBUG} "${script_folder_path}/${script_base}.sh"

@@ -27,31 +27,14 @@ then
   script_path="$(pwd)/$0"
 fi
 
-script_name="$(basename "${script_path}")"
-
 script_folder_path="$(dirname "${script_path}")"
 script_folder_name="$(basename "${script_folder_path}")"
 
 # =============================================================================
 
-cd "${script_folder_path}"
+script_name="$(basename "${script_path}")"
 
-source "../../helper/common-functions-source.sh"
+script_base=$(echo "${script_name}" | sed -e 's/\(.*\)[.]mac[.]command/\1/')
+# echo "${script_base}"
 
-# -----------------------------------------------------------------------------
-
-init_input
-
-arch="armhf"
-tag="ilegeul/ubuntu:armhf-16.04-xbb-v1.1"
-
-echo 
-echo "Building Docker image..."
-docker build --tag "${tag}" -f "${arch}-Dockerfile-v1.1" .
-
-clean_input
-
-echo 
-echo "Done."
-
-# -----------------------------------------------------------------------------
+bash ${DEBUG} "${script_folder_path}/${script_base}.sh"

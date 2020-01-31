@@ -34,23 +34,49 @@ script_folder_name="$(basename "${script_folder_path}")"
 
 # =============================================================================
 
-cd "${script_folder_path}"
-
-source "../../helper/common-functions-source.sh"
-source "../../helper/common-docker-functions-source.sh"
+env
 
 # -----------------------------------------------------------------------------
 
-WORK_FOLDER_PATH="${HOME}/Work"
-CACHE_FOLDER_PATH="${WORK_FOLDER_PATH}/cache"
+# These tools should be enough to build the bootstrap tools.
 
-host_init_docker_input
+apt-get install --yes \
+\
+build-essential \
+\
+gcc++ \
+make \
+automake \
+pkg-config \
+curl \
+xz-utils \
+zip \
+unzip \
+bzip2 \
+libtool \
+gettext \
+texinfo \
+bison \
+flex \
+dos2unix \
+patch \
+perl \
+zlib1g-dev \
+file \
+diffutils \
+cmake \
+libudev-dev \
+tcl \
+wget \
 
-docker_build_from_archive "i386" "i386-ubu12-rootfs.xz" "ilegeul/ubuntu:i386-12.04"
+apt-get clean
+apt-get autoclean
+apt-get autoremove
 
-clean_input
+# -----------------------------------------------------------------------------
 
-echo 
-echo "Done."
+echo
+uname -a
+lsb_release -a
 
 # -----------------------------------------------------------------------------

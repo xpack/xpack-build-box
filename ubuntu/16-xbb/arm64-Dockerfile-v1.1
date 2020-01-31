@@ -1,9 +1,0 @@
-FROM ilegeul/ubuntu:arm64-16.04-updated-v1.1
-LABEL maintainer="Liviu Ionescu <ilg@livius.net>"
-LABEL repository="https://github.com/xpack/xpack-build-box.git"
-LABEL docs="https://github.com/xpack/xpack-build-box/tree/master/ubuntu/16-updated/README.md"
-
-ADD input /input
-RUN DEBUG=-x /usr/bin/time bash /input/build-xbb-v1.1.sh
-
-CMD ["/bin/bash"]

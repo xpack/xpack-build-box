@@ -11,9 +11,7 @@ available in the host machine and do not build any of them from sources.
 
 ### Prerequisites
 
-The current procedure was tested on an Ubuntu 18 LTS 64-bit virtual
-machine running on VirtualBox, but should work on any virtualisation
-platform, or even with a physical systems.
+The current procedure was tested on an Ubuntu Server 18 LTS 64-bit.
 
 For virtual machines, to keep the space requirements low, preferably 
 install a **minimal** system (select this during the install).
@@ -21,7 +19,7 @@ install a **minimal** system (select this during the install).
 ### How to install?
 
 ```console
-$ rm -rf "${HOME}"/Downloads/xpack-build-box.git
+$ rm -rf "${HOME}/Downloads/xpack-build-box.git"
 $ git clone --recurse-submodules https://github.com/xpack/xpack-build-box.git \
   "${HOME}"/Downloads/xpack-build-box.git
 

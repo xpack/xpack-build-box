@@ -41,12 +41,14 @@ source "../../helper/common-docker-functions-source.sh"
 
 # -----------------------------------------------------------------------------
 
-WORK_FOLDER_PATH="${HOME}/Work"
-CACHE_FOLDER_PATH="${WORK_FOLDER_PATH}/cache"
-
 host_init_docker_input
 
-docker_build_from_archive "i386" "i386-ubu12-rootfs.xz" "ilegeul/ubuntu:i386-12.04"
+arch="amd64"
+tag="ilegeul/ubuntu:amd64-12.04-develop-v3.1"
+
+echo 
+echo "Building Docker image..."
+docker build --tag "${tag}" -f "${arch}-Dockerfile-v3.1" .
 
 clean_input
 

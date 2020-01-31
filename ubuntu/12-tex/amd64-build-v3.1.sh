@@ -37,17 +37,22 @@ script_folder_name="$(basename "${script_folder_path}")"
 cd "${script_folder_path}"
 
 source "../../helper/common-functions-source.sh"
+source "../../helper/common-docker-functions-source.sh"
 
 # -----------------------------------------------------------------------------
 
-init_input
+host_init_docker_input
 
-arch="armhf"
-tag="ilegeul/ubuntu:armhf-16.04-updated-v1.1"
+cp "${script_folder_path}/../../helper/common-functions-source.sh" "input/helper"
+cp "${script_folder_path}/../../helper/common-docker-functions-source.sh" "input/helper"
+cp "${script_folder_path}/../../helper/common-texlive-functions-source.sh" "input/helper"
+
+arch="amd64"
+tag="ilegeul/ubuntu:amd64-12.04-tex-v3.1"
 
 echo 
 echo "Building Docker image..."
-docker build --tag "${tag}" -f "${arch}-Dockerfile-v1.1" .
+docker build --tag "${tag}" -f "${arch}-Dockerfile-v3.1" .
 
 clean_input
 

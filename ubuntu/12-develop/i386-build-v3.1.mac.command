@@ -27,59 +27,14 @@ then
   script_path="$(pwd)/$0"
 fi
 
-script_name="$(basename "${script_path}")"
-
 script_folder_path="$(dirname "${script_path}")"
 script_folder_name="$(basename "${script_folder_path}")"
 
 # =============================================================================
 
-env
+script_name="$(basename "${script_path}")"
 
-apt-get install --yes software-properties-common
+script_base=$(echo "${script_name}" | sed -e 's/\(.*\)[.]mac[.]command/\1/')
+# echo "${script_base}"
 
-# Use this ppa to get GCC 7.x.
-add-apt-repository ppa:ubuntu-toolchain-r/test
-apt-get update
-
-apt-get install --yes \
-git \
-curl \
-make \
-pkg-config \
-m4 \
-gawk \
-autoconf automake \
-libtool libtool-bin \
-gettext \
-bison \
-texinfo \
-patchelf \
-dos2unix \
-flex \
-perl \
-cmake \
-python python3 \
-g++-7 
-
-apt-get install --yes \
-libpython-dev \
-libpython3-dev 
-
-# For QEMU
-apt-get install --yes \
-libx11-dev \
-libxext-dev \
-mesa-common-dev
-
-# For QEMU & OpenOCD
-apt-get install --yes \
-libudev-dev
-
-apt-get install --yes \
-texlive \
-texlive-generic-recommended \
-texlive-extra-utils
-
-echo
-gcc-7 --version
+bash ${DEBUG} "${script_folder_path}/${script_base}.sh"

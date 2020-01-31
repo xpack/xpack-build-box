@@ -27,6 +27,8 @@ then
   script_path="$(pwd)/$0"
 fi
 
+script_name="$(basename "${script_path}")"
+
 script_folder_path="$(dirname "${script_path}")"
 script_folder_name="$(basename "${script_folder_path}")"
 
@@ -35,10 +37,18 @@ script_folder_name="$(basename "${script_folder_path}")"
 cd "${script_folder_path}"
 
 source "../../helper/common-functions-source.sh"
+source "../../helper/common-docker-functions-source.sh"
 
 # -----------------------------------------------------------------------------
 
-docker_build "amd64" "ubu12" "ilegeul/ubuntu:amd64-12.04"
+WORK_FOLDER_PATH="${HOME}/Work"
+CACHE_FOLDER_PATH="${WORK_FOLDER_PATH}/cache"
+
+host_init_docker_input
+
+docker_build_from_archive "amd64" "amd64-ubu12-rootfs.xz" "ilegeul/ubuntu:amd64-12.04"
+
+clean_input
 
 echo 
 echo "Done."
