@@ -8,5 +8,6 @@ LABEL docs="https://github.com/xpack/xpack-build-box/tree/master/ubuntu/16/READM
 ENTRYPOINT ["linux32"]
 
 ADD input/armhf-ubu16-rootfs.xz /
+RUN linux32 apt-get update && apt-get -y upgrade
 
 CMD ["/bin/bash"]
