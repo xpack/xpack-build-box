@@ -90,6 +90,9 @@ __EOF__
     if [ "${HOST_MACHINE}" == "i686" ]
     then
        tl_machine="i386"
+    elif [ "${HOST_MACHINE}" == "armv8l" -o "${HOST_MACHINE}" == "armv7l" ]
+    then
+       tl_machine="armhf"
     fi
     tl_uname="${HOST_LC_UNAME}"
 
