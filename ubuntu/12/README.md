@@ -36,6 +36,13 @@ There are two scripts:
 - `amd64-build.sh` -> `ilegeul/ubuntu:amd64-12.04`
 - `i386-build.sh` -> `ilegeul/ubuntu:i386-12.04`
 
+```console
+$ bash ~/Downloads/xpack-build-box.git/ubuntu/12/amd64-build.sh
+$ bash ~/Downloads/xpack-build-box.git/ubuntu/12/i386-build.sh
+
+$ docker images
+```
+
 ## Test
 
 The test was performed on a macOS.

@@ -91,3 +91,8 @@ echo "$(uname) XBB TexLive ${TL_EDITION_YEAR} created in \"${INSTALL_FOLDER_PATH
 do_cleanup
 
 # -----------------------------------------------------------------------------
+
+echo
+echo "Container done."
+
+# -----------------------------------------------------------------------------
