@@ -45,7 +45,7 @@ host_init_docker_env
 host_init_docker_input
 
 arch="armhf"
-tag="ilegeul/ubuntu:armhf-16.04-updated-v3.1"
+tag="ilegeul/ubuntu:armhf-16.04-develop-v3.1"
 
 echo 
 echo "Building Docker image..."
