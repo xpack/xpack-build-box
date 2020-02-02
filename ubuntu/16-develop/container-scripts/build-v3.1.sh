@@ -57,7 +57,6 @@ gettext \
 git \
 libc6-dev \
 libtool \
-libtool-bin \
 m4 \
 make \
 patch \
@@ -72,6 +71,8 @@ wget \
 xz-utils \
 zip \
 zlib1g-dev \
+
+# libtool-bin - not present in precise
 
 # For QEMU
 apt-get install --yes \
@@ -135,8 +136,9 @@ apt-get update
 # From  (universe)
 apt-get install --yes \
 dos2unix \
-patchelf \
 texinfo \
+
+# patchelf - not present in precise
 
 # -----------------------------------------------------------------------------
 
