@@ -12,18 +12,18 @@ The Ubuntu 16 (xenial) distribution binaries are available
 from the current ports server http://ports.ubuntu.com/.
 
 ```console
-$ mkdir -p $HOME/tmp/arm64-ubu16-rootfs
-$ sudo debootstrap --verbose --arch=arm64 xenial $HOME/tmp/arm64-ubu16-rootfs http://ports.ubuntu.com/
-$ sudo tar cJvf $HOME/tmp/arm64-ubu16-rootfs.xz -C $HOME/tmp/arm64-ubu16-rootfs .
+$ mkdir -p "${HOME}/tmp/arm64-ubu16-rootfs"
+$ sudo debootstrap --verbose --arch=arm64 --variant=minbase xenial "${HOME}/tmp/arm64-ubu16-rootfs" http://ports.ubuntu.com/
+$ sudo tar cJvf "${HOME}/tmp/arm64-ubu16-rootfs.xz" -C "${HOME}/tmp/arm64-ubu16-rootfs" .
 ```
 
 ```console
-$ mkdir -p $HOME/tmp/armhf-ubu16-rootfs
-$ sudo debootstrap --verbose --arch=armhf xenial $HOME/tmp/armhf-ubu16-rootfs http://ports.ubuntu.com/
-$ sudo tar cJvf $HOME/tmp/armhf-ubu16-rootfs.xz -C $HOME/tmp/armhf-ubu16-rootfs .
+$ mkdir -p "${HOME}/tmp/armhf-ubu16-rootfs"
+$ sudo debootstrap --verbose --arch=armhf --variant=minbase xenial "${HOME}/tmp/armhf-ubu16-rootfs" http://ports.ubuntu.com/
+$ sudo tar cJvf "${HOME}/tmp/armhf-ubu16-rootfs.xz" -C "${HOME}/tmp/armhf-ubu16-rootfs" .
 ```
 
-The result are two archives that were published at 
+The result are two archives that were published at
 https://github.com/xpack/xpack-build-box/releases/download/rootfs/:
 
 - https://github.com/xpack/xpack-build-box/releases/download/rootfs/arm64-ubu16-rootfs.xz
