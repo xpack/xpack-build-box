@@ -64,11 +64,6 @@ docker_prepare_env
 echo
 echo "$(uname) XBB TexLive ${TL_EDITION_YEAR} build script started..."
 
-function xbb_activate()
-{
-  :
-}
-
 # -----------------------------------------------------------------------------
 
 # Make all tools choose gcc, not the old cc.
