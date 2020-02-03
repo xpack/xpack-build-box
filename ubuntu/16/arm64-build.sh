@@ -46,7 +46,7 @@ host_init_docker_input
 
 docker_build_from_archive "arm64" "arm64-ubu16-rootfs.xz" "ilegeul/ubuntu:arm64-16.04"
 
-clean_input
+host_clean_docker_input
 
 echo 
 echo "Done."

@@ -11,21 +11,38 @@
 
 # =============================================================================
 
-function host_init_docker_input()
-{
-  rm -rf "input"
-  mkdir -p "input/helper"
-
-  if [ -d "container-scripts" ]
-  then
-    cp "container-scripts"/*.sh "input"
-  fi
-}
-
 function host_init_docker_env()
 {
   WORK_FOLDER_PATH="${HOME}/Work"
   CACHE_FOLDER_PATH="${WORK_FOLDER_PATH}/cache"
+
+  cd "${script_folder_path}"
+}
+
+function host_init_docker_input()
+{
+  rm -rf "${script_folder_path}/input"
+  mkdir -p "${script_folder_path}/input/helper"
+
+  if [ -d "${script_folder_path}/container-scripts" ]
+  then
+    cp -v "${script_folder_path}/container-scripts"/*.sh "${script_folder_path}/input"
+  fi
+
+  # Copy the entire helper folder.
+  cp -R -v "${helper_folder_path}"/* "${script_folder_path}/input/helper"
+
+  # Possibly copy additional files.
+  while [ $# -gt 0 ]
+  do
+    cp -R -v "$1" "${script_folder_path}/input/helper"
+    shift
+  done
+}
+
+function host_clean_docker_input()
+{
+  rm -rf "${script_folder_path}/input"
 }
 
 # =============================================================================
@@ -48,9 +65,21 @@ function docker_prepare_env()
   # The place where files are downloaded.
   CACHE_FOLDER_PATH="${WORK_FOLDER_PATH}/cache"
 
-  # Make all tools choose gcc, not the old cc.
-  export CC=gcc
-  export CXX=g++
+  if [ "${IS_BOOTSTRAP}" == "y" ]
+  then
+    # Make all tools choose gcc, not the old cc.
+    export CC=gcc
+    export CXX=g++
+  else
+    # Build the XBB tools with the bootstrap compiler.
+    # Some packages fail, and have to revert to the Apple clang.
+    CC="gcc-7bs"
+    CXX="g++-7bs"
+  fi
+  
+  echo
+  echo "env..."
+  env
 }
 
 function docker_download_rootfs()

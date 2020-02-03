@@ -9,11 +9,6 @@
 
 # Common functions used for building the XBB environments.
 
-function clean_input()
-{
-  rm -rf "input"
-}
-
 # =============================================================================
 
 function download()

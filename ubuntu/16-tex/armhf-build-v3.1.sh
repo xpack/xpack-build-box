@@ -55,7 +55,7 @@ echo
 echo "Building Docker image..."
 docker build --tag "${tag}" -f "${arch}-Dockerfile-v3.1" .
 
-clean_input
+host_clean_docker_input
 
 echo 
 echo "Done."
