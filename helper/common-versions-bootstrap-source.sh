@@ -114,8 +114,6 @@ function do_build_versions()
  
     # -------------------------------------------------------------------------
 
-    # depends=('curl' 'libarchive' 'shared-mime-info' 'jsoncpp' 'rhash')
-    do_cmake "3.15.6" # "3.13.4"
 
     if [ "${HOST_UNAME}" != "Darwin" ]
     then
@@ -145,6 +143,13 @@ function do_build_versions()
 
     # Requires gmp, mpfr, mpc, isl.
     do_native_gcc "7.5.0" # "7.4.0"
+
+    # From here on, a reasonable C++11 is available.
+    # -------------------------------------------------------------------------
+
+    # Recent versions require C++11.
+    # depends=('curl' 'libarchive' 'shared-mime-info' 'jsoncpp' 'rhash')
+    do_cmake "3.15.6" # "3.13.4"
 
     # -------------------------------------------------------------------------
 
