@@ -406,7 +406,8 @@ function do_nettle()
 
           bash ${DEBUG} "${SOURCES_FOLDER_PATH}/${nettle_folder_name}/configure" \
             --prefix="${INSTALL_FOLDER_PATH}" \
-            --disable-documentation
+            --disable-documentation \
+            --enable-mini-gmp
 
           cp "config.log" "${LOGS_FOLDER_PATH}/config-nettle-log.txt"
         ) 2>&1 | tee "${LOGS_FOLDER_PATH}/configure-nettle-output.txt"
