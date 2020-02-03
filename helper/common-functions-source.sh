@@ -202,7 +202,12 @@ function prepare_xbb_env()
 
   # ---------------------------------------------------------------------------
 
-  JOBS=${JOBS:-"1"}
+  if [ -f "/.dockerenv" ]
+  then
+    JOBS=${JOBS:-"$(nproc)"}
+  else
+    JOBS=${JOBS:-"1"}
+  fi
 
   # Default PATH.
   PATH=${PATH:-""}
