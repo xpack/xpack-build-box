@@ -1283,6 +1283,13 @@ function do_coreutils()
 
           bash "${SOURCES_FOLDER_PATH}/${coreutils_folder_name}/configure" --help
 
+          if [ -f "/.dockerenv" ]
+          then
+            # configure: error: you should not run configure as root 
+            # (set FORCE_UNSAFE_CONFIGURE=1 in environment to bypass this check)
+            export FORCE_UNSAFE_CONFIGURE=1
+          fi
+
           # `ar` must be excluded, it interferes with Apple similar program.
           bash ${DEBUG} "${SOURCES_FOLDER_PATH}/${coreutils_folder_name}/configure" \
             --prefix="${INSTALL_FOLDER_PATH}" \
