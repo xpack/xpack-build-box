@@ -11,29 +11,6 @@
 
 # =============================================================================
 
-function download()
-{
-  local url="$1"
-  local archive_name="$2"
-
-  if [ ! -f "${CACHE_FOLDER_PATH}/${archive_name}" ]
-  then
-    (
-      echo
-      echo "Downloading \"${archive_name}\" from \"${url}\"..."
-      rm -f "${CACHE_FOLDER_PATH}/${archive_name}.download"
-      mkdir -p "${CACHE_FOLDER_PATH}"
-      curl --fail -L -o "${CACHE_FOLDER_PATH}/${archive_name}.download" "${url}"
-      mv "${CACHE_FOLDER_PATH}/${archive_name}.download" "${CACHE_FOLDER_PATH}/${archive_name}"
-    )
-  else
-    echo "File \"${CACHE_FOLDER_PATH}/${archive_name}\" already downloaded."
-  fi
-
-}
-
-# =============================================================================
-
 function detect_host()
 {
   echo
