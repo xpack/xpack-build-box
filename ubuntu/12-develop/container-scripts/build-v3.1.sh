@@ -56,6 +56,7 @@ gawk \
 gcc++ \
 gettext \
 git \
+help2man \
 libc6-dev \
 libtool \
 m4 \
