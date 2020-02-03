@@ -1747,13 +1747,15 @@ function do_automake()
   local automake_archive="${automake_folder_name}.tar.xz"
   local automake_url="https://ftp.gnu.org/gnu/automake/${automake_archive}"
 
+  local automake_patch_file_path="${helper_folder_path}/patches/${automake_folder_name}.patch"
+
   local automake_stamp_file_path="${STAMPS_FOLDER_PATH}/stamp-automake-${automake_version}-installed"
   if [ ! -f "${automake_stamp_file_path}" -o ! -d "${BUILD_FOLDER_PATH}/${automake_folder_name}" ]
   then
 
     cd "${SOURCES_FOLDER_PATH}"
 
-    download_and_extract "${automake_url}" "${automake_archive}" "${automake_folder_name}"
+    download_and_extract "${automake_url}" "${automake_archive}" "${automake_folder_name}" "${automake_patch_file_path}"
 
     (
       mkdir -p "${BUILD_FOLDER_PATH}/${automake_folder_name}"
