@@ -426,6 +426,13 @@ function extract()
         tar xf "${archive_name}"
       fi
 
+      # Docker containers run as root, adjust owner and mode.
+      if [ -f "/.dockerenv" ]
+      then
+        chown -R $(id -u):$(id -g) "${folder_name}"
+        chmod -R +w "${folder_name}"
+      fi
+
       if [ $# -gt 2 ]
       then
         if [ ! -z "$3" ]
