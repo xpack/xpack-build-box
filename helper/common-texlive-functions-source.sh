@@ -39,7 +39,7 @@ function do_texlive()
 
   # ---------------------------------------------------------------------------
 
-  if [ ! -f ".dockerenv" ]
+  if [ ! -f "/.dockerenv" ]
   then
     if [ -d "${INSTALL_FOLDER_PATH}" ]
     then
