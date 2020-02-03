@@ -253,12 +253,12 @@ function xbb_activate_installed_bin()
   PATH="${INSTALL_FOLDER_PATH}/bin:${PATH}"
 
   # Add XBB lib to LD_LIBRARY_PATH.
-  LD_LIBRARY_PATH="${XBB_FOLDER}/lib:${LD_LIBRARY_PATH}"
+  LD_LIBRARY_PATH="${INSTALL_FOLDER_PATH}/lib:${LD_LIBRARY_PATH}"
 
-  if [ -d "${XBB_FOLDER}/lib64" ]
+  if [ -d "${INSTALL_FOLDER_PATH}/lib64" ]
   then
     # On 64-bit systems, add lib64 in front of LD_LIBRARY_PATH.
-    LD_LIBRARY_PATH="${XBB_FOLDER}/lib64:${LD_LIBRARY_PATH}"
+    LD_LIBRARY_PATH="${INSTALL_FOLDER_PATH}/lib64:${LD_LIBRARY_PATH}"
   fi
 
   export PATH
@@ -322,11 +322,21 @@ export TEXLIVE_FOLDER="${HOME}/opt/texlive"
 __EOF__
 # The above marker must start in the first column.
 
-  if [ "${IS_BOOTSTRAP}" == "y" ]
+  if [ -f "/.dockerenv" ]
   then
-    echo "export XBB_BOOTSTRAP_FOLDER=\"\${HOME}/opt/$(basename "${XBB_FOLDER}")\"" >> "${INSTALL_FOLDER_PATH}/xbb-source.sh"
+    if [ "${IS_BOOTSTRAP}" == "y" ]
+    then
+      echo "export XBB_BOOTSTRAP_FOLDER=\"/opt/$(basename "${XBB_FOLDER}")\"" >> "${INSTALL_FOLDER_PATH}/xbb-source.sh"
+    else
+      echo "export XBB_FOLDER=\"/opt/$(basename "${XBB_FOLDER}")\"" >> "${INSTALL_FOLDER_PATH}/xbb-source.sh"
+    fi
   else
-    echo "export XBB_FOLDER=\"\${HOME}/opt/$(basename "${XBB_FOLDER}")\"" >> "${INSTALL_FOLDER_PATH}/xbb-source.sh"
+    if [ "${IS_BOOTSTRAP}" == "y" ]
+    then
+      echo "export XBB_BOOTSTRAP_FOLDER=\"\${HOME}/opt/$(basename "${XBB_FOLDER}")\"" >> "${INSTALL_FOLDER_PATH}/xbb-source.sh"
+    else
+      echo "export XBB_FOLDER=\"\${HOME}/opt/$(basename "${XBB_FOLDER}")\"" >> "${INSTALL_FOLDER_PATH}/xbb-source.sh"
+    fi
   fi
 
   echo "export XBB_VERSION=\"${XBB_VERSION}\"" >> "${INSTALL_FOLDER_PATH}/xbb-source.sh"
