@@ -242,6 +242,10 @@ function prepare_xbb_env()
 
   export SHELL="/bin/bash"
   export CONFIG_SHELL="/bin/bash"
+
+  echo
+  echo "env..."
+  env
 }
 
 # -----------------------------------------------------------------------------
