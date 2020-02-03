@@ -148,6 +148,8 @@ function do_native_gcc()
 
           bash "${SOURCES_FOLDER_PATH}/${native_gcc_folder_name}/configure" --help
 
+          # Safer without --disable-bootstrap, even if possibly slower.
+
           if [ "${HOST_UNAME}" == "Darwin" ]
           then
 
@@ -183,7 +185,6 @@ function do_native_gcc()
               --disable-multilib \
               --disable-werror \
               --disable-nls \
-              --disable-bootstrap \
 
           else [ "${HOST_UNAME}" == "Linux" ]
 
@@ -219,7 +220,6 @@ function do_native_gcc()
               --disable-multilib \
               --disable-werror \
               --disable-nls \
-              --disable-bootstrap \
 
           fi
 
