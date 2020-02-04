@@ -296,6 +296,17 @@ function xbb_activate_installed_dev()
     PKG_CONFIG_PATH="${INSTALL_FOLDER_PATH}/lib64/pkgconfig:${PKG_CONFIG_PATH}"
   fi
 
+  # Add XBB lib to LD_LIBRARY_PATH.
+  LD_LIBRARY_PATH="${INSTALL_FOLDER_PATH}/lib:${LD_LIBRARY_PATH}"
+
+  if [ -d "${INSTALL_FOLDER_PATH}/lib64" ]
+  then
+    # On 64-bit systems, add lib64 in front of LD_LIBRARY_PATH.
+    LD_LIBRARY_PATH="${INSTALL_FOLDER_PATH}/lib64:${LD_LIBRARY_PATH}"
+  fi
+
+  export LD_LIBRARY_PATH
+
   export XBB_CPPFLAGS
 
   export XBB_LDFLAGS
@@ -356,7 +367,17 @@ function xbb_activate_bootstrap()
 {
   PATH="${XBB_BOOTSTRAP_FOLDER}/bin:${PATH}"
 
+  # Add XBB lib to LD_LIBRARY_PATH.
+  LD_LIBRARY_PATH="${XBB_BOOTSTRAP_FOLDER}/lib:${LD_LIBRARY_PATH}"
+
+  if [ -d "${XBB_BOOTSTRAP_FOLDER}/lib64" ]
+  then
+    # On 64-bit systems, add lib64 in front of LD_LIBRARY_PATH.
+    LD_LIBRARY_PATH="${XBB_BOOTSTRAP_FOLDER}/lib64:${LD_LIBRARY_PATH}"
+  fi
+
   export PATH
+  export LD_LIBRARY_PATH
 }
 __EOF__
 # The above marker must start in the first column.
