@@ -2572,7 +2572,7 @@ function do_cmake()
 
   # November 10, 2017, "3.9.6"
   # November 2017, "3.10.1"
-  # Dec 19, 2019, "3.15.6"
+  # Dec 19, 2019, "3.15.6" - requires cmake 3.x -> bootstrap.
   # Dec 16, 2019, "3.16.2"
 
   local cmake_version="$1"
@@ -2594,6 +2594,11 @@ function do_cmake()
       cd "${BUILD_FOLDER_PATH}/${cmake_folder_name}"
 
       xbb_activate
+      if [ "${IS_BOOTSTRAP}" == "y" ]
+      then
+      # Requires new GCC.
+        xbb_activate_installed_bin
+      fi
 
       export CPPFLAGS="${XBB_CPPFLAGS}"
       export CFLAGS="${XBB_CFLAGS}"
@@ -2605,10 +2610,13 @@ function do_cmake()
         # error: variably modified 'bytes' at file scope
         export CC=clang
         export CXX=clang++
+      else
+        export CC=gcc-7bs
+        export CXX=g++-7bs
       fi
 
       local which_cmake="$(which cmake)"
-      if [ -z "${which_cmake}" ]
+      if [ -z "${which_cmake}" -o "${IS_BOOTSTRAP}" == "y" ]
       then
         if [ ! -d "Bootstrap.cmk" ]
         then
