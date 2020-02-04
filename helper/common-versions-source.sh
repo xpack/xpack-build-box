@@ -261,6 +261,6 @@ function do_build_versions()
 
   else
     echo 
-    echo "Version not yet supported."
+    echo "Version ${XBB_VERSION} not yet supported."
   fi
 }
