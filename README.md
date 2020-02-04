@@ -141,6 +141,10 @@ $ chmod +x /opt/xbb/bin/pkg-config-verbose
 $ export PKG_CONFIG=pkg-config-verbose
 ```
 
+## C++ Standards Support in GCC
+
+https://gcc.gnu.org/projects/cxx-status.html
+
 ## End-of-support schedule
 
 According to the
