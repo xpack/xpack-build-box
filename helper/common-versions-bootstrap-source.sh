@@ -15,7 +15,7 @@ function do_build_versions()
     # -------------------------------------------------------------------------
 
     # To differentiate the binaries from the XBB ones which use `-7`.
-    XBB_GCC_SUFFIX="-7bs"
+    XBB_GCC_SUFFIX="-8bs"
     XBB_BINUTILS_BRANDING="xPack Build Box Bootstrap Binutils\x2C ${HOST_BITS}-bit"
     XBB_GCC_BRANDING="xPack Build Box Bootstrap GCC\x2C ${HOST_BITS}-bit"
 
@@ -104,18 +104,13 @@ function do_build_versions()
       do_perl "5.18.2" # "5.24.4" # "5.26.3" # "5.28.2"
     fi
 
-    # Libraries, required by gcc.
-    # depends=('gcc-libs' 'sh')
-    do_gmp "6.1.2"
-    # depends=('gmp>=5.0')
-    do_mpfr "3.1.6"
-    # depends=('mpfr')
-    do_mpc "1.1.0" # "1.0.3"
-    # depends=('gmp')
-    do_isl "0.21"
- 
     # -------------------------------------------------------------------------
 
+    # Recent versions require C++11.
+    # depends=('curl' 'libarchive' 'shared-mime-info' 'jsoncpp' 'rhash')
+    do_cmake "3.15.6" # "3.13.4"
+
+    # -------------------------------------------------------------------------
 
     if [ "${HOST_UNAME}" != "Darwin" ]
     then
@@ -134,6 +129,16 @@ function do_build_versions()
     # -------------------------------------------------------------------------
     # Native binutils and gcc.
 
+    # Libraries, required by gcc.
+    # depends=('gcc-libs' 'sh')
+    do_gmp "6.1.2"
+    # depends=('gmp>=5.0')
+    do_mpfr "3.1.6"
+    # depends=('mpfr')
+    do_mpc "1.1.0" # "1.0.3"
+    # depends=('gmp')
+    do_isl "0.21"
+
     # By all means DO NOT build binutils on macOS, since this will 
     # override Apple specific tools (ar, strip, etc) and break the
     # build in multiple ways.
@@ -144,14 +149,9 @@ function do_build_versions()
     fi
 
     # Requires gmp, mpfr, mpc, isl.
-    do_native_gcc "7.5.0" # "7.4.0"
+    do_native_gcc "8.3.0" # "7.5.0" # "7.4.0"
 
     # From here on, a reasonable C++11 is available.
-    # -------------------------------------------------------------------------
-
-    # Recent versions require C++11.
-    # depends=('curl' 'libarchive' 'shared-mime-info' 'jsoncpp' 'rhash')
-    do_cmake "3.15.6" # "3.13.4"
 
     # -------------------------------------------------------------------------
 
