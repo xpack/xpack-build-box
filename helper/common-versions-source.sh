@@ -14,8 +14,8 @@ function do_build_versions()
 
     # -------------------------------------------------------------------------
 
-    XBB_GCC_VERSION="8.3.0" # "7.4.0"
-    XBB_GCC_SUFFIX="-8"
+    XBB_GCC_VERSION="9.2.0" # "7.4.0"
+    XBB_GCC_SUFFIX="-9"
     XBB_BINUTILS_VERSION="2.33.1"
 
     XBB_BINUTILS_BRANDING="xPack Build Box Binutils\x2C ${HOST_BITS}-bit"
