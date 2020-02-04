@@ -75,25 +75,6 @@ prepare_xbb_env
 
 source "${XBB_BOOTSTRAP_FOLDER}/xbb-source.sh"
 
-export TEXLIVE_FOLDER="/opt/texlive"
-export XBB_BOOTSTRAP_FOLDER="/opt/xbb-bootstrap"
-
-# Adjust PATH to prefer the XBB bootstrap binaries.
-function xbb_activate_bootstrap()
-{
-  PATH="${XBB_BOOTSTRAP_FOLDER}/bin:${PATH}"
-
-  export PATH
-}
-
-# Add TeX to PATH.
-function xbb_activate_tex()
-{
-  PATH="${TEXLIVE_FOLDER}/bin/x86_64-ubuntu:${PATH}"
-
-  export PATH
-}
-
 # Override function, must be here.
 function xbb_activate()
 {
