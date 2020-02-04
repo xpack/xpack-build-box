@@ -2594,11 +2594,6 @@ function do_cmake()
       cd "${BUILD_FOLDER_PATH}/${cmake_folder_name}"
 
       xbb_activate
-      if [ "${IS_BOOTSTRAP}" == "y" ]
-      then
-      # Requires new GCC.
-        xbb_activate_installed_bin
-      fi
 
       export CPPFLAGS="${XBB_CPPFLAGS}"
       export CFLAGS="${XBB_CFLAGS}"
@@ -2610,9 +2605,6 @@ function do_cmake()
         # error: variably modified 'bytes' at file scope
         export CC=clang
         export CXX=clang++
-      else
-        export CC=gcc-7bs
-        export CXX=g++-7bs
       fi
 
       local which_cmake="$(which cmake)"
