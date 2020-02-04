@@ -322,7 +322,7 @@ function create_xbb_source()
 # for any purpose is hereby granted, under the terms of the MIT license.
 # -----------------------------------------------------------------------------
 
-export TEXLIVE_FOLDER="${HOME}/opt/texlive"
+export TEXLIVE_FOLDER="/opt/texlive"
 __EOF__
 # The above marker must start in the first column.
 
@@ -388,13 +388,23 @@ __EOF__
 
   fi
 
+  # Adjust to TexLive conventions.
+  tl_machine="${HOST_MACHINE}"
+  if [ "${HOST_MACHINE}" == "i686" ]
+  then
+      tl_machine="i386"
+  elif [ "${HOST_MACHINE}" == "armv8l" -o "${HOST_MACHINE}" == "armv7l" ]
+  then
+      tl_machine="armhf"
+  fi
+
   # Note: __EOF__ is NOT quoted to allow substitutions.
   cat <<__EOF__ >> "${INSTALL_FOLDER_PATH}/xbb-source.sh"
 
 # Add TeX to PATH.
 function xbb_activate_tex()
 {
-  PATH="\${TEXLIVE_FOLDER}/bin/$(uname -m)-${HOST_DISTRO_LC_NAME}:\${PATH}"
+  PATH="\${TEXLIVE_FOLDER}/bin/${tl_machine}-linux:\${PATH}"
 
   export PATH
 }
