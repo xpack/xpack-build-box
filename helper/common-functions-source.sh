@@ -189,8 +189,8 @@ function prepare_xbb_env()
 
   XBB_LDFLAGS=""
   XBB_LDFLAGS_LIB="${XBB_LDFLAGS}"
-  XBB_LDFLAGS_APP="${XBB_LDFLAGS}"
-  XBB_LDFLAGS_APP_STATIC="${XBB_LDFLAGS_APP}"
+  XBB_LDFLAGS_APP="${XBB_LDFLAGS} -static-libstdc++"
+  XBB_LDFLAGS_APP_STATIC="${XBB_LDFLAGS_APP} -static-libstdc++"
 
   # ---------------------------------------------------------------------------
 
