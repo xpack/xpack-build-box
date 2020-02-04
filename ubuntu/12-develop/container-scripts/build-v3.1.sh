@@ -86,6 +86,14 @@ mesa-common-dev
 apt-get install --yes \
 libudev-dev
 
+apt-get install --yes software-properties-common
+
+# For add-apt-repository
+apt-get install --yes python-software-properties
+
+add-apt-repository --yes ppa:ubuntu-toolchain-r/test 
+add-apt-repository --yes ppa:openjdk-r/ppa
+
 # Moved here, to avoid possible problems created by poor version management,
 # as it happens in 16.04, when the main install fails with 'universe'.
 cat <<'__EOF__' >>"/etc/apt/sources.list"
@@ -133,6 +141,19 @@ apt-get install --yes \
 dos2unix \
 texinfo \
 
+apt-get install --yes \
+gcc-6 \
+g++-6 \
+
+update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-6 60 --slave /usr/bin/g++ g++ /usr/bin/g++-6
+update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-4.6 60 --slave /usr/bin/g++ g++ /usr/bin/g++-4.6
+
+echo 2 | update-alternatives --config gcc
+
+apt-get install --yes openjdk-8-jdk
+apt-get install --yes ant
+apt-get install --yes maven
+
 # patchelf - not present in precise
 
 # -----------------------------------------------------------------------------
@@ -147,6 +168,7 @@ echo
 uname -a
 lsb_release -a
 
+ant -version
 autoconf --version
 bison --version
 cmake --version
@@ -155,7 +177,9 @@ flex --version
 g++ --version
 gawk --version
 git --version
+java -version
 m4 --version
+mvn -version
 make --version
 patch --version
 perl --version
