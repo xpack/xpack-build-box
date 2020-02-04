@@ -53,7 +53,7 @@ echo "Running parent Docker image ${from}..."
 docker run \
   --interactive \
   --tty \
-  --hostname "docker" \
+  --hostname "xbb-$(uname -m)" \
   --workdir="/root" \
   --volume="${WORK_FOLDER_PATH}:/root/Work" \
   --volume="${script_folder_path}/input:/input" \
