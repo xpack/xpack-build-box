@@ -939,8 +939,14 @@ function do_openssl()
           then
             /usr/bin/install -v -c -m 644 "/private/etc/ssl/cert.pem" "${INSTALL_FOLDER_PATH}/openssl"
           fi
-          # Used by curl.
-          /usr/bin/install -v -c -m 644 "$(dirname "${script_folder_path}")/ca-bundle/ca-bundle.crt" "${INSTALL_FOLDER_PATH}/openssl"
+
+          # ca-bundle.crt is used by curl.
+          if [ -f "/.dockerenv" ]
+          then
+            /usr/bin/install -v -c -m 644 "${helper_folder_path}/ca-bundle.crt" "${INSTALL_FOLDER_PATH}/openssl"
+          else
+            /usr/bin/install -v -c -m 644 "$(dirname "${script_folder_path}")/ca-bundle/ca-bundle.crt" "${INSTALL_FOLDER_PATH}/openssl"
+          fi
         fi
 
       ) 2>&1 | tee "${LOGS_FOLDER_PATH}/make-openssl-output.txt"
