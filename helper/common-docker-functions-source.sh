@@ -62,6 +62,8 @@ function docker_prepare_env()
     touch "${WORK_FOLDER_PATH}/.dockerenv"
   fi
   
+  IS_BOOTSTRAP=${IS_BOOTSTRAP:-""}
+
   # The place where files are downloaded.
   CACHE_FOLDER_PATH="${WORK_FOLDER_PATH}/cache"
 
@@ -73,8 +75,8 @@ function docker_prepare_env()
   else
     # Build the XBB tools with the bootstrap compiler.
     # Some packages fail, and have to revert to the Apple clang.
-    CC="gcc-7bs"
-    CXX="g++-7bs"
+    CC="gcc-8bs"
+    CXX="g++-8bs"
   fi
   
   echo
