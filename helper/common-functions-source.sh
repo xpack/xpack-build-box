@@ -233,6 +233,8 @@ function prepare_xbb_env()
   export XBB_LDFLAGS_APP_STATIC
 
   export PATH
+  export LD_LIBRARY_PATH
+  
   export PKG_CONFIG_PATH
   export PKG_CONFIG_LIBDIR
   export PKG_CONFIG
