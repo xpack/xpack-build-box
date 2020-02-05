@@ -53,7 +53,7 @@ arch="amd64"
 tag="ilegeul/ubuntu:amd64-12.04-tex-v3.1"
 
 echo 
-echo "Building Docker image..."
+echo "Building Docker image ${tag}..."
 docker build --tag "${tag}" -f "${arch}-Dockerfile-v3.1" .
 
 host_clean_docker_input

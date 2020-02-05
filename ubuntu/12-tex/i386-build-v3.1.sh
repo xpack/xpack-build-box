@@ -45,15 +45,11 @@ source "${helper_folder_path}/common-docker-functions-source.sh"
 host_init_docker_env
 host_init_docker_input
 
-cp "${script_folder_path}/../../helper/common-functions-source.sh" "input/helper"
-cp "${script_folder_path}/../../helper/common-docker-functions-source.sh" "input/helper"
-cp "${script_folder_path}/../../helper/common-texlive-functions-source.sh" "input/helper"
-
 arch="i386"
 tag="ilegeul/ubuntu:i386-12.04-tex-v3.1"
 
 echo 
-echo "Building Docker image..."
+echo "Building Docker image ${tag}..."
 docker build --tag "${tag}" -f "${arch}-Dockerfile-v3.1" .
 
 host_clean_docker_input

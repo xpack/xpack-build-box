@@ -34,19 +34,16 @@ script_folder_name="$(basename "${script_folder_path}")"
 
 # =============================================================================
 
-cd "${script_folder_path}"
+# Walk two steps up.
+helper_folder_path="$(dirname $(dirname "${script_folder_path}"))/helper"
 
-source "../../helper/common-functions-source.sh"
-source "../../helper/common-docker-functions-source.sh"
+source "${helper_folder_path}/common-functions-source.sh"
+source "${helper_folder_path}/common-docker-functions-source.sh"
 
 # -----------------------------------------------------------------------------
 
 host_init_docker_env
 host_init_docker_input
-
-cp "${script_folder_path}/../../helper/common-functions-source.sh" "input/helper"
-cp "${script_folder_path}/../../helper/common-docker-functions-source.sh" "input/helper"
-cp "${script_folder_path}/../../helper/common-texlive-functions-source.sh" "input/helper"
 
 arch="arm64"
 tag="ilegeul/ubuntu:arm64-16.04-tex-v3.1"

@@ -139,7 +139,7 @@ function docker_build_from_archive()
   cp "${CACHE_FOLDER_PATH}/${archive_name}" "input"
 
   echo 
-  echo "Building Docker image..."
+  echo "Building Docker image ${tag}..."
   docker build --tag "${tag}" -f "${arch}-Dockerfile" .
 }
 
