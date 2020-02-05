@@ -247,8 +247,8 @@ function do_native_gcc()
       "${INSTALL_FOLDER_PATH}/bin/g++${XBB_GCC_SUFFIX}" -dumpmachine
       "${INSTALL_FOLDER_PATH}/bin/g++${XBB_GCC_SUFFIX}" -dumpspecs | wc -l
 
-      mkdir -p "${HOME}"/tmp
-      cd "${HOME}"/tmp
+      mkdir -p "${HOME}/tmp"
+      cd "${HOME}/tmp"
 
       # Note: __EOF__ is quoted to prevent substitutions here.
       cat <<'__EOF__' > hello.cpp
