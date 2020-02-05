@@ -42,6 +42,7 @@ source "${helper_folder_path}/common-docker-functions-source.sh"
 
 # -----------------------------------------------------------------------------
 
+host_init_docker_env
 host_init_docker_input
 
 arch="arm64"
