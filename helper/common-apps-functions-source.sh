@@ -104,7 +104,7 @@ function do_native_gcc()
   # 2018-12-06, "7.4.0"
   # 2019-11-14, "7.5.0"
   # 2019-02-22, "8.3.0"
-  # 2019-08-12, "9.2.0"
+  # 2019-08-12, "9.2.0" - requires -liconv for C++
 
   local native_gcc_version="$1"
   
@@ -202,10 +202,8 @@ function do_native_gcc()
               \
               --with-linker-hash-style=gnu \
               --enable-libmpx \
-              --enable-clocale=gnu \
               \
               --enable-checking=release \
-              --enable-static \
               --enable-threads=posix \
               --enable-__cxa_atexit \
               --disable-libunwind-exceptions \
@@ -264,7 +262,7 @@ __EOF__
       if true
       then
 
-        "${INSTALL_FOLDER_PATH}/bin/g++${XBB_GCC_SUFFIX}" hello.cpp -o hello
+        "${INSTALL_FOLDER_PATH}/bin/g++${XBB_GCC_SUFFIX}" hello.cpp -o hello 
 
         if [ "x$(./hello)x" != "xHellox" ]
         then
@@ -421,7 +419,7 @@ function do_mingw_all()
 
     cd "${SOURCES_FOLDER_PATH}"
 
-    download_and_extract "${mingw_url}" "${mingw_folder_archive}" "{mingw_folder_name}"
+    download_and_extract "${mingw_url}" "${mingw_folder_archive}" "${mingw_folder_name}"
 
     (
       mkdir -p "${BUILD_FOLDER_PATH}/${mingw_build_headers_folder_name}"
@@ -2880,7 +2878,7 @@ function do_patchelf()
       export CXXFLAGS="${XBB_CXXFLAGS}"
       # Wihtout -static-libstdc++, the bootstrap lib folder is needed to 
       # find libstdc++.
-      export LDFLAGS="${XBB_LDFLAGS_APP}"
+      export LDFLAGS="${XBB_LDFLAGS_APP} -static-libstdc++"
 
       if [ ! -f "config.status" ]
       then
