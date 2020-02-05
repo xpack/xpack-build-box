@@ -45,6 +45,24 @@ function host_clean_docker_input()
   rm -rf "${script_folder_path}/input"
 }
 
+function host_run_docker_it()
+{
+  out="${HOME}/opt/${name}-${arch}"
+  mkdir -p "${out}"
+
+  echo 
+  echo "Running parent Docker image ${from}..."
+  docker run \
+    --interactive \
+    --tty \
+    --hostname "${name}-${arch}" \
+    --workdir="/root" \
+    --volume="${WORK_FOLDER_PATH}:/root/Work" \
+    --volume="${script_folder_path}/input:/input" \
+    --volume="${out}:/opt/${name}" \
+    ${from}
+
+}
 # =============================================================================
 
 function xbb_activate()
