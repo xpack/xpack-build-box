@@ -22,20 +22,35 @@ function host_init_docker_env()
 function host_init_docker_input()
 {
   rm -rf "${script_folder_path}/input"
-  mkdir -p "${script_folder_path}/input/helper"
+  mkdir -p "${script_folder_path}/input/helper/patches"
 
   if [ -d "${script_folder_path}/container-scripts" ]
   then
-    cp -v "${script_folder_path}/container-scripts"/*.sh "${script_folder_path}/input"
+    ln -v "${script_folder_path}/container-scripts"/*.sh "${script_folder_path}/input"
   fi
 
-  # Copy the entire helper folder.
-  cp -R -v "${helper_folder_path}"/* "${script_folder_path}/input/helper"
+  # Using hard links simplifies development, since edits will no longer 
+  # need to be propagated back.
 
-  # Possibly copy additional files.
+  # Hard link the entire content of the helper folder.
+  ln -v "${helper_folder_path}"/*.sh "${script_folder_path}/input/helper"
+  ln -v "${helper_folder_path}"/pkg-config-verbose "${script_folder_path}/input/helper"
+
+  ln -v "${helper_folder_path}/patches"/*.patch "${script_folder_path}/input/helper/patches"
+  
+  # Possibly hard link additional files.
   while [ $# -gt 0 ]
   do
-    cp -R -v "$1" "${script_folder_path}/input/helper"
+    if [ -f "$1" ]
+    then
+      ln -v "$1" "${script_folder_path}/input/helper"
+    elif [ -d "$1" ]
+    then
+      local subfolder=$(basename "$1")
+      mkdir -p "${script_folder_path}/input/helper/${subfolder}"
+      ln -v "$1"/* "${script_folder_path}/input/helper/${subfolder}"
+    fi
+
     shift
   done
 }
