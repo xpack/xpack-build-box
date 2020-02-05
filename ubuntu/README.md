@@ -30,3 +30,23 @@ bash ~/Downloads/xpack-build-box.git/ubuntu/12-tex/i386-build-v3.1.sh
 bash ~/Downloads/xpack-build-box.git/ubuntu/12-bootstrap/i386-build-v3.1.sh
 bash ~/Downloads/xpack-build-box.git/ubuntu/12-xbb/i386-build-v3.1.sh
 ```
+
+```bash
+set -o errexit
+bash ~/Downloads/xpack-build-box.git/ubuntu/16/arm64-build.sh
+bash ~/Downloads/xpack-build-box.git/ubuntu/16-updated/arm64-build-v3.1.sh
+bash ~/Downloads/xpack-build-box.git/ubuntu/16-develop/arm64-build-v3.1.sh
+bash ~/Downloads/xpack-build-box.git/ubuntu/16-tex/arm64-build-v3.1.sh
+bash ~/Downloads/xpack-build-box.git/ubuntu/16-bootstrap/arm64-build-v3.1.sh
+bash ~/Downloads/xpack-build-box.git/ubuntu/16-xbb/arm64-build-v3.1.sh
+```
+
+```bash
+set -o errexit
+bash ~/Downloads/xpack-build-box.git/ubuntu/16/armhf-build.sh
+bash ~/Downloads/xpack-build-box.git/ubuntu/16-updated/armhf-build-v3.1.sh
+bash ~/Downloads/xpack-build-box.git/ubuntu/16-develop/armhf-build-v3.1.sh
+bash ~/Downloads/xpack-build-box.git/ubuntu/16-tex/armhf-build-v3.1.sh
+bash ~/Downloads/xpack-build-box.git/ubuntu/16-bootstrap/armhf-build-v3.1.sh
+bash ~/Downloads/xpack-build-box.git/ubuntu/16-xbb/armhf-build-v3.1.sh
+```
