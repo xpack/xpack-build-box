@@ -34,17 +34,20 @@ script_folder_name="$(basename "${script_folder_path}")"
 
 # =============================================================================
 
-cd "${script_folder_path}"
+# Walk two steps up.
+helper_folder_path="$(dirname $(dirname "${script_folder_path}"))/helper"
 
-source "../../helper/common-functions-source.sh"
-source "../../helper/common-docker-functions-source.sh"
+source "${helper_folder_path}/common-functions-source.sh"
+source "${helper_folder_path}/common-docker-functions-source.sh"
 
 # -----------------------------------------------------------------------------
 
 host_init_docker_env
 host_init_docker_input
 
-docker_build_from_archive "arm64" "arm64-ubu16-rootfs.xz" "ilegeul/ubuntu:arm64-16.04"
+arch="arm64"
+
+docker_build_from_archive "${arch}" "${arch}-ubu16-rootfs.xz" "ilegeul/ubuntu:${arch}-16.04"
 
 host_clean_docker_input
 

@@ -34,10 +34,11 @@ script_folder_name="$(basename "${script_folder_path}")"
 
 # =============================================================================
 
-cd "${script_folder_path}"
+# Walk two steps up.
+helper_folder_path="$(dirname $(dirname "${script_folder_path}"))/helper"
 
-source "../../helper/common-functions-source.sh"
-source "../../helper/common-docker-functions-source.sh"
+source "${helper_folder_path}/common-functions-source.sh"
+source "${helper_folder_path}/common-docker-functions-source.sh"
 
 # -----------------------------------------------------------------------------
 
@@ -47,7 +48,7 @@ arch="armhf"
 tag="ilegeul/ubuntu:armhf-16.04-updated-v3.1"
 
 echo 
-echo "Building Docker image..."
+echo "Building Docker image ${tag}..."
 docker build --tag "${tag}" -f "${arch}-Dockerfile-v3.1" .
 
 host_clean_docker_input
