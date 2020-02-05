@@ -43,7 +43,8 @@ unset TERM
 
 apt-get install --yes \
 \
-autoconf automake \
+autoconf \
+automake \
 bison \
 bzip2 \
 cmake \
@@ -85,8 +86,14 @@ mesa-common-dev
 apt-get install --yes \
 libudev-dev
 
-if true
-then
+apt-get install --yes software-properties-common
+
+# For add-apt-repository
+apt-get install --yes python-software-properties
+
+add-apt-repository --yes ppa:ubuntu-toolchain-r/test 
+add-apt-repository --yes ppa:openjdk-r/ppa
+
 cat <<'__EOF__' >>"/etc/apt/sources.list"
 
 ## N.B. software from this repository is ENTIRELY UNSUPPORTED by the Ubuntu
@@ -102,12 +109,6 @@ deb http://us.ports.ubuntu.com/ubuntu-ports/ xenial-updates universe
 
 deb http://us.ports.ubuntu.com/ubuntu-ports/ xenial-backports universe 
 # deb-src http://us.ports.ubuntu.com/ubuntu-ports/ xenial-backports universe 
-__EOF__
-fi
-
-if false
-then
-cat <<'__EOF__' >>"/etc/apt/sources.list"
 
 ## N.B. software from this repository is ENTIRELY UNSUPPORTED by the Ubuntu 
 ## team, and may not be under a free licence. Please satisfy yourself as to 
@@ -125,7 +126,6 @@ deb http://us.ports.ubuntu.com/ubuntu-ports/ xenial-updates multiverse
 deb http://us.ports.ubuntu.com/ubuntu-ports/ xenial-backports multiverse
 # deb-src http://us.ports.ubuntu.com/ubuntu-ports/ xenial-backports multiverse
 __EOF__
-fi
 
 echo
 echo "The resulting /etc/apt/sources.list"
@@ -138,6 +138,20 @@ apt-get update
 apt-get install --yes \
 dos2unix \
 texinfo \
+
+# GCC 6.0.1 already available, update to 6.5.
+apt-get install --yes \
+gcc-6 \
+g++-6 \
+
+update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-6 60 --slave /usr/bin/g++ g++ /usr/bin/g++-6
+update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-5 60 --slave /usr/bin/g++ g++ /usr/bin/g++-5
+
+echo 2 | update-alternatives --config gcc
+
+apt-get install --yes openjdk-8-jdk
+apt-get install --yes ant
+apt-get install --yes maven
 
 # patchelf - not present in precise
 
@@ -153,6 +167,7 @@ echo
 uname -a
 lsb_release -a
 
+ant -version
 autoconf --version
 bison --version
 cmake --version
@@ -161,7 +176,9 @@ flex --version
 g++ --version
 gawk --version
 git --version
+java -version
 m4 --version
+mvn -version
 make --version
 patch --version
 perl --version
