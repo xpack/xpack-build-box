@@ -46,18 +46,11 @@ host_init_docker_env
 host_init_docker_input \
   "$(dirname $(dirname "${script_folder_path}"))/ca-bundle/ca-bundle.crt" \
 
-from="ilegeul/ubuntu:i386-12.04-tex-v3.1"
+arch="i386"
+from="ilegeul/ubuntu:${arch}-12.04-tex-v3.1"
+name="xbb-bootstrap"
 
-echo 
-echo "Running parent Docker image ${from}..."
-docker run \
-  --interactive \
-  --tty \
-  --hostname "xbb-bootstrap-$(uname -m)" \
-  --workdir="/root" \
-  --volume="${WORK_FOLDER_PATH}:/root/Work" \
-  --volume="${script_folder_path}/input:/input" \
-  ${from}
+host_run_docker_it
 
 host_clean_docker_input
 
