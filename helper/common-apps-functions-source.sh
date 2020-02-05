@@ -1826,8 +1826,8 @@ function do_automake()
 function do_libtool() 
 {
   # https://www.gnu.org/software/libtool/
-  # http://gnu.mirrors.linux.ro/libtool/
-  # http://mirrors.nav.ro/gnu/libtool/libtool-2.4.6.tar.xz
+  # http://ftpmirror.gnu.org/libtool/
+  # http://ftpmirror.gnu.org/libtool/libtool-2.4.6.tar.xz
   # https://aur.archlinux.org/cgit/aur.git/tree/PKGBUILD?h=libtool-git
 
   # 15-Feb-2015, "2.4.6", latest
@@ -1836,7 +1836,7 @@ function do_libtool()
 
   local libtool_folder_name="libtool-${libtool_version}"
   local libtool_archive="${libtool_folder_name}.tar.xz"
-  local libtool_url="http://mirrors.nav.ro/gnu/libtool/${libtool_archive}"
+  local libtool_url="http://ftpmirror.gnu.org/libtool/${libtool_archive}"
 
   local libtool_stamp_file_path="${STAMPS_FOLDER_PATH}/stamp-libtool-${libtool_version}-installed"
   if [ ! -f "${libtool_stamp_file_path}" -o ! -d "${BUILD_FOLDER_PATH}/${libtool_folder_name}" ]
