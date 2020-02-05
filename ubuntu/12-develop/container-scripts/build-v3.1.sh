@@ -141,6 +141,7 @@ apt-get install --yes \
 dos2unix \
 texinfo \
 
+# Only GCC 4.6 available, install 6.2.
 apt-get install --yes \
 gcc-6 \
 g++-6 \
