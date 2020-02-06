@@ -1834,7 +1834,7 @@ function do_libtool()
 
   local libtool_folder_name="libtool-${libtool_version}"
   local libtool_archive="${libtool_folder_name}.tar.xz"
-  local libtool_url="http://ftpmirror.gnu.org/libtool/${libtool_archive}"
+  local libtool_url="http://ftp.hosteurope.de/mirror/ftp.gnu.org/gnu/libtool/${libtool_archive}"
 
   local libtool_stamp_file_path="${STAMPS_FOLDER_PATH}/stamp-libtool-${libtool_version}-installed"
   if [ ! -f "${libtool_stamp_file_path}" -o ! -d "${BUILD_FOLDER_PATH}/${libtool_folder_name}" ]
