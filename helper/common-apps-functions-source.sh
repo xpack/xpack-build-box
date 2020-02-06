@@ -3135,7 +3135,8 @@ function do_python()
             --with-system-expat \
             --with-system-ffi \
             --with-dbmliborder=gdbm:ndbm \
-            --without-ensurepip
+            --without-ensurepip \
+            --with-libiconv=native \
 
           cp "config.log" "${LOGS_FOLDER_PATH}/config-python-log.txt"
         ) 2>&1 | tee "${LOGS_FOLDER_PATH}/configure-python-output.txt"
