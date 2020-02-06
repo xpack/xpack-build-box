@@ -14,8 +14,8 @@ function do_build_versions()
 
     # -------------------------------------------------------------------------
 
-    XBB_GCC_VERSION="8.3.0" # "9.2.0" # "7.4.0"
-    XBB_GCC_SUFFIX="-8" # "-9"
+    XBB_GCC_VERSION="9.2.0" # "8.3.0" # "7.4.0"
+    XBB_GCC_SUFFIX="-9" # "-8"
     XBB_BINUTILS_VERSION="2.33.1"
 
     XBB_BINUTILS_BRANDING="xPack Build Box Binutils\x2C ${HOST_BITS}-bit"
@@ -68,7 +68,8 @@ function do_build_versions()
 
     # Library, required by wget.
     # depends=()
-    do_libiconv "1.16" # "1.15"
+    # Harmful for GCC 9.
+    # do_libiconv "1.16" # "1.15"
 
     # depends=('glibc' 'glib2 (internal)')
     do_pkg_config "0.29.2"
