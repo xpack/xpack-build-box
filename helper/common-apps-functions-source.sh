@@ -1391,7 +1391,6 @@ function do_pkg_config()
             --disable-debug \
             --disable-host-tool \
             --with-pc-path="" \
-            --with-libiconv=gnu
 
           cp "config.log" "${LOGS_FOLDER_PATH}/config-pkg_config-log.txt"
         ) 2>&1 | tee "${LOGS_FOLDER_PATH}/configure-pkg_config-output.txt"
