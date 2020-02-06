@@ -653,6 +653,9 @@ function do_libiconv()
   # 2017-02-02, "1.15"
   # 2019-04-26, "1.16"
 
+  # Warning, GCC 9.2 gets confused by it. If really needed, it must
+  # be installed in a separate folder. See --prefix below.
+
   local libiconv_version="$1"
 
   local libiconv_folder_name="libiconv-${libiconv_version}"
@@ -687,7 +690,7 @@ function do_libiconv()
           bash "${SOURCES_FOLDER_PATH}/${libiconv_folder_name}/configure" --help
 
           bash ${DEBUG} "${SOURCES_FOLDER_PATH}/${libiconv_folder_name}/configure" \
-            --prefix="${INSTALL_FOLDER_PATH}" 
+            --prefix="${INSTALL_FOLDER_PATH}/libiconv" 
 
           cp "config.log" "${LOGS_FOLDER_PATH}/config-libiconv-log.txt"
         ) 2>&1 | tee "${LOGS_FOLDER_PATH}/configure-libiconv-output.txt"
