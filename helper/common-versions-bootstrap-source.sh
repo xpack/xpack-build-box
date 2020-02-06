@@ -86,9 +86,9 @@ function do_build_versions()
     do_flex "2.6.3" # "2.6.4" fails
 
     # depends=()
-    do_libiconv "1.16" # "1.15"
+    # Not needed, possibly harmful for GCC 9.
+    # do_libiconv "1.16" # "1.15"
 
-    # requires libiconv
     # depends=('glibc' 'glib2 (internal)')
     do_pkg_config "0.29.2"
 
