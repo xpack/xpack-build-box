@@ -67,47 +67,6 @@ deb http://us.ports.ubuntu.com/ubuntu-ports/ xenial-backports main restricted
 # deb-src http://us.ports.ubuntu.com/ubuntu-ports/ xenial-backports main restricted 
 __EOF__
 
-if false
-then
-cat <<'__EOF__' >>"/etc/apt/sources.list"
-
-## N.B. software from this repository is ENTIRELY UNSUPPORTED by the Ubuntu
-## team. Also, please note that software in universe WILL NOT receive any
-## review or updates from the Ubuntu security team.
-deb http://us.ports.ubuntu.com/ubuntu-ports/ xenial universe
-# deb-src http://us.ports.ubuntu.com/ubuntu-ports/ xenial universe
-deb http://ports.ubuntu.com/ubuntu-ports xenial-security universe
-# deb-src http://ports.ubuntu.com/ubuntu-ports xenial-security universe
-
-deb http://us.ports.ubuntu.com/ubuntu-ports/ xenial-updates universe
-# deb-src http://us.ports.ubuntu.com/ubuntu-ports/ xenial-updates universe
-
-deb http://us.ports.ubuntu.com/ubuntu-ports/ xenial-backports universe 
-# deb-src http://us.ports.ubuntu.com/ubuntu-ports/ xenial-backports universe 
-__EOF__
-fi
-
-if false
-then
-cat <<'__EOF__' >>"/etc/apt/sources.list"
-
-## N.B. software from this repository is ENTIRELY UNSUPPORTED by the Ubuntu 
-## team, and may not be under a free licence. Please satisfy yourself as to 
-## your rights to use the software. Also, please note that software in 
-## multiverse WILL NOT receive any review or updates from the Ubuntu
-## security team.
-deb http://us.ports.ubuntu.com/ubuntu-ports/ xenial multiverse
-# deb-src http://us.ports.ubuntu.com/ubuntu-ports/ xenial multiverse
-deb http://ports.ubuntu.com/ubuntu-ports xenial-security multiverse
-# deb-src http://ports.ubuntu.com/ubuntu-ports xenial-security multiverse
-
-deb http://us.ports.ubuntu.com/ubuntu-ports/ xenial-updates multiverse
-# deb-src http://us.ports.ubuntu.com/ubuntu-ports/ xenial-updates multiverse
-
-deb http://us.ports.ubuntu.com/ubuntu-ports/ xenial-backports multiverse
-# deb-src http://us.ports.ubuntu.com/ubuntu-ports/ xenial-backports multiverse
-__EOF__
-fi
 
 # deb http://us.ports.ubuntu.com/ubuntu-ports/ xenial universe
 
