@@ -34,52 +34,28 @@ script_folder_name="$(basename "${script_folder_path}")"
 
 # =============================================================================
 
-env
+# Walk two steps up.
+helper_folder_path="$(dirname $(dirname "${script_folder_path}"))/helper"
 
-apt-get install --yes software-properties-common
+source "${helper_folder_path}/common-functions-source.sh"
+source "${helper_folder_path}/common-docker-functions-source.sh"
 
-# Use this ppa to get GCC 7.x.
-add-apt-repository ppa:ubuntu-toolchain-r/test
-apt-get update
+# -----------------------------------------------------------------------------
 
-apt-get install --yes \
-git \
-curl \
-make \
-pkg-config \
-m4 \
-gawk \
-autoconf automake \
-libtool libtool-bin \
-gettext \
-bison \
-texinfo \
-patchelf \
-dos2unix \
-flex \
-perl \
-cmake \
-python python3 \
-g++-7 
+host_init_docker_env
+host_init_docker_input \
+  "$(dirname $(dirname "${script_folder_path}"))/ca-bundle/ca-bundle.crt" \
 
-apt-get install --yes \
-libpython-dev \
-libpython3-dev 
+arch="arm64"
+tag="ilegeul/ubuntu:arm64-16.04-bootstrap-v3.1"
 
-# For QEMU
-apt-get install --yes \
-libx11-dev \
-libxext-dev \
-mesa-common-dev
+echo 
+echo "Building Docker image ${tag}..."
+docker build --tag "${tag}" -f "${arch}-Dockerfile-v3.1" .
 
-# For QEMU & OpenOCD
-apt-get install --yes \
-libudev-dev
+host_clean_docker_input
 
-apt-get install --yes \
-texlive \
-texlive-generic-recommended \
-texlive-extra-utils
+echo 
+echo "Done."
 
-echo
-gcc-7 --version
+# -----------------------------------------------------------------------------
