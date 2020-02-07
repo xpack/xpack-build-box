@@ -14,8 +14,11 @@ function do_build_versions()
 
     # -------------------------------------------------------------------------
 
-    # To differentiate the binaries from the XBB ones which use `-7`.
+    # The main characteristic of XBB Bootstrap is the compiler version.
+    XBB_GCC_VERSION="8.3.0" # "7.5.0" "7.4.0"
     XBB_GCC_SUFFIX="-8bs"
+    XBB_BINUTILS_VERSION="2.32" # "2.31"
+
     XBB_BINUTILS_BRANDING="xPack Build Box Bootstrap Binutils\x2C ${HOST_BITS}-bit"
     XBB_GCC_BRANDING="xPack Build Box Bootstrap GCC\x2C ${HOST_BITS}-bit"
 
@@ -145,11 +148,11 @@ function do_build_versions()
     if [ "${HOST_UNAME}" != "Darwin" ]
     then
       # Requires gmp, mpfr, mpc, isl.
-      do_native_binutils "2.31" 
+      do_native_binutils "${XBB_BINUTILS_VERSION}" 
     fi
 
     # Requires gmp, mpfr, mpc, isl.
-    do_native_gcc "8.3.0" # "7.5.0" # "7.4.0"
+    do_native_gcc "${XBB_GCC_VERSION}"
 
     # From here on, a reasonable C++11 is available.
 
