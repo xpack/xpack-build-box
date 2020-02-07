@@ -1,9 +1,11 @@
-FROM ilegeul/ubuntu:arm64-16.04-updated-v3.1
+FROM ilegeul/ubuntu:arm64-16.04-bootstrap-v3.1
+
+LABEL description="Ubuntu 16.04 arm64 image, with the XBB xbb."
 LABEL maintainer="Liviu Ionescu <ilg@livius.net>"
 LABEL repository="https://github.com/xpack/xpack-build-box.git"
-LABEL docs="https://github.com/xpack/xpack-build-box/tree/master/ubuntu/16-updated/README.md"
+LABEL docs="https://github.com/xpack/xpack-build-box/tree/master/ubuntu/16-xbb/README.md"
 
 ADD input /input
-RUN DEBUG=-x /usr/bin/time bash /input/build-xbb-v3.1.sh
+RUN DEBUG= JOBS=$(nproc) bash /input/build-v3.1.sh
 
 CMD ["/bin/bash"]

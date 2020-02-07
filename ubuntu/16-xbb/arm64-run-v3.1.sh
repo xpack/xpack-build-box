@@ -47,11 +47,10 @@ host_init_docker_input \
   "$(dirname $(dirname "${script_folder_path}"))/ca-bundle/ca-bundle.crt" \
 
 arch="arm64"
-tag="ilegeul/ubuntu:arm64-16.04-xbb-v3.1"
+from="ilegeul/ubuntu:${arch}-16.04-bootstrap-v3.1"
+name="xbb-xbb"
 
-echo 
-echo "Building Docker image ${tag}..."
-docker build --tag "${tag}" -f "${arch}-Dockerfile-v3.1" .
+host_run_docker_it
 
 host_clean_docker_input
 

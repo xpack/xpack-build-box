@@ -33,29 +33,70 @@ script_folder_path="$(dirname "${script_path}")"
 script_folder_name="$(basename "${script_folder_path}")"
 
 # =============================================================================
+# This script creates the XBB xbb docker images.
 
-# Walk two steps up.
-helper_folder_path="$(dirname $(dirname "${script_folder_path}"))/helper"
+XBB_VERSION="3.1"
+
+WORK_FOLDER_PATH="${HOME}/Work"
+
+XBB_FOLDER="/opt/xbb-xbb"
+XBB_xbb_FOLDER="${XBB_FOLDER}"
+
+IS_BOOTSTRAP="y"
+
+# -----------------------------------------------------------------------------
+
+helper_folder_path="${script_folder_path}/helper"
 
 source "${helper_folder_path}/common-functions-source.sh"
 source "${helper_folder_path}/common-docker-functions-source.sh"
 
+source "${helper_folder_path}/common-libs-functions-source.sh"
+source "${helper_folder_path}/common-apps-functions-source.sh"
+
+source "${helper_folder_path}/common-versions-source.sh"
+
+function do_cleanup()
+{
+  if [ -f "${WORK_FOLDER_PATH}/.dockerenv" ]
+  then
+    rm -rf "${WORK_FOLDER_PATH}"
+  fi
+}
+
+function xbb_activate()
+{
+  xbb_activate_installed_bin  # Use xbb binaries
+  xbb_activate_installed_dev  # Use xbb libraries and headers
+}
+
 # -----------------------------------------------------------------------------
 
-host_init_docker_env
-host_init_docker_input \
-  "$(dirname $(dirname "${script_folder_path}"))/ca-bundle/ca-bundle.crt" \
+detect_host
 
-arch="arm64"
-tag="ilegeul/ubuntu:arm64-16.04-xbb-v3.1"
+docker_prepare_env
 
-echo 
-echo "Building Docker image ${tag}..."
-docker build --tag "${tag}" -f "${arch}-Dockerfile-v3.1" .
+prepare_xbb_env
 
-host_clean_docker_input
+create_xbb_source
 
-echo 
-echo "Done."
+echo
+echo "$(uname) XBB xbb build script started..."
+
+# -----------------------------------------------------------------------------
+
+do_build_versions
+
+do_strip_debug_libs
+
+# -----------------------------------------------------------------------------
+
+echo
+echo "$(uname) XBB xbb created in \"${INSTALL_FOLDER_PATH}\""
+
+do_cleanup
+
+echo
+echo "Container done."
 
 # -----------------------------------------------------------------------------

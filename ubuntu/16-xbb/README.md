@@ -13,6 +13,8 @@ $ bash ~/Downloads/xpack-build-box.git/ubuntu/16-xbb/armhf-build-v3.1.sh
 $ docker images
 ```
 
+As a shortcut, macOS users can double click the `.command` files in Finder.
+
 ## Test
 
 The test was performed on a macOS.
