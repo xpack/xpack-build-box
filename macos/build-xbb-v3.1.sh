@@ -74,7 +74,7 @@ source "${helper_folder_path}/common-functions-source.sh"
 source "${helper_folder_path}/common-libs-functions-source.sh"
 source "${helper_folder_path}/common-apps-functions-source.sh"
 
-source "${helper_folder_path}/common-versions-source.sh"
+source "${helper_folder_path}/common-versions-xbb-source.sh"
 
 # -----------------------------------------------------------------------------
 
