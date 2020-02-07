@@ -12,6 +12,7 @@ function do_zlib()
   # http://zlib.net
   # http://zlib.net/fossils/
   # http://zlib.net/fossils/zlib-1.2.11.tar.gz
+  # https://archlinuxarm.org/packages/aarch64/zlib/files/PKGBUILD
   # https://aur.archlinux.org/cgit/aur.git/tree/PKGBUILD?h=zlib-static
   # https://aur.archlinux.org/cgit/aur.git/tree/PKGBUILD?h=zlib-git
 
@@ -85,6 +86,7 @@ function do_gmp()
   # https://gmplib.org
   # https://gmplib.org/download/gmp/
   # https://gmplib.org/download/gmp/gmp-6.1.2.tar.xz
+  # https://archlinuxarm.org/packages/aarch64/gmp/files/PKGBUILD
   # https://aur.archlinux.org/cgit/aur.git/tree/PKGBUILD?h=gmp-hg
 
   # 16-Dec-2016 "6.1.2"
@@ -127,7 +129,10 @@ function do_gmp()
           bash "${SOURCES_FOLDER_PATH}/${gmp_folder_name}/configure" --help
 
           bash ${DEBUG} "${SOURCES_FOLDER_PATH}/${gmp_folder_name}/configure" \
-            --prefix="${INSTALL_FOLDER_PATH}" 
+            --prefix="${INSTALL_FOLDER_PATH}" \
+            \
+            --enable-cxx \
+            --enable-fat
 
           cp "config.log" "${LOGS_FOLDER_PATH}/config-gmp-log.txt"
         ) 2>&1 | tee "${LOGS_FOLDER_PATH}/configure-gmp-output.txt"
@@ -158,6 +163,7 @@ function do_mpfr()
   # https://ftp.gnu.org/gnu/mpfr/
   # http://www.mpfr.org/mpfr-3.1.6
   # https://www.mpfr.org/mpfr-4.0.2/mpfr-4.0.2.tar.xz
+  # https://archlinuxarm.org/packages/aarch64/mpfr/files/PKGBUILD
   # https://git.archlinux.org/svntogit/packages.git/tree/trunk/PKGBUILD?h=packages/mpfr
 
   # 7 September 2017 "3.1.6"
@@ -198,7 +204,10 @@ function do_mpfr()
           bash "${SOURCES_FOLDER_PATH}/${mpfr_folder_name}/configure" --help
 
           bash ${DEBUG} "${SOURCES_FOLDER_PATH}/${mpfr_folder_name}/configure" \
-            --prefix="${INSTALL_FOLDER_PATH}" 
+            --prefix="${INSTALL_FOLDER_PATH}" \
+            \
+            --enable-thread-safe \
+            --enable-shared \
 
           cp "config.log" "${LOGS_FOLDER_PATH}/config-mpfr-log.txt"
         ) 2>&1 | tee "${LOGS_FOLDER_PATH}/configure-mpfr-output.txt"
@@ -228,6 +237,7 @@ function do_mpc()
   # http://www.multiprecision.org/
   # https://ftp.gnu.org/gnu/mpc
   # https://ftp.gnu.org/gnu/mpc/mpc-1.0.3.tar.gz
+  # https://archlinuxarm.org/packages/aarch64/mpc/files/PKGBUILD
   # https://git.archlinux.org/svntogit/packages.git/tree/trunk/PKGBUILD?h=packages/libmpc
 
   # 2015-02-20 "1.0.3"
@@ -365,6 +375,7 @@ function do_nettle()
 {
   # https://www.lysator.liu.se/~nisse/nettle/
   # https://ftp.gnu.org/gnu/nettle/
+  # https://archlinuxarm.org/packages/aarch64/nettle/files/PKGBUILD
   # https://aur.archlinux.org/cgit/aur.git/tree/PKGBUILD?h=nettle-git
 
   # 2017-11-19, "3.4"
@@ -404,10 +415,15 @@ function do_nettle()
 
           bash "${SOURCES_FOLDER_PATH}/${nettle_folder_name}/configure" --help
 
+          # -disable-static
+
           bash ${DEBUG} "${SOURCES_FOLDER_PATH}/${nettle_folder_name}/configure" \
             --prefix="${INSTALL_FOLDER_PATH}" \
+            \
+            --enable-mini-gmp \
             --disable-documentation \
-            --enable-mini-gmp
+            --disable-arm-neon \
+            --disable-assembler
 
           cp "config.log" "${LOGS_FOLDER_PATH}/config-nettle-log.txt"
         ) 2>&1 | tee "${LOGS_FOLDER_PATH}/configure-nettle-output.txt"
@@ -441,6 +457,7 @@ function do_tasn1()
   # https://www.gnu.org/software/libtasn1/
   # http://ftp.gnu.org/gnu/libtasn1/
   # https://ftp.gnu.org/gnu/libtasn1/libtasn1-4.12.tar.gz
+  # https://archlinuxarm.org/packages/aarch64/libtasn1/files/PKGBUILD
   # https://aur.archlinux.org/cgit/aur.git/tree/PKGBUILD?h=libtasn1-git
 
   # 2017-11-19, "4.12"
@@ -492,7 +509,7 @@ function do_tasn1()
         echo "Running tasn1 make..."
 
         # Build.
-        make -j ${JOBS}
+        CODE_COVERAGE_LDFLAGS=${LDFLAGS} make -j ${JOBS}
 
         make install-strip
       ) 2>&1 | tee "${LOGS_FOLDER_PATH}/make-tasn1-output.txt"
@@ -509,6 +526,7 @@ function do_expat()
 {
   # https://libexpat.github.io
   # https://github.com/libexpat/libexpat/releases
+  # https://archlinuxarm.org/packages/aarch64/expat/files/PKGBUILD
   # https://aur.archlinux.org/cgit/aur.git/tree/PKGBUILD?h=expat-git
 
   # Nov 1, 2017, "2.2.5"
@@ -579,6 +597,7 @@ function do_libffi()
 {
   # https://sourceware.org/libffi/
   # https://sourceware.org/pub/libffi/
+  # https://archlinuxarm.org/packages/aarch64/libffi/files/PKGBUILD
   # https://aur.archlinux.org/cgit/aur.git/tree/PKGBUILD?h=libffi-git
 
   # 12-Nov-2014, "3.2.1", latest
@@ -618,9 +637,12 @@ function do_libffi()
 
           bash "${SOURCES_FOLDER_PATH}/${libffi_folder_name}/configure" --help
 
+          #  --disable-static
+
           bash ${DEBUG} "${SOURCES_FOLDER_PATH}/${libffi_folder_name}/configure" \
             --prefix="${INSTALL_FOLDER_PATH}" \
-            --enable-pax_emutramp
+            \
+            --enable-pax_emutramp \
 
           cp "config.log" "${LOGS_FOLDER_PATH}/config-libffi-log.txt"
         ) 2>&1 | tee "${LOGS_FOLDER_PATH}/configure-libffi-output.txt"
@@ -722,6 +744,7 @@ function do_gnutls()
   # http://www.gnutls.org/
   # https://www.gnupg.org/ftp/gcrypt/gnutls/
   # https://www.gnupg.org/ftp/gcrypt/gnutls/v3.6/gnutls-3.6.7.tar.xz
+  # https://archlinuxarm.org/packages/aarch64/gnutls/files/PKGBUILD
   # https://aur.archlinux.org/cgit/aur.git/tree/PKGBUILD?h=gnutls-git
 
   # 2017-10-21, "3.6.1"
@@ -769,12 +792,16 @@ function do_gnutls()
 
           bash "${SOURCES_FOLDER_PATH}/${gnutls_folder_name}/configure" --help
 
+          # --disable-static 
+
           bash ${DEBUG} "${SOURCES_FOLDER_PATH}/${gnutls_folder_name}/configure" \
             --prefix="${INSTALL_FOLDER_PATH}" \
-            --without-p11-kit \
-            --enable-guile \
+            \
             --with-guile-site-dir=no \
-            --with-included-unistring
+            --with-included-unistring \
+            --without-p11-kit \
+            \
+            --enable-guile \
 
           cp "config.log" "${LOGS_FOLDER_PATH}/config-gnutls-log.txt"
         ) 2>&1 | tee "${LOGS_FOLDER_PATH}/configure-gnutls-output.txt"
@@ -805,6 +832,8 @@ function do_util_macros()
 
   # http://xorg.freedesktop.org/releases/individual/util
   # http://xorg.freedesktop.org/releases/individual/util/util-macros-1.17.1.tar.bz2
+
+  # https://archlinuxarm.org/packages/any/xorg-util-macros/files/PKGBUILD
 
   # 2013-09-07, "1.17.1"
   # 2018-03-05, "1.19.2"
@@ -871,6 +900,7 @@ function do_xorg_xproto()
 {
   # https://www.x.org/releases/individual/proto/
   # https://www.x.org/releases/individual/proto/xproto-7.0.31.tar.bz2
+  # https://aur.archlinux.org/cgit/aur.git/tree/PKGBUILD?h=xorgproto-git
 
   # 2016-09-23, "7.0.31" (latest)
 
@@ -914,6 +944,10 @@ function do_xorg_xproto()
             --prefix="${INSTALL_FOLDER_PATH}" \
             \
             --build="${BUILD}" \
+            \
+            --without-xmlto \
+            --without-xsltproc \
+            --without-fop
 
           cp "config.log" "${LOGS_FOLDER_PATH}/config-xorg_xproto-log.txt"
         ) 2>&1 | tee "${LOGS_FOLDER_PATH}/configure-xorg_xproto-output.txt"
@@ -943,6 +977,7 @@ function do_libpng()
   # https://sourceforge.net/projects/libpng/files/libpng16/
   # https://sourceforge.net/projects/libpng/files/libpng16/older-releases/
 
+  # https://archlinuxarm.org/packages/aarch64/libpng/files/PKGBUILD
   # https://aur.archlinux.org/cgit/aur.git/tree/PKGBUILD?h=libpng-git
   # https://aur.archlinux.org/cgit/aur.git/tree/PKGBUILD?h=mingw-w64-libpng
 
@@ -983,8 +1018,12 @@ function do_libpng()
 
           bash "${SOURCES_FOLDER_PATH}/${libpng_folder_name}/configure" --help
 
+          # --disable-static
+
           bash ${DEBUG} "${SOURCES_FOLDER_PATH}/${libpng_folder_name}/configure" \
-            --prefix="${INSTALL_FOLDER_PATH}" 
+            --prefix="${INSTALL_FOLDER_PATH}" \
+            \
+            --enable-arm-neon=no \
 
           cp "config.log" "${LOGS_FOLDER_PATH}/config-libpng-log.txt"
         ) 2>&1 | tee "${LOGS_FOLDER_PATH}/configure-libpng-output.txt"

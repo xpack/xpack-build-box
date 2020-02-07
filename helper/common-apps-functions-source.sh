@@ -11,6 +11,7 @@ function do_native_binutils()
 {
   # https://www.gnu.org/software/binutils/
   # https://ftp.gnu.org/gnu/binutils/
+  # https://archlinuxarm.org/packages/aarch64/binutils/files/PKGBUILD
   # https://aur.archlinux.org/cgit/aur.git/tree/PKGBUILD?h=gdb-git
 
   # 2017-07-24, "2.29"
@@ -59,11 +60,18 @@ function do_native_binutils()
             --prefix="${INSTALL_FOLDER_PATH}" \
             --with-pkgversion="${XBB_BINUTILS_BRANDING}" \
             \
-            --disable-shared \
-            --enable-static \
+            --with-pic \
+            \
             --enable-threads \
             --enable-deterministic-archives \
-            --disable-gdb
+            --enable-ld=default \
+            --enable-lto \
+            --enable-plugins \
+            --enable-relro \
+            --enable-shared \
+            --disable-gdb \
+            --disable-werror \
+            --disable-sim \
 
           cp "config.log" "${LOGS_FOLDER_PATH}/config-native-binutils-log.txt"
         ) 2>&1 | tee "${LOGS_FOLDER_PATH}/configure-native-binutils-output.txt"
@@ -100,6 +108,7 @@ function do_native_gcc()
   # https://ftp.gnu.org/gnu/gcc/
   # https://gcc.gnu.org/wiki/InstallingGCC
   # https://gcc.gnu.org/install/build.html
+  # https://archlinuxarm.org/packages/aarch64/gcc/files/PKGBUILD
   # https://aur.archlinux.org/cgit/aur.git/tree/PKGBUILD?h=gcc-git
 
   # 2018-12-06, "7.4.0"
@@ -183,7 +192,6 @@ function do_native_gcc()
               --enable-gnu-indirect-function \
               --disable-multilib \
               --disable-werror \
-              --disable-nls \
               --disable-bootstrap \
 
           else [ "${HOST_UNAME}" == "Linux" ]
@@ -193,7 +201,16 @@ function do_native_gcc()
             # --enable-libmpx (fails on arm)
             # --enable-clocale=gnu 
 
-            bash ${DEBUG} "${SOURCES_FOLDER_PATH}/${native_gcc_folder_name}/configure" \
+            config_options=()
+            if [ "${HOST_MACHINE}" == "aarch64" ]
+            then
+              config_options+=("--enable-fix-cortex-a53-835769")
+              config_options+=("--enable-fix-cortex-a53-843419")
+            fi
+
+            set +u
+
+            "${SOURCES_FOLDER_PATH}/${native_gcc_folder_name}/configure" \
               --prefix="${INSTALL_FOLDER_PATH}" \
               --program-suffix="${XBB_GCC_SUFFIX}" \
               --with-pkgversion="${XBB_GCC_BRANDING}" \
@@ -201,23 +218,31 @@ function do_native_gcc()
               --enable-languages=c,c++ \
               \
               --with-linker-hash-style=gnu \
+              --with-system-zlib \
+              --with-isl \
               \
+              --enable-shared \
               --enable-checking=release \
               --enable-threads=posix \
               --enable-__cxa_atexit \
-              --disable-libunwind-exceptions \
-              --disable-libstdcxx-pch \
-              --disable-libssp \
+              --enable-clocale=gnu \
               --enable-gnu-unique-object \
               --enable-linker-build-id \
               --enable-lto \
               --enable-plugin \
               --enable-install-libiberty \
               --enable-gnu-indirect-function \
+              --enable-default-pie \
+              --enable-default-ssp \
+              --disable-libunwind-exceptions \
+              --disable-libstdcxx-pch \
+              --disable-libssp \
               --disable-multilib \
               --disable-werror \
-              --disable-nls \
               --disable-bootstrap \
+              ${config_options[@]}
+              
+            set -u
 
           fi
 
@@ -289,6 +314,7 @@ __EOF__
 function do_mingw_binutils() 
 {
   # https://ftp.gnu.org/gnu/binutils/
+  # https://aur.archlinux.org/cgit/aur.git/tree/PKGBUILD?h=mingw-w64-binutils
   # https://aur.archlinux.org/cgit/aur.git/tree/PKGBUILD?h=mingw-w64-binutils-weak
 
   # 2017-07-24, "2.29"
@@ -341,11 +367,12 @@ function do_mingw_binutils()
             --build="${BUILD}" \
             --target="${MINGW_TARGET}" \
             \
-            --disable-shared \
             --enable-static \
-            --disable-multilib \
             --enable-lto \
             --enable-plugins \
+            --enable-deterministic-archives \
+            --disable-shared \
+            --disable-multilib \
             --disable-nls \
             --disable-werror
 
@@ -385,6 +412,7 @@ function do_mingw_all()
 {
   # http://mingw-w64.org/doku.php/start
   # https://sourceforge.net/projects/mingw-w64/files/mingw-w64/mingw-w64-release/
+  # https://aur.archlinux.org/cgit/aur.git/tree/PKGBUILD?h=mingw-w64-gcc
 
   # 2018-06-03, "5.0.4"
   # 2018-09-16, "6.0.0"
@@ -478,6 +506,7 @@ function do_mingw_all()
 
   # https://gcc.gnu.org
   # https://gcc.gnu.org/wiki/InstallingGCC
+  # https://aur.archlinux.org/cgit/aur.git/tree/PKGBUILD?h=mingw-w64-binutils
   # https://aur.archlinux.org/cgit/aur.git/tree/PKGBUILD?h=mingw-w64-gcc
 
   # https://ftp.gnu.org/gnu/gcc/
@@ -529,19 +558,21 @@ function do_mingw_all()
             --build="${BUILD}" \
             --target=${MINGW_TARGET} \
             \
+            --with-system-zlib \
+            \
             --enable-languages=c,c++ \
             --enable-shared \
             --enable-static \
             --enable-threads=posix \
             --enable-fully-dynamic-string \
             --enable-libstdcxx-time=yes \
-            --with-system-zlib \
+            --enable-libstdcxx-filesystem-ts=yes \
             --enable-cloog-backend=isl \
             --enable-lto \
-            --disable-dw2-exceptions \
             --enable-libgomp \
+            --enable-checking=release \
+            --disable-dw2-exceptions \
             --disable-multilib \
-            --enable-checking=release
 
           cp "config.log" "${LOGS_FOLDER_PATH}/config-mingw-gcc-step1-log.txt"
         ) 2>&1 | tee "${LOGS_FOLDER_PATH}/configure-mingw-gcc-step1-output.txt"
@@ -569,6 +600,7 @@ function do_mingw_all()
 
   # ---------------------------------------------------------------------------
 
+  # https://aur.archlinux.org/cgit/aur.git/tree/PKGBUILD?h=mingw-w64-crt
   # https://aur.archlinux.org/cgit/aur.git/tree/PKGBUILD?h=mingw-w64-crt-git
 
   local mingw_build_crt_folder_name="mingw-${mingw_version}-crt"
@@ -662,6 +694,7 @@ function do_mingw_all()
 
   # ---------------------------------------------------------------------------
 
+  # https://aur.archlinux.org/cgit/aur.git/tree/PKGBUILD?h=mingw-w64-winpthreads
   # https://aur.archlinux.org/cgit/aur.git/tree/PKGBUILD?h=mingw-w64-winpthreads-git
 
   local mingw_build_winpthreads_folder_name="mingw-${mingw_version}-winpthreads"
@@ -699,7 +732,7 @@ function do_mingw_all()
             --host="${MINGW_TARGET}" \
             \
             --enable-static \
-            --enable-shared
+            --enable-shared \
 
          cp "config.log" "${LOGS_FOLDER_PATH}/config-mingw-winpthreads-log.txt"
         ) 2>&1 | tee "${LOGS_FOLDER_PATH}/configure-mingw-winpthreads-output.txt"
@@ -823,6 +856,7 @@ function do_openssl()
 {
   # https://www.openssl.org
   # https://www.openssl.org/source/
+  # https://archlinuxarm.org/packages/aarch64/openssl/files/PKGBUILD
   # https://aur.archlinux.org/cgit/aur.git/tree/PKGBUILD?h=openssl-static
   # https://aur.archlinux.org/cgit/aur.git/tree/PKGBUILD?h=openssl-git
   
@@ -894,19 +928,26 @@ function do_openssl()
 
             "./config" --help
 
-            local optflags=""
+            config_options=()
             if [ "${HOST_MACHINE}" == "x86_64" ]
             then
-              optflags="enable-ec_nistp_64_gcc_128"
+              config_options+=("enable-ec_nistp_64_gcc_128")
+            elif [ "${HOST_MACHINE}" == "aarch64" ]
+            then
+              config_options+=("no-afalgeng")
             fi
+
+            set +u
 
             "./config" \
               --prefix="${INSTALL_FOLDER_PATH}" \
               --openssldir="${INSTALL_FOLDER_PATH}/openssl" \
               shared \
               enable-md2 enable-rc5 enable-tls enable-tls1_3 enable-tls1_2 enable-tls1_1 \
-              ${optflags} \
+              ${config_options[@]} \
               "-Wa,--noexecstack ${CPPFLAGS} ${CFLAGS} ${LDFLAGS}"
+
+            set -u
 
           fi
 
@@ -969,6 +1010,7 @@ function do_curl()
   # https://curl.haxx.se
   # https://curl.haxx.se/download/
   # https://curl.haxx.se/download/curl-7.64.1.tar.xz
+  # https://archlinuxarm.org/packages/aarch64/curl/files/PKGBUILD
   # https://aur.archlinux.org/cgit/aur.git/tree/PKGBUILD?h=curl-git
 
   # 2017-10-23, "7.56.1"
@@ -1013,18 +1055,19 @@ function do_curl()
           bash ${DEBUG} "${SOURCES_FOLDER_PATH}/${curl_folder_name}/configure" \
             --prefix="${INSTALL_FOLDER_PATH}" \
             \
-            --disable-debug \
+            --with-gssapi \
+            --with-ca-bundle="${INSTALL_FOLDER_PATH}/openssl/ca-bundle.crt" \
             --with-ssl \
+            \
             --enable-optimize \
+            --enable-versioned-symbols \
+            --enable-threaded-resolver \
             --disable-manual \
             --disable-ldap \
             --disable-ldaps \
             --disable-werror \
             --disable-warnings \
-            --enable-versioned-symbols \
-            --enable-threaded-resolver \
-            --with-gssapi \
-            --with-ca-bundle="${INSTALL_FOLDER_PATH}/openssl/ca-bundle.crt"
+            --disable-debug \
 
           cp "config.log" "${LOGS_FOLDER_PATH}/config-curl-log.txt"
         ) 2>&1 | tee "${LOGS_FOLDER_PATH}/configure-curl-output.txt"
@@ -1063,6 +1106,7 @@ function do_xz()
   # https://tukaani.org/xz/
   # https://sourceforge.net/projects/lzmautils/files/
   # https://tukaani.org/xz/xz-5.2.4.tar.xz
+  # https://archlinuxarm.org/packages/aarch64/xz/files/PKGBUILD
   # https://aur.archlinux.org/cgit/aur.git/tree/PKGBUILD?h=xz-git
 
   # 2016-12-30 "5.2.3"
@@ -1109,7 +1153,8 @@ function do_xz()
           bash ${DEBUG} "${SOURCES_FOLDER_PATH}/${xz_folder_name}/configure" \
             --prefix="${INSTALL_FOLDER_PATH}" \
             \
-            --disable-rpath
+            --disable-rpath \
+            --disable-werror \
 
           cp "config.log" "${LOGS_FOLDER_PATH}/config-xz-log.txt"
         ) 2>&1 | tee "${LOGS_FOLDER_PATH}/configure-xz-output.txt"
@@ -1146,6 +1191,7 @@ function do_tar()
 {
   # https://www.gnu.org/software/tar/
   # https://ftp.gnu.org/gnu/tar/
+  # https://archlinuxarm.org/packages/aarch64/tar/files/PKGBUILD
   # https://aur.archlinux.org/cgit/aur.git/tree/PKGBUILD?h=tar-git
 
   # 2016-05-16 "1.29"
@@ -1238,6 +1284,7 @@ function do_coreutils()
 {
   # https://www.gnu.org/software/coreutils/
   # https://ftp.gnu.org/gnu/coreutils/
+  # https://archlinuxarm.org/packages/aarch64/coreutils/files/PKGBUILD
 
   # 2018-07-01, "8.30"
   # 2019-03-10 "8.31"
@@ -1267,7 +1314,6 @@ function do_coreutils()
       export CXXFLAGS="${XBB_CXXFLAGS}"
       export LDFLAGS="${XBB_LDFLAGS_APP}"
 
-      local darwin_options=""
       # Use Apple GCC, since with GNU GCC it fails with some undefined symbols.
       if [ "${HOST_UNAME}" == "Darwin" ]
       then
@@ -1275,8 +1321,6 @@ function do_coreutils()
         # "_rpl_fchownat", referenced from:
         export CC=clang
         export CXX=clang++
-
-        darwin_options="--enable-no-install-program=ar"
       fi
 
       if [ ! -f "config.status" ]
@@ -1294,11 +1338,22 @@ function do_coreutils()
             export FORCE_UNSAFE_CONFIGURE=1
           fi
 
+          config_options=()
+          if [ "${HOST_UNAME}" == "Darwin" ]
+          then
+            config_options+=("--enable-no-install-program=ar")
+          fi
+
+          set +u
+
           # `ar` must be excluded, it interferes with Apple similar program.
           bash ${DEBUG} "${SOURCES_FOLDER_PATH}/${coreutils_folder_name}/configure" \
             --prefix="${INSTALL_FOLDER_PATH}" \
             \
-            ${darwin_options}
+            --with-openssl \
+            ${config_options[@]}
+
+          set -u
 
           cp "config.log" "${LOGS_FOLDER_PATH}/config-coreutils-log.txt"
         ) 2>&1 | tee "${LOGS_FOLDER_PATH}/configure-coreutils-output.txt"
@@ -1336,6 +1391,7 @@ function do_pkg_config()
 {
   # https://www.freedesktop.org/wiki/Software/pkg-config/
   # https://pkgconfig.freedesktop.org/releases/
+  # https://archlinuxarm.org/packages/aarch64/pkgconf/files/PKGBUILD
   # https://aur.archlinux.org/cgit/aur.git/tree/PKGBUILD?h=pkg-config-git
 
   # 2017-03-20, "0.29.2", latest
@@ -1427,6 +1483,7 @@ function do_m4()
 {
   # https://www.gnu.org/software/m4/
   # https://ftp.gnu.org/gnu/m4/
+  # https://archlinuxarm.org/packages/aarch64/m4/files/PKGBUILD
   # https://aur.archlinux.org/cgit/aur.git/tree/PKGBUILD?h=m4-git
 
   # 2016-12-31, "1.4.18", latest
@@ -1468,7 +1525,7 @@ function do_m4()
 
           bash ${DEBUG} "${SOURCES_FOLDER_PATH}/${m4_folder_name}/configure" \
             --prefix="${INSTALL_FOLDER_PATH}" \
-            --disable-dependency-tracking
+
 
           cp "config.log" "${LOGS_FOLDER_PATH}/config-m4-log.txt"
         ) 2>&1 | tee "${LOGS_FOLDER_PATH}/configure-m4-output.txt"
@@ -1512,6 +1569,7 @@ function do_gawk()
 {
   # https://www.gnu.org/software/gawk/
   # https://ftp.gnu.org/gnu/gawk/
+  # https://archlinuxarm.org/packages/aarch64/gawk/files/PKGBUILD
   # https://aur.archlinux.org/cgit/aur.git/tree/PKGBUILD?h=gawk-git
 
   # 2017-10-19, "4.2.0"
@@ -1672,6 +1730,7 @@ function do_autoconf()
 {
   # https://www.gnu.org/software/autoconf/
   # https://ftp.gnu.org/gnu/autoconf/
+  # https://archlinuxarm.org/packages/any/autoconf2.13/files/PKGBUILD
   # https://aur.archlinux.org/cgit/aur.git/tree/PKGBUILD?h=autoconf-git
 
   # 2012-04-24, "2.69", latest
@@ -1746,6 +1805,7 @@ function do_automake()
 {
   # https://www.gnu.org/software/automake/
   # https://ftp.gnu.org/gnu/automake/
+  # https://archlinuxarm.org/packages/any/automake/files/PKGBUILD
   # https://aur.archlinux.org/cgit/aur.git/tree/PKGBUILD?h=automake-git
 
   # 2015-01-05, "1.15"
@@ -1787,7 +1847,9 @@ function do_automake()
           bash "${SOURCES_FOLDER_PATH}/${automake_folder_name}/configure" --help
 
           bash ${DEBUG} "${SOURCES_FOLDER_PATH}/${automake_folder_name}/configure" \
-            --prefix="${INSTALL_FOLDER_PATH}" 
+            --prefix="${INSTALL_FOLDER_PATH}" \
+            \
+            --build="${BUILD}" \
 
           cp "config.log" "${LOGS_FOLDER_PATH}/config-automake-log.txt"
         ) 2>&1 | tee "${LOGS_FOLDER_PATH}/configure-automake-output.txt"
@@ -1825,6 +1887,7 @@ function do_libtool()
   # https://www.gnu.org/software/libtool/
   # http://ftpmirror.gnu.org/libtool/
   # http://ftpmirror.gnu.org/libtool/libtool-2.4.6.tar.xz
+  # https://archlinuxarm.org/packages/aarch64/libtool/files/PKGBUILD
   # https://aur.archlinux.org/cgit/aur.git/tree/PKGBUILD?h=libtool-git
 
   # 15-Feb-2015, "2.4.6", latest
@@ -1907,6 +1970,7 @@ function do_gettext()
 {
   # https://www.gnu.org/software/gettext/
   # https://ftp.gnu.org/gnu/gettext/
+  # https://archlinuxarm.org/packages/aarch64/gettext/files/PKGBUILD
   # https://aur.archlinux.org/cgit/aur.git/tree/PKGBUILD?h=gettext-git
 
   # 2016-06-09, "0.19.8"
@@ -1946,7 +2010,12 @@ function do_gettext()
           bash "${SOURCES_FOLDER_PATH}/${gettext_folder_name}/configure" --help
 
           bash ${DEBUG} "${SOURCES_FOLDER_PATH}/${gettext_folder_name}/configure" \
-            --prefix="${INSTALL_FOLDER_PATH}" 
+            --prefix="${INSTALL_FOLDER_PATH}" \
+            \
+            --with-xz \
+            --without-included-gettext \
+            --enable-csharp \
+            --enable-nls \
 
           cp "config.log" "${LOGS_FOLDER_PATH}/config-gettext-log.txt"
         ) 2>&1 | tee "${LOGS_FOLDER_PATH}/configure-gettext-output.txt"
@@ -1984,6 +2053,7 @@ function do_patch()
 {
   # https://www.gnu.org/software/patch/
   # https://ftp.gnu.org/gnu/patch/
+  # https://archlinuxarm.org/packages/aarch64/patch/files/PKGBUILD
   # https://aur.archlinux.org/cgit/aur.git/tree/PKGBUILD?h=patch-git
 
   # 2015-03-06, "2.7.5"
@@ -2060,6 +2130,7 @@ function do_diffutils()
 {
   # https://www.gnu.org/software/diffutils/
   # https://ftp.gnu.org/gnu/diffutils/
+  # https://archlinuxarm.org/packages/aarch64/diffutils/files/PKGBUILD
   # https://aur.archlinux.org/cgit/aur.git/tree/PKGBUILD?h=diffutils-git
 
   # 2017-05-21, "3.6"
@@ -2136,6 +2207,7 @@ function do_bison()
 {
   # https://www.gnu.org/software/bison/
   # https://ftp.gnu.org/gnu/bison/
+  # https://archlinuxarm.org/packages/aarch64/bison/files/PKGBUILD
   # https://aur.archlinux.org/cgit/aur.git/tree/PKGBUILD?h=bison-git
 
   # 2015-01-23, "3.0.4"
@@ -2223,6 +2295,7 @@ function do_flex()
   # https://www.gnu.org/software/flex/
   # https://github.com/westes/flex/releases
   # https://github.com/westes/flex/releases/download/v2.6.4/flex-2.6.4.tar.gz
+  # https://archlinuxarm.org/packages/aarch64/flex/files/PKGBUILD
   # https://aur.archlinux.org/cgit/aur.git/tree/PKGBUILD?h=flex-git
 
   # Apple uses 2.5.3
@@ -2316,6 +2389,7 @@ function do_make()
 {
   # https://www.gnu.org/software/make/
   # https://ftp.gnu.org/gnu/make/
+  # https://archlinuxarm.org/packages/aarch64/make/files/PKGBUILD
   # https://aur.archlinux.org/cgit/aur.git/tree/PKGBUILD?h=make-git
 
   # 2016-06-10, "4.2.1" (latest)
@@ -2356,8 +2430,7 @@ function do_make()
           bash "${SOURCES_FOLDER_PATH}/${make_folder_name}/configure" --help
 
           bash ${DEBUG} "${SOURCES_FOLDER_PATH}/${make_folder_name}/configure" \
-            --prefix="${INSTALL_FOLDER_PATH}" \
-            --with-guile
+            --prefix="${INSTALL_FOLDER_PATH}"
 
           cp "config.log" "${LOGS_FOLDER_PATH}/config-make-log.txt"
         ) 2>&1 | tee "${LOGS_FOLDER_PATH}/configure-make-output.txt"
@@ -2400,6 +2473,8 @@ function do_wget()
 {
   # https://www.gnu.org/software/wget/
   # https://ftp.gnu.org/gnu/wget/
+  # https://archlinuxarm.org/packages/aarch64/wget/files/PKGBUILD
+  # https://git.archlinux.org/svntogit/packages.git/tree/trunk/PKGBUILD?h=packages/wget
   # https://aur.archlinux.org/cgit/aur.git/tree/PKGBUILD?h=wget-git
 
   # 2016-06-10, "1.19"
@@ -2444,15 +2519,16 @@ function do_wget()
           # libpsl is not available anyway.
           bash ${DEBUG} "${SOURCES_FOLDER_PATH}/${wget_folder_name}/configure" \
             --prefix="${INSTALL_FOLDER_PATH}" \
-            --without-libpsl \
-            --without-included-regex \
-            --enable-nls \
-            --enable-dependency-tracking \
+            \
             --with-ssl=gnutls \
             --with-metalink \
+            --without-libpsl \
+            \
+            --enable-nls \
             --disable-debug \
             --disable-pcre \
-            --disable-pcre2 
+            --disable-pcre2 \
+            --disable-rpath \
 
           cp "config.log" "${LOGS_FOLDER_PATH}/config-wget-log.txt"
         ) 2>&1 | tee "${LOGS_FOLDER_PATH}/configure-wget-output.txt"
@@ -2490,6 +2566,7 @@ function do_texinfo()
 {
   # https://www.gnu.org/software/texinfo/
   # https://ftp.gnu.org/gnu/texinfo/
+  # https://archlinuxarm.org/packages/aarch64/texinfo/files/PKGBUILD
   # https://aur.archlinux.org/cgit/aur.git/tree/PKGBUILD?h=texinfo-svn
 
   # 2017-09-12, "6.5"
@@ -2569,6 +2646,7 @@ function do_cmake()
   # https://github.com/Kitware/CMake/releases/
   # https://github.com/Kitware/CMake/releases/download/v3.14.0/cmake-3.14.0.tar.gz
   # https://github.com/Kitware/CMake/releases/download/v3.13.4/cmake-3.13.4.tar.gz
+  # https://archlinuxarm.org/packages/aarch64/cmake/files/PKGBUILD
   # https://aur.archlinux.org/cgit/aur.git/tree/PKGBUILD?h=cmake-git
 
   # November 10, 2017, "3.9.6"
@@ -2620,7 +2698,8 @@ function do_cmake()
             bash "${SOURCES_FOLDER_PATH}/${cmake_folder_name}/bootstrap" --help || true
 
             bash ${DEBUG} "${SOURCES_FOLDER_PATH}/${cmake_folder_name}/bootstrap" \
-              --prefix="${INSTALL_FOLDER_PATH}" 
+              --prefix="${INSTALL_FOLDER_PATH}" \
+              --parallel="${JOBS}"
 
             cp "Bootstrap.cmk/cmake_bootstrap.log" "${LOGS_FOLDER_PATH}/bootstrap-cmake-log.txt"
           ) 2>&1 | tee "${LOGS_FOLDER_PATH}/bootstrap-cmake-output.txt"
@@ -2677,6 +2756,7 @@ function do_perl()
 {
   # https://www.cpan.org
   # http://www.cpan.org/src/
+  # https://archlinuxarm.org/packages/aarch64/perl/files/PKGBUILD
   # https://git.archlinux.org/svntogit/packages.git/tree/trunk/PKGBUILD?h=packages/perl
 
   # Fails to build on macOS
@@ -2727,6 +2807,7 @@ function do_perl()
             -Dprefix="${INSTALL_FOLDER_PATH}" \
             -Dcc="${CC}" \
             -Dccflags="${CFLAGS}" \
+            -Dlddlflags="-shared ${LDFLAGS}" -Dldflags="${LDFLAGS}" \
             -Duseshrplib \
             -Duselargefiles \
             -Dusethreads
@@ -2774,6 +2855,7 @@ function do_makedepend()
   # http://www.linuxfromscratch.org/blfs/view/7.4/x/makedepend.html
   # http://xorg.freedesktop.org/archive/individual/util
   # http://xorg.freedesktop.org/archive/individual/util/makedepend-1.0.5.tar.bz2
+  # https://aur.archlinux.org/cgit/aur.git/tree/PKGBUILD?h=makedepend
 
   # 2013-07-23, 1.0.5
   # 2019-03-16, 1.0.6
@@ -2852,6 +2934,7 @@ function do_patchelf()
   # https://nixos.org/patchelf.html
   # https://nixos.org/releases/patchelf/
   # https://nixos.org/releases/patchelf/patchelf-0.10/patchelf-0.10.tar.bz2
+  # https://archlinuxarm.org/packages/aarch64/patchelf/files/PKGBUILD
 
   # 2016-02-29, "0.9"
   # 2019-03-28, "0.10"
@@ -2930,6 +3013,7 @@ function do_dos2unix()
   # https://waterlan.home.xs4all.nl/dos2unix.html
   # http://dos2unix.sourceforge.net
   # https://waterlan.home.xs4all.nl/dos2unix/dos2unix-7.4.0.tar.gz
+  # https://archlinuxarm.org/packages/aarch64/dos2unix/files/PKGBUILD
 
   # 30-Oct-2017, "7.4.0"
   # 2019-09-24, "7.4.1"
@@ -3131,15 +3215,17 @@ function do_python2()
           bash ${DEBUG} "${SOURCES_FOLDER_PATH}/${python2_folder_name}/configure" \
             --prefix="${INSTALL_FOLDER_PATH}" \
             \
-            --enable-shared \
-            --enable-optimizations \
             --with-threads \
-            --enable-unicode=ucs4 \
             --with-system-expat \
             --with-system-ffi \
             --with-dbmliborder=gdbm:ndbm \
-            --without-ensurepip \
             --with-libiconv=native \
+            --without-ensurepip \
+            --with-lto \
+            \
+            --enable-shared \
+            --enable-optimizations \
+            --enable-unicode=ucs4 \
 
           cp "config.log" "${LOGS_FOLDER_PATH}/config-python2-log.txt"
         ) 2>&1 | tee "${LOGS_FOLDER_PATH}/configure-python2-output.txt"
@@ -3202,6 +3288,7 @@ function do_python3()
   # https://www.python.org/downloads/source/
   # https://www.python.org/ftp/python/3.7.3/Python-3.7.3.tar.xz
   
+  # https://archlinuxarm.org/packages/aarch64/python/files/PKGBUILD
   # https://git.archlinux.org/svntogit/packages.git/tree/trunk/PKGBUILD?h=packages/python
   # https://git.archlinux.org/svntogit/packages.git/tree/trunk/PKGBUILD?h=packages/python-pip
 
@@ -3260,18 +3347,20 @@ function do_python3()
           bash ${DEBUG} "${SOURCES_FOLDER_PATH}/${python3_folder_name}/configure" \
             --prefix="${INSTALL_FOLDER_PATH}" \
             \
-            --enable-shared \
             --with-universal-archs=${HOST_BITS}-bit \
             --with-computed-gotos \
-            --enable-optimizations \
             --with-system-expat \
             --with-system-ffi \
             --with-system-libmpdec \
             --with-dbmliborder=gdbm:ndbm \
-            --enable-loadable-sqlite-extensions \
             --with-openssl="${INSTALL_FOLDER_PATH}" \
-            --without-ensurepip
-            
+            --without-ensurepip \
+            --without-lto \
+            \
+            --enable-shared \
+            --enable-optimizations \
+            --enable-loadable-sqlite-extensions \
+             
           cp "config.log" "${LOGS_FOLDER_PATH}/config-python3-log.txt"
         ) 2>&1 | tee "${LOGS_FOLDER_PATH}/configure-python3-output.txt"
       fi
@@ -3325,6 +3414,7 @@ function do_scons()
   # http://scons.org
   # https://sourceforge.net/projects/scons/files/scons/
   # https://sourceforge.net/projects/scons/files/scons/3.0.5/scons-3.0.5.tar.gz/download
+  # https://archlinuxarm.org/packages/any/scons/files/PKGBUILD
   # https://aur.archlinux.org/cgit/aur.git/tree/PKGBUILD?h=python2-scons
 
   # 2017-09-16, "3.0.1"
@@ -3363,7 +3453,9 @@ function do_scons()
       # On macOS it uses the system python.
       python setup.py install \
         --prefix="${INSTALL_FOLDER_PATH}" \
-        --optimize=1
+        \
+        --optimize=1 \
+        --standard-lib \
 
     ) 2>&1 | tee "${LOGS_FOLDER_PATH}/install-scons-output.txt"
 
@@ -3388,6 +3480,7 @@ function do_meson
   # http://mesonbuild.com/
   # https://pypi.org/project/meson/
   # https://pypi.org/project/meson/0.50.0/#description
+  # https://archlinuxarm.org/packages/any/meson/files/PKGBUILD
 
   # Jan 7, 2020, "0.53.0"
 
@@ -3424,6 +3517,7 @@ function do_ninja()
   # https://github.com/ninja-build/ninja/releases
   # https://github.com/ninja-build/ninja/archive/v1.9.0.zip
   # https://github.com/ninja-build/ninja/archive/v1.9.0.tar.gz
+  # https://archlinuxarm.org/packages/aarch64/ninja/files/PKGBUILD
 
   # Jan 30, 2019 "1.9.0"
   # Jan 27, 2020, "1.10.0"
@@ -3492,6 +3586,7 @@ function do_p7zip()
 {
   # https://sourceforge.net/projects/p7zip/files/p7zip
   # https://sourceforge.net/projects/p7zip/files/p7zip/16.02/p7zip_16.02_src_all.tar.bz2/download
+  # https://archlinuxarm.org/packages/aarch64/p7zip/files/PKGBUILD
 
   # 2016-07-14, "16.02" (latest)
 
@@ -3577,6 +3672,7 @@ function do_wine()
   # https://www.winehq.org
   # https://dl.winehq.org/wine/source/
   # https://dl.winehq.org/wine/source/4.x/wine-4.3.tar.xz
+  # https://git.archlinux.org/svntogit/community.git/tree/trunk/PKGBUILD?h=packages/wine
 
   # 2017-09-16, "4.3"
   # 2019-11-29, "4.21"
