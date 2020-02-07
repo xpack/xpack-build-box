@@ -19,6 +19,13 @@ bash ~/Downloads/xpack-build-box.git/ubuntu/12-develop/amd64-build-v3.1.sh
 bash ~/Downloads/xpack-build-box.git/ubuntu/12-tex/amd64-build-v3.1.sh
 bash ~/Downloads/xpack-build-box.git/ubuntu/12-bootstrap/amd64-build-v3.1.sh
 bash ~/Downloads/xpack-build-box.git/ubuntu/12-xbb/amd64-build-v3.1.sh
+
+docker push "ilegeul/ubuntu:amd64-12.04"
+docker push "ilegeul/ubuntu:amd64-12.04-updated-v3.1"
+docker push "ilegeul/ubuntu:amd64-12.04-develop-v3.1"
+docker push "ilegeul/ubuntu:amd64-12.04-tex-v3.1"
+docker push "ilegeul/ubuntu:amd64-12.04-bootstrap-v3.1"
+docker push "ilegeul/ubuntu:amd64-12.04-xbb-v3.1"
 ```
 
 ```bash
@@ -29,6 +36,13 @@ bash ~/Downloads/xpack-build-box.git/ubuntu/12-develop/i386-build-v3.1.sh
 bash ~/Downloads/xpack-build-box.git/ubuntu/12-tex/i386-build-v3.1.sh
 bash ~/Downloads/xpack-build-box.git/ubuntu/12-bootstrap/i386-build-v3.1.sh
 bash ~/Downloads/xpack-build-box.git/ubuntu/12-xbb/i386-build-v3.1.sh
+
+docker push "ilegeul/ubuntu:i386-12.04"
+docker push "ilegeul/ubuntu:i386-12.04-updated-v3.1"
+docker push "ilegeul/ubuntu:i386-12.04-develop-v3.1"
+docker push "ilegeul/ubuntu:i386-12.04-tex-v3.1"
+docker push "ilegeul/ubuntu:i386-12.04-bootstrap-v3.1"
+docker push "ilegeul/ubuntu:i386-12.04-xbb-v3.1"
 ```
 
 ```bash
@@ -39,6 +53,13 @@ bash ~/Downloads/xpack-build-box.git/ubuntu/16-develop/arm64-build-v3.1.sh
 bash ~/Downloads/xpack-build-box.git/ubuntu/16-tex/arm64-build-v3.1.sh
 bash ~/Downloads/xpack-build-box.git/ubuntu/16-bootstrap/arm64-build-v3.1.sh
 bash ~/Downloads/xpack-build-box.git/ubuntu/16-xbb/arm64-build-v3.1.sh
+
+docker push "ilegeul/ubuntu:arm64-16.04"
+docker push "ilegeul/ubuntu:arm64-16.04-updated-v3.1"
+docker push "ilegeul/ubuntu:arm64-16.04-develop-v3.1"
+docker push "ilegeul/ubuntu:arm64-16.04-tex-v3.1"
+docker push "ilegeul/ubuntu:arm64-16.04-bootstrap-v3.1"
+docker push "ilegeul/ubuntu:arm64-16.04-xbb-v3.1"
 ```
 
 ```bash
@@ -49,4 +70,11 @@ bash ~/Downloads/xpack-build-box.git/ubuntu/16-develop/armhf-build-v3.1.sh
 bash ~/Downloads/xpack-build-box.git/ubuntu/16-tex/armhf-build-v3.1.sh
 bash ~/Downloads/xpack-build-box.git/ubuntu/16-bootstrap/armhf-build-v3.1.sh
 bash ~/Downloads/xpack-build-box.git/ubuntu/16-xbb/armhf-build-v3.1.sh
+
+docker push "ilegeul/ubuntu:armhf-16.04"
+docker push "ilegeul/ubuntu:armhf-16.04-updated-v3.1"
+docker push "ilegeul/ubuntu:armhf-16.04-develop-v3.1"
+docker push "ilegeul/ubuntu:armhf-16.04-tex-v3.1"
+docker push "ilegeul/ubuntu:armhf-16.04-bootstrap-v3.1"
+docker push "ilegeul/ubuntu:armhf-16.04-xbb-v3.1"
 ```
