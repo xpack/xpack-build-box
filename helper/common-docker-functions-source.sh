@@ -97,21 +97,33 @@ function docker_prepare_env()
   
   IS_BOOTSTRAP=${IS_BOOTSTRAP:-""}
 
-  # The place where files are downloaded.
-  CACHE_FOLDER_PATH="${WORK_FOLDER_PATH}/cache"
-
   if [ "${IS_BOOTSTRAP}" == "y" ]
   then
     # Make all tools choose gcc, not the old cc.
-    export CC=gcc
-    export CXX=g++
+    CC=gcc
+    CXX=g++
   else
     # Build the XBB tools with the bootstrap compiler.
     # Some packages fail, and have to revert to the Apple clang.
     CC="gcc-8bs"
     CXX="g++-8bs"
   fi
-  
+
+  if [ "${IS_BOOTSTRAP}" != "y" ]
+  then
+    if [ ! -d "${XBB_BOOTSTRAP_FOLDER}" -o ! -x "${XBB_BOOTSTRAP_FOLDER}/bin/${CXX}" ]
+    then
+      echo "XBB Bootstrap not found in \"${XBB_BOOTSTRAP_FOLDER}\""
+      exit 1
+    fi
+  fi
+
+  # The place where files are downloaded.
+  CACHE_FOLDER_PATH="${WORK_FOLDER_PATH}/cache"
+
+  export CC
+  export CXX
+
   echo
   echo "env..."
   env

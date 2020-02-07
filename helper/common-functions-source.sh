@@ -130,6 +130,32 @@ function detect_host()
 
 function prepare_xbb_env()
 {
+  IS_BOOTSTRAP=${IS_BOOTSTRAP:-""}
+
+  if [ "${HOST_UNAME}" == "Darwin" ]
+  then
+    macos_version=$(defaults read loginwindow SystemVersionStampAsString)
+    xclt_version=$(xcode-select --version | sed -e 's/xcode-select version \([0-9]*\)\./\1/')
+
+    if [ "${IS_BOOTSTRAP}" == "y" ]
+    then
+      CC=${CC:-"clang"}
+      CXX=${CXX:-"clang++"}
+    else
+      CC=${CC:-"gcc-8bs"}
+      CXX=${CXX:-"g++-8bs"}
+    fi
+  else
+    if [ "${IS_BOOTSTRAP}" == "y" ]
+    then
+      CC=${CC:-"gcc"}
+      CXX=${CXX:-"g++"}
+    else
+      CC=${CC:-"gcc-8bs"}
+      CXX=${CXX:-"g++-8bs"}
+    fi
+  fi
+
   if [ "${IS_BOOTSTRAP}" != "y" ]
   then
     if [ ! -d "${XBB_BOOTSTRAP_FOLDER}" -o ! -x "${XBB_BOOTSTRAP_FOLDER}/bin/${CXX}" ]
@@ -152,18 +178,6 @@ function prepare_xbb_env()
   INSTALL_FOLDER_PATH="${XBB_FOLDER}"
 
   # ---------------------------------------------------------------------------
-
-  if [ "${HOST_UNAME}" == "Darwin" ]
-  then
-    macos_version=$(defaults read loginwindow SystemVersionStampAsString)
-    xclt_version=$(xcode-select --version | sed -e 's/xcode-select version \([0-9]*\)\./\1/')
-
-    CC=${CC:-"clang"}
-    CXX=${CXX:-"clang++"}
-  else
-    CC=${CC:-"gcc"}
-    CXX=${CXX:-"g++"}
-  fi
 
   # ---------------------------------------------------------------------------
 
@@ -202,11 +216,11 @@ function prepare_xbb_env()
 
   # ---------------------------------------------------------------------------
 
-  if [ -f "/.dockerenv" ]
+  if [ "${HOST_UNAME}" == "Darwin" ]
   then
-    JOBS=${JOBS:-"$(nproc)"}
+    JOBS=${JOBS:-"$(sysctl -n hw.ncpu)"}
   else
-    JOBS=${JOBS:-"1"}
+    JOBS=${JOBS:-"$(nproc)"}
   fi
 
   # Default PATH.
