@@ -56,7 +56,6 @@ gawk \
 gcc++ \
 gettext \
 git \
-help2man \
 libc6-dev \
 libtool \
 m4 \
@@ -86,10 +85,10 @@ mesa-common-dev
 apt-get install --yes \
 libudev-dev
 
-apt-get install --yes software-properties-common
-
 # For add-apt-repository
-apt-get install --yes python-software-properties
+apt-get install --yes software-properties-common
+# Not longer available.
+# apt-get install --yes python-software-properties
 
 add-apt-repository --yes ppa:ubuntu-toolchain-r/test 
 add-apt-repository --yes ppa:openjdk-r/ppa
@@ -138,6 +137,7 @@ apt-get update
 apt-get install --yes \
 dos2unix \
 texinfo \
+help2man \
 
 # GCC 6.0.1 already available, update to 6.5.
 apt-get install --yes \
