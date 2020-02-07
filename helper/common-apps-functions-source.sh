@@ -140,8 +140,8 @@ function do_native_gcc()
 
       CPPFLAGS="${XBB_CPPFLAGS}"
       CPPFLAGS_FOR_TARGET="${XBB_CPPFLAGS}"
-      CFLAGS="${XBB_CFLAGS} -Wno-sign-compare -Wno-varargs -Wno-tautological-compare  "
-      CXXFLAGS="${XBB_CXXFLAGS} -Wno-sign-compare -Wno-varargs -Wno-tautological-compare"
+      CFLAGS="${XBB_CFLAGS} -Wno-sign-compare -Wno-varargs -Wno-tautological-compare -Wno-format-security -Wno-enum-compare -Wno-abi -Wno-cast-function-type -Wno-maybe-uninitialized"
+      CXXFLAGS="${XBB_CXXFLAGS} -Wno-sign-compare -Wno-varargs -Wno-tautological-compare -Wno-format -Wno-abi -Wno-cast-function-type -Wno-maybe-uninitialized"
       LDFLAGS="${XBB_LDFLAGS_APP}"
 
       export CPPFLAGS
@@ -1418,7 +1418,8 @@ function do_pkg_config()
       xbb_activate
 
       export CPPFLAGS="${XBB_CPPFLAGS}"
-      export CFLAGS="${XBB_CFLAGS} -Wno-int-conversion -Wno-unused-value -Wno-unused-function -Wno-deprecated-declarations -Wno-return-type -Wno-tautological-constant-out-of-range-compare -Wno-sometimes-uninitialized"
+      # -Wno-sometimes-uninitialized -Wno-tautological-constant-out-of-range-compare 
+      export CFLAGS="${XBB_CFLAGS} -Wno-int-conversion -Wno-unused-value -Wno-unused-function -Wno-deprecated-declarations -Wno-return-type  -Wno-unused-but-set-variable"
       export CXXFLAGS="${XBB_CXXFLAGS}"
       export LDFLAGS="${XBB_LDFLAGS_APP}"
 
@@ -2791,7 +2792,8 @@ function do_perl()
       xbb_activate
 
       export CPPFLAGS="${XBB_CPPFLAGS}"
-      export CFLAGS="${XBB_CFLAGS} -Wno-implicit-fallthrough -Wno-nonnull -Wno-format -Wno-sign-compare -Wno-null-pointer-arithmetic"
+      # -Wno-null-pointer-arithmetic -Wno-implicit-fallthrough
+      export CFLAGS="${XBB_CFLAGS}  -Wno-nonnull -Wno-format -Wno-sign-compare  -Wno-unused-result -Wno-nonnull-compare -Wno-unused-value -Wno-misleading-indentation -Wno-unused-const-variable -Wno-unused-but-set-variable"
       export CXXFLAGS="${XBB_CXXFLAGS}"
       export LDFLAGS="${XBB_LDFLAGS_APP}"
 
@@ -2882,7 +2884,7 @@ function do_makedepend()
       xbb_activate
 
       export CPPFLAGS="${XBB_CPPFLAGS}"
-      export CFLAGS="${XBB_CFLAGS}"
+      export CFLAGS="${XBB_CFLAGS} -Wno-shadow -Wno-discarded-qualifiers"
       export CXXFLAGS="${XBB_CXXFLAGS}"
       export LDFLAGS="${XBB_LDFLAGS_APP}"
       export PKG_CONFIG_PATH="${INSTALL_FOLDER_PATH}/share/pkgconfig:${PKG_CONFIG_PATH}"
@@ -3186,7 +3188,7 @@ function do_python2()
 
       export CPPFLAGS="${XBB_CPPFLAGS}"
       # export CFLAGS="${XBB_CFLAGS} -Wno-int-in-bool-context -Wno-maybe-uninitialized -Wno-nonnull -Wno-stringop-overflow"
-      export CFLAGS="${XBB_CFLAGS} -Wno-nonnull"
+      export CFLAGS="${XBB_CFLAGS} -Wno-nonnull -Wno-unused-but-set-variable -Wno-unused-value -Wno-unused-result -Wno-misleading-indentation -Wno-unused-const-variable -Wno-maybe-uninitialized"
       export CXXFLAGS="${XBB_CXXFLAGS}"
       export LDFLAGS="${XBB_LDFLAGS_APP}"
 
