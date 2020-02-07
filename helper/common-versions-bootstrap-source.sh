@@ -119,7 +119,7 @@ function do_build_versions()
     then
       # depends=('bzip2' 'gdbm' 'openssl' 'zlib' 'expat' 'sqlite' 'libffi')
       # macOS 10.10 uses 2.7.10, bring it in sync.
-      do_python "2.7.10" # "2.7.12" # "2.7.14" # "2.7.16" # "2.7.14"
+      do_python2 "2.7.10" # "2.7.12" # "2.7.14" # "2.7.16" # "2.7.14"
     fi
     # depends=('python2')
     do_scons "3.0.5" # "3.0.1"
