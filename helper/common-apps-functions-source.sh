@@ -2167,8 +2167,12 @@ function do_bison()
       export CFLAGS="${XBB_CFLAGS}"
       export CXXFLAGS="${XBB_CXXFLAGS}"
       export LDFLAGS="${XBB_LDFLAGS_APP}"
-      # undefined reference to `clock_gettime' on docker
-      export LIBS="-lrt"
+
+      if [ "${HOST_UNAME}" == "Linux" ]
+      then
+        # undefined reference to `clock_gettime' on docker
+        export LIBS="-lrt"
+      fi
 
       if [ ! -f "config.status" ]
       then
