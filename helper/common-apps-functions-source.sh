@@ -189,7 +189,7 @@ function do_native_gcc()
 
             # The Linux build also uses:
             # --with-linker-hash-style=gnu
-            # --enable-libmpx 
+            # --enable-libmpx (fails on arm)
             # --enable-clocale=gnu 
 
             bash ${DEBUG} "${SOURCES_FOLDER_PATH}/${native_gcc_folder_name}/configure" \
@@ -200,7 +200,6 @@ function do_native_gcc()
               --enable-languages=c,c++ \
               \
               --with-linker-hash-style=gnu \
-              --enable-libmpx \
               \
               --enable-checking=release \
               --enable-threads=posix \
