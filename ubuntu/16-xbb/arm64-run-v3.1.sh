@@ -42,6 +42,8 @@ source "${helper_folder_path}/common-docker-functions-source.sh"
 
 # -----------------------------------------------------------------------------
 
+detect_host
+
 host_init_docker_env
 host_init_docker_input \
   "$(dirname $(dirname "${script_folder_path}"))/ca-bundle/ca-bundle.crt" \
