@@ -56,13 +56,6 @@ XBB_BOOTSTRAP_FOLDER="${HOME}/opt/xbb-bootstrap"
 
 WORK_FOLDER_PATH="${HOME}/Work"
 
-IS_BOOTSTRAP="n"
-
-# Build the XBB tools with the bootstrap compiler.
-# Some packages fail, and have to revert to the Apple clang.
-CC="gcc-7bs"
-CXX="g++-7bs"
-
 echo
 echo "$(uname) XBB v${XBB_VERSION} build script started..."
 
@@ -99,9 +92,6 @@ function xbb_activate()
 do_build_versions
 
 do_strip_debug_libs
-
-# Only in final Docker image
-# do_cleanup
 
 # -----------------------------------------------------------------------------
 
