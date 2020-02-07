@@ -123,7 +123,7 @@ function do_build_versions()
 
     # makedepend is needed by openssl
     do_util_macros "1.19.2" # "1.17.1"
-    do_xorg_xproto "7.0.31"
+    do_xorg_xproto "7.0.31" # Needs a patch for aarch64.
     do_makedepend "1.0.6" # "1.0.5"
 
     # -------------------------------------------------------------------------

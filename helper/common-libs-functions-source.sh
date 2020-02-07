@@ -880,13 +880,16 @@ function do_xorg_xproto()
   local xorg_xproto_archive="${xorg_xproto_folder_name}.tar.bz2"
   local xorg_xproto_url="https://www.x.org/releases/individual/proto/${xorg_xproto_archive}"
 
+  # Add aarch64 to the list of Arm architectures.
+  local  xorg_xproto_patch_file_path="${helper_folder_path}/patches/${xorg_xproto_folder_name}.patch"
+
   local xorg_xproto_stamp_file_path="${STAMPS_FOLDER_PATH}/stamp-xorg_xproto-${xorg_xproto_version}-installed"
   if [ ! -f "${xorg_xproto_stamp_file_path}" -o ! -d "${LIBS_BUILD_FOLDER_PATH}/${xorg_xproto_folder_name}" ]
   then
 
     cd "${SOURCES_FOLDER_PATH}"
 
-    download_and_extract "${xorg_xproto_url}" "${xorg_xproto_archive}" "${xorg_xproto_folder_name}"
+    download_and_extract "${xorg_xproto_url}" "${xorg_xproto_archive}" "${xorg_xproto_folder_name}" "${xorg_xproto_patch_file_path}"
 
     (
       mkdir -p "${LIBS_BUILD_FOLDER_PATH}/${xorg_xproto_folder_name}"
@@ -908,7 +911,9 @@ function do_xorg_xproto()
           bash "${SOURCES_FOLDER_PATH}/${xorg_xproto_folder_name}/configure" --help
 
           bash ${DEBUG} "${SOURCES_FOLDER_PATH}/${xorg_xproto_folder_name}/configure" \
-            --prefix="${INSTALL_FOLDER_PATH}" 
+            --prefix="${INSTALL_FOLDER_PATH}" \
+            \
+            --build="${BUILD}" \
 
           cp "config.log" "${LOGS_FOLDER_PATH}/config-xorg_xproto-log.txt"
         ) 2>&1 | tee "${LOGS_FOLDER_PATH}/configure-xorg_xproto-output.txt"
