@@ -529,7 +529,7 @@ function do_strip_debug_libs()
   echo
   echo "Stripping debug info from libraries..."
 
-  if [ "${HOST_UNAME}" != "Darwin" ]
+  if [ "${HOST_UNAME}" == "Linux" ]
   then
     (
       cd "${XBB_FOLDER}"
