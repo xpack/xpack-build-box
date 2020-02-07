@@ -17,6 +17,7 @@ function do_native_binutils()
   # 2018-07-14, "2.31"
   # 2019-02-02, "2.32"
   # 2019-10-12, "2.33.1"
+  # 2020-02-01, "2.34"
 
   local native_binutils_version="$1"
 
@@ -104,7 +105,7 @@ function do_native_gcc()
   # 2018-12-06, "7.4.0"
   # 2019-11-14, "7.5.0"
   # 2019-02-22, "8.3.0"
-  # 2019-08-12, "9.2.0" - requires -liconv for C++
+  # 2019-08-12, "9.2.0"
 
   local native_gcc_version="$1"
   
@@ -3421,6 +3422,7 @@ function do_ninja()
   # https://github.com/ninja-build/ninja/archive/v1.9.0.tar.gz
 
   # Jan 30, 2019 "1.9.0"
+  # Jan 27, 2020, "1.10.0"
 
   local ninja_version="$1"
 
@@ -3576,6 +3578,7 @@ function do_wine()
   # 2019-11-29, "4.21"
   # Fails with a missing yywrap
   # 2020-01-21, "5.0"
+  # 2020-02-02, "5.1"
 
   local wine_version="$1"
 

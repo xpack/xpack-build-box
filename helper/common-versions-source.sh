@@ -14,9 +14,10 @@ function do_build_versions()
 
     # -------------------------------------------------------------------------
 
+    # The main characteristic of XBB is the compiler version.
     XBB_GCC_VERSION="9.2.0" # "8.3.0" # "7.4.0"
     XBB_GCC_SUFFIX="-9" # "-8"
-    XBB_BINUTILS_VERSION="2.33.1"
+    XBB_BINUTILS_VERSION="2.34" # "2.33.1"
 
     XBB_BINUTILS_BRANDING="xPack Build Box Binutils\x2C ${HOST_BITS}-bit"
     XBB_GCC_BRANDING="xPack Build Box GCC\x2C ${HOST_BITS}-bit"
@@ -63,7 +64,7 @@ function do_build_versions()
     # depends=('glibc' 'gmp')
     do_nettle "3.5.1" # "3.4.1"
 
-    # Needed by wine.
+    # Required by wine.
     do_libpng "1.6.37"
 
     # Library, required by wget.
@@ -188,7 +189,7 @@ function do_build_versions()
 
     # Requires scons
     # depends=('python2')
-    do_ninja "1.9.0"
+    do_ninja "1.10.0" # "1.9.0"
 
     # depends=('curl' 'expat>=2.0' 'perl-error' 'perl>=5.14.0' 'openssl' 'pcre2' 'grep' 'shadow')
     do_git "2.25.0" # "2.21.0"
@@ -210,8 +211,8 @@ function do_build_versions()
     # makedepends=('binutils>=2.26' 'libmpc' 'gcc-ada' 'doxygen' 'git')
     do_native_gcc "${XBB_GCC_VERSION}"
      
-    # mingw-w64 binutils and gcc.
-    if [ "${HOST_UNAME}" != "Darwin" ]
+    # Build mingw-w64 binutils and gcc only on Intel Linux.
+    if [ "${HOST_UNAME}" == "Linux" -a \( "${HOST_MACHINE}" == "x86_64" -o "${HOST_MACHINE}" == "i686" \)]
     then
       # depends=('zlib')
       do_mingw_binutils "${XBB_BINUTILS_VERSION}"
@@ -219,11 +220,13 @@ function do_build_versions()
       do_mingw_all "7.0.0" "${XBB_GCC_VERSION}" # "5.0.4" "7.4.0"
     fi
 
-    # Benefits from mingw
-    if [ "${HOST_UNAME}" != "Darwin" ]
+
+    # Build wine only on Intel Linux.
+    # Benefits from having mingw in PATH.
+    if [ "${HOST_UNAME}" == "Linux" -a \( "${HOST_MACHINE}" == "x86_64" -o "${HOST_MACHINE}" == "i686" \)]
     then
       # depends=('libpng')
-      do_wine "5.0" # "4.3"
+      do_wine "5.1" # "5.0" # "4.3"
 
       # configure: OpenCL 64-bit development files not found, OpenCL won't be supported.
       # configure: pcap 64-bit development files not found, wpcap won't be supported.
