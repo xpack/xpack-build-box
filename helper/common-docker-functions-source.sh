@@ -62,7 +62,7 @@ function host_clean_docker_input()
 
 function host_run_docker_it()
 {
-  out="${HOME}/opt/${name}-${arch}"
+  out="${HOME}/opt/${name}-${HOST_MACHINE}"
   mkdir -p "${out}"
 
   echo 
