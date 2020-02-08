@@ -153,6 +153,11 @@ apt-get install --yes openjdk-8-jdk
 apt-get install --yes ant
 apt-get install --yes maven
 
+# https://www.thomas-krenn.com/en/wiki/Configure_Locales_in_Ubuntu
+apt-get install --yes locales
+locale-gen en_US.UTF-8
+update-locale LANG=en_US.UTF-8
+
 # patchelf - not present in precise
 
 # -----------------------------------------------------------------------------
