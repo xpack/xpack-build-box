@@ -403,7 +403,7 @@ function do_nettle()
       xbb_activate
 
       export CPPFLAGS="${XBB_CPPFLAGS}"
-      export CFLAGS="${XBB_CFLAGS} -Wno-implicit-fallthrough -Wno-deprecated-declarations"
+      export CFLAGS="${XBB_CFLAGS}  -Wno-deprecated-declarations"
       export CXXFLAGS="${XBB_CXXFLAGS}"
       export LDFLAGS="${XBB_LDFLAGS_LIB}"
 
@@ -485,7 +485,7 @@ function do_tasn1()
       xbb_activate
 
       export CPPFLAGS="${XBB_CPPFLAGS}"
-      export CFLAGS="${XBB_CFLAGS} -Wno-logical-op -Wno-missing-prototypes -Wno-implicit-fallthrough -Wno-format-truncation"
+      export CFLAGS="${XBB_CFLAGS} -Wno-logical-op -Wno-missing-prototypes  -Wno-format-truncation"
       export CXXFLAGS="${XBB_CXXFLAGS}"
       export LDFLAGS="${XBB_LDFLAGS_LIB}"
 
@@ -773,7 +773,7 @@ function do_gnutls()
       xbb_activate
 
       export CPPFLAGS="${XBB_CPPFLAGS}"
-      export CFLAGS="${XBB_CFLAGS} -Wno-parentheses -Wno-bad-function-cast -Wno-unused-macros -Wno-bad-function-cast -Wno-unused-variable -Wno-pointer-sign -Wno-implicit-fallthrough -Wno-format-truncation -Wno-missing-prototypes -Wno-missing-declarations -Wno-shadow -Wno-sign-compare -Wno-unknown-warning-option -Wno-static-in-inline -Wno-implicit-function-declaration -Wno-strict-prototypes -Wno-tautological-pointer-compare"
+      export CFLAGS="${XBB_CFLAGS} -Wno-parentheses -Wno-bad-function-cast -Wno-unused-macros -Wno-bad-function-cast -Wno-unused-variable -Wno-pointer-sign  -Wno-format-truncation -Wno-missing-prototypes -Wno-missing-declarations -Wno-shadow -Wno-sign-compare -Wno-unknown-warning-option -Wno-static-in-inline -Wno-implicit-function-declaration -Wno-strict-prototypes -Wno-tautological-pointer-compare"
       export CXXFLAGS="${XBB_CXXFLAGS}"
       export LDFLAGS="${XBB_LDFLAGS_LIB}"
 
@@ -1076,7 +1076,7 @@ function do_libmpdec()
       xbb_activate
 
       export CPPFLAGS="${XBB_CPPFLAGS}"
-      export CFLAGS="${XBB_CFLAGS} -Wno-implicit-fallthrough"
+      export CFLAGS="${XBB_CFLAGS} "
       export CXXFLAGS="${XBB_CXXFLAGS}"
       export LDFLAGS="${XBB_LDFLAGS_LIB}"
 

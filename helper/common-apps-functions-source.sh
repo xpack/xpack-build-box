@@ -140,7 +140,7 @@ function do_native_gcc()
 
       CPPFLAGS="${XBB_CPPFLAGS}"
       CPPFLAGS_FOR_TARGET="${XBB_CPPFLAGS}"
-      CFLAGS="${XBB_CFLAGS} -Wno-sign-compare -Wno-varargs -Wno-tautological-compare -Wno-format-security -Wno-enum-compare -Wno-abi -Wno-cast-function-type -Wno-maybe-uninitialized -Wno-implicit-fallthrough"
+      CFLAGS="${XBB_CFLAGS} -Wno-sign-compare -Wno-varargs -Wno-tautological-compare -Wno-format-security -Wno-enum-compare -Wno-abi -Wno-cast-function-type -Wno-maybe-uninitialized "
       CXXFLAGS="${XBB_CXXFLAGS} -Wno-sign-compare -Wno-varargs -Wno-tautological-compare -Wno-format -Wno-abi -Wno-cast-function-type -Wno-maybe-uninitialized -Wno-type-limits"
       LDFLAGS="${XBB_LDFLAGS_APP}"
 
@@ -625,7 +625,7 @@ function do_mingw_all()
       # {standard input}:7150: Error: can't resolve `.text' {.text section} - `.LFB5156' {.text$WinMainCRTStartup section}
       # {standard input}:8937: Error: can't resolve `.text' {.text section} - `.LFB5156' {.text$WinMainCRTStartup section}
 
-      export CFLAGS="-O2 -pipe -Wno-unused-variable -Wno-implicit-fallthrough -Wno-implicit-function-declaration -Wno-cpp"
+      export CFLAGS="-O2 -pipe -Wno-unused-variable  -Wno-implicit-function-declaration -Wno-cpp"
       export CXXFLAGS="-O2 -pipe"
       export LDFLAGS=""
       
@@ -1140,7 +1140,7 @@ function do_xz()
       xbb_activate
 
       export CPPFLAGS="${XBB_CPPFLAGS}"
-      export CFLAGS="${XBB_CFLAGS} -Wno-implicit-fallthrough"
+      export CFLAGS="${XBB_CFLAGS} "
       export CXXFLAGS="${XBB_CXXFLAGS}"
       export LDFLAGS="${XBB_LDFLAGS_APP}"
 
@@ -2794,8 +2794,8 @@ function do_perl()
       xbb_activate
 
       export CPPFLAGS="${XBB_CPPFLAGS}"
-      # -Wno-null-pointer-arithmetic -Wno-implicit-fallthrough
-      export CFLAGS="${XBB_CFLAGS}  -Wno-nonnull -Wno-format -Wno-sign-compare  -Wno-unused-result -Wno-nonnull-compare -Wno-unused-value -Wno-misleading-indentation -Wno-unused-const-variable -Wno-unused-but-set-variable -Wno-cast-function-type -Wno-implicit-fallthrough -Wno-clobbered -Wno-int-in-bool-context"
+      # -Wno-null-pointer-arithmetic 
+      export CFLAGS="${XBB_CFLAGS}  -Wno-nonnull -Wno-format -Wno-sign-compare  -Wno-unused-result -Wno-nonnull-compare -Wno-unused-value -Wno-misleading-indentation -Wno-unused-const-variable -Wno-unused-but-set-variable -Wno-cast-function-type  -Wno-clobbered -Wno-int-in-bool-context"
       export CXXFLAGS="${XBB_CXXFLAGS}"
       export LDFLAGS="${XBB_LDFLAGS_APP}"
 
@@ -3675,6 +3675,7 @@ function do_wine()
   # https://www.winehq.org
   # https://dl.winehq.org/wine/source/
   # https://dl.winehq.org/wine/source/4.x/wine-4.3.tar.xz
+  # https://dl.winehq.org/wine/source/5.x/wine-5.1.tar.xz
   # https://git.archlinux.org/svntogit/community.git/tree/trunk/PKGBUILD?h=packages/wine
 
   # 2017-09-16, "4.3"
@@ -3691,7 +3692,7 @@ function do_wine()
   local wine_folder_name="wine-${wine_version}"
   local wine_archive="${wine_folder_name}.tar.xz"
 
-  if [ "${wine_version_major}" != "5" ]
+  if [ "${wine_version_minor}" != "0" ]
   then
     wine_version_minor="x"
   fi
