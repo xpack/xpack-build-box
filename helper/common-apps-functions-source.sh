@@ -140,8 +140,8 @@ function do_native_gcc()
 
       CPPFLAGS="${XBB_CPPFLAGS}"
       CPPFLAGS_FOR_TARGET="${XBB_CPPFLAGS}"
-      CFLAGS="${XBB_CFLAGS} -Wno-sign-compare -Wno-varargs -Wno-tautological-compare -Wno-format-security -Wno-enum-compare -Wno-abi -Wno-cast-function-type -Wno-maybe-uninitialized"
-      CXXFLAGS="${XBB_CXXFLAGS} -Wno-sign-compare -Wno-varargs -Wno-tautological-compare -Wno-format -Wno-abi -Wno-cast-function-type -Wno-maybe-uninitialized"
+      CFLAGS="${XBB_CFLAGS} -Wno-sign-compare -Wno-varargs -Wno-tautological-compare -Wno-format-security -Wno-enum-compare -Wno-abi -Wno-cast-function-type -Wno-maybe-uninitialized -Wno-implicit-fallthrough"
+      CXXFLAGS="${XBB_CXXFLAGS} -Wno-sign-compare -Wno-varargs -Wno-tautological-compare -Wno-format -Wno-abi -Wno-cast-function-type -Wno-maybe-uninitialized -Wno-type-limits"
       LDFLAGS="${XBB_LDFLAGS_APP}"
 
       export CPPFLAGS
@@ -536,8 +536,8 @@ function do_mingw_all()
       xbb_activate
 
       export CPPFLAGS="${XBB_CPPFLAGS}" 
-      export CFLAGS="${XBB_CFLAGS} -Wno-sign-compare -Wno-implicit-function-declaration -Wno-missing-prototypes"
-      export CXXFLAGS="${XBB_CXXFLAGS} -Wno-sign-compare -Wno-type-limits"
+      export CFLAGS="${XBB_CFLAGS} -Wno-sign-compare -Wno-implicit-function-declaration -Wno-missing-prototypes -Wno-builtin-declaration-mismatch -Wno-prio-ctor-dtor -Wno-attributes"
+      export CXXFLAGS="${XBB_CXXFLAGS} -Wno-sign-compare -Wno-type-limits -Wno-missing-prototypes -Wno-unused-function -Wno-type-limits -Wno-unused-parameter"
       # export LDFLAGS="-static-libstdc++ ${LDFLAGS}"
       export LDFLAGS="${XBB_LDFLAGS_APP}"
 
@@ -891,9 +891,11 @@ function do_openssl()
 
       xbb_activate
 
+      #  -Wno-unused-command-line-argument
+
       # export CPPFLAGS="${XBB_CPPFLAGS} -I${BUILD_FOLDER_PATH}/${openssl_folder_name}/include"
-      export CPPFLAGS="${XBB_CPPFLAGS} -Wno-unused-command-line-argument"
-      export CFLAGS="${XBB_CFLAGS}"
+      export CPPFLAGS="${XBB_CPPFLAGS}"
+      export CFLAGS="${XBB_CFLAGS} -Wno-unused-parameter"
       export CXXFLAGS="${XBB_CXXFLAGS}"
       export LDFLAGS="${XBB_LDFLAGS_APP}"
 
@@ -1512,7 +1514,7 @@ function do_m4()
       xbb_activate
 
       export CPPFLAGS="${XBB_CPPFLAGS}"
-      export CFLAGS="${XBB_CFLAGS} -Wno-incompatible-pointer-types"
+      export CFLAGS="${XBB_CFLAGS} -Wno-incompatible-pointer-types -Wno-attributes"
       export CXXFLAGS="${XBB_CXXFLAGS}"
       export LDFLAGS="${XBB_LDFLAGS_APP}"
 
@@ -1998,7 +2000,7 @@ function do_gettext()
       xbb_activate
 
       export CPPFLAGS="${XBB_CPPFLAGS}"
-      export CFLAGS="${XBB_CFLAGS}"
+      export CFLAGS="${XBB_CFLAGS} -Wno-format-security -Wno-discarded-qualifiers -Wno-format"
       export CXXFLAGS="${XBB_CXXFLAGS}"
       export LDFLAGS="${XBB_LDFLAGS_APP}"
 
@@ -2237,7 +2239,7 @@ function do_bison()
       xbb_activate
 
       export CPPFLAGS="${XBB_CPPFLAGS}"
-      export CFLAGS="${XBB_CFLAGS}"
+      export CFLAGS="${XBB_CFLAGS} -Wno-format"
       export CXXFLAGS="${XBB_CXXFLAGS}"
       export LDFLAGS="${XBB_LDFLAGS_APP}"
 
@@ -2595,7 +2597,7 @@ function do_texinfo()
       xbb_activate
 
       export CPPFLAGS="${XBB_CPPFLAGS}"
-      export CFLAGS="${XBB_CFLAGS}"
+      export CFLAGS="${XBB_CFLAGS} -Wno-pointer-to-int-cast"
       export CXXFLAGS="${XBB_CXXFLAGS}"
       export LDFLAGS="${XBB_LDFLAGS_APP}"
 
@@ -2793,7 +2795,7 @@ function do_perl()
 
       export CPPFLAGS="${XBB_CPPFLAGS}"
       # -Wno-null-pointer-arithmetic -Wno-implicit-fallthrough
-      export CFLAGS="${XBB_CFLAGS}  -Wno-nonnull -Wno-format -Wno-sign-compare  -Wno-unused-result -Wno-nonnull-compare -Wno-unused-value -Wno-misleading-indentation -Wno-unused-const-variable -Wno-unused-but-set-variable"
+      export CFLAGS="${XBB_CFLAGS}  -Wno-nonnull -Wno-format -Wno-sign-compare  -Wno-unused-result -Wno-nonnull-compare -Wno-unused-value -Wno-misleading-indentation -Wno-unused-const-variable -Wno-unused-but-set-variable -Wno-cast-function-type -Wno-implicit-fallthrough -Wno-clobbered -Wno-int-in-bool-context"
       export CXXFLAGS="${XBB_CXXFLAGS}"
       export LDFLAGS="${XBB_LDFLAGS_APP}"
 
@@ -3041,7 +3043,7 @@ function do_dos2unix()
       xbb_activate
 
       export CPPFLAGS="${XBB_CPPFLAGS}"
-      export CFLAGS="${XBB_CFLAGS}"
+      export CFLAGS="${XBB_CFLAGS} -Wno-unused-parameter"
       export CXXFLAGS="${XBB_CXXFLAGS}"
       export LDFLAGS="${XBB_LDFLAGS_APP}"
 
@@ -3188,7 +3190,7 @@ function do_python2()
 
       export CPPFLAGS="${XBB_CPPFLAGS}"
       # export CFLAGS="${XBB_CFLAGS} -Wno-int-in-bool-context -Wno-maybe-uninitialized -Wno-nonnull -Wno-stringop-overflow"
-      export CFLAGS="${XBB_CFLAGS} -Wno-nonnull -Wno-unused-but-set-variable -Wno-unused-value -Wno-unused-result -Wno-misleading-indentation -Wno-unused-const-variable -Wno-maybe-uninitialized"
+      export CFLAGS="${XBB_CFLAGS} -Wno-nonnull -Wno-unused-but-set-variable -Wno-unused-value -Wno-unused-result -Wno-misleading-indentation -Wno-unused-const-variable -Wno-maybe-uninitialized -Wno-stringop-overflow -Wno-unused-function"
       export CXXFLAGS="${XBB_CXXFLAGS}"
       export LDFLAGS="${XBB_LDFLAGS_APP}"
 
@@ -3221,7 +3223,6 @@ function do_python2()
             --with-system-expat \
             --with-system-ffi \
             --with-dbmliborder=gdbm:ndbm \
-            --with-libiconv=native \
             --without-ensurepip \
             --with-lto \
             \
@@ -3612,7 +3613,7 @@ function do_p7zip()
       xbb_activate
 
       export CPPFLAGS="${XBB_CPPFLAGS}"
-      export CFLAGS="${XBB_CFLAGS}"
+      export CFLAGS="${XBB_CFLAGS} -Wno-deprecated"
       export CXXFLAGS="${XBB_CXXFLAGS}"
       export LDFLAGS="${XBB_LDFLAGS_APP}"
 

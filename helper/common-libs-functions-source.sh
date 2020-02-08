@@ -1076,7 +1076,7 @@ function do_libmpdec()
       xbb_activate
 
       export CPPFLAGS="${XBB_CPPFLAGS}"
-      export CFLAGS="${XBB_CFLAGS}"
+      export CFLAGS="${XBB_CFLAGS} -Wno-implicit-fallthrough"
       export CXXFLAGS="${XBB_CXXFLAGS}"
       export LDFLAGS="${XBB_LDFLAGS_LIB}"
 
