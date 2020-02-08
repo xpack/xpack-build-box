@@ -122,7 +122,7 @@ function do_build_versions()
       do_python2 "2.7.10" # "2.7.12" # "2.7.14" # "2.7.16" # "2.7.14"
     fi
 
-    if [ "${HOST_UNAME}" == "Linux" ]
+    if false # [ "${HOST_UNAME}" == "Linux" ]
     then
       # require xz, openssl
       do_python3 "3.7.6" # "3.8.1" # "3.7.3"
