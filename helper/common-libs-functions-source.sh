@@ -70,6 +70,8 @@ function do_zlib()
         # Build.
         make -j ${JOBS}
 
+        make test
+
         make install
       ) 2>&1 | tee "${LOGS_FOLDER_PATH}/make-zlib-output.txt"
     )
@@ -149,6 +151,8 @@ function do_gmp()
         # Parallel builds may fail.
         make -j ${JOBS}
 
+        make check
+
         make install-strip
       ) 2>&1 | tee "${LOGS_FOLDER_PATH}/make-gmp-output.txt"
     )
@@ -223,6 +227,9 @@ function do_mpfr()
         # Build.
         # Parallel builds may fail.
         make -j ${JOBS}
+
+        make check
+        make check-exported-symbols
 
         make install-strip
       ) 2>&1 | tee "${LOGS_FOLDER_PATH}/make-mpfr-output.txt"
@@ -363,6 +370,8 @@ function do_isl()
         # Parallel builds may fail
         make -j ${JOBS}
 
+        make check
+
         make install-strip
       ) 2>&1 | tee "${LOGS_FOLDER_PATH}/make-isl-output.txt"
     )
@@ -440,6 +449,8 @@ function do_nettle()
         # Parallel builds may fail.
         make -j ${JOBS}
 
+        make -k check
+
         # make install-strip
         # For unknown reasons, on 32-bits make install-info fails 
         # (`install-info --info-dir="/opt/xbb/share/info" nettle.info` returns 1)
@@ -514,6 +525,8 @@ function do_tasn1()
         # Build.
         CODE_COVERAGE_LDFLAGS=${LDFLAGS} make -j ${JOBS}
 
+        make check
+
         make install-strip
       ) 2>&1 | tee "${LOGS_FOLDER_PATH}/make-tasn1-output.txt"
     )
@@ -584,6 +597,8 @@ function do_expat()
 
         # Build.
         make -j ${JOBS}
+
+        make check
 
         make install-strip
       ) 2>&1 | tee "${LOGS_FOLDER_PATH}/make-expat-output.txt"
@@ -658,6 +673,8 @@ function do_libffi()
         # Build.
         make -j ${JOBS}
 
+        make check
+
         make install-strip
       ) 2>&1 | tee "${LOGS_FOLDER_PATH}/make-libffi-output.txt"
     )
@@ -727,6 +744,8 @@ function do_libiconv()
 
         # Build.
         make -j ${JOBS}
+
+        make check
 
         make install-strip
 
@@ -816,6 +835,8 @@ function do_gnutls()
 
         # Build.
         make -j ${JOBS}
+
+        make check
 
         make install-strip
       ) 2>&1 | tee "${LOGS_FOLDER_PATH}/make-gnutls-output.txt"
@@ -1038,6 +1059,8 @@ function do_libpng()
 
         # Build.
         make -j ${JOBS}
+
+        make check
 
         make install-strip
       ) 2>&1 | tee "${LOGS_FOLDER_PATH}/make-libpng-output.txt"

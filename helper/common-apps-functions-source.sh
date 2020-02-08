@@ -1169,6 +1169,8 @@ function do_xz()
         # Build.
         make -j ${JOBS}
 
+        make check
+
         make install-strip
       ) 2>&1 | tee "${LOGS_FOLDER_PATH}/make-xz-output.txt"
     )
@@ -1255,6 +1257,8 @@ function do_tar()
         # Build.
         # Parallel builds may fail.
         # make -j ${JOBS}
+
+        make check
 
         make install-strip
 
@@ -1367,6 +1371,8 @@ function do_coreutils()
 
         # Build.
         make -j ${JOBS}
+
+        make check
 
         # make install-strip
         make install
@@ -1541,6 +1547,8 @@ function do_m4()
         # Build.
         make -j ${JOBS}
 
+        make check
+
         make install-strip
 
         echo
@@ -1628,6 +1636,8 @@ function do_gawk()
         # Build.
         make -j ${JOBS}
 
+        make check
+
         make install-strip
       ) 2>&1 | tee "${LOGS_FOLDER_PATH}/make-gawk-output.txt"
     )
@@ -1702,6 +1712,8 @@ function do_sed()
 
         # Build.
         make -j ${JOBS}
+
+        make check
 
         make install-strip
 
@@ -1865,6 +1877,8 @@ function do_automake()
         # Build.
         make -j ${JOBS}
 
+        make check
+
         make install-strip
       ) 2>&1 | tee "${LOGS_FOLDER_PATH}/make-automake-output.txt"
     )
@@ -1941,6 +1955,8 @@ function do_libtool()
 
         # Build.
         make -j ${JOBS}
+
+        make check gl_public_submodule_commit=
 
         make install-strip
 
@@ -2032,6 +2048,8 @@ function do_gettext()
         # Parallel builds may fail.
         make -j ${JOBS}
 
+        make check
+
         make install-strip
       ) 2>&1 | tee "${LOGS_FOLDER_PATH}/make-gettext-output.txt"
     )
@@ -2109,6 +2127,8 @@ function do_patch()
         # Build.
         make -j ${JOBS}
 
+        make check
+
         make install-strip
       ) 2>&1 | tee "${LOGS_FOLDER_PATH}/make-patch-output.txt"
     )
@@ -2185,6 +2205,8 @@ function do_diffutils()
 
         # Build.
         make -j ${JOBS}
+
+        make check
 
         make install-strip
       ) 2>&1 | tee "${LOGS_FOLDER_PATH}/make-diffutils-output.txt"
@@ -2271,6 +2293,8 @@ function do_bison()
         # Build.
         # Parallel builds may fail.
         make -j ${JOBS}
+
+        make -j1 check
 
         make install-strip
       ) 2>&1 | tee "${LOGS_FOLDER_PATH}/make-bison-output.txt"
@@ -2367,6 +2391,10 @@ function do_flex()
         make -j ${JOBS}
         # make
 
+        # cxx_restart fails - https://github.com/westes/flex/issues/98
+        # make -k check || true
+        make -k check
+
         # make install-strip
         make install
       ) 2>&1 | tee "${LOGS_FOLDER_PATH}/make-flex-output.txt"
@@ -2445,6 +2473,8 @@ function do_make()
 
         # Build.
         make -j ${JOBS}
+
+        make -k check
 
         make install-strip
 
@@ -2545,6 +2575,8 @@ function do_wget()
         # Parallel builds may fail.
         make -j ${JOBS}
 
+        make check
+
         make install-strip
       ) 2>&1 | tee "${LOGS_FOLDER_PATH}/make-wget-output.txt"
     )
@@ -2622,6 +2654,8 @@ function do_texinfo()
 
         # Build.
         make -j ${JOBS}
+
+        make check
 
         make install-strip
       ) 2>&1 | tee "${LOGS_FOLDER_PATH}/make-texinfo-output.txt"
@@ -2826,6 +2860,8 @@ function do_perl()
         # Build.
         make -j ${JOBS}
 
+        TEST_JOBS=$(echo $MAKEFLAGS | sed 's/.*-j\([0-9][0-9]*\).*/\1/') make test_harness
+
         # make test
         make install-strip
 
@@ -2992,6 +3028,8 @@ function do_patchelf()
         # Build.
         make -j ${JOBS}
 
+        make -C tests -j1 check
+
         make install-strip
       ) 2>&1 | tee "${LOGS_FOLDER_PATH}/make-patchelf-output.txt"
     )
@@ -3132,6 +3170,8 @@ function do_git()
         # Parallel builds may fail.
         make -j ${JOBS}
 
+        # Tests are quite complicated
+
         # make install-strip
         make install
         strip -S "${INSTALL_FOLDER_PATH}/bin/git"
@@ -3240,6 +3280,8 @@ function do_python2()
 
         # Build.
         make -j ${JOBS}
+
+        # Tests are quite complicated
 
         # make install-strip
         make install
@@ -3375,6 +3417,8 @@ function do_python3()
         # Build.
         make -j ${JOBS} build_all
 
+        # Tests are quite complicated
+
         # make install-strip
         make install
 
@@ -3497,6 +3541,10 @@ function do_meson
       xbb_activate_installed_bin
 
       pip3 install meson==${meson_version}
+
+      export LC_CTYPE=en_US.UTF-8 CPPFLAGS= CFLAGS= CXXFLAGS= LDFLAGS=
+      ./run_tests.py
+
     )
 
     (
