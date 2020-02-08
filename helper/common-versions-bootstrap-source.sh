@@ -121,8 +121,26 @@ function do_build_versions()
       # macOS 10.10 uses 2.7.10, bring it in sync.
       do_python2 "2.7.10" # "2.7.12" # "2.7.14" # "2.7.16" # "2.7.14"
     fi
+
+    if true # [ "${HOST_UNAME}" == "Linux" ]
+    then
+      # require xz, openssl
+      do_python3 "3.7.6" # "3.8.1" # "3.7.3"
+      # The necessary bits to build these optional modules were not found:
+      # _bz2                  _curses               _curses_panel      
+      # _dbm                  _gdbm                 _sqlite3           
+      # _tkinter              _uuid                 readline 
+                
+      # depends=('python3')
+      do_meson "0.53.1" # "0.50.0"
+    fi
+
     # depends=('python2')
     do_scons "3.0.5" # "3.0.1"
+
+    # Requires scons
+    # depends=('python2')
+    do_ninja "1.10.0" # "1.9.0"
 
     # makedepend is needed by openssl
     do_util_macros "1.19.2" # "1.17.1"
