@@ -117,8 +117,9 @@ function do_gmp()
       export CFLAGS="${XBB_CFLAGS} -Wno-unused-value -Wno-empty-translation-unit -Wno-tautological-compare -Wno-overflow"
       export CXXFLAGS="${XBB_CXXFLAGS}"
       export LDFLAGS="${XBB_LDFLAGS_LIB}"
+
       # Mandatory, it fails on 32-bits. 
-      export ABI="${HOST_BITS}"
+      # export ABI="${HOST_BITS}"
 
       if [ ! -f "config.status" ]
       then
@@ -130,6 +131,8 @@ function do_gmp()
 
           bash ${DEBUG} "${SOURCES_FOLDER_PATH}/${gmp_folder_name}/configure" \
             --prefix="${INSTALL_FOLDER_PATH}" \
+            \
+            --build="${BUILD}" \
             \
             --enable-cxx \
             --enable-fat
