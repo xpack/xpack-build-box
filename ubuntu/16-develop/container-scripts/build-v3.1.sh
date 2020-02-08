@@ -47,6 +47,7 @@ autoconf \
 automake \
 bison \
 bzip2 \
+ca-certificates \
 cmake \
 curl \
 diffutils \
