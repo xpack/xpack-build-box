@@ -11,6 +11,7 @@ function do_native_binutils()
 {
   # https://www.gnu.org/software/binutils/
   # https://ftp.gnu.org/gnu/binutils/
+
   # https://archlinuxarm.org/packages/aarch64/binutils/files/PKGBUILD
   # https://aur.archlinux.org/cgit/aur.git/tree/PKGBUILD?h=gdb-git
 
@@ -108,6 +109,7 @@ function do_native_gcc()
   # https://ftp.gnu.org/gnu/gcc/
   # https://gcc.gnu.org/wiki/InstallingGCC
   # https://gcc.gnu.org/install/build.html
+
   # https://archlinuxarm.org/packages/aarch64/gcc/files/PKGBUILD
   # https://aur.archlinux.org/cgit/aur.git/tree/PKGBUILD?h=gcc-git
 
@@ -314,6 +316,7 @@ __EOF__
 function do_mingw_binutils() 
 {
   # https://ftp.gnu.org/gnu/binutils/
+
   # https://aur.archlinux.org/cgit/aur.git/tree/PKGBUILD?h=mingw-w64-binutils
   # https://aur.archlinux.org/cgit/aur.git/tree/PKGBUILD?h=mingw-w64-binutils-weak
 
@@ -412,6 +415,7 @@ function do_mingw_all()
 {
   # http://mingw-w64.org/doku.php/start
   # https://sourceforge.net/projects/mingw-w64/files/mingw-w64/mingw-w64-release/
+
   # https://aur.archlinux.org/cgit/aur.git/tree/PKGBUILD?h=mingw-w64-gcc
 
   # 2018-06-03, "5.0.4"
@@ -506,6 +510,7 @@ function do_mingw_all()
 
   # https://gcc.gnu.org
   # https://gcc.gnu.org/wiki/InstallingGCC
+
   # https://aur.archlinux.org/cgit/aur.git/tree/PKGBUILD?h=mingw-w64-binutils
   # https://aur.archlinux.org/cgit/aur.git/tree/PKGBUILD?h=mingw-w64-gcc
 
@@ -856,6 +861,7 @@ function do_openssl()
 {
   # https://www.openssl.org
   # https://www.openssl.org/source/
+
   # https://archlinuxarm.org/packages/aarch64/openssl/files/PKGBUILD
   # https://aur.archlinux.org/cgit/aur.git/tree/PKGBUILD?h=openssl-static
   # https://aur.archlinux.org/cgit/aur.git/tree/PKGBUILD?h=openssl-git
@@ -1012,6 +1018,7 @@ function do_curl()
   # https://curl.haxx.se
   # https://curl.haxx.se/download/
   # https://curl.haxx.se/download/curl-7.64.1.tar.xz
+
   # https://archlinuxarm.org/packages/aarch64/curl/files/PKGBUILD
   # https://aur.archlinux.org/cgit/aur.git/tree/PKGBUILD?h=curl-git
 
@@ -1108,6 +1115,7 @@ function do_xz()
   # https://tukaani.org/xz/
   # https://sourceforge.net/projects/lzmautils/files/
   # https://tukaani.org/xz/xz-5.2.4.tar.xz
+  
   # https://archlinuxarm.org/packages/aarch64/xz/files/PKGBUILD
   # https://aur.archlinux.org/cgit/aur.git/tree/PKGBUILD?h=xz-git
 
@@ -1195,6 +1203,7 @@ function do_tar()
 {
   # https://www.gnu.org/software/tar/
   # https://ftp.gnu.org/gnu/tar/
+
   # https://archlinuxarm.org/packages/aarch64/tar/files/PKGBUILD
   # https://aur.archlinux.org/cgit/aur.git/tree/PKGBUILD?h=tar-git
 
@@ -1290,6 +1299,7 @@ function do_coreutils()
 {
   # https://www.gnu.org/software/coreutils/
   # https://ftp.gnu.org/gnu/coreutils/
+
   # https://archlinuxarm.org/packages/aarch64/coreutils/files/PKGBUILD
 
   # 2018-07-01, "8.30"
@@ -1399,6 +1409,7 @@ function do_pkg_config()
 {
   # https://www.freedesktop.org/wiki/Software/pkg-config/
   # https://pkgconfig.freedesktop.org/releases/
+
   # https://archlinuxarm.org/packages/aarch64/pkgconf/files/PKGBUILD
   # https://aur.archlinux.org/cgit/aur.git/tree/PKGBUILD?h=pkg-config-git
 
@@ -1492,6 +1503,7 @@ function do_m4()
 {
   # https://www.gnu.org/software/m4/
   # https://ftp.gnu.org/gnu/m4/
+
   # https://archlinuxarm.org/packages/aarch64/m4/files/PKGBUILD
   # https://aur.archlinux.org/cgit/aur.git/tree/PKGBUILD?h=m4-git
 
@@ -1580,6 +1592,7 @@ function do_gawk()
 {
   # https://www.gnu.org/software/gawk/
   # https://ftp.gnu.org/gnu/gawk/
+
   # https://archlinuxarm.org/packages/aarch64/gawk/files/PKGBUILD
   # https://aur.archlinux.org/cgit/aur.git/tree/PKGBUILD?h=gawk-git
 
@@ -1663,6 +1676,8 @@ function do_sed()
   # https://www.gnu.org/software/sed/
   # https://ftp.gnu.org/gnu/sed/
 
+  # https://archlinuxarm.org/packages/aarch64/sed/files/PKGBUILD
+
   # 2018-12-21, "4.7"
   # 2020-01-14, "4.8"
 
@@ -1745,6 +1760,7 @@ function do_autoconf()
 {
   # https://www.gnu.org/software/autoconf/
   # https://ftp.gnu.org/gnu/autoconf/
+
   # https://archlinuxarm.org/packages/any/autoconf2.13/files/PKGBUILD
   # https://aur.archlinux.org/cgit/aur.git/tree/PKGBUILD?h=autoconf-git
 
@@ -1820,6 +1836,7 @@ function do_automake()
 {
   # https://www.gnu.org/software/automake/
   # https://ftp.gnu.org/gnu/automake/
+
   # https://archlinuxarm.org/packages/any/automake/files/PKGBUILD
   # https://aur.archlinux.org/cgit/aur.git/tree/PKGBUILD?h=automake-git
 
@@ -1904,6 +1921,7 @@ function do_libtool()
   # https://www.gnu.org/software/libtool/
   # http://ftpmirror.gnu.org/libtool/
   # http://ftpmirror.gnu.org/libtool/libtool-2.4.6.tar.xz
+
   # https://archlinuxarm.org/packages/aarch64/libtool/files/PKGBUILD
   # https://aur.archlinux.org/cgit/aur.git/tree/PKGBUILD?h=libtool-git
 
@@ -1989,6 +2007,7 @@ function do_gettext()
 {
   # https://www.gnu.org/software/gettext/
   # https://ftp.gnu.org/gnu/gettext/
+
   # https://archlinuxarm.org/packages/aarch64/gettext/files/PKGBUILD
   # https://aur.archlinux.org/cgit/aur.git/tree/PKGBUILD?h=gettext-git
 
@@ -2074,6 +2093,7 @@ function do_patch()
 {
   # https://www.gnu.org/software/patch/
   # https://ftp.gnu.org/gnu/patch/
+
   # https://archlinuxarm.org/packages/aarch64/patch/files/PKGBUILD
   # https://aur.archlinux.org/cgit/aur.git/tree/PKGBUILD?h=patch-git
 
@@ -2153,6 +2173,7 @@ function do_diffutils()
 {
   # https://www.gnu.org/software/diffutils/
   # https://ftp.gnu.org/gnu/diffutils/
+
   # https://archlinuxarm.org/packages/aarch64/diffutils/files/PKGBUILD
   # https://aur.archlinux.org/cgit/aur.git/tree/PKGBUILD?h=diffutils-git
 
@@ -2232,6 +2253,7 @@ function do_bison()
 {
   # https://www.gnu.org/software/bison/
   # https://ftp.gnu.org/gnu/bison/
+
   # https://archlinuxarm.org/packages/aarch64/bison/files/PKGBUILD
   # https://aur.archlinux.org/cgit/aur.git/tree/PKGBUILD?h=bison-git
 
@@ -2322,6 +2344,7 @@ function do_flex()
   # https://www.gnu.org/software/flex/
   # https://github.com/westes/flex/releases
   # https://github.com/westes/flex/releases/download/v2.6.4/flex-2.6.4.tar.gz
+
   # https://archlinuxarm.org/packages/aarch64/flex/files/PKGBUILD
   # https://aur.archlinux.org/cgit/aur.git/tree/PKGBUILD?h=flex-git
 
@@ -2420,6 +2443,7 @@ function do_make()
 {
   # https://www.gnu.org/software/make/
   # https://ftp.gnu.org/gnu/make/
+
   # https://archlinuxarm.org/packages/aarch64/make/files/PKGBUILD
   # https://aur.archlinux.org/cgit/aur.git/tree/PKGBUILD?h=make-git
 
@@ -2506,6 +2530,7 @@ function do_wget()
 {
   # https://www.gnu.org/software/wget/
   # https://ftp.gnu.org/gnu/wget/
+
   # https://archlinuxarm.org/packages/aarch64/wget/files/PKGBUILD
   # https://git.archlinux.org/svntogit/packages.git/tree/trunk/PKGBUILD?h=packages/wget
   # https://aur.archlinux.org/cgit/aur.git/tree/PKGBUILD?h=wget-git
@@ -2601,6 +2626,7 @@ function do_texinfo()
 {
   # https://www.gnu.org/software/texinfo/
   # https://ftp.gnu.org/gnu/texinfo/
+
   # https://archlinuxarm.org/packages/aarch64/texinfo/files/PKGBUILD
   # https://aur.archlinux.org/cgit/aur.git/tree/PKGBUILD?h=texinfo-svn
 
@@ -2683,6 +2709,7 @@ function do_cmake()
   # https://github.com/Kitware/CMake/releases/
   # https://github.com/Kitware/CMake/releases/download/v3.14.0/cmake-3.14.0.tar.gz
   # https://github.com/Kitware/CMake/releases/download/v3.13.4/cmake-3.13.4.tar.gz
+
   # https://archlinuxarm.org/packages/aarch64/cmake/files/PKGBUILD
   # https://aur.archlinux.org/cgit/aur.git/tree/PKGBUILD?h=cmake-git
 
@@ -2793,6 +2820,7 @@ function do_perl()
 {
   # https://www.cpan.org
   # http://www.cpan.org/src/
+
   # https://archlinuxarm.org/packages/aarch64/perl/files/PKGBUILD
   # https://git.archlinux.org/svntogit/packages.git/tree/trunk/PKGBUILD?h=packages/perl
 
@@ -2895,6 +2923,7 @@ function do_makedepend()
   # http://www.linuxfromscratch.org/blfs/view/7.4/x/makedepend.html
   # http://xorg.freedesktop.org/archive/individual/util
   # http://xorg.freedesktop.org/archive/individual/util/makedepend-1.0.5.tar.bz2
+
   # https://aur.archlinux.org/cgit/aur.git/tree/PKGBUILD?h=makedepend
 
   # 2013-07-23, 1.0.5
@@ -2974,6 +3003,7 @@ function do_patchelf()
   # https://nixos.org/patchelf.html
   # https://nixos.org/releases/patchelf/
   # https://nixos.org/releases/patchelf/patchelf-0.10/patchelf-0.10.tar.bz2
+
   # https://archlinuxarm.org/packages/aarch64/patchelf/files/PKGBUILD
 
   # 2016-02-29, "0.9"
@@ -3054,7 +3084,8 @@ function do_dos2unix()
 {
   # https://waterlan.home.xs4all.nl/dos2unix.html
   # http://dos2unix.sourceforge.net
-  # https://waterlan.home.xs4all.nl/dos2unix/dos2unix-7.4.0.tar.gz
+  # https://waterlan.home.xs4all.nl/dos2unix/dos2unix-7.4.0.tar.
+  
   # https://archlinuxarm.org/packages/aarch64/dos2unix/files/PKGBUILD
 
   # 30-Oct-2017, "7.4.0"
@@ -3115,6 +3146,7 @@ function do_git()
 {
   # https://git-scm.com/
   # https://www.kernel.org/pub/software/scm/git/
+
   # https://git.archlinux.org/svntogit/packages.git/tree/trunk/PKGBUILD?h=packages/git
 
   # 30-Oct-2017, "2.15.0"
@@ -3200,6 +3232,7 @@ function do_python2()
   # https://www.python.org
   # https://www.python.org/downloads/source/
   # https://www.python.org/ftp/python/2.7.16/Python-2.7.16.tar.xz
+
   # https://git.archlinux.org/svntogit/packages.git/tree/trunk/PKGBUILD?h=packages/python2
 
   # macOS 10.10 uses 2.7.10
@@ -3461,6 +3494,7 @@ function do_scons()
   # http://scons.org
   # https://sourceforge.net/projects/scons/files/scons/
   # https://sourceforge.net/projects/scons/files/scons/3.0.5/scons-3.0.5.tar.gz/download
+
   # https://archlinuxarm.org/packages/any/scons/files/PKGBUILD
   # https://aur.archlinux.org/cgit/aur.git/tree/PKGBUILD?h=python2-scons
 
@@ -3527,6 +3561,7 @@ function do_meson
   # http://mesonbuild.com/
   # https://pypi.org/project/meson/
   # https://pypi.org/project/meson/0.50.0/#description
+
   # https://archlinuxarm.org/packages/any/meson/files/PKGBUILD
 
   # Jan 7, 2020, "0.53.0"
@@ -3568,6 +3603,7 @@ function do_ninja()
   # https://github.com/ninja-build/ninja/releases
   # https://github.com/ninja-build/ninja/archive/v1.9.0.zip
   # https://github.com/ninja-build/ninja/archive/v1.9.0.tar.gz
+
   # https://archlinuxarm.org/packages/aarch64/ninja/files/PKGBUILD
 
   # Jan 30, 2019 "1.9.0"
@@ -3637,6 +3673,7 @@ function do_p7zip()
 {
   # https://sourceforge.net/projects/p7zip/files/p7zip
   # https://sourceforge.net/projects/p7zip/files/p7zip/16.02/p7zip_16.02_src_all.tar.bz2/download
+
   # https://archlinuxarm.org/packages/aarch64/p7zip/files/PKGBUILD
 
   # 2016-07-14, "16.02" (latest)
@@ -3724,6 +3761,7 @@ function do_wine()
   # https://dl.winehq.org/wine/source/
   # https://dl.winehq.org/wine/source/4.x/wine-4.3.tar.xz
   # https://dl.winehq.org/wine/source/5.x/wine-5.1.tar.xz
+
   # https://git.archlinux.org/svntogit/community.git/tree/trunk/PKGBUILD?h=packages/wine
 
   # 2017-09-16, "4.3"

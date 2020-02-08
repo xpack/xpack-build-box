@@ -12,6 +12,7 @@ function do_zlib()
   # http://zlib.net
   # http://zlib.net/fossils/
   # http://zlib.net/fossils/zlib-1.2.11.tar.gz
+
   # https://archlinuxarm.org/packages/aarch64/zlib/files/PKGBUILD
   # https://aur.archlinux.org/cgit/aur.git/tree/PKGBUILD?h=zlib-static
   # https://aur.archlinux.org/cgit/aur.git/tree/PKGBUILD?h=zlib-git
@@ -88,6 +89,7 @@ function do_gmp()
   # https://gmplib.org
   # https://gmplib.org/download/gmp/
   # https://gmplib.org/download/gmp/gmp-6.1.2.tar.xz
+
   # https://archlinuxarm.org/packages/aarch64/gmp/files/PKGBUILD
   # https://aur.archlinux.org/cgit/aur.git/tree/PKGBUILD?h=gmp-hg
 
@@ -170,6 +172,7 @@ function do_mpfr()
   # https://ftp.gnu.org/gnu/mpfr/
   # http://www.mpfr.org/mpfr-3.1.6
   # https://www.mpfr.org/mpfr-4.0.2/mpfr-4.0.2.tar.xz
+
   # https://archlinuxarm.org/packages/aarch64/mpfr/files/PKGBUILD
   # https://git.archlinux.org/svntogit/packages.git/tree/trunk/PKGBUILD?h=packages/mpfr
 
@@ -247,6 +250,7 @@ function do_mpc()
   # http://www.multiprecision.org/
   # https://ftp.gnu.org/gnu/mpc
   # https://ftp.gnu.org/gnu/mpc/mpc-1.0.3.tar.gz
+
   # https://archlinuxarm.org/packages/aarch64/mpc/files/PKGBUILD
   # https://git.archlinux.org/svntogit/packages.git/tree/trunk/PKGBUILD?h=packages/libmpc
 
@@ -315,6 +319,7 @@ function do_isl()
 {
   # http://isl.gforge.inria.fr
   # http://isl.gforge.inria.fr/isl-0.21.tar.xz
+
   # https://aur.archlinux.org/cgit/aur.git/tree/PKGBUILD?h=isl
 
   # 2016-12-20 "0.18"
@@ -387,6 +392,7 @@ function do_nettle()
 {
   # https://www.lysator.liu.se/~nisse/nettle/
   # https://ftp.gnu.org/gnu/nettle/
+
   # https://archlinuxarm.org/packages/aarch64/nettle/files/PKGBUILD
   # https://aur.archlinux.org/cgit/aur.git/tree/PKGBUILD?h=nettle-git
 
@@ -471,6 +477,7 @@ function do_tasn1()
   # https://www.gnu.org/software/libtasn1/
   # http://ftp.gnu.org/gnu/libtasn1/
   # https://ftp.gnu.org/gnu/libtasn1/libtasn1-4.12.tar.gz
+
   # https://archlinuxarm.org/packages/aarch64/libtasn1/files/PKGBUILD
   # https://aur.archlinux.org/cgit/aur.git/tree/PKGBUILD?h=libtasn1-git
 
@@ -542,6 +549,7 @@ function do_expat()
 {
   # https://libexpat.github.io
   # https://github.com/libexpat/libexpat/releases
+
   # https://archlinuxarm.org/packages/aarch64/expat/files/PKGBUILD
   # https://aur.archlinux.org/cgit/aur.git/tree/PKGBUILD?h=expat-git
 
@@ -615,6 +623,7 @@ function do_libffi()
 {
   # https://sourceware.org/libffi/
   # https://sourceware.org/pub/libffi/
+
   # https://archlinuxarm.org/packages/aarch64/libffi/files/PKGBUILD
   # https://aur.archlinux.org/cgit/aur.git/tree/PKGBUILD?h=libffi-git
 
@@ -690,6 +699,7 @@ function do_libiconv()
 {
   # https://www.gnu.org/software/libiconv/
   # https://ftp.gnu.org/pub/gnu/libiconv/
+
   # https://aur.archlinux.org/cgit/aur.git/tree/PKGBUILD?h=libiconv
 
   # 2017-02-02, "1.15"
@@ -766,6 +776,7 @@ function do_gnutls()
   # http://www.gnutls.org/
   # https://www.gnupg.org/ftp/gcrypt/gnutls/
   # https://www.gnupg.org/ftp/gcrypt/gnutls/v3.6/gnutls-3.6.7.tar.xz
+
   # https://archlinuxarm.org/packages/aarch64/gnutls/files/PKGBUILD
   # https://aur.archlinux.org/cgit/aur.git/tree/PKGBUILD?h=gnutls-git
 
@@ -924,6 +935,7 @@ function do_xorg_xproto()
 {
   # https://www.x.org/releases/individual/proto/
   # https://www.x.org/releases/individual/proto/xproto-7.0.31.tar.bz2
+  
   # https://aur.archlinux.org/cgit/aur.git/tree/PKGBUILD?h=xorgproto-git
 
   # 2016-09-23, "7.0.31" (latest)
@@ -1078,6 +1090,8 @@ function do_libmpdec()
   # http://www.bytereef.org/mpdecimal/index.html
   # https://www.bytereef.org/mpdecimal/download.html
   # https://www.bytereef.org/software/mpdecimal/releases/mpdecimal-2.4.2.tar.gz
+
+  # https://archlinuxarm.org/packages/aarch64/mpdecimal/files/PKGBUILD
 
   # 2016-02-28, "2.4.2"
 
