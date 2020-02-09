@@ -179,14 +179,14 @@ function prepare_xbb_env()
 
   # ---------------------------------------------------------------------------
 
-  mkdir -p "${INSTALL_FOLDER_PATH}"
-
   mkdir -p "${CACHE_FOLDER_PATH}"
   mkdir -p "${BUILD_FOLDER_PATH}"
   mkdir -p "${LIBS_BUILD_FOLDER_PATH}"
   mkdir -p "${SOURCES_FOLDER_PATH}"
   mkdir -p "${STAMPS_FOLDER_PATH}"
   mkdir -p "${LOGS_FOLDER_PATH}"
+
+  mkdir -p "${INSTALL_FOLDER_PATH}"
 
   mkdir -p "${INSTALL_FOLDER_PATH}/bin"
   mkdir -p "${INSTALL_FOLDER_PATH}/include"
