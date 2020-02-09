@@ -170,7 +170,7 @@ as long as Node.js still supports them via the
 
 ## Arm binaries
 
-Support for Arm binaries is underway, and it is planned to be available
+Support for Arm binaries is under way, and it is planned to be available
 starting early 2020.
 
 The supported architectures will be:

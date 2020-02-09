@@ -69,7 +69,7 @@ function do_zlib()
         echo "Running zlib make..."
 
         # Build.
-        make -j ${JOBS}
+        make # -j ${JOBS}
 
         make test
 
@@ -232,7 +232,8 @@ function do_mpfr()
         make -j ${JOBS}
 
         make check
-        make check-exported-symbols
+        # Not available in 3.x
+        # make check-exported-symbols
 
         make install-strip
       ) 2>&1 | tee "${LOGS_FOLDER_PATH}/make-mpfr-output.txt"
@@ -847,7 +848,8 @@ function do_gnutls()
         # Build.
         make -j ${JOBS}
 
-        make check
+        # Takes too long.
+        # make check
 
         make install-strip
       ) 2>&1 | tee "${LOGS_FOLDER_PATH}/make-gnutls-output.txt"
