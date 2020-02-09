@@ -45,10 +45,6 @@ source "${helper_folder_path}/common-docker-functions-source.sh"
 host_init_docker_env
 host_init_docker_input
 
-cp "${helper_folder_path}/common-functions-source.sh" "input/helper"
-cp "${helper_folder_path}/common-docker-functions-source.sh" "input/helper"
-cp "${helper_folder_path}/common-texlive-functions-source.sh" "input/helper"
-
 arch="amd64"
 tag="ilegeul/ubuntu:amd64-12.04-tex-v3.1"
 
