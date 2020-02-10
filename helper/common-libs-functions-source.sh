@@ -453,7 +453,8 @@ function do_nettle()
         # Build.
         make -j ${JOBS}
 
-        make -k check
+        # Takes too long, especially on armhf.
+        # make -k check
 
         # make install-strip
         # For unknown reasons, on 32-bits make install-info fails 
