@@ -1072,7 +1072,8 @@ function do_libpng()
         # Build.
         make -j ${JOBS}
 
-        make check
+        # Takes too long (on armhf).
+        # make check
 
         make install-strip
       ) 2>&1 | tee "${LOGS_FOLDER_PATH}/make-libpng-output.txt"
