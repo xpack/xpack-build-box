@@ -97,6 +97,7 @@ function docker_prepare_env()
   fi
   
   IS_BOOTSTRAP=${IS_BOOTSTRAP:-""}
+  XBB_BOOTSTRAP_FOLDER=${XBB_BOOTSTRAP_FOLDER:-""}
 
   if [ "${IS_BOOTSTRAP}" == "y" ]
   then
@@ -110,7 +111,7 @@ function docker_prepare_env()
     CXX="g++-8bs"
   fi
 
-  if [ "${IS_BOOTSTRAP}" != "y" ]
+  if [ "${IS_BOOTSTRAP}" != "y" -a -n "${XBB_BOOTSTRAP_FOLDER}" ]
   then
     if [ ! -d "${XBB_BOOTSTRAP_FOLDER}" -o ! -x "${XBB_BOOTSTRAP_FOLDER}/bin/${CXX}" ]
     then
