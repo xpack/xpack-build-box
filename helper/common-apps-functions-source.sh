@@ -257,7 +257,6 @@ function do_native_gcc()
         echo "Running native gcc make..."
 
         # Build.
-        # Parallel builds may fail.
         make -j ${JOBS}
 
         make install-strip
@@ -587,9 +586,8 @@ function do_mingw_all()
         echo
         echo "Running mingw gcc step 1 make..."
 
-        # Parallel builds may fail.
+        # Build.
         make all-gcc -j ${JOBS}
-        # make all-gcc
 
         make install-gcc
       ) 2>&1 | tee "${LOGS_FOLDER_PATH}/make-mingw-gcc-step1-output.txt"
@@ -679,9 +677,8 @@ function do_mingw_all()
         echo
         echo "Running mingw-w64 crt make..."
 
-        # Parallel builds may fail.
+        # Build.
         make -j ${JOBS}
-        # make
 
         make install-strip
 
@@ -782,9 +779,8 @@ function do_mingw_all()
       export CXXFLAGS="${XBB_CXXFLAGS} -Wno-sign-compare -Wno-type-limits"
       export LDFLAGS="${XBB_LDFLAGS_APP}"
 
-      # Parallel builds may fail.
+      # Build.
       make -j ${JOBS}
-      # make
 
       make install-strip
     ) 2>&1 | tee "${LOGS_FOLDER_PATH}/make-mingw-gcc-step2-output.txt"
@@ -1087,7 +1083,6 @@ function do_curl()
         echo "Running curl make..."
 
         # Build.
-        # Parallel builds may fail
         make -j ${JOBS}
 
         make install
@@ -1264,7 +1259,6 @@ function do_tar()
         echo "Running tar make..."
 
         # Build.
-        # Parallel builds may fail.
         make -j ${JOBS}
 
         # Takes too long and fails.
@@ -2070,7 +2064,6 @@ function do_gettext()
         echo "Running gettext make..."
 
         # Build.
-        # Parallel builds may fail.
         make -j ${JOBS}
 
         # Fails on Arm.
@@ -2320,7 +2313,6 @@ function do_bison()
         echo "Running bison make..."
 
         # Build.
-        # Parallel builds may fail.
         make -j ${JOBS}
 
         # Takes too long.
@@ -2606,7 +2598,6 @@ function do_wget()
         echo "Running wget make..."
 
         # Build.
-        # Parallel builds may fail.
         make -j ${JOBS}
 
         # Fails
@@ -2799,7 +2790,6 @@ function do_cmake()
         echo "Running cmake make..."
 
         # Build.
-        # Parallel builds may fail.
         make -j ${JOBS}
 
         # make install-strip
@@ -3211,7 +3201,6 @@ function do_git()
         echo "Running git make..."
 
         # Build.
-        # Parallel builds may fail.
         make -j ${JOBS}
 
         # Tests are quite complicated
@@ -3850,9 +3839,8 @@ function do_wine()
         echo
         echo "Running wine make..."
 
-        # Parallel builds may fail 
+        # Build.
         make -j ${JOBS} STRIP=true
-        # make STRIP=true
 
         make install
 
