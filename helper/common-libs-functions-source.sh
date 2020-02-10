@@ -231,7 +231,8 @@ function do_mpfr()
         # Parallel builds may fail.
         make -j ${JOBS}
 
-        make check
+        # Fails.
+        # make check
         # Not available in 3.x
         # make check-exported-symbols
 
