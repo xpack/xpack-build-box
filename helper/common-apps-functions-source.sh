@@ -2682,7 +2682,8 @@ function do_texinfo()
         # Build.
         make -j ${JOBS}
 
-        make check
+        # Takes too long
+        # make check
 
         make install-strip
       ) 2>&1 | tee "${LOGS_FOLDER_PATH}/make-texinfo-output.txt"
