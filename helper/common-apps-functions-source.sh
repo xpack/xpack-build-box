@@ -3756,8 +3756,6 @@ function do_p7zip()
         make test
       else
         # make test test_7z
-        # Parallel build failed on Ubuntu.
-        # make -j ${JOBS} all_test
         make all_test
       fi
 
