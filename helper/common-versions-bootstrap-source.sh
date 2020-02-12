@@ -136,7 +136,7 @@ function do_build_versions()
     fi
 
     # depends=('python2')
-    do_scons "3.0.5" # "3.0.1"
+    do_scons "3.1.1" # "3.0.5" # "3.0.1"
 
     # Requires scons
     # depends=('python2')
