@@ -881,8 +881,12 @@ function do_gnutls()
         # Build.
         make -j ${JOBS}
 
-        # Takes too long.
-        # make check
+        # It takes very, very long.
+        # i386: FAIL: srp
+        if [ "${RUN_LONG_TESTS}" == "y" ]
+        then
+          make check
+        fi
 
         make install-strip
       ) 2>&1 | tee "${LOGS_FOLDER_PATH}/make-gnutls-output.txt"
