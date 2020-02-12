@@ -69,7 +69,7 @@ function do_zlib()
         echo "Running zlib make..."
 
         # Build.
-        make # -j ${JOBS}
+        make -j ${JOBS}
 
         make test
 
@@ -229,10 +229,42 @@ function do_mpfr()
         # Build.
         make -j ${JOBS}
 
-        # Fails.
-        # make check
-        # Not available in 3.x
-        # make check-exported-symbols
+        # Test to diagnose the 
+        if false
+        then
+          (
+            ls -l /opt/xbb/lib /opt/xbb-bootstrap/lib
+            echo
+
+            cd tests
+
+            make tversion
+
+            ldd -v tversion
+            readelf -d tversion 
+
+            # export LD_LIBRARY_PATH=/opt/xbb/lib:/opt/xbb-bootstrap/lib:
+            # export LD_LIBRARY_PATH=/opt/xbb/lib:
+            export LD_LIBRARY_PATH=""
+            echo "LD_LIBRARY_PATH=$LD_LIBRARY_PATH"
+
+            ./tversion
+
+          )
+        fi
+
+        if [ "${HOST_MACHINE}" != "i686" ]
+        then
+          # On 32-bit Intel it fails in `tversion`, due to a failure to load 
+          # libgmp.so from xbb.
+          make check
+
+          if [[ "${mpfr_version}" =~ 4\.* ]]
+          then
+            # Not available in 3.x
+            make check-exported-symbols
+          fi
+        fi
 
         make install-strip
       ) 2>&1 | tee "${LOGS_FOLDER_PATH}/make-mpfr-output.txt"
@@ -846,8 +878,12 @@ function do_gnutls()
         # Build.
         make -j ${JOBS}
 
-        # Takes too long.
-        # make check
+        # It takes very, very long.
+        # i386: FAIL: srp
+        if [ "${RUN_LONG_TESTS}" == "y" ]
+        then
+          make check
+        fi
 
         make install-strip
       ) 2>&1 | tee "${LOGS_FOLDER_PATH}/make-gnutls-output.txt"

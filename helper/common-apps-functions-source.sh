@@ -480,6 +480,7 @@ function do_mingw_all()
         echo
         echo "Running mingw-w64 headers make..."
 
+        # Build.
         make -j ${JOBS}
 
         make install-strip
@@ -587,7 +588,7 @@ function do_mingw_all()
         echo "Running mingw gcc step 1 make..."
 
         # Build.
-        make all-gcc -j ${JOBS}
+        make -j ${JOBS} all-gcc 
 
         make install-gcc
       ) 2>&1 | tee "${LOGS_FOLDER_PATH}/make-mingw-gcc-step1-output.txt"
@@ -744,6 +745,7 @@ function do_mingw_all()
         echo
         echo "Running mingw-w64 winpthreads make..."
 
+        # Build.
         make -j ${JOBS}
 
         make install-strip
@@ -1261,8 +1263,11 @@ function do_tar()
         # Build.
         make -j ${JOBS}
 
-        # Takes too long and fails.
-        # make check
+        # It takes very long.
+        if [ "${RUN_LONG_TESTS}" == "y" ]
+        then
+          make check
+        fi
 
         make install-strip
 
@@ -1377,7 +1382,9 @@ function do_coreutils()
         # Build.
         make -j ${JOBS}
 
-        # Takes too long and fails.
+        # Takes too long and fails
+        # x86_64: FAIL: tests/misc/chroot-credentials.sh
+        # x86_64: ERROR: tests/du/long-from-unreadable.sh
         # make check
 
         # make install-strip
@@ -1646,7 +1653,10 @@ function do_gawk()
         make -j ${JOBS}
 
         # 2 tests fail.
-        # make check
+        if [ "${RUN_LONG_TESTS}" == "y" ]
+        then
+          make check
+        fi
 
         make install-strip
       ) 2>&1 | tee "${LOGS_FOLDER_PATH}/make-gawk-output.txt"
@@ -1726,6 +1736,7 @@ function do_sed()
         make -j ${JOBS}
 
         # Some tests fail due to missing locales.
+        # x86_64: FAIL: testsuite/panic-tests.sh
         # make check
 
         make install-strip
@@ -1810,6 +1821,7 @@ function do_autoconf()
 
         # Build.
         make -j ${JOBS}
+
         make install-strip
       ) 2>&1 | tee "${LOGS_FOLDER_PATH}/make-autoconf-output.txt"
     )
@@ -1893,6 +1905,9 @@ function do_automake()
         make -j ${JOBS}
 
         # Takes too long and some tests fail.
+        # XFAIL: t/pm/Cond2.pl
+        # XFAIL: t/pm/Cond3.pl
+        # ...
         # make check
 
         make install-strip
@@ -1973,8 +1988,11 @@ function do_libtool()
         # Build.
         make -j ${JOBS}
 
-        # It takes too long.
-        # make check gl_public_submodule_commit=
+        # It takes too long (170 tests).
+        if [ "${RUN_LONG_TESTS}" == "y" ]
+        then
+          make check gl_public_submodule_commit=
+        fi
 
         make install-strip
 
@@ -2316,7 +2334,10 @@ function do_bison()
         make -j ${JOBS}
 
         # Takes too long.
-        # make -j1 check
+        if [ "${RUN_LONG_TESTS}" == "y" ]
+        then
+          make -j1 check
+        fi
 
         make install-strip
       ) 2>&1 | tee "${LOGS_FOLDER_PATH}/make-bison-output.txt"
@@ -2499,7 +2520,10 @@ function do_make()
         make -j ${JOBS}
 
         # Takes too long.
-        # make -k check
+        if [ "${RUN_LONG_TESTS}" == "y" ]
+        then
+          make -k check
+        fi
 
         make install-strip
 
@@ -2601,6 +2625,7 @@ function do_wget()
         make -j ${JOBS}
 
         # Fails
+        # x86_64: FAIL:  65
         # make check
 
         make install-strip
@@ -2891,8 +2916,8 @@ function do_perl()
 
         # Takes too long.
         # TEST_JOBS=$(echo $MAKEFLAGS | sed 's/.*-j\([0-9][0-9]*\).*/\1/') make test_harness
-
         # make test
+
         make install-strip
 
         # https://www.cpan.org/modules/INSTALL.html
@@ -3061,6 +3086,8 @@ function do_patchelf()
         make -j ${JOBS}
 
         # Fails.
+        # x86_64: FAIL: set-rpath-library.sh (Segmentation fault (core dumped))
+        # x86_64: FAIL: set-interpreter-long.sh (Segmentation fault (core dumped))
         # make -C tests -j1 check
 
         make install-strip
@@ -3125,6 +3152,7 @@ function do_dos2unix()
 
         # Build.
         make -j ${JOBS} prefix="${INSTALL_FOLDER_PATH}" ENABLE_NLS=
+
         make prefix="${INSTALL_FOLDER_PATH}" strip install
       ) 2>&1 | tee "${LOGS_FOLDER_PATH}/make-dos2unix-output.txt"
     )
@@ -3714,7 +3742,9 @@ function do_p7zip()
       sed -i -e "s|CFLAGS=|CFLAGS+=|" makefile.glb
       sed -i -e "s|CXXFLAGS=|CXXFLAGS+=|" makefile.glb
 
+      # Build.
       make -j ${JOBS}
+
       if [ "${HOST_UNAME}" == "Darwin" ]
       then
         # 7z cannot load library on macOS.

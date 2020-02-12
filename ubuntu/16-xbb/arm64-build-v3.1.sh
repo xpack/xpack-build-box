@@ -49,9 +49,7 @@ host_init_docker_input \
 arch="arm64"
 tag="ilegeul/ubuntu:arm64-16.04-xbb-v3.1"
 
-echo 
-echo "Building Docker image ${tag}..."
-docker build --tag "${tag}" -f "${arch}-Dockerfile-v3.1" .
+host_run_docker_build
 
 host_clean_docker_input
 

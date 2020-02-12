@@ -49,9 +49,7 @@ host_init_docker_input \
 arch="i386"
 tag="ilegeul/ubuntu:i386-12.04-xbb-v3.1"
 
-echo 
-echo "Building Docker image ${tag}..."
-docker build --tag "${tag}" -f "${arch}-Dockerfile-v3.1" .
+host_run_docker_build
 
 host_clean_docker_input
 
