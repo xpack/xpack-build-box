@@ -542,7 +542,7 @@ function do_mingw_all()
 
       export CPPFLAGS="${XBB_CPPFLAGS}" 
       export CFLAGS="${XBB_CFLAGS} -Wno-sign-compare -Wno-implicit-function-declaration -Wno-missing-prototypes -Wno-builtin-declaration-mismatch -Wno-prio-ctor-dtor -Wno-attributes"
-      export CXXFLAGS="${XBB_CXXFLAGS} -Wno-sign-compare -Wno-type-limits -Wno-missing-prototypes -Wno-unused-function -Wno-type-limits -Wno-unused-parameter"
+      export CXXFLAGS="${XBB_CXXFLAGS} -Wno-sign-compare -Wno-type-limits -Wno-unused-function -Wno-type-limits -Wno-unused-parameter"
       # export LDFLAGS="-static-libstdc++ ${LDFLAGS}"
       export LDFLAGS="${XBB_LDFLAGS_APP}"
 
