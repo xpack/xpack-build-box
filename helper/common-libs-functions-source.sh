@@ -169,7 +169,7 @@ function do_mpfr()
 {
   # http://www.mpfr.org
   # https://ftp.gnu.org/gnu/mpfr/
-  # http://www.mpfr.org/mpfr-3.1.6
+  # https://ftp.gnu.org/gnu/mpfr/mpfr-3.1.6.tar.xz
   # https://www.mpfr.org/mpfr-4.0.2/mpfr-4.0.2.tar.xz
 
   # https://archlinuxarm.org/packages/aarch64/mpfr/files/PKGBUILD
@@ -182,8 +182,7 @@ function do_mpfr()
 
   local mpfr_folder_name="mpfr-${mpfr_version}"
   local mpfr_archive="${mpfr_folder_name}.tar.xz"
-  local mpfr_url="https://www.mpfr.org/${mpfr_folder_name}/${mpfr_archive}"
-  # local mpfr_url="https://github.com/gnu-mcu-eclipse/files/raw/master/libs/${mpfr_archive}"
+  local mpfr_url="https://ftp.gnu.org/gnu/mpfr/${mpfr_archive}"
 
   local mpfr_stamp_file_path="${STAMPS_FOLDER_PATH}/stamp-mpfr-${mpfr_version}-installed"
   if [ ! -f "${mpfr_stamp_file_path}" -o ! -d "${LIBS_BUILD_FOLDER_PATH}/${mpfr_folder_name}" ]
