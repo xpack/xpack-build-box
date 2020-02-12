@@ -3521,21 +3521,27 @@ function do_python3()
 function do_scons() 
 {
   # http://scons.org
-  # https://sourceforge.net/projects/scons/files/scons/
-  # https://sourceforge.net/projects/scons/files/scons/3.0.5/scons-3.0.5.tar.gz/download
+  # http://prdownloads.sourceforge.net/scons/scons-3.1.2.tar.gz
 
   # https://archlinuxarm.org/packages/any/scons/files/PKGBUILD
   # https://aur.archlinux.org/cgit/aur.git/tree/PKGBUILD?h=python2-scons
 
-  # 2017-09-16, "3.0.1"
-  # 2019-03-27, "3.0.5"
+  # 2017-09-16, "3.0.1" (sourceforge)
+  # 2019-03-27, "3.0.5" (sourceforge)
   # 2019-12-17, "3.1.2"
 
   local scons_version="$1"
 
   local scons_folder_name="scons-${scons_version}"
   local scons_archive="${scons_folder_name}.tar.gz"
-  local scons_url="https://sourceforge.net/projects/scons/files/scons/${scons_version}/${scons_archive}"
+
+  local scons_url
+  if [[ "${scons_version}" =~ 3\.0\.* ]]
+  then
+    scons_url"https://sourceforge.net/projects/scons/files/scons/${scons_version}/${scons_archive}"
+  else
+    scons_url="http://prdownloads.sourceforge.net/scons/${scons_archive}"
+  fi
 
   local scons_stamp_file_path="${STAMPS_FOLDER_PATH}/stamp-scons-${scons_version}-installed"
   if [ ! -f "${scons_stamp_file_path}" -o ! -d "${BUILD_FOLDER_PATH}/${scons_folder_name}" ]
@@ -3906,6 +3912,50 @@ function do_wine()
 
   else
     echo "Component wine already installed."
+  fi
+}
+
+function do_nvm() 
+{
+  # https://github.com/nvm-sh/nvm
+  # curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.35.2/install.sh | bash
+
+  # https://aur.archlinux.org/cgit/aur.git/tree/PKGBUILD?h=nvm
+
+  # Dec 18, 2019, "0.35.2"
+
+  local nvm_version="$1"
+  local nvm_folder_name="nvm-${nvm_version}"
+  local nvm_url="https://raw.githubusercontent.com/nvm-sh/nvm/v${nvm_version}/install.sh"
+
+  local nvm_stamp_file_path="${STAMPS_FOLDER_PATH}/stamp-nvm-${nvm_version}-installed"
+  if [ ! -f "${nvm_stamp_file_path}" ]
+  then
+
+    (
+      cd "${BUILD_FOLDER_PATH}/${nvm_folder_name}"
+
+      xbb_activate
+
+      export NVM_DIR="${INSTALL_FOLDER_PATH}/nvm"
+
+      curl -o- "${nvm_url}" | bash
+
+    ) 2>&1 | tee "${LOGS_FOLDER_PATH}/install-nvm-output.txt"
+
+    (
+      xbb_activate_installed_bin
+
+      echo
+      # "${INSTALL_FOLDER_PATH}/bin/scons" --version
+    )
+
+    hash -r
+
+    touch "${nvm_stamp_file_path}"
+
+  else
+    echo "Component nvm already installed."
   fi
 }
 
