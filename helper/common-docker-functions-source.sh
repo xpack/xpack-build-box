@@ -73,12 +73,25 @@ function host_run_docker_it()
     --tty \
     --hostname "${name}-${arch}" \
     --workdir="/root" \
+    --env RUN_LONG_TESTS \
     --volume="${WORK_FOLDER_PATH}:/root/Work" \
     --volume="${script_folder_path}/input:/input" \
     --volume="${out}:/opt/${name}" \
     ${from}
 
 }
+
+function host_run_docker_build()
+{
+  echo 
+  echo "Building Docker image ${tag}..."
+  docker build \
+    --build-arg RUN_LONG_TESTS \
+    --tag "${tag}" \
+    --file "${arch}-Dockerfile-v3.1" \
+    .
+}
+
 # =============================================================================
 
 function xbb_activate()
