@@ -2085,7 +2085,7 @@ function do_gettext()
         make -j ${JOBS}
 
         # Fails on Arm.
-        # make check
+        make check
 
         make install-strip
       ) 2>&1 | tee "${LOGS_FOLDER_PATH}/make-gettext-output.txt"
@@ -2707,8 +2707,7 @@ function do_texinfo()
         # Build.
         make -j ${JOBS}
 
-        # Takes too long
-        # make check
+        make check
 
         make install-strip
       ) 2>&1 | tee "${LOGS_FOLDER_PATH}/make-texinfo-output.txt"
