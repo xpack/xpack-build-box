@@ -485,8 +485,8 @@ function do_nettle()
         # Build.
         make -j ${JOBS}
 
-        # Takes too long, especially on armhf.
-        # make -k check
+        # Takes very long on armhf.
+        make -k check
 
         # make install-strip
         # For unknown reasons, on 32-bits make install-info fails 
@@ -1108,8 +1108,8 @@ function do_libpng()
         # Build.
         make -j ${JOBS}
 
-        # Takes too long (on armhf).
-        # make check
+        # Takes very long on armhf.
+        make check
 
         make install-strip
       ) 2>&1 | tee "${LOGS_FOLDER_PATH}/make-libpng-output.txt"
