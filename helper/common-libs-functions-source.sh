@@ -69,7 +69,7 @@ function do_zlib()
         echo "Running zlib make..."
 
         # Build.
-        make # -j ${JOBS}
+        make -j ${JOBS}
 
         make test
 
@@ -150,7 +150,6 @@ function do_gmp()
         echo "Running gmp make..."
 
         # Build.
-        # Parallel builds may fail.
         make -j ${JOBS}
 
         make check
@@ -228,7 +227,6 @@ function do_mpfr()
         echo "Running mpfr make..."
 
         # Build.
-        # Parallel builds may fail.
         make -j ${JOBS}
 
         # Test to diagnose the 
@@ -406,7 +404,6 @@ function do_isl()
         echo "Running isl make..."
 
         # Build.
-        # Parallel builds may fail
         make -j ${JOBS}
 
         make check
@@ -486,7 +483,6 @@ function do_nettle()
         echo "Running nettle make..."
 
         # Build.
-        # Parallel builds may fail.
         make -j ${JOBS}
 
         make -k check
