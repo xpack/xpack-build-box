@@ -131,6 +131,7 @@ function detect_host()
 function prepare_xbb_env()
 {
   IS_BOOTSTRAP=${IS_BOOTSTRAP:-""}
+  RUN_LONG_TESTS=${RUN_LONG_TESTS:=""}
 
   if [ "${HOST_UNAME}" == "Darwin" ]
   then

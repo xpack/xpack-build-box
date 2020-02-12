@@ -98,6 +98,7 @@ function docker_prepare_env()
   
   IS_BOOTSTRAP=${IS_BOOTSTRAP:-""}
   XBB_BOOTSTRAP_FOLDER=${XBB_BOOTSTRAP_FOLDER:-""}
+  RUN_LONG_TESTS=${RUN_LONG_TESTS:=""}
 
   if [ "${IS_BOOTSTRAP}" == "y" ]
   then
