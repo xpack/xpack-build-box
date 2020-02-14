@@ -457,6 +457,27 @@ function xbb_activate_tex()
 __EOF__
 # The above marker must start in the first column.
 
+  if false
+  then
+
+    echo "export NVM_DIR=\"/opt/$(basename "${XBB_FOLDER}")/nvm\"" >> "${INSTALL_FOLDER_PATH}/xbb-source.sh"
+
+    # Note: __EOF__ is quoted to prevent substitutions here.
+    cat <<'__EOF__' >> "${INSTALL_FOLDER_PATH}/xbb-source.sh"
+# Add nvm shell functions.
+function xbb_activate_nvm()
+{
+  if [ -s "${NVM_DIR}/nvm.sh" ] 
+  then
+    source "${NVM_DIR}/nvm.sh"  # This loads nvm
+  fi
+}
+
+__EOF__
+# The above marker must start in the first column.
+
+  fi
+
   if [ "${IS_BOOTSTRAP}" != "y" ]
   then
 
