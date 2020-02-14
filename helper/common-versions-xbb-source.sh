@@ -263,6 +263,11 @@ function do_build_versions()
 
     # -------------------------------------------------------------------------
 
+    # $1=nvm_version
+    # $2=node_version
+    # $3=npm_version
+    # do_nvm "0.35.2" "12.16.0" "6.13.7"
+
     do_libgpg_error "1.37"
     do_libgcrypt "1.8.5"
     do_libassuan "2.5.3"

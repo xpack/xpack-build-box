@@ -3913,36 +3913,74 @@ function do_wine()
   fi
 }
 
+# Not yet functional.
 function do_nvm() 
 {
   # https://github.com/nvm-sh/nvm
   # curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.35.2/install.sh | bash
+  # https://github.com/nvm-sh/nvm/archive/v0.35.2.tar.gz
 
   # https://aur.archlinux.org/cgit/aur.git/tree/PKGBUILD?h=nvm
 
   # Dec 18, 2019, "0.35.2"
 
   local nvm_version="$1"
+  local node_version="$2"
+  local npm_version="$3"
+
   local nvm_folder_name="nvm-${nvm_version}"
-  local nvm_url="https://raw.githubusercontent.com/nvm-sh/nvm/v${nvm_version}/install.sh"
+  local nvm_archive="${nvm_folder_name}.tar.gz"
+  local nvm_url="https://github.com/nvm-sh/nvm/archive/v${nvm_version}.tar.gz"
 
   local nvm_stamp_file_path="${STAMPS_FOLDER_PATH}/stamp-nvm-${nvm_version}-installed"
-  if [ ! -f "${nvm_stamp_file_path}" ]
+  if [ ! -f "${nvm_stamp_file_path}" -o ! -d "${BUILD_FOLDER_PATH}/${nvm_folder_name}" -o ! -d "${INSTALL_FOLDER_PATH}/nvm" ]
   then
 
-    (
-      cd "${BUILD_FOLDER_PATH}/${nvm_folder_name}"
+    cd "${BUILD_FOLDER_PATH}"
 
+    download "${nvm_url}" "${nvm_archive}"
+
+    (
       xbb_activate
 
-      export NVM_DIR="${INSTALL_FOLDER_PATH}/nvm"
+      export CPPFLAGS="${XBB_CPPFLAGS}"
+      export CFLAGS="${XBB_CFLAGS}"
+      export CXXFLAGS="${XBB_CXXFLAGS}"
+      export LDFLAGS="${XBB_LDFLAGS_APP}"
+      export LIBS="-lrt"
 
-      curl -o- "${nvm_url}" | bash
+      if [ ! -d "${INSTALL_FOLDER_PATH}/nvm" ]
+      then
+        cd "${INSTALL_FOLDER_PATH}"
+        rm -rf "nvm-${nvm_version}"
+
+        echo "Unpacking ${nvm_archive}..."
+        tar xf "${CACHE_FOLDER_PATH}/${nvm_archive}"
+        mv -v "nvm-${nvm_version}" "nvm"
+      fi
+
+      if [ ! -x "xxx" ]
+      then
+        export NVM_DIR="/opt/$(basename "${XBB_FOLDER}")/nvm"
+        source "${NVM_DIR}/nvm.sh"
+
+        # Binary installs fail with a GLIBC 2.17 requirement.
+        # Source builds fail on Ubuntu 12 with
+        # undefined reference to `clock_gettime'
+        nvm install -s "${node_version}"
+        node --version
+        npm install "npm@${npm_version}"
+        npm --version
+      fi
 
     ) 2>&1 | tee "${LOGS_FOLDER_PATH}/install-nvm-output.txt"
 
     (
       xbb_activate_installed_bin
+      xbb_install_nvm
+
+      node --version
+      npm --version
 
       echo
       # "${INSTALL_FOLDER_PATH}/bin/scons" --version
