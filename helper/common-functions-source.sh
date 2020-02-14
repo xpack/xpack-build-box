@@ -255,6 +255,15 @@ function prepare_xbb_env()
   export CC
   export CXX
 
+  set +e
+  local java_home=$(java -XshowSettings:properties -version 2>&1 > /dev/null | grep 'java.home' | sed -e 's/.*= //' | sed -e 's|/jre||' )
+  set -e
+
+  if [ ! -z "${java_home}" ]
+  then
+    export JAVA_HOME="${java_home}"
+  fi
+
   export SHELL="/bin/bash"
   export CONFIG_SHELL="/bin/bash"
 
@@ -447,6 +456,23 @@ function xbb_activate_tex()
 
 __EOF__
 # The above marker must start in the first column.
+
+  if [ "${IS_BOOTSTRAP}" != "y" ]
+  then
+
+    set +e
+    local java_home=$(java -XshowSettings:properties -version 2>&1 > /dev/null | grep 'java.home' | sed -e 's/.*= //' | sed -e 's|/jre||')
+    set -e
+
+    if [ ! -z "${java_home}" ]
+    then
+      echo "export JAVA_HOME=\"${java_home}\"" >> "${INSTALL_FOLDER_PATH}/xbb-source.sh"
+    fi
+
+    echo >> "${INSTALL_FOLDER_PATH}/xbb-source.sh"
+
+  fi
+
 }
 
 # -----------------------------------------------------------------------------
