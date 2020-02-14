@@ -469,6 +469,8 @@ __EOF__
       echo "export JAVA_HOME=\"${java_home}\"" >> "${INSTALL_FOLDER_PATH}/xbb-source.sh"
     fi
 
+    echo "export M2_HOME=\"${INSTALL_FOLDER_PATH}/share/maven\"" >> "${INSTALL_FOLDER_PATH}/xbb-source.sh"
+
     echo >> "${INSTALL_FOLDER_PATH}/xbb-source.sh"
 
   fi
