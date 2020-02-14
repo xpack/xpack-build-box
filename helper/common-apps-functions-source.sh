@@ -3957,4 +3957,90 @@ function do_nvm()
   fi
 }
 
+function do_gnupg() 
+{
+  # https://www.gnupg.org
+  # https://www.gnupg.org/ftp/gcrypt/gnupg/gnupg-2.2.19.tar.bz2
+
+  # https://archlinuxarm.org/packages/aarch64/gnupg/files/PKGBUILD
+
+  local gnupg_version="$1"
+
+  local gnupg_folder_name="gnupg-${gnupg_version}"
+  local gnupg_archive="${gnupg_folder_name}.tar.bz2"
+  local gnupg_url="https://www.gnupg.org/ftp/gcrypt/gnupg/${gnupg_archive}"
+
+  local gnupg_stamp_file_path="${STAMPS_FOLDER_PATH}/stamp-gnupg-${gnupg_version}-installed"
+  if [ ! -f "${gnupg_stamp_file_path}" -o ! -d "${BUILD_FOLDER_PATH}/${gnupg_folder_name}" ]
+  then
+
+    cd "${SOURCES_FOLDER_PATH}"
+
+    download_and_extract "${gnupg_url}" "${gnupg_archive}" "${gnupg_folder_name}"
+
+    (
+      mkdir -p "${BUILD_FOLDER_PATH}/${gnupg_folder_name}"
+      cd "${BUILD_FOLDER_PATH}/${gnupg_folder_name}"
+
+      xbb_activate
+
+      export CPPFLAGS="${XBB_CPPFLAGS}"
+      export CFLAGS="${XBB_CFLAGS}"
+      export CXXFLAGS="${XBB_CXXFLAGS}"
+      export LDFLAGS="${XBB_LDFLAGS_APP}"
+      export LIBS="-lrt"
+
+      if [ ! -f "config.status" ]
+      then
+        (
+          echo
+          echo "Running gnupg configure..."
+
+          bash "${SOURCES_FOLDER_PATH}/${gnupg_folder_name}/configure" --help
+
+          bash ${DEBUG} "${SOURCES_FOLDER_PATH}/${gnupg_folder_name}/configure" \
+            --prefix="${INSTALL_FOLDER_PATH}" \
+            \
+            --with-libgpg-error-prefix="${INSTALL_FOLDER_PATH}" \
+            --with-libgcrypt-prefix="${INSTALL_FOLDER_PATH}" \
+            --with-libassuan-prefix="${INSTALL_FOLDER_PATH}" \
+            --with-ksba-prefix="${INSTALL_FOLDER_PATH}" \
+            --with-npth-prefix="${INSTALL_FOLDER_PATH}" \
+            \
+            --enable-maintainer-mode \
+            --enable-symcryptrun \
+
+          cp "config.log" "${LOGS_FOLDER_PATH}/config-gnupg-log.txt"
+        ) 2>&1 | tee "${LOGS_FOLDER_PATH}/configure-gnupg-output.txt"
+      fi
+
+      (
+        echo
+        echo "Running gnupg make..."
+
+        # Build.
+        make -j ${JOBS}
+
+        make check
+
+        make install-strip
+      ) 2>&1 | tee "${LOGS_FOLDER_PATH}/make-gnupg-output.txt"
+    )
+
+    (
+      xbb_activate_installed_bin
+
+      echo
+      "${INSTALL_FOLDER_PATH}/bin/gpg" --version
+    )
+
+    hash -r
+
+    touch "${gnupg_stamp_file_path}"
+
+  else
+    echo "Component gnupg already installed."
+  fi
+}
+
 # -----------------------------------------------------------------------------

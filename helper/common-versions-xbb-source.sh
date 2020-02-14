@@ -261,7 +261,18 @@ function do_build_versions()
       # configure: WARNING: No sound system was found. Windows applications will be silent.
     fi
 
-    # -----------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
+
+    do_libgpg_error "1.37"
+    do_libgcrypt "1.8.5"
+    do_libassuan "2.5.3"
+    do_libksba "1.3.5"
+    do_npth "1.6"
+
+    do_gnupg "2.2.19"
+
+
+    # -------------------------------------------------------------------------
 
   else
     echo 

@@ -1191,3 +1191,375 @@ function do_libmpdec()
 }
 
 # -----------------------------------------------------------------------------
+
+function do_libgpg_error() 
+{
+  # https://gnupg.org/ftp/gcrypt/libgpg-error
+  
+  # https://archlinuxarm.org/packages/aarch64/libgpg-error/files/PKGBUILD
+
+  # 2020-02-07, "1.37"
+
+  local libgpg_error_version="$1"
+
+  local libgpg_error_folder_name="libgpg-error-${libgpg_error_version}"
+  local libgpg_error_archive="${libgpg_error_folder_name}.tar.bz2"
+  local libgpg_error_url="https://gnupg.org/ftp/gcrypt/libgpg-error/${libgpg_error_archive}"
+
+
+  local libgpg_error_stamp_file_path="${STAMPS_FOLDER_PATH}/stamp-libgpg-error-${libgpg_error_version}-installed"
+  if [ ! -f "${libgpg_error_stamp_file_path}" -o ! -d "${LIBS_BUILD_FOLDER_PATH}/${libgpg_error_folder_name}" ]
+  then
+
+    cd "${SOURCES_FOLDER_PATH}"
+
+    download_and_extract "${libgpg_error_url}" "${libgpg_error_archive}" "${libgpg_error_folder_name}"
+
+    (
+      mkdir -p "${LIBS_BUILD_FOLDER_PATH}/${libgpg_error_folder_name}"
+      cd "${LIBS_BUILD_FOLDER_PATH}/${libgpg_error_folder_name}"
+
+      xbb_activate
+
+      export CPPFLAGS="${XBB_CPPFLAGS}"
+      export CFLAGS="${XBB_CFLAGS}"
+      export CXXFLAGS="${XBB_CXXFLAGS}"
+      export LDFLAGS="${XBB_LDFLAGS_LIB}"
+
+      if [ ! -f "config.status" ]
+      then
+        (
+          echo
+          echo "Running libgpg-error configure..."
+
+          bash "${SOURCES_FOLDER_PATH}/${libgpg_error_folder_name}/configure" --help
+
+          bash ${DEBUG} "${SOURCES_FOLDER_PATH}/${libgpg_error_folder_name}/configure" \
+            --prefix="${INSTALL_FOLDER_PATH}" 
+
+          cp "config.log" "${LOGS_FOLDER_PATH}/config-libgpg-error-log.txt"
+        ) 2>&1 | tee "${LOGS_FOLDER_PATH}/configure-libgpg-error-output.txt"
+      fi
+
+      (
+        echo
+        echo "Running libgpg-error make..."
+
+        # Build.
+        make -j ${JOBS}
+
+        make check
+
+        make install-strip
+      ) 2>&1 | tee "${LOGS_FOLDER_PATH}/make-libgpg-error-output.txt"
+    )
+
+    touch "${libgpg_error_stamp_file_path}"
+
+  else
+    echo "Library libgpg-error already installed."
+  fi
+}
+
+function do_libgcrypt() 
+{
+  # https://gnupg.org/ftp/gcrypt/libgcrypt
+  # https://gnupg.org/ftp/gcrypt/libgcrypt/libgcrypt-1.8.5.tar.bz2
+  
+  # https://archlinuxarm.org/packages/aarch64/libgcrypt/files/PKGBUILD
+
+  # 2019-08-29, "1.8.5"
+
+  local libgcrypt_version="$1"
+
+  local libgcrypt_folder_name="libgcrypt-${libgcrypt_version}"
+  local libgcrypt_archive="${libgcrypt_folder_name}.tar.bz2"
+  local libgcrypt_url="https://gnupg.org/ftp/gcrypt/libgcrypt/${libgcrypt_archive}"
+
+
+  local libgcrypt_stamp_file_path="${STAMPS_FOLDER_PATH}/stamp-libgcrypt-${libgcrypt_version}-installed"
+  if [ ! -f "${libgcrypt_stamp_file_path}" -o ! -d "${LIBS_BUILD_FOLDER_PATH}/${libgcrypt_folder_name}" ]
+  then
+
+    cd "${SOURCES_FOLDER_PATH}"
+
+    download_and_extract "${libgcrypt_url}" "${libgcrypt_archive}" "${libgcrypt_folder_name}"
+
+    (
+      mkdir -p "${LIBS_BUILD_FOLDER_PATH}/${libgcrypt_folder_name}"
+      cd "${LIBS_BUILD_FOLDER_PATH}/${libgcrypt_folder_name}"
+
+      xbb_activate
+
+      export CPPFLAGS="${XBB_CPPFLAGS}"
+      export CFLAGS="${XBB_CFLAGS}"
+      export CXXFLAGS="${XBB_CXXFLAGS}"
+      export LDFLAGS="${XBB_LDFLAGS_LIB}"
+
+      if [ ! -f "config.status" ]
+      then
+        (
+          echo
+          echo "Running libgcrypt configure..."
+
+          bash "${SOURCES_FOLDER_PATH}/${libgcrypt_folder_name}/configure" --help
+
+          config_options=()
+          if [ "${HOST_MACHINE}" != "aarch64" ]
+          then
+            config_options+=("--disable-neon-support")
+            config_options+=("--disable-arm-crypto-support")
+          fi
+
+          set +u
+
+          bash ${DEBUG} "${SOURCES_FOLDER_PATH}/${libgcrypt_folder_name}/configure" \
+            --prefix="${INSTALL_FOLDER_PATH}" \
+            \
+            --with-libgpg-error-prefix="${INSTALL_FOLDER_PATH}" \
+
+          set -u
+
+          if [ "${HOST_MACHINE}" != "aarch64" ]
+          then
+            # fix screwed up capability detection
+            sed -i '/HAVE_GCC_INLINE_ASM_AARCH32_CRYPTO 1/d' config.h
+            sed -i '/HAVE_GCC_INLINE_ASM_NEON 1/d' config.h
+          fi
+
+          cp "config.log" "${LOGS_FOLDER_PATH}/config-libgcrypt-log.txt"
+        ) 2>&1 | tee "${LOGS_FOLDER_PATH}/configure-libgcrypt-output.txt"
+      fi
+
+      (
+        echo
+        echo "Running libgcrypt make..."
+
+        # Build.
+        make -j ${JOBS}
+
+        make check
+
+        make install-strip
+      ) 2>&1 | tee "${LOGS_FOLDER_PATH}/make-libgcrypt-output.txt"
+    )
+
+    touch "${libgcrypt_stamp_file_path}"
+
+  else
+    echo "Library libgcrypt already installed."
+  fi
+}
+
+function do_libassuan() 
+{
+  # https://gnupg.org/ftp/gcrypt/libassuan
+  # https://gnupg.org/ftp/gcrypt/libassuan/libassuan-2.5.3.tar.bz2
+
+  # https://archlinuxarm.org/packages/aarch64/libassuan/files/PKGBUILD
+
+  # 2019-02-11, "2.5.3"
+
+  local libassuan_version="$1"
+
+  local libassuan_folder_name="libassuan-${libassuan_version}"
+  local libassuan_archive="${libassuan_folder_name}.tar.bz2"
+  local libassuan_url="https://gnupg.org/ftp/gcrypt/libassuan/${libassuan_archive}"
+
+  local libassuan_stamp_file_path="${STAMPS_FOLDER_PATH}/stamp-libassuan-${libassuan_version}-installed"
+  if [ ! -f "${libassuan_stamp_file_path}" -o ! -d "${LIBS_BUILD_FOLDER_PATH}/${libassuan_folder_name}" ]
+  then
+
+    cd "${SOURCES_FOLDER_PATH}"
+
+    download_and_extract "${libassuan_url}" "${libassuan_archive}" "${libassuan_folder_name}"
+
+    (
+      mkdir -p "${LIBS_BUILD_FOLDER_PATH}/${libassuan_folder_name}"
+      cd "${LIBS_BUILD_FOLDER_PATH}/${libassuan_folder_name}"
+
+      xbb_activate
+
+      export CPPFLAGS="${XBB_CPPFLAGS}"
+      export CFLAGS="${XBB_CFLAGS}"
+      export CXXFLAGS="${XBB_CXXFLAGS}"
+      export LDFLAGS="${XBB_LDFLAGS_LIB}"
+
+      if [ ! -f "config.status" ]
+      then
+        (
+          echo
+          echo "Running libassuan configure..."
+
+          bash "${SOURCES_FOLDER_PATH}/${libassuan_folder_name}/configure" --help
+
+          bash ${DEBUG} "${SOURCES_FOLDER_PATH}/${libassuan_folder_name}/configure" \
+            --prefix="${INSTALL_FOLDER_PATH}" \
+            \
+            --with-libgpg-error-prefix="${INSTALL_FOLDER_PATH}" \
+
+          cp "config.log" "${LOGS_FOLDER_PATH}/config-libassuan-log.txt"
+        ) 2>&1 | tee "${LOGS_FOLDER_PATH}/configure-libassuan-output.txt"
+      fi
+
+      (
+        echo
+        echo "Running libassuan make..."
+
+        # Build.
+        make -j ${JOBS}
+
+        make check
+
+        make install-strip
+      ) 2>&1 | tee "${LOGS_FOLDER_PATH}/make-libassuan-output.txt"
+    )
+
+    touch "${libassuan_stamp_file_path}"
+
+  else
+    echo "Library libassuan already installed."
+  fi
+}
+
+function do_libksba() 
+{
+  # https://gnupg.org/ftp/gcrypt/libksba
+  # https://gnupg.org/ftp/gcrypt/libksba/libksba-1.3.5.tar.bz2
+
+  # https://archlinuxarm.org/packages/aarch64/libksba/files/PKGBUILD
+
+  # 2016-08-22, "1.3.5"
+
+  local libksba_version="$1"
+
+  local libksba_folder_name="libksba-${libksba_version}"
+  local libksba_archive="${libksba_folder_name}.tar.bz2"
+  local libksba_url="https://gnupg.org/ftp/gcrypt/libksba/${libksba_archive}"
+
+  local libksba_stamp_file_path="${STAMPS_FOLDER_PATH}/stamp-libksba-${libksba_version}-installed"
+  if [ ! -f "${libksba_stamp_file_path}" -o ! -d "${LIBS_BUILD_FOLDER_PATH}/${libksba_folder_name}" ]
+  then
+
+    cd "${SOURCES_FOLDER_PATH}"
+
+    download_and_extract "${libksba_url}" "${libksba_archive}" "${libksba_folder_name}"
+
+    (
+      mkdir -p "${LIBS_BUILD_FOLDER_PATH}/${libksba_folder_name}"
+      cd "${LIBS_BUILD_FOLDER_PATH}/${libksba_folder_name}"
+
+      xbb_activate
+
+      export CPPFLAGS="${XBB_CPPFLAGS}"
+      export CFLAGS="${XBB_CFLAGS}"
+      export CXXFLAGS="${XBB_CXXFLAGS}"
+      export LDFLAGS="${XBB_LDFLAGS_LIB}"
+
+      if [ ! -f "config.status" ]
+      then
+        (
+          echo
+          echo "Running libksba configure..."
+
+          bash "${SOURCES_FOLDER_PATH}/${libksba_folder_name}/configure" --help
+
+          bash ${DEBUG} "${SOURCES_FOLDER_PATH}/${libksba_folder_name}/configure" \
+            --prefix="${INSTALL_FOLDER_PATH}" \
+            \
+            --with-libgpg-error-prefix="${INSTALL_FOLDER_PATH}" \
+
+          cp "config.log" "${LOGS_FOLDER_PATH}/config-libksba-log.txt"
+        ) 2>&1 | tee "${LOGS_FOLDER_PATH}/configure-libksba-output.txt"
+      fi
+
+      (
+        echo
+        echo "Running libksba make..."
+
+        # Build.
+        make -j ${JOBS}
+
+        make check
+
+        make install-strip
+      ) 2>&1 | tee "${LOGS_FOLDER_PATH}/make-libksba-output.txt"
+    )
+
+    touch "${libksba_stamp_file_path}"
+
+  else
+    echo "Library libksba already installed."
+  fi
+}
+
+function do_npth() 
+{
+  # https://gnupg.org/ftp/gcrypt/npth
+  # https://gnupg.org/ftp/gcrypt/npth/npth-1.6.tar.bz2
+
+  # https://archlinuxarm.org/packages/aarch64/npth/files/PKGBUILD
+
+  # 2018-07-16, "1.6"
+
+  local npth_version="$1"
+
+  local npth_folder_name="npth-${npth_version}"
+  local npth_archive="${npth_folder_name}.tar.bz2"
+  local npth_url="https://gnupg.org/ftp/gcrypt/npth/${npth_archive}"
+
+  local npth_stamp_file_path="${STAMPS_FOLDER_PATH}/stamp-npth-${npth_version}-installed"
+  if [ ! -f "${npth_stamp_file_path}" -o ! -d "${LIBS_BUILD_FOLDER_PATH}/${npth_folder_name}" ]
+  then
+
+    cd "${SOURCES_FOLDER_PATH}"
+
+    download_and_extract "${npth_url}" "${npth_archive}" "${npth_folder_name}"
+
+    (
+      mkdir -p "${LIBS_BUILD_FOLDER_PATH}/${npth_folder_name}"
+      cd "${LIBS_BUILD_FOLDER_PATH}/${npth_folder_name}"
+
+      xbb_activate
+
+      export CPPFLAGS="${XBB_CPPFLAGS}"
+      export CFLAGS="${XBB_CFLAGS}"
+      export CXXFLAGS="${XBB_CXXFLAGS}"
+      export LDFLAGS="${XBB_LDFLAGS_LIB}"
+
+      if [ ! -f "config.status" ]
+      then
+        (
+          echo
+          echo "Running npth configure..."
+
+          bash "${SOURCES_FOLDER_PATH}/${npth_folder_name}/configure" --help
+
+          bash ${DEBUG} "${SOURCES_FOLDER_PATH}/${npth_folder_name}/configure" \
+            --prefix="${INSTALL_FOLDER_PATH}" 
+
+          cp "config.log" "${LOGS_FOLDER_PATH}/config-npth-log.txt"
+        ) 2>&1 | tee "${LOGS_FOLDER_PATH}/configure-npth-output.txt"
+      fi
+
+      (
+        echo
+        echo "Running npth make..."
+
+        # Build.
+        make -j ${JOBS}
+
+        make check
+
+        make install-strip
+      ) 2>&1 | tee "${LOGS_FOLDER_PATH}/make-npth-output.txt"
+    )
+
+    touch "${npth_stamp_file_path}"
+
+  else
+    echo "Library npth already installed."
+  fi
+}
+
+# -----------------------------------------------------------------------------
