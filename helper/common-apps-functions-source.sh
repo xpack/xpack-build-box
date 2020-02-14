@@ -4106,4 +4106,70 @@ function do_ant()
   fi
 }
 
+function do_maven()
+{
+  # https://maven.apache.org
+  # https://www-eu.apache.org/dist/maven/source/
+  # https://www-eu.apache.org/dist/maven/maven-3/
+  # https://www-eu.apache.org/dist/maven/maven-3/3.6.3/binaries/apache-maven-3.6.3-bin.tar.gz
+  # https://www-eu.apache.org/dist/maven/maven-3/3.6.3/source/apache-maven-3.6.3-src.tar.gz
+
+  # https://archlinuxarm.org/packages/any/maven/files/PKGBUILD
+
+  # 2019-11-25, 3.6.3
+
+  local maven_version="$1"
+  local maven_version_major="$(echo "${maven_version}" | sed -e 's/\([0-9]*\)\..*/\1/')"
+
+  local maven_folder_name="apache-maven-${maven_version}"
+  local maven_archive="${maven_folder_name}-bin.tar.gz"
+  local maven_url="https://www-eu.apache.org/dist/maven/maven-${maven_version_major}/${maven_version}/binaries/${maven_archive}"
+
+  local maven_stamp_file_path="${STAMPS_FOLDER_PATH}/stamp-maven-${maven_version}-installed"
+  if [ ! -f "${maven_stamp_file_path}" -o ! -d "${BUILD_FOLDER_PATH}/${maven_folder_name}" ]
+  then
+
+    # In-source build.
+    cd "${BUILD_FOLDER_PATH}"
+
+    download_and_extract "${maven_url}" "${maven_archive}" "${maven_folder_name}"
+
+    (
+      cd "${BUILD_FOLDER_PATH}/${maven_folder_name}"
+
+      xbb_activate
+
+      (
+
+        # https://maven.apache.org/guides/development/guide-building-maven.html
+
+        echo
+        echo "Installing maven..."
+
+        rm -rf "${INSTALL_FOLDER_PATH}/share/maven"
+        mkdir -p "${INSTALL_FOLDER_PATH}/share/maven"
+
+        cp -R -v * "${INSTALL_FOLDER_PATH}/share/maven"
+
+        ln -s -v "${INSTALL_FOLDER_PATH}/share/maven/bin/mvn" "${INSTALL_FOLDER_PATH}/bin/mvn"
+
+      ) 2>&1 | tee "${LOGS_FOLDER_PATH}/build-maven-output.txt"
+    )
+
+    (
+      xbb_activate_installed_bin
+
+      echo
+      "${INSTALL_FOLDER_PATH}/bin/mvn" -version
+    )
+
+    hash -r
+
+    touch "${maven_stamp_file_path}"
+
+  else
+    echo "Component maven already installed."
+  fi
+}
+
 # -----------------------------------------------------------------------------
