@@ -4043,4 +4043,67 @@ function do_gnupg()
   fi
 }
 
+function do_ant()
+{
+  # https://ant.apache.org/srcdownload.cgi
+  # https://www-eu.apache.org/dist/ant/source/
+  # https://www-eu.apache.org/dist/ant/source/apache-ant-1.10.7-src.tar.xz
+
+  # https://archlinuxarm.org/packages/any/ant/files/PKGBUILD
+
+  # 2019-09-05, 1.10.7
+
+  local ant_version="$1"
+
+  local ant_folder_name="apache-ant-${ant_version}"
+  local ant_archive="${ant_folder_name}-src.tar.bz2"
+  local ant_url="https://www-eu.apache.org/dist/ant/source/${ant_archive}"
+
+  local ant_stamp_file_path="${STAMPS_FOLDER_PATH}/stamp-ant-${ant_version}-installed"
+  if [ ! -f "${ant_stamp_file_path}" -o ! -d "${BUILD_FOLDER_PATH}/${ant_folder_name}" ]
+  then
+
+    # In-source build.
+    cd "${BUILD_FOLDER_PATH}"
+
+    download_and_extract "${ant_url}" "${ant_archive}" "${ant_folder_name}"
+
+    (
+      mkdir -p "${BUILD_FOLDER_PATH}/${ant_folder_name}"
+      cd "${BUILD_FOLDER_PATH}/${ant_folder_name}"
+
+      xbb_activate
+
+      export CPPFLAGS="${XBB_CPPFLAGS}"
+      export CFLAGS="${XBB_CFLAGS}"
+      export CXXFLAGS="${XBB_CXXFLAGS}"
+      export LDFLAGS="${XBB_LDFLAGS_APP}"
+
+      (
+        # https://ant.apache.org/manual/install.html#buildingant
+
+        echo
+        echo "Building ant..."
+
+        bash build.sh -Ddist.dir="${INSTALL_FOLDER_PATH}" dist-lite
+
+      ) 2>&1 | tee "${LOGS_FOLDER_PATH}/build-ant-output.txt"
+    )
+
+    (
+      xbb_activate_installed_bin
+
+      echo
+      "${INSTALL_FOLDER_PATH}/bin/ant" -version
+    )
+
+    hash -r
+
+    touch "${ant_stamp_file_path}"
+
+  else
+    echo "Component ant already installed."
+  fi
+}
+
 # -----------------------------------------------------------------------------
