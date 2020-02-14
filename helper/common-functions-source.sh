@@ -347,11 +347,13 @@ function create_xbb_source()
 {
   echo
   echo "Creating ${INSTALL_FOLDER_PATH}/xbb-source.sh..."
-  cat <<'__EOF__' > "${INSTALL_FOLDER_PATH}/xbb-source.sh"
+
+  # Note: __EOF__ is NOT quoted to allow substitutions.
+  cat <<__EOF__ > "${INSTALL_FOLDER_PATH}/xbb-source.sh"
 # -----------------------------------------------------------------------------
 # This file is part of the xPack distribution.
 #   (http://xpack.github.io)
-# Copyright (c) 2020 Liviu Ionescu.
+# Copyright (c) $(date '+%Y') Liviu Ionescu.
 #
 # Permission to use, copy, modify, and/or distribute this software 
 # for any purpose is hereby granted, under the terms of the MIT license.
