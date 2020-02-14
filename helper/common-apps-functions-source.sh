@@ -91,7 +91,7 @@ function do_native_binutils()
     (
       xbb_activate_installed_bin
 
-      "${XBB_FOLDER_PATH}/bin/size" --version
+      "${INSTALL_FOLDER_PATH}/bin/size" --version
     )
 
     hash -r
@@ -397,7 +397,7 @@ function do_mingw_binutils()
     (
       xbb_activate_installed_bin
 
-      "${XBB_FOLDER_PATH}/bin/${MINGW_TARGET}-size" --version
+      "${INSTALL_FOLDER_PATH}/bin/${MINGW_TARGET}-size" --version
     )
 
     hash -r
@@ -557,7 +557,7 @@ function do_mingw_all()
 
           bash ${DEBUG} "${SOURCES_FOLDER_PATH}/${mingw_gcc_folder_name}/configure" \
             --prefix="${INSTALL_FOLDER_PATH}" \
-            --with-sysroot="${XBB_FOLDER_PATH}" \
+            --with-sysroot="${INSTALL_FOLDER_PATH}" \
             --with-pkgversion="${XBB_MINGW_GCC_BRANDING}" \
             \
             --build="${BUILD}" \
@@ -661,7 +661,7 @@ function do_mingw_all()
 
           bash ${DEBUG} "${SOURCES_FOLDER_PATH}/${mingw_folder_name}/mingw-w64-crt/configure" \
             --prefix="${INSTALL_FOLDER_PATH}/${MINGW_TARGET}" \
-            --with-sysroot="${XBB_FOLDER_PATH}" \
+            --with-sysroot="${INSTALL_FOLDER_PATH}" \
             \
             --build="${BUILD}" \
             --host="${MINGW_TARGET}" \
@@ -683,7 +683,7 @@ function do_mingw_all()
 
         make install-strip
 
-        ls -l "${XBB_FOLDER_PATH}" "${XBB_FOLDER_PATH}/${MINGW_TARGET}"
+        ls -l "${INSTALL_FOLDER_PATH}" "${INSTALL_FOLDER_PATH}/${MINGW_TARGET}"
       ) 2>&1 | tee "${LOGS_FOLDER_PATH}/make-mingw-crt-output.txt"
     )
 
@@ -3350,9 +3350,9 @@ function do_python2()
 
         if [ "${HOST_UNAME}" == "Darwin" ]
         then
-          strip "${XBB_FOLDER_PATH}/bin/python"
+          strip "${INSTALL_FOLDER_PATH}/bin/python"
         else
-          strip --strip-all "${XBB_FOLDER_PATH}/bin/python"
+          strip --strip-all "${INSTALL_FOLDER_PATH}/bin/python"
         fi
       ) 2>&1 | tee "${LOGS_FOLDER_PATH}/make-python2-output.txt"
     )
@@ -3486,9 +3486,9 @@ function do_python3()
 
         if [ "${HOST_UNAME}" == "Darwin" ]
         then
-          strip "${XBB_FOLDER_PATH}/bin/python3"
+          strip "${INSTALL_FOLDER_PATH}/bin/python3"
         else
-          strip --strip-all "${XBB_FOLDER_PATH}/bin/python3"
+          strip --strip-all "${INSTALL_FOLDER_PATH}/bin/python3"
         fi
       ) 2>&1 | tee "${LOGS_FOLDER_PATH}/make-python3-output.txt"
     )
@@ -3771,12 +3771,12 @@ function do_p7zip()
       xbb_activate_installed_bin
 
       echo
-      "${XBB_FOLDER_PATH}/bin/7za" --help
+      "${INSTALL_FOLDER_PATH}/bin/7za" --help
 
       if [ "${HOST_UNAME}" == "Linux" ]
       then
         echo
-        "${XBB_FOLDER_PATH}/bin/7z" --help
+        "${INSTALL_FOLDER_PATH}/bin/7z" --help
       fi
     )
 
@@ -3901,7 +3901,7 @@ function do_wine()
       # As a side effect, the "${HOME}/.wine" folder is created
       # and populated with lots of files., so subsequent runs
       # will no longer have to do it.
-      "${XBB_FOLDER_PATH}/bin/wine" "${XBB_FOLDER_PATH}"/lib*/wine/fakedlls/netstat.exe
+      "${INSTALL_FOLDER_PATH}/bin/wine" "${INSTALL_FOLDER_PATH}"/lib*/wine/fakedlls/netstat.exe
     )
 
     hash -r
@@ -3961,7 +3961,7 @@ function do_nvm()
 
       if [ ! -x "xxx" ]
       then
-        export NVM_DIR="/opt/$(basename "${XBB_FOLDER_PATH}")/nvm"
+        export NVM_DIR="/opt/$(basename "${INSTALL_FOLDER_PATH}")/nvm"
         source "${NVM_DIR}/nvm.sh"
 
         # Binary installs fail with a GLIBC 2.17 requirement.
