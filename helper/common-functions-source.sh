@@ -359,7 +359,6 @@ function create_xbb_source()
 # for any purpose is hereby granted, under the terms of the MIT license.
 # -----------------------------------------------------------------------------
 
-export TEXLIVE_FOLDER="/opt/texlive"
 __EOF__
 # The above marker must start in the first column.
 
@@ -381,6 +380,8 @@ __EOF__
   fi
 
   echo "export XBB_VERSION=\"${XBB_VERSION}\"" >> "${INSTALL_FOLDER_PATH}/xbb-source.sh"
+
+  echo "export TEXLIVE_FOLDER=\"/opt/texlive\"" >> "${INSTALL_FOLDER_PATH}/xbb-source.sh"
 
   if [ "${IS_BOOTSTRAP}" == "y" ]
   then
@@ -405,6 +406,7 @@ function xbb_activate_bootstrap()
   export PATH
   export LD_LIBRARY_PATH
 }
+
 __EOF__
 # The above marker must start in the first column.
 
