@@ -159,16 +159,16 @@ function prepare_xbb_env()
 
   if [ "${IS_BOOTSTRAP}" != "y" ]
   then
-    if [ ! -d "${XBB_BOOTSTRAP_FOLDER}" -o ! -x "${XBB_BOOTSTRAP_FOLDER}/bin/${CXX}" ]
+    if [ ! -d "${XBB_BOOTSTRAP_FOLDER_PATH}" -o ! -x "${XBB_BOOTSTRAP_FOLDER_PATH}/bin/${CXX}" ]
     then
-      echo "XBB Bootstrap not found in \"${XBB_BOOTSTRAP_FOLDER}\""
+      echo "XBB Bootstrap not found in \"${XBB_BOOTSTRAP_FOLDER_PATH}\""
       exit 1
     fi
   fi
   
   CACHE_FOLDER_PATH="${WORK_FOLDER_PATH}/cache"
 
-  XBB_WORK_FOLDER_PATH="${WORK_FOLDER_PATH}/$(basename "${XBB_FOLDER}")-${XBB_VERSION}-${HOST_DISTRO_LC_NAME}-${HOST_MACHINE}"
+  XBB_WORK_FOLDER_PATH="${WORK_FOLDER_PATH}/$(basename "${XBB_FOLDER_PATH}")-${XBB_VERSION}-${HOST_DISTRO_LC_NAME}-${HOST_MACHINE}"
 
   BUILD_FOLDER_PATH="${XBB_WORK_FOLDER_PATH}/build"
   LIBS_BUILD_FOLDER_PATH="${XBB_WORK_FOLDER_PATH}/build/libs"
@@ -176,7 +176,7 @@ function prepare_xbb_env()
   STAMPS_FOLDER_PATH="${XBB_WORK_FOLDER_PATH}/stamps"
   LOGS_FOLDER_PATH="${XBB_WORK_FOLDER_PATH}/logs"
 
-  INSTALL_FOLDER_PATH="${XBB_FOLDER}"
+  INSTALL_FOLDER_PATH="${XBB_FOLDER_PATH}"
 
   # ---------------------------------------------------------------------------
 
@@ -309,7 +309,7 @@ function xbb_activate_installed_dev()
   PKG_CONFIG_PATH="${INSTALL_FOLDER_PATH}/lib/pkgconfig:${PKG_CONFIG_PATH}"
 
   # If lib64 present, add it in front of lib.
-  if [ -d "${XBB_FOLDER}/lib64" ]
+  if [ -d "${XBB_FOLDER_PATH}/lib64" ]
   then
     XBB_LDFLAGS="-L${INSTALL_FOLDER_PATH}/lib64 ${XBB_LDFLAGS}"
     XBB_LDFLAGS_LIB="-L${INSTALL_FOLDER_PATH}/lib64 ${XBB_LDFLAGS_LIB}"
@@ -366,22 +366,22 @@ __EOF__
   then
     if [ "${IS_BOOTSTRAP}" == "y" ]
     then
-      echo "export XBB_BOOTSTRAP_FOLDER=\"/opt/$(basename "${XBB_FOLDER}")\"" >> "${INSTALL_FOLDER_PATH}/xbb-source.sh"
+      echo "export XBB_BOOTSTRAP_FOLDER_PATH=\"/opt/$(basename "${XBB_FOLDER_PATH}")\"" >> "${INSTALL_FOLDER_PATH}/xbb-source.sh"
     else
-      echo "export XBB_FOLDER=\"/opt/$(basename "${XBB_FOLDER}")\"" >> "${INSTALL_FOLDER_PATH}/xbb-source.sh"
+      echo "export XBB_FOLDER_PATH=\"/opt/$(basename "${XBB_FOLDER_PATH}")\"" >> "${INSTALL_FOLDER_PATH}/xbb-source.sh"
     fi
   else
     if [ "${IS_BOOTSTRAP}" == "y" ]
     then
-      echo "export XBB_BOOTSTRAP_FOLDER=\"\${HOME}/opt/$(basename "${XBB_FOLDER}")\"" >> "${INSTALL_FOLDER_PATH}/xbb-source.sh"
+      echo "export XBB_BOOTSTRAP_FOLDER_PATH=\"\${HOME}/opt/$(basename "${XBB_FOLDER_PATH}")\"" >> "${INSTALL_FOLDER_PATH}/xbb-source.sh"
     else
-      echo "export XBB_FOLDER=\"\${HOME}/opt/$(basename "${XBB_FOLDER}")\"" >> "${INSTALL_FOLDER_PATH}/xbb-source.sh"
+      echo "export XBB_FOLDER_PATH=\"\${HOME}/opt/$(basename "${XBB_FOLDER_PATH}")\"" >> "${INSTALL_FOLDER_PATH}/xbb-source.sh"
     fi
   fi
 
   echo "export XBB_VERSION=\"${XBB_VERSION}\"" >> "${INSTALL_FOLDER_PATH}/xbb-source.sh"
 
-  echo "export TEXLIVE_FOLDER=\"/opt/texlive\"" >> "${INSTALL_FOLDER_PATH}/xbb-source.sh"
+  echo "export TEXLIVE_FOLDER_PATH=\"/opt/texlive\"" >> "${INSTALL_FOLDER_PATH}/xbb-source.sh"
 
   if [ "${IS_BOOTSTRAP}" == "y" ]
   then
@@ -392,15 +392,15 @@ __EOF__
 # Adjust PATH to prefer the XBB bootstrap binaries.
 function xbb_activate_bootstrap()
 {
-  PATH="${XBB_BOOTSTRAP_FOLDER}/bin:${PATH}"
+  PATH="${XBB_BOOTSTRAP_FOLDER_PATH}/bin:${PATH}"
 
   # Add XBB lib to LD_LIBRARY_PATH.
-  LD_LIBRARY_PATH="${XBB_BOOTSTRAP_FOLDER}/lib:${LD_LIBRARY_PATH}"
+  LD_LIBRARY_PATH="${XBB_BOOTSTRAP_FOLDER_PATH}/lib:${LD_LIBRARY_PATH}"
 
-  if [ -d "${XBB_BOOTSTRAP_FOLDER}/lib64" ]
+  if [ -d "${XBB_BOOTSTRAP_FOLDER_PATH}/lib64" ]
   then
     # On 64-bit systems, add lib64 in front of LD_LIBRARY_PATH.
-    LD_LIBRARY_PATH="${XBB_BOOTSTRAP_FOLDER}/lib64:${LD_LIBRARY_PATH}"
+    LD_LIBRARY_PATH="${XBB_BOOTSTRAP_FOLDER_PATH}/lib64:${LD_LIBRARY_PATH}"
   fi
 
   export PATH
@@ -418,15 +418,15 @@ __EOF__
 # Adjust PATH and LD_LIBRARY_PATH to prefer the XBB binaries with their libs.
 function xbb_activate()
 {
-  PATH="${XBB_FOLDER}/bin:${PATH}"
+  PATH="${XBB_FOLDER_PATH}/bin:${PATH}"
 
   # Add XBB lib to LD_LIBRARY_PATH.
-  LD_LIBRARY_PATH="${XBB_FOLDER}/lib:${LD_LIBRARY_PATH}"
+  LD_LIBRARY_PATH="${XBB_FOLDER_PATH}/lib:${LD_LIBRARY_PATH}"
 
-  if [ -d "${XBB_FOLDER}/lib64" ]
+  if [ -d "${XBB_FOLDER_PATH}/lib64" ]
   then
     # On 64-bit systems, add lib64 in front of LD_LIBRARY_PATH.
-    LD_LIBRARY_PATH="${XBB_FOLDER}/lib64:${LD_LIBRARY_PATH}"
+    LD_LIBRARY_PATH="${XBB_FOLDER_PATH}/lib64:${LD_LIBRARY_PATH}"
   fi
 
   export PATH
@@ -453,7 +453,7 @@ __EOF__
 # Add TeX to PATH.
 function xbb_activate_tex()
 {
-  PATH="\${TEXLIVE_FOLDER}/bin/${tl_machine}-linux:\${PATH}"
+  PATH="\${TEXLIVE_FOLDER_PATH}/bin/${tl_machine}-linux:\${PATH}"
 
   export PATH
 }
@@ -464,7 +464,7 @@ __EOF__
   if false
   then
 
-    echo "export NVM_DIR=\"/opt/$(basename "${XBB_FOLDER}")/nvm\"" >> "${INSTALL_FOLDER_PATH}/xbb-source.sh"
+    echo "export NVM_DIR=\"/opt/$(basename "${XBB_FOLDER_PATH}")/nvm\"" >> "${INSTALL_FOLDER_PATH}/xbb-source.sh"
 
     # Note: __EOF__ is quoted to prevent substitutions here.
     cat <<'__EOF__' >> "${INSTALL_FOLDER_PATH}/xbb-source.sh"
@@ -598,28 +598,28 @@ function do_strip_debug_libs()
   if [ "${HOST_UNAME}" == "Linux" ]
   then
     (
-      cd "${XBB_FOLDER}"
+      cd "${XBB_FOLDER_PATH}"
 
       xbb_activate
 
       local strip
-      if [ -x "${XBB_FOLDER}/bin/strip" ]
+      if [ -x "${XBB_FOLDER_PATH}/bin/strip" ]
       then
-        strip="${XBB_FOLDER}/bin/strip"
-      elif [ -x "${XBB_BOOTSTRAP_FOLDER}/bin/strip" ]
+        strip="${XBB_FOLDER_PATH}/bin/strip"
+      elif [ -x "${XBB_BOOTSTRAP_FOLDER_PATH}/bin/strip" ]
       then
-        strip="${XBB_BOOTSTRAP_FOLDER}/bin/strip"
+        strip="${XBB_BOOTSTRAP_FOLDER_PATH}/bin/strip"
       else
         strip="strip"
       fi
 
       local ranlib
-      if [ -x "${XBB_FOLDER}/bin/ranlib" ]
+      if [ -x "${XBB_FOLDER_PATH}/bin/ranlib" ]
       then
-        ranlib="${XBB_FOLDER}/bin/ranlib"
-      elif [ -x "${XBB_BOOTSTRAP_FOLDER}/bin/ranlib" ]
+        ranlib="${XBB_FOLDER_PATH}/bin/ranlib"
+      elif [ -x "${XBB_BOOTSTRAP_FOLDER_PATH}/bin/ranlib" ]
       then
-        ranlib="${XBB_BOOTSTRAP_FOLDER}/bin/ranlib"
+        ranlib="${XBB_BOOTSTRAP_FOLDER_PATH}/bin/ranlib"
       else
         ranlib="ranlib"
       fi

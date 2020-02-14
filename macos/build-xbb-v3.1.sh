@@ -49,10 +49,10 @@ script_folder_name="$(basename "${script_folder_path}")"
 
 XBB_VERSION="3.1"
 
-# XBB_FOLDER="${HOME}/opt/xbb-${XBB_VERSION}"
-XBB_FOLDER="${HOME}/opt/xbb"
-# XBB_BOOTSTRAP_FOLDER="${HOME}/opt/xbb-bootstrap-${XBB_VERSION}"
-XBB_BOOTSTRAP_FOLDER="${HOME}/opt/xbb-bootstrap"
+# XBB_FOLDER_PATH="${HOME}/opt/xbb-${XBB_VERSION}"
+XBB_FOLDER_PATH="${HOME}/opt/xbb"
+# XBB_BOOTSTRAP_FOLDER_PATH="${HOME}/opt/xbb-bootstrap-${XBB_VERSION}"
+XBB_BOOTSTRAP_FOLDER_PATH="${HOME}/opt/xbb-bootstrap"
 
 WORK_FOLDER_PATH="${HOME}/Work"
 
@@ -77,7 +77,7 @@ detect_host
 
 prepare_xbb_env
 
-source "${XBB_BOOTSTRAP_FOLDER}/xbb-source.sh"
+source "${XBB_BOOTSTRAP_FOLDER_PATH}/xbb-source.sh"
 
 create_xbb_source
 

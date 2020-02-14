@@ -39,8 +39,8 @@ XBB_VERSION="3.1"
 
 WORK_FOLDER_PATH="${HOME}/Work"
 
-XBB_FOLDER="/opt/xbb-xbb"
-XBB_xbb_FOLDER="${XBB_FOLDER}"
+XBB_FOLDER_PATH="/opt/xbb"
+XBB_BOOTSTRAP_FOLDER_PATH="/opt/xbb-bootstrap"
 
 IS_BOOTSTRAP="y"
 

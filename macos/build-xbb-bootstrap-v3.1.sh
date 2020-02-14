@@ -50,9 +50,9 @@ script_folder_name="$(basename "${script_folder_path}")"
 
 XBB_VERSION="3.1"
 
-# XBB_FOLDER="${HOME}/opt/xbb-bootstrap-${XBB_VERSION}"
-XBB_FOLDER="${HOME}/opt/xbb-bootstrap"
-XBB_BOOTSTRAP_FOLDER="${XBB_FOLDER}"
+# XBB_FOLDER_PATH="${HOME}/opt/xbb-bootstrap-${XBB_VERSION}"
+XBB_FOLDER_PATH="${HOME}/opt/xbb-bootstrap"
+XBB_BOOTSTRAP_FOLDER_PATH="${XBB_FOLDER_PATH}"
 
 WORK_FOLDER_PATH="${HOME}/Work"
 

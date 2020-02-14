@@ -39,8 +39,8 @@ XBB_VERSION="3.1"
 
 WORK_FOLDER_PATH="${HOME}/Work"
 
-XBB_FOLDER="/opt/xbb"
-XBB_BOOTSTRAP_FOLDER="/opt/xbb-bootstrap"
+XBB_FOLDER_PATH="/opt/xbb"
+XBB_BOOTSTRAP_FOLDER_PATH="/opt/xbb-bootstrap"
 
 IS_BOOTSTRAP="n"
 
@@ -73,7 +73,7 @@ docker_prepare_env
 
 prepare_xbb_env
 
-source "${XBB_BOOTSTRAP_FOLDER}/xbb-source.sh"
+source "${XBB_BOOTSTRAP_FOLDER_PATH}/xbb-source.sh"
 
 # Override function, must be here.
 function xbb_activate()

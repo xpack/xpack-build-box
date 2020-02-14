@@ -37,35 +37,35 @@ script_folder_name="$(basename ${script_folder_path})"
 # -----------------------------------------------------------------------------
 # Definitions.
 
-XBB_FOLDER=${XBB_FOLDER:-/opt/xbb}
+XBB_FOLDER_PATH=${XBB_FOLDER_PATH:-/opt/xbb}
 
-mkdir -p "${XBB_FOLDER}"/bin
+mkdir -p "${XBB_FOLDER_PATH}"/bin
 
 # -----------------------------------------------------------------------------
 # Create a more verbose pkg-config.
 
 echo
-echo "Copying ${XBB_FOLDER}/bin/pkg-config-verbose..."
-cp "$(dirname "${script_folder_path}")/scripts/pkg-config-verbose" "${XBB_FOLDER}/bin"
-chmod +x "${XBB_FOLDER}/bin/pkg-config-verbose"
+echo "Copying ${XBB_FOLDER_PATH}/bin/pkg-config-verbose..."
+cp "$(dirname "${script_folder_path}")/scripts/pkg-config-verbose" "${XBB_FOLDER_PATH}/bin"
+chmod +x "${XBB_FOLDER_PATH}/bin/pkg-config-verbose"
 
 # -----------------------------------------------------------------------------
 # Create the XBB activator script.
 
-echo "Creating ${XBB_FOLDER}/xbb-source.sh..."
-cat <<'__EOF__' > "${XBB_FOLDER}/xbb-source.sh"
+echo "Creating ${XBB_FOLDER_PATH}/xbb-source.sh..."
+cat <<'__EOF__' > "${XBB_FOLDER_PATH}/xbb-source.sh"
 
-export XBB_FOLDER="/opt/xbb"
+export XBB_FOLDER_PATH="/opt/xbb"
 
 # Allow binaries from XBB to be found before all other.
 # Includes and pkg_config should be enabled only when needed.
 function xbb_activate()
 {
   PATH=${PATH:-""}
-  export PATH="${XBB_FOLDER}/bin:${PATH}"
+  export PATH="${XBB_FOLDER_PATH}/bin:${PATH}"
 
   LD_LIBRARY_PATH=${LD_LIBRARY_PATH:-""}
-  export LD_LIBRARY_PATH="${XBB_FOLDER}/lib:${LD_LIBRARY_PATH}"
+  export LD_LIBRARY_PATH="${XBB_FOLDER_PATH}/lib:${LD_LIBRARY_PATH}"
 }
 
 # Allow for the headers and pkg_config files to be found before all other.

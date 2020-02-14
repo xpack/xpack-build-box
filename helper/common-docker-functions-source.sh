@@ -110,7 +110,7 @@ function docker_prepare_env()
   fi
   
   IS_BOOTSTRAP=${IS_BOOTSTRAP:-""}
-  XBB_BOOTSTRAP_FOLDER=${XBB_BOOTSTRAP_FOLDER:-""}
+  XBB_BOOTSTRAP_FOLDER_PATH=${XBB_BOOTSTRAP_FOLDER_PATH:-""}
   RUN_LONG_TESTS=${RUN_LONG_TESTS:=""}
 
   if [ "${IS_BOOTSTRAP}" == "y" ]
@@ -125,11 +125,11 @@ function docker_prepare_env()
     CXX="g++-8bs"
   fi
 
-  if [ "${IS_BOOTSTRAP}" != "y" -a -n "${XBB_BOOTSTRAP_FOLDER}" ]
+  if [ "${IS_BOOTSTRAP}" != "y" -a -n "${XBB_BOOTSTRAP_FOLDER_PATH}" ]
   then
-    if [ ! -d "${XBB_BOOTSTRAP_FOLDER}" -o ! -x "${XBB_BOOTSTRAP_FOLDER}/bin/${CXX}" ]
+    if [ ! -d "${XBB_BOOTSTRAP_FOLDER_PATH}" -o ! -x "${XBB_BOOTSTRAP_FOLDER_PATH}/bin/${CXX}" ]
     then
-      echo "XBB Bootstrap not found in \"${XBB_BOOTSTRAP_FOLDER}\""
+      echo "XBB Bootstrap not found in \"${XBB_BOOTSTRAP_FOLDER_PATH}\""
       exit 1
     fi
   fi
