@@ -3176,6 +3176,8 @@ function do_dos2unix()
   fi
 }
 
+# -----------------------------------------------------------------------------
+
 function do_git() 
 {
   # https://git-scm.com/
@@ -3259,6 +3261,8 @@ function do_git()
     echo "Component git already installed."
   fi
 }
+
+# -----------------------------------------------------------------------------
 
 function do_python2() 
 {
@@ -3635,6 +3639,8 @@ function do_meson
   fi
 }
 
+# -----------------------------------------------------------------------------
+
 function do_ninja() 
 {
   # https://ninja-build.org
@@ -3706,6 +3712,8 @@ function do_ninja()
     echo "Component ninja already installed."
   fi
 }
+
+# -----------------------------------------------------------------------------
 
 function do_p7zip()
 {
@@ -3792,6 +3800,8 @@ function do_p7zip()
     echo "Component p7zip already installed."
   fi
 }
+
+# -----------------------------------------------------------------------------
 
 function do_wine()
 {
@@ -3917,6 +3927,8 @@ function do_wine()
   fi
 }
 
+# -----------------------------------------------------------------------------
+
 # Not yet functional.
 function do_nvm() 
 {
@@ -3998,6 +4010,8 @@ function do_nvm()
     echo "Component nvm already installed."
   fi
 }
+
+# -----------------------------------------------------------------------------
 
 function do_gnupg() 
 {
@@ -4085,6 +4099,8 @@ function do_gnupg()
   fi
 }
 
+# -----------------------------------------------------------------------------
+
 function do_ant()
 {
   # https://ant.apache.org/srcdownload.cgi
@@ -4111,7 +4127,6 @@ function do_ant()
     download_and_extract "${ant_url}" "${ant_archive}" "${ant_folder_name}"
 
     (
-      mkdir -p "${BUILD_FOLDER_PATH}/${ant_folder_name}"
       cd "${BUILD_FOLDER_PATH}/${ant_folder_name}"
 
       xbb_activate
