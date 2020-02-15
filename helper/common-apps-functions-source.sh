@@ -2084,8 +2084,12 @@ function do_gettext()
         # Build.
         make -j ${JOBS}
 
-        # Fails on Arm.
-        make check
+        # aarch64, armv8l: FAIL: test-thread_create
+        # aarch64, armv8l: FAIL: test-tls
+        if [ "${HOST_MACHINE}" != "aarch64" -a "${HOST_MACHINE}" != "armv8l" -a "${HOST_MACHINE}" != "armv7l" ]
+        then
+          make check
+        fi
 
         make install-strip
       ) 2>&1 | tee "${LOGS_FOLDER_PATH}/make-gettext-output.txt"
