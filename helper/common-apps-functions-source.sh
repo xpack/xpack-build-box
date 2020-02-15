@@ -4215,3 +4215,98 @@ function do_maven()
 }
 
 # -----------------------------------------------------------------------------
+
+function do_nodejs() 
+{
+  # https://nodejs.org/
+  # https://github.com/nodejs/node/releases
+  # https://github.com/nodejs/node/archive/v12.16.0.tar.gz
+
+  # https://archlinuxarm.org/packages/aarch64/nodejs-lts-erbium/files/PKGBUILD
+  # https://archlinuxarm.org/packages/aarch64/nodejs/files/PKGBUILD
+
+  # 2020-02-11, "12.16.0", lts
+
+  local nodejs_version="$1"
+
+  local nodejs_folder_name="node-${nodejs_version}"
+  local nodejs_archive="${nodejs_folder_name}.tar.gz"
+  local nodejs_url="https://github.com/nodejs/node/archive/v${nodejs_version}.tar.gz"
+
+  local nodejs_patch_file_path="${helper_folder_path}/patches/${nodejs_folder_name}.patch"
+
+  local nodejs_stamp_file_path="${STAMPS_FOLDER_PATH}/stamp-nodejs-${nodejs_version}-installed"
+  if [ ! -f "${nodejs_stamp_file_path}" -o ! -d "${BUILD_FOLDER_PATH}/${nodejs_folder_name}" ]
+  then
+
+    # In-source build.
+    cd "${BUILD_FOLDER_PATH}"
+
+    download_and_extract "${nodejs_url}" "${nodejs_archive}" "${nodejs_folder_name}" "${nodejs_patch_file_path}"
+
+    (
+      cd "${BUILD_FOLDER_PATH}/${nodejs_folder_name}"
+
+      xbb_activate
+
+      export CPPFLAGS="${XBB_CPPFLAGS}"
+      export CFLAGS="${XBB_CFLAGS}"
+      export CXXFLAGS="${XBB_CXXFLAGS}"
+      export LDFLAGS="${XBB_LDFLAGS_APP}"
+
+      if true # [ ! -f "config.status" ]
+      then
+        (
+          echo
+          echo "Running nodejs configure..."
+
+          bash "./configure" --help
+          
+          bash ${DEBUG} "./configure" \
+            --prefix="${INSTALL_FOLDER_PATH}/xxx" \
+            \
+            --with-intl=system-icu \
+            --without-npm \
+            --shared-openssl \
+            --shared-zlib \
+            --shared-libuv \
+            --experimental-http-parser \
+            --shared-cares \
+            --shared-nghttp2 \
+
+
+          # cp "config.log" "${LOGS_FOLDER_PATH}/config-nodejs-log.txt"
+        ) 2>&1 | tee "${LOGS_FOLDER_PATH}/configure-nodejs-output.txt"
+      fi
+
+      (
+        echo
+        echo "Running nodejs make..."
+
+        # Build.
+        make -j ${JOBS}
+
+        # make check
+
+        # make install-strip
+
+      ) 2>&1 | tee "${LOGS_FOLDER_PATH}/make-nodejs-output.txt"
+    )
+
+    (
+      xbb_activate_installed_bin
+
+      echo
+      "${INSTALL_FOLDER_PATH}/bin/node" --version
+    )
+
+    hash -r
+
+    touch "${nodejs_stamp_file_path}"
+
+  else
+    echo "Component nodejs already installed."
+  fi
+}
+
+# -----------------------------------------------------------------------------
