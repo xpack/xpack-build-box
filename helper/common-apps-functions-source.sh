@@ -4126,6 +4126,8 @@ function do_gnupg()
 function do_ant()
 {
   # https://ant.apache.org/srcdownload.cgi
+  # https://downloads.apache.org/ant/binaries/
+  # https://downloads.apache.org/ant/binaries/apache-ant-1.10.7-bin.tar.xz
   # https://www-eu.apache.org/dist/ant/source/
   # https://www-eu.apache.org/dist/ant/source/apache-ant-1.10.7-src.tar.xz
 
@@ -4136,8 +4138,8 @@ function do_ant()
   local ant_version="$1"
 
   local ant_folder_name="apache-ant-${ant_version}"
-  local ant_archive="${ant_folder_name}-src.tar.bz2"
-  local ant_url="https://www-eu.apache.org/dist/ant/source/${ant_archive}"
+  local ant_archive="${ant_folder_name}-bin.tar.xz"
+  local ant_url="https://downloads.apache.org/ant/binaries/${ant_archive}"
 
   local ant_stamp_file_path="${STAMPS_FOLDER_PATH}/stamp-ant-${ant_version}-installed"
   if [ ! -f "${ant_stamp_file_path}" -o ! -d "${BUILD_FOLDER_PATH}/${ant_folder_name}" ]
@@ -4153,18 +4155,19 @@ function do_ant()
 
       xbb_activate
 
-      export CPPFLAGS="${XBB_CPPFLAGS}"
-      export CFLAGS="${XBB_CFLAGS}"
-      export CXXFLAGS="${XBB_CXXFLAGS}"
-      export LDFLAGS="${XBB_LDFLAGS_APP}"
-
       (
         # https://ant.apache.org/manual/install.html#buildingant
 
         echo
-        echo "Building ant..."
+        echo "Installing ant..."
 
-        bash build.sh -Ddist.dir="${INSTALL_FOLDER_PATH}" dist-lite
+        rm -rf "${INSTALL_FOLDER_PATH}/share/ant"
+        mkdir -p "${INSTALL_FOLDER_PATH}/share/ant"
+
+        cp -R -v * "${INSTALL_FOLDER_PATH}/share/ant"
+
+        rm -f "${INSTALL_FOLDER_PATH}/bin/ant"
+        ln -s -v "${INSTALL_FOLDER_PATH}/share/ant/bin/ant" "${INSTALL_FOLDER_PATH}/bin/ant"
 
       ) 2>&1 | tee "${LOGS_FOLDER_PATH}/build-ant-output.txt"
     )
@@ -4190,6 +4193,7 @@ function do_maven()
   # https://maven.apache.org
   # https://www-eu.apache.org/dist/maven/source/
   # https://www-eu.apache.org/dist/maven/maven-3/
+  # https://downloads.apache.org/maven/maven-3/3.6.3/binaries/apache-maven-3.6.3-bin.tar.gz
   # https://www-eu.apache.org/dist/maven/maven-3/3.6.3/binaries/apache-maven-3.6.3-bin.tar.gz
   # https://www-eu.apache.org/dist/maven/maven-3/3.6.3/source/apache-maven-3.6.3-src.tar.gz
 
