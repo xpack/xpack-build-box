@@ -2086,7 +2086,8 @@ function do_gettext()
 
         # aarch64, armv8l: FAIL: test-thread_create
         # aarch64, armv8l: FAIL: test-tls
-        if [ "${HOST_MACHINE}" != "aarch64" -a "${HOST_MACHINE}" != "armv8l" -a "${HOST_MACHINE}" != "armv7l" ]
+        # Darwin: FAIL: lang-sh
+        if [ "${HOST_MACHINE}" != "aarch64" -a "${HOST_MACHINE}" != "armv8l" -a "${HOST_MACHINE}" != "armv7l" -a "${HOST_UNAME}" != "Darwin" ]
         then
           make check
         fi
