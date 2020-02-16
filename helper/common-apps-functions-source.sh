@@ -913,21 +913,14 @@ function do_openssl()
           if [ "${HOST_UNAME}" == "Darwin" ]
           then
 
-            # This config does not use the standard GNU environment definitions.
-            # `Configure` is a Perl script.
-            "./Configure" --help || true
+            "./config" --help
 
-            # WARNING! If you wish to build 64-bit library, then you have to
-            # invoke './Configure darwin64-x86_64-cc' *manually*.
-
-            local configure_target="darwin64-x86_64-cc"
-
-            "./Configure" \
+            export KERNEL_BITS=64
+            "./config" \
               --prefix="${INSTALL_FOLDER_PATH}" \
               --openssldir="${INSTALL_FOLDER_PATH}/openssl" \
               shared \
               enable-md2 enable-rc5 enable-tls enable-tls1_3 enable-tls1_2 enable-tls1_1 \
-              ${configure_target} \
               "${CPPFLAGS} ${CFLAGS} ${LDFLAGS}"
 
           else
