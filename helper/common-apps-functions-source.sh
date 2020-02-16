@@ -3523,6 +3523,7 @@ function do_python3()
 function do_scons() 
 {
   # http://scons.org
+  # http://prdownloads.sourceforge.net/scons/
   # http://prdownloads.sourceforge.net/scons/scons-3.1.2.tar.gz
 
   # https://archlinuxarm.org/packages/any/scons/files/PKGBUILD
@@ -3530,6 +3531,7 @@ function do_scons()
 
   # 2017-09-16, "3.0.1" (sourceforge)
   # 2019-03-27, "3.0.5" (sourceforge)
+  # 2019-08-08, "3.1.1"
   # 2019-12-17, "3.1.2"
 
   local scons_version="$1"
@@ -3542,7 +3544,12 @@ function do_scons()
   then
     scons_url"https://sourceforge.net/projects/scons/files/scons/${scons_version}/${scons_archive}"
   else
-    scons_url="http://prdownloads.sourceforge.net/scons/${scons_archive}"
+    if [ "${HOST_UNAME}" == "Darwin" ]
+    then
+      scons_url="https://github.com/xpack-dev-tools/files-cache/raw/master/libs/${scons_archive}"
+    else
+      scons_url="http://prdownloads.sourceforge.net/scons/${scons_archive}"
+    fi
   fi
 
   local scons_stamp_file_path="${STAMPS_FOLDER_PATH}/stamp-scons-${scons_version}-installed"
