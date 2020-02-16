@@ -4234,6 +4234,7 @@ function do_maven()
 
         cp -R -v * "${INSTALL_FOLDER_PATH}/share/maven"
 
+        rm -f "${INSTALL_FOLDER_PATH}/bin/mvn"
         ln -s -v "${INSTALL_FOLDER_PATH}/share/maven/bin/mvn" "${INSTALL_FOLDER_PATH}/bin/mvn"
 
       ) 2>&1 | tee "${LOGS_FOLDER_PATH}/build-maven-output.txt"
