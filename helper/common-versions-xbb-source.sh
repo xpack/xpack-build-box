@@ -158,7 +158,22 @@ function do_build_versions()
     
     # pip3 install meson=="0.53.1"
 
-    if true # [ "${HOST_UNAME}" == "Linux" ]
+    # Fails on Darwin.
+    # 0:01:39 load avg: 1.70 [187/400] test_io
+    # python.exe(15636,0x7fff75763300) malloc: *** mach_vm_map(size=9223372036854775808) failed (error code=3)
+    # *** error: can't allocate region
+    # *** set a breakpoint in malloc_error_break to debug
+    # python.exe(15636,0x7fff75763300) malloc: *** mach_vm_map(size=9223372036854775808) failed (error code=3)
+    # *** error: can't allocate region
+    # *** set a breakpoint in malloc_error_break to debug
+    # python.exe(15636,0x7fff75763300) malloc: *** mach_vm_map(size=9223372036854775808) failed (error code=3)
+    # *** error: can't allocate region
+    # *** set a breakpoint in malloc_error_break to debug
+
+    # error: [Errno 54] Connection reset by peer
+    # 0:05:27 load avg: 1.64 [311/400] test_startfile -- test_ssl failed (env changed)
+
+    if [ "${HOST_UNAME}" == "Linux" ]
     then
       # There are several errors on macOS 10.10 and some tests fail.                                           
       # depends=('bzip2' 'gdbm' 'openssl' 'zlib' 'expat' 'sqlite' 'libffi')
