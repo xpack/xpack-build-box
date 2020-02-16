@@ -1534,6 +1534,15 @@ function do_npth()
       export CXXFLAGS="${XBB_CXXFLAGS}"
       export LDFLAGS="${XBB_LDFLAGS_LIB}"
 
+      if [ "${HOST_UNAME}" == "Darwin" ]
+      then
+        # /usr/include/os/base.h:113:20: error: missing binary operator before token "("
+        # #if __has_extension(attribute_overloadable)
+
+        export CC=clang
+        export CXX=clang++
+      fi
+
       if [ ! -f "config.status" ]
       then
         (
