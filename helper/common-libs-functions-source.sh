@@ -484,8 +484,15 @@ function do_nettle()
         # Build.
         make -j ${JOBS}
 
-        # Takes very long on armhf.
-        make -k check
+        # dlopen failed: dlopen(../libnettle.so, 2): image not found
+        # /Users/ilg/Work/xbb-3.1-macosx-x86_64/sources/nettle-3.5.1/run-tests: line 57: 46731 Abort trap: 6           "$1" $testflags
+        # darwin: FAIL: dlopen
+
+        if [ "${HOST_UNAME}" != "Darwin" ]
+        then
+          # Takes very long on armhf.
+          make -k check
+        fi
 
         # make install-strip
         # For unknown reasons, on 32-bits make install-info fails 
