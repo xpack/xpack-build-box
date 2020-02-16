@@ -3568,12 +3568,16 @@ function do_scons()
       echo
       echo "Running scons install..."
 
-      # On macOS it uses the system python.
+      echo
+      which python
+
+      echo
       python setup.py install \
         --prefix="${INSTALL_FOLDER_PATH}" \
         \
         --optimize=1 \
         --standard-lib \
+
 
     ) 2>&1 | tee "${LOGS_FOLDER_PATH}/install-scons-output.txt"
 
@@ -3581,6 +3585,14 @@ function do_scons()
       xbb_activate_installed_bin
 
       echo
+      which python
+      if [ "${HOST_UNAME}" == "Darwin" ]
+      then
+        PYTHONPATH="${INSTALL_FOLDER_PATH}/lib/python2.7/site-packages"
+        export PYTHONPATH
+        echo PYTHONPATH="${PYTHONPATH}"
+      fi
+
       "${INSTALL_FOLDER_PATH}/bin/scons" --version
     )
 
