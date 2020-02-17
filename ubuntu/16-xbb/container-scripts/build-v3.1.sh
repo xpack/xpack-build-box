@@ -42,7 +42,7 @@ WORK_FOLDER_PATH="${HOME}/Work"
 XBB_FOLDER_PATH="/opt/xbb"
 XBB_BOOTSTRAP_FOLDER_PATH="/opt/xbb-bootstrap"
 
-IS_BOOTSTRAP="y"
+IS_BOOTSTRAP="n"
 
 # -----------------------------------------------------------------------------
 
