@@ -19,8 +19,10 @@ function do_build_versions()
     XBB_GCC_SUFFIX="-$(echo ${XBB_GCC_VERSION} | sed -e 's|\([0-9][0-9]*\)\..*|\1|')"
     XBB_BINUTILS_VERSION="2.34" # "2.33.1"
 
-    XBB_MINGW_GCC_VERSION="9.2.0" # "8.3.0" # "7.4.0"
-    XBB_MINGW_BINUTILS_VERSION="2.34" # "2.33.1"
+    # 8.x fails to compile the libstdc++ new file system classes.
+    # must be the same as native, otherwise shared libraries will bess versions.
+    XBB_MINGW_GCC_VERSION="${XBB_GCC_VERSION}" # "9.2.0" # "8.3.0" # "7.4.0"
+    XBB_MINGW_BINUTILS_VERSION="${XBB_BINUTILS_VERSION}" # "2.34" # "2.33.1"
 
     XBB_BINUTILS_BRANDING="xPack Build Box Binutils\x2C ${HOST_BITS}-bit"
     XBB_GCC_BRANDING="xPack Build Box GCC\x2C ${HOST_BITS}-bit"
