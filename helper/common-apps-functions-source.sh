@@ -91,7 +91,17 @@ function do_native_binutils()
     (
       xbb_activate_installed_bin
 
-      "${INSTALL_FOLDER_PATH}/bin/size" --version
+      run_app "${INSTALL_FOLDER_PATH}/bin/ar" --version
+      run_app "${INSTALL_FOLDER_PATH}/bin/as" --version
+      run_app "${INSTALL_FOLDER_PATH}/bin/ld" --version
+      run_app "${INSTALL_FOLDER_PATH}/bin/nm" --version
+      run_app "${INSTALL_FOLDER_PATH}/bin/objcopy" --version
+      run_app "${INSTALL_FOLDER_PATH}/bin/objdump" --version
+      run_app "${INSTALL_FOLDER_PATH}/bin/ranlib" --version
+      run_app "${INSTALL_FOLDER_PATH}/bin/size" --version
+      run_app "${INSTALL_FOLDER_PATH}/bin/strings" --version
+      run_app "${INSTALL_FOLDER_PATH}/bin/strip" --version
+
     )
 
     hash -r
@@ -267,8 +277,8 @@ function do_native_gcc()
       xbb_activate_installed_bin
 
       echo
-      "${INSTALL_FOLDER_PATH}/bin/g++${XBB_GCC_SUFFIX}" --version
-      "${INSTALL_FOLDER_PATH}/bin/g++${XBB_GCC_SUFFIX}" -dumpmachine
+      run_app "${INSTALL_FOLDER_PATH}/bin/g++${XBB_GCC_SUFFIX}" --version
+      run_app "${INSTALL_FOLDER_PATH}/bin/g++${XBB_GCC_SUFFIX}" -dumpmachine
       "${INSTALL_FOLDER_PATH}/bin/g++${XBB_GCC_SUFFIX}" -dumpspecs | wc -l
 
       mkdir -p "${HOME}/tmp"
@@ -397,7 +407,16 @@ function do_mingw_binutils()
     (
       xbb_activate_installed_bin
 
-      "${INSTALL_FOLDER_PATH}/bin/${MINGW_TARGET}-size" --version
+      run_app "${INSTALL_FOLDER_PATH}/bin/${MINGW_TARGET}-ar" --version
+      run_app "${INSTALL_FOLDER_PATH}/bin/${MINGW_TARGET}-as" --version
+      run_app "${INSTALL_FOLDER_PATH}/bin/${MINGW_TARGET}-ld" --version
+      run_app "${INSTALL_FOLDER_PATH}/bin/${MINGW_TARGET}-nm" --version
+      run_app "${INSTALL_FOLDER_PATH}/bin/${MINGW_TARGET}-objcopy" --version
+      run_app "${INSTALL_FOLDER_PATH}/bin/${MINGW_TARGET}-objdump" --version
+      run_app "${INSTALL_FOLDER_PATH}/bin/${MINGW_TARGET}-ranlib" --version
+      run_app "${INSTALL_FOLDER_PATH}/bin/${MINGW_TARGET}-size" --version
+      run_app "${INSTALL_FOLDER_PATH}/bin/${MINGW_TARGET}-strings" --version
+      run_app "${INSTALL_FOLDER_PATH}/bin/${MINGW_TARGET}-strip" --version
     )
 
     hash -r
@@ -993,7 +1012,7 @@ function do_openssl()
         xbb_activate_installed_bin
 
         echo
-        "${INSTALL_FOLDER_PATH}/bin/openssl" version
+        run_app "${INSTALL_FOLDER_PATH}/bin/openssl" version
       )
     )
 
@@ -1090,7 +1109,7 @@ function do_curl()
       xbb_activate_installed_bin
 
       echo
-      "${INSTALL_FOLDER_PATH}/bin/curl" --version
+      run_app "${INSTALL_FOLDER_PATH}/bin/curl" --version
     )
 
     touch "${curl_stamp_file_path}"
@@ -1177,7 +1196,7 @@ function do_xz()
       xbb_activate_installed_bin
 
       echo
-      "${INSTALL_FOLDER_PATH}/bin/xz" --version
+      run_app "${INSTALL_FOLDER_PATH}/bin/xz" --version
     )
 
     hash -r
@@ -1276,7 +1295,7 @@ function do_tar()
       xbb_activate_installed_bin
 
       echo
-      "${INSTALL_FOLDER_PATH}/bin/tar" --version
+      run_app "${INSTALL_FOLDER_PATH}/bin/tar" --version
     )
 
     hash -r
@@ -1389,7 +1408,7 @@ function do_coreutils()
       xbb_activate_installed_bin
 
       echo
-      "${INSTALL_FOLDER_PATH}/bin/realpath" --version
+      run_app "${INSTALL_FOLDER_PATH}/bin/realpath" --version
     )
 
     hash -r
@@ -1483,7 +1502,7 @@ function do_pkg_config()
       xbb_activate_installed_bin
 
       echo
-      "${INSTALL_FOLDER_PATH}/bin/pkg-config" --version
+      run_app "${INSTALL_FOLDER_PATH}/bin/pkg-config" --version
     )
 
     hash -r
@@ -1659,7 +1678,7 @@ function do_gawk()
       xbb_activate_installed_bin
 
       echo
-      "${INSTALL_FOLDER_PATH}/bin/awk" --version
+      run_app "${INSTALL_FOLDER_PATH}/bin/awk" --version
     )
 
     hash -r
@@ -1746,7 +1765,7 @@ function do_sed()
       xbb_activate_installed_bin
 
       echo
-      "${INSTALL_FOLDER_PATH}/bin/sed" --version
+      run_app "${INSTALL_FOLDER_PATH}/bin/sed" --version
     )
 
     hash -r
@@ -1823,7 +1842,7 @@ function do_autoconf()
       xbb_activate_installed_bin
 
       echo
-      "${INSTALL_FOLDER_PATH}/bin/autoconf" --version
+      run_app "${INSTALL_FOLDER_PATH}/bin/autoconf" --version
     )
 
     hash -r
@@ -1911,7 +1930,7 @@ function do_automake()
       xbb_activate_installed_bin
 
       echo
-      "${INSTALL_FOLDER_PATH}/bin/automake" --version
+      run_app "${INSTALL_FOLDER_PATH}/bin/automake" --version
     )
 
     hash -r
@@ -2002,7 +2021,7 @@ function do_libtool()
       xbb_activate_installed_bin
 
       echo
-      "${INSTALL_FOLDER_PATH}/bin/libtool" --version
+      run_app "${INSTALL_FOLDER_PATH}/bin/libtool" --version
     )
 
     hash -r
@@ -2093,7 +2112,7 @@ function do_gettext()
       xbb_activate_installed_bin
 
       echo
-      "${INSTALL_FOLDER_PATH}/bin/gettext" --version
+      run_app "${INSTALL_FOLDER_PATH}/bin/gettext" --version
     )
 
     hash -r
@@ -2173,7 +2192,7 @@ function do_patch()
       xbb_activate_installed_bin
 
       echo
-      "${INSTALL_FOLDER_PATH}/bin/patch" --version
+      run_app "${INSTALL_FOLDER_PATH}/bin/patch" --version
     )
 
     hash -r
@@ -2253,7 +2272,7 @@ function do_diffutils()
       xbb_activate_installed_bin
 
       echo
-      "${INSTALL_FOLDER_PATH}/bin/diff" --version
+      run_app "${INSTALL_FOLDER_PATH}/bin/diff" --version
     )
 
     hash -r
@@ -2345,7 +2364,7 @@ function do_bison()
       xbb_activate_installed_bin
 
       echo
-      "${INSTALL_FOLDER_PATH}/bin/bison" --version
+      run_app "${INSTALL_FOLDER_PATH}/bin/bison" --version
     )
 
     hash -r
@@ -2446,7 +2465,7 @@ function do_flex()
       xbb_activate_installed_bin
 
       echo
-      "${INSTALL_FOLDER_PATH}/bin/flex" --version
+      run_app "${INSTALL_FOLDER_PATH}/bin/flex" --version
     )
 
     hash -r
@@ -2537,7 +2556,7 @@ function do_make()
       xbb_activate_installed_bin
 
       echo
-      "${INSTALL_FOLDER_PATH}/bin/make" --version
+      run_app "${INSTALL_FOLDER_PATH}/bin/make" --version
     )
 
     hash -r
@@ -2634,7 +2653,7 @@ function do_wget()
       xbb_activate_installed_bin
 
       echo
-      "${INSTALL_FOLDER_PATH}/bin/wget" --version
+      run_app "${INSTALL_FOLDER_PATH}/bin/wget" --version
     )
 
     hash -r
@@ -2721,7 +2740,7 @@ function do_texinfo()
       xbb_activate_installed_bin
 
       echo
-      "${INSTALL_FOLDER_PATH}/bin/texi2pdf" --version
+      run_app "${INSTALL_FOLDER_PATH}/bin/texi2pdf" --version
     )
 
     hash -r
@@ -2833,7 +2852,7 @@ function do_cmake()
       xbb_activate_installed_bin
 
       echo
-      "${INSTALL_FOLDER_PATH}/bin/cmake" --version
+      run_app "${INSTALL_FOLDER_PATH}/bin/cmake" --version
     )
 
     hash -r
@@ -2936,7 +2955,7 @@ function do_perl()
       xbb_activate_installed_bin
 
       echo
-      "${INSTALL_FOLDER_PATH}/bin/perl" --version
+      run_app "${INSTALL_FOLDER_PATH}/bin/perl" --version
     )
 
     hash -r
@@ -3016,7 +3035,7 @@ function do_makedepend()
       xbb_activate_installed_bin
 
       echo
-      "${INSTALL_FOLDER_PATH}/bin/makedepend" || true
+      run_app "${INSTALL_FOLDER_PATH}/bin/makedepend" || true
     )
 
     hash -r
@@ -3101,7 +3120,7 @@ function do_patchelf()
       xbb_activate_installed_bin
 
       echo
-      "${INSTALL_FOLDER_PATH}/bin/patchelf" --version
+      run_app "${INSTALL_FOLDER_PATH}/bin/patchelf" --version
     )
 
     hash -r
@@ -3164,7 +3183,7 @@ function do_dos2unix()
       xbb_activate_installed_bin
 
       echo
-      "${INSTALL_FOLDER_PATH}/bin/unix2dos" --version
+      run_app "${INSTALL_FOLDER_PATH}/bin/unix2dos" --version
     )
 
     hash -r
@@ -3250,7 +3269,7 @@ function do_git()
       xbb_activate_installed_bin
 
       echo
-      "${INSTALL_FOLDER_PATH}/bin/git" --version
+      run_app "${INSTALL_FOLDER_PATH}/bin/git" --version
     )
 
     hash -r
@@ -3373,7 +3392,7 @@ function do_python2()
       echo
       echo "Installing setuptools and pip..."
 
-      "${INSTALL_FOLDER_PATH}/bin/python" --version
+      "${INSTALL_FOLDER_PATH}/bin/python2" --version
 
       "${INSTALL_FOLDER_PATH}/bin/python2" -m ensurepip --default-pip
       "${INSTALL_FOLDER_PATH}/bin/python2" -m pip install --upgrade pip setuptools wheel
@@ -3385,7 +3404,7 @@ function do_python2()
       xbb_activate_installed_bin
 
       echo
-      "${INSTALL_FOLDER_PATH}/bin/python" --version
+      run_app "${INSTALL_FOLDER_PATH}/bin/python" --version
     )
 
     hash -r
@@ -3509,7 +3528,7 @@ function do_python3()
       echo
       echo "Installing setuptools and pip3..."
 
-      "${INSTALL_FOLDER_PATH}/bin/python3" --version
+      run_app "${INSTALL_FOLDER_PATH}/bin/python3" --version
 
       "${INSTALL_FOLDER_PATH}/bin/python3" -m ensurepip --default-pip
       "${INSTALL_FOLDER_PATH}/bin/python3" -m pip install --upgrade pip setuptools wheel
@@ -3606,7 +3625,7 @@ function do_scons()
         echo PYTHONPATH="${PYTHONPATH}"
       fi
 
-      "${INSTALL_FOLDER_PATH}/bin/scons" --version
+      run_app "${INSTALL_FOLDER_PATH}/bin/scons" --version
     )
 
     hash -r
@@ -3646,7 +3665,7 @@ function do_meson
     (
       xbb_activate_installed_bin
 
-      "${INSTALL_FOLDER_PATH}/bin/meson" --version
+      run_app "${INSTALL_FOLDER_PATH}/bin/meson" --version
     )
 
     hash -r
@@ -3720,7 +3739,7 @@ function do_ninja()
       xbb_activate_installed_bin
 
       echo
-      "${INSTALL_FOLDER_PATH}/bin/ninja" --version
+      run_app "${INSTALL_FOLDER_PATH}/bin/ninja" --version
     )
 
     hash -r
@@ -3802,12 +3821,12 @@ function do_p7zip()
       xbb_activate_installed_bin
 
       echo
-      "${INSTALL_FOLDER_PATH}/bin/7za" --help
+      run_app "${INSTALL_FOLDER_PATH}/bin/7za" --help
 
       if [ "${HOST_UNAME}" == "Linux" ]
       then
         echo
-        "${INSTALL_FOLDER_PATH}/bin/7z" --help
+        run_app "${INSTALL_FOLDER_PATH}/bin/7z" --help
       fi
     )
 
@@ -3927,14 +3946,14 @@ function do_wine()
 
       echo
       # First check if the program is able to tell its version.
-      "${INSTALL_FOLDER_PATH}/bin/wine" --version
+      run_app "${INSTALL_FOLDER_PATH}/bin/wine" --version
 
       # This test should check if the program is able to start
       # a simple executable.
       # As a side effect, the "${HOME}/.wine" folder is created
       # and populated with lots of files., so subsequent runs
       # will no longer have to do it.
-      "${INSTALL_FOLDER_PATH}/bin/wine" "${INSTALL_FOLDER_PATH}"/lib*/wine/fakedlls/netstat.exe
+      run_app "${INSTALL_FOLDER_PATH}/bin/wine" "${INSTALL_FOLDER_PATH}"/lib*/wine/fakedlls/netstat.exe
     )
 
     hash -r

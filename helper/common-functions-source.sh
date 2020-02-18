@@ -591,6 +591,19 @@ function download_and_extract()
 
 # -----------------------------------------------------------------------------
 
+function run_app()
+{
+  # Does not include the .exe extension.
+  local app_path=$1
+  shift
+
+  echo
+  echo "${app_path} $@"
+  "${app_path}" $@ 2>&1
+}
+
+# -----------------------------------------------------------------------------
+
 function do_strip_debug_libs() 
 {
   echo
