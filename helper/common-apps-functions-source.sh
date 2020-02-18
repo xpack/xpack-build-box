@@ -1205,7 +1205,6 @@ function do_xz()
           bash ${DEBUG} "${SOURCES_FOLDER_PATH}/${xz_folder_name}/configure" \
             --prefix="${INSTALL_FOLDER_PATH}" \
             \
-            --disable-rpath \
             --disable-werror \
 
           cp "config.log" "${LOGS_FOLDER_PATH}/config-xz-log.txt"
@@ -2702,7 +2701,6 @@ function do_wget()
             --disable-debug \
             --disable-pcre \
             --disable-pcre2 \
-            --disable-rpath \
 
           cp "config.log" "${LOGS_FOLDER_PATH}/config-wget-log.txt"
         ) 2>&1 | tee "${LOGS_FOLDER_PATH}/configure-wget-output.txt"
