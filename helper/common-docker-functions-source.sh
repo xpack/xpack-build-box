@@ -68,17 +68,38 @@ function host_run_docker_it()
 
   echo 
   echo "Running parent Docker image ${from}..."
-  docker run \
-    --interactive \
-    --tty \
-    --hostname "${name}-${arch}" \
-    --workdir="/root" \
-    --env RUN_LONG_TESTS \
-    --volume="${WORK_FOLDER_PATH}:/root/Work" \
-    --volume="${script_folder_path}/input:/input" \
-    --volume="${out}:/opt/${name}" \
-    ${from}
 
+  if [[ "${name}" == *-bootstrap ]]
+  then
+    docker run \
+      --interactive \
+      --tty \
+      --hostname "${name}-${arch}" \
+      --workdir="/root" \
+      --env RUN_LONG_TESTS \
+      --volume="${WORK_FOLDER_PATH}:/root/Work" \
+      --volume="${script_folder_path}/input:/input" \
+      --volume="${out}:/opt/${name}" \
+      ${from}
+  else
+    if [ ! -d "${HOME}/opt/${name}-bootstrap-${arch}" ]
+    then
+      echo "Missing bootstrap folder ${HOME}/opt/${name}-bootstrap-${arch}."
+      exit 1
+    fi
+
+    docker run \
+      --interactive \
+      --tty \
+      --hostname "${name}-${arch}" \
+      --workdir="/root" \
+      --env RUN_LONG_TESTS \
+      --volume="${WORK_FOLDER_PATH}:/root/Work" \
+      --volume="${script_folder_path}/input:/input" \
+      --volume="${out}:/opt/${name}" \
+      --volume="${HOME}/opt/${name}-bootstrap-${arch}:/opt/${name}-bootstrap" \
+      ${from}
+  fi
 }
 
 function host_run_docker_build()
