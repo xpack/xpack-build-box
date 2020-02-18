@@ -602,6 +602,19 @@ function run_app()
   "${app_path}" $@ 2>&1
 }
 
+function run_ldd()
+{
+  # Does not include the .exe extension.
+  local app_path=$1
+  shift
+
+  echo
+  echo "ldd -v ${app_path}"
+  ldd -v "${app_path}"
+  echo "readelf -d ${app_path} | egrep -e 'NEEDED|RPATH'"
+  readelf -d "${app_path}" | egrep -e 'NEEDED|RPATH'
+}
+
 # -----------------------------------------------------------------------------
 
 function do_strip_debug_libs() 
