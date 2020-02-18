@@ -28,6 +28,7 @@ function do_build_versions()
     XBB_MINGW_BINUTILS_BRANDING="xPack Build Box Mingw-w64 Binutils\x2C ${HOST_BITS}-bit"
     XBB_MINGW_GCC_BRANDING="xPack Build Box Mingw-w64 GCC\x2C ${HOST_BITS}-bit"
 
+
     # -------------------------------------------------------------------------
 
     # New zlib, used in most of the tools.
@@ -215,6 +216,30 @@ function do_build_versions()
     do_p7zip "16.02"
 
     # -------------------------------------------------------------------------
+
+    # $1=nvm_version
+    # $2=node_version
+    # $3=npm_version
+    # do_nvm "0.35.2" "12.16.0" "6.13.7"
+
+    do_libgpg_error "1.37"
+    do_libgcrypt "1.8.5"
+    do_libassuan "2.5.3"
+    do_libksba "1.3.5"
+    do_npth "1.6"
+
+    do_gnupg "2.2.19"
+
+    # -------------------------------------------------------------------------
+
+    do_ant "1.10.7"
+
+    do_maven "3.6.3"
+    
+    # Not ready, dependency libs not yet in.
+    # do_nodejs "12.16.0"
+
+    # -------------------------------------------------------------------------
     # Compilers, native & mingw
 
     # By all means DO NOT build binutils on macOS, since this will 
@@ -238,6 +263,7 @@ function do_build_versions()
       do_mingw_all "7.0.0" "${XBB_MINGW_GCC_VERSION}" # "5.0.4" "7.4.0"
     fi
 
+    # -------------------------------------------------------------------------
 
     # Build wine only on Intel Linux.
     # Benefits from having mingw in PATH.
@@ -278,28 +304,6 @@ function do_build_versions()
       # configure: WARNING: libjpeg 64-bit development files not found, JPEG won't be supported.
       # configure: WARNING: No sound system was found. Windows applications will be silent.
     fi
-
-    # -------------------------------------------------------------------------
-
-    # $1=nvm_version
-    # $2=node_version
-    # $3=npm_version
-    # do_nvm "0.35.2" "12.16.0" "6.13.7"
-
-    do_libgpg_error "1.37"
-    do_libgcrypt "1.8.5"
-    do_libassuan "2.5.3"
-    do_libksba "1.3.5"
-    do_npth "1.6"
-
-    do_gnupg "2.2.19"
-
-    do_ant "1.10.7"
-
-    do_maven "3.6.3"
-    
-    # Not ready, dependency libs not yet in.
-    # do_nodejs "12.16.0"
 
     # -------------------------------------------------------------------------
 
