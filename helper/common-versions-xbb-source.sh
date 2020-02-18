@@ -16,7 +16,7 @@ function do_build_versions()
 
     # The main characteristic of XBB is the compiler version.
     XBB_GCC_VERSION="9.2.0" # "8.3.0" # "7.4.0"
-    XBB_GCC_SUFFIX="-9" # "-8"
+    XBB_GCC_SUFFIX="-$(echo ${XBB_GCC_VERSION} | sed -e 's|\([0-9][0-9]*\)\..*|\1|')"
     XBB_BINUTILS_VERSION="2.34" # "2.33.1"
 
     XBB_BINUTILS_BRANDING="xPack Build Box Binutils\x2C ${HOST_BITS}-bit"
