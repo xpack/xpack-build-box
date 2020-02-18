@@ -79,7 +79,7 @@ source "${XBB_BOOTSTRAP_FOLDER_PATH}/xbb-source.sh"
 function xbb_activate()
 {
   xbb_activate_bootstrap      # Use only bootstrap binaries, not xbb
-  xbb_activate_installed_dev  # Use xbb libraries and headers
+  xbb_activate_installed_dev  # Use freshly built libraries and headers
 }
 
 create_xbb_source
