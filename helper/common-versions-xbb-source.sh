@@ -15,9 +15,12 @@ function do_build_versions()
     # -------------------------------------------------------------------------
 
     # The main characteristic of XBB is the compiler version.
-    XBB_GCC_VERSION="9.2.0" # "8.3.0" # "7.4.0"
+    XBB_GCC_VERSION="8.3.0" # "9.2.0" # "8.3.0" # "7.4.0"
     XBB_GCC_SUFFIX="-$(echo ${XBB_GCC_VERSION} | sed -e 's|\([0-9][0-9]*\)\..*|\1|')"
-    XBB_BINUTILS_VERSION="2.34" # "2.33.1"
+    XBB_BINUTILS_VERSION="2.32" # "2.34" # "2.33.1"
+
+    XBB_MINGW_GCC_VERSION="9.2.0" # "8.3.0" # "7.4.0"
+    XBB_MINGW_BINUTILS_VERSION="2.32" # "2.34" # "2.33.1"
 
     XBB_BINUTILS_BRANDING="xPack Build Box Binutils\x2C ${HOST_BITS}-bit"
     XBB_GCC_BRANDING="xPack Build Box GCC\x2C ${HOST_BITS}-bit"
@@ -230,9 +233,9 @@ function do_build_versions()
     if [ "${HOST_UNAME}" == "Linux" -a \( "${HOST_MACHINE}" == "x86_64" -o "${HOST_MACHINE}" == "i686" \) ]
     then
       # depends=('zlib')
-      do_mingw_binutils "${XBB_BINUTILS_VERSION}"
+      do_mingw_binutils "${XBB_MINGW_BINUTILS_VERSION}"
       # depends=('zlib' 'libmpc' 'mingw-w64-crt' 'mingw-w64-binutils' 'mingw-w64-winpthreads' 'mingw-w64-headers')
-      do_mingw_all "7.0.0" "${XBB_GCC_VERSION}" # "5.0.4" "7.4.0"
+      do_mingw_all "7.0.0" "${XBB_MINGW_GCC_VERSION}" # "5.0.4" "7.4.0"
     fi
 
 
