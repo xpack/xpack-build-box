@@ -42,7 +42,7 @@ WORK_FOLDER_PATH="${HOME}/Work"
 XBB_FOLDER_PATH="/opt/xbb"
 XBB_BOOTSTRAP_FOLDER_PATH="/opt/xbb-bootstrap"
 
-IS_BOOTSTRAP="y"
+IS_BOOTSTRAP="n"
 
 # -----------------------------------------------------------------------------
 
@@ -64,12 +64,6 @@ function do_cleanup()
   fi
 }
 
-function xbb_activate()
-{
-  xbb_activate_installed_bin  # Use xbb binaries
-  xbb_activate_installed_dev  # Use xbb libraries and headers
-}
-
 # -----------------------------------------------------------------------------
 
 detect_host
@@ -77,6 +71,15 @@ detect_host
 docker_prepare_env
 
 prepare_xbb_env
+
+source "${XBB_BOOTSTRAP_FOLDER_PATH}/xbb-source.sh"
+
+# Override function, must be here.
+function xbb_activate()
+{
+  xbb_activate_bootstrap      # Use only bootstrap binaries, not xbb
+  xbb_activate_installed_dev  # Use xbb libraries and headers
+}
 
 create_xbb_source
 
