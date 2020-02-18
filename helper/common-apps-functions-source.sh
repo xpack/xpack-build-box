@@ -530,7 +530,7 @@ function do_mingw_all()
   if [ ! -f "${mingw_gcc_step1_stamp_file_path}" -o ! -d "${BUILD_FOLDER_PATH}/${mingw_build_gcc_folder_name}" ]
   then
 
-    cd "${BUILD_FOLDER_PATH}"
+    cd "${SOURCES_FOLDER_PATH}"
 
     download_and_extract "${mingw_gcc_url}" "${mingw_gcc_archive}" "${mingw_gcc_folder_name}"
 
