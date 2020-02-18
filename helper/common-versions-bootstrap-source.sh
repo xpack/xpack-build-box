@@ -53,6 +53,7 @@ function do_build_versions()
     do_coreutils "8.31"
 
     # depends=('glibc')
+    # PATCH!
     do_m4 "1.4.18"
 
     # depends=('glibc' 'mpfr')
@@ -64,6 +65,7 @@ function do_build_versions()
     # depends=('sh' 'perl' 'awk' 'm4' 'texinfo')
     do_autoconf "2.69"
     # depends=('sh' 'perl')
+    # PATCH!
     do_automake "1.16"
 
     # depends=('sh' 'tar' 'glibc')
@@ -81,6 +83,7 @@ function do_build_versions()
     do_bison "3.4.2" # "3.3.2"
 
     # depends=('glibc' 'guile')
+    # PATCH!
     do_make "4.2.1"
 
     # macOS 10.10 uses 2.5.3, an update is not mandatory.
@@ -145,6 +148,7 @@ function do_build_versions()
 
     # makedepend is needed by openssl
     do_util_macros "1.19.2" # "1.17.1"
+    # PATCH!
     do_xorg_xproto "7.0.31" # Needs a patch for aarch64.
     do_makedepend "1.0.6" # "1.0.5"
 

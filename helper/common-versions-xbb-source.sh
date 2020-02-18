@@ -15,12 +15,12 @@ function do_build_versions()
     # -------------------------------------------------------------------------
 
     # The main characteristic of XBB is the compiler version.
-    XBB_GCC_VERSION="8.3.0" # "9.2.0" # "8.3.0" # "7.4.0"
+    XBB_GCC_VERSION="9.2.0" # "8.3.0" # "7.4.0"
     XBB_GCC_SUFFIX="-$(echo ${XBB_GCC_VERSION} | sed -e 's|\([0-9][0-9]*\)\..*|\1|')"
-    XBB_BINUTILS_VERSION="2.32" # "2.34" # "2.33.1"
+    XBB_BINUTILS_VERSION="2.34" # "2.33.1"
 
     XBB_MINGW_GCC_VERSION="9.2.0" # "8.3.0" # "7.4.0"
-    XBB_MINGW_BINUTILS_VERSION="2.32" # "2.34" # "2.33.1"
+    XBB_MINGW_BINUTILS_VERSION="2.34" # "2.33.1"
 
     XBB_BINUTILS_BRANDING="xPack Build Box Binutils\x2C ${HOST_BITS}-bit"
     XBB_GCC_BRANDING="xPack Build Box GCC\x2C ${HOST_BITS}-bit"
@@ -95,6 +95,7 @@ function do_build_versions()
     # GNU tools
 
     # depends=('glibc')
+    # PATCH!
     do_m4 "1.4.18"
 
     # depends=('glibc' 'mpfr')
@@ -106,6 +107,7 @@ function do_build_versions()
     # depends=('sh' 'perl' 'awk' 'm4' 'texinfo')
     do_autoconf "2.69"
     # depends=('sh' 'perl')
+    # PATCH!
     do_automake "1.16"
 
     # depends=('sh' 'tar' 'glibc')
@@ -124,6 +126,7 @@ function do_build_versions()
     do_bison "3.5" # "3.3.2"
 
     # depends=('glibc' 'guile')
+    # PATCH!
     do_make "4.2.1"
 
     # -------------------------------------------------------------------------
