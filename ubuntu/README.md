@@ -19,7 +19,7 @@ The following sequences of commands were used:
 
 ```bash
 set -o errexit
-docker system prune
+docker system prune -f
 bash ~/Downloads/xpack-build-box.git/ubuntu/12/amd64-build.sh
 bash ~/Downloads/xpack-build-box.git/ubuntu/12-updated/amd64-build-v3.1.sh
 bash ~/Downloads/xpack-build-box.git/ubuntu/12-develop/amd64-build-v3.1.sh
@@ -37,7 +37,7 @@ docker push "ilegeul/ubuntu:amd64-12.04-xbb-v3.1"
 
 ```bash
 set -o errexit
-docker system prune
+docker system prune -f
 bash ~/Downloads/xpack-build-box.git/ubuntu/12/i386-build.sh
 bash ~/Downloads/xpack-build-box.git/ubuntu/12-updated/i386-build-v3.1.sh
 bash ~/Downloads/xpack-build-box.git/ubuntu/12-develop/i386-build-v3.1.sh
@@ -55,7 +55,7 @@ docker push "ilegeul/ubuntu:i386-12.04-xbb-v3.1"
 
 ```bash
 set -o errexit
-docker system prune
+docker system prune -f
 bash ~/Downloads/xpack-build-box.git/ubuntu/16/arm64-build.sh
 bash ~/Downloads/xpack-build-box.git/ubuntu/16-updated/arm64-build-v3.1.sh
 bash ~/Downloads/xpack-build-box.git/ubuntu/16-develop/arm64-build-v3.1.sh
@@ -73,7 +73,7 @@ docker push "ilegeul/ubuntu:arm64-16.04-xbb-v3.1"
 
 ```bash
 set -o errexit
-docker system prune
+docker system prune -f
 bash ~/Downloads/xpack-build-box.git/ubuntu/16/armhf-build.sh
 bash ~/Downloads/xpack-build-box.git/ubuntu/16-updated/armhf-build-v3.1.sh
 bash ~/Downloads/xpack-build-box.git/ubuntu/16-develop/armhf-build-v3.1.sh
