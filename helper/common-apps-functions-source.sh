@@ -3922,7 +3922,7 @@ function do_p7zip()
 
       bash install.sh
 
-      run_ldd "${INSTALL_FOLDER_PATH}/bin/7za"
+      # run_ldd "${INSTALL_FOLDER_PATH}/bin/7za"
     )
 
     (
