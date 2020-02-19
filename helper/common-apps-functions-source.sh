@@ -627,7 +627,7 @@ function do_mingw_all()
             --prefix="${INSTALL_FOLDER_PATH}" \
             \
             --build="${BUILD}" \
-            --target=${MINGW_TARGET} \
+            --target="${MINGW_TARGET}" \
             \
             --with-sysroot="${INSTALL_FOLDER_PATH}" \
             --with-pkgversion="${XBB_MINGW_GCC_BRANDING}" \
