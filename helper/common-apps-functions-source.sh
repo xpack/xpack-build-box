@@ -95,16 +95,16 @@ function do_native_binutils()
         # in other builds.
         rm -fv "${INSTALL_FOLDER_PATH}/lib/libiberty.a" "${INSTALL_FOLDER_PATH}/lib64/libiberty.a"
 
-        run_ldd "${INSTALL_FOLDER_PATH}/bin/ar" 
-        run_ldd "${INSTALL_FOLDER_PATH}/bin/as" 
-        run_ldd "${INSTALL_FOLDER_PATH}/bin/ld" 
-        run_ldd "${INSTALL_FOLDER_PATH}/bin/nm" 
-        run_ldd "${INSTALL_FOLDER_PATH}/bin/objcopy" 
-        run_ldd "${INSTALL_FOLDER_PATH}/bin/objdump" 
-        run_ldd "${INSTALL_FOLDER_PATH}/bin/ranlib" 
-        run_ldd "${INSTALL_FOLDER_PATH}/bin/size" 
-        run_ldd "${INSTALL_FOLDER_PATH}/bin/strings" 
-        run_ldd "${INSTALL_FOLDER_PATH}/bin/strip" 
+        show_libs "${INSTALL_FOLDER_PATH}/bin/ar" 
+        show_libs "${INSTALL_FOLDER_PATH}/bin/as" 
+        show_libs "${INSTALL_FOLDER_PATH}/bin/ld" 
+        show_libs "${INSTALL_FOLDER_PATH}/bin/nm" 
+        show_libs "${INSTALL_FOLDER_PATH}/bin/objcopy" 
+        show_libs "${INSTALL_FOLDER_PATH}/bin/objdump" 
+        show_libs "${INSTALL_FOLDER_PATH}/bin/ranlib" 
+        show_libs "${INSTALL_FOLDER_PATH}/bin/size" 
+        show_libs "${INSTALL_FOLDER_PATH}/bin/strings" 
+        show_libs "${INSTALL_FOLDER_PATH}/bin/strip" 
 
       ) 2>&1 | tee "${LOGS_FOLDER_PATH}/make-native-binutils-output.txt"
     )
@@ -294,14 +294,14 @@ function do_native_gcc()
 
         make install-strip
 
-        run_ldd "${INSTALL_FOLDER_PATH}/bin/gcc${XBB_GCC_SUFFIX}"
-        run_ldd "${INSTALL_FOLDER_PATH}/bin/g++${XBB_GCC_SUFFIX}"
+        show_libs "${INSTALL_FOLDER_PATH}/bin/gcc${XBB_GCC_SUFFIX}"
+        show_libs "${INSTALL_FOLDER_PATH}/bin/g++${XBB_GCC_SUFFIX}"
 
-        run_ldd "$(${INSTALL_FOLDER_PATH}/bin/gcc${XBB_GCC_SUFFIX} --print-prog-name=cc1)"
-        run_ldd "$(${INSTALL_FOLDER_PATH}/bin/gcc${XBB_GCC_SUFFIX} --print-prog-name=cc1plus)"
-        run_ldd "$(${INSTALL_FOLDER_PATH}/bin/gcc${XBB_GCC_SUFFIX} --print-prog-name=collect2)"
-        run_ldd "$(${INSTALL_FOLDER_PATH}/bin/gcc${XBB_GCC_SUFFIX} --print-prog-name=lto1)"
-        run_ldd "$(${INSTALL_FOLDER_PATH}/bin/gcc${XBB_GCC_SUFFIX} --print-prog-name=lto-wrapper)"
+        show_libs "$(${INSTALL_FOLDER_PATH}/bin/gcc${XBB_GCC_SUFFIX} --print-prog-name=cc1)"
+        show_libs "$(${INSTALL_FOLDER_PATH}/bin/gcc${XBB_GCC_SUFFIX} --print-prog-name=cc1plus)"
+        show_libs "$(${INSTALL_FOLDER_PATH}/bin/gcc${XBB_GCC_SUFFIX} --print-prog-name=collect2)"
+        show_libs "$(${INSTALL_FOLDER_PATH}/bin/gcc${XBB_GCC_SUFFIX} --print-prog-name=lto1)"
+        show_libs "$(${INSTALL_FOLDER_PATH}/bin/gcc${XBB_GCC_SUFFIX} --print-prog-name=lto-wrapper)"
 
       ) 2>&1 | tee "${LOGS_FOLDER_PATH}/make-native-gcc-output.txt"
     )
@@ -439,16 +439,16 @@ function do_mingw_binutils()
         # in other builds.
         rm -fv "${INSTALL_FOLDER_PATH}/lib/libiberty.a" "${INSTALL_FOLDER_PATH}/lib64/libiberty.a"
 
-        run_ldd "${INSTALL_FOLDER_PATH}/bin/${MINGW_TARGET}-ar" 
-        run_ldd  "${INSTALL_FOLDER_PATH}/bin/${MINGW_TARGET}-as" 
-        run_ldd  "${INSTALL_FOLDER_PATH}/bin/${MINGW_TARGET}-ld" 
-        run_ldd  "${INSTALL_FOLDER_PATH}/bin/${MINGW_TARGET}-nm" 
-        run_ldd  "${INSTALL_FOLDER_PATH}/bin/${MINGW_TARGET}-objcopy" 
-        run_ldd  "${INSTALL_FOLDER_PATH}/bin/${MINGW_TARGET}-objdump" 
-        run_ldd  "${INSTALL_FOLDER_PATH}/bin/${MINGW_TARGET}-ranlib" 
-        run_ldd  "${INSTALL_FOLDER_PATH}/bin/${MINGW_TARGET}-size" 
-        run_ldd  "${INSTALL_FOLDER_PATH}/bin/${MINGW_TARGET}-strings" 
-        run_ldd  "${INSTALL_FOLDER_PATH}/bin/${MINGW_TARGET}-strip" 
+        show_libs "${INSTALL_FOLDER_PATH}/bin/${MINGW_TARGET}-ar" 
+        show_libs  "${INSTALL_FOLDER_PATH}/bin/${MINGW_TARGET}-as" 
+        show_libs  "${INSTALL_FOLDER_PATH}/bin/${MINGW_TARGET}-ld" 
+        show_libs  "${INSTALL_FOLDER_PATH}/bin/${MINGW_TARGET}-nm" 
+        show_libs  "${INSTALL_FOLDER_PATH}/bin/${MINGW_TARGET}-objcopy" 
+        show_libs  "${INSTALL_FOLDER_PATH}/bin/${MINGW_TARGET}-objdump" 
+        show_libs  "${INSTALL_FOLDER_PATH}/bin/${MINGW_TARGET}-ranlib" 
+        show_libs  "${INSTALL_FOLDER_PATH}/bin/${MINGW_TARGET}-size" 
+        show_libs  "${INSTALL_FOLDER_PATH}/bin/${MINGW_TARGET}-strings" 
+        show_libs  "${INSTALL_FOLDER_PATH}/bin/${MINGW_TARGET}-strip" 
 
       ) 2>&1 | tee "${LOGS_FOLDER_PATH}/make-mingw-binutils-output.txt"
 
@@ -1059,7 +1059,7 @@ function do_openssl()
           fi
         fi
 
-        run_ldd "${INSTALL_FOLDER_PATH}/bin/openssl"
+        show_libs "${INSTALL_FOLDER_PATH}/bin/openssl"
 
       ) 2>&1 | tee "${LOGS_FOLDER_PATH}/make-openssl-output.txt"
 
@@ -1158,7 +1158,7 @@ function do_curl()
 
         strip -S "${INSTALL_FOLDER_PATH}/bin/curl"
 
-        run_ldd "${INSTALL_FOLDER_PATH}/bin/curl"
+        show_libs "${INSTALL_FOLDER_PATH}/bin/curl"
 
       ) 2>&1 | tee "${LOGS_FOLDER_PATH}/make-curl-output.txt"
     )
@@ -1247,7 +1247,7 @@ function do_xz()
 
         make install-strip
 
-        run_ldd "${INSTALL_FOLDER_PATH}/bin/xz"
+        show_libs "${INSTALL_FOLDER_PATH}/bin/xz"
 
       ) 2>&1 | tee "${LOGS_FOLDER_PATH}/make-xz-output.txt"
     )
@@ -1343,7 +1343,7 @@ function do_tar()
 
         make install-strip
 
-        run_ldd "${INSTALL_FOLDER_PATH}/bin/tar"
+        show_libs "${INSTALL_FOLDER_PATH}/bin/tar"
 
         echo
         echo "Linking gnutar..."
@@ -1465,7 +1465,7 @@ function do_coreutils()
         make install
 
         # TODO test more
-        run_ldd "${INSTALL_FOLDER_PATH}/bin/realpath"
+        show_libs "${INSTALL_FOLDER_PATH}/bin/realpath"
 
       ) 2>&1 | tee "${LOGS_FOLDER_PATH}/make-coreutils-output.txt"
     )
@@ -1564,7 +1564,7 @@ function do_pkg_config()
 
         make install-strip
 
-        run_ldd "${INSTALL_FOLDER_PATH}/bin/pkg-config"
+        show_libs "${INSTALL_FOLDER_PATH}/bin/pkg-config"
 
       ) 2>&1 | tee "${LOGS_FOLDER_PATH}/make-pkg_config-output.txt"
     )
@@ -1648,7 +1648,7 @@ function do_m4()
 
         make install-strip
 
-        run_ldd "${INSTALL_FOLDER_PATH}/bin/m4"
+        show_libs "${INSTALL_FOLDER_PATH}/bin/m4"
 
         echo
         echo "Linking gm4..."
@@ -1744,7 +1744,7 @@ function do_gawk()
 
         make install-strip
 
-        run_ldd "${INSTALL_FOLDER_PATH}/bin/awk"
+        show_libs "${INSTALL_FOLDER_PATH}/bin/awk"
 
       ) 2>&1 | tee "${LOGS_FOLDER_PATH}/make-gawk-output.txt"
     )
@@ -1828,7 +1828,7 @@ function do_sed()
 
         make install-strip
 
-        run_ldd "${INSTALL_FOLDER_PATH}/bin/sed"
+        show_libs "${INSTALL_FOLDER_PATH}/bin/sed"
 
         echo
         echo "Linking gsed..."
@@ -2186,7 +2186,7 @@ function do_gettext()
 
         make install-strip
 
-        run_ldd "${INSTALL_FOLDER_PATH}/bin/gettext"
+        show_libs "${INSTALL_FOLDER_PATH}/bin/gettext"
 
       ) 2>&1 | tee "${LOGS_FOLDER_PATH}/make-gettext-output.txt"
     )
@@ -2269,7 +2269,7 @@ function do_patch()
 
         make install-strip
 
-        run_ldd "${INSTALL_FOLDER_PATH}/bin/patch"
+        show_libs "${INSTALL_FOLDER_PATH}/bin/patch"
 
       ) 2>&1 | tee "${LOGS_FOLDER_PATH}/make-patch-output.txt"
     )
@@ -2352,7 +2352,7 @@ function do_diffutils()
 
         make install-strip
 
-        run_ldd "${INSTALL_FOLDER_PATH}/bin/diff"
+        show_libs "${INSTALL_FOLDER_PATH}/bin/diff"
 
       ) 2>&1 | tee "${LOGS_FOLDER_PATH}/make-diffutils-output.txt"
     )
@@ -2447,7 +2447,7 @@ function do_bison()
 
         make install-strip
 
-        run_ldd "${INSTALL_FOLDER_PATH}/bin/bison"
+        show_libs "${INSTALL_FOLDER_PATH}/bin/bison"
 
       ) 2>&1 | tee "${LOGS_FOLDER_PATH}/make-bison-output.txt"
     )
@@ -2553,7 +2553,7 @@ function do_flex()
 
         strip -S "${INSTALL_FOLDER_PATH}/bin/flex"
 
-        run_ldd "${INSTALL_FOLDER_PATH}/bin/flex"
+        show_libs "${INSTALL_FOLDER_PATH}/bin/flex"
 
       ) 2>&1 | tee "${LOGS_FOLDER_PATH}/make-flex-output.txt"
     )
@@ -2641,7 +2641,7 @@ function do_make()
 
         make install-strip
 
-        run_ldd "${INSTALL_FOLDER_PATH}/bin/make"
+        show_libs "${INSTALL_FOLDER_PATH}/bin/make"
 
         echo
         echo "Linking gmake..."
@@ -2745,7 +2745,7 @@ function do_wget()
 
         make install-strip
 
-        run_ldd "${INSTALL_FOLDER_PATH}/bin/wget"
+        show_libs "${INSTALL_FOLDER_PATH}/bin/wget"
 
       ) 2>&1 | tee "${LOGS_FOLDER_PATH}/make-wget-output.txt"
     )
@@ -2948,7 +2948,7 @@ function do_cmake()
 
         strip -S "${INSTALL_FOLDER_PATH}/bin/cmake"
 
-        run_ldd "${INSTALL_FOLDER_PATH}/bin/cmake"
+        show_libs "${INSTALL_FOLDER_PATH}/bin/cmake"
 
       ) 2>&1 | tee "${LOGS_FOLDER_PATH}/make-cmake-output.txt"
     )
@@ -3048,7 +3048,7 @@ function do_perl()
 
         make install-strip
 
-        run_ldd "${INSTALL_FOLDER_PATH}/bin/perl"
+        show_libs "${INSTALL_FOLDER_PATH}/bin/perl"
 
         # https://www.cpan.org/modules/INSTALL.html
         # Convince cpan not to ask confirmations.
@@ -3223,7 +3223,7 @@ function do_patchelf()
 
         make install-strip
 
-        run_ldd "${INSTALL_FOLDER_PATH}/bin/patchelf"
+        show_libs "${INSTALL_FOLDER_PATH}/bin/patchelf"
 
       ) 2>&1 | tee "${LOGS_FOLDER_PATH}/make-patchelf-output.txt"
     )
@@ -3289,7 +3289,7 @@ function do_dos2unix()
 
         make prefix="${INSTALL_FOLDER_PATH}" strip install
 
-        run_ldd "${INSTALL_FOLDER_PATH}/bin/unix2dos"
+        show_libs "${INSTALL_FOLDER_PATH}/bin/unix2dos"
 
       ) 2>&1 | tee "${LOGS_FOLDER_PATH}/make-dos2unix-output.txt"
     )
@@ -3378,7 +3378,7 @@ function do_git()
         strip -S "${INSTALL_FOLDER_PATH}/bin/git"
         strip -S "${INSTALL_FOLDER_PATH}/bin"/git-[rsu]*
 
-        run_ldd "${INSTALL_FOLDER_PATH}/bin/git"
+        show_libs "${INSTALL_FOLDER_PATH}/bin/git"
 
       ) 2>&1 | tee "${LOGS_FOLDER_PATH}/make-git-output.txt"
     )
@@ -3500,7 +3500,7 @@ function do_python2()
           strip --strip-all "${INSTALL_FOLDER_PATH}/bin/python"
         fi
 
-        run_ldd "${INSTALL_FOLDER_PATH}/bin/python"
+        show_libs "${INSTALL_FOLDER_PATH}/bin/python"
 
       ) 2>&1 | tee "${LOGS_FOLDER_PATH}/make-python2-output.txt"
     )
@@ -3639,7 +3639,7 @@ function do_python3()
           strip --strip-all "${INSTALL_FOLDER_PATH}/bin/python3"
         fi
 
-        run_ldd "${INSTALL_FOLDER_PATH}/bin/python3"
+        show_libs "${INSTALL_FOLDER_PATH}/bin/python3"
 
       ) 2>&1 | tee "${LOGS_FOLDER_PATH}/make-python3-output.txt"
     )
@@ -3859,7 +3859,7 @@ function do_ninja()
 
         strip -S "${INSTALL_FOLDER_PATH}/bin/ninja"
 
-        run_ldd "${INSTALL_FOLDER_PATH}/bin/ninja"
+        show_libs "${INSTALL_FOLDER_PATH}/bin/ninja"
 
       ) 2>&1 | tee "${LOGS_FOLDER_PATH}/configure-ninja-output.txt"
     )
@@ -3945,7 +3945,7 @@ function do_p7zip()
 
       bash install.sh
 
-      # run_ldd "${INSTALL_FOLDER_PATH}/bin/7za"
+      # show_libs "${INSTALL_FOLDER_PATH}/bin/7za"
     )
 
     (
@@ -4070,7 +4070,7 @@ function do_wine()
           )
         fi
 
-        run_ldd "${INSTALL_FOLDER_PATH}/bin/wine"
+        show_libs "${INSTALL_FOLDER_PATH}/bin/wine"
 
       ) 2>&1 | tee "${LOGS_FOLDER_PATH}/make-wine-output.txt"
     )

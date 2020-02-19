@@ -602,7 +602,7 @@ function run_app()
   "${app_path}" $@ 2>&1
 }
 
-function run_ldd()
+function show_libs()
 {
   # Does not include the .exe extension.
   local app_path=$1
