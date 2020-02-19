@@ -273,7 +273,6 @@ function do_native_gcc()
               --enable-linker-build-id \
               --enable-lto \
               --enable-plugin \
-              --enable-install-libiberty \
               --enable-gnu-indirect-function \
               --enable-default-pie \
               --enable-default-ssp \
