@@ -95,9 +95,10 @@ function do_native_binutils()
         make configure-host
 
         # Build.
-        make -j ${JOBS} tooldir="${INSTALL_FOLDER_PATH}/usr"
+        make -j ${JOBS}
 
-        make tooldir="${INSTALL_FOLDER_PATH}/usr" install-strip
+        make install-strip
+
         rm -fv "${INSTALL_FOLDER_PATH}/lib/libiberty.a" "${INSTALL_FOLDER_PATH}/lib64/libiberty.a"
 
         run_ldd "${INSTALL_FOLDER_PATH}/bin/ar" 
