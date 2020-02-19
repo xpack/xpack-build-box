@@ -81,7 +81,7 @@ prepare_xbb_env
 create_xbb_source
 
 echo
-echo "$(uname) XBB bootstrap build script started..."
+echo "$(uname) ${HOST_MACHINE} XBB bootstrap build script started..."
 
 # -----------------------------------------------------------------------------
 
@@ -92,7 +92,7 @@ do_strip_debug_libs
 # -----------------------------------------------------------------------------
 
 echo
-echo "$(uname) XBB bootstrap created in \"${INSTALL_FOLDER_PATH}\""
+echo "$(uname) ${HOST_MACHINE} XBB bootstrap created in \"${INSTALL_FOLDER_PATH}\""
 
 do_cleanup
 

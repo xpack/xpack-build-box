@@ -85,7 +85,7 @@ function xbb_activate()
 create_xbb_source
 
 echo
-echo "$(uname) XBB build script started..."
+echo "$(uname) ${HOST_MACHINE} XBB build script started..."
 
 # -----------------------------------------------------------------------------
 
@@ -96,7 +96,7 @@ do_strip_debug_libs
 # -----------------------------------------------------------------------------
 
 echo
-echo "$(uname) XBB created in \"${INSTALL_FOLDER_PATH}\""
+echo "$(uname) ${HOST_MACHINE} XBB created in \"${INSTALL_FOLDER_PATH}\""
 
 do_cleanup
 

@@ -62,7 +62,7 @@ detect_host
 docker_prepare_env
 
 echo
-echo "$(uname) XBB TexLive ${TL_EDITION_YEAR} build script started..."
+echo "$(uname) ${HOST_MACHINE} XBB TexLive ${TL_EDITION_YEAR} build script started..."
 
 # -----------------------------------------------------------------------------
 
@@ -86,7 +86,7 @@ function do_cleanup()
 do_texlive "${TL_EDITION_YEAR}" "${TL_EDITION_FOLDER_NAME}" "${TL_SCHEME}"
 
 echo
-echo "$(uname) XBB TexLive ${TL_EDITION_YEAR} created in \"${INSTALL_FOLDER_PATH}\""
+echo "$(uname) ${HOST_MACHINE} XBB TexLive ${TL_EDITION_YEAR} created in \"${INSTALL_FOLDER_PATH}\""
 
 do_cleanup
 
