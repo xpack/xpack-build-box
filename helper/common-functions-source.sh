@@ -609,8 +609,8 @@ function run_ldd()
   shift
 
   echo
-  echo "readelf -d ${app_path} | egrep -e 'NEEDED|RPATH'"
-  readelf -d "${app_path}" | egrep -e 'NEEDED|RPATH'
+  echo "readelf -d ${app_path} | grep 'ibrary'"
+  readelf -d "${app_path}" | grep 'ibrary'
   echo "ldd -v ${app_path}"
   ldd -v "${app_path}"
 }
