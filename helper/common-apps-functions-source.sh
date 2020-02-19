@@ -56,14 +56,6 @@ function do_native_binutils()
 
           bash "${SOURCES_FOLDER_PATH}/${native_binutils_folder_name}/configure" --help
 
-          #  --bindir="${INSTALL_FOLDER_PATH}/bin" \
-          #  --libdir="${INSTALL_FOLDER_PATH}/usr/lib" \
-          #  --includedir="${INSTALL_FOLDER_PATH}/usr/include" \
-          #  --datarootdir="${INSTALL_FOLDER_PATH}usr//share" \
-          #  --infodir="${INSTALL_FOLDER_PATH}/share/info" \
-          #  --localedir="${INSTALL_FOLDER_PATH}/share/locale" \
-          #  --mandir="${INSTALL_FOLDER_PATH}/share/man" \
-
           # --with-sysroot failed.
           bash ${DEBUG} "${SOURCES_FOLDER_PATH}/${native_binutils_folder_name}/configure" \
             --prefix="${INSTALL_FOLDER_PATH}" \
@@ -99,6 +91,8 @@ function do_native_binutils()
 
         make install-strip
 
+        # For just in case, it has nasty consequences when picked 
+        # in other builds.
         rm -fv "${INSTALL_FOLDER_PATH}/lib/libiberty.a" "${INSTALL_FOLDER_PATH}/lib64/libiberty.a"
 
         run_ldd "${INSTALL_FOLDER_PATH}/bin/ar" 
@@ -128,7 +122,6 @@ function do_native_binutils()
       run_app "${INSTALL_FOLDER_PATH}/bin/size" --version
       run_app "${INSTALL_FOLDER_PATH}/bin/strings" --version
       run_app "${INSTALL_FOLDER_PATH}/bin/strip" --version
-
     )
 
     hash -r
@@ -304,6 +297,12 @@ function do_native_gcc()
         run_ldd "${INSTALL_FOLDER_PATH}/bin/gcc${XBB_GCC_SUFFIX}"
         run_ldd "${INSTALL_FOLDER_PATH}/bin/g++${XBB_GCC_SUFFIX}"
 
+        run_ldd "$(${INSTALL_FOLDER_PATH}/bin/gcc${XBB_GCC_SUFFIX} --print-prog-name=cc1)"
+        run_ldd "$(${INSTALL_FOLDER_PATH}/bin/gcc${XBB_GCC_SUFFIX} --print-prog-name=cc1plus)"
+        run_ldd "$(${INSTALL_FOLDER_PATH}/bin/gcc${XBB_GCC_SUFFIX} --print-prog-name=collect2)"
+        run_ldd "$(${INSTALL_FOLDER_PATH}/bin/gcc${XBB_GCC_SUFFIX} --print-prog-name=lto1)"
+        run_ldd "$(${INSTALL_FOLDER_PATH}/bin/gcc${XBB_GCC_SUFFIX} --print-prog-name=lto-wrapper)"
+
       ) 2>&1 | tee "${LOGS_FOLDER_PATH}/make-native-gcc-output.txt"
     )
 
@@ -436,6 +435,8 @@ function do_mingw_binutils()
 
         make install-strip
 
+        # For just in case, it has nasty consequences when picked 
+        # in other builds.
         rm -fv "${INSTALL_FOLDER_PATH}/lib/libiberty.a" "${INSTALL_FOLDER_PATH}/lib64/libiberty.a"
 
         run_ldd "${INSTALL_FOLDER_PATH}/bin/${MINGW_TARGET}-ar" 
@@ -470,6 +471,7 @@ function do_mingw_binutils()
 
     hash -r
 
+exit
     touch "${mingw_binutils_stamp_file_path}" 
 
   else
