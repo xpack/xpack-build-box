@@ -69,6 +69,9 @@ function do_native_binutils()
             --prefix="${INSTALL_FOLDER_PATH}" \
             --with-pkgversion="${XBB_BINUTILS_BRANDING}" \
             \
+            --build="${BUILD}" \
+            --target="${BUILD}" \
+            \
             --with-pic \
             \
             --enable-threads \
@@ -207,6 +210,9 @@ function do_native_gcc()
               --program-suffix="${XBB_GCC_SUFFIX}" \
               --with-pkgversion="${XBB_GCC_BRANDING}" \
               \
+              --build="${BUILD}" \
+              --target="${BUILD}" \
+              \
               --with-native-system-header-dir="/usr/include" \
               --with-sysroot="${MACOS_SDK_PATH}" \
               \
@@ -250,12 +256,14 @@ function do_native_gcc()
               --program-suffix="${XBB_GCC_SUFFIX}" \
               --with-pkgversion="${XBB_GCC_BRANDING}" \
               \
-              --enable-languages=c,c++ \
+              --build="${BUILD}" \
+              --target="${BUILD}" \
               \
               --with-linker-hash-style=gnu \
               --with-system-zlib \
               --with-isl \
               \
+              --enable-languages=c,c++ \
               --enable-shared \
               --enable-checking=release \
               --enable-threads=posix \
