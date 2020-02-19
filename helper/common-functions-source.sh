@@ -608,11 +608,19 @@ function run_ldd()
   local app_path=$1
   shift
 
-  echo
-  echo "readelf -d ${app_path} | grep 'ibrary'"
-  readelf -d "${app_path}" | grep 'ibrary'
-  echo "ldd -v ${app_path}"
-  ldd -v "${app_path}"
+  if [ "${HOST_UNAME}" == "Linux" ]
+  then
+    echo
+    echo "readelf -d ${app_path} | grep 'ibrary'"
+    readelf -d "${app_path}" | grep 'ibrary'
+    echo "ldd -v ${app_path}"
+    ldd -v "${app_path}"
+  elif [ "${HOST_UNAME}" == "Darwin" ]
+  then
+    echo
+    echo "otool -L ${app_path}"
+    otool -L "${app_path}"
+  fi
 }
 
 # -----------------------------------------------------------------------------
