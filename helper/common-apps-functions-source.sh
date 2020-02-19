@@ -471,7 +471,6 @@ function do_mingw_binutils()
 
     hash -r
 
-exit
     touch "${mingw_binutils_stamp_file_path}" 
 
   else
