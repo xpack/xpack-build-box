@@ -67,11 +67,11 @@ function do_native_binutils()
           # --with-sysroot failed.
           bash ${DEBUG} "${SOURCES_FOLDER_PATH}/${native_binutils_folder_name}/configure" \
             --prefix="${INSTALL_FOLDER_PATH}" \
-            --with-pkgversion="${XBB_BINUTILS_BRANDING}" \
             \
             --build="${BUILD}" \
             --target="${BUILD}" \
             \
+            --with-pkgversion="${XBB_BINUTILS_BRANDING}" \
             --with-pic \
             \
             --enable-threads \
@@ -208,16 +208,15 @@ function do_native_gcc()
             bash ${DEBUG} "${SOURCES_FOLDER_PATH}/${native_gcc_folder_name}/configure" \
               --prefix="${INSTALL_FOLDER_PATH}" \
               --program-suffix="${XBB_GCC_SUFFIX}" \
-              --with-pkgversion="${XBB_GCC_BRANDING}" \
               \
               --build="${BUILD}" \
               --target="${BUILD}" \
               \
+              --with-pkgversion="${XBB_GCC_BRANDING}" \
               --with-native-system-header-dir="/usr/include" \
               --with-sysroot="${MACOS_SDK_PATH}" \
               \
               --enable-languages=c,c++,objc,obj-c++ \
-              \
               --enable-checking=release \
               --enable-static \
               --enable-threads=posix \
@@ -254,11 +253,11 @@ function do_native_gcc()
             "${SOURCES_FOLDER_PATH}/${native_gcc_folder_name}/configure" \
               --prefix="${INSTALL_FOLDER_PATH}" \
               --program-suffix="${XBB_GCC_SUFFIX}" \
-              --with-pkgversion="${XBB_GCC_BRANDING}" \
               \
               --build="${BUILD}" \
               --target="${BUILD}" \
               \
+              --with-pkgversion="${XBB_GCC_BRANDING}" \
               --with-linker-hash-style=gnu \
               --with-system-zlib \
               --with-isl \
@@ -408,11 +407,12 @@ function do_mingw_binutils()
 
           bash "${SOURCES_FOLDER_PATH}/${mingw_binutils_folder_name}/configure" \
             --prefix="${INSTALL_FOLDER_PATH}" \
-            --with-sysroot="${INSTALL_FOLDER_PATH}" \
-            --with-pkgversion="${XBB_MINGW_BINUTILS_BRANDING}" \
             \
             --build="${BUILD}" \
             --target="${MINGW_TARGET}" \
+            \
+            --with-sysroot="${INSTALL_FOLDER_PATH}" \
+            --with-pkgversion="${XBB_MINGW_BINUTILS_BRANDING}" \
             \
             --enable-static \
             --enable-lto \
@@ -538,7 +538,7 @@ function do_mingw_all()
             --prefix="${INSTALL_FOLDER_PATH}/${MINGW_TARGET}" \
             \
             --build="${BUILD}" \
-            --host="${MINGW_TARGET}"
+            --host="${MINGW_TARGET}" \
 
           cp "config.log" "${LOGS_FOLDER_PATH}/config-mingw-headers-log.txt"
         ) 2>&1 | tee "${LOGS_FOLDER_PATH}/configure-mingw-headers-output.txt"
@@ -625,12 +625,12 @@ function do_mingw_all()
 
           bash ${DEBUG} "${SOURCES_FOLDER_PATH}/${mingw_gcc_folder_name}/configure" \
             --prefix="${INSTALL_FOLDER_PATH}" \
-            --with-sysroot="${INSTALL_FOLDER_PATH}" \
-            --with-pkgversion="${XBB_MINGW_GCC_BRANDING}" \
             \
             --build="${BUILD}" \
             --target=${MINGW_TARGET} \
             \
+            --with-sysroot="${INSTALL_FOLDER_PATH}" \
+            --with-pkgversion="${XBB_MINGW_GCC_BRANDING}" \
             --with-system-zlib \
             \
             --enable-languages=c,c++ \
@@ -729,10 +729,11 @@ function do_mingw_all()
 
           bash ${DEBUG} "${SOURCES_FOLDER_PATH}/${mingw_folder_name}/mingw-w64-crt/configure" \
             --prefix="${INSTALL_FOLDER_PATH}/${MINGW_TARGET}" \
-            --with-sysroot="${INSTALL_FOLDER_PATH}" \
             \
             --build="${BUILD}" \
             --host="${MINGW_TARGET}" \
+            \
+            --with-sysroot="${INSTALL_FOLDER_PATH}" \
             \
             --enable-wildcard \
             ${_crt_configure_lib32} \
@@ -986,6 +987,7 @@ function do_openssl()
             export KERNEL_BITS=64
             "./config" \
               --prefix="${INSTALL_FOLDER_PATH}" \
+              \
               --openssldir="${INSTALL_FOLDER_PATH}/openssl" \
               shared \
               enable-md2 enable-rc5 enable-tls enable-tls1_3 enable-tls1_2 enable-tls1_1 \
@@ -1008,6 +1010,7 @@ function do_openssl()
 
             "./config" \
               --prefix="${INSTALL_FOLDER_PATH}" \
+              \
               --openssldir="${INSTALL_FOLDER_PATH}/openssl" \
               shared \
               enable-md2 enable-rc5 enable-tls enable-tls1_3 enable-tls1_2 enable-tls1_1 \
@@ -1542,9 +1545,10 @@ function do_pkg_config()
             --prefix="${INSTALL_FOLDER_PATH}" \
             \
             --with-internal-glib \
+            --with-pc-path="" \
+            \
             --disable-debug \
             --disable-host-tool \
-            --with-pc-path="" \
 
           cp "config.log" "${LOGS_FOLDER_PATH}/config-pkg_config-log.txt"
         ) 2>&1 | tee "${LOGS_FOLDER_PATH}/configure-pkg_config-output.txt"
@@ -1627,7 +1631,6 @@ function do_m4()
 
           bash ${DEBUG} "${SOURCES_FOLDER_PATH}/${m4_folder_name}/configure" \
             --prefix="${INSTALL_FOLDER_PATH}" \
-
 
           cp "config.log" "${LOGS_FOLDER_PATH}/config-m4-log.txt"
         ) 2>&1 | tee "${LOGS_FOLDER_PATH}/configure-m4-output.txt"
@@ -1719,7 +1722,7 @@ function do_gawk()
           bash ${DEBUG} "${SOURCES_FOLDER_PATH}/${gawk_folder_name}/configure" \
             --prefix="${INSTALL_FOLDER_PATH}" \
             \
-            --without-libsigsegv
+            --without-libsigsegv \
 
           cp "config.log" "${LOGS_FOLDER_PATH}/config-gawk-log.txt"
         ) 2>&1 | tee "${LOGS_FOLDER_PATH}/configure-gawk-output.txt"
@@ -2157,6 +2160,7 @@ function do_gettext()
             \
             --with-xz \
             --without-included-gettext \
+            \
             --enable-csharp \
             --enable-nls \
 
@@ -2909,6 +2913,7 @@ function do_cmake()
 
             bash ${DEBUG} "${SOURCES_FOLDER_PATH}/${cmake_folder_name}/bootstrap" \
               --prefix="${INSTALL_FOLDER_PATH}" \
+              \
               --parallel="${JOBS}"
 
             cp "Bootstrap.cmk/cmake_bootstrap.log" "${LOGS_FOLDER_PATH}/bootstrap-cmake-log.txt"
@@ -3018,6 +3023,7 @@ function do_perl()
 
           bash ${DEBUG} "./Configure" -d -e -s \
             -Dprefix="${INSTALL_FOLDER_PATH}" \
+            \
             -Dcc="${CC}" \
             -Dccflags="${CFLAGS}" \
             -Dlddlflags="-shared ${LDFLAGS}" -Dldflags="${LDFLAGS}" \
@@ -4033,13 +4039,13 @@ function do_wine()
           bash configure \
             --prefix="${INSTALL_FOLDER_PATH}" \
             \
+            --with-png \
+            --without-freetype \
+            --without-x \
+            \
             ${ENABLE_64} \
             --disable-win16 \
             --disable-tests \
-            \
-            --without-freetype \
-            --without-x \
-            --with-png
 
           cp "config.log" "${LOGS_FOLDER_PATH}/config-wine-log.txt"
         ) 2>&1 | tee "${LOGS_FOLDER_PATH}/configure-wine-output.txt"
@@ -4404,6 +4410,7 @@ function do_maven()
 
 # -----------------------------------------------------------------------------
 
+# Not functional.
 function do_nodejs() 
 {
   # https://nodejs.org/
