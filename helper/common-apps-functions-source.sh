@@ -56,6 +56,14 @@ function do_native_binutils()
 
           bash "${SOURCES_FOLDER_PATH}/${native_binutils_folder_name}/configure" --help
 
+          #  --bindir="${INSTALL_FOLDER_PATH}/bin" \
+          #  --libdir="${INSTALL_FOLDER_PATH}/usr/lib" \
+          #  --includedir="${INSTALL_FOLDER_PATH}/usr/include" \
+          #  --datarootdir="${INSTALL_FOLDER_PATH}usr//share" \
+          #  --infodir="${INSTALL_FOLDER_PATH}/share/info" \
+          #  --localedir="${INSTALL_FOLDER_PATH}/share/locale" \
+          #  --mandir="${INSTALL_FOLDER_PATH}/share/man" \
+
           # --with-sysroot failed.
           bash ${DEBUG} "${SOURCES_FOLDER_PATH}/${native_binutils_folder_name}/configure" \
             --prefix="${INSTALL_FOLDER_PATH}" \
@@ -4038,8 +4046,6 @@ function do_wine()
 
         make install
 
-        run_ldd "${INSTALL_FOLDER_PATH}/bin/wine"
-
         if [ "${HOST_BITS}" == "64" ]
         then
           (
@@ -4048,6 +4054,9 @@ function do_wine()
             ln -s wine64 wine
           )
         fi
+
+        run_ldd "${INSTALL_FOLDER_PATH}/bin/wine"
+
       ) 2>&1 | tee "${LOGS_FOLDER_PATH}/make-wine-output.txt"
     )
 
