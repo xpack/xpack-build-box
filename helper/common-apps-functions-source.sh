@@ -98,7 +98,7 @@ function do_native_binutils()
         make -j ${JOBS} tooldir="${INSTALL_FOLDER_PATH}/usr"
 
         make tooldir="${INSTALL_FOLDER_PATH}/usr" install-strip
-        rm -fv "${INSTALL_FOLDER_PATH}/lib/libiberty.a"
+        rm -fv "${INSTALL_FOLDER_PATH}/lib/libiberty.a" "${INSTALL_FOLDER_PATH}/lib64/libiberty.a"
 
         run_ldd "${INSTALL_FOLDER_PATH}/bin/ar" 
         run_ldd "${INSTALL_FOLDER_PATH}/bin/as" 
@@ -436,7 +436,7 @@ function do_mingw_binutils()
 
         make install-strip
 
-        rm -fv "${INSTALL_FOLDER_PATH}/lib/libiberty.a"
+        rm -fv "${INSTALL_FOLDER_PATH}/lib/libiberty.a" "${INSTALL_FOLDER_PATH}/lib64/libiberty.a"
 
         run_ldd "${INSTALL_FOLDER_PATH}/bin/${MINGW_TARGET}-ar" 
         run_ldd  "${INSTALL_FOLDER_PATH}/bin/${MINGW_TARGET}-as" 
