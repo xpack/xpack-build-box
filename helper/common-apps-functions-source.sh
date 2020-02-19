@@ -222,15 +222,14 @@ function do_native_gcc()
               --enable-static \
               --enable-threads=posix \
               --enable-__cxa_atexit \
-              --disable-libunwind-exceptions \
-              --disable-libstdcxx-pch \
-              --disable-libssp \
               --enable-gnu-unique-object \
               --enable-linker-build-id \
               --enable-lto \
               --enable-plugin \
-              --enable-install-libiberty \
               --enable-gnu-indirect-function \
+              --disable-libunwind-exceptions \
+              --disable-libstdcxx-pch \
+              --disable-libssp \
               --disable-multilib \
               --disable-werror \
               --disable-bootstrap \
@@ -241,6 +240,7 @@ function do_native_gcc()
             # --with-linker-hash-style=gnu
             # --enable-libmpx (fails on arm)
             # --enable-clocale=gnu 
+            # --enable-install-libiberty 
 
             config_options=()
             if [ "${HOST_MACHINE}" == "aarch64" ]
