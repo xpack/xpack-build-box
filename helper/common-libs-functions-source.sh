@@ -436,13 +436,15 @@ function do_nettle()
   local nettle_archive="${nettle_folder_name}.tar.gz"
   local nettle_url="ftp://ftp.gnu.org/gnu/nettle/${nettle_archive}"
 
+  local  nettle_patch_file_path="${helper_folder_path}/patches/${nettle_folder_name}.patch"
+
   local nettle_stamp_file_path="${STAMPS_FOLDER_PATH}/stamp-nettle-${nettle_version}-installed"
   if [ ! -f "${nettle_stamp_file_path}" -o ! -d "${LIBS_BUILD_FOLDER_PATH}/${nettle_folder_name}" ]
   then
 
     cd "${SOURCES_FOLDER_PATH}"
 
-    download_and_extract "${nettle_url}" "${nettle_archive}" "${nettle_folder_name}"
+    download_and_extract "${nettle_url}" "${nettle_archive}" "${nettle_folder_name}" "${nettle_patch_file_path}"
 
     (
       mkdir -p "${LIBS_BUILD_FOLDER_PATH}/${nettle_folder_name}"
@@ -491,7 +493,7 @@ function do_nettle()
         if [ "${HOST_UNAME}" != "Darwin" ]
         then
           # Takes very long on armhf.
-          make -k check
+          make -k check V=1
         fi
 
         # make install-strip
