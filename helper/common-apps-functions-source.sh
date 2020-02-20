@@ -313,6 +313,7 @@ function do_native_gcc()
       echo
       run_app "${INSTALL_FOLDER_PATH}/bin/g++${XBB_GCC_SUFFIX}" --version
       run_app "${INSTALL_FOLDER_PATH}/bin/g++${XBB_GCC_SUFFIX}" -dumpmachine
+      run_app "${INSTALL_FOLDER_PATH}/bin/g++${XBB_GCC_SUFFIX}" -print-search-dirs
       "${INSTALL_FOLDER_PATH}/bin/g++${XBB_GCC_SUFFIX}" -dumpspecs | wc -l
 
       mkdir -p "${HOME}/tmp"
@@ -892,6 +893,8 @@ function do_mingw_all()
       xbb_activate_installed_bin
 
       "${INSTALL_FOLDER_PATH}/bin/${MINGW_TARGET}-g++" --version
+      "${INSTALL_FOLDER_PATH}/bin/${MINGW_TARGET}-g++" -dumpmachine
+      "${INSTALL_FOLDER_PATH}/bin/${MINGW_TARGET}-g++" -print-search-dirs
 
       mkdir -p "${HOME}/tmp"
       cd "${HOME}/tmp"
