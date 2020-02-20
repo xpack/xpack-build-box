@@ -189,6 +189,7 @@ function do_native_gcc()
           echo "Running native gcc configure..."
 
           bash "${SOURCES_FOLDER_PATH}/${native_gcc_folder_name}/configure" --help
+          bash "${SOURCES_FOLDER_PATH}/${native_gcc_folder_name}/gcc/configure" --help
 
           if [ "${HOST_UNAME}" == "Darwin" ]
           then
