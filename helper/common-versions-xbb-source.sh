@@ -68,6 +68,7 @@ function do_build_versions()
 
     # Requires openssl.
     # depends=('glibc' 'gmp')
+    # PATCH!
     do_nettle "3.5.1" # "3.4.1"
 
     # Required by wine.
