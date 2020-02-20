@@ -50,7 +50,7 @@ host_init_docker_input \
 
 arch="armhf"
 from="ilegeul/ubuntu:${arch}-16.04-bootstrap-v3.1"
-name="xbb-xbb"
+name="xbb"
 
 host_run_docker_it
 
