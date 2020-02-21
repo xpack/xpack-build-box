@@ -3677,6 +3677,7 @@ function do_scons()
   # http://scons.org
   # http://prdownloads.sourceforge.net/scons/
   # http://prdownloads.sourceforge.net/scons/scons-3.1.2.tar.gz
+  # https://github.com/xpack-dev-tools/files-cache/raw/master/libs/scons-3.1.1.tar.gz
 
   # https://archlinuxarm.org/packages/any/scons/files/PKGBUILD
   # https://aur.archlinux.org/cgit/aur.git/tree/PKGBUILD?h=python2-scons
@@ -3696,12 +3697,7 @@ function do_scons()
   then
     scons_url"https://sourceforge.net/projects/scons/files/scons/${scons_version}/${scons_archive}"
   else
-    if [ "${HOST_UNAME}" == "Darwin" ]
-    then
-      scons_url="https://github.com/xpack-dev-tools/files-cache/raw/master/libs/${scons_archive}"
-    else
-      scons_url="http://prdownloads.sourceforge.net/scons/${scons_archive}"
-    fi
+    scons_url="https://github.com/xpack-dev-tools/files-cache/raw/master/libs/${scons_archive}"
   fi
 
   local scons_stamp_file_path="${STAMPS_FOLDER_PATH}/stamp-scons-${scons_version}-installed"
