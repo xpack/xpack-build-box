@@ -195,15 +195,31 @@ function prepare_xbb_env()
 
   # ---------------------------------------------------------------------------
 
+
+  # This is a very important option, which has a higher precedence than 
+  # LD_LIBRARY_PATH, so the binaries use exactly the shared libraries
+  # that were used during link.
+  XBB_RPATH=""
+  if [ "${HOST_BITS}" == "64" ]
+  then
+    XBB_RPATH+="-Wl,-rpath,${XBB_FOLDER_PATH}/lib64 "
+  fi
+  XBB_RPATH+="-Wl,-rpath,${XBB_FOLDER_PATH}/lib"
+
   XBB_CPPFLAGS=""
 
   XBB_CFLAGS="-pipe"
   XBB_CXXFLAGS="-pipe"
 
-  XBB_LDFLAGS=""
+  XBB_LDFLAGS="${XBB_RPATH}"
   XBB_LDFLAGS_LIB="${XBB_LDFLAGS}"
+  XBB_LDFLAGS_LIB_STATIC_GCC="${XBB_LDFLAGS} -static-libgcc -static-libstdc++"
   XBB_LDFLAGS_APP="${XBB_LDFLAGS}"
-  XBB_LDFLAGS_APP_STATIC="${XBB_LDFLAGS_APP}"
+  XBB_LDFLAGS_APP_STATIC="${XBB_LDFLAGS_APP} -static"
+  XBB_LDFLAGS_APP_STATIC_GCC="${XBB_LDFLAGS_APP} -static-libgcc -static-libstdc++"
+  
+  # Applications should generally use STATIC_GCC, otherwise XBB apps which
+  # require GCC shared libs from bootstrap might not find them.
 
   # ---------------------------------------------------------------------------
 
@@ -242,8 +258,12 @@ function prepare_xbb_env()
   export XBB_CXXFLAGS
   export XBB_LDFLAGS
   export XBB_LDFLAGS_LIB
+  export XBB_LDFLAGS_LIB_STATIC_GCC
   export XBB_LDFLAGS_APP
   export XBB_LDFLAGS_APP_STATIC
+  export XBB_LDFLAGS_APP_STATIC_GCC
+
+  export XBB_RPATH
 
   export PATH
   export LD_LIBRARY_PATH
@@ -304,6 +324,7 @@ function xbb_activate_installed_dev()
   XBB_LDFLAGS_LIB="-L${INSTALL_FOLDER_PATH}/lib ${XBB_LDFLAGS_LIB}"
   XBB_LDFLAGS_APP="-L${INSTALL_FOLDER_PATH}/lib ${XBB_LDFLAGS_APP}"
   XBB_LDFLAGS_APP_STATIC="-L${INSTALL_FOLDER_PATH}/lib ${XBB_LDFLAGS_APP_STATIC}"
+  XBB_LDFLAGS_APP_STATIC_GCC="-L${INSTALL_FOLDER_PATH}/lib ${XBB_LDFLAGS_APP_STATIC_GCC}"
 
   # Add XBB lib in front of PKG_CONFIG_PATH.
   PKG_CONFIG_PATH="${INSTALL_FOLDER_PATH}/lib/pkgconfig:${PKG_CONFIG_PATH}"
@@ -315,6 +336,7 @@ function xbb_activate_installed_dev()
     XBB_LDFLAGS_LIB="-L${INSTALL_FOLDER_PATH}/lib64 ${XBB_LDFLAGS_LIB}"
     XBB_LDFLAGS_APP="-L${INSTALL_FOLDER_PATH}/lib64 ${XBB_LDFLAGS_APP}"
     XBB_LDFLAGS_APP_STATIC="-L${INSTALL_FOLDER_PATH}/lib64 ${XBB_LDFLAGS_APP_STATIC}"
+    XBB_LDFLAGS_APP_STATIC_GCC="-L${INSTALL_FOLDER_PATH}/lib64 ${XBB_LDFLAGS_APP_STATIC_GCC}"
 
     # Add XBB lib in front of PKG_CONFIG_PATH.
     PKG_CONFIG_PATH="${INSTALL_FOLDER_PATH}/lib64/pkgconfig:${PKG_CONFIG_PATH}"
@@ -337,6 +359,7 @@ function xbb_activate_installed_dev()
   export XBB_LDFLAGS_LIB
   export XBB_LDFLAGS_APP
   export XBB_LDFLAGS_APP_STATIC
+  export XBB_LDFLAGS_APP_STATIC_GCC
 
   export PKG_CONFIG_PATH
 }
@@ -683,6 +706,36 @@ function do_strip_debug_libs()
         -exec "${ranlib}" {} \;
       set -e
     )
+  fi
+}
+
+function check_rpath()
+{
+  echo
+  echo "Checking rpath in elf files.."
+
+  find "${XBB_FOLDER_PATH}/bin" "${XBB_FOLDER_PATH}/libexec" "${XBB_FOLDER_PATH}/openssl" \
+    -type f \
+    -exec bash ${helper_folder_path}/check_rpath.sh {} \;
+
+  if [ -d "${XBB_FOLDER_PATH}/usr" ]
+  then
+    find "${XBB_FOLDER_PATH}/usr"  \
+      -type f \
+      -exec bash ${helper_folder_path}/check_rpath.sh {} \;
+  fi
+
+  find "${XBB_FOLDER_PATH}/lib"  \
+    -type f \
+    -name '*.so*' \
+    -exec bash ${helper_folder_path}/check_rpath.sh {} \;
+
+  if [ -d "${XBB_FOLDER_PATH}/lib64" ]
+  then
+    find "${XBB_FOLDER_PATH}/lib64"  \
+      -type f \
+      -name '*.so*' \
+      -exec bash ${helper_folder_path}/check_rpath.sh {} \;
   fi
 }
 

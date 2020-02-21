@@ -46,7 +46,7 @@ function do_native_binutils()
       export CPPFLAGS="${XBB_CPPFLAGS}" 
       export CFLAGS="${XBB_CFLAGS} -Wno-sign-compare"
       export CXXFLAGS="${XBB_CXXFLAGS} -Wno-sign-compare"
-      export LDFLAGS="${XBB_LDFLAGS_APP}"
+      export LDFLAGS="${XBB_LDFLAGS_APP_STATIC_GCC}"
 
       if [ ! -f "config.status" ]
       then
@@ -174,7 +174,7 @@ function do_native_gcc()
       CPPFLAGS_FOR_TARGET="${XBB_CPPFLAGS}"
       CFLAGS="${XBB_CFLAGS} -Wno-sign-compare -Wno-varargs -Wno-tautological-compare -Wno-format-security -Wno-enum-compare -Wno-abi -Wno-cast-function-type -Wno-maybe-uninitialized "
       CXXFLAGS="${XBB_CXXFLAGS} -Wno-sign-compare -Wno-varargs -Wno-tautological-compare -Wno-format -Wno-abi -Wno-cast-function-type -Wno-maybe-uninitialized -Wno-type-limits"
-      LDFLAGS="${XBB_LDFLAGS_APP}"
+      LDFLAGS="${XBB_LDFLAGS_APP_STATIC_GCC}"
 
       export CPPFLAGS
       export CPPFLAGS_FOR_TARGET
@@ -254,7 +254,6 @@ function do_native_gcc()
               \
               --with-pkgversion="${XBB_GCC_BRANDING}" \
               --with-linker-hash-style=gnu \
-              --with-system-zlib \
               --with-isl \
               \
               --enable-languages=c,c++ \
@@ -395,7 +394,7 @@ function do_mingw_binutils()
       export CFLAGS="${XBB_CFLAGS} -Wno-sign-compare"
       export CXXFLAGS="${XBB_CXXFLAGS} -Wno-sign-compare"
       # export LDFLAGS="-static-libstdc++ ${LDFLAGS}"
-      export LDFLAGS="${XBB_LDFLAGS_APP}"
+      export LDFLAGS="${XBB_LDFLAGS_APP_STATIC_GCC}"
 
       if [ ! -f "config.status" ]
       then
@@ -615,7 +614,7 @@ function do_mingw_all()
       export CFLAGS="${XBB_CFLAGS} -Wno-sign-compare -Wno-implicit-function-declaration -Wno-missing-prototypes -Wno-builtin-declaration-mismatch -Wno-prio-ctor-dtor -Wno-attributes"
       export CXXFLAGS="${XBB_CXXFLAGS} -Wno-sign-compare -Wno-type-limits -Wno-unused-function -Wno-type-limits -Wno-unused-parameter"
       # export LDFLAGS="-static-libstdc++ ${LDFLAGS}"
-      export LDFLAGS="${XBB_LDFLAGS_APP}"
+      export LDFLAGS="${XBB_LDFLAGS_APP_STATIC_GCC}"
 
       if [ ! -f "config.status" ]
       then
@@ -634,7 +633,6 @@ function do_mingw_all()
             \
             --with-sysroot="${INSTALL_FOLDER_PATH}" \
             --with-pkgversion="${XBB_MINGW_GCC_BRANDING}" \
-            --with-system-zlib \
             \
             --enable-languages=c,c++ \
             --enable-shared \
@@ -851,7 +849,7 @@ function do_mingw_all()
       export CPPFLAGS="${XBB_CPPFLAGS}" 
       export CFLAGS="${XBB_CFLAGS} -Wno-sign-compare -Wno-implicit-function-declaration -Wno-missing-prototypes"
       export CXXFLAGS="${XBB_CXXFLAGS} -Wno-sign-compare -Wno-type-limits"
-      export LDFLAGS="${XBB_LDFLAGS_APP}"
+      export LDFLAGS="${XBB_LDFLAGS_APP_STATIC_GCC}"
 
       # Build.
       make -j ${JOBS}
@@ -975,7 +973,7 @@ function do_openssl()
       export CPPFLAGS="${XBB_CPPFLAGS}"
       export CFLAGS="${XBB_CFLAGS} -Wno-unused-parameter"
       export CXXFLAGS="${XBB_CXXFLAGS}"
-      export LDFLAGS="${XBB_LDFLAGS_APP}"
+      export LDFLAGS="${XBB_LDFLAGS_APP_STATIC_GCC}"
 
       if [ ! -f config.stamp ]
       then
@@ -1120,7 +1118,7 @@ function do_curl()
       export CPPFLAGS="${XBB_CPPFLAGS}"
       export CFLAGS="${XBB_CFLAGS} -Wno-deprecated-declarations"
       export CXXFLAGS="${XBB_CXXFLAGS}"
-      export LDFLAGS="${XBB_LDFLAGS_APP}"
+      export LDFLAGS="${XBB_LDFLAGS_APP_STATIC_GCC}"
 
       if [ ! -f "config.status" ]
       then
@@ -1221,7 +1219,7 @@ function do_xz()
       export CPPFLAGS="${XBB_CPPFLAGS}"
       export CFLAGS="${XBB_CFLAGS} "
       export CXXFLAGS="${XBB_CXXFLAGS}"
-      export LDFLAGS="${XBB_LDFLAGS_APP}"
+      export LDFLAGS="${XBB_LDFLAGS_APP_STATIC_GCC}"
 
       if [ ! -f "config.status" ]
       then
@@ -1312,7 +1310,7 @@ function do_tar()
       export CPPFLAGS="${XBB_CPPFLAGS}"
       export CFLAGS="${XBB_CFLAGS}"
       export CXXFLAGS="${XBB_CXXFLAGS}"
-      export LDFLAGS="${XBB_LDFLAGS_APP}"
+      export LDFLAGS="${XBB_LDFLAGS_APP_STATIC_GCC}"
 
       # Avoid 'configure: error: you should not run configure as root'.
       export FORCE_UNSAFE_CONFIGURE=1
@@ -1406,7 +1404,7 @@ function do_coreutils()
       export CPPFLAGS="${XBB_CPPFLAGS}"
       export CFLAGS="${XBB_CFLAGS} -Wno-pointer-sign -Wno-incompatible-pointer-types"
       export CXXFLAGS="${XBB_CXXFLAGS}"
-      export LDFLAGS="${XBB_LDFLAGS_APP}"
+      export LDFLAGS="${XBB_LDFLAGS_APP_STATIC_GCC}"
 
       # Use Apple GCC, since with GNU GCC it fails with some undefined symbols.
       if [ "${HOST_UNAME}" == "Darwin" ]
@@ -1526,7 +1524,7 @@ function do_pkg_config()
       # -Wno-sometimes-uninitialized -Wno-tautological-constant-out-of-range-compare 
       export CFLAGS="${XBB_CFLAGS} -Wno-int-conversion -Wno-unused-value -Wno-unused-function -Wno-deprecated-declarations -Wno-return-type  -Wno-unused-but-set-variable"
       export CXXFLAGS="${XBB_CXXFLAGS}"
-      export LDFLAGS="${XBB_LDFLAGS_APP}"
+      export LDFLAGS="${XBB_LDFLAGS_APP_STATIC_GCC}"
 
       if [ "${HOST_UNAME}" == "Darwin" ]
       then
@@ -1624,7 +1622,7 @@ function do_m4()
       export CPPFLAGS="${XBB_CPPFLAGS}"
       export CFLAGS="${XBB_CFLAGS} -Wno-incompatible-pointer-types -Wno-attributes"
       export CXXFLAGS="${XBB_CXXFLAGS}"
-      export LDFLAGS="${XBB_LDFLAGS_APP}"
+      export LDFLAGS="${XBB_LDFLAGS_APP_STATIC_GCC}"
 
       if [ ! -f "config.status" ]
       then
@@ -1714,7 +1712,7 @@ function do_gawk()
       export CPPFLAGS="${XBB_CPPFLAGS}"
       export CFLAGS="${XBB_CFLAGS}"
       export CXXFLAGS="${XBB_CXXFLAGS}"
-      export LDFLAGS="${XBB_LDFLAGS_APP}"
+      export LDFLAGS="${XBB_LDFLAGS_APP_STATIC_GCC}"
 
       if [ ! -f "config.status" ]
       then
@@ -1802,7 +1800,7 @@ function do_sed()
       export CPPFLAGS="${XBB_CPPFLAGS}"
       export CFLAGS="${XBB_CFLAGS}"
       export CXXFLAGS="${XBB_CXXFLAGS}"
-      export LDFLAGS="${XBB_LDFLAGS_APP}"
+      export LDFLAGS="${XBB_LDFLAGS_APP_STATIC_GCC}"
 
       if [ ! -f "config.status" ]
       then
@@ -1891,7 +1889,7 @@ function do_autoconf()
       export CPPFLAGS="${XBB_CPPFLAGS}"
       export CFLAGS="${XBB_CFLAGS}"
       export CXXFLAGS="${XBB_CXXFLAGS}"
-      export LDFLAGS="${XBB_LDFLAGS_APP}"
+      export LDFLAGS="${XBB_LDFLAGS_APP_STATIC_GCC}"
 
       if [ ! -f "config.status" ]
       then
@@ -1972,7 +1970,7 @@ function do_automake()
       export CPPFLAGS="${XBB_CPPFLAGS}"
       export CFLAGS="${XBB_CFLAGS}"
       export CXXFLAGS="${XBB_CXXFLAGS}"
-      export LDFLAGS="${XBB_LDFLAGS_APP}"
+      export LDFLAGS="${XBB_LDFLAGS_APP_STATIC_GCC}"
 
       if [ ! -f "config.status" ]
       then
@@ -2059,7 +2057,7 @@ function do_libtool()
       export CPPFLAGS="${XBB_CPPFLAGS}"
       export CFLAGS="${XBB_CFLAGS}"
       export CXXFLAGS="${XBB_CXXFLAGS}"
-      export LDFLAGS="${XBB_LDFLAGS_APP}"
+      export LDFLAGS="${XBB_LDFLAGS_APP_STATIC_GCC}"
 
       if [ ! -f "config.status" ]
       then
@@ -2150,7 +2148,8 @@ function do_gettext()
       export CPPFLAGS="${XBB_CPPFLAGS}"
       export CFLAGS="${XBB_CFLAGS} -Wno-format-security -Wno-discarded-qualifiers -Wno-format"
       export CXXFLAGS="${XBB_CXXFLAGS}"
-      export LDFLAGS="${XBB_LDFLAGS_APP}"
+      # export LDFLAGS="${XBB_LDFLAGS_APP_STATIC_GCC}"
+      export LDFLAGS="${XBB_LDFLAGS_APP_STATIC_GCC}"
 
       if [ ! -f "config.status" ]
       then
@@ -2245,7 +2244,7 @@ function do_patch()
       export CPPFLAGS="${XBB_CPPFLAGS}"
       export CFLAGS="${XBB_CFLAGS}"
       export CXXFLAGS="${XBB_CXXFLAGS}"
-      export LDFLAGS="${XBB_LDFLAGS_APP}"
+      export LDFLAGS="${XBB_LDFLAGS_APP_STATIC_GCC}"
 
       if [ ! -f "config.status" ]
       then
@@ -2328,7 +2327,7 @@ function do_diffutils()
       export CPPFLAGS="${XBB_CPPFLAGS}"
       export CFLAGS="${XBB_CFLAGS}"
       export CXXFLAGS="${XBB_CXXFLAGS}"
-      export LDFLAGS="${XBB_LDFLAGS_APP}"
+      export LDFLAGS="${XBB_LDFLAGS_APP_STATIC_GCC}"
 
       if [ ! -f "config.status" ]
       then
@@ -2413,7 +2412,7 @@ function do_bison()
       export CPPFLAGS="${XBB_CPPFLAGS}"
       export CFLAGS="${XBB_CFLAGS} -Wno-format"
       export CXXFLAGS="${XBB_CXXFLAGS}"
-      export LDFLAGS="${XBB_LDFLAGS_APP}"
+      export LDFLAGS="${XBB_LDFLAGS_APP_STATIC_GCC}"
 
       if [ "${HOST_UNAME}" == "Linux" ]
       then
@@ -2523,7 +2522,7 @@ function do_flex()
       export CPPFLAGS="${XBB_CPPFLAGS}"
       export CFLAGS="${XBB_CFLAGS}"
       export CXXFLAGS="${XBB_CXXFLAGS}"
-      export LDFLAGS="${XBB_LDFLAGS_APP}"
+      export LDFLAGS="${XBB_LDFLAGS_APP_STATIC_GCC}"
 
       if [ ! -f "config.status" ]
       then
@@ -2613,7 +2612,7 @@ function do_make()
       export CPPFLAGS="${XBB_CPPFLAGS}"
       export CFLAGS="${XBB_CFLAGS}"
       export CXXFLAGS="${XBB_CXXFLAGS}"
-      export LDFLAGS="${XBB_LDFLAGS_APP}"
+      export LDFLAGS="${XBB_LDFLAGS_APP_STATIC_GCC}"
 
       if [ ! -f "config.status" ]
       then
@@ -2707,7 +2706,7 @@ function do_wget()
       export CPPFLAGS="${XBB_CPPFLAGS}"
       export CFLAGS="${XBB_CFLAGS} -Wno-implicit-function-declaration"
       export CXXFLAGS="${XBB_CXXFLAGS}"
-      export LDFLAGS="${XBB_LDFLAGS_APP}"
+      export LDFLAGS="${XBB_LDFLAGS_APP_STATIC_GCC}"
       # Might be needed on Mac
       # export LIBS="-liconv"
 
@@ -2805,7 +2804,7 @@ function do_texinfo()
       export CPPFLAGS="${XBB_CPPFLAGS}"
       export CFLAGS="${XBB_CFLAGS} -Wno-pointer-to-int-cast"
       export CXXFLAGS="${XBB_CXXFLAGS}"
-      export LDFLAGS="${XBB_LDFLAGS_APP}"
+      export LDFLAGS="${XBB_LDFLAGS_APP_STATIC_GCC}"
 
       if [ ! -f "config.status" ]
       then
@@ -2896,7 +2895,7 @@ function do_cmake()
       export CPPFLAGS="${XBB_CPPFLAGS}"
       export CFLAGS="${XBB_CFLAGS}"
       export CXXFLAGS="${XBB_CXXFLAGS}"
-      export LDFLAGS="${XBB_LDFLAGS_APP}"
+      export LDFLAGS="${XBB_LDFLAGS_APP_STATIC_GCC}"
 
       if [ "${HOST_UNAME}" == "Darwin" ]
       then
@@ -3016,7 +3015,7 @@ function do_perl()
       # -Wno-null-pointer-arithmetic 
       export CFLAGS="${XBB_CFLAGS}  -Wno-nonnull -Wno-format -Wno-sign-compare  -Wno-unused-result -Wno-nonnull-compare -Wno-unused-value -Wno-misleading-indentation -Wno-unused-const-variable -Wno-unused-but-set-variable -Wno-cast-function-type  -Wno-clobbered -Wno-int-in-bool-context"
       export CXXFLAGS="${XBB_CXXFLAGS}"
-      export LDFLAGS="${XBB_LDFLAGS_APP}"
+      export LDFLAGS="${XBB_LDFLAGS_APP_STATIC_GCC}"
 
       if [ ! -f "config.h" ]
       then
@@ -3114,7 +3113,7 @@ function do_makedepend()
       export CPPFLAGS="${XBB_CPPFLAGS}"
       export CFLAGS="${XBB_CFLAGS} -Wno-shadow -Wno-discarded-qualifiers"
       export CXXFLAGS="${XBB_CXXFLAGS}"
-      export LDFLAGS="${XBB_LDFLAGS_APP}"
+      export LDFLAGS="${XBB_LDFLAGS_APP_STATIC_GCC}"
       export PKG_CONFIG_PATH="${INSTALL_FOLDER_PATH}/share/pkgconfig:${PKG_CONFIG_PATH}"
 
       if [ ! -f "config.status" ]
@@ -3196,7 +3195,7 @@ function do_patchelf()
       export CXXFLAGS="${XBB_CXXFLAGS}"
       # Wihtout -static-libstdc++, the bootstrap lib folder is needed to 
       # find libstdc++.
-      export LDFLAGS="${XBB_LDFLAGS_APP} -static-libstdc++"
+      export LDFLAGS="${XBB_LDFLAGS_APP_STATIC_GCC} -static-libstdc++"
 
       if [ ! -f "config.status" ]
       then
@@ -3282,7 +3281,7 @@ function do_dos2unix()
       export CPPFLAGS="${XBB_CPPFLAGS}"
       export CFLAGS="${XBB_CFLAGS} -Wno-unused-parameter"
       export CXXFLAGS="${XBB_CXXFLAGS}"
-      export LDFLAGS="${XBB_LDFLAGS_APP}"
+      export LDFLAGS="${XBB_LDFLAGS_APP_STATIC_GCC}"
 
       (
         echo
@@ -3350,7 +3349,7 @@ function do_git()
       export CPPFLAGS="${XBB_CPPFLAGS}"
       export CFLAGS="${XBB_CFLAGS}"
       export CXXFLAGS="${XBB_CXXFLAGS}"
-      export LDFLAGS="${XBB_LDFLAGS_APP}"
+      export LDFLAGS="${XBB_LDFLAGS_APP_STATIC_GCC}"
       # export LIBS="-ldl"
 
       if [ ! -f "config.status" ]
@@ -3443,7 +3442,7 @@ function do_python2()
       # export CFLAGS="${XBB_CFLAGS} -Wno-int-in-bool-context -Wno-maybe-uninitialized -Wno-nonnull -Wno-stringop-overflow"
       export CFLAGS="${XBB_CFLAGS} -Wno-nonnull -Wno-unused-but-set-variable -Wno-unused-value -Wno-unused-result -Wno-misleading-indentation -Wno-unused-const-variable -Wno-maybe-uninitialized -Wno-stringop-overflow -Wno-unused-function"
       export CXXFLAGS="${XBB_CXXFLAGS}"
-      export LDFLAGS="${XBB_LDFLAGS_APP}"
+      export LDFLAGS="${XBB_LDFLAGS_APP_STATIC_GCC}"
 
       if [ "${HOST_UNAME}" == "Darwin" ]
       then
@@ -3579,7 +3578,7 @@ function do_python3()
       # export CFLAGS="${XBB_CFLAGS} -Wno-int-in-bool-context -Wno-maybe-uninitialized -Wno-nonnull -Wno-stringop-overflow"
       export CFLAGS="${XBB_CFLAGS} -Wno-nonnull -Wno-deprecated-declarations"
       export CXXFLAGS="${XBB_CXXFLAGS}"
-      export LDFLAGS="${XBB_LDFLAGS_APP}"
+      export LDFLAGS="${XBB_LDFLAGS_APP_STATIC_GCC}"
 
       if [ "${HOST_UNAME}" == "Darwin" ]
       then
@@ -3723,7 +3722,7 @@ function do_scons()
       export CPPFLAGS="${XBB_CPPFLAGS}"
       export CFLAGS="${XBB_CFLAGS}"
       export CXXFLAGS="${XBB_CXXFLAGS}"
-      export LDFLAGS="${XBB_LDFLAGS_APP}"
+      export LDFLAGS="${XBB_LDFLAGS_APP_STATIC_GCC}"
 
       echo
       echo "Running scons install..."
@@ -3842,7 +3841,7 @@ function do_ninja()
       export CPPFLAGS="${XBB_CPPFLAGS}"
       export CFLAGS="${XBB_CFLAGS}"
       export CXXFLAGS="${XBB_CXXFLAGS}"
-      export LDFLAGS="${XBB_LDFLAGS_APP}"
+      export LDFLAGS="${XBB_LDFLAGS_APP_STATIC_GCC}"
 
       (
         echo
@@ -3917,7 +3916,7 @@ function do_p7zip()
       export CPPFLAGS="${XBB_CPPFLAGS}"
       export CFLAGS="${XBB_CFLAGS} -Wno-deprecated"
       export CXXFLAGS="${XBB_CXXFLAGS}"
-      export LDFLAGS="${XBB_LDFLAGS_APP}"
+      export LDFLAGS="${XBB_LDFLAGS_APP_STATIC_GCC}"
 
       echo
       echo "Running p7zip make..."
@@ -4024,7 +4023,7 @@ function do_wine()
       export CPPFLAGS="${XBB_CPPFLAGS}" 
       export CFLAGS="${XBB_CFLAGS}"
       export CXXFLAGS="${XBB_CXXFLAGS}"
-      export LDFLAGS="${XBB_LDFLAGS_APP}"
+      export LDFLAGS="${XBB_LDFLAGS_APP_STATIC_GCC}"
 
       if [ ! -f "config.status" ]
       then
@@ -4138,7 +4137,7 @@ function do_nvm()
       export CPPFLAGS="${XBB_CPPFLAGS}"
       export CFLAGS="${XBB_CFLAGS}"
       export CXXFLAGS="${XBB_CXXFLAGS}"
-      export LDFLAGS="${XBB_LDFLAGS_APP}"
+      export LDFLAGS="${XBB_LDFLAGS_APP_STATIC_GCC}"
       export LIBS="-lrt"
 
       if [ ! -d "${INSTALL_FOLDER_PATH}/nvm" ]
@@ -4219,7 +4218,7 @@ function do_gnupg()
       export CPPFLAGS="${XBB_CPPFLAGS}"
       export CFLAGS="${XBB_CFLAGS}"
       export CXXFLAGS="${XBB_CXXFLAGS}"
-      export LDFLAGS="${XBB_LDFLAGS_APP}"
+      export LDFLAGS="${XBB_LDFLAGS_APP_STATIC_GCC}"
       if [ "${HOST_UNAME}" == "Linux" ]
       then
         export LIBS="-lrt"
@@ -4452,7 +4451,7 @@ function do_nodejs()
       export CPPFLAGS="${XBB_CPPFLAGS}"
       export CFLAGS="${XBB_CFLAGS}"
       export CXXFLAGS="${XBB_CXXFLAGS}"
-      export LDFLAGS="${XBB_LDFLAGS_APP}"
+      export LDFLAGS="${XBB_LDFLAGS_APP_STATIC_GCC}"
 
       if true # [ ! -f "config.status" ]
       then
