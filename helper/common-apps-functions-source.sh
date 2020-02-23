@@ -625,6 +625,9 @@ function do_mingw_all()
           # For the native build, --disable-shared failed with errors in libstdc++-v3
           bash "${SOURCES_FOLDER_PATH}/${mingw_gcc_folder_name}/configure" --help
 
+          # Requires new GCC & mingw.
+          # --enable-libstdcxx-filesystem-ts=yes
+
           bash ${DEBUG} "${SOURCES_FOLDER_PATH}/${mingw_gcc_folder_name}/configure" \
             --prefix="${INSTALL_FOLDER_PATH}" \
             \
