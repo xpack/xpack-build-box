@@ -24,7 +24,7 @@ $ sudo tar cJvf "${HOME}/tmp/armhf-ubu16-rootfs.xz" -C "${HOME}/tmp/armhf-ubu16-
 ```
 
 The result are two archives that were published at
-https://github.com/xpack/xpack-build-box/releases/download/rootfs/:
+https://github.com/xpack/xpack-build-box/releases/tag/rootfs:
 
 - https://github.com/xpack/xpack-build-box/releases/download/rootfs/arm64-ubu16-rootfs.xz
 - https://github.com/xpack/xpack-build-box/releases/download/rootfs/armhf-ubu16-rootfs.xz
@@ -45,7 +45,7 @@ $ docker images
 
 ## Test
 
-The test was performed on a macOS.
+The test was performed on an Ubuntu Server 18.04 running on a Raspberry Pi 4B.
 
 ```console
 $ docker run --interactive --tty ilegeul/ubuntu:arm64-16.04
