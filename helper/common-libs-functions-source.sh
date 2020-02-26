@@ -381,7 +381,8 @@ function do_isl()
       export CPPFLAGS="${XBB_CPPFLAGS}"
       export CFLAGS="${XBB_CFLAGS}"
       export CXXFLAGS="${XBB_CXXFLAGS}"
-      export LDFLAGS="${XBB_LDFLAGS_LIB}"
+      # The c++ test fails without it.
+      export LDFLAGS="${XBB_LDFLAGS_LIB_STATIC_GCC}"
 
       if [ ! -f "config.status" ]
       then
