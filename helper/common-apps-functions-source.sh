@@ -3420,7 +3420,7 @@ function do_python2()
   # "2.7.12" # Fails on macOS in bootstrap
   # 2017-09-16, "2.7.14" # Fails on macOS in bootstrap
   # March 4, 2019, "2.7.16" # Fails on macOS in bootstrap
-  # Oct. 19, 2019, "2.7.17"
+  # Oct. 19, 2019, "2.7.17" - final release.
 
   local python2_version="$1"
 
