@@ -419,17 +419,19 @@ function xbb_activate_bootstrap()
 {
   PATH="${XBB_BOOTSTRAP_FOLDER_PATH}/bin:${PATH}"
 
-  # Add XBB lib to LD_LIBRARY_PATH.
-  LD_LIBRARY_PATH="${XBB_BOOTSTRAP_FOLDER_PATH}/lib:${LD_LIBRARY_PATH}"
+  # Disabled, shared libs must be located via rpath.
 
-  if [ -d "${XBB_BOOTSTRAP_FOLDER_PATH}/lib64" ]
-  then
+  # Add XBB lib to LD_LIBRARY_PATH.
+  # LD_LIBRARY_PATH="${XBB_BOOTSTRAP_FOLDER_PATH}/lib:${LD_LIBRARY_PATH}"
+
+  # if [ -d "${XBB_BOOTSTRAP_FOLDER_PATH}/lib64" ]
+  # then
     # On 64-bit systems, add lib64 in front of LD_LIBRARY_PATH.
-    LD_LIBRARY_PATH="${XBB_BOOTSTRAP_FOLDER_PATH}/lib64:${LD_LIBRARY_PATH}"
-  fi
+    # LD_LIBRARY_PATH="${XBB_BOOTSTRAP_FOLDER_PATH}/lib64:${LD_LIBRARY_PATH}"
+  # fi
 
   export PATH
-  export LD_LIBRARY_PATH
+  # export LD_LIBRARY_PATH
 }
 
 __EOF__
@@ -445,14 +447,16 @@ function xbb_activate()
 {
   PATH="${XBB_FOLDER_PATH}/bin:${PATH}"
 
-  # Add XBB lib to LD_LIBRARY_PATH.
-  LD_LIBRARY_PATH="${XBB_FOLDER_PATH}/lib:${LD_LIBRARY_PATH}"
+  # Disabled, shared libs must be located via rpath.
 
-  if [ -d "${XBB_FOLDER_PATH}/lib64" ]
-  then
+  # Add XBB lib to LD_LIBRARY_PATH.
+  # LD_LIBRARY_PATH="${XBB_FOLDER_PATH}/lib:${LD_LIBRARY_PATH}"
+
+  # if [ -d "${XBB_FOLDER_PATH}/lib64" ]
+  # then
     # On 64-bit systems, add lib64 in front of LD_LIBRARY_PATH.
-    LD_LIBRARY_PATH="${XBB_FOLDER_PATH}/lib64:${LD_LIBRARY_PATH}"
-  fi
+    # LD_LIBRARY_PATH="${XBB_FOLDER_PATH}/lib64:${LD_LIBRARY_PATH}"
+  # fi
 
   export PATH
   export LD_LIBRARY_PATH
