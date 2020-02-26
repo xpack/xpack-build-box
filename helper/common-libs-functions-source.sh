@@ -228,7 +228,7 @@ function do_mpfr()
         # Build.
         make -j ${JOBS}
 
-        # Test to diagnose the 
+        # Test to diagnose the failure.
         if false
         then
           (
@@ -334,6 +334,8 @@ function do_mpc()
 
         # Build.
         make -j ${JOBS}
+
+        make check
 
         make install-strip
       ) 2>&1 | tee "${LOGS_FOLDER_PATH}/make-mpc-output.txt"
@@ -494,7 +496,7 @@ function do_nettle()
         if [ "${HOST_UNAME}" != "Darwin" ]
         then
           # Takes very long on armhf.
-          make -k check V=1
+          make -k check
         fi
 
         # make install-strip
