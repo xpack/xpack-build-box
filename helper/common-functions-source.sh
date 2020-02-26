@@ -309,7 +309,7 @@ function xbb_activate_installed_bin()
   # then
     # On 64-bit systems, add lib64 in front of LD_LIBRARY_PATH.
     # LD_LIBRARY_PATH="${INSTALL_FOLDER_PATH}/lib64:${LD_LIBRARY_PATH}"
-  fi
+  # fi
 
   export PATH
   # export LD_LIBRARY_PATH
