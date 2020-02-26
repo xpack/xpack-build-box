@@ -300,17 +300,19 @@ function xbb_activate_installed_bin()
   # Add the XBB bin to the PATH.
   PATH="${INSTALL_FOLDER_PATH}/bin:${PATH}"
 
-  # Add XBB lib to LD_LIBRARY_PATH.
-  LD_LIBRARY_PATH="${INSTALL_FOLDER_PATH}/lib:${LD_LIBRARY_PATH}"
+  # Disabled, shared libs must be located via rpath.
 
-  if [ -d "${INSTALL_FOLDER_PATH}/lib64" ]
-  then
+  # Add XBB lib to LD_LIBRARY_PATH.
+  # LD_LIBRARY_PATH="${INSTALL_FOLDER_PATH}/lib:${LD_LIBRARY_PATH}"
+
+  # if [ -d "${INSTALL_FOLDER_PATH}/lib64" ]
+  # then
     # On 64-bit systems, add lib64 in front of LD_LIBRARY_PATH.
-    LD_LIBRARY_PATH="${INSTALL_FOLDER_PATH}/lib64:${LD_LIBRARY_PATH}"
+    # LD_LIBRARY_PATH="${INSTALL_FOLDER_PATH}/lib64:${LD_LIBRARY_PATH}"
   fi
 
   export PATH
-  export LD_LIBRARY_PATH
+  # export LD_LIBRARY_PATH
 }
 
 # For the XBB builds, add the freshly built headrs and libraries.
