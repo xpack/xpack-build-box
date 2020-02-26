@@ -3166,6 +3166,7 @@ function do_patchelf()
 {
   # https://nixos.org/patchelf.html
   # https://nixos.org/releases/patchelf/
+  # https://nixos.org/releases/patchelf/patchelf-0.9/patchelf-0.9.tar.bz2
   # https://nixos.org/releases/patchelf/patchelf-0.10/patchelf-0.10.tar.bz2
 
   # https://archlinuxarm.org/packages/aarch64/patchelf/files/PKGBUILD
