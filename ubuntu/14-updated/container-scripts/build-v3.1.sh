@@ -53,48 +53,49 @@ cat <<'__EOF__'  >"/etc/apt/sources.list"
 # See http://help.ubuntu.com/community/UpgradeNotes for how to upgrade to
 # newer versions of the distribution.
 
-deb http://us.ports.ubuntu.com/ubuntu-ports/ trusty main restricted
-# deb-src http://us.ports.ubuntu.com/ubuntu-ports/ trusty main restricted
-deb http://ports.ubuntu.com/ubuntu-ports trusty-security main restricted
-# deb-src http://ports.ubuntu.com/ubuntu-ports trusty-security main restricted
+deb http://ports.ubuntu.com/ubuntu-ports/ trusty main restricted 
+# deb-src http://ports.ubuntu.com/ubuntu-ports/ trusty main restricted 
+deb http://ports.ubuntu.com/ubuntu-ports/ trusty-security main restricted 
+# deb-src http://ports.ubuntu.com/ubuntu-ports/ trusty-security main restricted 
 
 ## Major bug fix updates produced after the final release of the
 ## distribution.
-deb http://us.ports.ubuntu.com/ubuntu-ports/ trusty-updates main restricted
-# deb-src http://us.ports.ubuntu.com/ubuntu-ports/ trusty-updates main restricted
+deb http://ports.ubuntu.com/ubuntu-ports/ trusty-updates main restricted 
+# deb-src http://ports.ubuntu.com/ubuntu-ports/ trusty-updates main restricted 
 
-deb http://us.ports.ubuntu.com/ubuntu-ports/ trusty-backports main restricted 
-# deb-src http://us.ports.ubuntu.com/ubuntu-ports/ trusty-backports main restricted 
+deb http://ports.ubuntu.com/ubuntu-ports/ trusty-backports main restricted 
+# deb-src http://ports.ubuntu.com/ubuntu-ports/ trusty-backports main restricted 
+
+## N.B. software from this repository is ENTIRELY UNSUPPORTED by the Ubuntu
+## team. Also, please note that software in universe WILL NOT receive any
+## review or updates from the Ubuntu security team.
+deb http://ports.ubuntu.com/ubuntu-ports/ trusty universe
+# deb-src http://ports.ubuntu.com/ubuntu-ports/ trusty universe
+deb http://ports.ubuntu.com/ubuntu-ports/ trusty-security universe
+# deb-src http://ports.ubuntu.com/ubuntu-ports/ trusty-security universe
+
+deb http://ports.ubuntu.com/ubuntu-ports/ trusty-updates universe
+# deb-src http://ports.ubuntu.com/ubuntu-ports/ trusty-updates universe
+
+deb http://ports.ubuntu.com/ubuntu-ports/ trusty-backports universe 
+# deb-src http://ports.ubuntu.com/ubuntu-ports/ trusty-backports universe 
+
+## N.B. software from this repository is ENTIRELY UNSUPPORTED by the Ubuntu 
+## team, and may not be under a free licence. Please satisfy yourself as to 
+## your rights to use the software. Also, please note that software in 
+## multiverse WILL NOT receive any review or updates from the Ubuntu
+## security team.
+deb http://ports.ubuntu.com/ubuntu-ports/ trusty multiverse
+# deb-src http://ports.ubuntu.com/ubuntu-ports/ trusty multiverse
+deb http://ports.ubuntu.com/ubuntu-ports/ trusty-security multiverse
+# deb-src http://ports.ubuntu.com/ubuntu-ports/ trusty-security multiverse
+
+deb http://ports.ubuntu.com/ubuntu-ports/ trusty-updates multiverse
+# deb-src http://ports.ubuntu.com/ubuntu-ports/ trusty-updates multiverse
+
+deb http://ports.ubuntu.com/ubuntu-ports/ trusty-backports multiverse
+# deb-src http://ports.ubuntu.com/ubuntu-ports/ trusty-backports multiverse
 __EOF__
-
-
-# deb http://us.ports.ubuntu.com/ubuntu-ports/ trusty universe
-
-# Some packages could not be installed. This may mean that you have
-# requested an impossible situation or if you are using the unstable
-# distribution that some required packages have not yet been created
-# or been moved out of Incoming.
-# The following information may help to resolve the situation:
-# 
-# The following packages have unmet dependencies:
-#  gcc-4.7-plugin-dev : Depends: libgmpv4-dev (>= 2:5.0.1~) but it is not going to be installed
-#  lib32gcc-4.9-dev-s390x-cross : Depends: gcc-4.9-s390x-linux-gnu-base (>= 4.9.3-13ubuntu2) but it is not installable
-#  lib64gcc-4.8-dev-powerpc-cross : Depends: gcc-4.8-powerpc-linux-gnu-base (= 4.8.5-4ubuntu2cross3) but it is not installable
-#                                   Depends: lib64asan0-powerpc-cross (>= 4.8.5-4ubuntu2cross3) but it is not going to be installed
-#  lib64gcc-4.9-dev-powerpc-cross : Depends: gcc-4.9-powerpc-linux-gnu-base (>= 4.9.3-13ubuntu2) but it is not installable
-#                                   Depends: lib64asan1-powerpc-cross (>= 4.9.3-13ubuntu2cross1) but it is not going to be installed
-#  libgcc-4.7-dev-armel-cross : Depends: gcc-4.7-arm-linux-gnueabi-base (= 4.7.4-3ubuntu12cross3) but it is not installable
-#  libgcc-4.8-dev-arm64-cross : Depends: gcc-4.8-aarch64-linux-gnu-base (= 4.8.5-4ubuntu1cross2) but it is not installable
-#  libgcc-4.8-dev-powerpc-cross : Depends: gcc-4.8-powerpc-linux-gnu-base (= 4.8.5-4ubuntu2cross3) but it is not installable
-#                                 Depends: libasan0-powerpc-cross (>= 4.8.5-4ubuntu2cross3) but it is not going to be installed
-#  libgcc-4.8-dev-ppc64el-cross : Depends: gcc-4.8-powerpc64le-linux-gnu-base (= 4.8.5-4ubuntu1cross2) but it is not installable
-#  libgcc-4.9-dev-arm64-cross : Depends: gcc-4.9-aarch64-linux-gnu-base (>= 4.9.3-13ubuntu2) but it is not installable
-#  libgcc-4.9-dev-powerpc-cross : Depends: gcc-4.9-powerpc-linux-gnu-base (>= 4.9.3-13ubuntu2) but it is not installable
-#                                 Depends: libasan1-powerpc-cross (>= 4.9.3-13ubuntu2cross1) but it is not going to be installed
-#  libgcc-4.9-dev-ppc64el-cross : Depends: gcc-4.9-powerpc64le-linux-gnu-base (>= 4.9.3-13ubuntu2) but it is not installable
-#  libgcc-4.9-dev-s390x-cross : Depends: gcc-4.9-s390x-linux-gnu-base (>= 4.9.3-13ubuntu2) but it is not installable
-#  libhfgcc-4.7-dev-armel-cross : Depends: gcc-4.7-arm-linux-gnueabi-base (= 4.7.4-3ubuntu12cross3) but it is not installable
-# E: Unable to correct problems, you have held broken packages.
 
 echo
 echo "The resulting /etc/apt/sources.list"
@@ -111,6 +112,8 @@ apt-get autoclean
 apt-get autoremove
 
 # -----------------------------------------------------------------------------
+
+apt-get install --yes lsb-release
 
 echo
 uname -a

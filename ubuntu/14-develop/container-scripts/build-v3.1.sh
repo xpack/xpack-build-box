@@ -54,11 +54,13 @@ diffutils \
 file \
 flex \
 gawk \
-gcc++ \
+gcc \
+g++ \
 gettext \
 git \
 libc6-dev \
 libtool \
+lsb-release \
 m4 \
 make \
 patch \
@@ -86,6 +88,14 @@ mesa-common-dev
 apt-get install --yes \
 libudev-dev
 
+# From  (universe)
+apt-get install --yes \
+texinfo \
+help2man \
+
+# Not available.
+# dos2unix \
+
 # For add-apt-repository
 apt-get install --yes software-properties-common
 # Not longer available.
@@ -94,65 +104,24 @@ apt-get install --yes software-properties-common
 add-apt-repository --yes ppa:ubuntu-toolchain-r/test 
 add-apt-repository --yes ppa:openjdk-r/ppa
 
-cat <<'__EOF__' >>"/etc/apt/sources.list"
+apt-get update
 
-## N.B. software from this repository is ENTIRELY UNSUPPORTED by the Ubuntu
-## team. Also, please note that software in universe WILL NOT receive any
-## review or updates from the Ubuntu security team.
-deb http://us.ports.ubuntu.com/ubuntu-ports/ trusty universe
-# deb-src http://us.ports.ubuntu.com/ubuntu-ports/ trusty universe
-deb http://ports.ubuntu.com/ubuntu-ports trusty-security universe
-# deb-src http://ports.ubuntu.com/ubuntu-ports trusty-security universe
-
-deb http://us.ports.ubuntu.com/ubuntu-ports/ trusty-updates universe
-# deb-src http://us.ports.ubuntu.com/ubuntu-ports/ trusty-updates universe
-
-deb http://us.ports.ubuntu.com/ubuntu-ports/ trusty-backports universe 
-# deb-src http://us.ports.ubuntu.com/ubuntu-ports/ trusty-backports universe 
-
-## N.B. software from this repository is ENTIRELY UNSUPPORTED by the Ubuntu 
-## team, and may not be under a free licence. Please satisfy yourself as to 
-## your rights to use the software. Also, please note that software in 
-## multiverse WILL NOT receive any review or updates from the Ubuntu
-## security team.
-deb http://us.ports.ubuntu.com/ubuntu-ports/ trusty multiverse
-# deb-src http://us.ports.ubuntu.com/ubuntu-ports/ trusty multiverse
-deb http://ports.ubuntu.com/ubuntu-ports trusty-security multiverse
-# deb-src http://ports.ubuntu.com/ubuntu-ports trusty-security multiverse
-
-deb http://us.ports.ubuntu.com/ubuntu-ports/ trusty-updates multiverse
-# deb-src http://us.ports.ubuntu.com/ubuntu-ports/ trusty-updates multiverse
-
-deb http://us.ports.ubuntu.com/ubuntu-ports/ trusty-backports multiverse
-# deb-src http://us.ports.ubuntu.com/ubuntu-ports/ trusty-backports multiverse
-__EOF__
-
-echo
-echo "The resulting /etc/apt/sources.list"
-cat "/etc/apt/sources.list" | egrep '^deb '
-echo "---"
-
-apt-get update 
-
-# From  (universe)
-apt-get install --yes \
-dos2unix \
-texinfo \
-help2man \
-
-# GCC 6.0.1 already available, update to 6.5.
+# Upgrade to 6.5.
 apt-get install --yes \
 gcc-6 \
 g++-6 \
 
 update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-6 60 --slave /usr/bin/g++ g++ /usr/bin/g++-6
-update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-5 60 --slave /usr/bin/g++ g++ /usr/bin/g++-5
+update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-4.8 60 --slave /usr/bin/g++ g++ /usr/bin/g++-4.6
 
 echo 2 | update-alternatives --config gcc
 
 apt-get install --yes openjdk-8-jdk
+
 apt-get install --yes ant
-apt-get install --yes maven
+
+# Not available.
+# apt-get install --yes maven
 
 # https://www.thomas-krenn.com/en/wiki/Configure_Locales_in_Ubuntu
 apt-get install --yes locales
@@ -184,7 +153,7 @@ gawk --version
 git --version
 java -version
 m4 --version
-mvn -version
+# mvn -version
 make --version
 patch --version
 perl --version
