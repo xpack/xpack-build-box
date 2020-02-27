@@ -708,6 +708,7 @@ function do_libffi()
   fi
 }
 
+# Normally not used.
 function do_libiconv() 
 {
   # https://www.gnu.org/software/libiconv/
