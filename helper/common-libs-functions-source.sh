@@ -228,41 +228,12 @@ function do_mpfr()
         # Build.
         make -j ${JOBS}
 
-        # Test to diagnose the failure.
-        if false
+        make check
+
+        if [[ "${mpfr_version}" =~ 4\.* ]]
         then
-          (
-            ls -l /opt/xbb/lib /opt/xbb-bootstrap/lib
-            echo
-
-            cd tests
-
-            make tversion
-
-            ldd -v tversion
-            readelf -d tversion 
-
-            # export LD_LIBRARY_PATH=/opt/xbb/lib:/opt/xbb-bootstrap/lib:
-            # export LD_LIBRARY_PATH=/opt/xbb/lib:
-            export LD_LIBRARY_PATH=""
-            echo "LD_LIBRARY_PATH=$LD_LIBRARY_PATH"
-
-            ./tversion
-
-          )
-        fi
-
-        if [ "${HOST_MACHINE}" != "i686" ]
-        then
-          # On 32-bit Intel it fails in `tversion`, due to a failure to load 
-          # libgmp.so from xbb.
-          make check
-
-          if [[ "${mpfr_version}" =~ 4\.* ]]
-          then
-            # Not available in 3.x
-            make check-exported-symbols
-          fi
+          # Not available in 3.x
+          make check-exported-symbols
         fi
 
         make install-strip
