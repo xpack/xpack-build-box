@@ -16,6 +16,8 @@ function host_init_docker_env()
   WORK_FOLDER_PATH="${HOME}/Work"
   CACHE_FOLDER_PATH="${WORK_FOLDER_PATH}/cache"
 
+  docker system prune -f
+
   cd "${script_folder_path}"
 }
 
