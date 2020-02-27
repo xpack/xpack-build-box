@@ -1,0 +1,11 @@
+FROM ilegeul/ubuntu:arm64-14.04
+
+LABEL description="Ubuntu 14.04 arm64 image, updated to the latest available."
+LABEL maintainer="Liviu Ionescu <ilg@livius.net>"
+LABEL repository="https://github.com/xpack/xpack-build-box.git"
+LABEL docs="https://github.com/xpack/xpack-build-box/tree/master/ubuntu/14-updated/README.md"
+
+ADD input /input
+RUN DEBUG=-x bash /input/build-v3.1.sh
+
+CMD ["/bin/bash"]

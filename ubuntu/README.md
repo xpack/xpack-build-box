@@ -53,6 +53,45 @@ docker push "ilegeul/ubuntu:i386-12.04-bootstrap-v3.1"
 docker push "ilegeul/ubuntu:i386-12.04-xbb-v3.1"
 ```
 
+
+```bash
+set -o errexit
+docker system prune -f
+bash ~/Downloads/xpack-build-box.git/ubuntu/14/arm64-build.sh
+bash ~/Downloads/xpack-build-box.git/ubuntu/14-updated/arm64-build-v3.1.sh
+bash ~/Downloads/xpack-build-box.git/ubuntu/14-develop/arm64-build-v3.1.sh
+bash ~/Downloads/xpack-build-box.git/ubuntu/14-tex/arm64-build-v3.1.sh
+bash ~/Downloads/xpack-build-box.git/ubuntu/14-bootstrap/arm64-build-v3.1.sh
+bash ~/Downloads/xpack-build-box.git/ubuntu/14-xbb/arm64-build-v3.1.sh
+
+docker push "ilegeul/ubuntu:arm64-14.04"
+docker push "ilegeul/ubuntu:arm64-14.04-updated-v3.1"
+docker push "ilegeul/ubuntu:arm64-14.04-develop-v3.1"
+docker push "ilegeul/ubuntu:arm64-14.04-tex-v3.1"
+docker push "ilegeul/ubuntu:arm64-14.04-bootstrap-v3.1"
+docker push "ilegeul/ubuntu:arm64-14.04-xbb-v3.1"
+```
+
+```bash
+set -o errexit
+docker system prune -f
+bash ~/Downloads/xpack-build-box.git/ubuntu/14/armhf-build.sh
+bash ~/Downloads/xpack-build-box.git/ubuntu/14-updated/armhf-build-v3.1.sh
+bash ~/Downloads/xpack-build-box.git/ubuntu/14-develop/armhf-build-v3.1.sh
+bash ~/Downloads/xpack-build-box.git/ubuntu/14-tex/armhf-build-v3.1.sh
+bash ~/Downloads/xpack-build-box.git/ubuntu/14-bootstrap/armhf-build-v3.1.sh
+bash ~/Downloads/xpack-build-box.git/ubuntu/14-xbb/armhf-build-v3.1.sh
+
+docker push "ilegeul/ubuntu:armhf-14.04"
+docker push "ilegeul/ubuntu:armhf-14.04-updated-v3.1"
+docker push "ilegeul/ubuntu:armhf-14.04-develop-v3.1"
+docker push "ilegeul/ubuntu:armhf-14.04-tex-v3.1"
+docker push "ilegeul/ubuntu:armhf-14.04-bootstrap-v3.1"
+docker push "ilegeul/ubuntu:armhf-14.04-xbb-v3.1"
+```
+
+
+
 ```bash
 set -o errexit
 docker system prune -f

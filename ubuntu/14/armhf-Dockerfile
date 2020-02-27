@@ -1,0 +1,13 @@
+FROM scratch
+
+LABEL description="Pristine Ubuntu 14.04 armhf image, as resulted from debootstrap."
+LABEL maintainer="Liviu Ionescu <ilg@livius.net>"
+LABEL repository="https://github.com/xpack/xpack-build-box.git"
+LABEL docs="https://github.com/xpack/xpack-build-box/tree/master/ubuntu/14/README.md"
+
+ENTRYPOINT ["linux32"]
+
+ADD input/armhf-ubu14-rootfs.xz /
+RUN linux32 apt-get update && apt-get -y upgrade
+
+CMD ["/bin/bash"]

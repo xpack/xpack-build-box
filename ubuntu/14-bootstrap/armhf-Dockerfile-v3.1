@@ -1,0 +1,13 @@
+FROM ilegeul/ubuntu:armhf-14.04-tex-v3.1
+
+LABEL description="Ubuntu 14.04 armhf image, with the XBB bootstrap."
+LABEL maintainer="Liviu Ionescu <ilg@livius.net>"
+LABEL repository="https://github.com/xpack/xpack-build-box.git"
+LABEL docs="https://github.com/xpack/xpack-build-box/tree/master/ubuntu/14-bootstrap/README.md"
+
+ENTRYPOINT ["linux32"]
+
+ADD input /input
+RUN DEBUG= JOBS=$(nproc) linux32 bash /input/build-v3.1.sh
+
+CMD ["/bin/bash"]
