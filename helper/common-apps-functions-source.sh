@@ -2961,19 +2961,19 @@ function do_cmake()
           ) 2>&1 | tee "${LOGS_FOLDER_PATH}/bootstrap-cmake-output.txt"
         fi
       else
-          (
-            echo
-            echo "Running cmake cmake..."
+        (
+          echo
+          echo "Running cmake cmake..."
 
-            # If more verbosity is needed:
-            #  -DCMAKE_VERBOSE_MAKEFILE:BOOL=ON 
+          # If more verbosity is needed:
+          #  -DCMAKE_VERBOSE_MAKEFILE:BOOL=ON 
 
-            # Use the existing cmake to configure this one.
-            cmake \
-              -DCMAKE_INSTALL_PREFIX="${INSTALL_FOLDER_PATH}" \
-              "${SOURCES_FOLDER_PATH}/${cmake_folder_name}"
+          # Use the existing cmake to configure this one.
+          cmake \
+            -DCMAKE_INSTALL_PREFIX="${INSTALL_FOLDER_PATH}" \
+            "${SOURCES_FOLDER_PATH}/${cmake_folder_name}"
 
-          ) 2>&1 | tee "${LOGS_FOLDER_PATH}/cmake-cmake-output.txt"
+        ) 2>&1 | tee "${LOGS_FOLDER_PATH}/cmake-cmake-output.txt"
       fi
 
       (
