@@ -1469,18 +1469,51 @@ function do_coreutils()
         # make install-strip
         make install
 
-        # TODO test more
+        show_libs "${INSTALL_FOLDER_PATH}/bin/basename"
+        show_libs "${INSTALL_FOLDER_PATH}/bin/cat"
+        show_libs "${INSTALL_FOLDER_PATH}/bin/chmod"
+        show_libs "${INSTALL_FOLDER_PATH}/bin/chown"
+        show_libs "${INSTALL_FOLDER_PATH}/bin/cp"
+        show_libs "${INSTALL_FOLDER_PATH}/bin/dirname"
+        show_libs "${INSTALL_FOLDER_PATH}/bin/ln"
+        show_libs "${INSTALL_FOLDER_PATH}/bin/ls"
+        show_libs "${INSTALL_FOLDER_PATH}/bin/mkdir"
+        show_libs "${INSTALL_FOLDER_PATH}/bin/mv"
+        show_libs "${INSTALL_FOLDER_PATH}/bin/printf"
         show_libs "${INSTALL_FOLDER_PATH}/bin/realpath"
-
+        show_libs "${INSTALL_FOLDER_PATH}/bin/rm"
+        show_libs "${INSTALL_FOLDER_PATH}/bin/rmdir"
+        show_libs "${INSTALL_FOLDER_PATH}/bin/sha256sum"
+        show_libs "${INSTALL_FOLDER_PATH}/bin/sort"
+        show_libs "${INSTALL_FOLDER_PATH}/bin/touch"
+        show_libs "${INSTALL_FOLDER_PATH}/bin/tr"
+        show_libs "${INSTALL_FOLDER_PATH}/bin/wc"
       ) 2>&1 | tee "${LOGS_FOLDER_PATH}/make-coreutils-output.txt"
     )
 
     (
       xbb_activate_installed_bin
 
-      # TODO test more
       echo
+      run_app "${INSTALL_FOLDER_PATH}/bin/basename" --version
+      run_app "${INSTALL_FOLDER_PATH}/bin/cat" --version
+      run_app "${INSTALL_FOLDER_PATH}/bin/chmod" --version
+      run_app "${INSTALL_FOLDER_PATH}/bin/chown" --version
+      run_app "${INSTALL_FOLDER_PATH}/bin/cp" --version
+      run_app "${INSTALL_FOLDER_PATH}/bin/dirname" --version
+      run_app "${INSTALL_FOLDER_PATH}/bin/ln" --version
+      run_app "${INSTALL_FOLDER_PATH}/bin/ls" --version
+      run_app "${INSTALL_FOLDER_PATH}/bin/mkdir" --version
+      run_app "${INSTALL_FOLDER_PATH}/bin/mv" --version
+      run_app "${INSTALL_FOLDER_PATH}/bin/printf" --version
       run_app "${INSTALL_FOLDER_PATH}/bin/realpath" --version
+      run_app "${INSTALL_FOLDER_PATH}/bin/rm" --version
+      run_app "${INSTALL_FOLDER_PATH}/bin/rmdir" --version
+      run_app "${INSTALL_FOLDER_PATH}/bin/sha256sum" --version
+      run_app "${INSTALL_FOLDER_PATH}/bin/sort" --version
+      run_app "${INSTALL_FOLDER_PATH}/bin/touch" --version
+      run_app "${INSTALL_FOLDER_PATH}/bin/tr" --version
+      run_app "${INSTALL_FOLDER_PATH}/bin/wc" --version
     )
 
     hash -r
