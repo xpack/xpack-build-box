@@ -34,6 +34,12 @@ script_folder_name="$(basename "${script_folder_path}")"
 
 # =============================================================================
 
+helper_folder_path="${script_folder_path}/helper"
+
+source "${helper_folder_path}/common-docker-functions-source.sh"
+
+# -----------------------------------------------------------------------------
+
 env
 unset TERM
 
@@ -88,6 +94,11 @@ mesa-common-dev
 apt-get install --yes \
 libudev-dev
 
+# From  (universe)
+apt-get install --yes \
+dos2unix \
+texinfo \
+
 apt-get install --yes software-properties-common
 
 # For add-apt-repository
@@ -96,52 +107,7 @@ apt-get install --yes python-software-properties
 add-apt-repository --yes ppa:ubuntu-toolchain-r/test 
 add-apt-repository --yes ppa:openjdk-r/ppa
 
-# Moved here, to avoid possible problems created by poor version management,
-# as it happens in 16.04, when the main install fails with 'universe'.
-cat <<'__EOF__' >>"/etc/apt/sources.list"
-
-## N.B. software from this repository is ENTIRELY UNSUPPORTED by the Ubuntu
-## team. Also, please note that software in universe WILL NOT receive any
-## review or updates from the Ubuntu security team.
-deb http://old-releases.ubuntu.com/ubuntu precise universe
-# deb-src http://old-releases.ubuntu.com/ubuntu precise universe
-deb http://old-releases.ubuntu.com/ubuntu precise-security universe
-# deb-src http://old-releases.ubuntu.com/ubuntu precise-security universe
-
-deb http://old-releases.ubuntu.com/ubuntu precise-updates universe
-# deb-src http://old-releases.ubuntu.com/ubuntu precise-updates universe
-
-deb http://old-releases.ubuntu.com/ubuntu precise-backports universe 
-# deb-src http://old-releases.ubuntu.com/ubuntu precise-backports universe 
-
-## N.B. software from this repository is ENTIRELY UNSUPPORTED by the Ubuntu 
-## team, and may not be under a free licence. Please satisfy yourself as to 
-## your rights to use the software. Also, please note that software in 
-## multiverse WILL NOT receive any review or updates from the Ubuntu
-## security team.
-deb http://old-releases.ubuntu.com/ubuntu precise multiverse
-# deb-src http://old-releases.ubuntu.com/ubuntu precise multiverse
-deb http://old-releases.ubuntu.com/ubuntu precise-security multiverse
-# deb-src http://old-releases.ubuntu.com/ubuntu precise-security multiverse
-
-deb http://old-releases.ubuntu.com/ubuntu precise-updates multiverse
-# deb-src http://old-releases.ubuntu.com/ubuntu precise-updates multiverse
-
-deb http://old-releases.ubuntu.com/ubuntu precise-backports multiverse
-# deb-src http://old-releases.ubuntu.com/ubuntu precise-backports multiverse
-__EOF__
-
-echo
-echo "The resulting /etc/apt/sources.list"
-cat "/etc/apt/sources.list" | egrep '^deb '
-echo "---"
-
 apt-get update 
-
-# From  (universe)
-apt-get install --yes \
-dos2unix \
-texinfo \
 
 # Only GCC 4.6 available, install 6.2.
 apt-get install --yes \
