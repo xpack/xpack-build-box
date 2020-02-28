@@ -195,3 +195,78 @@ function docker_build_from_archive()
 }
 
 # =============================================================================
+
+function docker_replace_source_list()
+{
+  local url=$1
+  local name=$2
+
+  echo
+  echo "The orginal /etc/apt/sources.list"
+  cat "/etc/apt/sources.list"
+  echo "---"
+
+  # -----------------------------------------------------------------------------
+
+  echo "Creating new sources.list..."
+
+# Note: __EOF__ is not quoted to allow substitutions here.
+cat <<__EOF__  >"/etc/apt/sources.list"
+# https://help.ubuntu.com/community/Repositories/Ubuntu
+# See http://help.ubuntu.com/community/UpgradeNotes for how to upgrade to
+# newer versions of the distribution.
+
+deb ${url} ${name} main restricted
+# deb-src ${url} ${name} main restricted
+deb ${url} ${name}-security main restricted
+# deb-src ${url} ${name}-security main restricted
+
+## Major bug fix updates produced after the final release of the
+## distribution.
+deb ${url} ${name}-updates main restricted
+# deb-src ${url} ${name}-updates main restricted
+
+deb ${url} ${name}-backports main restricted 
+# deb-src ${url} ${name}-backports main restricted 
+
+## N.B. software from this repository is ENTIRELY UNSUPPORTED by the Ubuntu
+## team. Also, please note that software in universe WILL NOT receive any
+## review or updates from the Ubuntu security team.
+deb ${url} ${name} universe
+# deb-src ${url} ${name} universe
+deb ${url} ${name}-security universe
+# deb-src ${url} ${name}-security universe
+
+deb ${url} ${name}-updates universe
+# deb-src ${url} ${name}-updates universe
+
+deb ${url} ${name}-backports universe 
+# deb-src ${url} ${name}-backports universe 
+
+## N.B. software from this repository is ENTIRELY UNSUPPORTED by the Ubuntu 
+## team, and may not be under a free licence. Please satisfy yourself as to 
+## your rights to use the software. Also, please note that software in 
+## multiverse WILL NOT receive any review or updates from the Ubuntu
+## security team.
+deb ${url} ${name} multiverse
+# deb-src ${url} ${name} multiverse
+deb ${url} ${name}-security multiverse
+# deb-src ${url} ${name}-security multiverse
+
+deb ${url} ${name}-updates multiverse
+# deb-src ${url} ${name}-updates multiverse
+
+deb ${url} ${name}-backports multiverse
+# deb-src ${url} ${name}-backports multiverse
+__EOF__
+
+  echo
+  echo "The resulting /etc/apt/sources.list"
+  cat "/etc/apt/sources.list" | egrep '^deb '
+  echo "---"
+
+  apt-get update 
+  apt-get upgrade --yes 
+}
+
+# =============================================================================
