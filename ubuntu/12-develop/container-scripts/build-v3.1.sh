@@ -54,7 +54,8 @@ diffutils \
 file \
 flex \
 gawk \
-gcc++ \
+gcc \
+g++ \
 gettext \
 git \
 help2man \
