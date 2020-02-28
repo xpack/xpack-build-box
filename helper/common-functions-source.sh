@@ -213,11 +213,18 @@ function prepare_xbb_env()
 
   XBB_LDFLAGS="${XBB_RPATH}"
   XBB_LDFLAGS_LIB="${XBB_LDFLAGS}"
-  XBB_LDFLAGS_LIB_STATIC_GCC="${XBB_LDFLAGS} -static-libgcc -static-libstdc++"
+  XBB_LDFLAGS_LIB_STATIC_GCC="${XBB_LDFLAGS}"
   XBB_LDFLAGS_APP="${XBB_LDFLAGS}"
   XBB_LDFLAGS_APP_STATIC="${XBB_LDFLAGS_APP} -static"
-  XBB_LDFLAGS_APP_STATIC_GCC="${XBB_LDFLAGS_APP} -static-libgcc -static-libstdc++"
-  
+  XBB_LDFLAGS_APP_STATIC_GCC="${XBB_LDFLAGS_APP}"
+
+  if [ "${HOST_UNAME}" == "Linux" ]
+  then
+    # Minimise the risk of picking the wrong shared libraries.
+    XBB_LDFLAGS_LIB_STATIC_GCC+=" -static-libgcc -static-libstdc++"
+    XBB_LDFLAGS_APP_STATIC_GCC+=" -static-libgcc -static-libstdc++"
+  fi
+
   # Applications should generally use STATIC_GCC, otherwise XBB apps which
   # require GCC shared libs from bootstrap might not find them.
 
