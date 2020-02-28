@@ -961,6 +961,8 @@ function do_openssl()
   # 20 Dec 2019, "1.0.2u"
 
   local openssl_version="$1"
+  local openssl_version_major="$(echo ${openssl_version} | sed -e 's|\([0-9][0-9]*\)\.\([0-9][0-9]*\)|\1|')"
+  local openssl_version_minor="$(echo ${openssl_version} | sed -e 's|\([0-9][0-9]*\)\.\([0-9][0-9]*\)|\2|')"
 
   local openssl_folder_name="openssl-${openssl_version}"
   local openssl_archive="${openssl_folder_name}.tar.gz"
@@ -998,16 +1000,38 @@ function do_openssl()
           if [ "${HOST_UNAME}" == "Darwin" ]
           then
 
-            "./config" --help
+            # Older versions do not support the KERNEL_BITS trick and require
+            # the separate configurator.
 
-            export KERNEL_BITS=64
-            "./config" \
-              --prefix="${INSTALL_FOLDER_PATH}" \
-              \
-              --openssldir="${INSTALL_FOLDER_PATH}/openssl" \
-              shared \
-              enable-md2 enable-rc5 enable-tls enable-tls1_3 enable-tls1_2 enable-tls1_1 \
-              "${CPPFLAGS} ${CFLAGS} ${LDFLAGS}"
+            if [ "${openssl_version_minor}" == "0" ]
+            then
+
+              # This config does not use the standard GNU environment definitions.
+              # `Configure` is a Perl script.
+              "./Configure" --help || true
+
+              "./Configure" "darwin64-x86_64-cc" \
+                --prefix="${INSTALL_FOLDER_PATH}" \
+                \
+                --openssldir="${INSTALL_FOLDER_PATH}/openssl" \
+                shared \
+                enable-md2 enable-rc5 enable-tls enable-tls1_3 enable-tls1_2 enable-tls1_1 \
+                "${CPPFLAGS} ${CFLAGS} ${LDFLAGS}"
+
+            else
+
+              "./config" --help
+
+              export KERNEL_BITS=64
+              "./config" \
+                --prefix="${INSTALL_FOLDER_PATH}" \
+                \
+                --openssldir="${INSTALL_FOLDER_PATH}/openssl" \
+                shared \
+                enable-md2 enable-rc5 enable-tls enable-tls1_3 enable-tls1_2 enable-tls1_1 \
+                "${CPPFLAGS} ${CFLAGS} ${LDFLAGS}"
+
+            fi
 
           else
 
