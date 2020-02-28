@@ -2901,7 +2901,7 @@ function do_texinfo()
         # Darwin: FAIL: t/94htmlxref.t 11 - htmlxref errors file_html
         # Darwin: ERROR: t/94htmlxref.t - exited with status 2
 
-        if [ "${HOST_UNAME}" != "Darwin" ]
+        if [ "${HOST_UNAME}" == "Linux" ]
         then
           make check
         fi

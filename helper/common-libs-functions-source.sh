@@ -466,7 +466,7 @@ function do_nettle()
         # /Users/ilg/Work/xbb-3.1-macosx-x86_64/sources/nettle-3.5.1/run-tests: line 57: 46731 Abort trap: 6           "$1" $testflags
         # darwin: FAIL: dlopen
 
-        if [ "${HOST_UNAME}" != "Darwin" ]
+        if [ "${HOST_UNAME}" == "Linux" ]
         then
           # Takes very long on armhf.
           make -k check
