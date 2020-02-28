@@ -366,7 +366,9 @@ function do_isl()
           bash "${SOURCES_FOLDER_PATH}/${isl_folder_name}/configure" --help
 
           bash ${DEBUG} "${SOURCES_FOLDER_PATH}/${isl_folder_name}/configure" \
-            --prefix="${INSTALL_FOLDER_PATH}" 
+            --prefix="${INSTALL_FOLDER_PATH}" \
+            \
+            --with-gmp-prefix="${INSTALL_FOLDER_PATH}" \
 
           cp "config.log" "${LOGS_FOLDER_PATH}/config-isl-log.txt"
         ) 2>&1 | tee "${LOGS_FOLDER_PATH}/configure-isl-output.txt"
