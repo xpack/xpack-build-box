@@ -1558,3 +1558,87 @@ function do_npth()
 }
 
 # -----------------------------------------------------------------------------
+
+function do_libxcrypt() 
+{
+  # Replacement for the old libcrypt.so.1.
+
+  # https://github.com/besser82/libxcrypt
+  # https://github.com/besser82/libxcrypt/archive/v4.4.15.tar.gz
+
+  # Feb 25, 2020, "4.4.15"
+
+  local libxcrypt_version="$1"
+
+  local libxcrypt_folder_name="libxcrypt-${libxcrypt_version}"
+  local libxcrypt_archive="v${libxcrypt_version}.tar.gz"
+  local libxcrypt_url="https://github.com/besser82/libxcrypt/archive/${libxcrypt_archive}"
+
+  local libxcrypt_stamp_file_path="${STAMPS_FOLDER_PATH}/stamp-libxcrypt-${libxcrypt_version}-installed"
+  if [ ! -f "${libxcrypt_stamp_file_path}" -o ! -d "${LIBS_BUILD_FOLDER_PATH}/${libxcrypt_folder_name}" ]
+  then
+
+    cd "${SOURCES_FOLDER_PATH}"
+
+    download_and_extract "${libxcrypt_url}" "${libxcrypt_archive}" "${libxcrypt_folder_name}"
+
+    if [ ! -x "${SOURCES_FOLDER_PATH}/${libxcrypt_folder_name}/configure" ]
+    then
+      (
+        cd "${SOURCES_FOLDER_PATH}/${libxcrypt_folder_name}"
+
+        xbb_activate
+
+        bash ${DEBUG} autogen.sh
+
+      ) 2>&1 | tee "${LOGS_FOLDER_PATH}/autogen-libxcrypt-output.txt"
+
+    fi
+
+    (
+      mkdir -p "${LIBS_BUILD_FOLDER_PATH}/${libxcrypt_folder_name}"
+      cd "${LIBS_BUILD_FOLDER_PATH}/${libxcrypt_folder_name}"
+
+      xbb_activate
+
+      export CPPFLAGS="${XBB_CPPFLAGS}"
+      export CFLAGS="${XBB_CFLAGS}"
+      export CXXFLAGS="${XBB_CXXFLAGS}"
+      export LDFLAGS="${XBB_LDFLAGS_LIB}"
+
+      if [ ! -f "config.status" ]
+      then
+        (
+          echo
+          echo "Running libxcrypt configure..."
+
+          bash "${SOURCES_FOLDER_PATH}/${libxcrypt_folder_name}/configure" --help
+
+          bash ${DEBUG} "${SOURCES_FOLDER_PATH}/${libxcrypt_folder_name}/configure" \
+            --prefix="${INSTALL_FOLDER_PATH}" \
+
+          cp "config.log" "${LOGS_FOLDER_PATH}/config-libxcrypt-log.txt"
+        ) 2>&1 | tee "${LOGS_FOLDER_PATH}/configure-libxcrypt-output.txt"
+      fi
+
+      (
+        echo
+        echo "Running libxcrypt make..."
+
+        # Build.
+        make -j ${JOBS}
+
+        make check
+
+        make install-strip
+      ) 2>&1 | tee "${LOGS_FOLDER_PATH}/make-libxcrypt-output.txt"
+    )
+
+    touch "${libxcrypt_stamp_file_path}"
+
+  else
+    echo "Library libxcrypt already installed."
+  fi
+}
+
+# -----------------------------------------------------------------------------

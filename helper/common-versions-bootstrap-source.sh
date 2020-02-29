@@ -39,6 +39,9 @@ function do_build_versions()
     # -------------------------------------------------------------------------
     # From this moment on, .xz archives can be processed.
 
+    # Replacement for the old libcrypt.so.1.
+    do_libxcrypt "4.4.15"
+
     # New openssl, required by curl, cmake, python, etc.
     # depends=('perl')
     do_openssl "1.0.2u" # "1.0.2r"

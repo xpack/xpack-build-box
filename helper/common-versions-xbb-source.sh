@@ -37,6 +37,9 @@ function do_build_versions()
     # depends=('glibc')
     do_zlib "1.2.11"
 
+    # Replacement for the old libcrypt.so.1.
+    do_libxcrypt "4.4.15"
+
     # Libraries, required by gcc.
     # depends=('gcc-libs' 'sh')
     do_gmp "6.2.0" # "6.1.2"
