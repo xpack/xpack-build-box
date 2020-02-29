@@ -3589,12 +3589,12 @@ function do_python2()
       echo
       echo "Installing setuptools and pip..."
 
-      "${INSTALL_FOLDER_PATH}/bin/python2" --version
+      run_app "${INSTALL_FOLDER_PATH}/bin/python2" --version
 
-      "${INSTALL_FOLDER_PATH}/bin/python2" -m ensurepip --default-pip
-      "${INSTALL_FOLDER_PATH}/bin/python2" -m pip install --upgrade pip==19.3.1 setuptools==44.0.0 wheel==0.34.2
+      run_app "${INSTALL_FOLDER_PATH}/bin/python2" -m ensurepip --default-pip
+      run_app "${INSTALL_FOLDER_PATH}/bin/python2" -m pip install --upgrade pip==19.3.1 setuptools==44.0.0 wheel==0.34.2
       
-      "${INSTALL_FOLDER_PATH}/bin/pip2" --version
+      run_app "${INSTALL_FOLDER_PATH}/bin/pip2" --version
     ) 2>&1 | tee "${LOGS_FOLDER_PATH}/make-python2-pip-output.txt"
 
     (
@@ -3730,10 +3730,10 @@ function do_python3()
 
       run_app "${INSTALL_FOLDER_PATH}/bin/python3" --version
 
-      "${INSTALL_FOLDER_PATH}/bin/python3" -m ensurepip --default-pip
-      "${INSTALL_FOLDER_PATH}/bin/python3" -m pip install --upgrade pip==20.0.2 setuptools==45.2.0 wheel==0.34.2
+      run_app "${INSTALL_FOLDER_PATH}/bin/python3" -m ensurepip --default-pip
+      run_app "${INSTALL_FOLDER_PATH}/bin/python3" -m pip install --upgrade pip==20.0.2 setuptools==45.2.0 wheel==0.34.2
 
-      "${INSTALL_FOLDER_PATH}/bin/pip3" --version
+      run_app "${INSTALL_FOLDER_PATH}/bin/pip3" --version
     ) 2>&1 | tee "${LOGS_FOLDER_PATH}/make-python3-pip-output.txt"
 
     hash -r
