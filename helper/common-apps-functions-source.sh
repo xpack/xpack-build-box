@@ -3616,9 +3616,9 @@ function do_python3()
 
       export CPPFLAGS="${XBB_CPPFLAGS}"
       # export CFLAGS="${XBB_CFLAGS} -Wno-int-in-bool-context -Wno-maybe-uninitialized -Wno-nonnull -Wno-stringop-overflow"
-      export CFLAGS="${XBB_CFLAGS} -Wno-nonnull -Wno-deprecated-declarations"
-      export CXXFLAGS="${XBB_CXXFLAGS}"
-      export LDFLAGS="${XBB_LDFLAGS_APP_STATIC_GCC}"
+      export CFLAGS="${XBB_CFLAGS} -fno-semantic-interposition -Wno-nonnull -Wno-deprecated-declarations"
+      export CXXFLAGS="${XBB_CXXFLAGS} -fno-semantic-interposition"
+      export LDFLAGS="${XBB_LDFLAGS_APP_STATIC_GCC} -fno-semantic-interposition"
 
       if [ "${HOST_UNAME}" == "Darwin" ]
       then
