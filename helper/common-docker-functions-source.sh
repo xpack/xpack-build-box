@@ -104,6 +104,27 @@ function host_run_docker_it()
   fi
 }
 
+function host_run_docker_it_bs()
+{
+  # Warning: do not use HOST_MACHINE!
+  out="${HOME}/opt/${name}-${arch}"
+  mkdir -p "${out}"
+
+  echo 
+  echo "Running parent Docker image ${from}..."
+
+    docker run \
+      --interactive \
+      --tty \
+      --hostname "${name}-${arch}" \
+      --workdir="/root" \
+      --env RUN_LONG_TESTS \
+      --volume="${WORK_FOLDER_PATH}:/root/Work" \
+      --volume="${script_folder_path}/input:/input" \
+      --volume="${out}:/opt/${name}" \
+      ${from}
+}
+
 function host_run_docker_build()
 {
   echo 
