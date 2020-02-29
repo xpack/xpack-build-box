@@ -724,32 +724,34 @@ function do_strip_debug_libs()
 
 function check_rpath()
 {
-  echo
-  echo "Checking rpath in elf files.."
+  (
+    echo
+    echo "Checking rpath in elf files.."
 
-  find "${XBB_FOLDER_PATH}/bin" "${XBB_FOLDER_PATH}/libexec" "${XBB_FOLDER_PATH}/openssl" \
-    -type f \
-    -exec bash ${helper_folder_path}/check_rpath.sh {} \;
-
-  if [ -d "${XBB_FOLDER_PATH}/usr" ]
-  then
-    find "${XBB_FOLDER_PATH}/usr"  \
+    find "${XBB_FOLDER_PATH}/bin" "${XBB_FOLDER_PATH}/libexec" "${XBB_FOLDER_PATH}/openssl" \
       -type f \
       -exec bash ${helper_folder_path}/check_rpath.sh {} \;
-  fi
 
-  find "${XBB_FOLDER_PATH}/lib"  \
-    -type f \
-    -name '*.so*' \
-    -exec bash ${helper_folder_path}/check_rpath.sh {} \;
+    if [ -d "${XBB_FOLDER_PATH}/usr" ]
+    then
+      find "${XBB_FOLDER_PATH}/usr"  \
+        -type f \
+        -exec bash ${helper_folder_path}/check_rpath.sh {} \;
+    fi
 
-  if [ -d "${XBB_FOLDER_PATH}/lib64" ]
-  then
-    find "${XBB_FOLDER_PATH}/lib64"  \
+    find "${XBB_FOLDER_PATH}/lib"  \
       -type f \
       -name '*.so*' \
       -exec bash ${helper_folder_path}/check_rpath.sh {} \;
-  fi
+
+    if [ -d "${XBB_FOLDER_PATH}/lib64" ]
+    then
+      find "${XBB_FOLDER_PATH}/lib64"  \
+        -type f \
+        -name '*.so*' \
+        -exec bash ${helper_folder_path}/check_rpath.sh {} \;
+    fi
+  ) 2>&1 | tee "${LOGS_FOLDER_PATH}/check-rpath-output.txt"
 }
 
 # -----------------------------------------------------------------------------
