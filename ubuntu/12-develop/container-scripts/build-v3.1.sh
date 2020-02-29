@@ -121,7 +121,9 @@ echo 2 | update-alternatives --config gcc
 
 apt-get install --yes openjdk-8-jdk
 apt-get install --yes ant
-apt-get install --yes maven
+
+# Disabled, since it is not available on Arm Ubuntu 14.
+# apt-get install --yes maven
 
 # https://www.thomas-krenn.com/en/wiki/Configure_Locales_in_Ubuntu
 apt-get install --yes locales
@@ -153,7 +155,7 @@ gawk --version
 git --version
 java -version
 m4 --version
-mvn -version
+# mvn -version
 make --version
 patch --version
 perl --version
