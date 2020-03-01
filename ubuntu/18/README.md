@@ -24,7 +24,7 @@ $ sudo tar cJvf "${HOME}/tmp/armhf-ubu18-rootfs.xz" -C "${HOME}/tmp/armhf-ubu18-
 ```
 
 The result are two archives that were published at
-https://github.com/xpack/xpack-build-box/releases/tag/rootfs:
+https://github.com/xpack/xpack-build-box/releases/tag/rootfs/
 
 - https://github.com/xpack/xpack-build-box/releases/download/rootfs/arm64-ubu18-rootfs.xz
 - https://github.com/xpack/xpack-build-box/releases/download/rootfs/armhf-ubu18-rootfs.xz

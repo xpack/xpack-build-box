@@ -24,7 +24,7 @@ $ sudo tar cJvf "${HOME}/tmp/i386-ubu12-rootfs.xz" -C "${HOME}/tmp/i386-ubu12-ro
 ```
 
 The result are two archives that were published at
-https://github.com/xpack/xpack-build-box/releases/tag/rootfs/:
+https://github.com/xpack/xpack-build-box/releases/tag/rootfs/
 
 - https://github.com/xpack/xpack-build-box/releases/download/rootfs/amd64-ubu12-rootfs.xz
 - https://github.com/xpack/xpack-build-box/releases/download/rootfs/i386-ubu12-rootfs.xz
