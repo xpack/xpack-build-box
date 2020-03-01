@@ -28,6 +28,9 @@ function detect_host()
   HOST_NODE_ARCH="?" # Node.js process.arch (x32|x64|arm|arm64)
   HOST_NODE_PLATFORM="?" # Node.js process.platform (darwin|linux|win32)
 
+  IS_HOST_ARM=""
+  IS_HOST_INTEL=""
+
   if [ "${HOST_UNAME}" == "Darwin" ]
   then
     # uname -p -> i386
@@ -55,18 +58,22 @@ function detect_host()
     then
       HOST_BITS="64"
       HOST_NODE_ARCH="x64"
+      IS_HOST_INTEL="y"
     elif [ "${HOST_MACHINE}" == "i686" ]
     then
       HOST_BITS="32"
       HOST_NODE_ARCH="x32"
+      IS_HOST_INTEL="y"
     elif [ "${HOST_MACHINE}" == "aarch64" ]
     then
       HOST_BITS="64"
       HOST_NODE_ARCH="arm64"
+      IS_HOST_ARM="y"
     elif [ "${HOST_MACHINE}" == "armv7l" -o "${HOST_MACHINE}" == "armv8l" ]
     then
       HOST_BITS="32"
       HOST_NODE_ARCH="arm"
+      IS_HOST_ARM="y"
     else
       echo "Unknown uname -m ${HOST_MACHINE}"
       exit 1
@@ -126,6 +133,37 @@ function detect_host()
   USER_NAME="$(id -u -n)"
   GROUP_ID=$(id -g)
   GROUP_NAME="$(id -g -n)"
+}
+
+function is_intel()
+{
+  local machine="$(uname -m)"
+  if [ "${machine}" == "x86_64" ]
+  then
+    return 0
+  elif [ "${machine}" == "i686" ]
+  then
+    return 0
+  else
+    return 1
+  fi
+}
+
+function is_arm()
+{
+  local machine="$(uname -m)"
+  if [ "${machine}" == "aarch64" ]
+  then
+    return 0
+  elif [ "${machine}" == "armv8l" ]
+  then
+    return 0
+  elif [ "${machine}" == "armv7l" ]
+  then
+    return 0
+  else
+    return 1
+  fi
 }
 
 function prepare_xbb_env()
@@ -296,7 +334,7 @@ function prepare_xbb_env()
 
   echo
   echo "env..."
-  env
+  env | sort
 }
 
 # -----------------------------------------------------------------------------
