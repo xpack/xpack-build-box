@@ -1,21 +1,34 @@
 # The Ubuntu XBB
 
-The Ubuntu XBB consists of four Docker images
+The Ubuntu XBB consists of multiple Docker images, in pairs of 32/64-bit, 
+for each platform and version.
+
+Intel Ubuntu
 
 - `ilegeul/ubuntu:amd64-12.04-xbb-v3.1`
 - `ilegeul/ubuntu:i386-12.04-xbb-v3.1`
 
-They are built upon multple layers, starting from a base archive,
+Arm Ubuntu
+
+- `ilegeul/ubuntu:arm64-14.04-xbb-v3.1`
+- `ilegeul/ubuntu:armhf-14.04-xbb-v3.1`
+
+Each of these images are built upon multple layers,
+starting from a base archive,
 updating it, installing development tools, tex, the bootstrap and
 finally the XBB itself.
 
-To be sure there is enough space, clean dangling images:
+To be sure there is enough space, before each step it is recommended
+to clean possible dangling images:
 
 ```
-docker system prune
+docker system prune -f
 ```
 
-The following sequences of commands were used:
+## Intel Linux
+
+The following sequences of commands were used on an Ubuntu 18.04 LTS
+Linux (x86_64):
 
 ```bash
 set -o errexit
@@ -53,6 +66,10 @@ docker push "ilegeul/ubuntu:i386-12.04-bootstrap-v3.1"
 docker push "ilegeul/ubuntu:i386-12.04-xbb-v3.1"
 ```
 
+## Arm Linux
+
+The following sequences of commands were used on a Manjaro 20.02 Arm
+Linux (Aarch64):
 
 ```bash
 set -o errexit
@@ -89,8 +106,6 @@ docker push "ilegeul/ubuntu:armhf-14.04-tex-v3.1"
 docker push "ilegeul/ubuntu:armhf-14.04-bootstrap-v3.1"
 docker push "ilegeul/ubuntu:armhf-14.04-xbb-v3.1"
 ```
-
-
 
 ```bash
 set -o errexit
