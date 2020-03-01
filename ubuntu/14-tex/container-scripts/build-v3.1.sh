@@ -55,7 +55,8 @@ source "helper/common-texlive-functions-source.sh"
 
 # -----------------------------------------------------------------------------
 
-env
+echo
+env | sort
 
 detect_host
 
