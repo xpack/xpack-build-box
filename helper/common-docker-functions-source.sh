@@ -308,7 +308,8 @@ __EOF__
 function docker_install_develop()
 {
   # lsb_release must be present from upgrade.
-  local release=$(lsb_release -r | sed 's/Release:[^0-9]*//')
+  local release="$(lsb_release -r | sed 's/Release:[^0-9]*//')"
+  local machine="$(uname -m)"
 
   # ---------------------------------------------------------------------------
 
@@ -354,7 +355,7 @@ function docker_install_develop()
 
   # Without it, building GCC on Ubuntu 14 fails.
   # https://askubuntu.com/questions/1202249/c-compilng-failed
-  if [ "${release}" == "14.04" ]
+  if [ "${release}" == "14.04" -a \( "${machine}" == "armv8l" -o "${machine}" == "armv7l" \) ]
   then
     apt-get install --yes g++-multilib
   fi
