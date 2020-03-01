@@ -34,6 +34,12 @@ script_folder_name="$(basename "${script_folder_path}")"
 
 # =============================================================================
 
+helper_folder_path="${script_folder_path}/helper"
+
+source "${helper_folder_path}/common-docker-functions-source.sh"
+
+# -----------------------------------------------------------------------------
+
 env
 unset TERM
 
