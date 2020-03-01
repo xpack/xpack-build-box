@@ -290,4 +290,167 @@ __EOF__
   apt-get upgrade --yes 
 }
 
+
+function docker_install_develop()
+{
+  # lsb_release must be present from upgrade.
+  local release=$(lsb_release -r | sed 's/Release:[^0-9]*//')
+
+  # ---------------------------------------------------------------------------
+
+  env | sort
+  # Be sure no tool will senter a curses mode.
+  unset TERM
+
+  # These tools should be enough to build the bootstrap tools.
+
+  apt-get install --yes \
+  \
+  autoconf \
+  automake \
+  bison \
+  bzip2 \
+  ca-certificates \
+  cmake \
+  curl \
+  diffutils \
+  file \
+  flex \
+  gawk \
+  gcc \
+  g++ \
+  gettext \
+  git \
+  libc6-dev \
+  libtool \
+  m4 \
+  make \
+  patch \
+  perl \
+  pkg-config \
+  python \
+  python3 \
+  tcl \
+  time \
+  unzip \
+  wget \
+  xz-utils \
+  zip \
+  zlib1g-dev \
+
+  # Without it, building GCC on Ubuntu 14 fails.
+  # https://askubuntu.com/questions/1202249/c-compilng-failed
+  if [ "${release}" == "14.04" ]
+  then
+    apt-get install --yes g++-multilib
+  fi
+
+  # libtool-bin - not present in precise
+
+  # For QEMU
+  apt-get install --yes \
+  libx11-dev \
+  libxext-dev \
+  mesa-common-dev \
+
+  # For QEMU & OpenOCD
+  apt-get install --yes \
+  libudev-dev
+
+  # From  (universe)
+  apt-get install --yes \
+  texinfo \
+  help2man \
+
+  # Not available on Ubuntu 16.
+  if [ "${release}" != "16.04" ]
+  then
+    apt-get install --yes dos2unix
+  fi
+
+  # patchelf - not present in 14 trusty, 16 precise
+
+  # ---------------------------------------------------------------------------
+
+  # For add-apt-repository
+  apt-get install --yes software-properties-common
+  if [ "${release}" == "12.04" ]
+  then
+    # Only needed on old distributions.
+    apt-get install --yes python-software-properties
+  fi
+
+  add-apt-repository --yes ppa:ubuntu-toolchain-r/test 
+  add-apt-repository --yes ppa:openjdk-r/ppa
+
+  apt-get update
+
+  # Upgrade to 6.5.
+  apt-get install --yes \
+  gcc-6 \
+  g++-6 \
+
+  update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-6 60 --slave /usr/bin/g++ g++ /usr/bin/g++-6
+  if [ "${release}" == "12.04" ]
+  then
+    update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-4.6 60 --slave /usr/bin/g++ g++ /usr/bin/g++-4.6
+  elif [ "${release}" == "14.04" ]
+  then
+    update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-4.8 60 --slave /usr/bin/g++ g++ /usr/bin/g++-4.6
+  elif [ "${release}" == "16.04" ]
+  then
+    update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-5 60 --slave /usr/bin/g++ g++ /usr/bin/g++-5
+  fi
+
+  echo 2 | update-alternatives --config gcc
+
+  # ---------------------------------------------------------------------------
+
+  apt-get install --yes openjdk-8-jdk
+
+  apt-get install --yes ant
+
+  # maven not available in Ubuntu 14, and not needed so far.
+  # apt-get install --yes maven
+
+  # ---------------------------------------------------------------------------
+
+  # https://www.thomas-krenn.com/en/wiki/Configure_Locales_in_Ubuntu
+  apt-get install --yes locales
+  locale-gen en_US.UTF-8
+  update-locale LANG=en_US.UTF-8
+
+  # ---------------------------------------------------------------------------
+
+  apt-get clean
+  apt-get autoclean
+  apt-get autoremove
+
+  # ---------------------------------------------------------------------------
+
+  echo
+  uname -a
+  lsb_release -a
+
+  ant -version
+  autoconf --version
+  bison --version
+  cmake --version
+  curl --version
+  flex --version
+  g++ --version
+  gawk --version
+  git --version
+  java -version
+  m4 --version
+  # mvn -version
+  make --version
+  patch --version
+  perl --version
+  pkg-config --version
+  python --version
+  python3 --version
+
+}
+
 # =============================================================================
