@@ -63,16 +63,6 @@ docker_replace_source_list "http://old-releases.ubuntu.com/ubuntu/" "precise"
 
 # -----------------------------------------------------------------------------
 
-apt-get clean
-apt-get autoclean
-apt-get autoremove
-
-# -----------------------------------------------------------------------------
-
-echo
-uname -a
-lsb_release -a
-
 echo
 echo "Container done."
 
