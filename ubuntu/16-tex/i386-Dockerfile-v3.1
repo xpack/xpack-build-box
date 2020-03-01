@@ -1,0 +1,13 @@
+FROM ilegeul/ubuntu:i386-16.04-develop-v3.1
+
+LABEL description="Ubuntu 16.04 i386 image, with TeX tools."
+LABEL maintainer="Liviu Ionescu <ilg@livius.net>"
+LABEL repository="https://github.com/xpack/xpack-build-box.git"
+LABEL docs="https://github.com/xpack/xpack-build-box/tree/master/ubuntu/16-tex/README.md"
+
+ENTRYPOINT ["linux32"]
+
+ADD input /input
+RUN DEBUG=-x linux32 bash /input/build-v3.1.sh
+
+CMD ["/bin/bash"]
