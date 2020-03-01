@@ -1,7 +1,7 @@
 
 ## Build Docker images
 
-There are two scripts:
+There are several scripts:
 
 - `amd64-build-v3.1.sh` -> `ilegeul/ubuntu:amd64-12.04-bootstrap-v3.1`
 - `i386-build-v3.1.sh` -> `ilegeul/ubuntu:i386-12.04-bootstrap-v3.1`
@@ -13,11 +13,10 @@ $ bash ~/Downloads/xpack-build-box.git/ubuntu/12-bootstrap/i386-build-v3.1.sh
 $ docker images
 ```
 
-As a shortcut, macOS users can double click the `.command` files in Finder.
-
 ## Test
 
-The test was performed on a macOS.
+The following tests were performed on an Ubuntu Server
+18.04 running on an Intel NUC.
 
 ```console
 $ docker run --interactive --tty ilegeul/ubuntu:amd64-12.04-bootstrap-v3.1
