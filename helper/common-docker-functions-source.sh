@@ -309,6 +309,8 @@ function docker_install_develop()
 {
   # lsb_release must be present from upgrade.
   local release="$(lsb_release -r | sed 's/Release:[^0-9]*//')"
+  local release_major=$(echo ${release} | sed -e 's|\([0-9][0-9]*\)\.[0-9].*|\1|')
+
   local machine="$(uname -m)"
 
   # ---------------------------------------------------------------------------
@@ -400,24 +402,33 @@ function docker_install_develop()
 
   apt-get update
 
-  # Upgrade to 6.5.
-  apt-get install --yes \
-  gcc-6 \
-  g++-6 \
+  gcc --version
 
-  update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-6 60 --slave /usr/bin/g++ g++ /usr/bin/g++-6
-  if [ "${release}" == "12.04" ]
+  local gcc_version="$(gcc -dumpversion)"
+  local gcc_version_major=$(echo ${gcc_version} | sed -e 's|\([0-9][0-9]*\)\.[0-9].*|\1|')
+
+  # Ubuntu 18 is already 7.4, no need to install 6.x.
+  if [ ${gcc_version_major} -le 6 ]
   then
-    update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-4.6 60 --slave /usr/bin/g++ g++ /usr/bin/g++-4.6
-  elif [ "${release}" == "14.04" ]
-  then
-    update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-4.8 60 --slave /usr/bin/g++ g++ /usr/bin/g++-4.6
-  elif [ "${release}" == "16.04" ]
-  then
-    update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-5 60 --slave /usr/bin/g++ g++ /usr/bin/g++-5
+    # Install 6.x.
+    apt-get install --yes \
+    gcc-6 \
+    g++-6 \
+
+    update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-6 60 --slave /usr/bin/g++ g++ /usr/bin/g++-6
+    if [ "${release}" == "12.04" ]
+    then
+      update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-4.6 60 --slave /usr/bin/g++ g++ /usr/bin/g++-4.6
+    elif [ "${release}" == "14.04" ]
+    then
+      update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-4.8 60 --slave /usr/bin/g++ g++ /usr/bin/g++-4.6
+    elif [ "${release}" == "16.04" ]
+    then
+      update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-5 60 --slave /usr/bin/g++ g++ /usr/bin/g++-5
+    fi
+
+    echo 2 | update-alternatives --config gcc
   fi
-
-  echo 2 | update-alternatives --config gcc
 
   # ---------------------------------------------------------------------------
 
