@@ -185,8 +185,8 @@ function docker_prepare_env()
   export CXX
 
   echo
-  echo "env..."
-  env
+  echo "docker env..."
+  env | sort
 }
 
 function docker_download_rootfs()
@@ -315,6 +315,7 @@ function docker_install_develop()
 
   # ---------------------------------------------------------------------------
 
+  echo "docker env..."
   env | sort
   # Be sure no tool will senter a curses mode.
   unset TERM

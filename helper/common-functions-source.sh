@@ -333,7 +333,7 @@ function prepare_xbb_env()
   export CONFIG_SHELL="/bin/bash"
 
   echo
-  echo "env..."
+  echo "xbb env..."
   env | sort
 }
 
