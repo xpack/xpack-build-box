@@ -33,14 +33,14 @@ Generally, xPack binaries are available for the following platforms:
 For a repetitive and controllable build process, the Windows and GNU/Linux
 binaries are built using two Docker images (32/64-bit).
 
-- ilegeul/centos:6-xbb-v2.2
-- ilegeul/centos32:6-xbb-v2.2
+- ilegeul/ubuntu:amd64-12.04-bootstrap-v3.1
+- ilegeul/ubuntu:i386-12.04-bootstrap-v3.1
 
-The images are based on CentOS 6.9 (ldd 2.12), and the GNU/Linux binaries
+The images are based on Ubuntu 12 (ldd 2.15), and the GNU/Linux binaries
 should run on most modern distributions.
 
-The Windows executables are created with mingw-w64 v5.0.4 and the
-mingw-w64 GCC 7.4, available from the same Docker images.
+The Windows executables are created with mingw-w64 v7.0.0 and the
+mingw-w64 GCC 9.2, available from the same Docker images.
 
 The macOS binaries are generated on a macOS 10.10.5, plus a set of new
 GNU tools, installed in a separate folder. The TeX tools (from 2018)
@@ -51,8 +51,8 @@ are also installed in a custom folder.
 Both on GNU/Linux and macOS, the XBB tools are installed in separate
 folders, and are fully distinct from the system tools.
 
-To access them, the application should update the `PATH` and
-`LD_LIBRARY_PATH` to prefer the newer XBB tools.
+To access them, the application should update the `PATH` to prefer
+the newer XBB tools.
 
 Scripts defining some helper functions are available.
 
@@ -101,25 +101,17 @@ built with `install-patched-gcc.sh`; binaries are suffixed with
 
 ## The `xbb-source.sh` script
 
-The build environment includes two more scripts.
-
-The first script is `xbb-source.sh`, which, if available, should be included
+The build environment includes a helper script, `xbb-source.sh`, 
+which should be included
 with `source` by the build scripts, to define more bash functions to
 the shell.
 
 These functions are used to extend the environment with resources available
 in the XBB folders.
 
-The `xbb_activate` function is used to extend the `PATH` and the
-`LD_LIBRARY_PATH` with folders in the XBB folders, in front of existing
+The `xbb_activate` function is used to extend the `PATH` with folders
+in the XBB folders, in front of existing
 folders, so that the XBB executables are preferred over the system ones.
-
-The `xbb_activate_this` function is used to further extend the environment
-with other definitions, like `PKG_CONFIG_PATH`, the path where `pkg-config`
-searches for resources, if it is necessary to search for the XBB
-folders. There are also custom variables that can be used as
-CPPFLAGS and LDFLAGS, that add the XBB folders to the include paths and
-the library path.
 
 ## The `pkg-config-verbose` script
 
@@ -170,22 +162,22 @@ as long as Node.js still supports them via the
 
 ## Arm binaries
 
-Support for Arm binaries is under way, and it is planned to be available
-starting early 2020.
+Support for Arm binaries became available
+in early 2020.
 
-The supported architectures will be:
+The supported architectures are:
 
 - `arm64` - the ARMv8 64-bit architecture Aarch64
 - `armhl` - the ARMv7 32-bit architecture with hardware float
 
-The base distribution for building the Arm binaries will be Ubuntu 16.04 LTS
-(xenial), ldd 2.24.
+The base distribution for building the Arm binaries is be Ubuntu 14.04 LTS
+(trusty), ldd 2.19.
 
 ## Distro versions
 
 To better decide whch versions to support, below is a list of existing versions.
 
-The names are in fact docker image names, and can be used directly to query 
+The names are in fact docker image names, and can be used directly to query
 the `ldd --version`:
 
 ```console
@@ -195,7 +187,7 @@ $ docker run -it <image> ldd --version
 ### [Debian](https://en.wikipedia.org/wiki/Debian_version_history)
 
 - `debian:6` - squeeze - 2011-2016, 2.11.3
-- `debian:7` - wheezy - 2013-2016, 2.13, kernel 3.10 <--- prefered candidate
+- `debian:7` - wheezy - 2013-2016, 2.13, kernel 3.10
 - `debian:8` - jessie - 2015-2018, 2.19
 - `debian:9` - stretch - 2017-2020, 2.24 (first with arm64)
 - `debian:10` - buster - 2019-2022, 2.28
@@ -203,16 +195,16 @@ $ docker run -it <image> ldd --version
 ### [Ubuntu](https://en.wikipedia.org/wiki/Ubuntu_version_history)
 
 - `ubuntu:10.04` - lucy - 2010-2015, 2.11.1
-- `ubuntu:12.04` - precise - 2012-2019, 2.15 <--- second choice
-- `ubuntu:14.04` - trusty - 2014-2022, 2.19
-- `ubuntu:16.04` - xenial - 2016-2024, 2.23 <--- reference for Arm
+- `ubuntu:12.04` - precise - 2012-2019, 2.15 <--- Intel Linux choice
+- `ubuntu:14.04` - trusty - 2014-2022, 2.19 <--- Arm Linux choice
+- `ubuntu:16.04` - xenial - 2016-2024, 2.23
 - `ubuntu:18.04` - bionic - 2018-2028, 2.27
 - `ubuntu:20.04` - focal - 2020-2-30, ?
 
 ### [RHEL](https://access.redhat.com/support/policy/updates/errata/#Life_Cycle_Dates)
 
 - `registry.access.redhat.com/rhel6` - 2.12
-- `registry.access.redhat.com/rhel7` - 2.17
+- `registry.access.redhat.com/rhel7` - 2.17 <--- supported
 
 ### [CentOS](https://en.wikipedia.org/wiki/CentOS)
 
@@ -236,15 +228,10 @@ $ git clone https://github.com/xpack/xpack-build-box.git \
 
 ### Conclusions
 
-To preserve support for RHEL 6, the only reasonable distribution is CentOS 6,
-with all its problems and incompatibilities with modern systems (like the
-issue with gdb-py, running on CentOS/Arch and failing on Debian/Ubuntu).
+For Intel Linux, to preserve support for older distributions,
+the **Ubuntu 12 precise** (2.15) distribution was selected.
 
-To preserve support for RHEL 7, **the ldd version must be <= 2.17**.
+The binaries should also run on RHEL 7; support for RHEL 6 was discontinued.
 
-Apart from CentOS 7, other possible distributions are
-**Debian 7** (2.13), the prefered one, and **Ubuntu 12** (2.15),
-the second choice.
-
-For Arm binaries, the base distribution will be **Ubuntu 16.04 LTS xenial**,
-(2.24).
+For Arm binaries, the base distribution is **Ubuntu 14.04 LTS trusty**,
+(2.19).
