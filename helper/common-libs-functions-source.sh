@@ -1566,7 +1566,11 @@ function do_libxcrypt()
   # https://github.com/besser82/libxcrypt
   # https://github.com/besser82/libxcrypt/archive/v4.4.15.tar.gz
 
-  # Feb 25, 2020, "4.4.15"
+  # 26 Jul 2018, "4.1.1"
+  # 14 Nov 2018, "4.3.4"
+  # Requires new autotools.
+  # m4/ax_valgrind_check.m4:80: warning: macro `AM_EXTRA_RECURSIVE_TARGETS' not found in library
+  # Feb 25 2020, "4.4.15"
 
   local libxcrypt_version="$1"
 
@@ -1574,13 +1578,15 @@ function do_libxcrypt()
   local libxcrypt_archive="v${libxcrypt_version}.tar.gz"
   local libxcrypt_url="https://github.com/besser82/libxcrypt/archive/${libxcrypt_archive}"
 
+  local libxcrypt_patch_file_path="${helper_folder_path}/patches/${libxcrypt_folder_name}.patch"
+
   local libxcrypt_stamp_file_path="${STAMPS_FOLDER_PATH}/stamp-libxcrypt-${libxcrypt_version}-installed"
   if [ ! -f "${libxcrypt_stamp_file_path}" -o ! -d "${LIBS_BUILD_FOLDER_PATH}/${libxcrypt_folder_name}" ]
   then
 
     cd "${SOURCES_FOLDER_PATH}"
 
-    download_and_extract "${libxcrypt_url}" "${libxcrypt_archive}" "${libxcrypt_folder_name}"
+    download_and_extract "${libxcrypt_url}" "${libxcrypt_archive}" "${libxcrypt_folder_name}" "${libxcrypt_patch_file_path}"
 
     if [ ! -x "${SOURCES_FOLDER_PATH}/${libxcrypt_folder_name}/configure" ]
     then
@@ -1589,7 +1595,16 @@ function do_libxcrypt()
 
         xbb_activate
 
-        bash ${DEBUG} autogen.sh
+        if [ -f "autogen.sh" ]
+        then
+          bash ${DEBUG} autogen.sh
+        elif [ -f "bootstrap" ]
+        then
+          bash ${DEBUG} bootstrap
+        else
+          # 
+          autoreconf -fiv
+        fi
 
       ) 2>&1 | tee "${LOGS_FOLDER_PATH}/autogen-libxcrypt-output.txt"
 
