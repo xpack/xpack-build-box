@@ -7,18 +7,28 @@ Intel Ubuntu
 
 - `ilegeul/ubuntu:amd64-12.04-xbb-v3.1`
 - `ilegeul/ubuntu:i386-12.04-xbb-v3.1`
+- `ilegeul/ubuntu:amd64-14.04-xbb-v3.1`
+- `ilegeul/ubuntu:i386-14.04-xbb-v3.1`
+- `ilegeul/ubuntu:amd64-16.04-xbb-v3.1`
+- `ilegeul/ubuntu:i386-16.04-xbb-v3.1`
+- `ilegeul/ubuntu:amd64-18.04-xbb-v3.1`
+- `ilegeul/ubuntu:i386-18.04-xbb-v3.1`
 
 Arm Ubuntu
 
 - `ilegeul/ubuntu:arm64-14.04-xbb-v3.1`
 - `ilegeul/ubuntu:armhf-14.04-xbb-v3.1`
+- `ilegeul/ubuntu:arm64-16.04-xbb-v3.1`
+- `ilegeul/ubuntu:armhf-16.04-xbb-v3.1`
+- `ilegeul/ubuntu:arm64-14.08-xbb-v3.1`
+- `ilegeul/ubuntu:armhf-14.08-xbb-v3.1`
 
-Each of these images are built upon multple layers,
+Each of these images are built upon multiple layers,
 starting from a base archive,
 updating it, installing development tools, tex, the bootstrap and
 finally the XBB itself.
 
-To be sure there is enough space, before each step it is recommended
+To be sure there is enough space, before each build step it is recommended
 to clean possible dangling images:
 
 ```
@@ -29,6 +39,8 @@ docker system prune -f
 
 The following sequences of commands were used on an Ubuntu 18.04 LTS
 Linux (x86_64):
+
+### Ubuntu 12 (precise)
 
 ```bash
 set -o errexit
@@ -66,10 +78,126 @@ docker push "ilegeul/ubuntu:i386-12.04-bootstrap-v3.1"
 docker push "ilegeul/ubuntu:i386-12.04-xbb-v3.1"
 ```
 
+### Ubuntu 14 (trusty)
+
+```bash
+set -o errexit
+docker system prune -f
+bash ~/Downloads/xpack-build-box.git/ubuntu/14/amd64-build.sh
+bash ~/Downloads/xpack-build-box.git/ubuntu/14-updated/amd64-build-v3.1.sh
+bash ~/Downloads/xpack-build-box.git/ubuntu/14-develop/amd64-build-v3.1.sh
+bash ~/Downloads/xpack-build-box.git/ubuntu/14-tex/amd64-build-v3.1.sh
+bash ~/Downloads/xpack-build-box.git/ubuntu/14-bootstrap/amd64-build-v3.1.sh
+bash ~/Downloads/xpack-build-box.git/ubuntu/14-xbb/amd64-build-v3.1.sh
+
+docker push "ilegeul/ubuntu:amd64-14.04"
+docker push "ilegeul/ubuntu:amd64-14.04-updated-v3.1"
+docker push "ilegeul/ubuntu:amd64-14.04-develop-v3.1"
+docker push "ilegeul/ubuntu:amd64-14.04-tex-v3.1"
+docker push "ilegeul/ubuntu:amd64-14.04-bootstrap-v3.1"
+docker push "ilegeul/ubuntu:amd64-14.04-xbb-v3.1"
+```
+
+```bash
+set -o errexit
+docker system prune -f
+bash ~/Downloads/xpack-build-box.git/ubuntu/14/i386-build.sh
+bash ~/Downloads/xpack-build-box.git/ubuntu/14-updated/i386-build-v3.1.sh
+bash ~/Downloads/xpack-build-box.git/ubuntu/14-develop/i386-build-v3.1.sh
+bash ~/Downloads/xpack-build-box.git/ubuntu/14-tex/i386-build-v3.1.sh
+bash ~/Downloads/xpack-build-box.git/ubuntu/14-bootstrap/i386-build-v3.1.sh
+bash ~/Downloads/xpack-build-box.git/ubuntu/14-xbb/i386-build-v3.1.sh
+
+docker push "ilegeul/ubuntu:i386-14.04"
+docker push "ilegeul/ubuntu:i386-14.04-updated-v3.1"
+docker push "ilegeul/ubuntu:i386-14.04-develop-v3.1"
+docker push "ilegeul/ubuntu:i386-14.04-tex-v3.1"
+docker push "ilegeul/ubuntu:i386-14.04-bootstrap-v3.1"
+docker push "ilegeul/ubuntu:i386-14.04-xbb-v3.1"
+```
+
+### Ubuntu 16 (xenial)
+
+```bash
+set -o errexit
+docker system prune -f
+bash ~/Downloads/xpack-build-box.git/ubuntu/16/amd64-build.sh
+bash ~/Downloads/xpack-build-box.git/ubuntu/16-updated/amd64-build-v3.1.sh
+bash ~/Downloads/xpack-build-box.git/ubuntu/16-develop/amd64-build-v3.1.sh
+bash ~/Downloads/xpack-build-box.git/ubuntu/16-tex/amd64-build-v3.1.sh
+bash ~/Downloads/xpack-build-box.git/ubuntu/16-bootstrap/amd64-build-v3.1.sh
+bash ~/Downloads/xpack-build-box.git/ubuntu/16-xbb/amd64-build-v3.1.sh
+
+docker push "ilegeul/ubuntu:amd64-16.04"
+docker push "ilegeul/ubuntu:amd64-16.04-updated-v3.1"
+docker push "ilegeul/ubuntu:amd64-16.04-develop-v3.1"
+docker push "ilegeul/ubuntu:amd64-16.04-tex-v3.1"
+docker push "ilegeul/ubuntu:amd64-16.04-bootstrap-v3.1"
+docker push "ilegeul/ubuntu:amd64-16.04-xbb-v3.1"
+```
+
+```bash
+set -o errexit
+docker system prune -f
+bash ~/Downloads/xpack-build-box.git/ubuntu/16/i386-build.sh
+bash ~/Downloads/xpack-build-box.git/ubuntu/16-updated/i386-build-v3.1.sh
+bash ~/Downloads/xpack-build-box.git/ubuntu/16-develop/i386-build-v3.1.sh
+bash ~/Downloads/xpack-build-box.git/ubuntu/16-tex/i386-build-v3.1.sh
+bash ~/Downloads/xpack-build-box.git/ubuntu/16-bootstrap/i386-build-v3.1.sh
+bash ~/Downloads/xpack-build-box.git/ubuntu/16-xbb/i386-build-v3.1.sh
+
+docker push "ilegeul/ubuntu:i386-16.04"
+docker push "ilegeul/ubuntu:i386-16.04-updated-v3.1"
+docker push "ilegeul/ubuntu:i386-16.04-develop-v3.1"
+docker push "ilegeul/ubuntu:i386-16.04-tex-v3.1"
+docker push "ilegeul/ubuntu:i386-16.04-bootstrap-v3.1"
+docker push "ilegeul/ubuntu:i386-16.04-xbb-v3.1"
+```
+
+### Ubuntu 18 (bionic)
+
+```bash
+set -o errexit
+docker system prune -f
+bash ~/Downloads/xpack-build-box.git/ubuntu/18/amd64-build.sh
+bash ~/Downloads/xpack-build-box.git/ubuntu/18-updated/amd64-build-v3.1.sh
+bash ~/Downloads/xpack-build-box.git/ubuntu/18-develop/amd64-build-v3.1.sh
+bash ~/Downloads/xpack-build-box.git/ubuntu/18-tex/amd64-build-v3.1.sh
+bash ~/Downloads/xpack-build-box.git/ubuntu/18-bootstrap/amd64-build-v3.1.sh
+bash ~/Downloads/xpack-build-box.git/ubuntu/18-xbb/amd64-build-v3.1.sh
+
+docker push "ilegeul/ubuntu:amd64-18.04"
+docker push "ilegeul/ubuntu:amd64-18.04-updated-v3.1"
+docker push "ilegeul/ubuntu:amd64-18.04-develop-v3.1"
+docker push "ilegeul/ubuntu:amd64-18.04-tex-v3.1"
+docker push "ilegeul/ubuntu:amd64-18.04-bootstrap-v3.1"
+docker push "ilegeul/ubuntu:amd64-18.04-xbb-v3.1"
+```
+
+```bash
+set -o errexit
+docker system prune -f
+bash ~/Downloads/xpack-build-box.git/ubuntu/18/i386-build.sh
+bash ~/Downloads/xpack-build-box.git/ubuntu/18-updated/i386-build-v3.1.sh
+bash ~/Downloads/xpack-build-box.git/ubuntu/18-develop/i386-build-v3.1.sh
+bash ~/Downloads/xpack-build-box.git/ubuntu/18-tex/i386-build-v3.1.sh
+bash ~/Downloads/xpack-build-box.git/ubuntu/18-bootstrap/i386-build-v3.1.sh
+bash ~/Downloads/xpack-build-box.git/ubuntu/18-xbb/i386-build-v3.1.sh
+
+docker push "ilegeul/ubuntu:i386-18.04"
+docker push "ilegeul/ubuntu:i386-18.04-updated-v3.1"
+docker push "ilegeul/ubuntu:i386-18.04-develop-v3.1"
+docker push "ilegeul/ubuntu:i386-18.04-tex-v3.1"
+docker push "ilegeul/ubuntu:i386-18.04-bootstrap-v3.1"
+docker push "ilegeul/ubuntu:i386-18.04-xbb-v3.1"
+```
+
 ## Arm Linux
 
 The following sequences of commands were used on a Manjaro 20.02 Arm
 Linux (Aarch64):
+
+### Ubuntu 14 (trusty)
 
 ```bash
 set -o errexit
@@ -107,6 +235,8 @@ docker push "ilegeul/ubuntu:armhf-14.04-bootstrap-v3.1"
 docker push "ilegeul/ubuntu:armhf-14.04-xbb-v3.1"
 ```
 
+### Ubuntu 16 (xenial)
+
 ```bash
 set -o errexit
 docker system prune -f
@@ -141,4 +271,42 @@ docker push "ilegeul/ubuntu:armhf-16.04-develop-v3.1"
 docker push "ilegeul/ubuntu:armhf-16.04-tex-v3.1"
 docker push "ilegeul/ubuntu:armhf-16.04-bootstrap-v3.1"
 docker push "ilegeul/ubuntu:armhf-16.04-xbb-v3.1"
+```
+
+### Ubuntu 18 (bionic)
+
+```bash
+set -o errexit
+docker system prune -f
+bash ~/Downloads/xpack-build-box.git/ubuntu/18/arm64-build.sh
+bash ~/Downloads/xpack-build-box.git/ubuntu/18-updated/arm64-build-v3.1.sh
+bash ~/Downloads/xpack-build-box.git/ubuntu/18-develop/arm64-build-v3.1.sh
+bash ~/Downloads/xpack-build-box.git/ubuntu/18-tex/arm64-build-v3.1.sh
+bash ~/Downloads/xpack-build-box.git/ubuntu/18-bootstrap/arm64-build-v3.1.sh
+bash ~/Downloads/xpack-build-box.git/ubuntu/18-xbb/arm64-build-v3.1.sh
+
+docker push "ilegeul/ubuntu:arm64-18.04"
+docker push "ilegeul/ubuntu:arm64-18.04-updated-v3.1"
+docker push "ilegeul/ubuntu:arm64-18.04-develop-v3.1"
+docker push "ilegeul/ubuntu:arm64-18.04-tex-v3.1"
+docker push "ilegeul/ubuntu:arm64-18.04-bootstrap-v3.1"
+docker push "ilegeul/ubuntu:arm64-18.04-xbb-v3.1"
+```
+
+```bash
+set -o errexit
+docker system prune -f
+bash ~/Downloads/xpack-build-box.git/ubuntu/18/armhf-build.sh
+bash ~/Downloads/xpack-build-box.git/ubuntu/18-updated/armhf-build-v3.1.sh
+bash ~/Downloads/xpack-build-box.git/ubuntu/18-develop/armhf-build-v3.1.sh
+bash ~/Downloads/xpack-build-box.git/ubuntu/18-tex/armhf-build-v3.1.sh
+bash ~/Downloads/xpack-build-box.git/ubuntu/18-bootstrap/armhf-build-v3.1.sh
+bash ~/Downloads/xpack-build-box.git/ubuntu/18-xbb/armhf-build-v3.1.sh
+
+docker push "ilegeul/ubuntu:armhf-18.04"
+docker push "ilegeul/ubuntu:armhf-18.04-updated-v3.1"
+docker push "ilegeul/ubuntu:armhf-18.04-develop-v3.1"
+docker push "ilegeul/ubuntu:armhf-18.04-tex-v3.1"
+docker push "ilegeul/ubuntu:armhf-18.04-bootstrap-v3.1"
+docker push "ilegeul/ubuntu:armhf-18.04-xbb-v3.1"
 ```
