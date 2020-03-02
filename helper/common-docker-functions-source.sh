@@ -355,9 +355,9 @@ function docker_install_develop()
   zip \
   zlib1g-dev \
 
-  # Without it, building GCC on Ubuntu 14 fails.
+  # Without it, building GCC on Arm 32-bit fails.
   # https://askubuntu.com/questions/1202249/c-compilng-failed
-  if [ "${release}" == "14.04" -a \( "${machine}" == "armv8l" -o "${machine}" == "armv7l" \) ]
+  if [ "${machine}" == "armv8l" -o "${machine}" == "armv7l" ]
   then
     apt-get install --yes g++-multilib
   fi
