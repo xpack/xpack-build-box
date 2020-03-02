@@ -3067,6 +3067,10 @@ function do_perl()
   local perl_archive="${perl_folder_name}.tar.gz"
   local perl_url="http://www.cpan.org/src/${perl_version_major}/${perl_archive}"
 
+  # Fix an incompatibility with libxcrypt and glibc.
+  # https://groups.google.com/forum/#!topic/perl.perl5.porters/BTMp2fQg8q4
+  local perl_patch_file_path="${helper_folder_path}/patches/${perl_folder_name}.patch"
+
   local perl_stamp_file_path="${STAMPS_FOLDER_PATH}/stamp-perl-${perl_version}-installed"
   if [ ! -f "${perl_stamp_file_path}" -o ! -d "${BUILD_FOLDER_PATH}/${perl_folder_name}" ]
   then
@@ -3074,7 +3078,7 @@ function do_perl()
     # In-source build.
     cd "${BUILD_FOLDER_PATH}"
 
-    download_and_extract "${perl_url}" "${perl_archive}" "${perl_folder_name}"
+    download_and_extract "${perl_url}" "${perl_archive}" "${perl_folder_name}" "${perl_patch_file_path}"
 
     (
       cd "${BUILD_FOLDER_PATH}/${perl_folder_name}"
@@ -3083,7 +3087,7 @@ function do_perl()
 
       export CPPFLAGS="${XBB_CPPFLAGS}"
       # -Wno-null-pointer-arithmetic 
-      export CFLAGS="${XBB_CFLAGS}  -Wno-nonnull -Wno-format -Wno-sign-compare  -Wno-unused-result -Wno-nonnull-compare -Wno-unused-value -Wno-misleading-indentation -Wno-unused-const-variable -Wno-unused-but-set-variable -Wno-cast-function-type  -Wno-clobbered -Wno-int-in-bool-context"
+      export CFLAGS="${XBB_CFLAGS}  -Wno-nonnull -Wno-format -Wno-sign-compare  -Wno-unused-result -Wno-nonnull-compare -Wno-unused-value -Wno-misleading-indentation -Wno-unused-const-variable -Wno-unused-but-set-variable -Wno-cast-function-type  -Wno-clobbered -Wno-int-in-bool-context -Wno-implicit-fallthrough"
       export CXXFLAGS="${XBB_CXXFLAGS}"
       export LDFLAGS="${XBB_LDFLAGS_APP_STATIC_GCC}"
 
@@ -3100,7 +3104,9 @@ function do_perl()
             \
             -Dcc="${CC}" \
             -Dccflags="${CFLAGS}" \
-            -Dlddlflags="-shared ${LDFLAGS}" -Dldflags="${LDFLAGS}" \
+            -Dcppflags="${CPPFLAGS}" \
+            -Dlddlflags="-shared ${LDFLAGS}" \
+            -Dldflags="${LDFLAGS}" \
             -Duseshrplib \
             -Duselargefiles \
             -Dusethreads
