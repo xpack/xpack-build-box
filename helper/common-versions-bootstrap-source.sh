@@ -39,7 +39,18 @@ function do_build_versions()
     # -------------------------------------------------------------------------
     # From this moment on, .xz archives can be processed.
 
+    # depends=('sh' 'perl')
+    # PATCH! .xz!
+    do_automake "1.16"
+
+    # depends=('sh' 'perl' 'awk' 'm4' 'texinfo')
+    do_autoconf "2.69"
+
+    # depends=('sh' 'tar' 'glibc')
+    do_libtool "2.4.6"
+
     # Replacement for the old libcrypt.so.1.
+    # Requires new autotools.
     do_libxcrypt "4.4.15"
 
     # New openssl, required by curl, cmake, python, etc.
@@ -65,14 +76,6 @@ function do_build_versions()
     # depends ?
     do_sed "4.7"
 
-    # depends=('sh' 'perl' 'awk' 'm4' 'texinfo')
-    do_autoconf "2.69"
-    # depends=('sh' 'perl')
-    # PATCH!
-    do_automake "1.16"
-
-    # depends=('sh' 'tar' 'glibc')
-    do_libtool "2.4.6"
 
     # depends=('glibc' 'glib2' 'libunistring' 'ncurses')
     do_gettext "0.19.8"
