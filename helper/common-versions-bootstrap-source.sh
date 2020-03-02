@@ -113,6 +113,7 @@ function do_build_versions()
       # depends=('gdbm' 'db' 'glibc')
       # On macOS 10.10 newer versions fail with clang, due to a missing clock_gettime()
       # Warning: macOS divergence!
+      # PATCH!
       do_perl "5.18.2" # "5.24.4" # "5.26.3" # "5.28.2"
     fi
 

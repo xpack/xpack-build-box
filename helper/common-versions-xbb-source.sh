@@ -158,6 +158,7 @@ function do_build_versions()
       # macOS 10.10 uses 5.18.2, an update is not mandatory.
       # depends=('gdbm' 'db' 'glibc')
       # For Linux, go back to the same version supported by macOS 10.10.
+      # PATCH!
       do_perl "5.18.2" # "5.30.1" # "5.28.1"
     fi
 
