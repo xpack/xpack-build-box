@@ -1,7 +1,11 @@
 # The Ubuntu XBB
 
-The Ubuntu XBB consists of multiple Docker images, in pairs of 32/64-bit, 
+The Ubuntu XBB consists of multiple Docker images, in pairs of 32/64-bit,
 for each platform and version.
+
+The images are published on
+[Docker Hub](https://hub.docker.com/repository/docker/ilegeul/ubuntu)
+(requires login).
 
 Intel Ubuntu
 
@@ -31,7 +35,7 @@ finally the XBB itself.
 To be sure there is enough space, before each build step it is recommended
 to clean possible dangling images:
 
-```
+```bash
 docker system prune -f
 ```
 
