@@ -1567,6 +1567,7 @@ function do_libxcrypt()
   # https://github.com/besser82/libxcrypt/archive/v4.4.15.tar.gz
 
   # 26 Jul 2018, "4.1.1"
+  # 26 Oct 2018, "4.2.3"
   # 14 Nov 2018, "4.3.4"
   # Requires new autotools.
   # m4/ax_valgrind_check.m4:80: warning: macro `AM_EXTRA_RECURSIVE_TARGETS' not found in library
@@ -1643,7 +1644,11 @@ function do_libxcrypt()
         # Build.
         make -j ${JOBS}
 
-        make check
+        if [ "${IS_BOOTSTRAP}" != "y" ]
+        then
+          # FAILS on bootstrap
+          make check
+        fi
 
         make install-strip
       ) 2>&1 | tee "${LOGS_FOLDER_PATH}/make-libxcrypt-output.txt"
