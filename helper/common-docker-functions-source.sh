@@ -65,8 +65,9 @@ function host_clean_docker_input()
 function host_run_docker_it()
 {
   # Warning: do not use HOST_MACHINE!
-  out="${HOME}/opt/${name}-${arch}"
+  out="${HOME}/opt/${name}-${distro}-${release}-${arch}"
   mkdir -p "${out}"
+  bootstrap_path="${HOME}/opt/${name}-bootstrap-${distro}-${release}-${arch}"
 
   echo 
   echo "Running parent Docker image ${from}..."
@@ -84,9 +85,9 @@ function host_run_docker_it()
       --volume="${out}:/opt/${name}" \
       ${from}
   else
-    if [ ! -d "${HOME}/opt/${name}-bootstrap-${arch}" ]
+    if [ ! -d "${bootstrap_path}" ]
     then
-      echo "Missing bootstrap folder ${HOME}/opt/${name}-bootstrap-${arch}."
+      echo "Missing bootstrap folder ${bootstrap_path}."
       exit 1
     fi
 
@@ -99,7 +100,7 @@ function host_run_docker_it()
       --volume="${WORK_FOLDER_PATH}:/root/Work" \
       --volume="${script_folder_path}/input:/input" \
       --volume="${out}:/opt/${name}" \
-      --volume="${HOME}/opt/${name}-bootstrap-${arch}:/opt/${name}-bootstrap" \
+      --volume="${bootstrap_path}:/opt/${name}-bootstrap" \
       ${from}
   fi
 }
@@ -107,7 +108,7 @@ function host_run_docker_it()
 function host_run_docker_it_bs()
 {
   # Warning: do not use HOST_MACHINE!
-  out="${HOME}/opt/${name}-${arch}"
+  out="${HOME}/opt/${name}-${distro}-${release}-${arch}"
   mkdir -p "${out}"
 
   echo 

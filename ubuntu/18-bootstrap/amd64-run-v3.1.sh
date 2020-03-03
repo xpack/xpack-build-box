@@ -49,7 +49,9 @@ host_init_docker_input \
   "$(dirname $(dirname "${script_folder_path}"))/ca-bundle/ca-bundle.crt" \
 
 arch="amd64"
-from="ilegeul/ubuntu:${arch}-18.04-tex-v3.1"
+distro="ubuntu"
+release="18.04"
+from="ilegeul/${distro}:${arch}-${release}-tex-v3.1"
 name="xbb-bootstrap"
 
 host_run_docker_it
