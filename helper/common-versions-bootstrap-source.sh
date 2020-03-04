@@ -77,7 +77,6 @@ function do_build_versions()
     # depends ?
     do_sed "4.7"
 
-
     # depends=('glibc' 'glib2' 'libunistring' 'ncurses')
     do_gettext "0.19.8"
 

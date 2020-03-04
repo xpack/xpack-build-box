@@ -1495,7 +1495,7 @@ function do_coreutils()
         # Build.
         make -j ${JOBS}
 
-        # Takes too long and fails
+        # Takes very long and fails.
         # x86_64: FAIL: tests/misc/chroot-credentials.sh
         # x86_64: ERROR: tests/du/long-from-unreadable.sh
         # make check
@@ -2899,11 +2899,11 @@ function do_texinfo()
         # Darwin: FAIL: t/94htmlxref.t 11 - htmlxref errors file_html
         # Darwin: ERROR: t/94htmlxref.t - exited with status 2
 
-        if [ "${HOST_UNAME}" == "Linux" ]
+        if [ "${HOST_UNAME}" == "Darwin" ]
         then
-          make check
-        else
           make check || true
+        else
+          make check
         fi
 
         make install-strip
