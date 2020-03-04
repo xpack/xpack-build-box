@@ -4585,3 +4585,100 @@ function do_nodejs()
 }
 
 # -----------------------------------------------------------------------------
+
+function do_tcl() 
+{
+  # https://www.tcl.tk/
+  # https://www.tcl.tk/software/tcltk/download.html
+  # https://www.tcl.tk/doc/howto/compile.html
+
+  # https://prdownloads.sourceforge.net/tcl/tcl8.6.10-src.tar.gz
+  # https://github.com/xpack-dev-tools/files-cache/raw/master/libs/tcl8.6.10-src.tar.gz
+  # https://archlinuxarm.org/packages/aarch64/tcl/files/PKGBUILD
+
+  # 2019-11-21, "8.6.10"
+
+  local tcl_version="$1"
+
+  local tcl_version_major="$(echo ${tcl_version} | sed -e 's|\([0-9][0-9]*\)\.\([0-9][0-9]*\)\..*|\1|')"
+  local tcl_version_minor="$(echo ${tcl_version} | sed -e 's|\([0-9][0-9]*\)\.\([0-9][0-9]*\)\..*|\2|')"
+
+  local tcl_folder_name="tcl${tcl_version}"
+  local tcl_archive="tcl${tcl_version}-src.tar.gz"
+  # local tcl_url="https://prdownloads.sourceforge.net/tcl/${tcl_archive}"
+  local tcl_url="https://github.com/xpack-dev-tools/files-cache/raw/master/libs/${tcl_archive}"
+
+  local tcl_stamp_file_path="${STAMPS_FOLDER_PATH}/stamp-tcl-${tcl_version}-installed"
+  if [ ! -f "${tcl_stamp_file_path}" -o ! -d "${BUILD_FOLDER_PATH}/${tcl_folder_name}" ]
+  then
+
+    cd "${SOURCES_FOLDER_PATH}"
+
+    download_and_extract "${tcl_url}" "${tcl_archive}" "${tcl_folder_name}"
+
+    (
+      mkdir -p "${BUILD_FOLDER_PATH}/${tcl_folder_name}"
+      cd "${BUILD_FOLDER_PATH}/${tcl_folder_name}"
+
+      xbb_activate
+
+      export CPPFLAGS="${XBB_CPPFLAGS}"
+      export CFLAGS="${XBB_CFLAGS}"
+      export CXXFLAGS="${XBB_CXXFLAGS}"
+      export LDFLAGS="${XBB_LDFLAGS_APP_STATIC_GCC}"
+
+      if [ ! -f "config.status" ]
+      then
+        (
+          echo
+          echo "Running tcl configure..."
+
+          bash "${SOURCES_FOLDER_PATH}/${tcl_folder_name}/unix/configure" --help
+
+          bash ${DEBUG} "${SOURCES_FOLDER_PATH}/${tcl_folder_name}/unix/configure" \
+            --prefix="${INSTALL_FOLDER_PATH}" \
+            \
+            --enable-threads \
+
+          cp "config.log" "${LOGS_FOLDER_PATH}/config-tcl-log.txt"
+        ) 2>&1 | tee "${LOGS_FOLDER_PATH}/configure-tcl-output.txt"
+      fi
+
+      (
+        echo
+        echo "Running tcl make..."
+
+        # Build.
+        make -j ${JOBS}
+
+        if [ "${RUN_LONG_TESTS}" == "y" ]
+        then
+          make test
+        fi
+
+        # make install-strip
+        make install
+        strip -S "${INSTALL_FOLDER_PATH}/bin/tclsh${tcl_version_major}.${tcl_version_minor}"
+
+        show_libs "${INSTALL_FOLDER_PATH}/bin/tclsh${tcl_version_major}.${tcl_version_minor}"
+
+      ) 2>&1 | tee "${LOGS_FOLDER_PATH}/make-tcl-output.txt"
+    )
+
+    (
+      xbb_activate_installed_bin
+
+      echo
+      run_app "${INSTALL_FOLDER_PATH}/bin/tclsh${tcl_version_major}.${tcl_version_minor}" <<< 'puts [info patchlevel]'
+    )
+
+    hash -r
+
+    touch "${tcl_stamp_file_path}"
+
+  else
+    echo "Component tcl already installed."
+  fi
+}
+
+# -----------------------------------------------------------------------------
