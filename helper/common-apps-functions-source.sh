@@ -2253,7 +2253,7 @@ function do_gettext()
         # aarch64, armv8l: FAIL: test-tls
         # Darwin: FAIL: lang-sh
         # Fails on Ubuntu 14 bootstrap 
-        make check || true
+        make check # || true
 
         make install-strip
 
