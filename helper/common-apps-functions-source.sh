@@ -4639,6 +4639,7 @@ function do_tcl()
             --prefix="${INSTALL_FOLDER_PATH}" \
             \
             --enable-threads \
+            --enable-64bit \
 
           cp "config.log" "${LOGS_FOLDER_PATH}/config-tcl-log.txt"
         ) 2>&1 | tee "${LOGS_FOLDER_PATH}/configure-tcl-output.txt"
