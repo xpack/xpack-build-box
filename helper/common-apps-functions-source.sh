@@ -3487,6 +3487,7 @@ function do_python2()
   # https://www.python.org/downloads/source/
   # https://www.python.org/ftp/python/2.7.16/Python-2.7.16.tar.xz
 
+  # https://archlinuxarm.org/packages/aarch64/python2/files/PKGBUILD
   # https://git.archlinux.org/svntogit/packages.git/tree/trunk/PKGBUILD?h=packages/python2
 
   # macOS 10.10 uses 2.7.10
@@ -3527,6 +3528,9 @@ function do_python2()
         export CC=clang
         export CXX=clang++
       fi
+
+      # From Arch.
+      export OPT="${CFLAGS}"
 
       if [ ! -f "config.status" ]
       then
