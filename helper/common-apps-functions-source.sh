@@ -1374,8 +1374,8 @@ function do_tar()
         # Build.
         make -j ${JOBS}
 
-        # It takes very long.
-        if [ "${RUN_LONG_TESTS}" == "y" ]
+        # It takes very long ().
+        if true # [ "${RUN_LONG_TESTS}" == "y" ]
         then
           make check
         fi
