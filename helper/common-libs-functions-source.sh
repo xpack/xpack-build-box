@@ -1578,8 +1578,8 @@ function do_libxcrypt()
   local libxcrypt_version="$1"
 
   local libxcrypt_folder_name="libxcrypt-${libxcrypt_version}"
-  local libxcrypt_archive="v${libxcrypt_version}.tar.gz"
-  local libxcrypt_url="https://github.com/besser82/libxcrypt/archive/${libxcrypt_archive}"
+  local libxcrypt_archive="libxcrypt-${libxcrypt_version}.tar.gz"
+  local libxcrypt_url="https://github.com/besser82/libxcrypt/archive/v${libxcrypt_version}.tar.gz"
 
   local libxcrypt_patch_file_path="${helper_folder_path}/patches/${libxcrypt_folder_name}.patch"
 
