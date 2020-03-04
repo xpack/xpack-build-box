@@ -470,6 +470,8 @@ function do_nettle()
         then
           # Takes very long on armhf.
           make -k check
+        else
+          make -k check || true
         fi
 
         # make install-strip
@@ -1644,9 +1646,11 @@ function do_libxcrypt()
         # Build.
         make -j ${JOBS}
 
-        if [ "${IS_BOOTSTRAP}" != "y" ]
+        if [ "${IS_BOOTSTRAP}" == "y" ]
         then
           # FAILS on bootstrap
+          make check || true
+        else
           make check
         fi
 
