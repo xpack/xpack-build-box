@@ -162,6 +162,10 @@ function do_build_versions()
       do_perl "5.18.2" # "5.30.1" # "5.28.1"
     fi
 
+    # Give other a chance to use it.
+    # However some (like Python) test for Tk too.
+    do_tcl "8.6.10"
+
     # depends=('curl' 'libarchive' 'shared-mime-info' 'jsoncpp' 'rhash')
     do_cmake "3.16.2" # "3.13.4"
 
@@ -239,8 +243,6 @@ function do_build_versions()
     do_npth "1.6"
 
     do_gnupg "2.2.19"
-
-    do_tcl "8.6.10"
 
     # -------------------------------------------------------------------------
 
