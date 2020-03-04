@@ -1018,6 +1018,8 @@ function do_openssl()
                 enable-md2 enable-rc5 enable-tls enable-tls1_3 enable-tls1_2 enable-tls1_1 \
                 "${CPPFLAGS} ${CFLAGS} ${LDFLAGS}"
 
+              make depend 
+
             else
 
               "./config" --help
@@ -1035,8 +1037,6 @@ function do_openssl()
 
           else
 
-            "./config" --help
-
             config_options=()
             if [ "${HOST_MACHINE}" == "x86_64" ]
             then
@@ -1048,20 +1048,32 @@ function do_openssl()
 
             set +u
 
+            # undefined reference to EVP_md2
+            #  enable-md2 
+
+            # perl, do not start with bash.
             "./config" \
               --prefix="${INSTALL_FOLDER_PATH}" \
               \
               --openssldir="${INSTALL_FOLDER_PATH}/openssl" \
               shared \
-              enable-md2 enable-rc5 enable-tls enable-tls1_3 enable-tls1_2 enable-tls1_1 \
+              enable-md2 \
+              enable-rc5 \
+              enable-tls \
+              enable-tls1_3 \
+              enable-tls1_2 \
+              enable-tls1_1 \
               ${config_options[@]} \
               "-Wa,--noexecstack ${CPPFLAGS} ${CFLAGS} ${LDFLAGS}"
 
             set -u
 
-          fi
+            if [ "${openssl_version_minor}" == "0" ]
+            then
+              make depend 
+            fi
 
-          make depend 
+          fi
 
           touch config.stamp
 
@@ -1080,23 +1092,25 @@ function do_openssl()
 
         strip -S "${INSTALL_FOLDER_PATH}/bin/openssl"
 
-        if [ ! -f "${INSTALL_FOLDER_PATH}/openssl/cert.pem" ]
+        mkdir -p "${INSTALL_FOLDER_PATH}/openssl"
+
+        if [ -f "/private/etc/ssl/cert.pem" ]
         then
-          mkdir -p "${INSTALL_FOLDER_PATH}/openssl"
-
-          if [ -f "/private/etc/ssl/cert.pem" ]
-          then
-            /usr/bin/install -v -c -m 644 "/private/etc/ssl/cert.pem" "${INSTALL_FOLDER_PATH}/openssl"
-          fi
-
-          # ca-bundle.crt is used by curl.
-          if [ -f "/.dockerenv" ]
-          then
-            /usr/bin/install -v -c -m 644 "${helper_folder_path}/ca-bundle.crt" "${INSTALL_FOLDER_PATH}/openssl"
-          else
-            /usr/bin/install -v -c -m 644 "$(dirname "${script_folder_path}")/ca-bundle/ca-bundle.crt" "${INSTALL_FOLDER_PATH}/openssl"
-          fi
+          /usr/bin/install -v -c -m 644 "/private/etc/ssl/cert.pem" "${INSTALL_FOLDER_PATH}/openssl"
         fi
+
+        curl -L http://curl.haxx.se/ca/cacert.pem -o cacert.pem
+        /usr/bin/install -v -c -m 644 cacert.pem "${INSTALL_FOLDER_PATH}/openssl"
+
+        # ca-bundle.crt is used by curl.
+        if [ -f "/.dockerenv" ]
+        then
+          /usr/bin/install -v -c -m 644 "${helper_folder_path}/ca-bundle.crt" "${INSTALL_FOLDER_PATH}/openssl"
+        else
+          /usr/bin/install -v -c -m 644 "$(dirname "${script_folder_path}")/ca-bundle/ca-bundle.crt" "${INSTALL_FOLDER_PATH}/openssl"
+        fi
+
+        make test
 
         show_libs "${INSTALL_FOLDER_PATH}/bin/openssl"
 
