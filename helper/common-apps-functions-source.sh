@@ -2266,11 +2266,16 @@ function do_gettext()
         # Build.
         make -j ${JOBS}
 
-        # aarch64, armv8l: FAIL: test-thread_create
-        # aarch64, armv8l: FAIL: test-tls
         # Darwin: FAIL: lang-sh
         # Fails on Ubuntu 14 bootstrap 
-        make check # || true
+        if is_arm
+        then
+          # aarch64, armv8l: FAIL: test-thread_create
+          # aarch64, armv8l: FAIL: test-tls
+          make check || true
+        else
+          make check
+        fi
 
         make install-strip
 
