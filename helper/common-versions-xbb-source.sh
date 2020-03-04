@@ -40,6 +40,9 @@ function do_build_versions()
     # Replacement for the old libcrypt.so.1.
     do_libxcrypt "4.4.15"
 
+    # depends=('perl')
+    do_openssl "1.1.1d" # "1.0.2u" # "1.1.1d" # "1.0.2r" # "1.1.1b"
+
     # Libraries, required by gcc.
     # depends=('gcc-libs' 'sh')
     do_gmp "6.2.0" # "6.1.2"
@@ -65,9 +68,6 @@ function do_build_versions()
     # Libary, required by tar. 
     # depends=('sh')
     do_xz "5.2.4"
-
-    # depends=('perl')
-    do_openssl "1.1.1d" # "1.0.2u" # "1.1.1d" # "1.0.2r" # "1.1.1b"
 
     # Requires openssl.
     # depends=('glibc' 'gmp')
