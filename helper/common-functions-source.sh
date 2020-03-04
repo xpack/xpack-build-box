@@ -582,6 +582,7 @@ __EOF__
 function extract()
 {
   local archive_name="$1"
+  # Must be exactly what results from expanding the archive.
   local folder_name="$2"
   # local patch_file_name="$3"
   local pwd="$(pwd)"
@@ -652,6 +653,7 @@ function download_and_extract()
 {
   local url="$1"
   local archive_name="$2"
+  # Must be exactly what results from expanding the archive.
   local folder_name="$3"
 
   download "${url}" "${archive_name}"
