@@ -1389,7 +1389,7 @@ function do_tar()
         make -j ${JOBS}
 
         # It takes very long ().
-        if [ "${HOST_DISTRO_NAME}" == "Ubuntu" && "${HOST_DISTRO_RELEASE}" == "12.04" ]
+        if [ "${HOST_DISTRO_NAME}" == "Ubuntu" -a "${HOST_DISTRO_RELEASE}" == "12.04" ]
         then
           #  92: link mismatch FAILED (difflink.at:19)
           make check || true
