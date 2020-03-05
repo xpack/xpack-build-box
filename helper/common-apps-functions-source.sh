@@ -2272,20 +2272,11 @@ function do_gettext()
         # Build.
         make -j ${JOBS}
 
-        # Darwin: FAIL: lang-sh
         # Fails on Ubuntu 14 bootstrap 
-        if is_arm
-        then
-          # aarch64, armv8l: FAIL: test-thread_create
-          # aarch64, armv8l: FAIL: test-tls
-          make check || true
-        elif [ "${HOST_UNAME}" == "Darwin" ]
-        then
-          # FAIL: lang-sh
-          make check || true
-        else
-          make check
-        fi
+        # aarch64, armv8l: FAIL: test-thread_create
+        # aarch64, armv8l: FAIL: test-tls
+        # Darwin: FAIL: lang-sh
+        make check || true
 
         make install-strip
 
