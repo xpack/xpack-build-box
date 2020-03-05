@@ -1388,8 +1388,8 @@ function do_tar()
         # Build.
         make -j ${JOBS}
 
-        # It takes very long ().
-        if [ "${HOST_DISTRO_NAME}" == "Ubuntu" -a "${HOST_DISTRO_RELEASE}" == "12.04" ]
+        # It takes very long (220 tests).
+        if is_intel
         then
           #  92: link mismatch FAILED (difflink.at:19)
           make check || true
