@@ -135,6 +135,28 @@ function detect_host()
   GROUP_NAME="$(id -g -n)"
 }
 
+function is_linux()
+{
+  local uname="$(uname)"
+  if [ "${uname}" == "Linux" ]
+  then
+    return 0
+  else
+    return 1
+  fi
+}
+
+function is_darwin()
+{
+  local uname="$(uname)"
+  if [ "${uname}" == "Darwin" ]
+  then
+    return 0
+  else
+    return 1
+  fi
+}
+
 function is_intel()
 {
   local machine="$(uname -m)"
