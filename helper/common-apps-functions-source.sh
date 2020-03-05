@@ -3539,18 +3539,30 @@ function do_python2()
 
       xbb_activate
 
-      export CPPFLAGS="${XBB_CPPFLAGS}"
-      # export CFLAGS="${XBB_CFLAGS} -Wno-int-in-bool-context -Wno-maybe-uninitialized -Wno-nonnull -Wno-stringop-overflow"
-      export CFLAGS="${XBB_CFLAGS} -Wno-nonnull -Wno-unused-but-set-variable -Wno-unused-value -Wno-unused-result -Wno-misleading-indentation -Wno-unused-const-variable -Wno-maybe-uninitialized -Wno-stringop-overflow -Wno-unused-function"
-      export CXXFLAGS="${XBB_CXXFLAGS}"
-      export LDFLAGS="${XBB_LDFLAGS_APP_STATIC_GCC}"
-
       if is_darwin
       then
         # error: variably modified 'bytes' at file scope
         export CC=clang
         export CXX=clang++
       fi
+
+      CPPFLAGS="${XBB_CPPFLAGS}"
+      CFLAGS="${XBB_CFLAGS} -Wno-nonnull -Wno-unused-value -Wno-unused-result -Wno-unused-const-variable -Wno-unused-function"
+      CXXFLAGS="${XBB_CXXFLAGS}"
+      LDFLAGS="${XBB_LDFLAGS_APP_STATIC_GCC}"
+
+      if [[ "${CC}" =~ gcc* ]]
+      then
+         CFLAGS+=" -Wno-unused-but-set-variable -Wno-misleading-indentation -Wno-maybe-uninitialized -Wno-stringop-overflow "
+      elif [[ "${CC}" =~ clang* ]]
+      then
+        CFLAGS+=" -Wno-tautological-pointer-compare -Wno-incompatible-pointer-types"
+      fi
+
+      export CPPFLAGS
+      export CFLAGS
+      export CXXFLAGS
+      export LDFLAGS
 
       # From Arch.
       export OPT="${CFLAGS}"
