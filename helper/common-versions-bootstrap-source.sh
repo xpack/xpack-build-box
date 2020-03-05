@@ -125,6 +125,7 @@ function do_build_versions()
 
     # -------------------------------------------------------------------------
 
+    # macOS: Segmentation fault: 11
     if is_linux
     then
       # depends=('bzip2' 'gdbm' 'openssl' 'zlib' 'expat' 'sqlite' 'libffi')
@@ -132,6 +133,7 @@ function do_build_versions()
       do_python2 "2.7.10" # "2.7.12" # "2.7.14" # "2.7.16" # "2.7.14"
     fi
 
+    # macOS: fails with "ModuleNotFoundError: No module named '_ctypes'" in meson
     # TODO: make it work for v3.2.
     if false # is_linux
     then
