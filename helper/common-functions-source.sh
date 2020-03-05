@@ -260,11 +260,16 @@ function prepare_xbb_env()
   # LD_LIBRARY_PATH, so the binaries use exactly the shared libraries
   # that were used during link.
   XBB_RPATH=""
-  if [ "${HOST_BITS}" == "64" ]
+  
+  # Darwin bootstrap uses clang, which does not enjoy -rpath.
+  if [ ! \( "${IS_BOOTSTRAP}" == "y" -a "${HOST_UNAME}" == "Darwin" \) ]
   then
-    XBB_RPATH+="-Wl,-rpath,${XBB_FOLDER_PATH}/lib64 "
+    if [ "${HOST_BITS}" == "64" ]
+    then
+      XBB_RPATH+="-Wl,-rpath,${XBB_FOLDER_PATH}/lib64 "
+    fi
+    XBB_RPATH+="-Wl,-rpath,${XBB_FOLDER_PATH}/lib"
   fi
-  XBB_RPATH+="-Wl,-rpath,${XBB_FOLDER_PATH}/lib"
 
   XBB_CPPFLAGS=""
 
