@@ -507,8 +507,8 @@ function do_mingw_all()
   # The original SourceForge location.
   local mingw_folder_name="mingw-w64-v${mingw_version}"
   local mingw_folder_archive="${mingw_folder_name}.tar.bz2"
-  local mingw_url="https://sourceforge.net/projects/mingw-w64/files/mingw-w64/mingw-w64-release/${mingw_folder_archive}"
-  # local mingw_url="https://github.com/gnu-mcu-eclipse/files/raw/master/libs/${mingw_folder_archive}"
+  # local mingw_url="https://sourceforge.net/projects/mingw-w64/files/mingw-w64/mingw-w64-release/${mingw_folder_archive}"
+  local mingw_url="https://github.com/xpack-dev-tools/files-cache/raw/master/libs/${mingw_folder_archive}"
   
   # If SourceForge is down, there is also a GitHub mirror.
   # https://github.com/mirror/mingw-w64
@@ -4001,7 +4001,8 @@ function do_p7zip()
 
   local p7zip_folder_name="p7zip_${p7zip_version}"
   local p7zip_archive="${p7zip_folder_name}_src_all.tar.bz2"
-  local p7zip_url="https://sourceforge.net/projects/p7zip/files/p7zip/${p7zip_version}/${p7zip_archive}"
+  # local p7zip_url="https://sourceforge.net/projects/p7zip/files/p7zip/${p7zip_version}/${p7zip_archive}"
+  local p7zip_url="https://github.com/xpack-dev-tools/files-cache/raw/master/libs/${p7zip_archive}"
 
   local p7zip_stamp_file_path="${STAMPS_FOLDER_PATH}/stamp-p7zip-${p7zip_version}-installed"
   if [ ! -f "${p7zip_stamp_file_path}" -o ! -d "${BUILD_FOLDER_PATH}/${p7zip_folder_name}" ]

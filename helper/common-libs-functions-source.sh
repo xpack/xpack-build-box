@@ -1047,7 +1047,8 @@ function do_libpng()
 
   local libpng_folder_name="libpng-${libpng_version}"
   local libpng_archive="${libpng_folder_name}.tar.gz"
-  local libpng_url="https://sourceforge.net/projects/libpng/files/libpng16/${libpng_version}/${libpng_archive}"
+  # local libpng_url="https://sourceforge.net/projects/libpng/files/libpng16/${libpng_version}/${libpng_archive}"
+  local libpng_url="https://github.com/xpack-dev-tools/files-cache/raw/master/libs/${libpng_archive}"
 
   local libpng_stamp_file_path="${STAMPS_FOLDER_PATH}/stamp-libpng-${libpng_version}-installed"
   if [ ! -f "${libpng_stamp_file_path}" -o ! -d "${LIBS_BUILD_FOLDER_PATH}/${libpng_folder_name}" ]
