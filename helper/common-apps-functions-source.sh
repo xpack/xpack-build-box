@@ -3680,18 +3680,31 @@ function do_python3()
 
       xbb_activate
 
-      export CPPFLAGS="${XBB_CPPFLAGS}"
-      # export CFLAGS="${XBB_CFLAGS} -Wno-int-in-bool-context -Wno-maybe-uninitialized -Wno-nonnull -Wno-stringop-overflow"
-      export CFLAGS="${XBB_CFLAGS} -fno-semantic-interposition -Wno-nonnull -Wno-deprecated-declarations"
-      export CXXFLAGS="${XBB_CXXFLAGS} -fno-semantic-interposition"
-      export LDFLAGS="${XBB_LDFLAGS_APP_STATIC_GCC} -fno-semantic-interposition"
-
       if [ "${HOST_UNAME}" == "Darwin" ]
       then
+        # GCC fails with:
         # error: variably modified 'bytes' at file scope
         export CC=clang
         export CXX=clang++
       fi
+
+      CPPFLAGS="${XBB_CPPFLAGS}"
+      CFLAGS="${XBB_CFLAGS} -Wno-nonnull -Wno-deprecated-declarations"
+      CXXFLAGS="${XBB_CXXFLAGS}"
+      LDFLAGS="${XBB_LDFLAGS_APP_STATIC_GCC}"
+
+      if [[ "${CC}" =~ gcc* ]]
+      then
+        # Inspired from Arch; not supported by clang.
+        CFLAGS+=" -fno-semantic-interposition"
+        CXXFLAGS+=" -fno-semantic-interposition"
+        LDFLAGS+=" -fno-semantic-interposition"
+      fi
+
+      export CPPFLAGS
+      export CFLAGS
+      export CXXFLAGS
+      export LDFLAGS
 
       if [ ! -f "config.status" ]
       then
