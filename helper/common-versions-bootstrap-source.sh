@@ -104,7 +104,7 @@ function do_build_versions()
     # depends=('glibc' 'glib2 (internal)')
     do_pkg_config "0.29.2"
 
-    if [ "${HOST_UNAME}" == "Linux" ]
+    if is_linux
     then
       # macOS 10.10 uses 5.18.2, an update is not mandatory.
       # Ubuntu 12 uses 5.14.2.
@@ -125,7 +125,7 @@ function do_build_versions()
 
     # -------------------------------------------------------------------------
 
-    if [ "${HOST_UNAME}" == "Linux" ]
+    if is_linux
     then
       # depends=('bzip2' 'gdbm' 'openssl' 'zlib' 'expat' 'sqlite' 'libffi')
       # macOS 10.10 uses 2.7.10, bring it in sync.
@@ -133,7 +133,7 @@ function do_build_versions()
     fi
 
     # TODO: make it work for v3.2.
-    if false # [ "${HOST_UNAME}" == "Linux" ]
+    if false # is_linux
     then
       # require xz, openssl
       do_python3 "3.7.6" # "3.8.1" # "3.7.3"
@@ -175,7 +175,7 @@ function do_build_versions()
     # By all means DO NOT build binutils on macOS, since this will 
     # override Apple specific tools (ar, strip, etc) and break the
     # build in multiple ways.
-    if [ "${HOST_UNAME}" == "Linux" ]
+    if is_linux
     then
       # Requires gmp, mpfr, mpc, isl.
       do_native_binutils "${XBB_BINUTILS_VERSION}" 

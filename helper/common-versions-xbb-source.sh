@@ -153,7 +153,7 @@ function do_build_versions()
     # depends=('glibc' 'm4' 'sh')
     do_flex "2.6.4"
 
-    if [ "${HOST_UNAME}" == "Linux" ]
+    if is_linux
     then
       # macOS 10.10 uses 5.18.2, an update is not mandatory.
       # depends=('gdbm' 'db' 'glibc')
@@ -191,7 +191,7 @@ function do_build_versions()
     # error: [Errno 54] Connection reset by peer
     # 0:05:27 load avg: 1.64 [311/400] test_startfile -- test_ssl failed (env changed)
 
-    if [ "${HOST_UNAME}" == "Linux" ]
+    if is_linux
     then
       # There are several errors on macOS 10.10 and some tests fail.                                           
       # depends=('bzip2' 'gdbm' 'openssl' 'zlib' 'expat' 'sqlite' 'libffi')
@@ -204,7 +204,7 @@ function do_build_versions()
       # sunaudiodev  
     fi
 
-    if true # [ "${HOST_UNAME}" == "Linux" ]
+    if true # is_linux
     then
       # require xz, openssl
       do_python3 "3.7.6" # "3.8.1" # "3.7.3"
@@ -259,7 +259,7 @@ function do_build_versions()
     # By all means DO NOT build binutils on macOS, since this will 
     # override Apple specific tools (ar, strip, etc) and break the
     # build in multiple ways.
-    if [ "${HOST_UNAME}" == "Linux" ]
+    if is_linux
     then
       # Requires gmp, mpfr, mpc, isl.
       do_native_binutils "${XBB_BINUTILS_VERSION}" 
@@ -269,7 +269,7 @@ function do_build_versions()
     do_native_gcc "${XBB_GCC_VERSION}"
      
     # Build mingw-w64 binutils and gcc only on Intel Linux.
-    if [ "${HOST_UNAME}" == "Linux" -a \( "${HOST_MACHINE}" == "x86_64" -o "${HOST_MACHINE}" == "i686" \) ]
+    if is_linux && is_intel
     then
       # depends=('zlib')
       do_mingw_binutils "${XBB_MINGW_BINUTILS_VERSION}"
@@ -281,7 +281,7 @@ function do_build_versions()
 
     # Build wine only on Intel Linux.
     # Benefits from having mingw in PATH.
-    if [ "${HOST_UNAME}" == "Linux" -a \( "${HOST_MACHINE}" == "x86_64" -o "${HOST_MACHINE}" == "i686" \) ]
+    if is_linux && is_intel
     then
       # depends=('libpng')
       do_wine "5.1" # "5.0" # "4.3"

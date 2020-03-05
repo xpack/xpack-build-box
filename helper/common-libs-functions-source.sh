@@ -462,7 +462,7 @@ function do_nettle()
         # Build.
         make -j ${JOBS}
 
-        if [ "${HOST_UNAME}" == "Darwin" ]
+        if is_darwin
         then
           # dlopen failed: dlopen(../libnettle.so, 2): image not found
           # /Users/ilg/Work/xbb-3.1-macosx-x86_64/sources/nettle-3.5.1/run-tests: line 57: 46731 Abort trap: 6           "$1" $testflags
@@ -827,7 +827,7 @@ function do_gnutls()
       export CXXFLAGS="${XBB_CXXFLAGS}"
       export LDFLAGS="${XBB_LDFLAGS_LIB}"
 
-      if [ "${HOST_UNAME}" == "Darwin" ]
+      if is_darwin
       then
         # lib/system/certs.c:49 error: variably modified 'bytes' at file scope
         export CC=clang
@@ -1515,7 +1515,7 @@ function do_npth()
       export CXXFLAGS="${XBB_CXXFLAGS}"
       export LDFLAGS="${XBB_LDFLAGS_LIB}"
 
-      if [ "${HOST_UNAME}" == "Darwin" ]
+      if is_darwin
       then
         # /usr/include/os/base.h:113:20: error: missing binary operator before token "("
         # #if __has_extension(attribute_overloadable)
@@ -1646,7 +1646,7 @@ function do_libxcrypt()
         # Build.
         make -j ${JOBS}
 
-        if [ "${HOST_UNAME}" == "Darwin" ]
+        if is_darwin
         then
           # macOS FAIL: test/symbols-static.sh
           # macOS FAIL: test/symbols-renames.sh

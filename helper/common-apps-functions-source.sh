@@ -200,7 +200,7 @@ function do_native_gcc()
           bash "${SOURCES_FOLDER_PATH}/${native_gcc_folder_name}/configure" --help
           bash "${SOURCES_FOLDER_PATH}/${native_gcc_folder_name}/gcc/configure" --help
 
-          if [ "${HOST_UNAME}" == "Darwin" ]
+          if is_darwin
           then
 
             # Fail on macOS
@@ -237,7 +237,7 @@ function do_native_gcc()
               --disable-werror \
               --disable-bootstrap \
 
-          else [ "${HOST_UNAME}" == "Linux" ]
+          else is_linux
 
             # The Linux build also uses:
             # --with-linker-hash-style=gnu
@@ -997,7 +997,7 @@ function do_openssl()
           echo "Running openssl configure..."
 
           echo
-          if [ "${HOST_UNAME}" == "Darwin" ]
+          if is_darwin
           then
 
             # Older versions do not support the KERNEL_BITS trick and require
@@ -1393,7 +1393,7 @@ function do_tar()
         then
           #  92: link mismatch FAILED (difflink.at:19)
           make check || true
-        elif [ "${HOST_UNAME}" == "Darwin" ]
+        elif is_darwin
         then
           # 92: link mismatch FAILED (difflink.at:19)
           # 175: remove-files with compression FAILED (remfiles01.at:32)
@@ -1467,7 +1467,7 @@ function do_coreutils()
       export LDFLAGS="${XBB_LDFLAGS_APP_STATIC_GCC}"
 
       # Use Apple GCC, since with GNU GCC it fails with some undefined symbols.
-      if [ "${HOST_UNAME}" == "Darwin" ]
+      if is_darwin
       then
         # Undefined symbols for architecture x86_64:
         # "_rpl_fchownat", referenced from:
@@ -1491,7 +1491,7 @@ function do_coreutils()
           fi
 
           config_options=()
-          if [ "${HOST_UNAME}" == "Darwin" ]
+          if is_darwin
           then
             config_options+=("--enable-no-install-program=ar")
           fi
@@ -1619,7 +1619,7 @@ function do_pkg_config()
       export CXXFLAGS="${XBB_CXXFLAGS}"
       export LDFLAGS="${XBB_LDFLAGS_APP_STATIC_GCC}"
 
-      if [ "${HOST_UNAME}" == "Darwin" ]
+      if is_darwin
       then
         # error: variably modified 'bytes' at file scope
         export CC=clang
@@ -2505,7 +2505,7 @@ function do_bison()
       export CXXFLAGS="${XBB_CXXFLAGS}"
       export LDFLAGS="${XBB_LDFLAGS_APP_STATIC_GCC}"
 
-      if [ "${HOST_UNAME}" == "Linux" ]
+      if is_linux
       then
         # undefined reference to `clock_gettime' on docker
         export LIBS="-lrt"
@@ -2922,7 +2922,7 @@ function do_texinfo()
         # Darwin: FAIL: t/94htmlxref.t 11 - htmlxref errors file_html
         # Darwin: ERROR: t/94htmlxref.t - exited with status 2
 
-        if [ "${HOST_UNAME}" == "Darwin" ]
+        if is_darwin
         then
           make check || true
         else
@@ -2990,7 +2990,7 @@ function do_cmake()
       export CXXFLAGS="${XBB_CXXFLAGS}"
       export LDFLAGS="${XBB_LDFLAGS_APP_STATIC_GCC}"
 
-      if [ "${HOST_UNAME}" == "Darwin" ]
+      if is_darwin
       then
         # error: variably modified 'bytes' at file scope
         export CC=clang
@@ -3545,7 +3545,7 @@ function do_python2()
       export CXXFLAGS="${XBB_CXXFLAGS}"
       export LDFLAGS="${XBB_LDFLAGS_APP_STATIC_GCC}"
 
-      if [ "${HOST_UNAME}" == "Darwin" ]
+      if is_darwin
       then
         # error: variably modified 'bytes' at file scope
         export CC=clang
@@ -3602,7 +3602,7 @@ function do_python2()
         # make install-strip
         make install
 
-        if [ "${HOST_UNAME}" == "Darwin" ]
+        if is_darwin
         then
           strip "${INSTALL_FOLDER_PATH}/bin/python"
         else
@@ -3680,7 +3680,7 @@ function do_python3()
 
       xbb_activate
 
-      if [ "${HOST_UNAME}" == "Darwin" ]
+      if is_darwin
       then
         # GCC fails with:
         # error: variably modified 'bytes' at file scope
@@ -3755,7 +3755,7 @@ function do_python3()
         # make install-strip
         make install
 
-        if [ "${HOST_UNAME}" == "Darwin" ]
+        if is_darwin
         then
           strip "${INSTALL_FOLDER_PATH}/bin/python3"
         else
@@ -3861,7 +3861,7 @@ function do_scons()
 
       echo
       which python
-      if [ "${HOST_UNAME}" == "Darwin" ]
+      if is_darwin
       then
         PYTHONPATH="${INSTALL_FOLDER_PATH}/lib/python2.7/site-packages"
         export PYTHONPATH
@@ -4049,7 +4049,7 @@ function do_p7zip()
       # Build.
       make -j ${JOBS}
 
-      if [ "${HOST_UNAME}" == "Darwin" ]
+      if is_darwin
       then
         # 7z cannot load library on macOS.
         make test
@@ -4074,7 +4074,7 @@ function do_p7zip()
       echo
       run_app "${INSTALL_FOLDER_PATH}/bin/7za" --help
 
-      if [ "${HOST_UNAME}" == "Linux" ]
+      if is_linux
       then
         echo
         run_app "${INSTALL_FOLDER_PATH}/bin/7z" --help
@@ -4336,7 +4336,7 @@ function do_gnupg()
       export CFLAGS="${XBB_CFLAGS}"
       export CXXFLAGS="${XBB_CXXFLAGS}"
       export LDFLAGS="${XBB_LDFLAGS_APP_STATIC_GCC}"
-      if [ "${HOST_UNAME}" == "Linux" ]
+      if is_linux
       then
         export LIBS="-lrt"
       fi
