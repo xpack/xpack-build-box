@@ -191,7 +191,7 @@ function do_build_versions()
     # error: [Errno 54] Connection reset by peer
     # 0:05:27 load avg: 1.64 [311/400] test_startfile -- test_ssl failed (env changed)
 
-    if is_linux
+    if true # is_linux
     then
       # There are several errors on macOS 10.10 and some tests fail.                                           
       # depends=('bzip2' 'gdbm' 'openssl' 'zlib' 'expat' 'sqlite' 'libffi')
