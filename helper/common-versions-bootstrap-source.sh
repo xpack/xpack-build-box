@@ -95,7 +95,8 @@ function do_build_versions()
     # macOS 10.10 uses 2.5.3, an update is not mandatory.
     # Ubuntu 12 uses 2.5.35, an update is not mandatory.
     # depends=('glibc' 'm4' 'sh')
-    do_flex "2.6.3" # "2.6.4" fails
+    # PATCH!
+    do_flex "2.6.4" # "2.6.3" fails
 
     # depends=()
     # Not needed, possibly harmful for GCC 9.
