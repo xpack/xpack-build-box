@@ -2613,7 +2613,8 @@ function do_flex()
   # On Ubuntu 18 it crashes (due to an autotool issue) with 
   # ./stage1flex   -o stage1scan.c /home/ilg/Work/xbb-bootstrap/sources/flex-2.6.4/src/scan.l
   # make[2]: *** [Makefile:1696: stage1scan.c] Segmentation fault (core dumped)
-  # The patch should fix it.
+  # The patch from Arch should fix it.
+  # https://archlinuxarm.org/packages/aarch64/flex/files/flex-pie.patch
   
   local flex_version="$1"
 
@@ -2629,13 +2630,18 @@ function do_flex()
 
     cd "${SOURCES_FOLDER_PATH}"
 
-    download_and_extract "${flex_url}" "${flex_archive}" "${flex_folder_name}"
+    download_and_extract "${flex_url}" "${flex_archive}" "${flex_folder_name}" "${flex_patch_file_path}"
 
     (
       cd "${SOURCES_FOLDER_PATH}/${flex_folder_name}"
-      if [ ! -x "configure" ]
+      if [ ! -f "stamp-autogen" ]
       then
-        bash ${DEBUG} "autogen.sh"
+
+        xbb_activate
+        
+        run_app bash ${DEBUG} "autogen.sh"
+
+        touch "stamp-autogen"
       fi
     )
 
