@@ -8,56 +8,37 @@ docker system prune -f
 # ubuntu:18.04 - bionic - 2018-2028, 2.27
 # ubuntu:20.04 - focal - 2020-2-30, ?
 
-bash ~/Downloads/xpack-build-box.git/ubuntu/12/amd64-build.sh
-bash ~/Downloads/xpack-build-box.git/ubuntu/12/i386-build.sh
-bash ~/Downloads/xpack-build-box.git/ubuntu/14/amd64-build.sh
-bash ~/Downloads/xpack-build-box.git/ubuntu/14/i386-build.sh
-bash ~/Downloads/xpack-build-box.git/ubuntu/16/amd64-build.sh
-bash ~/Downloads/xpack-build-box.git/ubuntu/16/i386-build.sh
-bash ~/Downloads/xpack-build-box.git/ubuntu/18/amd64-build.sh
-bash ~/Downloads/xpack-build-box.git/ubuntu/18/i386-build.sh
+function do_one()
+{
+  local version=$1
+  local arch=$2
 
-bash ~/Downloads/xpack-build-box.git/ubuntu/12-updated/amd64-build-v3.1.sh
-bash ~/Downloads/xpack-build-box.git/ubuntu/12-updated/i386-build-v3.1.sh
-bash ~/Downloads/xpack-build-box.git/ubuntu/14-updated/amd64-build-v3.1.sh
-bash ~/Downloads/xpack-build-box.git/ubuntu/14-updated/i386-build-v3.1.sh
-bash ~/Downloads/xpack-build-box.git/ubuntu/16-updated/amd64-build-v3.1.sh
-bash ~/Downloads/xpack-build-box.git/ubuntu/16-updated/i386-build-v3.1.sh
-bash ~/Downloads/xpack-build-box.git/ubuntu/18-updated/amd64-build-v3.1.sh
-bash ~/Downloads/xpack-build-box.git/ubuntu/18-updated/i386-build-v3.1.sh
+  if true
+  then
+    bash ~/Downloads/xpack-build-box.git/ubuntu/${version}/${arch}-build.sh
+    docker push "ilegeul/ubuntu:${arch}-${version}.04"
+    bash ~/Downloads/xpack-build-box.git/ubuntu/${version}-updated/${arch}-build-v3.1.sh
+    docker push "ilegeul/ubuntu:${arch}-${version}.04-updated-v3.1"
+    bash ~/Downloads/xpack-build-box.git/ubuntu/${version}-develop/${arch}-build-v3.1.sh
+    docker push "ilegeul/ubuntu:${arch}-${version}.04-develop-v3.1"
+    bash ~/Downloads/xpack-build-box.git/ubuntu/${version}-tex/${arch}-build-v3.1.sh
+    docker push "ilegeul/ubuntu:${arch}-${version}.04-tex-v3.1"
+  fi
 
-bash ~/Downloads/xpack-build-box.git/ubuntu/12-develop/amd64-build-v3.1.sh
-bash ~/Downloads/xpack-build-box.git/ubuntu/12-develop/i386-build-v3.1.sh
-bash ~/Downloads/xpack-build-box.git/ubuntu/14-develop/amd64-build-v3.1.sh
-bash ~/Downloads/xpack-build-box.git/ubuntu/14-develop/i386-build-v3.1.sh
-bash ~/Downloads/xpack-build-box.git/ubuntu/16-develop/amd64-build-v3.1.sh
-bash ~/Downloads/xpack-build-box.git/ubuntu/16-develop/i386-build-v3.1.sh
-bash ~/Downloads/xpack-build-box.git/ubuntu/18-develop/amd64-build-v3.1.sh
-bash ~/Downloads/xpack-build-box.git/ubuntu/18-develop/i386-build-v3.1.sh
+  bash ~/Downloads/xpack-build-box.git/ubuntu/${version}-bootstrap/${arch}-build-v3.1.sh
+  docker push "ilegeul/ubuntu:${arch}-${version}.04-bootstrap-v3.1"
+  bash ~/Downloads/xpack-build-box.git/ubuntu/${version}-xbb/${arch}-build-v3.1.sh
+  docker push "ilegeul/ubuntu:${arch}-${version}.04-xbb-v3.1"
+}
 
-bash ~/Downloads/xpack-build-box.git/ubuntu/12-tex/amd64-build-v3.1.sh
-bash ~/Downloads/xpack-build-box.git/ubuntu/12-tex/i386-build-v3.1.sh
-bash ~/Downloads/xpack-build-box.git/ubuntu/14-tex/amd64-build-v3.1.sh
-bash ~/Downloads/xpack-build-box.git/ubuntu/14-tex/i386-build-v3.1.sh
-bash ~/Downloads/xpack-build-box.git/ubuntu/16-tex/amd64-build-v3.1.sh
-bash ~/Downloads/xpack-build-box.git/ubuntu/16-tex/i386-build-v3.1.sh
-bash ~/Downloads/xpack-build-box.git/ubuntu/18-tex/amd64-build-v3.1.sh
-bash ~/Downloads/xpack-build-box.git/ubuntu/18-tex/i386-build-v3.1.sh
+time do_one 12 amd64
+time do_one 12 i386
 
-bash ~/Downloads/xpack-build-box.git/ubuntu/12-bootstrap/amd64-build-v3.1.sh
-bash ~/Downloads/xpack-build-box.git/ubuntu/12-bootstrap/i386-build-v3.1.sh
-bash ~/Downloads/xpack-build-box.git/ubuntu/14-bootstrap/amd64-build-v3.1.sh
-bash ~/Downloads/xpack-build-box.git/ubuntu/14-bootstrap/i386-build-v3.1.sh
-bash ~/Downloads/xpack-build-box.git/ubuntu/16-bootstrap/amd64-build-v3.1.sh
-bash ~/Downloads/xpack-build-box.git/ubuntu/16-bootstrap/i386-build-v3.1.sh
-bash ~/Downloads/xpack-build-box.git/ubuntu/18-bootstrap/amd64-build-v3.1.sh
-bash ~/Downloads/xpack-build-box.git/ubuntu/18-bootstrap/i386-build-v3.1.sh
+time do_one 14 amd64
+time do_one 14 i386
 
-bash ~/Downloads/xpack-build-box.git/ubuntu/12-xbb/amd64-build-v3.1.sh
-bash ~/Downloads/xpack-build-box.git/ubuntu/12-xbb/i386-build-v3.1.sh
-bash ~/Downloads/xpack-build-box.git/ubuntu/14-xbb/amd64-build-v3.1.sh
-bash ~/Downloads/xpack-build-box.git/ubuntu/14-xbb/i386-build-v3.1.sh
-bash ~/Downloads/xpack-build-box.git/ubuntu/16-xbb/amd64-build-v3.1.sh
-bash ~/Downloads/xpack-build-box.git/ubuntu/16-xbb/i386-build-v3.1.sh
-bash ~/Downloads/xpack-build-box.git/ubuntu/18-xbb/amd64-build-v3.1.sh
-bash ~/Downloads/xpack-build-box.git/ubuntu/18-xbb/i386-build-v3.1.sh
+time do_one 16 amd64
+time do_one 16 i386
+
+time do_one 18 amd64
+time do_one 18 i386

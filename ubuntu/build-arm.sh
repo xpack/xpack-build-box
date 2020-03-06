@@ -8,33 +8,31 @@ docker system prune -f
 # ubuntu:18.04 - bionic - 2018-2028, 2.27
 # ubuntu:20.04 - focal - 2020-2-30, ?
 
-bash ~/Downloads/xpack-build-box.git/ubuntu/16/arm64v8-build.sh
-bash ~/Downloads/xpack-build-box.git/ubuntu/16/arm32v7-build.sh
-bash ~/Downloads/xpack-build-box.git/ubuntu/18/arm64v8-build.sh
-bash ~/Downloads/xpack-build-box.git/ubuntu/18/arm32v7-build.sh
+function do_one()
+{
+  local version=$1
+  local arch=$2
 
-bash ~/Downloads/xpack-build-box.git/ubuntu/16-updated/arm64v8-build-v3.1.sh
-bash ~/Downloads/xpack-build-box.git/ubuntu/16-updated/arm32v7-build-v3.1.sh
-bash ~/Downloads/xpack-build-box.git/ubuntu/18-updated/arm64v8-build-v3.1.sh
-bash ~/Downloads/xpack-build-box.git/ubuntu/18-updated/arm32v7-build-v3.1.sh
+  if true
+  then
+    bash ~/Downloads/xpack-build-box.git/ubuntu/${version}/${arch}-build.sh
+    docker push "ilegeul/ubuntu:${arch}-${version}.04"
+    bash ~/Downloads/xpack-build-box.git/ubuntu/${version}-updated/${arch}-build-v3.1.sh
+    docker push "ilegeul/ubuntu:${arch}-${version}.04-updated-v3.1"
+    bash ~/Downloads/xpack-build-box.git/ubuntu/${version}-develop/${arch}-build-v3.1.sh
+    docker push "ilegeul/ubuntu:${arch}-${version}.04-develop-v3.1"
+    bash ~/Downloads/xpack-build-box.git/ubuntu/${version}-tex/${arch}-build-v3.1.sh
+    docker push "ilegeul/ubuntu:${arch}-${version}.04-tex-v3.1"
+  fi
 
-bash ~/Downloads/xpack-build-box.git/ubuntu/16-develop/arm64v8-build-v3.1.sh
-bash ~/Downloads/xpack-build-box.git/ubuntu/16-develop/arm32v7-build-v3.1.sh
-bash ~/Downloads/xpack-build-box.git/ubuntu/18-develop/arm64v8-build-v3.1.sh
-bash ~/Downloads/xpack-build-box.git/ubuntu/18-develop/arm32v7-build-v3.1.sh
+  bash ~/Downloads/xpack-build-box.git/ubuntu/${version}-bootstrap/${arch}-build-v3.1.sh
+  docker push "ilegeul/ubuntu:${arch}-${version}.04-bootstrap-v3.1"
+  bash ~/Downloads/xpack-build-box.git/ubuntu/${version}-xbb/${arch}-build-v3.1.sh
+  docker push "ilegeul/ubuntu:${arch}-${version}.04-xbb-v3.1"
+}
 
-bash ~/Downloads/xpack-build-box.git/ubuntu/16-tex/arm64v8-build-v3.1.sh
-bash ~/Downloads/xpack-build-box.git/ubuntu/16-tex/arm32v7-build-v3.1.sh
-bash ~/Downloads/xpack-build-box.git/ubuntu/18-tex/arm64v8-build-v3.1.sh
-bash ~/Downloads/xpack-build-box.git/ubuntu/18-tex/arm32v7-build-v3.1.sh
+time do_one 16 arm64v8
+time do_one 16 arm32v7
 
-bash ~/Downloads/xpack-build-box.git/ubuntu/16-bootstrap/arm64v8-build-v3.1.sh
-bash ~/Downloads/xpack-build-box.git/ubuntu/16-bootstrap/arm32v7-build-v3.1.sh
-bash ~/Downloads/xpack-build-box.git/ubuntu/18-bootstrap/arm64v8-build-v3.1.sh
-bash ~/Downloads/xpack-build-box.git/ubuntu/18-bootstrap/arm32v7-build-v3.1.sh
-
-bash ~/Downloads/xpack-build-box.git/ubuntu/16-xbb/arm64v8-build-v3.1.sh
-bash ~/Downloads/xpack-build-box.git/ubuntu/16-xbb/arm32v7-build-v3.1.sh
-bash ~/Downloads/xpack-build-box.git/ubuntu/18-xbb/arm64v8-build-v3.1.sh
-bash ~/Downloads/xpack-build-box.git/ubuntu/18-xbb/arm32v7-build-v3.1.sh
-
+time do_one 18 arm64v8
+time do_one 18 arm32v7
