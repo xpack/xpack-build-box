@@ -176,11 +176,12 @@ function do_native_gcc()
       CXXFLAGS="${XBB_CXXFLAGS} -Wno-sign-compare -Wno-varargs -Wno-tautological-compare -Wno-format -Wno-abi -Wno-type-limits"
       LDFLAGS="${XBB_LDFLAGS_APP_STATIC_GCC}"
 
-      if [ "${CC}" == "clang" ]
+      if [[ "${CC}" =~ clang* ]]
       then
         CFLAGS+=" -Wno-mismatched-tags -Wno-array-bounds -Wno-null-conversion -Wno-extended-offsetof -Wno-c99-extensions -Wno-keyword-macro -Wno-unused-function" 
         CXXFLAGS+=" -Wno-mismatched-tags -Wno-array-bounds -Wno-null-conversion -Wno-extended-offsetof -Wno-keyword-macro -Wno-unused-function" 
-      else
+      elif [[ "${CC}" =~ gcc* ]]
+      then
         CFLAGS+=" -Wno-cast-function-type -Wno-maybe-uninitialized"
         CXXFLAGS+=" -Wno-cast-function-type -Wno-maybe-uninitialized"
       fi
@@ -3136,11 +3137,21 @@ function do_perl()
 
       xbb_activate
 
-      export CPPFLAGS="${XBB_CPPFLAGS}"
+      CPPFLAGS="${XBB_CPPFLAGS}"
       # -Wno-null-pointer-arithmetic 
-      export CFLAGS="${XBB_CFLAGS}  -Wno-nonnull -Wno-format -Wno-sign-compare  -Wno-unused-result -Wno-nonnull-compare -Wno-unused-value -Wno-misleading-indentation -Wno-unused-const-variable -Wno-unused-but-set-variable -Wno-cast-function-type  -Wno-clobbered -Wno-int-in-bool-context -Wno-implicit-fallthrough"
-      export CXXFLAGS="${XBB_CXXFLAGS}"
-      export LDFLAGS="${XBB_LDFLAGS_APP_STATIC_GCC}"
+      CFLAGS="${XBB_CFLAGS}  -Wno-nonnull -Wno-format -Wno-sign-compare  -Wno-unused-result -Wno-nonnull-compare -Wno-unused-value -Wno-unused-const-variable -Wno-cast-function-type  -Wno-clobbered -Wno-int-in-bool-context -Wno-implicit-fallthrough"
+      CXXFLAGS="${XBB_CXXFLAGS}"
+      LDFLAGS="${XBB_LDFLAGS_APP_STATIC_GCC}"
+
+      if [[ "${CC}" =~ gcc* ]]
+      then
+         CFLAGS+=" -Wno-unused-but-set-variable -Wno-misleading-indentation"
+      fi
+
+      export CPPFLAGS
+      export CFLAGS
+      export CXXFLAGS
+      export LDFLAGS
 
       if [ ! -f "config.h" ]
       then
@@ -3222,7 +3233,6 @@ function do_makedepend()
   local makedepend_archive="${makedepend_folder_name}.tar.bz2"
   local makedepend_url="http://xorg.freedesktop.org/archive/individual/util/${makedepend_archive}"
   
-
   local makedepend_stamp_file_path="${STAMPS_FOLDER_PATH}/stamp-makedepend-${makedepend_version}-installed"
   if [ ! -f "${makedepend_stamp_file_path}" -o ! -d "${BUILD_FOLDER_PATH}/${makedepend_folder_name}" ]
   then
@@ -3237,11 +3247,22 @@ function do_makedepend()
 
       xbb_activate
 
-      export CPPFLAGS="${XBB_CPPFLAGS}"
-      export CFLAGS="${XBB_CFLAGS} -Wno-shadow -Wno-discarded-qualifiers"
-      export CXXFLAGS="${XBB_CXXFLAGS}"
-      export LDFLAGS="${XBB_LDFLAGS_APP_STATIC_GCC}"
-      export PKG_CONFIG_PATH="${INSTALL_FOLDER_PATH}/share/pkgconfig:${PKG_CONFIG_PATH}"
+      CPPFLAGS="${XBB_CPPFLAGS}"
+      CFLAGS="${XBB_CFLAGS} -Wno-shadow"
+      CXXFLAGS="${XBB_CXXFLAGS}"
+      LDFLAGS="${XBB_LDFLAGS_APP_STATIC_GCC}"
+      PKG_CONFIG_PATH="${INSTALL_FOLDER_PATH}/share/pkgconfig:${PKG_CONFIG_PATH}"
+
+      if [[ "${CC}" =~ gcc* ]]
+      then
+         CFLAGS+=" -Wno-discarded-qualifiers "
+      fi
+
+      export CPPFLAGS
+      export CFLAGS
+      export CXXFLAGS
+      export LDFLAGS
+      export PKG_CONFIG_PATH
 
       if [ ! -f "config.status" ]
       then
