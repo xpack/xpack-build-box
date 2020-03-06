@@ -222,6 +222,12 @@ $ git clone https://github.com/xpack/xpack-build-box.git \
   ~/Downloads/xpack-build-box.git
 ```
 
+### TODO
+
+- properly set the architecture for 32-bit images
+- build nodejs
+- build Python 3 in bootstrap
+
 ### Conclusions
 
 For Intel Linux, to preserve support for older distributions,
