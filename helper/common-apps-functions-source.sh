@@ -2591,7 +2591,6 @@ function do_bison()
   fi
 }
 
-# Not functional, it requires libtoolize
 function do_flex() 
 {
   # https://www.gnu.org/software/flex/
@@ -2605,17 +2604,24 @@ function do_flex()
   # Ubuntu 12 uses 2.5.35
 
   # 30 Dec 2016, "2.6.3"
+  # On Ubuntu 18, it fails while building wine with
+  # /opt/xbb/lib/gcc/x86_64-w64-mingw32/9.2.0/../../../../x86_64-w64-mingw32/bin/ld: macro.lex.yy.cross.o: in function `yylex':
+  # /root/Work/xbb-3.1-ubuntu-18.04-x86_64/build/wine-5.1/programs/winhlp32/macro.lex.yy.c:1031: undefined reference to `yywrap'
+  # collect2: error: ld returned 1 exit status
+  
   # May 6, 2017, "2.6.4" (latest)
   # On Ubuntu 18 it crashes (due to an autotool issue) with 
   # ./stage1flex   -o stage1scan.c /home/ilg/Work/xbb-bootstrap/sources/flex-2.6.4/src/scan.l
   # make[2]: *** [Makefile:1696: stage1scan.c] Segmentation fault (core dumped)
+  # The patch should fix it.
   
   local flex_version="$1"
 
   local flex_folder_name="flex-${flex_version}"
   local flex_archive="${flex_folder_name}.tar.gz"
   local flex_url="https://github.com/westes/flex/releases/download/v${flex_version}/${flex_archive}"
-  # local flex_url="https://github.com/westes/flex/releases/download/v${flex_version}/libs/${flex_archive}"
+
+  local flex_patch_file_path="${helper_folder_path}/patches/${flex_folder_name}.patch"
 
   local flex_stamp_file_path="${STAMPS_FOLDER_PATH}/stamp-flex-${flex_version}-installed"
   if [ ! -f "${flex_stamp_file_path}" -o ! -d "${BUILD_FOLDER_PATH}/${flex_folder_name}" ]
@@ -4195,7 +4201,9 @@ function do_wine()
       cd "${BUILD_FOLDER_PATH}/${wine_folder_name}"
 
       xbb_activate
-      # Required to find the newly compiled mingw-w46.
+      # Required to find the newly compiled mingw-w46. 
+      # It also picks flex, which may crash with
+      # macro.lex.yy.c:1031: undefined reference to `yywrap'.
       xbb_activate_installed_bin
 
       export CPPFLAGS="${XBB_CPPFLAGS}" 
