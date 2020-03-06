@@ -33,15 +33,15 @@ The Arm Ubuntu 18 (bionic) distribution binaries are available
 from the ports server http://ports.ubuntu.com/.
 
 ```console
-$ mkdir -p "${HOME}/tmp/arm64-ubu18-rootfs"
-$ sudo debootstrap --verbose --arch=arm64 --variant=minbase bionic "${HOME}/tmp/arm64-ubu18-rootfs" http://ports.ubuntu.com/
-$ sudo tar cJvf "${HOME}/tmp/arm64-ubu18-rootfs.xz" -C "${HOME}/tmp/arm64-ubu18-rootfs" .
+$ mkdir -p "${HOME}/tmp/arm64v8-ubu18-rootfs"
+$ sudo debootstrap --verbose --arch=arm64 --variant=minbase bionic "${HOME}/tmp/arm64v8-ubu18-rootfs" http://ports.ubuntu.com/
+$ sudo tar cJvf "${HOME}/tmp/arm64v8-ubu18-rootfs.xz" -C "${HOME}/tmp/arm64v8-ubu18-rootfs" .
 ```
 
 ```console
-$ mkdir -p "${HOME}/tmp/armhf-ubu18-rootfs"
-$ sudo debootstrap --verbose --arch=armhf --variant=minbase bionic "${HOME}/tmp/armhf-ubu18-rootfs" http://ports.ubuntu.com/
-$ sudo tar cJvf "${HOME}/tmp/armhf-ubu18-rootfs.xz" -C "${HOME}/tmp/armhf-ubu18-rootfs" .
+$ mkdir -p "${HOME}/tmp/arm32v7-ubu18-rootfs"
+$ sudo debootstrap --verbose --arch=armhf --variant=minbase bionic "${HOME}/tmp/arm32v7-ubu18-rootfs" http://ports.ubuntu.com/
+$ sudo tar cJvf "${HOME}/tmp/arm32v7-ubu18-rootfs.xz" -C "${HOME}/tmp/arm32v7-ubu18-rootfs" .
 ```
 
 The result are several archives that were published at
@@ -49,8 +49,8 @@ https://github.com/xpack/xpack-build-box/releases/tag/rootfs/
 
 - https://github.com/xpack/xpack-build-box/releases/download/rootfs/amd64-ubu18-rootfs.xz
 - https://github.com/xpack/xpack-build-box/releases/download/rootfs/i386-ubu18-rootfs.xz
-- https://github.com/xpack/xpack-build-box/releases/download/rootfs/arm64-ubu18-rootfs.xz
-- https://github.com/xpack/xpack-build-box/releases/download/rootfs/armhf-ubu18-rootfs.xz
+- https://github.com/xpack/xpack-build-box/releases/download/rootfs/arm64v8-ubu18-rootfs.xz
+- https://github.com/xpack/xpack-build-box/releases/download/rootfs/arm32v7-ubu18-rootfs.xz
 
 ## Build Docker images
 
@@ -58,14 +58,14 @@ There are several scripts:
 
 - `amd64-build.sh` -> `ilegeul/ubuntu:amd64-18.04`
 - `i386-build.sh` -> `ilegeul/ubuntu:i386-18.04`
-- `arm64-build.sh` -> `ilegeul/ubuntu:arm64-18.04`
-- `armhf-build.sh` -> `ilegeul/ubuntu:armhf-18.04`
+- `arm64v8-build.sh` -> `ilegeul/ubuntu:arm64v8-18.04`
+- `arm32v7-build.sh` -> `ilegeul/ubuntu:arm32v7-18.04`
 
 ```console
 $ bash ~/Downloads/xpack-build-box.git/ubuntu/18/amd64-build.sh
 $ bash ~/Downloads/xpack-build-box.git/ubuntu/18/i386-build.sh
-$ bash ~/Downloads/xpack-build-box.git/ubuntu/18/arm64-build.sh
-$ bash ~/Downloads/xpack-build-box.git/ubuntu/18/armhf-build.sh
+$ bash ~/Downloads/xpack-build-box.git/ubuntu/18/arm64v8-build.sh
+$ bash ~/Downloads/xpack-build-box.git/ubuntu/18/arm32v7-build.sh
 
 $ docker images
 ```
@@ -109,7 +109,7 @@ The following tests were performed on an Ubuntu Server
 18.04 running on a Raspberry Pi 4B.
 
 ```console
-$ docker run --interactive --tty ilegeul/ubuntu:arm64-18.04
+$ docker run --interactive --tty ilegeul/ubuntu:arm64v8-18.04
 root@f57a7ff91fce:/# apt-get install -y lsb-release
 root@f57a7ff91fce:/# lsb_release -a
 No LSB modules are available.
@@ -124,7 +124,7 @@ exit
 ```
 
 ```console
-$ docker run --interactive --tty ilegeul/ubuntu:armhf-18.04
+$ docker run --interactive --tty ilegeul/ubuntu:arm32v7-18.04
 root@7ec385ddeb43:/# apt-get install -y lsb-release
 root@7ec385ddeb43:/# lsb_release -a
 No LSB modules are available.
@@ -145,6 +145,6 @@ To publish, use:
 ```console
 $ docker push "ilegeul/ubuntu:amd64-18.04"
 $ docker push "ilegeul/ubuntu:i386-18.04"
-$ docker push "ilegeul/ubuntu:arm64-18.04"
-$ docker push "ilegeul/ubuntu:armhf-18.04"
+$ docker push "ilegeul/ubuntu:arm64v8-18.04"
+$ docker push "ilegeul/ubuntu:arm32v7-18.04"
 ```

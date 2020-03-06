@@ -1,0 +1,13 @@
+FROM scratch
+
+LABEL description="Pristine Ubuntu 18.04 arm32v7 image, as resulted from debootstrap."
+LABEL maintainer="Liviu Ionescu <ilg@livius.net>"
+LABEL repository="https://github.com/xpack/xpack-build-box.git"
+LABEL docs="https://github.com/xpack/xpack-build-box/tree/master/ubuntu/18/README.md"
+
+ENTRYPOINT ["linux32"]
+
+ADD input/arm32v7-ubu18-rootfs.xz /
+RUN linux32 apt-get update && apt-get -y upgrade
+
+CMD ["/bin/bash"]

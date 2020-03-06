@@ -166,8 +166,8 @@ Support for Arm binaries was added in v3.1, in early 2020.
 
 The supported architectures are:
 
-- `arm64` - the ARMv8 64-bit architecture Aarch64
-- `armhl` - the ARMv7 32-bit architecture with hardware float
+- `arm64v8` - the ARMv8 64-bit architecture Aarch64
+- `arm32v7` - the ARMv7 32-bit architecture with hardware float (armhf)
 
 ## Distro versions
 

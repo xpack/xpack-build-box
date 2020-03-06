@@ -1,0 +1,11 @@
+FROM scratch
+
+LABEL description="Pristine Ubuntu 16.04 arm64v8 image, as resulted from debootstrap."
+LABEL maintainer="Liviu Ionescu <ilg@livius.net>"
+LABEL repository="https://github.com/xpack/xpack-build-box.git"
+LABEL docs="https://github.com/xpack/xpack-build-box/tree/master/ubuntu/16/README.md"
+
+ADD input/arm64v8-ubu16-rootfs.xz /
+RUN apt-get update && apt-get -y upgrade
+
+CMD ["/bin/bash"]
