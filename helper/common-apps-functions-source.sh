@@ -2248,11 +2248,20 @@ function do_gettext()
 
       xbb_activate
 
-      export CPPFLAGS="${XBB_CPPFLAGS}"
-      export CFLAGS="${XBB_CFLAGS} -Wno-format-security -Wno-discarded-qualifiers -Wno-format"
-      export CXXFLAGS="${XBB_CXXFLAGS}"
-      # export LDFLAGS="${XBB_LDFLAGS_APP_STATIC_GCC}"
-      export LDFLAGS="${XBB_LDFLAGS_APP_STATIC_GCC}"
+      CPPFLAGS="${XBB_CPPFLAGS}"
+      CFLAGS="${XBB_CFLAGS} -Wno-format-security -Wno-format"
+      CXXFLAGS="${XBB_CXXFLAGS}"
+      LDFLAGS="${XBB_LDFLAGS_APP_STATIC_GCC}"
+
+      if [[ "${CC}" =~ gcc* ]]
+      then
+         CFLAGS+=" -Wno-discarded-qualifiers "
+      fi
+
+      export CPPFLAGS
+      export CFLAGS
+      export CXXFLAGS
+      export LDFLAGS
 
       if [ ! -f "config.status" ]
       then
