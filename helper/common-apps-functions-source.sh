@@ -1392,9 +1392,15 @@ function do_tar()
         # It takes very long (220 tests).
         # arm64: 118: explicitly named directory removed before reading FAILED (dirrem02.at:34)
         # amd64: 92: link mismatch FAILED (difflink.at:19)
+        # 10.15
         # darwin: 92: link mismatch FAILED (difflink.at:19)
         # darwin: 175: remove-files with compression FAILED (remfiles01.at:32)
         # darwin: 176: remove-files with compression: grand-child FAILED (remfiles02.at:32)
+        # 10.10
+        # darwin: 172: sparse file truncated while archiving           FAILED (sptrcreat.at:36)
+        # darwin: 173: file truncated in sparse region while comparing FAILED (sptrdiff00.at:30)
+        # darwin: 174: file truncated in data region while comparing   FAILED (sptrdiff01.at:30)
+
         make check || true
 
         make install-strip
