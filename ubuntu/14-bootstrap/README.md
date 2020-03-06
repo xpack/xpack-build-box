@@ -1,6 +1,8 @@
 
 ## Build Docker images
 
+Please note that the Arm images proved to be unstable, and are not usable.
+
 There are several scripts:
 
 - `amd64-build-v3.1.sh` -> `ilegeul/ubuntu:amd64-14.04-bootstrap-v3.1`

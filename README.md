@@ -162,16 +162,12 @@ as long as Node.js still supports them via the
 
 ## Arm binaries
 
-Support for Arm binaries became available
-in early 2020.
+Support for Arm binaries was added in v3.1, in early 2020.
 
 The supported architectures are:
 
 - `arm64` - the ARMv8 64-bit architecture Aarch64
 - `armhl` - the ARMv7 32-bit architecture with hardware float
-
-The base distribution for building the Arm binaries is be Ubuntu 14.04 LTS
-(trusty), ldd 2.19.
 
 ## Distro versions
 
@@ -196,8 +192,8 @@ $ docker run -it <image> ldd --version
 
 - `ubuntu:10.04` - lucy - 2010-2015, 2.11.1
 - `ubuntu:12.04` - precise - 2012-2019, 2.15 <--- Intel Linux choice
-- `ubuntu:14.04` - trusty - 2014-2022, 2.19 <--- Arm Linux choice
-- `ubuntu:16.04` - xenial - 2016-2024, 2.23
+- `ubuntu:14.04` - trusty - 2014-2022, 2.19
+- `ubuntu:16.04` - xenial - 2016-2024, 2.23 <--- Arm Linux choice
 - `ubuntu:18.04` - bionic - 2018-2028, 2.27
 - `ubuntu:20.04` - focal - 2020-2-30, ?
 
@@ -229,9 +225,9 @@ $ git clone https://github.com/xpack/xpack-build-box.git \
 ### Conclusions
 
 For Intel Linux, to preserve support for older distributions,
-the **Ubuntu 12 precise** (2.15) distribution was selected.
+the **Ubuntu 12 (precise)** (2.15) distribution was selected.
 
 The binaries should also run on RHEL 7; support for RHEL 6 was discontinued.
 
-For Arm binaries, the base distribution is **Ubuntu 14.04 LTS trusty**,
-(2.19).
+For Arm binaries, the base distribution is **Ubuntu 16.04 LTS (xenial)**,
+(2.23).
