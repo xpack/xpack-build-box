@@ -151,7 +151,7 @@ function do_build_versions()
 
     # macOS 10.10 uses 2.5.3, an update is not mandatory.
     # depends=('glibc' 'm4' 'sh')
-    do_flex "2.6.4"
+    do_flex "2.6.3" # "2.6.4" fails
 
     if is_linux
     then
