@@ -1613,18 +1613,27 @@ function do_pkg_config()
 
       xbb_activate
 
-      export CPPFLAGS="${XBB_CPPFLAGS}"
-      # -Wno-sometimes-uninitialized -Wno-tautological-constant-out-of-range-compare 
-      export CFLAGS="${XBB_CFLAGS} -Wno-int-conversion -Wno-unused-value -Wno-unused-function -Wno-deprecated-declarations -Wno-return-type  -Wno-unused-but-set-variable"
-      export CXXFLAGS="${XBB_CXXFLAGS}"
-      export LDFLAGS="${XBB_LDFLAGS_APP_STATIC_GCC}"
-
       if is_darwin
       then
         # error: variably modified 'bytes' at file scope
         export CC=clang
         export CXX=clang++
       fi
+
+      CPPFLAGS="${XBB_CPPFLAGS}"
+      CFLAGS="${XBB_CFLAGS} -Wno-int-conversion -Wno-unused-value -Wno-unused-function -Wno-deprecated-declarations -Wno-return-type"
+      CXXFLAGS="${XBB_CXXFLAGS}"
+      LDFLAGS="${XBB_LDFLAGS_APP_STATIC_GCC}"
+
+      if [[ "${CC}" =~ gcc* ]]
+      then
+         CFLAGS+=" -Wno-unused-but-set-variable"
+      fi
+
+      export CPPFLAGS
+      export CFLAGS
+      export CXXFLAGS
+      export LDFLAGS
 
       if [ ! -f "config.status" ]
       then
