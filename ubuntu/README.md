@@ -201,44 +201,6 @@ docker push "ilegeul/ubuntu:i386-18.04-xbb-v3.1"
 The following sequences of commands were used on a Manjaro 20.02 Arm
 Linux (Aarch64):
 
-### Ubuntu 14 (trusty)
-
-```bash
-set -o errexit
-docker system prune -f
-bash ~/Downloads/xpack-build-box.git/ubuntu/14/arm64v8-build.sh
-bash ~/Downloads/xpack-build-box.git/ubuntu/14-updated/arm64v8-build-v3.1.sh
-bash ~/Downloads/xpack-build-box.git/ubuntu/14-develop/arm64v8-build-v3.1.sh
-bash ~/Downloads/xpack-build-box.git/ubuntu/14-tex/arm64v8-build-v3.1.sh
-bash ~/Downloads/xpack-build-box.git/ubuntu/14-bootstrap/arm64v8-build-v3.1.sh
-bash ~/Downloads/xpack-build-box.git/ubuntu/14-xbb/arm64v8-build-v3.1.sh
-
-docker push "ilegeul/ubuntu:arm64v8-14.04"
-docker push "ilegeul/ubuntu:arm64v8-14.04-updated-v3.1"
-docker push "ilegeul/ubuntu:arm64v8-14.04-develop-v3.1"
-docker push "ilegeul/ubuntu:arm64v8-14.04-tex-v3.1"
-docker push "ilegeul/ubuntu:arm64v8-14.04-bootstrap-v3.1"
-docker push "ilegeul/ubuntu:arm64v8-14.04-xbb-v3.1"
-```
-
-```bash
-set -o errexit
-docker system prune -f
-bash ~/Downloads/xpack-build-box.git/ubuntu/14/arm32v7-build.sh
-bash ~/Downloads/xpack-build-box.git/ubuntu/14-updated/arm32v7-build-v3.1.sh
-bash ~/Downloads/xpack-build-box.git/ubuntu/14-develop/arm32v7-build-v3.1.sh
-bash ~/Downloads/xpack-build-box.git/ubuntu/14-tex/arm32v7-build-v3.1.sh
-bash ~/Downloads/xpack-build-box.git/ubuntu/14-bootstrap/arm32v7-build-v3.1.sh
-bash ~/Downloads/xpack-build-box.git/ubuntu/14-xbb/arm32v7-build-v3.1.sh
-
-docker push "ilegeul/ubuntu:arm32v7-14.04"
-docker push "ilegeul/ubuntu:arm32v7-14.04-updated-v3.1"
-docker push "ilegeul/ubuntu:arm32v7-14.04-develop-v3.1"
-docker push "ilegeul/ubuntu:arm32v7-14.04-tex-v3.1"
-docker push "ilegeul/ubuntu:arm32v7-14.04-bootstrap-v3.1"
-docker push "ilegeul/ubuntu:arm32v7-14.04-xbb-v3.1"
-```
-
 ### Ubuntu 16 (xenial)
 
 ```bash
