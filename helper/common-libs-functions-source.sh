@@ -662,6 +662,19 @@ function do_libffi()
     download_and_extract "${libffi_url}" "${libffi_archive}" "${libffi_folder_name}"
 
     (
+      if [ ! -x "{SOURCES_FOLDER_PATH}/${libffi_folder_name}/configure" ]
+      then
+
+        cd "${SOURCES_FOLDER_PATH}/${libffi_folder_name}"
+        
+        xbb_activate
+
+        run_app bash ${DEBUG} "autogen.sh"
+
+      fi
+    ) 2>&1 | tee "${LOGS_FOLDER_PATH}/autogen-libffi-output.txt"
+
+    (
       mkdir -p "${LIBS_BUILD_FOLDER_PATH}/${libffi_folder_name}"
       cd "${LIBS_BUILD_FOLDER_PATH}/${libffi_folder_name}"
 
