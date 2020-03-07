@@ -637,21 +637,25 @@ function do_expat()
 
 function do_libffi() 
 {
-  # https://sourceware.org/libffi/
-  # https://sourceware.org/pub/libffi/
+  # https://github.com/libffi/libffi
+  # https://sourceware.org/libffi/ (deprecated?)
 
   # https://archlinuxarm.org/packages/aarch64/libffi/files/PKGBUILD
   # https://aur.archlinux.org/cgit/aur.git/tree/PKGBUILD?h=libffi-git
 
-  # 12-Nov-2014, "3.2.1", latest
+  # https://github.com/libffi/libffi/archive/v3.2.1.tar.gz
+
+  # 12-Nov-2014, "3.2.1", latest on sourceware.org
+  # 23 Nov 2019, "3.3"
 
   local libffi_version="$1"
 
   local libffi_folder_name="libffi-${libffi_version}"
   # .gz only.
-  local libffi_archive="${libffi_folder_name}.tar.gz"
+  local libffi_archive="v${libffi_version}.tar.gz"
   # local libffi_url="ftp://ftp.gnu.org/gnu/libffi/${libffi_archive}"
-  local libffi_url="https://sourceware.org/pub/libffi/${libffi_archive}"
+  # local libffi_url="https://sourceware.org/pub/libffi/${libffi_archive}"
+  local libffi_url="https://github.com/libffi/libffi/archive/${libffi_archive}"
 
   local libffi_stamp_file_path="${STAMPS_FOLDER_PATH}/stamp-libffi-${libffi_version}-installed"
   if [ ! -f "${libffi_stamp_file_path}" -o ! -d "${LIBS_BUILD_FOLDER_PATH}/${libffi_folder_name}" ]
