@@ -2642,7 +2642,7 @@ function do_flex()
 
         touch "stamp-autogen"
       fi
-    )
+    ) 2>&1 | tee "${LOGS_FOLDER_PATH}/autogen-flex-output.txt"
 
     (
       mkdir -p "${BUILD_FOLDER_PATH}/${flex_folder_name}"
