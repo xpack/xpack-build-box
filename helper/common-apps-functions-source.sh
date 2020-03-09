@@ -1938,6 +1938,7 @@ function do_sed()
 
         # Some tests fail due to missing locales.
         # x86_64: FAIL: testsuite/panic-tests.sh
+        # darwin: FAIL: testsuite/subst-mb-incomplete.sh
         make check || true
 
         make install-strip
