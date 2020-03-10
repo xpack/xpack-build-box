@@ -331,6 +331,7 @@ function docker_install_develop()
   bzip2 \
   ca-certificates \
   cmake \
+  cpio \
   curl \
   diffutils \
   file \
@@ -349,6 +350,9 @@ function docker_install_develop()
   pkg-config \
   python \
   python3 \
+  re2c \
+  rhash \
+  rsync \
   tcl \
   time \
   unzip \
