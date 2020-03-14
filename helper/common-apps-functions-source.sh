@@ -246,11 +246,22 @@ function do_native_gcc()
             # --enable-clocale=gnu 
             # --enable-install-libiberty 
 
+            # Ubuntu also used:
+            # --enable-libstdcxx-debug 
+            # --enable-libstdcxx-time=yes (liks librt)
+            # --with-default-libstdcxx-abi=new (default)
+
             config_options=()
             if [ "${HOST_MACHINE}" == "aarch64" ]
             then
+              config_options+=("--with-arch=armv8-a")
               config_options+=("--enable-fix-cortex-a53-835769")
               config_options+=("--enable-fix-cortex-a53-843419")
+            elif [ "${HOST_MACHINE}" == "armv7l" -o "${HOST_MACHINE}" == "armv8l" ]
+            then
+              config_options+=("--with-arch=armv7-a")
+              config_options+=("--with-float=hard")
+              config_options+=("--with-fpu=vfpv3-d16")
             fi
 
             set +u
