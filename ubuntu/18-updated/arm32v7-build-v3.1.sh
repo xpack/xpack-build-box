@@ -45,12 +45,17 @@ source "${helper_folder_path}/common-docker-functions-source.sh"
 host_init_docker_env
 host_init_docker_input
 
-arch="arm32v7"
-tag="ilegeul/ubuntu:${arch}-18.04-updated-v3.1"
+version="3.1"
+layer="updated"
 
-echo 
-echo "Building Docker image ${tag}..."
-docker build --tag "${tag}" -f "${arch}-Dockerfile-v3.1" .
+arch="arm32v7"
+distro="ubuntu"
+release="18.04"
+
+tag="ilegeul/${distro}:${arch}-${release}-${layer}-v${version}"
+dockerfile="${arch}-Dockerfile-v${version}"
+
+host_run_docker_build "${tag}" "${dockerfile}"
 
 host_clean_docker_input
 

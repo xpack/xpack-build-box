@@ -46,10 +46,17 @@ host_init_docker_env
 host_init_docker_input \
   "$(dirname $(dirname "${script_folder_path}"))/ca-bundle/ca-bundle.crt" \
 
-arch="arm64v8"
-tag="ilegeul/ubuntu:arm64v8-16.04-bootstrap-v3.1"
+version="3.1"
+layer="bootstrap"
 
-host_run_docker_build
+arch="arm64v8"
+distro="ubuntu"
+release="16.04"
+
+tag="ilegeul/${distro}:${arch}-${release}-${layer}-v${version}"
+dockerfile="${arch}-Dockerfile-v${version}"
+
+host_run_docker_build "${tag}" "${dockerfile}"
 
 host_clean_docker_input
 

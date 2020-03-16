@@ -45,12 +45,17 @@ source "${helper_folder_path}/common-docker-functions-source.sh"
 host_init_docker_env
 host_init_docker_input
 
-arch="i386"
-tag="ilegeul/ubuntu:i386-16.04-tex-v3.1"
+version="3.1"
+layer="tex"
 
-echo 
-echo "Building Docker image ${tag}..."
-docker build --tag "${tag}" -f "${arch}-Dockerfile-v3.1" .
+arch="i386"
+distro="ubuntu"
+release="16.04"
+
+tag="ilegeul/${distro}:${arch}-${release}-${layer}-v${version}"
+dockerfile="${arch}-Dockerfile-v${version}"
+
+host_run_docker_build "${tag}" "${dockerfile}"
 
 host_clean_docker_input
 

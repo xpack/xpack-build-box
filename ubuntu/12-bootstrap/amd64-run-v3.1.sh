@@ -51,7 +51,7 @@ host_init_docker_input \
 arch="amd64"
 distro="ubuntu"
 release="12.04"
-from="ilegeul/${distro}:${arch}-${release}-tex-v3.1"
+from="ilegeul/${distro}:${arch}-${release}-tex-v${version}"
 name="xbb-bootstrap"
 
 host_run_docker_it
