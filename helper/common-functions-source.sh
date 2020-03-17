@@ -476,8 +476,6 @@ __EOF__
     fi
   fi
 
-  echo "export XBB_VERSION=\"${XBB_VERSION}\"" >> "${INSTALL_FOLDER_PATH}/xbb-source.sh"
-
   echo "export TEXLIVE_FOLDER_PATH=\"/opt/texlive\"" >> "${INSTALL_FOLDER_PATH}/xbb-source.sh"
 
   if [ "${IS_BOOTSTRAP}" == "y" ]
