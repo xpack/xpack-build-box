@@ -988,8 +988,9 @@ function do_openssl()
   # 20 Dec 2019, "1.0.2u"
 
   local openssl_version="$1"
-  local openssl_version_major="$(echo ${openssl_version} | sed -e 's|\([0-9][0-9]*\)\.\([0-9][0-9]*\)|\1|')"
-  local openssl_version_minor="$(echo ${openssl_version} | sed -e 's|\([0-9][0-9]*\)\.\([0-9][0-9]*\)|\2|')"
+  # Numbers
+  local openssl_version_major=$(echo ${openssl_version} | sed -e 's|\([0-9][0-9]*\)\.\([0-9][0-9]*\)\..*|\1|')
+  local openssl_version_minor=$(echo ${openssl_version} | sed -e 's|\([0-9][0-9]*\)\.\([0-9][0-9]*\)\..*|\2|')
 
   local openssl_folder_name="openssl-${openssl_version}"
   local openssl_archive="${openssl_folder_name}.tar.gz"
@@ -1030,7 +1031,7 @@ function do_openssl()
             # Older versions do not support the KERNEL_BITS trick and require
             # the separate configurator.
 
-            if [ "${openssl_version_minor}" == "0" ]
+            if [ ${openssl_version_minor} -eq 0 ]
             then
 
               # This config does not use the standard GNU environment definitions.
@@ -1095,7 +1096,7 @@ function do_openssl()
 
             set -u
 
-            if [ "${openssl_version_minor}" == "0" ]
+            if [ ${openssl_version_minor} -eq 0 ]
             then
               make depend 
             fi
