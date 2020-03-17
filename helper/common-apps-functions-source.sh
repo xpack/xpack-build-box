@@ -515,6 +515,8 @@ function do_mingw_all()
   local mingw_version="$1"
   local mingw_gcc_version="$2"
 
+  # Number
+  local mingw_version_major=$(echo ${mingw_version} | sed -e 's|\([0-9][0-9]*\)\..*|\1|')
 
   # The original SourceForge location.
   local mingw_folder_name="mingw-w64-v${mingw_version}"
@@ -611,6 +613,9 @@ function do_mingw_all()
   # 2019-02-22, "8.3.0"
   # 2019-08-12, "9.2.0"
 
+  # Number
+  local mingw_gcc_version_major=$(echo ${mingw_gcc_version} | sed -e 's|\([0-9][0-9]*\)\..*|\1|')
+
   local mingw_gcc_folder_name="gcc-${mingw_gcc_version}"
   local mingw_gcc_archive="${mingw_gcc_folder_name}.tar.xz"
   local mingw_gcc_url="https://ftp.gnu.org/gnu/gcc/gcc-${mingw_gcc_version}/${mingw_gcc_archive}"
@@ -647,8 +652,16 @@ function do_mingw_all()
           bash "${SOURCES_FOLDER_PATH}/${mingw_gcc_folder_name}/configure" --help
           bash "${SOURCES_FOLDER_PATH}/${mingw_gcc_folder_name}/gcc/configure" --help
 
-          # Requires new GCC & mingw.
-          # --enable-libstdcxx-filesystem-ts=yes
+
+          config_options=()
+          if [ ${mingw_version_major} -ge 7 -a ${mingw_gcc_version} -ge 9 ]
+          then
+            # Requires new GCC 9 & mingw 7.
+            # --enable-libstdcxx-filesystem-ts=yes
+            config_options+=("--enable-libstdcxx-filesystem-ts=yes")
+          fi
+
+          set +u
 
           bash ${DEBUG} "${SOURCES_FOLDER_PATH}/${mingw_gcc_folder_name}/configure" \
             --prefix="${INSTALL_FOLDER_PATH}" \
@@ -665,13 +678,15 @@ function do_mingw_all()
             --enable-threads=posix \
             --enable-fully-dynamic-string \
             --enable-libstdcxx-time=yes \
-            --enable-libstdcxx-filesystem-ts=yes \
             --enable-cloog-backend=isl \
             --enable-lto \
             --enable-libgomp \
             --enable-checking=release \
             --disable-dw2-exceptions \
             --disable-multilib \
+            ${config_options[@]} \
+
+          set -u
 
           cp "config.log" "${LOGS_FOLDER_PATH}/config-mingw-gcc-step1-log.txt"
         ) 2>&1 | tee "${LOGS_FOLDER_PATH}/configure-mingw-gcc-step1-output.txt"
