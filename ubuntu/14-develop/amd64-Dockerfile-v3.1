@@ -5,8 +5,13 @@ LABEL maintainer="Liviu Ionescu <ilg@livius.net>"
 LABEL repository="https://github.com/xpack/xpack-build-box.git"
 LABEL docs="https://github.com/xpack/xpack-build-box/tree/master/ubuntu/14-develop/README.md"
 
+ARG DEBUG
+ARG JOBS
+
+ARG XBB_VERSION
+
 ADD input /input
-RUN DEBUG=-x bash /input/build-v3.1.sh
+RUN bash /input/build-v3.1.sh
 
 ENV LANG en_US.UTF-8
 ENV LANGUAGE en_US:en

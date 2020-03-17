@@ -128,13 +128,17 @@ function host_run_docker_it_bs()
 
 function host_run_docker_build()
 {
-  local tag="$1"
-  local dockerfile="$2"
+  local version="$1"
+  local tag="$2"
+  local dockerfile="$3"
 
   echo 
   echo "Building Docker image ${tag}..."
   docker build \
-    --build-arg RUN_LONG_TESTS \
+    --build-arg DEBUG="${DEBUG}" \
+    --build-arg JOBS="${JOBS:-$(nproc)}" \
+    --build-arg XBB_VERSION="${version}" \
+    --build-arg RUN_LONG_TESTS="${RUN_LONG_TESTS:-""}" \
     --tag "${tag}" \
     --file "${dockerfile}" \
     .

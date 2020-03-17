@@ -7,7 +7,13 @@ LABEL docs="https://github.com/xpack/xpack-build-box/tree/master/ubuntu/14-boots
 
 ENTRYPOINT ["linux32"]
 
+ARG DEBUG
+ARG JOBS
+
+ARG XBB_VERSION
+ARG RUN_LONG_TESTS
+
 ADD input /input
-RUN DEBUG= JOBS=$(nproc) linux32 bash /input/build-v3.1.sh
+RUN linux32 bash /input/build-v3.1.sh
 
 CMD ["/bin/bash"]

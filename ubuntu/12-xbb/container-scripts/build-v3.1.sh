@@ -35,8 +35,6 @@ script_folder_name="$(basename "${script_folder_path}")"
 # =============================================================================
 # This script creates the XBB bootstrap docker images.
 
-XBB_VERSION="3.1"
-
 WORK_FOLDER_PATH="${HOME}/Work"
 
 XBB_FOLDER_PATH="/opt/xbb"

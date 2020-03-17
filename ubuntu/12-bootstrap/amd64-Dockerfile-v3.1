@@ -5,7 +5,13 @@ LABEL maintainer="Liviu Ionescu <ilg@livius.net>"
 LABEL repository="https://github.com/xpack/xpack-build-box.git"
 LABEL docs="https://github.com/xpack/xpack-build-box/tree/master/ubuntu/12-bootstrap/README.md"
 
+ARG DEBUG
+ARG JOBS
+
+ARG XBB_VERSION
+ARG RUN_LONG_TESTS
+
 ADD input /input
-RUN DEBUG= JOBS=$(nproc) bash /input/build-v3.1.sh
+RUN bash /input/build-v3.1.sh
 
 CMD ["/bin/bash"]

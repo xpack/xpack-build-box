@@ -56,7 +56,7 @@ release="18.04"
 tag="ilegeul/${distro}:${arch}-${release}-${layer}-v${version}"
 dockerfile="${arch}-Dockerfile-v${version}"
 
-host_run_docker_build "${tag}" "${dockerfile}"
+host_run_docker_build "${version}" "${tag}" "${dockerfile}"
 
 host_clean_docker_input
 
