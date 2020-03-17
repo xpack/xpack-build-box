@@ -819,11 +819,12 @@ function do_gnutls()
   # 2019-12-02, "3.6.11.1"
 
   local gnutls_version="$1"
-  local gnutls_version_major="$(echo ${gnutls_version} | sed -e 's|\([0-9][0-9]*\.[0-9][0-9]*\)\.[0-9].*|\1|')"
+  # The first two digits.
+  local gnutls_version_major_minor="$(echo ${gnutls_version} | sed -e 's|\([0-9][0-9]*\.[0-9][0-9]*\)\.[0-9].*|\1|')"
 
   local gnutls_folder_name="gnutls-${gnutls_version}"
   local gnutls_archive="${gnutls_folder_name}.tar.xz"
-  local gnutls_url="https://www.gnupg.org/ftp/gcrypt/gnutls/v${gnutls_version_major}/${gnutls_archive}"
+  local gnutls_url="https://www.gnupg.org/ftp/gcrypt/gnutls/v${gnutls_version_major_minor}/${gnutls_archive}"
 
   local gnutls_stamp_file_path="${STAMPS_FOLDER_PATH}/stamp-gnutls-${gnutls_version}-installed"
   if [ ! -f "${gnutls_stamp_file_path}" -o ! -d "${LIBS_BUILD_FOLDER_PATH}/${gnutls_folder_name}" ]
