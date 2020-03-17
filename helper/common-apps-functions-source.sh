@@ -3913,7 +3913,7 @@ function do_scons()
   local scons_archive="${scons_folder_name}.tar.gz"
 
   local scons_url
-  scons_url"https://sourceforge.net/projects/scons/files/scons/${scons_version}/${scons_archive}"
+  scons_url="https://sourceforge.net/projects/scons/files/scons/${scons_version}/${scons_archive}"
 
   local scons_stamp_file_path="${STAMPS_FOLDER_PATH}/stamp-scons-${scons_version}-installed"
   if [ ! -f "${scons_stamp_file_path}" -o ! -d "${BUILD_FOLDER_PATH}/${scons_folder_name}" ]
