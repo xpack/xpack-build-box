@@ -652,21 +652,51 @@ function extract()
   fi
 }
 
+function _download_one()
+{
+  local url="$1"
+  local archive_name="$2"
+
+  echo
+  echo "Downloading \"${archive_name}\" from \"${url}\"..."
+  rm -f "${CACHE_FOLDER_PATH}/${archive_name}.download"
+  mkdir -p "${CACHE_FOLDER_PATH}"
+  curl --fail -L -o "${CACHE_FOLDER_PATH}/${archive_name}.download" "${url}"
+
+  # return true for process exit code 0.
+  return $?
+}
+
 function download()
 {
   local url="$1"
   local archive_name="$2"
+  local url_base="https://github.com/xpack-dev-tools/files-cache/raw/master/libs"
 
   if [ ! -f "${CACHE_FOLDER_PATH}/${archive_name}" ]
   then
     (
       xbb_activate
 
-      echo
-      echo "Downloading \"${archive_name}\" from \"${url}\"..."
-      rm -f "${CACHE_FOLDER_PATH}/${archive_name}.download"
-      mkdir -p "${CACHE_FOLDER_PATH}"
-      curl --fail -L -o "${CACHE_FOLDER_PATH}/${archive_name}.download" "${url}"
+      for count in 1 2 3 4
+      do
+        if [ ${count} -eq 4 ]
+        then
+          local backup_url="${url_base}/$(basename "${url}")"
+          if _download_one "${backup_url}" "${archive_name}" 
+          then
+            break
+          else
+            echo "Several download attempts failed. Quit."
+            exit 1
+          fi 
+        fi
+        if _download_one "${url}" "${archive_name}" 
+        then
+          break
+        fi
+      done
+
       mv "${CACHE_FOLDER_PATH}/${archive_name}.download" "${CACHE_FOLDER_PATH}/${archive_name}"
     )
   else
