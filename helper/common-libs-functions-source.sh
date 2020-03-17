@@ -652,10 +652,11 @@ function do_libffi()
 
   local libffi_folder_name="libffi-${libffi_version}"
   # .gz only.
-  local libffi_archive="v${libffi_version}.tar.gz"
+  local libffi_archive="${libffi_folder_name}.tar.gz"
   # local libffi_url="ftp://ftp.gnu.org/gnu/libffi/${libffi_archive}"
   # local libffi_url="https://sourceware.org/pub/libffi/${libffi_archive}"
-  local libffi_url="https://github.com/libffi/libffi/archive/${libffi_archive}"
+  # GitHub release archive.
+  local libffi_url="https://github.com/libffi/libffi/archive/v${libffi_version}.tar.gz"
 
   local libffi_stamp_file_path="${STAMPS_FOLDER_PATH}/stamp-libffi-${libffi_version}-installed"
   if [ ! -f "${libffi_stamp_file_path}" -o ! -d "${LIBS_BUILD_FOLDER_PATH}/${libffi_folder_name}" ]
@@ -1065,8 +1066,7 @@ function do_libpng()
 
   local libpng_folder_name="libpng-${libpng_version}"
   local libpng_archive="${libpng_folder_name}.tar.gz"
-  # local libpng_url="https://sourceforge.net/projects/libpng/files/libpng16/${libpng_version}/${libpng_archive}"
-  local libpng_url="https://github.com/xpack-dev-tools/files-cache/raw/master/libs/${libpng_archive}"
+  local libpng_url="https://sourceforge.net/projects/libpng/files/libpng16/${libpng_version}/${libpng_archive}"
 
   local libpng_stamp_file_path="${STAMPS_FOLDER_PATH}/stamp-libpng-${libpng_version}-installed"
   if [ ! -f "${libpng_stamp_file_path}" -o ! -d "${LIBS_BUILD_FOLDER_PATH}/${libpng_folder_name}" ]
@@ -1601,7 +1601,8 @@ function do_libxcrypt()
   local libxcrypt_version="$1"
 
   local libxcrypt_folder_name="libxcrypt-${libxcrypt_version}"
-  local libxcrypt_archive="libxcrypt-${libxcrypt_version}.tar.gz"
+  local libxcrypt_archive="${libxcrypt_folder_name}.tar.gz"
+  # GitHub release archive.
   local libxcrypt_url="https://github.com/besser82/libxcrypt/archive/v${libxcrypt_version}.tar.gz"
 
   local libxcrypt_patch_file_path="${helper_folder_path}/patches/${libxcrypt_folder_name}.patch"

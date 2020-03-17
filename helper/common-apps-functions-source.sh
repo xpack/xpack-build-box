@@ -521,8 +521,7 @@ function do_mingw_all()
   # The original SourceForge location.
   local mingw_folder_name="mingw-w64-v${mingw_version}"
   local mingw_folder_archive="${mingw_folder_name}.tar.bz2"
-  # local mingw_url="https://sourceforge.net/projects/mingw-w64/files/mingw-w64/mingw-w64-release/${mingw_folder_archive}"
-  local mingw_url="https://github.com/xpack-dev-tools/files-cache/raw/master/libs/${mingw_folder_archive}"
+  local mingw_url="https://sourceforge.net/projects/mingw-w64/files/mingw-w64/mingw-w64-release/${mingw_folder_archive}"
   
   # If SourceForge is down, there is also a GitHub mirror.
   # https://github.com/mirror/mingw-w64
@@ -3896,8 +3895,9 @@ function do_scons()
 {
   # http://scons.org
   # http://prdownloads.sourceforge.net/scons/
+  # https://sourceforge.net/projects/scons/files/scons/3.1.2/scons-3.1.2.tar.gz/download
+  # https://sourceforge.net/projects/scons/files/latest/download
   # http://prdownloads.sourceforge.net/scons/scons-3.1.2.tar.gz
-  # https://github.com/xpack-dev-tools/files-cache/raw/master/libs/scons-3.1.1.tar.gz
 
   # https://archlinuxarm.org/packages/any/scons/files/PKGBUILD
   # https://aur.archlinux.org/cgit/aur.git/tree/PKGBUILD?h=python2-scons
@@ -3913,12 +3913,7 @@ function do_scons()
   local scons_archive="${scons_folder_name}.tar.gz"
 
   local scons_url
-  if [[ "${scons_version}" =~ 3\.0\.* ]]
-  then
-    scons_url"https://sourceforge.net/projects/scons/files/scons/${scons_version}/${scons_archive}"
-  else
-    scons_url="https://github.com/xpack-dev-tools/files-cache/raw/master/libs/${scons_archive}"
-  fi
+  scons_url"https://sourceforge.net/projects/scons/files/scons/${scons_version}/${scons_archive}"
 
   local scons_stamp_file_path="${STAMPS_FOLDER_PATH}/stamp-scons-${scons_version}-installed"
   if [ ! -f "${scons_stamp_file_path}" -o ! -d "${BUILD_FOLDER_PATH}/${scons_folder_name}" ]
@@ -4037,8 +4032,9 @@ function do_ninja()
   local ninja_version="$1"
 
   local ninja_folder_name="ninja-${ninja_version}"
-  local ninja_archive="v${ninja_version}.tar.gz"
-  local ninja_url="https://github.com/ninja-build/ninja/archive/${ninja_archive}"
+  local ninja_archive="${ninja_folder_name}.tar.gz"
+  # GitHub release archive.
+  local ninja_url="https://github.com/ninja-build/ninja/archive/v${ninja_version}.tar.gz"
 
   local ninja_stamp_file_path="${STAMPS_FOLDER_PATH}/stamp-ninja-${ninja_version}-installed"
   if [ ! -f "${ninja_stamp_file_path}" -o ! -d "${BUILD_FOLDER_PATH}/${ninja_folder_name}" ]
@@ -4114,8 +4110,7 @@ function do_p7zip()
 
   local p7zip_folder_name="p7zip_${p7zip_version}"
   local p7zip_archive="${p7zip_folder_name}_src_all.tar.bz2"
-  # local p7zip_url="https://sourceforge.net/projects/p7zip/files/p7zip/${p7zip_version}/${p7zip_archive}"
-  local p7zip_url="https://github.com/xpack-dev-tools/files-cache/raw/master/libs/${p7zip_archive}"
+  local p7zip_url="https://sourceforge.net/projects/p7zip/files/p7zip/${p7zip_version}/${p7zip_archive}"
 
   local p7zip_stamp_file_path="${STAMPS_FOLDER_PATH}/stamp-p7zip-${p7zip_version}-installed"
   if [ ! -f "${p7zip_stamp_file_path}" -o ! -d "${BUILD_FOLDER_PATH}/${p7zip_folder_name}" ]
@@ -4340,6 +4335,7 @@ function do_nvm()
 
   local nvm_folder_name="nvm-${nvm_version}"
   local nvm_archive="${nvm_folder_name}.tar.gz"
+  # GitHub release archive.
   local nvm_url="https://github.com/nvm-sh/nvm/archive/v${nvm_version}.tar.gz"
 
   local nvm_stamp_file_path="${STAMPS_FOLDER_PATH}/stamp-nvm-${nvm_version}-installed"
@@ -4649,6 +4645,7 @@ function do_nodejs()
 
   local nodejs_folder_name="node-${nodejs_version}"
   local nodejs_archive="${nodejs_folder_name}.tar.gz"
+  # GitHub release archive.
   local nodejs_url="https://github.com/nodejs/node/archive/v${nodejs_version}.tar.gz"
 
   local nodejs_patch_file_path="${helper_folder_path}/patches/${nodejs_folder_name}.patch"
@@ -4736,7 +4733,7 @@ function do_tcl()
   # https://www.tcl.tk/doc/howto/compile.html
 
   # https://prdownloads.sourceforge.net/tcl/tcl8.6.10-src.tar.gz
-  # https://github.com/xpack-dev-tools/files-cache/raw/master/libs/tcl8.6.10-src.tar.gz
+  # https://sourceforge.net/projects/tcl/files/Tcl/8.6.10/tcl8.6.10-src.tar.gz/download
   # https://archlinuxarm.org/packages/aarch64/tcl/files/PKGBUILD
 
   # 2019-11-21, "8.6.10"
@@ -4748,8 +4745,7 @@ function do_tcl()
 
   local tcl_folder_name="tcl${tcl_version}"
   local tcl_archive="tcl${tcl_version}-src.tar.gz"
-  # local tcl_url="https://prdownloads.sourceforge.net/tcl/${tcl_archive}"
-  local tcl_url="https://github.com/xpack-dev-tools/files-cache/raw/master/libs/${tcl_archive}"
+  local tcl_url="https://sourceforge.net/projects/tcl/files/Tcl/${tcl_version}/${tcl_archive}"
 
   local tcl_stamp_file_path="${STAMPS_FOLDER_PATH}/stamp-tcl-${tcl_version}-installed"
   if [ ! -f "${tcl_stamp_file_path}" -o ! -d "${BUILD_FOLDER_PATH}/${tcl_folder_name}" ]
