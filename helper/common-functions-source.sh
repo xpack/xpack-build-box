@@ -656,15 +656,20 @@ function _download_one()
 {
   local url="$1"
   local archive_name="$2"
+  local exit_code
 
   echo
   echo "Downloading \"${archive_name}\" from \"${url}\"..."
   rm -f "${CACHE_FOLDER_PATH}/${archive_name}.download"
   mkdir -p "${CACHE_FOLDER_PATH}"
-  curl --fail -L -o "${CACHE_FOLDER_PATH}/${archive_name}.download" "${url}"
 
+  set +e
+  curl --fail -L -o "${CACHE_FOLDER_PATH}/${archive_name}.download" "${url}"
+  exit_code=$?
+  set -e
+  
   # return true for process exit code 0.
-  return $?
+  return ${exit_code}
 }
 
 function download()
