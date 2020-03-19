@@ -20,7 +20,8 @@ function do_build_versions()
     XBB_BINUTILS_VERSION="2.34" # "2.33.1"
 
     # 8.x fails to compile the libstdc++ new file system classes.
-    # must be the same as native, otherwise shared libraries will bess versions.
+    # must be the same as native, otherwise shared libraries will mess versions.
+    XBB_MINGW_VERSION="7.0.0"
     XBB_MINGW_GCC_VERSION="${XBB_GCC_VERSION}" # "9.2.0" # "8.3.0" # "7.4.0"
     XBB_MINGW_BINUTILS_VERSION="${XBB_BINUTILS_VERSION}" # "2.34" # "2.33.1"
 
@@ -29,7 +30,6 @@ function do_build_versions()
 
     XBB_MINGW_BINUTILS_BRANDING="xPack Build Box Mingw-w64 Binutils\x2C ${HOST_BITS}-bit"
     XBB_MINGW_GCC_BRANDING="xPack Build Box Mingw-w64 GCC\x2C ${HOST_BITS}-bit"
-
 
     # -------------------------------------------------------------------------
 
@@ -275,7 +275,7 @@ function do_build_versions()
       # depends=('zlib')
       do_mingw_binutils "${XBB_MINGW_BINUTILS_VERSION}"
       # depends=('zlib' 'libmpc' 'mingw-w64-crt' 'mingw-w64-binutils' 'mingw-w64-winpthreads' 'mingw-w64-headers')
-      do_mingw_all "7.0.0" "${XBB_MINGW_GCC_VERSION}" # "5.0.4" "7.4.0"
+      do_mingw_all "${XBB_MINGW_VERSION}" "${XBB_MINGW_GCC_VERSION}" # "5.0.4" "7.4.0"
     fi
 
     # -------------------------------------------------------------------------
