@@ -4908,4 +4908,89 @@ function do_guile()
   fi
 }
 
+function do_rhash() 
+{
+  # https://github.com/rhash/RHash
+  # https://github.com/rhash/RHash/releases
+  # https://github.com/rhash/RHash/archive/v1.3.9.tar.gz
+
+  # https://archlinuxarm.org/packages/aarch64/rhash/files/PKGBUILD
+
+  # 14 Dec 2019, "1.3.9"
+
+  local rhash_version="$1"
+
+  local rhash_folder_name="RHash-${rhash_version}"
+  local rhash_archive="${rhash_folder_name}.tar.gz"
+  local rhash_url="https://github.com/rhash/RHash/archive/v${rhash_version}.tar.gz"
+
+  local rhash_stamp_file_path="${STAMPS_FOLDER_PATH}/stamp-rhash-${rhash_version}-installed"
+  if [ ! -f "${rhash_stamp_file_path}" -o ! -d "${BUILD_FOLDER_PATH}/${rhash_folder_name}" ]
+  then
+
+    # In-source build.
+    cd "${BUILD_FOLDER_PATH}"
+
+    download_and_extract "${rhash_url}" "${rhash_archive}" "${rhash_folder_name}"
+
+    (
+      cd "${BUILD_FOLDER_PATH}/${rhash_folder_name}"
+
+      xbb_activate
+
+      export CPPFLAGS="${XBB_CPPFLAGS}"
+      export CFLAGS="${XBB_CFLAGS} -Wno-format"
+      export CXXFLAGS="${XBB_CXXFLAGS}"
+      export LDFLAGS="${XBB_LDFLAGS_APP_STATIC_GCC}"
+
+      if [ ! -f "config.status" ]
+      then
+        (
+          echo
+          echo "Running rhash configure..."
+
+          bash "${BUILD_FOLDER_PATH}/${rhash_folder_name}/configure" --help
+
+          bash ${DEBUG} "${BUILD_FOLDER_PATH}/${rhash_folder_name}/configure" \
+            --prefix="${INSTALL_FOLDER_PATH}" \
+            \
+            --extra-cflags="$CFLAGS" \
+            --extra-ldflags="$LDFLAGS" \
+
+          cp "config.log" "${LOGS_FOLDER_PATH}/config-rhash-log.txt"
+        ) 2>&1 | tee "${LOGS_FOLDER_PATH}/configure-rhash-output.txt"
+      fi
+
+      (
+        echo
+        echo "Running rhash make..."
+
+        # Build.
+        make -j ${JOBS}
+
+        make -j1 test test-lib
+
+        make install
+
+        show_libs "${INSTALL_FOLDER_PATH}/bin/rhash"
+
+      ) 2>&1 | tee "${LOGS_FOLDER_PATH}/make-rhash-output.txt"
+    )
+
+    (
+      xbb_activate_installed_bin
+
+      echo
+      run_app "${INSTALL_FOLDER_PATH}/bin/rhash" --version
+    )
+
+    hash -r
+
+    touch "${rhash_stamp_file_path}"
+
+  else
+    echo "Component rhash already installed."
+  fi
+}
+
 # -----------------------------------------------------------------------------
