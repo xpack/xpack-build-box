@@ -2748,7 +2748,8 @@ function do_make()
   local make_version="$1"
 
   local make_folder_name="make-${make_version}"
-  local make_archive="${make_folder_name}.tar.bz2"
+  # bz2 available up to 4.2.1, gz available on all.
+  local make_archive="${make_folder_name}.tar.gz"
   local make_url="https://ftp.gnu.org/gnu/make/${make_archive}"
 
   local make_patch_file_path="${helper_folder_path}/patches/${make_folder_name}.patch"
