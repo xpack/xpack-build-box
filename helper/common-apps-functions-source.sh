@@ -2668,6 +2668,7 @@ function do_flex()
         run_app bash ${DEBUG} "autogen.sh"
 
         touch "stamp-autogen"
+      
       fi
     ) 2>&1 | tee "${LOGS_FOLDER_PATH}/autogen-flex-output.txt"
 
