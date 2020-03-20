@@ -136,6 +136,10 @@ function do_build_versions()
     # depends=('glibc')
     do_bison "3.5" # "3.3.2"
 
+    # Fails a test. Avoid it for now.
+    # depends=(gmp libltdl ncurses texinfo libunistring gc libffi)
+    # do_guile "2.2.7"
+
     # depends=('glibc' 'guile')
     # PATCH!
     do_make "4.3" # "4.2.1"
