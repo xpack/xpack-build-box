@@ -133,7 +133,7 @@ function do_build_versions()
 
     # depends=('glibc' 'guile')
     # PATCH!
-    do_make "4.2.1"
+    do_make "4.3" # "4.2.1"
 
     # -------------------------------------------------------------------------
     # Third party tools
