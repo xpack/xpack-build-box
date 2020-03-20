@@ -1690,4 +1690,74 @@ function do_libxcrypt()
   fi
 }
 
+function do_libunistring() 
+{
+  # https://www.gnu.org/software/libunistring/
+  # https://ftp.gnu.org/gnu/libunistring/
+  # https://ftp.gnu.org/gnu/libunistring/libunistring-0.9.10.tar.xz
+
+  # https://archlinuxarm.org/packages/aarch64/libunistring/files/PKGBUILD
+
+  # 2018-05-25 "0.9.10"
+
+  local libunistring_version="$1"
+
+  local libunistring_folder_name="libunistring-${libunistring_version}"
+  local libunistring_archive="${libunistring_folder_name}.tar.xz"
+  local libunistring_url="https://ftp.gnu.org/gnu/libunistring/${libunistring_archive}"
+
+  local libunistring_stamp_file_path="${STAMPS_FOLDER_PATH}/stamp-libunistring-${libunistring_version}-installed"
+  if [ ! -f "${libunistring_stamp_file_path}" -o ! -d "${LIBS_BUILD_FOLDER_PATH}/${libunistring_folder_name}" ]
+  then
+
+    cd "${SOURCES_FOLDER_PATH}"
+
+    download_and_extract "${libunistring_url}" "${libunistring_archive}" "${libunistring_folder_name}"
+
+    (
+      mkdir -p "${LIBS_BUILD_FOLDER_PATH}/${libunistring_folder_name}"
+      cd "${LIBS_BUILD_FOLDER_PATH}/${libunistring_folder_name}"
+
+      xbb_activate
+
+      export CPPFLAGS="${XBB_CPPFLAGS}"
+      export CFLAGS="${XBB_CFLAGS}"
+      export CXXFLAGS="${XBB_CXXFLAGS}"
+      export LDFLAGS="${XBB_LDFLAGS_LIB}"
+
+      if [ ! -f "config.status" ]
+      then
+        (
+          echo
+          echo "Running libunistring configure..."
+
+          bash "${SOURCES_FOLDER_PATH}/${libunistring_folder_name}/configure" --help
+
+          bash ${DEBUG} "${SOURCES_FOLDER_PATH}/${libunistring_folder_name}/configure" \
+            --prefix="${INSTALL_FOLDER_PATH}" \
+
+          cp "config.log" "${LOGS_FOLDER_PATH}/config-libunistring-log.txt"
+        ) 2>&1 | tee "${LOGS_FOLDER_PATH}/configure-libunistring-output.txt"
+      fi
+
+      (
+        echo
+        echo "Running libunistring make..."
+
+        # Build.
+        make -j ${JOBS}
+
+        make check
+
+        make install-strip
+      ) 2>&1 | tee "${LOGS_FOLDER_PATH}/make-libunistring-output.txt"
+    )
+
+    touch "${libunistring_stamp_file_path}"
+
+  else
+    echo "Library libunistring already installed."
+  fi
+}
+
 # -----------------------------------------------------------------------------
