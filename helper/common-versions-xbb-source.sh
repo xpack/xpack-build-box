@@ -65,6 +65,8 @@ function do_build_versions()
     do_libunistring "0.9.10"
 
     # Required by guile, not used now.
+    do_gc "8.0.4"
+
     # Required by Python
     do_libmpdec "2.4.2"
 
