@@ -4822,4 +4822,90 @@ function do_tcl()
   fi
 }
 
+# Fails a test. Avoid it for now.
+function do_guile() 
+{
+  # https://www.gnu.org/software/guile/
+  # https://ftp.gnu.org/gnu/guile/
+
+  # https://archlinuxarm.org/packages/aarch64/guile/files/PKGBUILD
+
+  # 2020-03-07, "2.2.7"
+  # 2020-03-08, "3.0.1"
+
+  local guile_version="$1"
+
+  local guile_folder_name="guile-${guile_version}"
+  local guile_archive="${guile_folder_name}.tar.xz"
+  local guile_url="https://ftp.gnu.org/gnu/guile/${guile_archive}"
+
+  local guile_stamp_file_path="${STAMPS_FOLDER_PATH}/stamp-guile-${guile_version}-installed"
+  if [ ! -f "${guile_stamp_file_path}" -o ! -d "${BUILD_FOLDER_PATH}/${guile_folder_name}" ]
+  then
+
+    cd "${SOURCES_FOLDER_PATH}"
+
+    download_and_extract "${guile_url}" "${guile_archive}" "${guile_folder_name}"
+
+    (
+      mkdir -p "${BUILD_FOLDER_PATH}/${guile_folder_name}"
+      cd "${BUILD_FOLDER_PATH}/${guile_folder_name}"
+
+      xbb_activate
+
+      export CPPFLAGS="${XBB_CPPFLAGS}"
+      export CFLAGS="${XBB_CFLAGS} -Wno-format"
+      export CXXFLAGS="${XBB_CXXFLAGS}"
+      export LDFLAGS="${XBB_LDFLAGS_APP_STATIC_GCC}"
+
+      if [ ! -f "config.status" ]
+      then
+        (
+          echo
+          echo "Running guile configure..."
+
+          bash "${SOURCES_FOLDER_PATH}/${guile_folder_name}/configure" --help
+
+          bash ${DEBUG} "${SOURCES_FOLDER_PATH}/${guile_folder_name}/configure" \
+            --prefix="${INSTALL_FOLDER_PATH}" \
+            \
+            --disable-error-on-warning
+
+          cp "config.log" "${LOGS_FOLDER_PATH}/config-guile-log.txt"
+        ) 2>&1 | tee "${LOGS_FOLDER_PATH}/configure-guile-output.txt"
+      fi
+
+      (
+        echo
+        echo "Running guile make..."
+
+        # Build.
+        make -j ${JOBS}
+
+        # FAIL: test-out-of-memory
+        make -j1 check
+
+        make install-strip
+
+        show_libs "${INSTALL_FOLDER_PATH}/bin/guile"
+
+      ) 2>&1 | tee "${LOGS_FOLDER_PATH}/make-guile-output.txt"
+    )
+
+    (
+      xbb_activate_installed_bin
+
+      echo
+      run_app "${INSTALL_FOLDER_PATH}/bin/guile" --version
+    )
+
+    hash -r
+
+    touch "${guile_stamp_file_path}"
+
+  else
+    echo "Component guile already installed."
+  fi
+}
+
 # -----------------------------------------------------------------------------
