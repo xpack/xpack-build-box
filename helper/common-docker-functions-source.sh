@@ -79,7 +79,10 @@ function host_run_docker_it()
       --tty \
       --hostname "${name}-${arch}" \
       --workdir="/root" \
-      --env RUN_LONG_TESTS \
+      --env DEBUG="${DEBUG}" \
+      --env JOBS="${JOBS:-$(nproc)}" \
+      --env XBB_VERSION="${version}" \
+      --env RUN_LONG_TESTS="${RUN_LONG_TESTS:-""}" \
       --volume="${WORK_FOLDER_PATH}:/root/Work" \
       --volume="${script_folder_path}/input:/input" \
       --volume="${out}:/opt/${name}" \
@@ -96,7 +99,10 @@ function host_run_docker_it()
       --tty \
       --hostname "${name}-${arch}" \
       --workdir="/root" \
-      --env RUN_LONG_TESTS \
+      --env DEBUG="${DEBUG}" \
+      --env JOBS="${JOBS:-$(nproc)}" \
+      --env XBB_VERSION="${version}" \
+      --env RUN_LONG_TESTS="${RUN_LONG_TESTS:-""}" \
       --volume="${WORK_FOLDER_PATH}:/root/Work" \
       --volume="${script_folder_path}/input:/input" \
       --volume="${out}:/opt/${name}" \
@@ -119,7 +125,10 @@ function host_run_docker_it_bs()
       --tty \
       --hostname "${name}-${arch}" \
       --workdir="/root" \
-      --env RUN_LONG_TESTS \
+      --env DEBUG="${DEBUG}" \
+      --env JOBS="${JOBS:-$(nproc)}" \
+      --env XBB_VERSION="${version}" \
+      --env RUN_LONG_TESTS="${RUN_LONG_TESTS:-""}" \
       --volume="${WORK_FOLDER_PATH}:/root/Work" \
       --volume="${script_folder_path}/input:/input" \
       --volume="${out}:/opt/${name}" \

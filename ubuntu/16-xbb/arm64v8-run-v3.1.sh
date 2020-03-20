@@ -48,6 +48,8 @@ host_init_docker_env
 host_init_docker_input \
   "$(dirname $(dirname "${script_folder_path}"))/ca-bundle/ca-bundle.crt" \
 
+version="3.1"
+
 arch="arm64v8"
 distro="ubuntu"
 release="16.04"
