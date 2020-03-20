@@ -1760,4 +1760,76 @@ function do_libunistring()
   fi
 }
 
+function do_gc() 
+{
+  # https://www.hboehm.info/gc
+  # https://github.com/ivmai/bdwgc/releases/
+  # https://github.com/ivmai/bdwgc/releases/download/v8.0.4/gc-8.0.4.tar.gz
+
+  # https://archlinuxarm.org/packages/aarch64/gc/files/PKGBUILD
+
+  # 2 Mar 2019 "8.0.4"
+
+  local gc_version="$1"
+
+  local gc_folder_name="gc-${gc_version}"
+  local gc_archive="${gc_folder_name}.tar.gz"
+  local gc_url="https://github.com/ivmai/bdwgc/releases/download/v${gc_version}/${gc_archive}"
+
+  local gc_stamp_file_path="${STAMPS_FOLDER_PATH}/stamp-gc-${gc_version}-installed"
+  if [ ! -f "${gc_stamp_file_path}" -o ! -d "${LIBS_BUILD_FOLDER_PATH}/${gc_folder_name}" ]
+  then
+
+    cd "${SOURCES_FOLDER_PATH}"
+
+    download_and_extract "${gc_url}" "${gc_archive}" "${gc_folder_name}"
+
+    (
+      mkdir -p "${LIBS_BUILD_FOLDER_PATH}/${gc_folder_name}"
+      cd "${LIBS_BUILD_FOLDER_PATH}/${gc_folder_name}"
+
+      xbb_activate
+
+      export CPPFLAGS="${XBB_CPPFLAGS}"
+      export CFLAGS="${XBB_CFLAGS}"
+      export CXXFLAGS="${XBB_CXXFLAGS}"
+      export LDFLAGS="${XBB_LDFLAGS_LIB}"
+
+      if [ ! -f "config.status" ]
+      then
+        (
+          echo
+          echo "Running gc configure..."
+
+          bash "${SOURCES_FOLDER_PATH}/${gc_folder_name}/configure" --help
+
+          bash ${DEBUG} "${SOURCES_FOLDER_PATH}/${gc_folder_name}/configure" \
+            --prefix="${INSTALL_FOLDER_PATH}" \
+            \
+            --enable-cplusplus \
+
+          cp "config.log" "${LOGS_FOLDER_PATH}/config-gc-log.txt"
+        ) 2>&1 | tee "${LOGS_FOLDER_PATH}/configure-gc-output.txt"
+      fi
+
+      (
+        echo
+        echo "Running gc make..."
+
+        # Build.
+        make -j ${JOBS}
+
+        make check
+
+        make install-strip
+      ) 2>&1 | tee "${LOGS_FOLDER_PATH}/make-gc-output.txt"
+    )
+
+    touch "${gc_stamp_file_path}"
+
+  else
+    echo "Library gc already installed."
+  fi
+}
+
 # -----------------------------------------------------------------------------
