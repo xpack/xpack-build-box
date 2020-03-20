@@ -62,6 +62,9 @@ function do_build_versions()
     # depends=('glibc')
     do_libffi "3.2.1"
 
+    do_libunistring "0.9.10"
+
+    # Required by guile, not used now.
     # Required by Python
     do_libmpdec "2.4.2"
 
