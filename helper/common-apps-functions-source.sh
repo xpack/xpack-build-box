@@ -4993,4 +4993,100 @@ function do_rhash()
   fi
 }
 
+function do_re2c() 
+{
+  # https://github.com/skvadrik/re2c
+  # https://github.com/skvadrik/re2c/releases
+  # https://github.com/skvadrik/re2c/releases/download/1.3/re2c-1.3.tar.xz
+
+  # https://archlinuxarm.org/packages/aarch64/re2c/files/PKGBUILD
+
+  # 14 Dec 2019, "1.3"
+
+  local re2c_version="$1"
+
+  local re2c_folder_name="re2c-${re2c_version}"
+  local re2c_archive="${re2c_folder_name}.tar.xz"
+  local re2c_url="https://github.com/skvadrik/re2c/releases/download/${re2c_version}/${re2c_archive}"
+
+  local re2c_stamp_file_path="${STAMPS_FOLDER_PATH}/stamp-re2c-${re2c_version}-installed"
+  if [ ! -f "${re2c_stamp_file_path}" -o ! -d "${BUILD_FOLDER_PATH}/${re2c_folder_name}" ]
+  then
+
+    # In-source build.
+    cd "${BUILD_FOLDER_PATH}"
+
+    download_and_extract "${re2c_url}" "${re2c_archive}" "${re2c_folder_name}"
+
+    (
+      cd "${BUILD_FOLDER_PATH}/${re2c_folder_name}"
+      if [ ! -f "stamp-autogen" ]
+      then
+
+        xbb_activate
+        
+        # run_app bash ${DEBUG} "autogen.sh"
+
+        touch "stamp-autogen"
+
+      fi
+    ) 2>&1 | tee "${LOGS_FOLDER_PATH}/autogen-re2c-output.txt"
+
+    (
+      cd "${BUILD_FOLDER_PATH}/${re2c_folder_name}"
+
+      xbb_activate
+
+      export CPPFLAGS="${XBB_CPPFLAGS}"
+      export CFLAGS="${XBB_CFLAGS} -Wno-format"
+      export CXXFLAGS="${XBB_CXXFLAGS}"
+      export LDFLAGS="${XBB_LDFLAGS_APP_STATIC_GCC}"
+    
+      if [ ! -f "config.status" ]
+      then
+        (
+          echo
+          echo "Running re2c configure..."
+
+          bash "${BUILD_FOLDER_PATH}/${re2c_folder_name}/configure" --help
+
+          bash ${DEBUG} "${BUILD_FOLDER_PATH}/${re2c_folder_name}/configure" \
+            --prefix="${INSTALL_FOLDER_PATH}" \
+
+          cp "config.log" "${LOGS_FOLDER_PATH}/config-re2c-log.txt"
+        ) 2>&1 | tee "${LOGS_FOLDER_PATH}/configure-re2c-output.txt"
+      fi
+
+      (
+        echo
+        echo "Running re2c make..."
+
+        # Build.
+        make -j ${JOBS}
+
+        make -j1 tests
+
+        make install-strip
+
+        show_libs "${INSTALL_FOLDER_PATH}/bin/re2c"
+
+      ) 2>&1 | tee "${LOGS_FOLDER_PATH}/make-re2c-output.txt"
+    )
+
+    (
+      xbb_activate_installed_bin
+
+      echo
+      run_app "${INSTALL_FOLDER_PATH}/bin/re2c" --version
+    )
+
+    hash -r
+
+    touch "${re2c_stamp_file_path}"
+
+  else
+    echo "Component re2c already installed."
+  fi
+}
+
 # -----------------------------------------------------------------------------
