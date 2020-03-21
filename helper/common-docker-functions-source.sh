@@ -141,6 +141,10 @@ function host_run_docker_build()
   local tag="$2"
   local dockerfile="$3"
 
+  set +e
+  docker rmi "${tag}"
+  set -e
+
   echo 
   echo "Building Docker image ${tag}..."
   docker build \
