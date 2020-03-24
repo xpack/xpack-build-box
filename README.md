@@ -40,7 +40,7 @@ The images are based on Ubuntu 12 (ldd 2.15), and the GNU/Linux binaries
 should run on most modern distributions.
 
 The Windows executables are created with mingw-w64 v7.0.0 and the
-mingw-w64 GCC 9.2, available from the same Docker images.
+mingw-w64 GCC 9.3, available from the same Docker images.
 
 The macOS binaries are generated on a macOS 10.10.5, plus a set of new
 GNU tools, installed in a separate folder. The TeX tools (from 2018)
