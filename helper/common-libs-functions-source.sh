@@ -667,7 +667,7 @@ function do_libffi()
     download_and_extract "${libffi_url}" "${libffi_archive}" "${libffi_folder_name}"
 
     (
-      if [ ! -x "{SOURCES_FOLDER_PATH}/${libffi_folder_name}/configure" ]
+      if [ ! -x "${SOURCES_FOLDER_PATH}/${libffi_folder_name}/configure" ]
       then
 
         cd "${SOURCES_FOLDER_PATH}/${libffi_folder_name}"
