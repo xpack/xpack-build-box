@@ -4944,7 +4944,7 @@ function do_rhash()
       export CXXFLAGS="${XBB_CXXFLAGS}"
       export LDFLAGS="${XBB_LDFLAGS_APP_STATIC_GCC}"
 
-      if [ ! -f "config.status" ]
+      if [ ! -f "stamp-configure" ]
       then
         (
           echo
@@ -4959,6 +4959,8 @@ function do_rhash()
             --extra-ldflags="${LDFLAGS}" \
 
           cp "config.log" "${LOGS_FOLDER_PATH}/config-rhash-log.txt"
+
+          touch "stamp-configure"
         ) 2>&1 | tee "${LOGS_FOLDER_PATH}/configure-rhash-output.txt"
       fi
 
