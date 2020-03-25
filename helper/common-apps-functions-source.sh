@@ -4955,8 +4955,8 @@ function do_rhash()
           bash ${DEBUG} "${BUILD_FOLDER_PATH}/${rhash_folder_name}/configure" \
             --prefix="${INSTALL_FOLDER_PATH}" \
             \
-            --extra-cflags="$CFLAGS" \
-            --extra-ldflags="$LDFLAGS" \
+            --extra-cflags="${CFLAGS} ${CPPFLAGS}" \
+            --extra-ldflags="${LDFLAGS}" \
 
           cp "config.log" "${LOGS_FOLDER_PATH}/config-rhash-log.txt"
         ) 2>&1 | tee "${LOGS_FOLDER_PATH}/configure-rhash-output.txt"
