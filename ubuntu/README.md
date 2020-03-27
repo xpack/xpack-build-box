@@ -24,8 +24,8 @@ Arm Ubuntu
 - `ilegeul/ubuntu:arm32v7-14.04-xbb-v3.1`
 - `ilegeul/ubuntu:arm64v8-16.04-xbb-v3.1`
 - `ilegeul/ubuntu:arm32v7-16.04-xbb-v3.1`
-- `ilegeul/ubuntu:arm64v8-14.08-xbb-v3.1`
-- `ilegeul/ubuntu:arm32v7-14.08-xbb-v3.1`
+- `ilegeul/ubuntu:arm64v8-18.04-xbb-v3.1`
+- `ilegeul/ubuntu:arm32v7-18.04-xbb-v3.1`
 
 Each of these images are built upon multiple layers,
 starting from a base archive,
