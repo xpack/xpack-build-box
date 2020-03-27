@@ -5,7 +5,7 @@ for each platform and version.
 
 The images are published on
 [Docker Hub](https://hub.docker.com/repository/docker/ilegeul/ubuntu)
-(requires login).
+(pulling can be done anonymously, pushing requires login).
 
 Intel Ubuntu
 
