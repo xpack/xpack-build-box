@@ -59,7 +59,29 @@ All images include the TeX tools (from 2018); on GNU/Linux, they are
 installed in the system folders; on macOS, similarly to
 XBB, they are installed in a custom folder (`${HOME}/opt/texlive`).
 
-## How to use?
+## Docker specifics
+
+As with any Docker builds, the XBB builds run completely inside Docker
+containers, which start afresh each time they are instantiated.
+
+To pass the folder with the build scripts in and the results out,
+it is usual to use a `Work` folder, for example:
+
+```console
+$ docker run -it --volume "${HOME}/Work:/Host/Work" ilegeul/ubuntu:amd64-12.04-xbb-v3.1
+root@831bc35faf9f:/# ls -l /Host/Work
+total 175320
+drwxr-xr-x  14 root root       448 Mar  7 19:47 arm-none-eabi-gcc-9.2.1-1.2
+drwxr-xr-x 144 root root      4608 Mar  9 13:15 cache
+drwxr-xr-x  34 root root      1088 Mar 26 11:22 openocd-0.10.0-14
+drwxr-xr-x  12 root root       384 Oct 30 19:00 riscv-none-embed-gcc-8.3.0-1.1
+```
+
+In this simple configuration, the builds run with root permissions; with
+more elaborate configurations it is possible to start the Docker images
+with user rights, but they are beyound the scope of this document.
+
+## How to use the XBB tools?
 
 Both on GNU/Linux and macOS, the XBB tools are installed in separate
 folders, and are fully distinct from the system tools.
