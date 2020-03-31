@@ -239,10 +239,10 @@ Things to be considered for future versions:
 ## Conclusions
 
 For Intel Linux, to preserve support for older distributions,
-the **Ubuntu 12 (precise)** (2.15) distribution was selected.
-
-The resulting binaries should also run on RHEL 7; support for RHEL 6
-was discontinued.
+the **Ubuntu 12 (precise)** (2.15) distribution was selected;
+the resulting binaries should also run on RHEL 7 or newer;
+support for RHEL 6 was discontinued.
 
 For Arm binaries, the base distribution is **Ubuntu 16.04 LTS (xenial)**,
-(2.23).
+(2.23); the resulting binaries should run on all Raspberry Pi class
+machines, or larger.
