@@ -36,7 +36,7 @@ script_folder_name="$(basename ${script_folder_path})"
 
 # =============================================================================
 
-helper_folder_path="${script_folder_path}/helper"
+helper_folder_path="$(dirname ${script_folder_path})/helper"
 
 source "${helper_folder_path}/common-docker-functions-source.sh"
 
