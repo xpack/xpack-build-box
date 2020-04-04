@@ -326,7 +326,7 @@ __EOF__
 }
 
 
-function docker_install_develop()
+function install_ubuntu_develop()
 {
   # lsb_release must be present from upgrade.
   local release="$(lsb_release -r | sed 's/Release:[^0-9]*//')"
