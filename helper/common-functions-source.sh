@@ -512,9 +512,10 @@ __EOF__
     # Note: __EOF__ is quoted to prevent substitutions here.
     cat <<'__EOF__' >> "${INSTALL_FOLDER_PATH}/xbb-source.sh"
 
-# Adjust PATH and LD_LIBRARY_PATH to prefer the XBB binaries with their libs.
+# Adjust PATH to prefer the XBB binaries.
 function xbb_activate()
 {
+  PATH=${PATH:-""}
   PATH="${XBB_FOLDER_PATH}/bin:${PATH}"
 
   # Disabled, shared libs must be located via rpath.
@@ -529,7 +530,7 @@ function xbb_activate()
   # fi
 
   export PATH
-  export LD_LIBRARY_PATH
+  # export LD_LIBRARY_PATH
 }
 __EOF__
 # The above marker must start in the first column.
