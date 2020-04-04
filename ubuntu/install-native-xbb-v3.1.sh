@@ -65,6 +65,8 @@ then
   apt-get install --yes wine64
 fi
 
+ubuntu_clean
+
 # -----------------------------------------------------------------------------
 
 echo "Done."

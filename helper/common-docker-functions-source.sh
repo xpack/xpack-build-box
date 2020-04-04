@@ -474,12 +474,6 @@ function ubuntu_install_develop()
 
   # ---------------------------------------------------------------------------
 
-  apt-get clean
-  apt-get autoclean
-  apt-get autoremove
-
-  # ---------------------------------------------------------------------------
-
   echo
   uname -a
   lsb_release -a
@@ -503,6 +497,13 @@ function ubuntu_install_develop()
   python --version
   python3 --version
 
+}
+
+function ubuntu_clean()
+{
+  apt-get clean --yes
+  apt-get autoclean --yes
+  apt-get autoremove --yes
 }
 
 # =============================================================================

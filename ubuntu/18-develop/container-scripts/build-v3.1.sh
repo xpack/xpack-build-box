@@ -43,6 +43,8 @@ source "${helper_folder_path}/common-docker-functions-source.sh"
 # These tools should be enough to build the bootstrap tools.
 ubuntu_install_develop
 
+ubuntu_clean
+
 # -----------------------------------------------------------------------------
 
 echo
