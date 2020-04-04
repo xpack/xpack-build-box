@@ -37,7 +37,7 @@ script_folder_name="$(basename ${script_folder_path})"
 # =============================================================================
 
 # Definitions.
-XBB_FOLDER_PATH="${XBB_FOLDER_PATH:/opt/xbb}"
+XBB_FOLDER_PATH="/opt/xbb"
 
 # -----------------------------------------------------------------------------
 
