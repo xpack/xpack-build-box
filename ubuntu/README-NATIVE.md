@@ -1,4 +1,4 @@
-## The Ubuntu XBB
+## The Ubuntu XBB - native development
 
 ### Overview
 
@@ -7,16 +7,14 @@ applications that can be used in edit-compile-debug cycles, thus should
 be as fast as reasonably possible.
 
 For this, the build environment should use the tools and libraries
-available in the host machine and do not build any of them from sources.
-
-Note: this solution was superseeded by the solution using the Docker
-containers.
+available in the host machine, even if the versions may be slightly
+different from those used in the Docker images.
 
 ### Prerequisites
 
-The current procedure was tested on an Ubuntu Server 18 LTS 64-bit.
+The current procedure was tested on an Ubuntu 18 LTS 64-bit.
 
-For virtual machines, to keep the space requirements low, preferably 
+For virtual machines, to keep the space requirements low, preferably
 install a **minimal** system (select this during the install).
 
 ### How to install?
@@ -26,8 +24,8 @@ $ rm -rf "${HOME}/Downloads/xpack-build-box.git"
 $ git clone --recurse-submodules https://github.com/xpack/xpack-build-box.git \
   "${HOME}"/Downloads/xpack-build-box.git
 
-$ sudo bash "${HOME}"/Downloads/xpack-build-box.git/ubuntu/install-xbb.sh
-$ sudo bash "${HOME}"/Downloads/xpack-build-box.git/ubuntu/add-xbb-extras.sh
+$ sudo bash "${HOME}/Downloads/xpack-build-box.git/ubuntu/install-native-xbb-v3.1.sh"
+$ sudo bash "${HOME}/Downloads/xpack-build-box.git/ubuntu/add-native-extras-xbb-v3.1.sh"
 ```
 
 It takes a few minutes to install all system requirements.
@@ -50,15 +48,27 @@ $ sudo apt install --yes ~/Downloads/code_1.31.1-1549938243_amd64.deb
 
 Preferably add it to the tool bar, for convenient access.
 
-The QEMU git already includes the `.vscode` folder with preconfigured
+Some of the project Gits, like qemu.git, already includes
+the `.vscode` folder with preconfigured
 build and debug configurations.
 
 This is an optional step. Any other editor is perfectly ok, but the
 build and debug configurations must be recreated.
 
-#### Git Kraken
+#### Visual Studio Code - Git
 
 Since SourceTree is not available for GNU/Linux, the second choice is
+to use the VS Code Git plug-ins, which are doing a fair job.
+
+In addition to the included Git functionality, there are several useful Git
+plug-ins, like;
+
+- GitLens
+- Git Graph
+
+#### Git Kraken
+
+A separate alternative is
 Git Kraken, which can be downloaded for free from 
 [gitkraken.com](https://www.gitkraken.com/download).
 
@@ -98,39 +108,3 @@ See the parent [`README.md`](../README.md).
 
 See the parent [`README.md`](../README.md).
 
-
-### Actual libraries versions
-
-On Ubuntu 18LTS, the following packages were used for QEMU:
-
-```console
-$ dpkg -l \
-libpng-dev \
-libjpeg-dev \
-libsdl2-dev \
-libsdl2-image-dev \
-libpixman-1-dev \
-libglib2.0-dev \
-zlib1g-dev \
-libffi-dev \
-libxml2-dev \
-zlib1g-dev \
-
-
-Desired=Unknown/Install/Remove/Purge/Hold
-| Status=Not/Inst/Conf-files/Unpacked/halF-conf/Half-inst/trig-aWait/Trig-pend
-|/ Err?=(none)/Reinst-required (Status,Err: uppercase=bad)
-||/ Name           Version      Architecture Description
-+++-==============-============-============-=================================
-ii  libffi-dev:amd 3.2.1-8      amd64        Foreign Function Interface librar
-ii  libglib2.0-dev 2.56.3-0ubun amd64        Development files for the GLib li
-ii  libjpeg-dev:am 8c-2ubuntu8  amd64        Independent JPEG Group's JPEG run
-ii  libpixman-1-de 0.34.0-2     amd64        pixel-manipulation library for X 
-ii  libpng-dev:amd 1.6.34-1ubun amd64        PNG library - development (versio
-ii  libsdl2-dev:am 2.0.8+dfsg1- amd64        Simple DirectMedia Layer developm
-ii  libsdl2-image- 2.0.3+dfsg1- amd64        Image loading library for Simple 
-ii  libxml2-dev:am 2.9.4+dfsg1- amd64        Development files for the GNOME X
-ii  zlib1g-dev:amd 1:1.2.11.dfs amd64        compression library - development
-```
-
-TODO: update for the current QEMU build scripts.

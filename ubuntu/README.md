@@ -1,7 +1,12 @@
-# The Ubuntu XBB
+# The Ubuntu XBB - production Docker images
 
-The Ubuntu XBB consists of multiple Docker images, in pairs of 32/64-bit,
-for each platform and version.
+Note: This page is dedicated to the production version of the
+Ubuntu XBB, used for building distribution packages.
+The Ubuntu XBB used for native builds is docummented in the
+separate [README-NATIVE](README-NATIVE.md) page.  
+
+The production Ubuntu XBB consists of multiple Docker images,
+in pairs of 32/64-bit, for each platform and version.
 
 The images are published on
 [Docker Hub](https://hub.docker.com/repository/docker/ilegeul/ubuntu)
@@ -32,7 +37,8 @@ starting from a base archive,
 updating it, installing development tools, tex, the bootstrap and
 finally the XBB itself.
 
-To be sure there is enough space, before each build step it is recommended
+To be sure Docker will not run out of space while building the images,
+before each build step it is recommended
 to clean possible dangling images:
 
 ```bash
@@ -41,7 +47,7 @@ docker system prune -f
 
 ## Intel Linux
 
-The following sequences of commands were used on an Ubuntu 18.04 LTS
+The following sequences of commands were used on a Manjaro 20.02 Intel
 Linux (x86_64):
 
 ### Ubuntu 12 (precise)

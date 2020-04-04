@@ -63,6 +63,9 @@ bootstrap_.
 $ JOBS=7 caffeinate bash "${HOME}/Downloads/xpack-build-box.git/macos/build-xbb-bootstrap-v3.1.sh"
 ```
 
+The Finder command `build-xbb-bootstrap-v3.1.mac.command` can be used
+as a shortcut.
+
 The build process takes quite a while.
 
 The build is performed in a folder like `${HOME}/Work/xbb-bootstrap-3.1-darwin-x86_64`
@@ -71,7 +74,8 @@ which can be removed after the build is completed.
 The result of this step is a folder in user home (`${HOME}/opt/xbb-bootstrap`).
 No files are stored in system locations.
 
-This folder can also be removed after the final XBB tools are built.
+This folder **should not** be removed after the final XBB tools are built,
+since they may refer to bootstrap libraries.
 
 ### Build the XBB tools
 
@@ -80,6 +84,9 @@ The final XBB tools are compiled with the bootstrapped compiler.
 ```console
 $ JOBS=7 caffeinate bash "${HOME}/Downloads/xpack-build-box.git/macos/build-xbb-v3.1.sh"
 ```
+
+The Finder command `build-xbb-v3.1.mac.command` can be used
+as a shortcut.
 
 The build process takes quite a while. 
 
@@ -91,10 +98,11 @@ No files are stored in system locations.
 
 ### Protect the XBB folders
 
-To prevent inadvertent changes, it is recommended to make the XBB folders 
+To prevent inadvertent changes, it is recommended to make the XBB folders
 read-only.
 
 ```console
+$ chmod -R -w "${HOME}/opt/xbb-bootstrap"
 $ chmod -R -w "${HOME}/opt/xbb"
 ```
 
@@ -133,6 +141,9 @@ not mandatory.
 $ caffeinate bash "${HOME}/Downloads/xpack-build-box.git/macos/install-texlive.sh"
 ```
 
+The Finder command `install-texlive.mac.command` can be used
+as a shortcut.
+
 The TeX install script is locked to a certain version, but depends on the
 presence of that version on a certain server, which is also not guaranteed
 to last forever.
@@ -141,8 +152,8 @@ to last forever.
 
 The first version of the macOS XBB used Homebrew, but it was soon discovered
 that Homebrew was not designed to facilitate the version locking required
-by XBB, because changes to the Ruby core are quite often, sometimes
+by XBB; changes to the Ruby core are quite often, sometimes
 incompatible, and support for older macOS versions, like 10.10, was
-discontinued.
+discontinued, thus making Homebrew not a choice for XBB.
 
-For more details, see the README-DEPRECATED.md file.
+For more details, see the [README-DEPRECATED](README-DEPRECATED.md) file.
