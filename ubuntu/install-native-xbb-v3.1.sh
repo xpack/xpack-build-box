@@ -42,6 +42,9 @@ source "${helper_folder_path}/common-docker-functions-source.sh"
 
 # -----------------------------------------------------------------------------
 
+apt-get update 
+apt-get upgrade --yes 
+
 ubuntu_install_develop
 
 apt-get install --yes \
