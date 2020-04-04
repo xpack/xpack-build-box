@@ -41,7 +41,7 @@ source "${helper_folder_path}/common-docker-functions-source.sh"
 # -----------------------------------------------------------------------------
 
 # These tools should be enough to build the bootstrap tools.
-install_ubuntu_develop
+ubuntu_install_develop
 
 # -----------------------------------------------------------------------------
 

@@ -326,7 +326,7 @@ __EOF__
 }
 
 
-function install_ubuntu_develop()
+function ubuntu_install_develop()
 {
   # lsb_release must be present from upgrade.
   local release="$(lsb_release -r | sed 's/Release:[^0-9]*//')"

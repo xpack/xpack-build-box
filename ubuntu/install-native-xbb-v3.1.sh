@@ -42,7 +42,7 @@ source "${helper_folder_path}/common-docker-functions-source.sh"
 
 # -----------------------------------------------------------------------------
 
-install_ubuntu_develop
+ubuntu_install_develop
 
 apt-get install --yes \
 g++-mingw-w64 \
