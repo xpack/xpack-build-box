@@ -9,7 +9,12 @@
 
 function do_build_versions()
 {
-  if [[ "${XBB_VERSION}" =~ 3\.[1] ]]
+  if [[ "${XBB_VERSION}" =~ 3\.[2] ]]
+  then
+
+    do_sphinx "2.4.4"
+
+  elif [[ "${XBB_VERSION}" =~ 3\.[1] ]]
   then
 
     # -------------------------------------------------------------------------
