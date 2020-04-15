@@ -235,6 +235,23 @@ $ docker run -it <image> ldd --version
 - `centos:7` - 2014-2024, 2.17, kernel 3.10 <--- must be supported
 - `centos:8` - 2019-2029, 2.28
 
+### [Fedora](https://en.wikipedia.org/wiki/Fedora_version_history)
+
+- `fedora:20` - 2013-12, 2.18 <-- Intel
+- `fedora:21` - 2014-12, 2.20
+- `fedora:22` - 2015-05, 2.21
+- `fedora:23` - 2015-11, 2.22
+- `fedora:24` - 2016-06, 2.23 <-- Arm
+- `fedora:25` - 2016-11, 2.24
+- `fedora:26` - 2017-07,
+- `fedora:27` - 2017-11, 2.26
+- `fedora:28` - 2018-05,
+- `fedora:29` - 2018-10, 2.28
+- `fedora:30` - 2019-05,
+- `fedora:31` - 2019-10, 2.30
+- `fedora:32` - 2020-04, 2.20
+
+
 ## Maintainer info
 
 A shortcut to clone the repo is:
