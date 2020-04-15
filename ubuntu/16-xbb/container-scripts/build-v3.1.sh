@@ -70,7 +70,9 @@ docker_prepare_env
 
 prepare_xbb_env
 
+saved_version=${XBB_VERSION}
 source "${XBB_BOOTSTRAP_FOLDER_PATH}/xbb-source.sh"
+XBB_VERSION=${saved_version}
 
 # Override function, must be here.
 function xbb_activate()
