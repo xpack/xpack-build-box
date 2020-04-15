@@ -5097,3 +5097,42 @@ function do_re2c()
 }
 
 # -----------------------------------------------------------------------------
+
+function do_sphinx()
+{
+  local sphinx_version="$1"
+
+  # https://www.sphinx-doc.org/en/master/
+
+  # https://archlinuxarm.org/packages/any/python-sphinx/files/PKGBUILD
+
+  # Apr 10, 2020, "3.0.1"
+  # Mar 5, 2020, "2.4.4"
+
+  local sphinx_stamp_file_path="${STAMPS_FOLDER_PATH}/stamp-sphinx-${sphinx_version}-installed"
+
+  if [ ! -f "${sphinx_stamp_file_path}" ]
+  then
+    (
+      xbb_activate_installed_bin
+
+      pip3 install sphinx==${sphinx_version}
+    )
+
+    hash -r
+
+    (
+      xbb_activate_installed_bin
+
+      run_app "${INSTALL_FOLDER_PATH}/bin/sphinx-build" --version
+    )
+
+    touch "${sphinx_stamp_file_path}"
+
+  else
+    echo "Component sphinx already installed."
+  fi
+
+}
+
+# -----------------------------------------------------------------------------
