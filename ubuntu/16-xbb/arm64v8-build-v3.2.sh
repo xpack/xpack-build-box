@@ -49,7 +49,7 @@ host_init_docker_input \
 version="3.2"
 layer="xbb"
 
-arch="amd64"
+arch="arm64v8"
 distro="ubuntu"
 release="16.04"
 
