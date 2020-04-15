@@ -18,6 +18,16 @@ function host_init_docker_env()
 
   docker system prune -f
 
+  if [ "$(uname)" == "Linux" ]
+  then
+    NPROC=$(nproc)
+  elif [ "$(uname)" == "Darwin" ]
+  then
+    NPROC=$(sysctl hw.ncpu | sed 's/hw.ncpu: //')
+  fi
+
+  export NPROC
+
   cd "${script_folder_path}"
 }
 
@@ -80,7 +90,7 @@ function host_run_docker_it()
       --hostname "${name}-${arch}" \
       --workdir="/root" \
       --env DEBUG="${DEBUG}" \
-      --env JOBS="${JOBS:-$(nproc)}" \
+      --env JOBS="${JOBS:-${NPROC}}" \
       --env XBB_VERSION="${version}" \
       --env RUN_LONG_TESTS="${RUN_LONG_TESTS:-""}" \
       --volume="${WORK_FOLDER_PATH}:/root/Work" \
@@ -100,7 +110,7 @@ function host_run_docker_it()
       --hostname "${name}-${arch}" \
       --workdir="/root" \
       --env DEBUG="${DEBUG}" \
-      --env JOBS="${JOBS:-$(nproc)}" \
+      --env JOBS="${JOBS:-${NPROC}}" \
       --env XBB_VERSION="${version}" \
       --env RUN_LONG_TESTS="${RUN_LONG_TESTS:-""}" \
       --volume="${WORK_FOLDER_PATH}:/root/Work" \
@@ -126,7 +136,7 @@ function host_run_docker_it_bs()
       --hostname "${name}-${arch}" \
       --workdir="/root" \
       --env DEBUG="${DEBUG}" \
-      --env JOBS="${JOBS:-$(nproc)}" \
+      --env JOBS="${JOBS:-${NPROC}}" \
       --env XBB_VERSION="${version}" \
       --env RUN_LONG_TESTS="${RUN_LONG_TESTS:-""}" \
       --volume="${WORK_FOLDER_PATH}:/root/Work" \
@@ -149,7 +159,7 @@ function host_run_docker_build()
   echo "Building Docker image ${tag}..."
   docker build \
     --build-arg DEBUG="${DEBUG}" \
-    --build-arg JOBS="${JOBS:-$(nproc)}" \
+    --build-arg JOBS="${JOBS:-${NPROC}}" \
     --build-arg XBB_VERSION="${version}" \
     --build-arg RUN_LONG_TESTS="${RUN_LONG_TESTS:-""}" \
     --tag "${tag}" \
