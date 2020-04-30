@@ -272,6 +272,15 @@ $ git clone https://github.com/xpack/xpack-build-box.git \
 
 Things to be considered for future versions:
 
+- -D_FILE_OFFSET_BITS=64 for 32-bit machine
+- libtool to use xbb gcc, not bootstrap
+- bash
+- guille
+- autogen
+- rename gcc-xbb, gcc-xbs
+- link gcc, cc, g++, c++
+- add objc, objc++, fortran support to gcc
+- investigate why isl_test_cpp fails 
 - build nodejs
 - build Python 3 in bootstrap
 
