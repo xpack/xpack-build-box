@@ -23,25 +23,41 @@ function do_native_binutils()
 
   local native_binutils_version="$1"
 
-  local native_binutils_folder_name="binutils-${native_binutils_version}"
-  local native_binutils_archive="${native_binutils_folder_name}.tar.xz"
+  local step
+  if [ $# -ge 2 ]
+  then
+    step="$2"
+  else
+    step=""
+  fi
+
+  # ! Must be different from glibc (/usr).
+  NATIVE_BINUTILS_INSTALL_FOLDER_PATH="${NATIVE_BINUTILS_INSTALL_FOLDER_PATH:-${INSTALL_FOLDER_PATH}}"
+
+  local native_binutils_src_folder_name="binutils-${native_binutils_version}"
+  
+  local native_binutils_archive="${native_binutils_src_folder_name}.tar.xz"
   local native_binutils_url="https://ftp.gnu.org/gnu/binutils/${native_binutils_archive}"
 
-  local native_binutils_build_folder_name="native-binutils-${native_binutils_version}"
+  local native_binutils_folder_name="native-binutils${step}-${native_binutils_version}"
 
-  local native_binutils_stamp_file_path="${STAMPS_FOLDER_PATH}/stamp-${native_binutils_build_folder_name}-installed"
-  if [ ! -f "${native_binutils_stamp_file_path}" -o ! -d "${BUILD_FOLDER_PATH}/${native_binutils_build_folder_name}" ]
+  local native_binutils_patch_file_path="${helper_folder_path}/patches/binutils-${native_binutils_version}.patch"
+
+  local native_binutils_stamp_file_path="${STAMPS_FOLDER_PATH}/stamp-${native_binutils_folder_name}-installed"
+  if [ ! -f "${native_binutils_stamp_file_path}" -o ! -d "${BUILD_FOLDER_PATH}/${native_binutils_folder_name}" ]
   then
 
     cd "${SOURCES_FOLDER_PATH}"
 
-    download_and_extract "${native_binutils_url}" "${native_binutils_archive}" "${native_binutils_folder_name}"
+    download_and_extract "${native_binutils_url}" "${native_binutils_archive}" \
+      "${native_binutils_src_folder_name}" \
+      "${native_binutils_patch_file_path}"
 
     mkdir -pv "${LOGS_FOLDER_PATH}/${native_binutils_folder_name}"
 
     (
-      mkdir -p "${BUILD_FOLDER_PATH}/${native_binutils_build_folder_name}"
-      cd "${BUILD_FOLDER_PATH}/${native_binutils_build_folder_name}"
+      mkdir -p "${BUILD_FOLDER_PATH}/${native_binutils_folder_name}"
+      cd "${BUILD_FOLDER_PATH}/${native_binutils_folder_name}"
 
       xbb_activate
       xbb_activate_installed_dev
@@ -64,32 +80,56 @@ function do_native_binutils()
           echo
           echo "Running native binutils configure..."
 
-          bash "${SOURCES_FOLDER_PATH}/${native_binutils_folder_name}/configure" --help
+          bash "${SOURCES_FOLDER_PATH}/${native_binutils_src_folder_name}/configure" --help
 
-          # --with-sysroot failed.
-          bash ${DEBUG} "${SOURCES_FOLDER_PATH}/${native_binutils_folder_name}/configure" \
-            --prefix="${INSTALL_FOLDER_PATH}" \
-            \
-            --build="${BUILD}" \
-            --target="${BUILD}" \
-            \
-            --with-pkgversion="${XBB_BINUTILS_BRANDING}" \
-            --with-pic \
-            \
-            --enable-threads \
-            --enable-deterministic-archives \
-            --enable-ld=default \
-            --enable-lto \
-            --enable-plugins \
-            --enable-relro \
-            --enable-shared \
-            --disable-gdb \
-            --disable-werror \
-            --disable-sim \
+          config_options=()
+
+          # ! Do not use the same folder as glibc, since this leads to
+          # shared libs confusions.
+          config_options+=("--prefix=${NATIVE_BINUTILS_INSTALL_FOLDER_PATH}")
+          
+          config_options+=("--build=${BUILD}")
+          config_options+=("--target=${BUILD}")
+          
+          config_options+=("--with-pkgversion=${XBB_BINUTILS_BRANDING}")
+
+          if false # [ "${IS_BOOTSTRAP}" != "y" ]
+          then
+            # There is no --with-sysroot.
+            config_options+=("--with-build-sysroot=${GLIBC_INSTALL_FOLDER_PATH}")
+          fi
+
+          # Arch also uses
+          # --with-lib-path=/usr/lib:/usr/local/lib
+
+          config_options+=("--with-pic")
+          config_options+=("--with-system-zlib")
+          
+          config_options+=("--enable-threads")
+          config_options+=("--enable-deterministic-archives")
+          config_options+=("--enable-ld=default")
+          config_options+=("--enable-gold")
+          config_options+=("--enable-lto")
+          config_options+=("--enable-libssp")
+          config_options+=("--enable-plugins")
+          config_options+=("--enable-relro")
+          config_options+=("--enable-static")
+          config_options+=("--enable-shared")
+          config_options+=("--enable-shared-libgcc")
+          config_options+=("--enable-interwork")
+          config_options+=("--enable-build-warnings=no")
+          
+          config_options+=("--disable-gdb")
+          config_options+=("--disable-werror")
+          config_options+=("--disable-sim")
+
+          bash ${DEBUG} "${SOURCES_FOLDER_PATH}/${native_binutils_src_folder_name}/configure" \
+            ${config_options[@]}
 
           cp "config.log" "${LOGS_FOLDER_PATH}/${native_binutils_folder_name}/config-log.txt"
         ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${native_binutils_folder_name}/configure-output.txt"
       fi
+
       (
         echo
         echo "Running native binutils make..."
