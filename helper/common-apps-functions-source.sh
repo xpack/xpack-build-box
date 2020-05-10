@@ -3283,11 +3283,18 @@ function do_perl()
       CXXFLAGS="${XBB_CPPFLAGS} ${XBB_CXXFLAGS_NO_W}"
       LDFLAGS="${XBB_LDFLAGS_APP_STATIC_GCC} -v"
 
+      # make[1]: Leaving directory '/root/Work/xbb-3.3-ubuntu-12.04-x86_64/build/perl-5.30.1/dist/Unicode-Normalize'
+      # LD_LIBRARY_PATH=/root/Work/xbb-3.3-ubuntu-12.04-x86_64/build/perl-5.30.1  ./perl -Ilib -I. -f pod/buildtoc -q
+      # ./perl: /lib/x86_64-linux-gnu/libcrypt.so.1: version `XCRYPT_2.0' not found (required by /root/Work/xbb-3.3-ubuntu-12.04-x86_64/build/perl-5.30.1/libperl.so)
+      # make: *** [makefile:405: pod/perltoc.pod] Error 1
+      LD_LIBRARY_PATH="${INSTALL_FOLDER_PATH}/lib:$(dirname $(realpath $(${CC} -print-file-name=libssp.so)))"
 
       export CPPFLAGS
       export CFLAGS
       export CXXFLAGS
       export LDFLAGS
+
+      export LD_LIBRARY_PATH
 
       env | sort
 
