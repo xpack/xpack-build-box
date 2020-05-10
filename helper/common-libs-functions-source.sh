@@ -1685,6 +1685,11 @@ function do_libxcrypt()
         cd "${SOURCES_FOLDER_PATH}/${libxcrypt_folder_name}"
 
         xbb_activate
+        if [ "${IS_BOOTSTRAP}" == "y" ]
+        then
+          # Requires the new autotools.
+          xbb_activate_installed_bin
+        fi
         xbb_activate_installed_dev
 
         if [ -f "autogen.sh" ]

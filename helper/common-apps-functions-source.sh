@@ -177,6 +177,9 @@ function do_native_gcc()
       cd "${BUILD_FOLDER_PATH}/${native_gcc_build_folder_name}"
 
       xbb_activate
+      # To pick the ld from the new binutils.
+      # /usr/bin/ld: BFD (GNU Binutils for Ubuntu) 2.22 internal error, aborting at ../../bfd/reloc.c line 443 in bfd_get_reloc_size
+      xbb_activate_installed_bin
       xbb_activate_installed_dev
 
       CPPFLAGS="${XBB_CPPFLAGS}" 
@@ -2238,6 +2241,11 @@ function do_libtool()
       cd "${BUILD_FOLDER_PATH}/${libtool_folder_name}"
 
       xbb_activate
+      if [ "${IS_BOOTSTRAP}" != "y" ]
+      then
+        # To pick the new GCC.
+        xbb_activate_installed_bin
+      fi
       xbb_activate_installed_dev
 
       export CPPFLAGS="${XBB_CPPFLAGS}"
@@ -2720,6 +2728,11 @@ function do_flex()
       then
 
         xbb_activate
+        if [ "${IS_BOOTSTRAP}" == "y" ]
+        then
+          # Requires autopoint from autotools.
+          xbb_activate_installed_bin
+        fi
         xbb_activate_installed_dev
         
         run_app bash ${DEBUG} "autogen.sh"
@@ -3248,6 +3261,11 @@ function do_perl()
       cd "${BUILD_FOLDER_PATH}/${perl_folder_name}"
 
       xbb_activate
+      if [ "${IS_BOOTSTRAP}" == "y" ]
+      then
+        # ! Requires patchelf.
+        xbb_activate_installed_bin
+      fi
       xbb_activate_installed_dev
 
       CPPFLAGS="${XBB_CPPFLAGS}"
