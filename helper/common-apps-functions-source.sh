@@ -322,6 +322,36 @@ function do_native_gcc()
 
         make install-strip
 
+        (
+          cd "${INSTALL_FOLDER_PATH}/usr/bin"
+
+          # Add links with the non-suffixed names, to
+          # prevent using the system old versions.
+
+          rm -fv "gcc" "cc"          
+          ln -sv "gcc${XBB_GCC_SUFFIX}" "gcc"
+          ln -sv "gcc${XBB_GCC_SUFFIX}" "cc"
+
+          rm -fv "g++" "c++"
+          ln -sv "g++${XBB_GCC_SUFFIX}" "g++"
+          ln -sv "g++${XBB_GCC_SUFFIX}" "c++"
+
+          rm -fv "gcc-ar" "gcc-nm" "gcc-ranlib"
+          ln -sv "gcc-ar${XBB_GCC_SUFFIX}" "gcc-ar"
+          ln -sv "gcc-nm${XBB_GCC_SUFFIX}" "gcc-nm"
+          ln -sv "gcc-ranlib${XBB_GCC_SUFFIX}" "gcc-ranlib"
+
+          rm -fv "gcov" "gcov-dump" "gcov-tool"
+          ln -sv "gcov${XBB_GCC_SUFFIX}" "gcov"
+          ln -sv "gcov-dump${XBB_GCC_SUFFIX}" "gcov-dump"
+          ln -sv "gcov-tool${XBB_GCC_SUFFIX}" "gcov-tool"
+
+          if [ -x "gfortran-xbs" ]
+          then
+            rm -fv "gfortran"
+            ln -sv "gfortran-xbs" "gfortran"
+          fi
+        )
 
 if false
 then
