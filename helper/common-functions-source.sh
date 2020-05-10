@@ -216,20 +216,19 @@ function prepare_xbb_env()
 
     if [ "${IS_BOOTSTRAP}" == "y" ]
     then
+      # TODO
       CC=${CC:-"clang"}
       CXX=${CXX:-"clang++"}
     else
-      CC=${CC:-"gcc-8bs"}
-      CXX=${CXX:-"g++-8bs"}
+      # TODO
+      prepare_gcc_env "" "-8bs"
     fi
   else
     if [ "${IS_BOOTSTRAP}" == "y" ]
     then
-      CC=${CC:-"gcc"}
-      CXX=${CXX:-"g++"}
+      prepare_gcc_env ""
     else
-      CC=${CC:-"gcc-8bs"}
-      CXX=${CXX:-"g++-8bs"}
+      prepare_gcc_env "" "-xbs"
     fi
   fi
 
