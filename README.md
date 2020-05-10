@@ -251,6 +251,10 @@ $ docker run -it <image> ldd --version
 - `fedora:31` - 2019-10, 2.30
 - `fedora:32` - 2020-04, 2.20
 
+## Credits
+
+The xPack Build Box is inspired by the 
+[Holy Build Box](https://github.com/phusion/holy-build-box)
 
 ## Maintainer info
 
