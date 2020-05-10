@@ -221,32 +221,46 @@ function do_native_gcc()
   # https://archlinuxarm.org/packages/aarch64/gcc/files/PKGBUILD
   # https://aur.archlinux.org/cgit/aur.git/tree/PKGBUILD?h=gcc-git
 
+  # 2018-10-30, "6.5.0"
   # 2018-12-06, "7.4.0"
   # 2019-11-14, "7.5.0"
+  # 2018-05-02, "8.1.0"
+  # 2018-07-26, "8.2.0"
   # 2019-02-22, "8.3.0"
+  # 2020-03-04, "8.4.0"
+  # 2019-05-03, "9.1.0"
   # 2019-08-12, "9.2.0"
+  # 2020-03-12, "9.3.0"
 
   local native_gcc_version="$1"
-  
-  local native_gcc_folder_name="gcc-${native_gcc_version}"
-  local native_gcc_archive="${native_gcc_folder_name}.tar.xz"
+
+  local step
+  if [ $# -ge 2 ]
+  then
+    step="$2"
+  else
+    step=""
+  fi
+
+  local native_gcc_src_folder_name="gcc-${native_gcc_version}"
+  local native_gcc_archive="${native_gcc_src_folder_name}.tar.xz"
   local native_gcc_url="https://ftp.gnu.org/gnu/gcc/gcc-${native_gcc_version}/${native_gcc_archive}"
 
-  local native_gcc_build_folder_name="native-gcc-${native_gcc_version}"
+  local native_gcc_folder_name="native-gcc${step}-${native_gcc_version}"
 
-  local native_gcc_stamp_file_path="${STAMPS_FOLDER_PATH}/stamp-${native_gcc_build_folder_name}-installed"
-  if [ ! -f "${native_gcc_stamp_file_path}" -o ! -d "${BUILD_FOLDER_PATH}/${native_gcc_build_folder_name}" ]
+  local native_gcc_stamp_file_path="${STAMPS_FOLDER_PATH}/stamp-${native_gcc_folder_name}-installed"
+  if [ ! -f "${native_gcc_stamp_file_path}" -o ! -d "${BUILD_FOLDER_PATH}/${native_gcc_folder_name}" ]
   then
 
     cd "${SOURCES_FOLDER_PATH}"
 
-    download_and_extract "${native_gcc_url}" "${native_gcc_archive}" "${native_gcc_folder_name}" 
+    download_and_extract "${native_gcc_url}" "${native_gcc_archive}" "${native_gcc_src_folder_name}" 
 
     mkdir -pv "${LOGS_FOLDER_PATH}/${native_gcc_folder_name}"
 
     (
-      mkdir -p "${BUILD_FOLDER_PATH}/${native_gcc_build_folder_name}"
-      cd "${BUILD_FOLDER_PATH}/${native_gcc_build_folder_name}"
+      mkdir -p "${BUILD_FOLDER_PATH}/${native_gcc_folder_name}"
+      cd "${BUILD_FOLDER_PATH}/${native_gcc_folder_name}"
 
       xbb_activate
       # To pick the ld from the new binutils.
@@ -273,8 +287,70 @@ function do_native_gcc()
           echo
           echo "Running native gcc configure..."
 
-          bash "${SOURCES_FOLDER_PATH}/${native_gcc_folder_name}/configure" --help
-          bash "${SOURCES_FOLDER_PATH}/${native_gcc_folder_name}/gcc/configure" --help
+          bash "${SOURCES_FOLDER_PATH}/${native_gcc_src_folder_name}/configure" --help
+          bash "${SOURCES_FOLDER_PATH}/${native_gcc_src_folder_name}/gcc/configure" --help
+
+          config_options=()
+
+          config_options+=("--prefix=${INSTALL_FOLDER_PATH}/usr")
+          # Do not use the same folder as glibc.
+          config_options+=("--libdir=${INSTALL_FOLDER_PATH}/usr/${BUILD}/lib")
+
+          config_options+=("--program-suffix=${XBB_GCC_SUFFIX}")
+
+          config_options+=("--build=${BUILD}")
+          config_options+=("--target=${BUILD}")
+
+          config_options+=("--with-pkgversion=${XBB_GCC_BRANDING}")
+
+          config_options+=("--with-default-libstdcxx-abi=new")
+          config_options+=("--with-dwarf2")
+          config_options+=("--with-libiconv")
+
+          config_options+=("--with-isl")
+          # config_options+=("--with-isl=${INSTALL_FOLDER_PATH}")
+
+          config_options+=("--with-system-zlib")
+          config_options+=("--without-cuda-driver")
+
+          config_options+=("--enable-checking=release")
+          config_options+=("--enable-static")
+          config_options+=("--enable-shared")
+          config_options+=("--enable-shared-libgcc")
+
+          config_options+=("--enable-threads=posix")
+          config_options+=("--enable-__cxa_atexit")
+
+          config_options+=("--enable-gnu-unique-object")
+          config_options+=("--enable-linker-build-id")
+          config_options+=("--enable-lto")
+          config_options+=("--enable-plugin")
+          config_options+=("--enable-gnu-indirect-function")
+
+          config_options+=("--enable-default-pie")
+          config_options+=("--enable-default-ssp")
+          config_options+=("--enable-libssp")
+          config_options+=("--enable-libquadmath-support")
+          config_options+=("--enable-libquadmath")
+          config_options+=("--enable-graphite")
+          config_options+=("--enable-libatomic")
+          config_options+=("--enable-libgomp")
+          config_options+=("--enable-cloog-backend=isl")
+          config_options+=("--enable-fully-dynamic-string")
+          config_options+=("--enable-libstdcxx-time=yes")
+
+          if false
+          then
+            config_options+=("--enable-bootstrap")
+          else
+            config_options+=("--disable-bootstrap")
+          fi
+
+          config_options+=("--disable-libunwind-exceptions")
+          config_options+=("--disable-libstdcxx-pch")
+          config_options+=("--disable-libstdcxx-debug")
+          config_options+=("--disable-multilib")
+          config_options+=("--disable-werror")
 
           if is_darwin
           then
@@ -284,34 +360,11 @@ function do_native_gcc()
             # --enable-libmpx 
             # --enable-clocale=gnu
             echo "${MACOS_SDK_PATH}"
-
-            bash ${DEBUG} "${SOURCES_FOLDER_PATH}/${native_gcc_folder_name}/configure" \
-              --prefix="${INSTALL_FOLDER_PATH}" \
-              --program-suffix="${XBB_GCC_SUFFIX}" \
-              \
-              --build="${BUILD}" \
-              --target="${BUILD}" \
-              \
-              --with-pkgversion="${XBB_GCC_BRANDING}" \
-              --with-native-system-header-dir="/usr/include" \
-              --with-sysroot="${MACOS_SDK_PATH}" \
-              \
-              --enable-languages=c,c++,objc,obj-c++ \
-              --enable-checking=release \
-              --enable-static \
-              --enable-threads=posix \
-              --enable-__cxa_atexit \
-              --enable-gnu-unique-object \
-              --enable-linker-build-id \
-              --enable-lto \
-              --enable-plugin \
-              --enable-gnu-indirect-function \
-              --disable-libunwind-exceptions \
-              --disable-libstdcxx-pch \
-              --disable-libssp \
-              --disable-multilib \
-              --disable-werror \
-              --disable-bootstrap \
+        
+            config_options+=("--with-native-system-header-dir=/usr/include")
+            config_options+=("--with-sysroot=${MACOS_SDK_PATH}")
+            
+            config_options+=("--enable-languages=c,c++,fortran,objc,obj-c++")
 
           else is_linux
 
@@ -326,7 +379,16 @@ function do_native_gcc()
             # --enable-libstdcxx-time=yes (liks librt)
             # --with-default-libstdcxx-abi=new (default)
 
-            config_options=()
+            #  --enable-shared \
+
+            config_options+=("--with-linker-hash-style=gnu")
+            config_options+=("--with-gnu-as")
+            config_options+=("--with-gnu-ld")
+            
+            config_options+=("--enable-languages=c,c++,fortran,objc,obj-c++")
+
+            config_options+=("--enable-clocale=gnu")
+
             if [ "${HOST_MACHINE}" == "aarch64" ]
             then
               config_options+=("--with-arch=armv8-a")
@@ -339,43 +401,15 @@ function do_native_gcc()
               config_options+=("--with-fpu=vfpv3-d16")
             fi
 
-            set +u
-
-            "${SOURCES_FOLDER_PATH}/${native_gcc_folder_name}/configure" \
-              --prefix="${INSTALL_FOLDER_PATH}" \
-              --program-suffix="${XBB_GCC_SUFFIX}" \
-              \
-              --build="${BUILD}" \
-              --target="${BUILD}" \
-              \
-              --with-pkgversion="${XBB_GCC_BRANDING}" \
-              --with-linker-hash-style=gnu \
-              --with-isl \
-              \
-              --enable-languages=c,c++ \
-              --enable-shared \
-              --enable-checking=release \
-              --enable-threads=posix \
-              --enable-__cxa_atexit \
-              --enable-clocale=gnu \
-              --enable-gnu-unique-object \
-              --enable-linker-build-id \
-              --enable-lto \
-              --enable-plugin \
-              --enable-gnu-indirect-function \
-              --enable-default-pie \
-              --enable-default-ssp \
-              --disable-libunwind-exceptions \
-              --disable-libstdcxx-pch \
-              --disable-libssp \
-              --disable-multilib \
-              --disable-werror \
-              --disable-bootstrap \
-              ${config_options[@]}
-              
-            set -u
+            if false # [ "${IS_BOOTSTRAP}" != "y" ]
+            then
+              config_options+=("--with-sysroot=${INSTALL_FOLDER_PATH}")
+            fi
 
           fi
+
+          "${SOURCES_FOLDER_PATH}/${native_gcc_src_folder_name}/configure" \
+            ${config_options[@]}
 
           cp "config.log" "${LOGS_FOLDER_PATH}/${native_gcc_folder_name}/config-log.txt"
         ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${native_gcc_folder_name}/configure-output.txt"
