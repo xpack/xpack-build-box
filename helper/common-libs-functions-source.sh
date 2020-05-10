@@ -52,6 +52,8 @@ function do_zlib()
       export CXXFLAGS="${XBB_CXXFLAGS_NO_W}"
       export LDFLAGS="${XBB_LDFLAGS_LIB_STATIC_GCC}"
 
+      env | sort
+
       (
         echo
         echo "Running zlib configure..."
@@ -127,6 +129,8 @@ function do_gmp()
 
       # Mandatory, it fails on 32-bits. 
       # export ABI="${HOST_BITS}"
+
+      env | sort
 
       if [ ! -f "config.status" ]
       then
@@ -205,6 +209,8 @@ function do_mpfr()
       export CFLAGS="${XBB_CFLAGS_NO_W}"
       export CXXFLAGS="${XBB_CXXFLAGS_NO_W}"
       export LDFLAGS="${XBB_LDFLAGS_LIB_STATIC_GCC}"
+
+      env | sort
 
       if [ ! -f "config.status" ]
       then
@@ -287,6 +293,8 @@ function do_mpc()
       export CXXFLAGS="${XBB_CXXFLAGS_NO_W}"
       export LDFLAGS="${XBB_LDFLAGS_LIB_STATIC_GCC}"
 
+      env | sort
+
       if [ ! -f "config.status" ]
       then
         (
@@ -359,6 +367,8 @@ function do_isl()
       export CXXFLAGS="${XBB_CXXFLAGS_NO_W}"
       # The c++ test fails without it.
       export LDFLAGS="${XBB_LDFLAGS_LIB_STATIC_GCC}"
+
+      env | sort
 
       if [ ! -f "config.status" ]
       then
@@ -435,6 +445,8 @@ function do_nettle()
       export CFLAGS="${XBB_CFLAGS_NO_W}"
       export CXXFLAGS="${XBB_CXXFLAGS_NO_W}"
       export LDFLAGS="${XBB_LDFLAGS_LIB_STATIC_GCC}"
+
+      env | sort
 
       if [ ! -f "config.status" ]
       then
@@ -529,6 +541,8 @@ function do_tasn1()
       export CXXFLAGS="${XBB_CXXFLAGS_NO_W}"
       export LDFLAGS="${XBB_LDFLAGS_LIB_STATIC_GCC}"
 
+      env | sort
+
       if [ ! -f "config.status" ]
       then
         (
@@ -602,6 +616,8 @@ function do_expat()
       export CFLAGS="${XBB_CFLAGS_NO_W}"
       export CXXFLAGS="${XBB_CXXFLAGS_NO_W}"
       export LDFLAGS="${XBB_LDFLAGS_LIB_STATIC_GCC}"
+
+      env | sort
 
       if [ ! -f "config.status" ]
       then
@@ -693,6 +709,8 @@ function do_libffi()
       export CXXFLAGS="${XBB_CXXFLAGS_NO_W}"
       export LDFLAGS="${XBB_LDFLAGS_LIB_STATIC_GCC}"
 
+      env | sort
+
       if [ ! -f "config.status" ]
       then
         (
@@ -770,6 +788,8 @@ function do_libiconv()
       export CFLAGS="${XBB_CFLAGS_NO_W}"
       export CXXFLAGS="${XBB_CXXFLAGS_NO_W}"
       export LDFLAGS="${XBB_LDFLAGS_LIB_STATIC_GCC}"
+
+      env | sort
 
       if [ ! -f "config.status" ]
       then
@@ -856,6 +876,8 @@ function do_gnutls()
         export CXX=clang++
       fi
       
+      env | sort
+
       if [ ! -f "config.status" ]
       then
         (
@@ -942,6 +964,8 @@ function do_util_macros()
       export CXXFLAGS="${XBB_CXXFLAGS_NO_W}"
       export LDFLAGS="${XBB_LDFLAGS_LIB_STATIC_GCC}"
 
+      env | sort
+
       if [ ! -f "config.status" ]
       then
         (
@@ -1011,6 +1035,8 @@ function do_xorg_xproto()
       export CFLAGS="${XBB_CFLAGS_NO_W}"
       export CXXFLAGS="${XBB_CXXFLAGS_NO_W}"
       export LDFLAGS="${XBB_LDFLAGS_LIB_STATIC_GCC}"
+
+      env | sort
 
       if [ ! -f "config.status" ]
       then
@@ -1090,6 +1116,8 @@ function do_libpng()
       export CXXFLAGS="${XBB_CXXFLAGS_NO_W}"
       export LDFLAGS="${XBB_LDFLAGS_LIB_STATIC_GCC}"
 
+      env | sort
+
       if [ ! -f "config.status" ]
       then
         (
@@ -1165,6 +1193,8 @@ function do_libmpdec()
       export CXXFLAGS="${XBB_CXXFLAGS_NO_W}"
       export LDFLAGS="${XBB_LDFLAGS_LIB_STATIC_GCC} -v"
 
+      env | sort
+
       if [ ! -f "config.status" ]
       then
         (
@@ -1235,6 +1265,8 @@ function do_libgpg_error()
       export CXXFLAGS="${XBB_CXXFLAGS_NO_W}"
       export LDFLAGS="${XBB_LDFLAGS_LIB_STATIC_GCC}"
 
+      env | sort
+
       if [ ! -f "config.status" ]
       then
         (
@@ -1304,6 +1336,8 @@ function do_libgcrypt()
       export CFLAGS="${XBB_CFLAGS_NO_W}"
       export CXXFLAGS="${XBB_CXXFLAGS_NO_W}"
       export LDFLAGS="${XBB_LDFLAGS_LIB_STATIC_GCC}"
+
+      env | sort
 
       if [ ! -f "config.status" ]
       then
@@ -1399,6 +1433,8 @@ function do_libassuan()
       export CXXFLAGS="${XBB_CXXFLAGS_NO_W}"
       export LDFLAGS="${XBB_LDFLAGS_LIB_STATIC_GCC}"
 
+      env | sort
+
       if [ ! -f "config.status" ]
       then
         (
@@ -1469,6 +1505,8 @@ function do_libksba()
       export CFLAGS="${XBB_CFLAGS_NO_W}"
       export CXXFLAGS="${XBB_CXXFLAGS_NO_W}"
       export LDFLAGS="${XBB_LDFLAGS_LIB_STATIC_GCC}"
+
+      env | sort
 
       if [ ! -f "config.status" ]
       then
@@ -1549,6 +1587,8 @@ function do_npth()
         export CC=clang
         export CXX=clang++
       fi
+
+      env | sort
 
       if [ ! -f "config.status" ]
       then
@@ -1651,6 +1691,8 @@ function do_libxcrypt()
       export CXXFLAGS="${XBB_CXXFLAGS_NO_W}"
       export LDFLAGS="${XBB_LDFLAGS_LIB_STATIC_GCC}"
 
+      env | sort
+
       if [ ! -f "config.status" ]
       then
         (
@@ -1728,6 +1770,8 @@ function do_libunistring()
       export CXXFLAGS="${XBB_CXXFLAGS_NO_W}"
       export LDFLAGS="${XBB_LDFLAGS_LIB_STATIC_GCC}"
 
+      env | sort
+
       if [ ! -f "config.status" ]
       then
         (
@@ -1797,6 +1841,8 @@ function do_gc()
       export CFLAGS="${XBB_CFLAGS_NO_W}"
       export CXXFLAGS="${XBB_CXXFLAGS_NO_W}"
       export LDFLAGS="${XBB_LDFLAGS_LIB_STATIC_GCC}"
+
+      env | sort
 
       if [ ! -f "config.status" ]
       then

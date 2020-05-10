@@ -53,6 +53,8 @@ function do_native_binutils()
       export CXXFLAGS
       export LDFLAGS
 
+      env | sort
+
       if [ ! -f "config.status" ]
       then
         (
@@ -185,6 +187,8 @@ function do_native_gcc()
       export CFLAGS
       export CXXFLAGS
       export LDFLAGS
+
+      env | sort
 
       if [ ! -f "config.status" ]
       then
@@ -411,6 +415,8 @@ function do_mingw_binutils()
       # export LDFLAGS="-static-libstdc++ ${LDFLAGS}"
       export LDFLAGS="${XBB_LDFLAGS_APP_STATIC_GCC}"
 
+      env | sort
+
       if [ ! -f "config.status" ]
       then
         (
@@ -544,6 +550,8 @@ function do_mingw_all()
 
       xbb_activate
 
+      env | sort
+
       if [ ! -f "config.status" ]
       then
         (
@@ -633,6 +641,8 @@ function do_mingw_all()
       export CFLAGS="${XBB_CFLAGS_NO_W}"
       export CXXFLAGS="${XBB_CXXFLAGS_NO_W}"
       export LDFLAGS="${XBB_LDFLAGS_APP_STATIC_GCC}"
+
+      env | sort
 
       if [ ! -f "config.status" ]
       then
@@ -740,6 +750,8 @@ function do_mingw_all()
       # (https://github.com/henry0312/build_gcc/issues/1)
       export CC=""
 
+      env | sort
+
       if [ ! -f "config.status" ]
       then
         (
@@ -822,6 +834,8 @@ function do_mingw_all()
       
       export CC=""
 
+      env | sort
+
       if [ ! -f "config.status" ]
       then
         (
@@ -882,6 +896,8 @@ function do_mingw_all()
       export CFLAGS="${XBB_CFLAGS_NO_W}"
       export CXXFLAGS="${XBB_CXXFLAGS_NO_W}"
       export LDFLAGS="${XBB_LDFLAGS_APP_STATIC_GCC}"
+
+      env | sort
 
       # Build.
       make -j ${JOBS}
@@ -1009,6 +1025,8 @@ function do_openssl()
       export CFLAGS="${XBB_CFLAGS_NO_W}"
       export CXXFLAGS="${XBB_CXXFLAGS_NO_W}"
       export LDFLAGS="${XBB_LDFLAGS_APP_STATIC_GCC}"
+
+      env | sort
 
       if [ ! -f config.stamp ]
       then
@@ -1191,6 +1209,8 @@ function do_curl()
       export CXXFLAGS="${XBB_CXXFLAGS_NO_W}"
       export LDFLAGS="${XBB_LDFLAGS_APP_STATIC_GCC}"
 
+      env | sort
+
       if [ ! -f "config.status" ]
       then
         (
@@ -1292,6 +1312,8 @@ function do_xz()
       export CXXFLAGS="${XBB_CXXFLAGS_NO_W}"
       export LDFLAGS="${XBB_LDFLAGS_APP_STATIC_GCC}"
 
+      env | sort
+
       if [ ! -f "config.status" ]
       then
         (
@@ -1385,6 +1407,8 @@ function do_tar()
 
       # Avoid 'configure: error: you should not run configure as root'.
       export FORCE_UNSAFE_CONFIGURE=1
+
+      env | sort
 
       if [ ! -f "config.status" ]
       then
@@ -1493,6 +1517,8 @@ function do_coreutils()
         export CC=clang
         export CXX=clang++
       fi
+
+      env | sort
 
       if [ ! -f "config.status" ]
       then
@@ -1649,6 +1675,8 @@ function do_pkg_config()
       export CXXFLAGS
       export LDFLAGS
 
+      env | sort
+
       if [ ! -f "config.status" ]
       then
         (
@@ -1739,6 +1767,8 @@ function do_m4()
       export CFLAGS="${XBB_CFLAGS_NO_W}"
       export CXXFLAGS="${XBB_CXXFLAGS_NO_W}"
       export LDFLAGS="${XBB_LDFLAGS_APP_STATIC_GCC}"
+
+      env | sort
 
       if [ ! -f "config.status" ]
       then
@@ -1840,6 +1870,8 @@ function do_gawk()
       export CXXFLAGS="${XBB_CXXFLAGS_NO_W}"
       export LDFLAGS="${XBB_LDFLAGS_APP_STATIC_GCC}"
 
+      env | sort
+
       if [ ! -f "config.status" ]
       then
         (
@@ -1927,6 +1959,8 @@ function do_sed()
       export CFLAGS="${XBB_CFLAGS_NO_W}"
       export CXXFLAGS="${XBB_CXXFLAGS_NO_W}"
       export LDFLAGS="${XBB_LDFLAGS_APP_STATIC_GCC}"
+
+      env | sort
 
       if [ ! -f "config.status" ]
       then
@@ -2018,6 +2052,8 @@ function do_autoconf()
       export CXXFLAGS="${XBB_CXXFLAGS_NO_W}"
       export LDFLAGS="${XBB_LDFLAGS_APP_STATIC_GCC}"
 
+      env | sort
+
       if [ ! -f "config.status" ]
       then
         (
@@ -2098,6 +2134,8 @@ function do_automake()
       export CFLAGS="${XBB_CFLAGS_NO_W}"
       export CXXFLAGS="${XBB_CXXFLAGS_NO_W}"
       export LDFLAGS="${XBB_LDFLAGS_APP_STATIC_GCC}"
+
+      env | sort
 
       if [ ! -f "config.status" ]
       then
@@ -2185,6 +2223,8 @@ function do_libtool()
       export CFLAGS="${XBB_CFLAGS_NO_W}"
       export CXXFLAGS="${XBB_CXXFLAGS_NO_W}"
       export LDFLAGS="${XBB_LDFLAGS_APP_STATIC_GCC}"
+
+      env | sort
 
       if [ ! -f "config.status" ]
       then
@@ -2282,6 +2322,8 @@ function do_gettext()
       export CXXFLAGS
       export LDFLAGS
 
+      env | sort
+
       if [ ! -f "config.status" ]
       then
         (
@@ -2375,6 +2417,8 @@ function do_patch()
       export CXXFLAGS="${XBB_CXXFLAGS_NO_W}"
       export LDFLAGS="${XBB_LDFLAGS_APP_STATIC_GCC}"
 
+      env | sort
+
       if [ ! -f "config.status" ]
       then
         (
@@ -2457,6 +2501,8 @@ function do_diffutils()
       export CFLAGS="${XBB_CFLAGS_NO_W}"
       export CXXFLAGS="${XBB_CXXFLAGS_NO_W}"
       export LDFLAGS="${XBB_LDFLAGS_APP_STATIC_GCC}"
+
+      env | sort
 
       if [ ! -f "config.status" ]
       then
@@ -2548,6 +2594,8 @@ function do_bison()
         # undefined reference to `clock_gettime' on docker
         export LIBS="-lrt"
       fi
+
+      env | sort
 
       if [ ! -f "config.status" ]
       then
@@ -2666,6 +2714,8 @@ function do_flex()
       export CXXFLAGS="${XBB_CXXFLAGS_NO_W}"
       export LDFLAGS="${XBB_LDFLAGS_APP_STATIC_GCC}"
 
+      env | sort
+
       if [ ! -f "config.status" ]
       then
         (
@@ -2756,6 +2806,8 @@ function do_make()
       export CFLAGS="${XBB_CFLAGS_NO_W}"
       export CXXFLAGS="${XBB_CXXFLAGS_NO_W}"
       export LDFLAGS="${XBB_LDFLAGS_APP_STATIC_GCC}"
+
+      env | sort
 
       if [ ! -f "config.status" ]
       then
@@ -2853,6 +2905,8 @@ function do_wget()
       # Might be needed on Mac
       # export LIBS="-liconv"
 
+      env | sort
+
       if [ ! -f "config.status" ]
       then
         (
@@ -2948,6 +3002,8 @@ function do_texinfo()
       export CFLAGS="${XBB_CFLAGS_NO_W}"
       export CXXFLAGS="${XBB_CXXFLAGS_NO_W}"
       export LDFLAGS="${XBB_LDFLAGS_APP_STATIC_GCC}"
+
+      env | sort
 
       if [ ! -f "config.status" ]
       then
@@ -3048,6 +3104,8 @@ function do_cmake()
         export CC=clang
         export CXX=clang++
       fi
+
+      env | sort
 
       local which_cmake="$(which cmake)"
       if [ -z "${which_cmake}" -o "${IS_BOOTSTRAP}" == "y" ]
@@ -3172,6 +3230,8 @@ function do_perl()
       export CXXFLAGS
       export LDFLAGS
 
+      env | sort
+
       if [ ! -f "config.h" ]
       then
         (
@@ -3278,6 +3338,8 @@ function do_makedepend()
       export LDFLAGS
       export PKG_CONFIG_PATH
 
+      env | sort
+
       if [ ! -f "config.status" ]
       then
         (
@@ -3359,6 +3421,8 @@ function do_patchelf()
       # Wihtout -static-libstdc++, the bootstrap lib folder is needed to 
       # find libstdc++.
       export LDFLAGS="${XBB_LDFLAGS_APP_STATIC_GCC}"
+
+      env | sort
 
       if [ ! -f "config.status" ]
       then
@@ -3446,6 +3510,8 @@ function do_dos2unix()
       export CXXFLAGS="${XBB_CXXFLAGS_NO_W}"
       export LDFLAGS="${XBB_LDFLAGS_APP_STATIC_GCC}"
 
+      env | sort
+
       (
         echo
         echo "Running dos2unix make..."
@@ -3514,6 +3580,8 @@ function do_git()
       export CXXFLAGS="${XBB_CXXFLAGS_NO_W}"
       export LDFLAGS="${XBB_LDFLAGS_APP_STATIC_GCC}"
       # export LIBS="-ldl"
+
+      env | sort
 
       if [ ! -f "config.status" ]
       then
@@ -3621,6 +3689,8 @@ function do_python2()
 
       # From Arch.
       export OPT="${CFLAGS}"
+
+      env | sort
 
       if [ ! -f "config.status" ]
       then
@@ -3773,6 +3843,8 @@ function do_python3()
       export CXXFLAGS
       export LDFLAGS
 
+      env | sort
+
       if [ ! -f "config.status" ]
       then
         (
@@ -3903,6 +3975,8 @@ function do_scons()
       export CXXFLAGS="${XBB_CXXFLAGS_NO_W}"
       export LDFLAGS="${XBB_LDFLAGS_APP_STATIC_GCC}"
 
+      env | sort
+
       echo
       echo "Running scons install..."
 
@@ -3961,6 +4035,8 @@ function do_meson
 
     (
       xbb_activate_installed_bin
+
+      env | sort
 
       pip3 install meson==${meson_version}
 
@@ -4022,6 +4098,8 @@ function do_ninja()
       export CFLAGS="${XBB_CFLAGS_NO_W}"
       export CXXFLAGS="${XBB_CXXFLAGS_NO_W}"
       export LDFLAGS="${XBB_LDFLAGS_APP_STATIC_GCC}"
+
+      env | sort
 
       (
         echo
@@ -4097,6 +4175,8 @@ function do_p7zip()
       export CFLAGS="${XBB_CFLAGS_NO_W}"
       export CXXFLAGS="${XBB_CXXFLAGS_NO_W}"
       export LDFLAGS="${XBB_LDFLAGS_APP_STATIC_GCC}"
+
+      env | sort
 
       echo
       echo "Running p7zip make..."
@@ -4206,6 +4286,8 @@ function do_wine()
       export CFLAGS="${XBB_CFLAGS_NO_W}"
       export CXXFLAGS="${XBB_CXXFLAGS_NO_W}"
       export LDFLAGS="${XBB_LDFLAGS_APP_STATIC_GCC}"
+
+      env | sort
 
       if [ ! -f "config.status" ]
       then
@@ -4323,6 +4405,8 @@ function do_nvm()
       export LDFLAGS="${XBB_LDFLAGS_APP_STATIC_GCC}"
       export LIBS="-lrt"
 
+      env | sort
+
       if [ ! -d "${INSTALL_FOLDER_PATH}/nvm" ]
       then
         cd "${INSTALL_FOLDER_PATH}"
@@ -4406,6 +4490,8 @@ function do_gnupg()
       then
         export LIBS="-lrt"
       fi
+
+      env | sort
 
       if [ ! -f "config.status" ]
       then
@@ -4494,6 +4580,8 @@ function do_ant()
 
       xbb_activate
 
+      env | sort
+
       (
         # https://ant.apache.org/manual/install.html#buildingant
 
@@ -4560,6 +4648,8 @@ function do_maven()
       cd "${BUILD_FOLDER_PATH}/${maven_folder_name}"
 
       xbb_activate
+
+      env | sort
 
       (
 
@@ -4636,6 +4726,8 @@ function do_nodejs()
       export CFLAGS="${XBB_CFLAGS_NO_W}"
       export CXXFLAGS="${XBB_CXXFLAGS_NO_W}"
       export LDFLAGS="${XBB_LDFLAGS_APP_STATIC_GCC}"
+
+      env | sort
 
       if true # [ ! -f "config.status" ]
       then
@@ -4734,6 +4826,8 @@ function do_tcl()
       export CXXFLAGS="${XBB_CXXFLAGS_NO_W}"
       export LDFLAGS="${XBB_LDFLAGS_APP_STATIC_GCC}"
 
+      env | sort
+
       if [ ! -f "config.status" ]
       then
         (
@@ -4825,6 +4919,8 @@ function do_guile()
       export CXXFLAGS="${XBB_CXXFLAGS_NO_W}"
       export LDFLAGS="${XBB_LDFLAGS_APP_STATIC_GCC}"
 
+      env | sort
+
       if [ ! -f "config.status" ]
       then
         (
@@ -4909,6 +5005,8 @@ function do_rhash()
       export CFLAGS="${XBB_CFLAGS_NO_W}"
       export CXXFLAGS="${XBB_CXXFLAGS_NO_W}"
       export LDFLAGS="${XBB_LDFLAGS_APP_STATIC_GCC}"
+
+      env | sort
 
       if [ ! -f "stamp-configure" ]
       then
@@ -5011,6 +5109,8 @@ function do_re2c()
       export CXXFLAGS="${XBB_CXXFLAGS_NO_W}"
       export LDFLAGS="${XBB_LDFLAGS_APP_STATIC_GCC}"
     
+      env | sort
+
       if [ ! -f "config.status" ]
       then
         (
@@ -5081,6 +5181,8 @@ function do_sphinx()
   then
     (
       xbb_activate_installed_bin
+
+      env | sort
 
       pip3 install sphinx==${sphinx_version}
     )
