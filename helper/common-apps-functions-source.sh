@@ -4059,6 +4059,9 @@ function do_scons()
         --optimize=1 \
         --standard-lib \
 
+      mkdir -p "${INSTALL_FOLDER_PATH}/share/man/man1"
+      mv -v "${INSTALL_FOLDER_PATH}/man/man1"/* "${INSTALL_FOLDER_PATH}/share/man/man1"
+      rm -rv "${INSTALL_FOLDER_PATH}/man/man1"
 
     ) 2>&1 | tee "${LOGS_FOLDER_PATH}/install-scons-output.txt"
 
