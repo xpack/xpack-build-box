@@ -423,6 +423,12 @@ function ubuntu_install_develop()
 
   # patchelf - not present in 14 trusty, 16 precise
 
+  # Starting with 16.04, it is part of coreutils.
+  if [ "${release}" == "12.04" -o "${release}" == "14.04" ]
+  then
+    apt-get install --yes realpath
+  fi
+
   # ---------------------------------------------------------------------------
 
   # For add-apt-repository
