@@ -33,34 +33,66 @@ script_folder_path="$(dirname "${script_path}")"
 script_folder_name="$(basename "${script_folder_path}")"
 
 # =============================================================================
+# This script creates the XBB bootstrap docker images.
 
-# Walk two steps up.
-helper_folder_path="$(dirname $(dirname "${script_folder_path}"))/helper"
+WORK_FOLDER_PATH="${HOME}/Work"
+
+XBB_FOLDER_PATH="/opt/xbb"
+XBB_BOOTSTRAP_FOLDER_PATH="/opt/xbb-bootstrap"
+
+IS_BOOTSTRAP="n"
+
+# -----------------------------------------------------------------------------
+
+helper_folder_path="${script_folder_path}/helper"
 
 source "${helper_folder_path}/common-functions-source.sh"
 source "${helper_folder_path}/common-docker-functions-source.sh"
 
+source "${helper_folder_path}/common-libs-functions-source.sh"
+source "${helper_folder_path}/common-apps-functions-source.sh"
+
+source "${helper_folder_path}/common-versions-xbb-source.sh"
+
+source "${XBB_BOOTSTRAP_FOLDER_PATH}/xbb-source.sh"
+
+# Override function, must be here.
+function xbb_activate()
+{
+  xbb_activate_bootstrap      # Use only bootstrap binaries, not xbb
+  if [ -f "${BUILD_FOLDER_PATH}/.activate_installed_bin" ]
+  then
+    xbb_activate_installed_bin
+  fi
+}
+
+function do_cleanup()
+{
+  if [ -f "${WORK_FOLDER_PATH}/.dockerenv" ]
+  then
+    rm -rf "${WORK_FOLDER_PATH}"
+  fi
+}
+
 # -----------------------------------------------------------------------------
 
-detect_host
+do_prerequisites
 
-host_init_docker_env
-host_init_docker_input \
-  "$(dirname $(dirname "${script_folder_path}"))/ca-bundle/ca-bundle.crt" \
+echo
+echo "$(uname) ${HOST_MACHINE} XBB build script started..."
 
-version="3.1"
+# -----------------------------------------------------------------------------
 
-arch="i386"
-distro="ubuntu"
-release="12.04"
-from="ilegeul/${distro}:${arch}-${release}-tex-v3.1"
-name="xbb"
+do_build_versions
 
-host_run_docker_it
+# -----------------------------------------------------------------------------
 
-host_clean_docker_input
+echo
+echo "$(uname) ${HOST_MACHINE} XBB created in \"${INSTALL_FOLDER_PATH}\""
 
-echo 
-echo "Done."
+do_cleanup
+
+echo
+echo "Container done."
 
 # -----------------------------------------------------------------------------

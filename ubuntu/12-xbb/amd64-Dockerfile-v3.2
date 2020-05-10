@@ -1,4 +1,4 @@
-FROM ilegeul/ubuntu:amd64-12.04-xbb-v3.1
+FROM ilegeul/ubuntu:amd64-12.04-bootstrap-v3.2
 
 LABEL description="Ubuntu 12.04 amd64 image, with the XBB."
 LABEL maintainer="Liviu Ionescu <ilg@livius.net>"
@@ -12,6 +12,6 @@ ARG XBB_VERSION
 ARG RUN_LONG_TESTS
 
 ADD input /input
-RUN bash /input/build-v3.1.sh
+RUN bash /input/build-v3.sh
 
 CMD ["/bin/bash"]

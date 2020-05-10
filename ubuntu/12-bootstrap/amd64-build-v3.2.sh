@@ -42,21 +42,21 @@ source "${helper_folder_path}/common-docker-functions-source.sh"
 
 # -----------------------------------------------------------------------------
 
-detect_host
-
 host_init_docker_env
 host_init_docker_input \
   "$(dirname $(dirname "${script_folder_path}"))/ca-bundle/ca-bundle.crt" \
 
-version="3.1"
+version="3.2"
+layer="bootstrap"
 
-arch="i386"
+arch="amd64"
 distro="ubuntu"
 release="12.04"
-from="ilegeul/${distro}:${arch}-${release}-tex-v3.1"
-name="xbb"
 
-host_run_docker_it
+tag="ilegeul/${distro}:${arch}-${release}-${layer}-v${version}"
+dockerfile="${arch}-Dockerfile-v${version}"
+
+host_run_docker_build "${version}" "${tag}" "${dockerfile}"
 
 host_clean_docker_input
 

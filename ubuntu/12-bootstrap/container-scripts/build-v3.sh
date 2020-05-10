@@ -37,10 +37,10 @@ script_folder_name="$(basename "${script_folder_path}")"
 
 WORK_FOLDER_PATH="${HOME}/Work"
 
-XBB_FOLDER_PATH="/opt/xbb"
-XBB_BOOTSTRAP_FOLDER_PATH="/opt/xbb-bootstrap"
+XBB_FOLDER_PATH="/opt/xbb-bootstrap"
+XBB_BOOTSTRAP_FOLDER_PATH="${XBB_FOLDER_PATH}"
 
-IS_BOOTSTRAP="n"
+IS_BOOTSTRAP="y"
 
 # -----------------------------------------------------------------------------
 
@@ -52,7 +52,12 @@ source "${helper_folder_path}/common-docker-functions-source.sh"
 source "${helper_folder_path}/common-libs-functions-source.sh"
 source "${helper_folder_path}/common-apps-functions-source.sh"
 
-source "${helper_folder_path}/common-versions-xbb-source.sh"
+source "${helper_folder_path}/common-versions-bootstrap-source.sh"
+
+function xbb_activate()
+{
+  :
+}
 
 function do_cleanup()
 {
@@ -62,43 +67,21 @@ function do_cleanup()
   fi
 }
 
-
 # -----------------------------------------------------------------------------
 
-detect_host
-
-docker_prepare_env
-
-prepare_xbb_env
-
-saved_version=${XBB_VERSION}
-source "${XBB_BOOTSTRAP_FOLDER_PATH}/xbb-source.sh"
-XBB_VERSION=${saved_version}
-
-# Override function, must be here.
-function xbb_activate()
-{
-  xbb_activate_bootstrap      # Use only bootstrap binaries, not xbb
-  xbb_activate_installed_dev  # Use freshly built libraries and headers
-}
-
-create_xbb_source
+do_prerequisites
 
 echo
-echo "$(uname) ${HOST_MACHINE} XBB build script started..."
+echo "$(uname) ${HOST_MACHINE} XBB bootstrap build script started..."
 
 # -----------------------------------------------------------------------------
 
 do_build_versions
 
-do_strip_debug_libs
-
-check_rpath
-
 # -----------------------------------------------------------------------------
 
 echo
-echo "$(uname) ${HOST_MACHINE} XBB created in \"${INSTALL_FOLDER_PATH}\""
+echo "$(uname) ${HOST_MACHINE} XBB bootstrap created in \"${INSTALL_FOLDER_PATH}\""
 
 do_cleanup
 

@@ -53,7 +53,7 @@ version="3.1"
 arch="i386"
 distro="ubuntu"
 release="12.04"
-from="ilegeul/${distro}:${arch}-${release}-bootstrap-v3.1"
+from="ilegeul/${distro}:${arch}-${release}-bootstrap-v${version}"
 name="xbb"
 
 host_run_docker_it_bs
