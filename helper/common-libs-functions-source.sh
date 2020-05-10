@@ -48,9 +48,9 @@ function do_zlib()
 
       # -fPIC makes possible to include static libs in shared libs.
       export CPPFLAGS="${XBB_CPPFLAGS}" 
-      export CFLAGS="${XBB_CFLAGS} -fPIC"
-      export CXXFLAGS="${XBB_CXXFLAGS}"
-      export LDFLAGS="${XBB_LDFLAGS_LIB}"
+      export CFLAGS="${XBB_CFLAGS_NO_W} -fPIC"
+      export CXXFLAGS="${XBB_CXXFLAGS_NO_W}"
+      export LDFLAGS="${XBB_LDFLAGS_LIB_STATIC_GCC}"
 
       (
         echo
@@ -118,8 +118,11 @@ function do_gmp()
       xbb_activate
 
       export CPPFLAGS="${XBB_CPPFLAGS}"
-      export CFLAGS="${XBB_CFLAGS} -Wno-unused-value -Wno-empty-translation-unit -Wno-tautological-compare -Wno-overflow"
-      export CXXFLAGS="${XBB_CXXFLAGS}"
+      export CFLAGS="${XBB_CFLAGS_NO_W}"
+      export CXXFLAGS="${XBB_CXXFLAGS_NO_W}"
+
+      # Static fails one cxx test (t-misc) on Intel 64
+      # export LDFLAGS="${XBB_LDFLAGS_LIB_STATIC_GCC}"
       export LDFLAGS="${XBB_LDFLAGS_LIB}"
 
       # Mandatory, it fails on 32-bits. 
@@ -199,9 +202,9 @@ function do_mpfr()
       xbb_activate
 
       export CPPFLAGS="${XBB_CPPFLAGS}"
-      export CFLAGS="${XBB_CFLAGS}"
-      export CXXFLAGS="${XBB_CXXFLAGS}"
-      export LDFLAGS="${XBB_LDFLAGS_LIB}"
+      export CFLAGS="${XBB_CFLAGS_NO_W}"
+      export CXXFLAGS="${XBB_CXXFLAGS_NO_W}"
+      export LDFLAGS="${XBB_LDFLAGS_LIB_STATIC_GCC}"
 
       if [ ! -f "config.status" ]
       then
@@ -280,9 +283,9 @@ function do_mpc()
       xbb_activate
 
       export CPPFLAGS="${XBB_CPPFLAGS}"
-      export CFLAGS="${XBB_CFLAGS}"
-      export CXXFLAGS="${XBB_CXXFLAGS}"
-      export LDFLAGS="${XBB_LDFLAGS_LIB}"
+      export CFLAGS="${XBB_CFLAGS_NO_W}"
+      export CXXFLAGS="${XBB_CXXFLAGS_NO_W}"
+      export LDFLAGS="${XBB_LDFLAGS_LIB_STATIC_GCC}"
 
       if [ ! -f "config.status" ]
       then
@@ -352,8 +355,8 @@ function do_isl()
       xbb_activate
 
       export CPPFLAGS="${XBB_CPPFLAGS}"
-      export CFLAGS="${XBB_CFLAGS}"
-      export CXXFLAGS="${XBB_CXXFLAGS}"
+      export CFLAGS="${XBB_CFLAGS_NO_W}"
+      export CXXFLAGS="${XBB_CXXFLAGS_NO_W}"
       # The c++ test fails without it.
       export LDFLAGS="${XBB_LDFLAGS_LIB_STATIC_GCC}"
 
@@ -429,9 +432,9 @@ function do_nettle()
       xbb_activate
 
       export CPPFLAGS="${XBB_CPPFLAGS}"
-      export CFLAGS="${XBB_CFLAGS}  -Wno-deprecated-declarations"
-      export CXXFLAGS="${XBB_CXXFLAGS}"
-      export LDFLAGS="${XBB_LDFLAGS_LIB}"
+      export CFLAGS="${XBB_CFLAGS_NO_W}"
+      export CXXFLAGS="${XBB_CXXFLAGS_NO_W}"
+      export LDFLAGS="${XBB_LDFLAGS_LIB_STATIC_GCC}"
 
       if [ ! -f "config.status" ]
       then
@@ -522,9 +525,9 @@ function do_tasn1()
       xbb_activate
 
       export CPPFLAGS="${XBB_CPPFLAGS}"
-      export CFLAGS="${XBB_CFLAGS} -Wno-logical-op -Wno-missing-prototypes  -Wno-format-truncation"
-      export CXXFLAGS="${XBB_CXXFLAGS}"
-      export LDFLAGS="${XBB_LDFLAGS_LIB}"
+      export CFLAGS="${XBB_CFLAGS_NO_W}"
+      export CXXFLAGS="${XBB_CXXFLAGS_NO_W}"
+      export LDFLAGS="${XBB_LDFLAGS_LIB_STATIC_GCC}"
 
       if [ ! -f "config.status" ]
       then
@@ -596,9 +599,9 @@ function do_expat()
       xbb_activate
 
       export CPPFLAGS="${XBB_CPPFLAGS}"
-      export CFLAGS="${XBB_CFLAGS}"
-      export CXXFLAGS="${XBB_CXXFLAGS}"
-      export LDFLAGS="${XBB_LDFLAGS_LIB}"
+      export CFLAGS="${XBB_CFLAGS_NO_W}"
+      export CXXFLAGS="${XBB_CXXFLAGS_NO_W}"
+      export LDFLAGS="${XBB_LDFLAGS_LIB_STATIC_GCC}"
 
       if [ ! -f "config.status" ]
       then
@@ -686,9 +689,9 @@ function do_libffi()
       xbb_activate
 
       export CPPFLAGS="${XBB_CPPFLAGS}"
-      export CFLAGS="${XBB_CFLAGS}"
-      export CXXFLAGS="${XBB_CXXFLAGS}"
-      export LDFLAGS="${XBB_LDFLAGS_LIB}"
+      export CFLAGS="${XBB_CFLAGS_NO_W}"
+      export CXXFLAGS="${XBB_CXXFLAGS_NO_W}"
+      export LDFLAGS="${XBB_LDFLAGS_LIB_STATIC_GCC}"
 
       if [ ! -f "config.status" ]
       then
@@ -764,9 +767,9 @@ function do_libiconv()
       xbb_activate
 
       export CPPFLAGS="${XBB_CPPFLAGS}"
-      export CFLAGS="${XBB_CFLAGS}"
-      export CXXFLAGS="${XBB_CXXFLAGS}"
-      export LDFLAGS="${XBB_LDFLAGS_LIB}"
+      export CFLAGS="${XBB_CFLAGS_NO_W}"
+      export CXXFLAGS="${XBB_CXXFLAGS_NO_W}"
+      export LDFLAGS="${XBB_LDFLAGS_LIB_STATIC_GCC}"
 
       if [ ! -f "config.status" ]
       then
@@ -842,9 +845,9 @@ function do_gnutls()
       xbb_activate
 
       export CPPFLAGS="${XBB_CPPFLAGS}"
-      export CFLAGS="${XBB_CFLAGS} -Wno-parentheses -Wno-bad-function-cast -Wno-unused-macros -Wno-bad-function-cast -Wno-unused-variable -Wno-pointer-sign  -Wno-format-truncation -Wno-missing-prototypes -Wno-missing-declarations -Wno-shadow -Wno-sign-compare -Wno-unknown-warning-option -Wno-static-in-inline -Wno-implicit-function-declaration -Wno-strict-prototypes -Wno-tautological-pointer-compare"
-      export CXXFLAGS="${XBB_CXXFLAGS}"
-      export LDFLAGS="${XBB_LDFLAGS_LIB}"
+      export CFLAGS="${XBB_CFLAGS_NO_W}"
+      export CXXFLAGS="${XBB_CXXFLAGS_NO_W}"
+      export LDFLAGS="${XBB_LDFLAGS_LIB_STATIC_GCC}"
 
       if is_darwin
       then
@@ -935,9 +938,9 @@ function do_util_macros()
       xbb_activate
 
       export CPPFLAGS="${XBB_CPPFLAGS}"
-      export CFLAGS="${XBB_CFLAGS}"
-      export CXXFLAGS="${XBB_CXXFLAGS}"
-      export LDFLAGS="${XBB_LDFLAGS_LIB}"
+      export CFLAGS="${XBB_CFLAGS_NO_W}"
+      export CXXFLAGS="${XBB_CXXFLAGS_NO_W}"
+      export LDFLAGS="${XBB_LDFLAGS_LIB_STATIC_GCC}"
 
       if [ ! -f "config.status" ]
       then
@@ -1005,9 +1008,9 @@ function do_xorg_xproto()
       xbb_activate
 
       export CPPFLAGS="${XBB_CPPFLAGS}"
-      export CFLAGS="${XBB_CFLAGS}"
-      export CXXFLAGS="${XBB_CXXFLAGS}"
-      export LDFLAGS="${XBB_LDFLAGS_LIB}"
+      export CFLAGS="${XBB_CFLAGS_NO_W}"
+      export CXXFLAGS="${XBB_CXXFLAGS_NO_W}"
+      export LDFLAGS="${XBB_LDFLAGS_LIB_STATIC_GCC}"
 
       if [ ! -f "config.status" ]
       then
@@ -1083,9 +1086,9 @@ function do_libpng()
       xbb_activate
 
       export CPPFLAGS="${XBB_CPPFLAGS}"
-      export CFLAGS="${XBB_CFLAGS}"
-      export CXXFLAGS="${XBB_CXXFLAGS}"
-      export LDFLAGS="${XBB_LDFLAGS_LIB}"
+      export CFLAGS="${XBB_CFLAGS_NO_W}"
+      export CXXFLAGS="${XBB_CXXFLAGS_NO_W}"
+      export LDFLAGS="${XBB_LDFLAGS_LIB_STATIC_GCC}"
 
       if [ ! -f "config.status" ]
       then
@@ -1158,9 +1161,9 @@ function do_libmpdec()
       xbb_activate
 
       export CPPFLAGS="${XBB_CPPFLAGS}"
-      export CFLAGS="${XBB_CFLAGS} "
-      export CXXFLAGS="${XBB_CXXFLAGS}"
-      export LDFLAGS="${XBB_LDFLAGS_LIB}"
+      export CFLAGS="${XBB_CFLAGS_NO_W}"
+      export CXXFLAGS="${XBB_CXXFLAGS_NO_W}"
+      export LDFLAGS="${XBB_LDFLAGS_LIB_STATIC_GCC} -v"
 
       if [ ! -f "config.status" ]
       then
@@ -1228,9 +1231,9 @@ function do_libgpg_error()
       xbb_activate
 
       export CPPFLAGS="${XBB_CPPFLAGS}"
-      export CFLAGS="${XBB_CFLAGS}"
-      export CXXFLAGS="${XBB_CXXFLAGS}"
-      export LDFLAGS="${XBB_LDFLAGS_LIB}"
+      export CFLAGS="${XBB_CFLAGS_NO_W}"
+      export CXXFLAGS="${XBB_CXXFLAGS_NO_W}"
+      export LDFLAGS="${XBB_LDFLAGS_LIB_STATIC_GCC}"
 
       if [ ! -f "config.status" ]
       then
@@ -1298,9 +1301,9 @@ function do_libgcrypt()
       xbb_activate
 
       export CPPFLAGS="${XBB_CPPFLAGS}"
-      export CFLAGS="${XBB_CFLAGS}"
-      export CXXFLAGS="${XBB_CXXFLAGS}"
-      export LDFLAGS="${XBB_LDFLAGS_LIB}"
+      export CFLAGS="${XBB_CFLAGS_NO_W}"
+      export CXXFLAGS="${XBB_CXXFLAGS_NO_W}"
+      export LDFLAGS="${XBB_LDFLAGS_LIB_STATIC_GCC}"
 
       if [ ! -f "config.status" ]
       then
@@ -1392,9 +1395,9 @@ function do_libassuan()
       xbb_activate
 
       export CPPFLAGS="${XBB_CPPFLAGS}"
-      export CFLAGS="${XBB_CFLAGS}"
-      export CXXFLAGS="${XBB_CXXFLAGS}"
-      export LDFLAGS="${XBB_LDFLAGS_LIB}"
+      export CFLAGS="${XBB_CFLAGS_NO_W}"
+      export CXXFLAGS="${XBB_CXXFLAGS_NO_W}"
+      export LDFLAGS="${XBB_LDFLAGS_LIB_STATIC_GCC}"
 
       if [ ! -f "config.status" ]
       then
@@ -1463,9 +1466,9 @@ function do_libksba()
       xbb_activate
 
       export CPPFLAGS="${XBB_CPPFLAGS}"
-      export CFLAGS="${XBB_CFLAGS}"
-      export CXXFLAGS="${XBB_CXXFLAGS}"
-      export LDFLAGS="${XBB_LDFLAGS_LIB}"
+      export CFLAGS="${XBB_CFLAGS_NO_W}"
+      export CXXFLAGS="${XBB_CXXFLAGS_NO_W}"
+      export LDFLAGS="${XBB_LDFLAGS_LIB_STATIC_GCC}"
 
       if [ ! -f "config.status" ]
       then
@@ -1534,9 +1537,9 @@ function do_npth()
       xbb_activate
 
       export CPPFLAGS="${XBB_CPPFLAGS}"
-      export CFLAGS="${XBB_CFLAGS}"
-      export CXXFLAGS="${XBB_CXXFLAGS}"
-      export LDFLAGS="${XBB_LDFLAGS_LIB}"
+      export CFLAGS="${XBB_CFLAGS_NO_W}"
+      export CXXFLAGS="${XBB_CXXFLAGS_NO_W}"
+      export LDFLAGS="${XBB_LDFLAGS_LIB_STATIC_GCC}"
 
       if is_darwin
       then
@@ -1644,9 +1647,9 @@ function do_libxcrypt()
       xbb_activate
 
       export CPPFLAGS="${XBB_CPPFLAGS}"
-      export CFLAGS="${XBB_CFLAGS}"
-      export CXXFLAGS="${XBB_CXXFLAGS}"
-      export LDFLAGS="${XBB_LDFLAGS_LIB}"
+      export CFLAGS="${XBB_CFLAGS_NO_W}"
+      export CXXFLAGS="${XBB_CXXFLAGS_NO_W}"
+      export LDFLAGS="${XBB_LDFLAGS_LIB_STATIC_GCC}"
 
       if [ ! -f "config.status" ]
       then
@@ -1721,9 +1724,9 @@ function do_libunistring()
       xbb_activate
 
       export CPPFLAGS="${XBB_CPPFLAGS}"
-      export CFLAGS="${XBB_CFLAGS}"
-      export CXXFLAGS="${XBB_CXXFLAGS}"
-      export LDFLAGS="${XBB_LDFLAGS_LIB}"
+      export CFLAGS="${XBB_CFLAGS_NO_W}"
+      export CXXFLAGS="${XBB_CXXFLAGS_NO_W}"
+      export LDFLAGS="${XBB_LDFLAGS_LIB_STATIC_GCC}"
 
       if [ ! -f "config.status" ]
       then
@@ -1791,9 +1794,9 @@ function do_gc()
       xbb_activate
 
       export CPPFLAGS="${XBB_CPPFLAGS}"
-      export CFLAGS="${XBB_CFLAGS}"
-      export CXXFLAGS="${XBB_CXXFLAGS}"
-      export LDFLAGS="${XBB_LDFLAGS_LIB}"
+      export CFLAGS="${XBB_CFLAGS_NO_W}"
+      export CXXFLAGS="${XBB_CXXFLAGS_NO_W}"
+      export LDFLAGS="${XBB_LDFLAGS_LIB_STATIC_GCC}"
 
       if [ ! -f "config.status" ]
       then
