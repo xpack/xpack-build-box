@@ -743,6 +743,126 @@ function download_and_extract()
 
 # -----------------------------------------------------------------------------
 
+function is_elf()
+{
+  if [ $# -lt 1 ]
+  then
+    warning "is_elf: Missing arguments"
+    exit 1
+  fi
+
+  local bin_path="$1"
+
+  # Symlinks do not match.
+  if [ -L "${bin_path}" ]
+  then
+    return 1
+  fi
+
+  if [ -f "${bin_path}" ]
+  then
+    # Return 0 (true) if found.
+    file ${bin_path} | egrep -q "( ELF )|( PE )|( PE32 )|( PE32\+ )|( Mach-O )"
+  else
+    return 1
+  fi
+}
+
+function is_static()
+{
+  if [ $# -lt 1 ]
+  then
+    warning "is_static: Missing arguments"
+    exit 1
+  fi
+  local bin="$1"
+
+  # Symlinks do not match.
+  if [ -L "${bin}" ]
+  then
+    return 1
+  fi
+
+  if [ -f "${bin}" ]
+  then
+    # Return 0 (true) if found.
+    file ${bin} | egrep -q "statically linked"
+  else
+    return 1
+  fi
+}
+
+function patch_linux_elf_origin()
+{
+  if [ $# -lt 1 ]
+  then 
+    echo "patch_linux_elf_origin requires 1 args." 
+    exit 1
+  fi
+
+  local file_path="$1"
+
+  local tmp_path=$(mktemp)
+  rm -rf "${tmp_path}"
+  cp "${file_path}" "${tmp_path}"
+  if file "${tmp_path}" | grep statically
+  then
+    file "${file_path}"
+  else
+    # No need for separate lib64, it was linked to lib.
+    patchelf --set-rpath "${XBB_FOLDER_PATH}/lib" "${tmp_path}"
+  fi
+  cp "${tmp_path}" "${file_path}"
+  rm -rf "${tmp_path}"
+}
+
+function append_linux_elf_rpath()
+{
+  if [ $# -lt 2 ]
+  then 
+    echo "patch_linux_elf_rpath requires 2 args." 
+    exit 1
+  fi
+
+  (
+    local file_path="$1"
+    local new_rpath_path="$2"
+
+    if file "${file_path}" | grep "dynamically linked" >/dev/null
+    then
+      local crt_rpath_path="$(patchelf --print-rpath "${file_path}")"
+      if [[ "${crt_rpath_path}" == *"${new_rpath_path}"* ]]
+      then
+        # If new path already part of the existing path.
+        echo "${file_path} RPATH ${crt_rpath_path}"
+        return
+      fi
+
+      if [ -z "${crt_rpath_path}" ]
+      then
+        patchelf --set-rpath "${new_rpath_path}" "${file_path}"
+        echo "${file_path} RPATH - -> ${new_rpath_path}"
+      else
+        patchelf --set-rpath "${crt_rpath_path}:${new_rpath_path}" "${file_path}"
+        echo "${file_path} RPATH ${crt_rpath_path} -> ${crt_rpath_path}:${new_rpath_path}"
+      fi
+    else
+      file "${file_path}"
+    fi
+  )
+}
+
+# -----------------------------------------------------------------------------
+
+function which_patchelf()
+{
+  (
+    xbb_activate
+
+    which patchelf
+  )
+}
+
 function run_app()
 {
   # Does not include the .exe extension.
