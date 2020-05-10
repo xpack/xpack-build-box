@@ -82,11 +82,26 @@ function do_zlib()
       ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${zlib_folder_name}/make-output.txt"
     )
 
+    (
+      test_zlib
+    ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${zlib_folder_name}/test-output.txt"
+
     touch "${zlib_stamp_file_path}"
 
   else
     echo "Library zlib already installed."
   fi
+
+  test_functions+=("test_zlib")
+}
+
+function test_zlib()
+{
+  (
+    xbb_activate
+
+    show_libs "$(realpath ${INSTALL_FOLDER_PATH}/lib/libz.so)"
+  )
 }
 
 function do_gmp() 
@@ -171,11 +186,27 @@ function do_gmp()
       ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${gmp_folder_name}/make-output.txt"
     )
 
+    (
+      test_gmp
+    ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${gmp_folder_name}/test-output.txt"
+
     touch "${gmp_stamp_file_path}"
 
   else
     echo "Library gmp already installed."
   fi
+
+  test_functions+=("test_gmp")
+}
+
+function test_gmp()
+{
+  (
+    xbb_activate
+
+    show_libs "$(realpath ${INSTALL_FOLDER_PATH}/lib/libgmp.so)"
+    show_libs "$(realpath ${INSTALL_FOLDER_PATH}/lib/libgmpxx.so)"
+  )
 }
 
 function do_mpfr() 
@@ -258,11 +289,26 @@ function do_mpfr()
       ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${mpfr_folder_name}/make-output.txt"
     )
 
+    (
+      test_mpfr
+    ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${mpfr_folder_name}/test-output.txt"
+
     touch "${mpfr_stamp_file_path}"
 
   else
     echo "Library mpfr already installed."
   fi
+
+  test_functions+=("test_mpfr")
+}
+
+function test_mpfr()
+{
+  (
+    xbb_activate
+
+    show_libs "$(realpath ${INSTALL_FOLDER_PATH}/lib/libmpfr.so)"
+  )
 }
 
 function do_mpc() 
@@ -335,11 +381,24 @@ function do_mpc()
       ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${mpc_folder_name}/make-output.txt"
     )
 
+    (
+      test_mpc
+    ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${mpc_folder_name}/test-output.txt"
+
     touch "${mpc_stamp_file_path}"
 
   else
     echo "Library mpc already installed."
   fi
+}
+
+function test_mpc()
+{
+  (
+    xbb_activate
+
+    show_libs "$(realpath ${INSTALL_FOLDER_PATH}/lib/libmpc.so)"
+  )
 }
 
 function do_isl() 
@@ -415,11 +474,26 @@ function do_isl()
       ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${isl_folder_name}/make-output.txt"
     )
 
+    (
+      test_isl
+    ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${isl_folder_name}/test-output.txt"
+
     touch "${isl_stamp_file_path}"
 
   else
     echo "Library isl already installed."
   fi
+
+  test_functions+=("test_isl")
+}
+
+function test_isl()
+{
+  (
+    xbb_activate
+
+    show_libs "$(realpath ${INSTALL_FOLDER_PATH}/lib/libisl.so)"
+  )
 }
 
 function do_nettle() 
