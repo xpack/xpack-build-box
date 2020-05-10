@@ -760,19 +760,48 @@ function show_libs()
   local app_path=$1
   shift
 
-  if [ "${HOST_UNAME}" == "Linux" ]
+  echo
+  echo "$(basename "${app_path}"):"
+  if ! is_elf "${app_path}"
   then
-    echo
-    echo "readelf -d ${app_path} | grep 'ibrary'"
-    readelf -d "${app_path}" | grep 'ibrary'
-    echo "ldd -v ${app_path}"
-    ldd -v "${app_path}"
-  elif [ "${HOST_UNAME}" == "Darwin" ]
-  then
-    echo
-    echo "otool -L ${app_path}"
-    otool -L "${app_path}"
+    file "${app_path}"
+    return
   fi
+
+  if is_static "${app_path}"
+  then
+    file "${app_path}"
+    return
+  fi
+
+  (
+    if [ "${HOST_UNAME}" == "Linux" ]
+    then
+      local patchelf="$(which_patchelf)"
+      if [ "${IS_BOOTSTRAP}" == "y" ]
+      then
+        patchelf="${INSTALL_FOLDER_PATH}/bin/patchelf"
+      fi
+
+      local readelf="$(which readelf)"
+      local ldd="$(which ldd)"
+
+      echo "${readelf} -d ${app_path} | egrep -i ..."
+      "${readelf}" -d "${app_path}" | egrep -i '(SONAME)' || true
+      "${readelf}" -d "${app_path}" | egrep -i '(RUNPATH|RPATH)' || true
+      "${readelf}" -d "${app_path}" | egrep -i '(NEEDED)' || true
+      echo
+      echo "${patchelf} --print-interpreter ${app_path}"
+      "${patchelf}" --print-interpreter "${app_path}" || true
+      echo
+      echo "${ldd} -v ${app_path}"
+      "${ldd}" -v "${app_path}" || true
+    elif [ "${HOST_UNAME}" == "Darwin" ]
+    then
+      echo "otool -L ${app_path}"
+      otool -L "${app_path}"
+    fi
+  )
 }
 
 # -----------------------------------------------------------------------------
