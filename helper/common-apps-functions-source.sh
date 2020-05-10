@@ -3329,6 +3329,17 @@ function do_perl()
         # make install-strip
         make install
 
+        # `make` ignores any environment RPATH and fills in the 
+        # actual folder path to libperl.so.
+        local rpath="$(patchelf --print-rpath "${INSTALL_FOLDER_PATH}/bin/perl")"
+        rpath+=":${INSTALL_FOLDER_PATH}/lib:$(dirname $(realpath $(${CC} -print-file-name=libssp.so)))"
+        patchelf --set-rpath "${rpath}" "${INSTALL_FOLDER_PATH}/bin/perl"
+
+        local shlib="$(find ${INSTALL_FOLDER_PATH}/lib/perl5/${perl_version} -name HiRes.so)"
+        rpath="$(patchelf --print-rpath "${shlib}")"
+        rpath+=":$(dirname $(realpath $(${CC} -print-file-name=libssp.so)))"
+        patchelf --set-rpath "${rpath}" "${shlib}"
+
         show_libs "${INSTALL_FOLDER_PATH}/bin/perl"
 
         # https://www.cpan.org/modules/INSTALL.html
