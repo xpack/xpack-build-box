@@ -935,7 +935,6 @@ function do_mingw_all()
           bash "${SOURCES_FOLDER_PATH}/${mingw_gcc_folder_name}/configure" --help
           bash "${SOURCES_FOLDER_PATH}/${mingw_gcc_folder_name}/gcc/configure" --help
 
-
           config_options=()
           if [ ${mingw_version_major} -ge 7 -a ${mingw_gcc_version} -ge 9 ]
           then
