@@ -2308,6 +2308,7 @@ function do_libtool()
 
       echo
       run_app "${INSTALL_FOLDER_PATH}/bin/libtool" --version
+      run_app "${INSTALL_FOLDER_PATH}/bin/libtool" --help
     ) 2>&1 | tee "${LOGS_FOLDER_PATH}/test-libtool-output.txt"
 
     hash -r
