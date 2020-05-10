@@ -3342,6 +3342,9 @@ function do_perl()
 
         show_libs "${INSTALL_FOLDER_PATH}/bin/perl"
 
+        show_libs "$(find ${INSTALL_FOLDER_PATH}/lib/perl5/${perl_version} -name libperl.so)"
+        show_libs "$(find ${INSTALL_FOLDER_PATH}/lib/perl5/${perl_version} -name HiRes.so)"
+
         # https://www.cpan.org/modules/INSTALL.html
         # Convince cpan not to ask confirmations.
         export PERL_MM_USE_DEFAULT=true
