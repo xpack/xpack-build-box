@@ -45,6 +45,7 @@ function do_zlib()
       cd "${LIBS_BUILD_FOLDER_PATH}/${zlib_folder_name}"
 
       xbb_activate
+      xbb_activate_installed_dev
 
       # -fPIC makes possible to include static libs in shared libs.
       export CPPFLAGS="${XBB_CPPFLAGS}" 
@@ -118,6 +119,7 @@ function do_gmp()
       cd "${LIBS_BUILD_FOLDER_PATH}/${gmp_folder_name}"
 
       xbb_activate
+      xbb_activate_installed_dev
 
       export CPPFLAGS="${XBB_CPPFLAGS}"
       export CFLAGS="${XBB_CFLAGS_NO_W}"
@@ -204,6 +206,7 @@ function do_mpfr()
       cd "${LIBS_BUILD_FOLDER_PATH}/${mpfr_folder_name}"
 
       xbb_activate
+      xbb_activate_installed_dev
 
       export CPPFLAGS="${XBB_CPPFLAGS}"
       export CFLAGS="${XBB_CFLAGS_NO_W}"
@@ -287,6 +290,7 @@ function do_mpc()
       cd "${LIBS_BUILD_FOLDER_PATH}/${mpc_folder_name}"
 
       xbb_activate
+      xbb_activate_installed_dev
 
       export CPPFLAGS="${XBB_CPPFLAGS}"
       export CFLAGS="${XBB_CFLAGS_NO_W}"
@@ -361,6 +365,7 @@ function do_isl()
       cd "${LIBS_BUILD_FOLDER_PATH}/${isl_folder_name}"
 
       xbb_activate
+      xbb_activate_installed_dev
 
       export CPPFLAGS="${XBB_CPPFLAGS}"
       export CFLAGS="${XBB_CFLAGS_NO_W}"
@@ -440,6 +445,7 @@ function do_nettle()
       cd "${LIBS_BUILD_FOLDER_PATH}/${nettle_folder_name}"
 
       xbb_activate
+      xbb_activate_installed_dev
 
       export CPPFLAGS="${XBB_CPPFLAGS}"
       export CFLAGS="${XBB_CFLAGS_NO_W}"
@@ -535,6 +541,7 @@ function do_tasn1()
       cd "${LIBS_BUILD_FOLDER_PATH}/${tasn1_folder_name}"
 
       xbb_activate
+      xbb_activate_installed_dev
 
       export CPPFLAGS="${XBB_CPPFLAGS}"
       export CFLAGS="${XBB_CFLAGS_NO_W}"
@@ -611,6 +618,7 @@ function do_expat()
       cd "${LIBS_BUILD_FOLDER_PATH}/${expat_folder_name}"
 
       xbb_activate
+      xbb_activate_installed_dev
 
       export CPPFLAGS="${XBB_CPPFLAGS}"
       export CFLAGS="${XBB_CFLAGS_NO_W}"
@@ -692,6 +700,7 @@ function do_libffi()
         cd "${SOURCES_FOLDER_PATH}/${libffi_folder_name}"
         
         xbb_activate
+        xbb_activate_installed_dev
 
         run_app bash ${DEBUG} "autogen.sh"
 
@@ -703,6 +712,7 @@ function do_libffi()
       cd "${LIBS_BUILD_FOLDER_PATH}/${libffi_folder_name}"
 
       xbb_activate
+      xbb_activate_installed_dev
 
       export CPPFLAGS="${XBB_CPPFLAGS}"
       export CFLAGS="${XBB_CFLAGS_NO_W}"
@@ -783,6 +793,7 @@ function do_libiconv()
       cd "${LIBS_BUILD_FOLDER_PATH}/${libiconv_folder_name}"
 
       xbb_activate
+      xbb_activate_installed_dev
 
       export CPPFLAGS="${XBB_CPPFLAGS}"
       export CFLAGS="${XBB_CFLAGS_NO_W}"
@@ -863,6 +874,7 @@ function do_gnutls()
       cd "${LIBS_BUILD_FOLDER_PATH}/${gnutls_folder_name}"
 
       xbb_activate
+      xbb_activate_installed_dev
 
       export CPPFLAGS="${XBB_CPPFLAGS}"
       export CFLAGS="${XBB_CFLAGS_NO_W}"
@@ -958,6 +970,7 @@ function do_util_macros()
       cd "${LIBS_BUILD_FOLDER_PATH}/${util_macros_folder_name}"
 
       xbb_activate
+      xbb_activate_installed_dev
 
       export CPPFLAGS="${XBB_CPPFLAGS}"
       export CFLAGS="${XBB_CFLAGS_NO_W}"
@@ -1030,6 +1043,7 @@ function do_xorg_xproto()
       cd "${LIBS_BUILD_FOLDER_PATH}/${xorg_xproto_folder_name}"
 
       xbb_activate
+      xbb_activate_installed_dev
 
       export CPPFLAGS="${XBB_CPPFLAGS}"
       export CFLAGS="${XBB_CFLAGS_NO_W}"
@@ -1110,6 +1124,7 @@ function do_libpng()
       cd "${LIBS_BUILD_FOLDER_PATH}/${libpng_folder_name}"
 
       xbb_activate
+      xbb_activate_installed_dev
 
       export CPPFLAGS="${XBB_CPPFLAGS}"
       export CFLAGS="${XBB_CFLAGS_NO_W}"
@@ -1187,6 +1202,7 @@ function do_libmpdec()
       cd "${LIBS_BUILD_FOLDER_PATH}/${libmpdec_folder_name}"
 
       xbb_activate
+      xbb_activate_installed_dev
 
       export CPPFLAGS="${XBB_CPPFLAGS}"
       export CFLAGS="${XBB_CFLAGS_NO_W}"
@@ -1259,6 +1275,7 @@ function do_libgpg_error()
       cd "${LIBS_BUILD_FOLDER_PATH}/${libgpg_error_folder_name}"
 
       xbb_activate
+      xbb_activate_installed_dev
 
       export CPPFLAGS="${XBB_CPPFLAGS}"
       export CFLAGS="${XBB_CFLAGS_NO_W}"
@@ -1331,6 +1348,7 @@ function do_libgcrypt()
       cd "${LIBS_BUILD_FOLDER_PATH}/${libgcrypt_folder_name}"
 
       xbb_activate
+      xbb_activate_installed_dev
 
       export CPPFLAGS="${XBB_CPPFLAGS}"
       export CFLAGS="${XBB_CFLAGS_NO_W}"
@@ -1427,6 +1445,7 @@ function do_libassuan()
       cd "${LIBS_BUILD_FOLDER_PATH}/${libassuan_folder_name}"
 
       xbb_activate
+      xbb_activate_installed_dev
 
       export CPPFLAGS="${XBB_CPPFLAGS}"
       export CFLAGS="${XBB_CFLAGS_NO_W}"
@@ -1500,6 +1519,7 @@ function do_libksba()
       cd "${LIBS_BUILD_FOLDER_PATH}/${libksba_folder_name}"
 
       xbb_activate
+      xbb_activate_installed_dev
 
       export CPPFLAGS="${XBB_CPPFLAGS}"
       export CFLAGS="${XBB_CFLAGS_NO_W}"
@@ -1573,6 +1593,7 @@ function do_npth()
       cd "${LIBS_BUILD_FOLDER_PATH}/${npth_folder_name}"
 
       xbb_activate
+      xbb_activate_installed_dev
 
       export CPPFLAGS="${XBB_CPPFLAGS}"
       export CFLAGS="${XBB_CFLAGS_NO_W}"
@@ -1664,6 +1685,7 @@ function do_libxcrypt()
         cd "${SOURCES_FOLDER_PATH}/${libxcrypt_folder_name}"
 
         xbb_activate
+        xbb_activate_installed_dev
 
         if [ -f "autogen.sh" ]
         then
@@ -1685,6 +1707,7 @@ function do_libxcrypt()
       cd "${LIBS_BUILD_FOLDER_PATH}/${libxcrypt_folder_name}"
 
       xbb_activate
+      xbb_activate_installed_dev
 
       export CPPFLAGS="${XBB_CPPFLAGS}"
       export CFLAGS="${XBB_CFLAGS_NO_W}"
@@ -1764,6 +1787,7 @@ function do_libunistring()
       cd "${LIBS_BUILD_FOLDER_PATH}/${libunistring_folder_name}"
 
       xbb_activate
+      xbb_activate_installed_dev
 
       export CPPFLAGS="${XBB_CPPFLAGS}"
       export CFLAGS="${XBB_CFLAGS_NO_W}"
@@ -1836,6 +1860,7 @@ function do_gc()
       cd "${LIBS_BUILD_FOLDER_PATH}/${gc_folder_name}"
 
       xbb_activate
+      xbb_activate_installed_dev
 
       export CPPFLAGS="${XBB_CPPFLAGS}"
       export CFLAGS="${XBB_CFLAGS_NO_W}"

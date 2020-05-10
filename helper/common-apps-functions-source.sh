@@ -42,6 +42,7 @@ function do_native_binutils()
       cd "${BUILD_FOLDER_PATH}/${native_binutils_build_folder_name}"
 
       xbb_activate
+      xbb_activate_installed_dev
 
       CPPFLAGS="${XBB_CPPFLAGS}" 
       CFLAGS="${XBB_CFLAGS_NO_W}"
@@ -176,6 +177,7 @@ function do_native_gcc()
       cd "${BUILD_FOLDER_PATH}/${native_gcc_build_folder_name}"
 
       xbb_activate
+      xbb_activate_installed_dev
 
       CPPFLAGS="${XBB_CPPFLAGS}" 
       CFLAGS="${XBB_CFLAGS_NO_W}"
@@ -408,6 +410,7 @@ function do_mingw_binutils()
       cd "${BUILD_FOLDER_PATH}/${mingw_binutils_build_folder_name}"
 
       xbb_activate
+      xbb_activate_installed_dev
 
       export CPPFLAGS="${XBB_CPPFLAGS}" 
       export CFLAGS="${XBB_CFLAGS_NO_W}"
@@ -549,6 +552,7 @@ function do_mingw_all()
       cd "${BUILD_FOLDER_PATH}/${mingw_build_headers_folder_name}"
 
       xbb_activate
+      xbb_activate_installed_dev
 
       env | sort
 
@@ -561,7 +565,7 @@ function do_mingw_all()
           bash "${SOURCES_FOLDER_PATH}/${mingw_folder_name}/mingw-w64-headers/configure" --help
           
           bash ${DEBUG} "${SOURCES_FOLDER_PATH}/${mingw_folder_name}/mingw-w64-headers/configure" \
-            --prefix="${INSTALL_FOLDER_PATH}/${MINGW_TARGET}" \
+            --prefix="${INSTALL_FOLDER_PATH}/usr/${MINGW_TARGET}" \
             \
             --build="${BUILD}" \
             --host="${MINGW_TARGET}" \
@@ -636,6 +640,7 @@ function do_mingw_all()
       cd "${BUILD_FOLDER_PATH}/${mingw_build_gcc_folder_name}"
 
       xbb_activate
+      xbb_activate_installed_dev
 
       export CPPFLAGS="${XBB_CPPFLAGS}" 
       export CFLAGS="${XBB_CFLAGS_NO_W}"
@@ -730,6 +735,7 @@ function do_mingw_all()
 
       xbb_activate
       xbb_activate_installed_bin
+      xbb_activate_installed_dev
 
       # Overwrite the flags, -ffunction-sections -fdata-sections result in
       # {standard input}: Assembler messages:
@@ -826,6 +832,7 @@ function do_mingw_all()
 
       xbb_activate
       xbb_activate_installed_bin
+      xbb_activate_installed_dev
 
       export CPPFLAGS="" 
       export CFLAGS="-O2 -pipe -w"
@@ -891,6 +898,7 @@ function do_mingw_all()
       cd "${BUILD_FOLDER_PATH}/${mingw_build_gcc_folder_name}"
 
       xbb_activate
+      xbb_activate_installed_dev
 
       export CPPFLAGS="${XBB_CPPFLAGS}" 
       export CFLAGS="${XBB_CFLAGS_NO_W}"
@@ -1017,6 +1025,7 @@ function do_openssl()
       cd "${BUILD_FOLDER_PATH}/${openssl_folder_name}"
 
       xbb_activate
+      xbb_activate_installed_dev
 
       #  -Wno-unused-command-line-argument
 
@@ -1203,6 +1212,7 @@ function do_curl()
       cd "${BUILD_FOLDER_PATH}/${curl_folder_name}"
 
       xbb_activate
+      xbb_activate_installed_dev
 
       export CPPFLAGS="${XBB_CPPFLAGS}"
       export CFLAGS="${XBB_CFLAGS_NO_W}"
@@ -1306,6 +1316,7 @@ function do_xz()
       cd "${BUILD_FOLDER_PATH}/${xz_folder_name}"
 
       xbb_activate
+      xbb_activate_installed_dev
 
       export CPPFLAGS="${XBB_CPPFLAGS}"
       export CFLAGS="${XBB_CFLAGS_NO_W}"
@@ -1399,6 +1410,7 @@ function do_tar()
       cd "${BUILD_FOLDER_PATH}/${tar_folder_name}"
 
       xbb_activate
+      xbb_activate_installed_dev
 
       export CPPFLAGS="${XBB_CPPFLAGS}"
       export CFLAGS="${XBB_CFLAGS_NO_W}"
@@ -1503,6 +1515,7 @@ function do_coreutils()
       cd "${BUILD_FOLDER_PATH}/${coreutils_folder_name}"
 
       xbb_activate
+      xbb_activate_installed_dev
 
       export CPPFLAGS="${XBB_CPPFLAGS}"
       export CFLAGS="${XBB_CFLAGS_NO_W}"
@@ -1657,6 +1670,7 @@ function do_pkg_config()
       cd "${BUILD_FOLDER_PATH}/${pkg_config_folder_name}"
 
       xbb_activate
+      xbb_activate_installed_dev
 
       if is_darwin
       then
@@ -1762,6 +1776,7 @@ function do_m4()
       cd "${BUILD_FOLDER_PATH}/${m4_folder_name}"
 
       xbb_activate
+      xbb_activate_installed_dev
 
       export CPPFLAGS="${XBB_CPPFLAGS}"
       export CFLAGS="${XBB_CFLAGS_NO_W}"
@@ -1864,6 +1879,7 @@ function do_gawk()
       cd "${BUILD_FOLDER_PATH}/${gawk_folder_name}"
 
       xbb_activate
+      xbb_activate_installed_dev
 
       export CPPFLAGS="${XBB_CPPFLAGS}"
       export CFLAGS="${XBB_CFLAGS_NO_W}"
@@ -1954,6 +1970,7 @@ function do_sed()
       cd "${BUILD_FOLDER_PATH}/${sed_folder_name}"
 
       xbb_activate
+      xbb_activate_installed_dev
 
       export CPPFLAGS="${XBB_CPPFLAGS}"
       export CFLAGS="${XBB_CFLAGS_NO_W}"
@@ -2046,6 +2063,7 @@ function do_autoconf()
       cd "${BUILD_FOLDER_PATH}/${autoconf_folder_name}"
 
       xbb_activate
+      xbb_activate_installed_dev
 
       export CPPFLAGS="${XBB_CPPFLAGS}"
       export CFLAGS="${XBB_CFLAGS_NO_W}"
@@ -2129,6 +2147,7 @@ function do_automake()
       cd "${BUILD_FOLDER_PATH}/${automake_folder_name}"
 
       xbb_activate
+      xbb_activate_installed_dev
 
       export CPPFLAGS="${XBB_CPPFLAGS}"
       export CFLAGS="${XBB_CFLAGS_NO_W}"
@@ -2218,6 +2237,7 @@ function do_libtool()
       cd "${BUILD_FOLDER_PATH}/${libtool_folder_name}"
 
       xbb_activate
+      xbb_activate_installed_dev
 
       export CPPFLAGS="${XBB_CPPFLAGS}"
       export CFLAGS="${XBB_CFLAGS_NO_W}"
@@ -2311,6 +2331,7 @@ function do_gettext()
       cd "${BUILD_FOLDER_PATH}/${gettext_folder_name}"
 
       xbb_activate
+      xbb_activate_installed_dev
 
       CPPFLAGS="${XBB_CPPFLAGS}"
       CFLAGS="${XBB_CFLAGS_NO_W}"
@@ -2411,6 +2432,7 @@ function do_patch()
       cd "${BUILD_FOLDER_PATH}/${patch_folder_name}"
 
       xbb_activate
+      xbb_activate_installed_dev
 
       export CPPFLAGS="${XBB_CPPFLAGS}"
       export CFLAGS="${XBB_CFLAGS_NO_W}"
@@ -2496,6 +2518,7 @@ function do_diffutils()
       cd "${BUILD_FOLDER_PATH}/${diffutils_folder_name}"
 
       xbb_activate
+      xbb_activate_installed_dev
 
       export CPPFLAGS="${XBB_CPPFLAGS}"
       export CFLAGS="${XBB_CFLAGS_NO_W}"
@@ -2583,6 +2606,7 @@ function do_bison()
       cd "${BUILD_FOLDER_PATH}/${bison_folder_name}"
 
       xbb_activate
+      xbb_activate_installed_dev
 
       export CPPFLAGS="${XBB_CPPFLAGS}"
       export CFLAGS="${XBB_CFLAGS_NO_W}"
@@ -2695,6 +2719,7 @@ function do_flex()
       then
 
         xbb_activate
+        xbb_activate_installed_dev
         
         run_app bash ${DEBUG} "autogen.sh"
 
@@ -2708,6 +2733,7 @@ function do_flex()
       cd "${BUILD_FOLDER_PATH}/${flex_folder_name}"
 
       xbb_activate
+      xbb_activate_installed_dev
 
       export CPPFLAGS="${XBB_CPPFLAGS}"
       export CFLAGS="${XBB_CFLAGS_NO_W}"
@@ -2801,6 +2827,7 @@ function do_make()
       cd "${BUILD_FOLDER_PATH}/${make_folder_name}"
 
       xbb_activate
+      xbb_activate_installed_dev
 
       export CPPFLAGS="${XBB_CPPFLAGS}"
       export CFLAGS="${XBB_CFLAGS_NO_W}"
@@ -2897,6 +2924,7 @@ function do_wget()
       cd "${BUILD_FOLDER_PATH}/${wget_folder_name}"
 
       xbb_activate
+      xbb_activate_installed_dev
 
       export CPPFLAGS="${XBB_CPPFLAGS}"
       export CFLAGS="${XBB_CFLAGS_NO_W}"
@@ -2997,6 +3025,7 @@ function do_texinfo()
       cd "${BUILD_FOLDER_PATH}/${texinfo_folder_name}"
 
       xbb_activate
+      xbb_activate_installed_dev
 
       export CPPFLAGS="${XBB_CPPFLAGS}"
       export CFLAGS="${XBB_CFLAGS_NO_W}"
@@ -3092,6 +3121,7 @@ function do_cmake()
       cd "${BUILD_FOLDER_PATH}/${cmake_folder_name}"
 
       xbb_activate
+      xbb_activate_installed_dev
 
       export CPPFLAGS="${XBB_CPPFLAGS}"
       export CFLAGS="${XBB_CFLAGS_NO_W}"
@@ -3217,6 +3247,7 @@ function do_perl()
       cd "${BUILD_FOLDER_PATH}/${perl_folder_name}"
 
       xbb_activate
+      xbb_activate_installed_dev
 
       CPPFLAGS="${XBB_CPPFLAGS}"
       # -Wno-null-pointer-arithmetic 
@@ -3325,6 +3356,7 @@ function do_makedepend()
       cd "${BUILD_FOLDER_PATH}/${makedepend_folder_name}"
 
       xbb_activate
+      xbb_activate_installed_dev
 
       CPPFLAGS="${XBB_CPPFLAGS}"
       CFLAGS="${XBB_CFLAGS_NO_W}"
@@ -3414,6 +3446,7 @@ function do_patchelf()
       cd "${BUILD_FOLDER_PATH}/${patchelf_folder_name}"
 
       xbb_activate
+      xbb_activate_installed_dev
 
       export CPPFLAGS="${XBB_CPPFLAGS}"
       export CFLAGS="${XBB_CFLAGS_NO_W}"
@@ -3504,6 +3537,7 @@ function do_dos2unix()
       cd "${BUILD_FOLDER_PATH}/${dos2unix_folder_name}"
 
       xbb_activate
+      xbb_activate_installed_dev
 
       export CPPFLAGS="${XBB_CPPFLAGS}"
       export CFLAGS="${XBB_CFLAGS_NO_W}"
@@ -3574,6 +3608,7 @@ function do_git()
       cd "${BUILD_FOLDER_PATH}/${git_folder_name}"
 
       xbb_activate
+      xbb_activate_installed_dev
 
       export CPPFLAGS="${XBB_CPPFLAGS}"
       export CFLAGS="${XBB_CFLAGS_NO_W}"
@@ -3669,6 +3704,7 @@ function do_python2()
       cd "${BUILD_FOLDER_PATH}/${python2_folder_name}"
 
       xbb_activate
+      xbb_activate_installed_dev
 
       if is_darwin
       then
@@ -3816,6 +3852,7 @@ function do_python3()
       cd "${BUILD_FOLDER_PATH}/${python3_folder_name}"
 
       xbb_activate
+      xbb_activate_installed_dev
 
       if is_darwin
       then
@@ -3968,6 +4005,7 @@ function do_scons()
       cd "${BUILD_FOLDER_PATH}/${scons_folder_name}"
 
       xbb_activate
+      xbb_activate_installed_dev
       xbb_activate_installed_bin
 
       export CPPFLAGS="${XBB_CPPFLAGS}"
@@ -4093,6 +4131,7 @@ function do_ninja()
       cd "${BUILD_FOLDER_PATH}/${ninja_folder_name}"
 
       xbb_activate
+      xbb_activate_installed_dev
 
       export CPPFLAGS="${XBB_CPPFLAGS}"
       export CFLAGS="${XBB_CFLAGS_NO_W}"
@@ -4170,6 +4209,7 @@ function do_p7zip()
       cd "${BUILD_FOLDER_PATH}/${p7zip_folder_name}"
 
       xbb_activate
+      xbb_activate_installed_dev
 
       export CPPFLAGS="${XBB_CPPFLAGS}"
       export CFLAGS="${XBB_CFLAGS_NO_W}"
@@ -4277,6 +4317,7 @@ function do_wine()
       cd "${BUILD_FOLDER_PATH}/${wine_folder_name}"
 
       xbb_activate
+      xbb_activate_installed_dev
       # Required to find the newly compiled mingw-w46. 
       # It also picks flex, which may crash with
       # macro.lex.yy.c:1031: undefined reference to `yywrap'.
@@ -4398,6 +4439,7 @@ function do_nvm()
 
     (
       xbb_activate
+      xbb_activate_installed_dev
 
       export CPPFLAGS="${XBB_CPPFLAGS}"
       export CFLAGS="${XBB_CFLAGS_NO_W}"
@@ -4481,6 +4523,7 @@ function do_gnupg()
       cd "${BUILD_FOLDER_PATH}/${gnupg_folder_name}"
 
       xbb_activate
+      xbb_activate_installed_dev
 
       export CPPFLAGS="${XBB_CPPFLAGS}"
       export CFLAGS="${XBB_CFLAGS_NO_W}"
@@ -4579,6 +4622,7 @@ function do_ant()
       cd "${BUILD_FOLDER_PATH}/${ant_folder_name}"
 
       xbb_activate
+      xbb_activate_installed_dev
 
       env | sort
 
@@ -4648,6 +4692,7 @@ function do_maven()
       cd "${BUILD_FOLDER_PATH}/${maven_folder_name}"
 
       xbb_activate
+      xbb_activate_installed_dev
 
       env | sort
 
@@ -4721,6 +4766,7 @@ function do_nodejs()
       cd "${BUILD_FOLDER_PATH}/${nodejs_folder_name}"
 
       xbb_activate
+      xbb_activate_installed_dev
 
       export CPPFLAGS="${XBB_CPPFLAGS}"
       export CFLAGS="${XBB_CFLAGS_NO_W}"
@@ -4820,6 +4866,7 @@ function do_tcl()
       cd "${BUILD_FOLDER_PATH}/${tcl_folder_name}"
 
       xbb_activate
+      xbb_activate_installed_dev
 
       export CPPFLAGS="${XBB_CPPFLAGS}"
       export CFLAGS="${XBB_CFLAGS_NO_W}"
@@ -4913,6 +4960,7 @@ function do_guile()
       cd "${BUILD_FOLDER_PATH}/${guile_folder_name}"
 
       xbb_activate
+      xbb_activate_installed_dev
 
       export CPPFLAGS="${XBB_CPPFLAGS}"
       export CFLAGS="${XBB_CFLAGS_NO_W}"
@@ -5000,6 +5048,7 @@ function do_rhash()
       cd "${BUILD_FOLDER_PATH}/${rhash_folder_name}"
 
       xbb_activate
+      xbb_activate_installed_dev
 
       export CPPFLAGS="${XBB_CPPFLAGS}"
       export CFLAGS="${XBB_CFLAGS_NO_W}"
@@ -5091,6 +5140,7 @@ function do_re2c()
       then
 
         xbb_activate
+        xbb_activate_installed_dev
         
         # run_app bash ${DEBUG} "autogen.sh"
 
@@ -5103,6 +5153,7 @@ function do_re2c()
       cd "${BUILD_FOLDER_PATH}/${re2c_folder_name}"
 
       xbb_activate
+      xbb_activate_installed_dev
 
       export CPPFLAGS="${XBB_CPPFLAGS}"
       export CFLAGS="${XBB_CFLAGS_NO_W}"
