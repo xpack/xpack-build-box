@@ -3211,6 +3211,9 @@ function do_cmake()
 
         show_libs "${INSTALL_FOLDER_PATH}/bin/cmake"
 
+        mkdir -pv "${INSTALL_FOLDER_PATH}/share/doc"
+        mv -v "${INSTALL_FOLDER_PATH}/doc/cmake-${cmake_version_major}.${cmake_version_minor}" "${INSTALL_FOLDER_PATH}/share/doc"
+
       ) 2>&1 | tee "${LOGS_FOLDER_PATH}/make-cmake-output.txt"
     )
 
