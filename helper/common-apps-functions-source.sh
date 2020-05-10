@@ -322,56 +322,66 @@ function do_native_gcc()
 
         make install-strip
 
-        show_libs "${INSTALL_FOLDER_PATH}/bin/gcc${XBB_GCC_SUFFIX}"
-        show_libs "${INSTALL_FOLDER_PATH}/bin/g++${XBB_GCC_SUFFIX}"
 
-        show_libs "$(${INSTALL_FOLDER_PATH}/bin/gcc${XBB_GCC_SUFFIX} --print-prog-name=cc1)"
-        show_libs "$(${INSTALL_FOLDER_PATH}/bin/gcc${XBB_GCC_SUFFIX} --print-prog-name=cc1plus)"
-        show_libs "$(${INSTALL_FOLDER_PATH}/bin/gcc${XBB_GCC_SUFFIX} --print-prog-name=collect2)"
-        show_libs "$(${INSTALL_FOLDER_PATH}/bin/gcc${XBB_GCC_SUFFIX} --print-prog-name=lto1)"
-        show_libs "$(${INSTALL_FOLDER_PATH}/bin/gcc${XBB_GCC_SUFFIX} --print-prog-name=lto-wrapper)"
+if false
+then
+
+        (
+          xbb_activate_installed_bin
+
+          # The glibc location.
+          local new_rpath="${INSTALL_FOLDER_PATH}/usr/lib"
+          if [ "${HOST_BITS}" == "64" ]
+          then
+            new_rpath+=":${INSTALL_FOLDER_PATH}/usr/${BUILD}/lib64"
+          fi
+          new_rpath+=":${INSTALL_FOLDER_PATH}/usr/${BUILD}/lib"
+
+          # set -x
+          binaries=$(find "${INSTALL_FOLDER_PATH}/usr/libexec" -type f -executable)
+          for bin in ${binaries} 
+          do
+            if is_elf "${bin}"
+            then
+              append_linux_elf_rpath "${bin}" "${new_rpath}"
+              # Simple test, broken elfs may crash it.
+              /usr/bin/ldd "${bin}" >/dev/null
+            else
+              file "${bin}"
+            fi
+          done
+
+          binaries=$(find "${INSTALL_FOLDER_PATH}/usr/${BUILD}" -type f -name 'libstdc++*')
+          for bin in ${binaries} 
+          do
+            if is_elf "${bin}"
+            then
+              append_linux_elf_rpath "${bin}" "${new_rpath}"
+              # Simple test, broken elfs may crash it.
+              /usr/bin/ldd "${bin}" >/dev/null
+            else
+              file "${bin}"
+            fi
+          done
+
+        )
+fi
+
+        show_libs "${INSTALL_FOLDER_PATH}/usr/bin/gcc${XBB_GCC_SUFFIX}"
+        show_libs "${INSTALL_FOLDER_PATH}/usr/bin/g++${XBB_GCC_SUFFIX}"
+
+        show_libs "$(${INSTALL_FOLDER_PATH}/usr/bin/gcc${XBB_GCC_SUFFIX} --print-prog-name=cc1)"
+        show_libs "$(${INSTALL_FOLDER_PATH}/usr/bin/gcc${XBB_GCC_SUFFIX} --print-prog-name=cc1plus)"
+        show_libs "$(${INSTALL_FOLDER_PATH}/usr/bin/gcc${XBB_GCC_SUFFIX} --print-prog-name=collect2)"
+        show_libs "$(${INSTALL_FOLDER_PATH}/usr/bin/gcc${XBB_GCC_SUFFIX} --print-prog-name=lto1)"
+        show_libs "$(${INSTALL_FOLDER_PATH}/usr/bin/gcc${XBB_GCC_SUFFIX} --print-prog-name=lto-wrapper)"
 
       ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${native_gcc_folder_name}/make-output.txt"
     )
 
     (
-      xbb_activate_installed_bin
+      test_native_gcc
     ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${native_gcc_folder_name}/test-output.txt"
-
-      echo
-      run_app "${INSTALL_FOLDER_PATH}/bin/g++${XBB_GCC_SUFFIX}" --version
-      run_app "${INSTALL_FOLDER_PATH}/bin/g++${XBB_GCC_SUFFIX}" -dumpmachine
-      run_app "${INSTALL_FOLDER_PATH}/bin/g++${XBB_GCC_SUFFIX}" -print-search-dirs
-      "${INSTALL_FOLDER_PATH}/bin/g++${XBB_GCC_SUFFIX}" -dumpspecs | wc -l
-
-      mkdir -p "${HOME}/tmp"
-      cd "${HOME}/tmp"
-
-      # Note: __EOF__ is quoted to prevent substitutions here.
-      cat <<'__EOF__' > hello.cpp
-#include <iostream>
-
-int
-main(int argc, char* argv[])
-{
-  std::cout << "Hello" << std::endl;
-}
-__EOF__
-
-      if true
-      then
-
-        "${INSTALL_FOLDER_PATH}/bin/g++${XBB_GCC_SUFFIX}" hello.cpp -o hello 
-
-        if [ "x$(./hello)x" != "xHellox" ]
-        then
-          exit 1
-        fi
-
-      fi
-
-      rm -rf hello.cpp hello
-    )
 
     hash -r
 
@@ -380,6 +390,128 @@ __EOF__
   else
     echo "Component gcc native already installed."
   fi
+
+  if [ -z "${step}" ]
+  then
+    test_functions+=("test_native_gcc")
+  fi
+}
+
+function test_native_gcc()
+{
+  (
+    # xbb_activate_installed_bin
+
+    echo
+    echo "PATH=${PATH}"
+    echo "LD_RUN_PATH=${LD_RUN_PATH}"
+
+    run_app which as
+    run_app which ld
+
+    run_app as --version
+    run_app ld --version
+
+    echo
+    echo "Testing if gcc binaries start properly..."
+
+    run_app "${INSTALL_FOLDER_PATH}/usr/bin/gcc${XBB_GCC_SUFFIX}" --version
+    run_app "${INSTALL_FOLDER_PATH}/usr/bin/g++${XBB_GCC_SUFFIX}" --version
+
+    run_app "${INSTALL_FOLDER_PATH}/usr/bin/gcc-ar${XBB_GCC_SUFFIX}" --version
+    run_app "${INSTALL_FOLDER_PATH}/usr/bin/gcc-nm${XBB_GCC_SUFFIX}" --version
+    run_app "${INSTALL_FOLDER_PATH}/usr/bin/gcc-ranlib${XBB_GCC_SUFFIX}" --version
+    run_app "${INSTALL_FOLDER_PATH}/usr/bin/gcov${XBB_GCC_SUFFIX}" --version
+    run_app "${INSTALL_FOLDER_PATH}/usr/bin/gcov-dump${XBB_GCC_SUFFIX}" --version
+    run_app "${INSTALL_FOLDER_PATH}/usr/bin/gcov-tool${XBB_GCC_SUFFIX}" --version
+
+    if [ -f "${INSTALL_FOLDER_PATH}/usr/bin/gfortran${XBB_GCC_SUFFIX}" ]
+    then
+      run_app "${INSTALL_FOLDER_PATH}/usr/bin/gfortran${XBB_GCC_SUFFIX}" --version
+    fi
+
+    echo
+    echo "Checking the shared libraries..."
+
+    show_libs "${INSTALL_FOLDER_PATH}/usr/bin/gcc${XBB_GCC_SUFFIX}"
+    show_libs "${INSTALL_FOLDER_PATH}/usr/bin/g++${XBB_GCC_SUFFIX}"
+
+    show_libs "$(${INSTALL_FOLDER_PATH}/usr/bin/gcc${XBB_GCC_SUFFIX} --print-prog-name=cc1)"
+    show_libs "$(${INSTALL_FOLDER_PATH}/usr/bin/gcc${XBB_GCC_SUFFIX} --print-prog-name=cc1plus)"
+    show_libs "$(${INSTALL_FOLDER_PATH}/usr/bin/gcc${XBB_GCC_SUFFIX} --print-prog-name=collect2)"
+    show_libs "$(${INSTALL_FOLDER_PATH}/usr/bin/gcc${XBB_GCC_SUFFIX} --print-prog-name=lto1)"
+    show_libs "$(${INSTALL_FOLDER_PATH}/usr/bin/gcc${XBB_GCC_SUFFIX} --print-prog-name=lto-wrapper)"
+
+    echo
+    echo "Showing configurations..."
+
+    run_app "${INSTALL_FOLDER_PATH}/usr/bin/gcc${XBB_GCC_SUFFIX}" -v
+    run_app "${INSTALL_FOLDER_PATH}/usr/bin/gcc${XBB_GCC_SUFFIX}" -dumpversion
+    run_app "${INSTALL_FOLDER_PATH}/usr/bin/gcc${XBB_GCC_SUFFIX}" -dumpmachine
+
+    run_app "${INSTALL_FOLDER_PATH}/usr/bin/gcc${XBB_GCC_SUFFIX}" -print-search-dirs
+    run_app "${INSTALL_FOLDER_PATH}/usr/bin/gcc${XBB_GCC_SUFFIX}" -print-libgcc-file-name
+    run_app "${INSTALL_FOLDER_PATH}/usr/bin/gcc${XBB_GCC_SUFFIX}" -print-multi-directory
+    run_app "${INSTALL_FOLDER_PATH}/usr/bin/gcc${XBB_GCC_SUFFIX}" -print-multi-lib
+    run_app "${INSTALL_FOLDER_PATH}/usr/bin/gcc${XBB_GCC_SUFFIX}" -print-multi-os-directory
+    run_app "${INSTALL_FOLDER_PATH}/usr/bin/gcc${XBB_GCC_SUFFIX}" -print-sysroot
+    # run_app "${INSTALL_FOLDER_PATH}/usr/bin/gcc${XBB_GCC_SUFFIX}" -print-sysroot-headers-suffix
+    run_app "${INSTALL_FOLDER_PATH}/usr/bin/gcc${XBB_GCC_SUFFIX}" -print-file-name=libstdc++.so
+    run_app "${INSTALL_FOLDER_PATH}/usr/bin/gcc${XBB_GCC_SUFFIX}" -print-prog-name=cc1
+
+    echo
+    echo "Testing if gcc compiles simple Hello programs..."
+
+    # To access the new binutils.
+    # /usr/bin/ld: BFD (GNU Binutils for Ubuntu) 2.22 internal error, aborting at ../../bfd/reloc.c line 443 in bfd_get_reloc_size
+    xbb_activate_installed_bin
+
+    mkdir -p "${HOME}/tmp"
+    cd "${HOME}/tmp"
+
+    # Note: __EOF__ is quoted to prevent substitutions here.
+    cat <<'__EOF__' > hello.cpp
+#include <iostream>
+
+int
+main(int argc, char* argv[])
+{
+  std::cout << "Hello++" << std::endl;
+
+  return 0;
+}
+__EOF__
+
+    "${INSTALL_FOLDER_PATH}/usr/bin/g++${XBB_GCC_SUFFIX}" hello.cpp -o hello1 -v 
+
+    show_libs hello1
+
+    # run_app /usr/bin/ldd -v hello
+
+    output=$(./hello1)
+    echo ${output}
+
+    if [ "x${output}x" != "xHello++x" ]
+    then
+      exit 1
+    fi
+
+    "${INSTALL_FOLDER_PATH}/usr/bin/g++${XBB_GCC_SUFFIX}" hello.cpp -o hello2 -v -static-libgcc -static-libstdc++
+
+    show_libs hello2
+
+    # run_app /usr/bin/ldd -v hello
+
+    output=$(./hello2)
+    echo ${output}
+
+    if [ "x${output}x" != "xHello++x" ]
+    then
+      exit 1
+    fi
+
+    # rm -rf hello.cpp hello
+  ) 
 }
 
 # -----------------------------------------------------------------------------
