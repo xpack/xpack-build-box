@@ -838,6 +838,27 @@ function do_strip_debug_libs()
   fi
 }
 
+function compute_gcc_rpath()
+{
+  local cc="$1"
+
+  local lib_names=( libc.so libm.so libstdc++.so libgcc_s.so libdl.so libpthread.so libnsl.so librt.so )
+  # Local by definition.
+  declare -A paths
+  for lib_name in ${lib_names[@]}
+  do
+    local file_path=$(${cc} -print-file-name="${lib_name}")
+    if [ "${file_path}" == "${lib_name}" ]
+    then
+      continue
+    fi
+    local folder_path=$(dirname $(realpath ${file_path}))
+    paths+=( ["${folder_path}"]="${folder_path}" )
+  done
+
+  echo "$(IFS=":"; echo "${!paths[*]}")"
+}
+
 function check_rpath()
 {
   (
