@@ -781,54 +781,57 @@ function do_strip_debug_libs()
 {
   echo
   echo "Stripping debug info from libraries..."
+  echo
 
   if [ "${HOST_UNAME}" == "Linux" ]
   then
     (
-      cd "${XBB_FOLDER_PATH}"
+      cd "${INSTALL_FOLDER_PATH}"
 
       xbb_activate
 
       local strip
-      if [ -x "${XBB_FOLDER_PATH}/bin/strip" ]
+      if [ -x "${XBB_FOLDER_PATH}/usr/bin/strip" ]
       then
-        strip="${XBB_FOLDER_PATH}/bin/strip"
-      elif [ -x "${XBB_BOOTSTRAP_FOLDER_PATH}/bin/strip" ]
+        strip="${XBB_FOLDER_PATH}/usr/bin/strip"
+      elif [ -x "${XBB_BOOTSTRAP_FOLDER_PATH}/usr/bin/strip" ]
       then
-        strip="${XBB_BOOTSTRAP_FOLDER_PATH}/bin/strip"
+        strip="${XBB_BOOTSTRAP_FOLDER_PATH}/usr/bin/strip"
       else
         strip="strip"
       fi
 
       local ranlib
-      if [ -x "${XBB_FOLDER_PATH}/bin/ranlib" ]
+      if [ -x "${XBB_FOLDER_PATH}/usr/bin/ranlib" ]
       then
-        ranlib="${XBB_FOLDER_PATH}/bin/ranlib"
-      elif [ -x "${XBB_BOOTSTRAP_FOLDER_PATH}/bin/ranlib" ]
+        ranlib="${XBB_FOLDER_PATH}/usr/bin/ranlib"
+      elif [ -x "${XBB_BOOTSTRAP_FOLDER_PATH}/usr/bin/ranlib" ]
       then
-        ranlib="${XBB_BOOTSTRAP_FOLDER_PATH}/bin/ranlib"
+        ranlib="${XBB_BOOTSTRAP_FOLDER_PATH}/usr/bin/ranlib"
       else
         ranlib="ranlib"
       fi
 
       set +e
       # -type f to skip links.
-      find lib* \
+      find lib* usr/lib* \
         -type f \
         -name '*.so' \
         -print \
         -exec chmod +w {} \; \
         -exec "${strip}" --strip-debug {} \;
-      find lib* \
+      find lib* usr/lib* \
         -type f \
         -name '*.so.*' \
         -print \
         -exec chmod +w {} \; \
         -exec "${strip}" --strip-debug {} \;
-      find lib* \
+
+      # Should we skip mingw libraries?
+      # -not -path 'lib/gcc/*-w64-mingw32/*'  \
+      find lib* usr/lib* \
         -type f \
         -name '*.a' \
-        -not -path 'lib/gcc/*-w64-mingw32/*'  \
         -print \
         -exec chmod +w {} \; \
         -exec "${strip}" --strip-debug {} \; \
