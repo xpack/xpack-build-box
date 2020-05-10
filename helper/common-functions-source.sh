@@ -385,21 +385,14 @@ function prepare_xbb_env()
 function xbb_activate_installed_bin()
 {
   # Add the XBB bin to the PATH.
-  PATH="${INSTALL_FOLDER_PATH}/bin:${PATH}"
-
-  # Disabled, shared libs must be located via rpath.
-
-  # Add XBB lib to LD_LIBRARY_PATH.
-  # LD_LIBRARY_PATH="${INSTALL_FOLDER_PATH}/lib:${LD_LIBRARY_PATH}"
-
-  # if [ -d "${INSTALL_FOLDER_PATH}/lib64" ]
-  # then
-    # On 64-bit systems, add lib64 in front of LD_LIBRARY_PATH.
-    # LD_LIBRARY_PATH="${INSTALL_FOLDER_PATH}/lib64:${LD_LIBRARY_PATH}"
-  # fi
+  if [ -z "${PATH:-""}" ]
+  then
+    PATH="${INSTALL_FOLDER_PATH}/usr/sbin:${INSTALL_FOLDER_PATH}/usr/bin:${INSTALL_FOLDER_PATH}/sbin:${INSTALL_FOLDER_PATH}/bin"
+  else
+    PATH="${INSTALL_FOLDER_PATH}/usr/sbin:${INSTALL_FOLDER_PATH}/usr/bin:${INSTALL_FOLDER_PATH}/sbin:${INSTALL_FOLDER_PATH}/bin:${PATH}"
+  fi
 
   export PATH
-  # export LD_LIBRARY_PATH
 }
 
 # For the XBB builds, add the freshly built headrs and libraries.
@@ -408,44 +401,49 @@ function xbb_activate_installed_dev()
   # Add XBB include in front of XBB_CPPFLAGS.
   XBB_CPPFLAGS="-I${INSTALL_FOLDER_PATH}/include ${XBB_CPPFLAGS}"
 
-  # Add XBB lib in front of XBB_LDFLAGS.
-  XBB_LDFLAGS="-L${INSTALL_FOLDER_PATH}/lib ${XBB_LDFLAGS}"
-  XBB_LDFLAGS_LIB="-L${INSTALL_FOLDER_PATH}/lib ${XBB_LDFLAGS_LIB}"
-  XBB_LDFLAGS_APP="-L${INSTALL_FOLDER_PATH}/lib ${XBB_LDFLAGS_APP}"
-  XBB_LDFLAGS_APP_STATIC="-L${INSTALL_FOLDER_PATH}/lib ${XBB_LDFLAGS_APP_STATIC}"
-  XBB_LDFLAGS_APP_STATIC_GCC="-L${INSTALL_FOLDER_PATH}/lib ${XBB_LDFLAGS_APP_STATIC_GCC}"
+  if [ -d "${INSTALL_FOLDER_PATH}/lib" ]
+  then
+    # Add XBB lib in front of XBB_LDFLAGS.
+    XBB_LDFLAGS="-L${INSTALL_FOLDER_PATH}/lib ${XBB_LDFLAGS}"
+    XBB_LDFLAGS_LIB="-L${INSTALL_FOLDER_PATH}/lib ${XBB_LDFLAGS_LIB}"
+    XBB_LDFLAGS_LIB_STATIC_GCC="-L${INSTALL_FOLDER_PATH}/lib ${XBB_LDFLAGS_LIB_STATIC_GCC}"
+    XBB_LDFLAGS_APP="-L${INSTALL_FOLDER_PATH}/lib ${XBB_LDFLAGS_APP}"
+    XBB_LDFLAGS_APP_STATIC="-L${INSTALL_FOLDER_PATH}/lib ${XBB_LDFLAGS_APP_STATIC}"
+    XBB_LDFLAGS_APP_STATIC_GCC="-L${INSTALL_FOLDER_PATH}/lib ${XBB_LDFLAGS_APP_STATIC_GCC}"
 
-  # Add XBB lib in front of PKG_CONFIG_PATH.
-  PKG_CONFIG_PATH="${INSTALL_FOLDER_PATH}/lib/pkgconfig:${PKG_CONFIG_PATH}"
+    # Add XBB lib in front of PKG_CONFIG_PATH.
+    if [ -z "${PKG_CONFIG_PATH}" ]
+    then
+      PKG_CONFIG_PATH="${INSTALL_FOLDER_PATH}/lib/pkgconfig"
+    else
+      PKG_CONFIG_PATH="${INSTALL_FOLDER_PATH}/lib/pkgconfig:${PKG_CONFIG_PATH}"
+    fi
+  fi
 
-  # If lib64 present, add it in front of lib.
-  if [ -d "${XBB_FOLDER_PATH}/lib64" ]
+  # If lib64 present and not link, add it in front of lib.
+  if [ -d "${INSTALL_FOLDER_PATH}/lib64" -a ! -L "${INSTALL_FOLDER_PATH}/lib64" ]
   then
     XBB_LDFLAGS="-L${INSTALL_FOLDER_PATH}/lib64 ${XBB_LDFLAGS}"
     XBB_LDFLAGS_LIB="-L${INSTALL_FOLDER_PATH}/lib64 ${XBB_LDFLAGS_LIB}"
+    XBB_LDFLAGS_LIB_STATIC_GCC="-L${INSTALL_FOLDER_PATH}/lib64 ${XBB_LDFLAGS_LIB_STATIC_GCC}"
     XBB_LDFLAGS_APP="-L${INSTALL_FOLDER_PATH}/lib64 ${XBB_LDFLAGS_APP}"
     XBB_LDFLAGS_APP_STATIC="-L${INSTALL_FOLDER_PATH}/lib64 ${XBB_LDFLAGS_APP_STATIC}"
     XBB_LDFLAGS_APP_STATIC_GCC="-L${INSTALL_FOLDER_PATH}/lib64 ${XBB_LDFLAGS_APP_STATIC_GCC}"
 
     # Add XBB lib in front of PKG_CONFIG_PATH.
-    PKG_CONFIG_PATH="${INSTALL_FOLDER_PATH}/lib64/pkgconfig:${PKG_CONFIG_PATH}"
+    if [ -z "${PKG_CONFIG_PATH}" ]
+    then
+      PKG_CONFIG_PATH="${INSTALL_FOLDER_PATH}/lib64/pkgconfig"
+    else
+      PKG_CONFIG_PATH="${INSTALL_FOLDER_PATH}/lib64/pkgconfig:${PKG_CONFIG_PATH}"
+    fi
   fi
-
-  # Add XBB lib to LD_LIBRARY_PATH.
-  LD_LIBRARY_PATH="${INSTALL_FOLDER_PATH}/lib:${LD_LIBRARY_PATH}"
-
-  if [ -d "${INSTALL_FOLDER_PATH}/lib64" ]
-  then
-    # On 64-bit systems, add lib64 in front of LD_LIBRARY_PATH.
-    LD_LIBRARY_PATH="${INSTALL_FOLDER_PATH}/lib64:${LD_LIBRARY_PATH}"
-  fi
-
-  export LD_LIBRARY_PATH
 
   export XBB_CPPFLAGS
 
   export XBB_LDFLAGS
   export XBB_LDFLAGS_LIB
+  export XBB_LDFLAGS_LIB_STATIC_GCC
   export XBB_LDFLAGS_APP
   export XBB_LDFLAGS_APP_STATIC
   export XBB_LDFLAGS_APP_STATIC_GCC
@@ -502,21 +500,14 @@ __EOF__
 # Adjust PATH to prefer the XBB bootstrap binaries.
 function xbb_activate_bootstrap()
 {
-  PATH="${XBB_BOOTSTRAP_FOLDER_PATH}/bin:${PATH}"
-
-  # Disabled, shared libs must be located via rpath.
-
-  # Add XBB lib to LD_LIBRARY_PATH.
-  # LD_LIBRARY_PATH="${XBB_BOOTSTRAP_FOLDER_PATH}/lib:${LD_LIBRARY_PATH}"
-
-  # if [ -d "${XBB_BOOTSTRAP_FOLDER_PATH}/lib64" ]
-  # then
-    # On 64-bit systems, add lib64 in front of LD_LIBRARY_PATH.
-    # LD_LIBRARY_PATH="${XBB_BOOTSTRAP_FOLDER_PATH}/lib64:${LD_LIBRARY_PATH}"
-  # fi
+  if [ -z "${PATH:-""}" ]
+  then
+    PATH="${XBB_BOOTSTRAP_FOLDER_PATH}/usr/sbin:${XBB_BOOTSTRAP_FOLDER_PATH}/usr/bin:${XBB_BOOTSTRAP_FOLDER_PATH}/sbin:${XBB_BOOTSTRAP_FOLDER_PATH}/bin"
+  else
+    PATH="${XBB_BOOTSTRAP_FOLDER_PATH}/usr/sbin:${XBB_BOOTSTRAP_FOLDER_PATH}/usr/bin:${XBB_BOOTSTRAP_FOLDER_PATH}/sbin:${XBB_BOOTSTRAP_FOLDER_PATH}/bin:${PATH}"
+  fi
 
   export PATH
-  # export LD_LIBRARY_PATH
 }
 
 __EOF__
@@ -530,22 +521,14 @@ __EOF__
 # Adjust PATH to prefer the XBB binaries.
 function xbb_activate()
 {
-  PATH=${PATH:-""}
-  PATH="${XBB_FOLDER_PATH}/bin:${PATH}"
-
-  # Disabled, shared libs must be located via rpath.
-
-  # Add XBB lib to LD_LIBRARY_PATH.
-  # LD_LIBRARY_PATH="${XBB_FOLDER_PATH}/lib:${LD_LIBRARY_PATH}"
-
-  # if [ -d "${XBB_FOLDER_PATH}/lib64" ]
-  # then
-    # On 64-bit systems, add lib64 in front of LD_LIBRARY_PATH.
-    # LD_LIBRARY_PATH="${XBB_FOLDER_PATH}/lib64:${LD_LIBRARY_PATH}"
-  # fi
+  if [ -z "${PATH:-""}" ]
+  then
+    PATH="${XBB_FOLDER_PATH}/usr/sbin:${XBB_FOLDER_PATH}/usr/bin:${XBB_FOLDER_PATH}/sbin:${XBB_FOLDER_PATH}/bin"
+  else
+    PATH="${XBB_FOLDER_PATH}/usr/sbin:${XBB_FOLDER_PATH}/usr/bin:${XBB_FOLDER_PATH}/sbin:${XBB_FOLDER_PATH}/bin:${PATH}"
+  fi
 
   export PATH
-  # export LD_LIBRARY_PATH
 }
 __EOF__
 # The above marker must start in the first column.
