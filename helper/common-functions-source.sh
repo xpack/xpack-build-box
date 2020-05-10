@@ -11,6 +11,17 @@
 
 # =============================================================================
 
+function do_prerequisites()
+{
+  detect_host
+
+  docker_prepare_env
+
+  prepare_xbb_env
+
+  create_xbb_source
+}
+
 function detect_host()
 {
   echo
