@@ -21,7 +21,7 @@ There are two types of builds:
 - distribution builds, intended for xPack binary distributions and running
   on most modern machines
 
-The main use cases of XBBs are distributionbuilds, but they can be used
+The main use cases of XBBs are distribution builds, but they can be used
 for native builds as well.
 
 Generally, xPack binaries are available for the following platforms:
@@ -210,7 +210,7 @@ $ docker run -it <image> ldd --version
 ### [Debian](https://en.wikipedia.org/wiki/Debian_version_history)
 
 - `debian:6` - squeeze - 2011-2016, 2.11.3
-- `debian:7` - wheezy - 2013-2016, 2.13, kernel 3.10
+- `debian:7` - wheezy - 2013-2016, 2.13, kernel 3.2 - 3.10
 - `debian:8` - jessie - 2015-2018, 2.19
 - `debian:9` - stretch - 2017-2020, 2.24 (first with arm64)
 - `debian:10` - buster - 2019-2022, 2.28
@@ -218,7 +218,7 @@ $ docker run -it <image> ldd --version
 ### [Ubuntu](https://en.wikipedia.org/wiki/Ubuntu_version_history)
 
 - `ubuntu:10.04` - lucy - 2010-2015, 2.11.1
-- `ubuntu:12.04` - precise - 2012-2019, 2.15 <--- Intel Linux choice
+- `ubuntu:12.04` - precise - 2012-2019, 2.15, kernel 3.2 <--- Intel Linux choice
 - `ubuntu:14.04` - trusty - 2014-2022, 2.19
 - `ubuntu:16.04` - xenial - 2016-2024, 2.23 <--- Arm Linux choice
 - `ubuntu:18.04` - bionic - 2018-2028, 2.27
@@ -237,7 +237,7 @@ $ docker run -it <image> ldd --version
 
 ### [Fedora](https://en.wikipedia.org/wiki/Fedora_version_history)
 
-- `fedora:20` - 2013-12, 2.18 <-- Intel
+- `fedora:20` - 2013-12, 2.18, kernel 3.6 <-- Intel
 - `fedora:21` - 2014-12, 2.20
 - `fedora:22` - 2015-05, 2.21
 - `fedora:23` - 2015-11, 2.22
