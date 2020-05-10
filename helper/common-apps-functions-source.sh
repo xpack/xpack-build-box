@@ -691,7 +691,7 @@ function do_mingw_all()
             --with-sysroot="${INSTALL_FOLDER_PATH}" \
             --with-pkgversion="${XBB_MINGW_GCC_BRANDING}" \
             \
-            --enable-languages=c,c++ \
+            --enable-languages=c,c++,fortran,objc,obj-c++ \
             --enable-shared \
             --enable-static \
             --enable-threads=posix \
