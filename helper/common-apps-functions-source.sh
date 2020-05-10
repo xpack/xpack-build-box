@@ -758,7 +758,9 @@ function do_mingw_all()
       # checking for _mingw_mac.h... no
       # configure: error: Please check if the mingw-w64 header set and the build/host option are set properly.
       # (https://github.com/henry0312/build_gcc/issues/1)
-      export CC=""
+      # export CC=""
+
+      prepare_gcc_env "${MINGW_TARGET}-"
 
       env | sort
 
@@ -843,7 +845,8 @@ function do_mingw_all()
       export CXXFLAGS="-O2 -pipe -w"
       export LDFLAGS=""
       
-      export CC=""
+      # export CC=""
+      prepare_gcc_env "${MINGW_TARGET}-"
 
       env | sort
 
@@ -2245,6 +2248,8 @@ function do_libtool()
       then
         # To pick the new GCC.
         xbb_activate_installed_bin
+
+        prepare_gcc_env "" "-xbb"
       fi
       xbb_activate_installed_dev
 
