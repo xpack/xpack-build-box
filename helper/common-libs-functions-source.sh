@@ -736,6 +736,9 @@ function do_expat()
         make check
 
         make install-strip
+
+        show_libs "${INSTALL_FOLDER_PATH}/lib/libexpat.so"
+
       ) 2>&1 | tee "${LOGS_FOLDER_PATH}/make-expat-output.txt"
     )
 
