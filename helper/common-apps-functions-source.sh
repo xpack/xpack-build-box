@@ -3974,6 +3974,9 @@ function do_python3()
     (
       xbb_activate_installed_bin
 
+      # export PYTHONHOME="${INSTALL_FOLDER_PATH}"
+      export PYTHONPATH="${INSTALL_FOLDER_PATH}/lib/python3.7"
+
       # Install setuptools and pip. Be sure the new version is used.
       # https://packaging.python.org/tutorials/installing-packages/
       echo
@@ -4102,6 +4105,8 @@ function do_meson
     (
       xbb_activate_installed_bin
 
+      export PYTHONPATH="${INSTALL_FOLDER_PATH}/lib/python3.7"
+
       env | sort
 
       pip3 install meson==${meson_version}
@@ -4112,6 +4117,8 @@ function do_meson
 
     (
       xbb_activate_installed_bin
+
+      export PYTHONPATH="${INSTALL_FOLDER_PATH}/lib/python3.7"
 
       run_app "${INSTALL_FOLDER_PATH}/bin/meson" --version
     ) 2>&1 | tee "${LOGS_FOLDER_PATH}/test-meson-output.txt"
