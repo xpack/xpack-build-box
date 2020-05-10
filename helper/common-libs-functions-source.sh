@@ -21,18 +21,21 @@ function do_zlib()
 
   local zlib_version="$1"
 
-  local zlib_folder_name="zlib-${zlib_version}"
-  local zlib_archive="${zlib_folder_name}.tar.gz"
+  local zlib_src_folder_name="zlib-${zlib_version}"
+
+  local zlib_archive="${zlib_src_folder_name}.tar.gz"
   local zlib_url="http://zlib.net/fossils/${zlib_archive}"
   # local zlib_url="https://github.com/gnu-mcu-eclipse/files/raw/master/libs/${zlib_archive}"
 
-  local zlib_stamp_file_path="${STAMPS_FOLDER_PATH}/stamp-zlib-${zlib_version}-installed"
+  local zlib_folder_name="${zlib_src_folder_name}"
+
+  local zlib_stamp_file_path="${STAMPS_FOLDER_PATH}/stamp-${zlib_folder_name}-installed"
   if [ ! -f "${zlib_stamp_file_path}" -o ! -d "${LIBS_BUILD_FOLDER_PATH}/${zlib_folder_name}" ]
   then
 
     cd "${SOURCES_FOLDER_PATH}"
 
-    download_and_extract "${zlib_url}" "${zlib_archive}" "${zlib_folder_name}"
+    download_and_extract "${zlib_url}" "${zlib_archive}" "${zlib_src_folder_name}"
 
     mkdir -pv "${LOGS_FOLDER_PATH}/${zlib_folder_name}"
 
@@ -41,10 +44,11 @@ function do_zlib()
       then
         mkdir -p "${LIBS_BUILD_FOLDER_PATH}/${zlib_folder_name}"
         # Copy the sources in the build folder.
-        cp -r "${SOURCES_FOLDER_PATH}/${zlib_folder_name}"/* \
+        cp -r "${SOURCES_FOLDER_PATH}/${zlib_src_folder_name}"/* \
           "${LIBS_BUILD_FOLDER_PATH}/${zlib_folder_name}"
       fi
       cd "${LIBS_BUILD_FOLDER_PATH}/${zlib_folder_name}"
+
 
       xbb_activate
       xbb_activate_installed_dev
@@ -118,18 +122,21 @@ function do_gmp()
 
   local gmp_version="$1"
 
-  local gmp_folder_name="gmp-${gmp_version}"
-  local gmp_archive="${gmp_folder_name}.tar.xz"
+  local gmp_src_folder_name="gmp-${gmp_version}"
+
+  local gmp_archive="${gmp_src_folder_name}.tar.xz"
   local gmp_url="https://gmplib.org/download/gmp/${gmp_archive}"
   # local gmp_url="https://github.com/gnu-mcu-eclipse/files/raw/master/libs/${gmp_archive}"
 
-  local gmp_stamp_file_path="${STAMPS_FOLDER_PATH}/stamp-gmp-${gmp_version}-installed"
+  local gmp_folder_name="${gmp_src_folder_name}"
+
+  local gmp_stamp_file_path="${STAMPS_FOLDER_PATH}/stamp-${gmp_folder_name}-installed"
   if [ ! -f "${gmp_stamp_file_path}" -o ! -d "${LIBS_BUILD_FOLDER_PATH}/${gmp_folder_name}" ]
   then
 
     cd "${SOURCES_FOLDER_PATH}"
 
-    download_and_extract "${gmp_url}" "${gmp_archive}" "${gmp_folder_name}"
+    download_and_extract "${gmp_url}" "${gmp_archive}" "${gmp_src_folder_name}"
 
     mkdir -pv "${LOGS_FOLDER_PATH}/${gmp_folder_name}"
 
@@ -159,9 +166,9 @@ function do_gmp()
           echo
           echo "Running gmp configure..."
 
-          bash "${SOURCES_FOLDER_PATH}/${gmp_folder_name}/configure" --help
+          bash "${SOURCES_FOLDER_PATH}/${gmp_src_folder_name}/configure" --help
 
-          bash ${DEBUG} "${SOURCES_FOLDER_PATH}/${gmp_folder_name}/configure" \
+          bash ${DEBUG} "${SOURCES_FOLDER_PATH}/${gmp_src_folder_name}/configure" \
             --prefix="${INSTALL_FOLDER_PATH}" \
             \
             --build="${BUILD}" \
@@ -224,17 +231,20 @@ function do_mpfr()
 
   local mpfr_version="$1"
 
-  local mpfr_folder_name="mpfr-${mpfr_version}"
-  local mpfr_archive="${mpfr_folder_name}.tar.xz"
+  local mpfr_src_folder_name="mpfr-${mpfr_version}"
+
+  local mpfr_archive="${mpfr_src_folder_name}.tar.xz"
   local mpfr_url="https://ftp.gnu.org/gnu/mpfr/${mpfr_archive}"
 
-  local mpfr_stamp_file_path="${STAMPS_FOLDER_PATH}/stamp-mpfr-${mpfr_version}-installed"
+  local mpfr_folder_name="${mpfr_src_folder_name}"
+
+  local mpfr_stamp_file_path="${STAMPS_FOLDER_PATH}/stamp-${mpfr_folder_name}-installed"
   if [ ! -f "${mpfr_stamp_file_path}" -o ! -d "${LIBS_BUILD_FOLDER_PATH}/${mpfr_folder_name}" ]
   then
 
     cd "${SOURCES_FOLDER_PATH}"
 
-    download_and_extract "${mpfr_url}" "${mpfr_archive}" "${mpfr_folder_name}"
+    download_and_extract "${mpfr_url}" "${mpfr_archive}" "${mpfr_src_folder_name}"
 
     mkdir -pv "${LOGS_FOLDER_PATH}/${mpfr_folder_name}"
 
@@ -258,9 +268,9 @@ function do_mpfr()
           echo
           echo "Running mpfr configure..."
 
-          bash "${SOURCES_FOLDER_PATH}/${mpfr_folder_name}/configure" --help
+          bash "${SOURCES_FOLDER_PATH}/${mpfr_src_folder_name}/configure" --help
 
-          bash ${DEBUG} "${SOURCES_FOLDER_PATH}/${mpfr_folder_name}/configure" \
+          bash ${DEBUG} "${SOURCES_FOLDER_PATH}/${mpfr_src_folder_name}/configure" \
             --prefix="${INSTALL_FOLDER_PATH}" \
             \
             --enable-thread-safe \
@@ -325,17 +335,20 @@ function do_mpc()
 
   local mpc_version="$1"
 
-  local mpc_folder_name="mpc-${mpc_version}"
-  local mpc_archive="${mpc_folder_name}.tar.gz"
+  local mpc_src_folder_name="mpc-${mpc_version}"
+
+  local mpc_archive="${mpc_src_folder_name}.tar.gz"
   local mpc_url="ftp://ftp.gnu.org/gnu/mpc/${mpc_archive}"
 
-  local mpc_stamp_file_path="${STAMPS_FOLDER_PATH}/stamp-mpc-${mpc_version}-installed"
+  local mpc_folder_name="${mpc_src_folder_name}"
+
+  local mpc_stamp_file_path="${STAMPS_FOLDER_PATH}/stamp-${mpc_folder_name}-installed"
   if [ ! -f "${mpc_stamp_file_path}" -o ! -d "${LIBS_BUILD_FOLDER_PATH}/${mpc_folder_name}" ]
   then
 
     cd "${SOURCES_FOLDER_PATH}"
 
-    download_and_extract "${mpc_url}" "${mpc_archive}" "${mpc_folder_name}"
+    download_and_extract "${mpc_url}" "${mpc_archive}" "${mpc_src_folder_name}"
 
     mkdir -pv "${LOGS_FOLDER_PATH}/${mpc_folder_name}"
 
@@ -359,9 +372,9 @@ function do_mpc()
           echo
           echo "Running mpc configure..."
 
-          bash "${SOURCES_FOLDER_PATH}/${mpc_folder_name}/configure" --help
+          bash "${SOURCES_FOLDER_PATH}/${mpc_src_folder_name}/configure" --help
 
-          bash ${DEBUG} "${SOURCES_FOLDER_PATH}/${mpc_folder_name}/configure" \
+          bash ${DEBUG} "${SOURCES_FOLDER_PATH}/${mpc_src_folder_name}/configure" \
             --prefix="${INSTALL_FOLDER_PATH}" 
 
           cp "config.log" "${LOGS_FOLDER_PATH}/${mpc_folder_name}/config-log.txt"
@@ -414,18 +427,21 @@ function do_isl()
 
   local isl_version="$1"
 
-  local isl_folder_name="isl-${isl_version}"
-  local isl_archive="${isl_folder_name}.tar.xz"
+  local isl_src_folder_name="isl-${isl_version}"
+
+  local isl_archive="${isl_src_folder_name}.tar.xz"
   local isl_url="http://isl.gforge.inria.fr/${isl_archive}"
   # local isl_url="https://github.com/gnu-mcu-eclipse/files/raw/master/libs/${isl_archive}"
 
-  local isl_stamp_file_path="${STAMPS_FOLDER_PATH}/stamp-isl-${isl_version}-installed"
+  local isl_folder_name="${isl_src_folder_name}"
+
+  local isl_stamp_file_path="${STAMPS_FOLDER_PATH}/stamp-${isl_folder_name}-installed"
   if [ ! -f "${isl_stamp_file_path}" -o ! -d "${LIBS_BUILD_FOLDER_PATH}/${isl_folder_name}" ]
   then
 
     cd "${SOURCES_FOLDER_PATH}"
 
-    download_and_extract "${isl_url}" "${isl_archive}" "${isl_folder_name}"
+    download_and_extract "${isl_url}" "${isl_archive}" "${isl_src_folder_name}"
 
     mkdir -pv "${LOGS_FOLDER_PATH}/${isl_folder_name}"
 
@@ -450,9 +466,9 @@ function do_isl()
           echo
           echo "Running isl configure..."
 
-          bash "${SOURCES_FOLDER_PATH}/${isl_folder_name}/configure" --help
+          bash "${SOURCES_FOLDER_PATH}/${isl_src_folder_name}/configure" --help
 
-          bash ${DEBUG} "${SOURCES_FOLDER_PATH}/${isl_folder_name}/configure" \
+          bash ${DEBUG} "${SOURCES_FOLDER_PATH}/${isl_src_folder_name}/configure" \
             --prefix="${INSTALL_FOLDER_PATH}" \
             \
             --with-gmp-prefix="${INSTALL_FOLDER_PATH}" \
