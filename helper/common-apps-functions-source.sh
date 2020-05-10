@@ -101,37 +101,22 @@ function do_native_binutils()
 
         make install-strip
 
-        # For just in case, it has nasty consequences when picked 
-        # in other builds.
-        rm -fv "${INSTALL_FOLDER_PATH}/lib/libiberty.a" "${INSTALL_FOLDER_PATH}/lib64/libiberty.a"
-
-        show_libs "${INSTALL_FOLDER_PATH}/bin/ar" 
-        show_libs "${INSTALL_FOLDER_PATH}/bin/as" 
-        show_libs "${INSTALL_FOLDER_PATH}/bin/ld" 
-        show_libs "${INSTALL_FOLDER_PATH}/bin/nm" 
-        show_libs "${INSTALL_FOLDER_PATH}/bin/objcopy" 
-        show_libs "${INSTALL_FOLDER_PATH}/bin/objdump" 
-        show_libs "${INSTALL_FOLDER_PATH}/bin/ranlib" 
-        show_libs "${INSTALL_FOLDER_PATH}/bin/size" 
-        show_libs "${INSTALL_FOLDER_PATH}/bin/strings" 
-        show_libs "${INSTALL_FOLDER_PATH}/bin/strip" 
+        show_libs "${NATIVE_BINUTILS_INSTALL_FOLDER_PATH}/bin/ar" 
+        show_libs "${NATIVE_BINUTILS_INSTALL_FOLDER_PATH}/bin/as" 
+        show_libs "${NATIVE_BINUTILS_INSTALL_FOLDER_PATH}/bin/ld" 
+        show_libs "${NATIVE_BINUTILS_INSTALL_FOLDER_PATH}/bin/nm" 
+        show_libs "${NATIVE_BINUTILS_INSTALL_FOLDER_PATH}/bin/objcopy" 
+        show_libs "${NATIVE_BINUTILS_INSTALL_FOLDER_PATH}/bin/objdump" 
+        show_libs "${NATIVE_BINUTILS_INSTALL_FOLDER_PATH}/bin/ranlib" 
+        show_libs "${NATIVE_BINUTILS_INSTALL_FOLDER_PATH}/bin/size" 
+        show_libs "${NATIVE_BINUTILS_INSTALL_FOLDER_PATH}/bin/strings" 
+        show_libs "${NATIVE_BINUTILS_INSTALL_FOLDER_PATH}/bin/strip" 
 
       ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${native_binutils_folder_name}/make-output.txt"
     )
 
     (
-      xbb_activate_installed_bin
-
-      run_app "${INSTALL_FOLDER_PATH}/bin/ar" --version
-      run_app "${INSTALL_FOLDER_PATH}/bin/as" --version
-      run_app "${INSTALL_FOLDER_PATH}/bin/ld" --version
-      run_app "${INSTALL_FOLDER_PATH}/bin/nm" --version
-      run_app "${INSTALL_FOLDER_PATH}/bin/objcopy" --version
-      run_app "${INSTALL_FOLDER_PATH}/bin/objdump" --version
-      run_app "${INSTALL_FOLDER_PATH}/bin/ranlib" --version
-      run_app "${INSTALL_FOLDER_PATH}/bin/size" --version
-      run_app "${INSTALL_FOLDER_PATH}/bin/strings" --version
-      run_app "${INSTALL_FOLDER_PATH}/bin/strip" --version
+      test_native_binutils
     ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${native_binutils_folder_name}/test-output.txt"
 
     hash -r
@@ -139,8 +124,51 @@ function do_native_binutils()
     touch "${native_binutils_stamp_file_path}" 
 
   else
-    echo "Component native binutils already installed."
+    echo "Component native binutils ${step} already installed."
   fi
+
+  if [ -z "${step}" ]
+  then
+    test_functions+=("test_native_binutils")
+  fi
+}
+
+function test_native_binutils()
+{
+  (
+    if [ -f "${BUILD_FOLDER_PATH}/.activate_installed_bin" ]
+    then
+      xbb_activate_installed_bin
+    fi
+
+    echo
+    echo "Testing if binutils binaries start properly..."
+
+    run_app "${NATIVE_BINUTILS_INSTALL_FOLDER_PATH}/bin/ar" --version
+    run_app "${NATIVE_BINUTILS_INSTALL_FOLDER_PATH}/bin/as" --version
+    run_app "${NATIVE_BINUTILS_INSTALL_FOLDER_PATH}/bin/ld" --version
+    run_app "${NATIVE_BINUTILS_INSTALL_FOLDER_PATH}/bin/nm" --version
+    run_app "${NATIVE_BINUTILS_INSTALL_FOLDER_PATH}/bin/objcopy" --version
+    run_app "${NATIVE_BINUTILS_INSTALL_FOLDER_PATH}/bin/objdump" --version
+    run_app "${NATIVE_BINUTILS_INSTALL_FOLDER_PATH}/bin/ranlib" --version
+    run_app "${NATIVE_BINUTILS_INSTALL_FOLDER_PATH}/bin/size" --version
+    run_app "${NATIVE_BINUTILS_INSTALL_FOLDER_PATH}/bin/strings" --version
+    run_app "${NATIVE_BINUTILS_INSTALL_FOLDER_PATH}/bin/strip" --version
+
+    echo
+    echo "Checking the binutils shared libraries..."
+
+    show_libs "${NATIVE_BINUTILS_INSTALL_FOLDER_PATH}/bin/ar" 
+    show_libs "${NATIVE_BINUTILS_INSTALL_FOLDER_PATH}/bin/as" 
+    show_libs "${NATIVE_BINUTILS_INSTALL_FOLDER_PATH}/bin/ld" 
+    show_libs "${NATIVE_BINUTILS_INSTALL_FOLDER_PATH}/bin/nm" 
+    show_libs "${NATIVE_BINUTILS_INSTALL_FOLDER_PATH}/bin/objcopy" 
+    show_libs "${NATIVE_BINUTILS_INSTALL_FOLDER_PATH}/bin/objdump" 
+    show_libs "${NATIVE_BINUTILS_INSTALL_FOLDER_PATH}/bin/ranlib" 
+    show_libs "${NATIVE_BINUTILS_INSTALL_FOLDER_PATH}/bin/size" 
+    show_libs "${NATIVE_BINUTILS_INSTALL_FOLDER_PATH}/bin/strings" 
+    show_libs "${NATIVE_BINUTILS_INSTALL_FOLDER_PATH}/bin/strip" 
+  ) 
 }
 
 function do_native_gcc() 
