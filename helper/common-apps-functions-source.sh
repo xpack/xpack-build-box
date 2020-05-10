@@ -130,7 +130,7 @@ function do_native_binutils()
       run_app "${INSTALL_FOLDER_PATH}/bin/size" --version
       run_app "${INSTALL_FOLDER_PATH}/bin/strings" --version
       run_app "${INSTALL_FOLDER_PATH}/bin/strip" --version
-    )
+    ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${native_binutils_folder_name}/test-output.txt"
 
     hash -r
 
@@ -329,6 +329,7 @@ function do_native_gcc()
 
     (
       xbb_activate_installed_bin
+    ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${native_gcc_folder_name}/test-output.txt"
 
       echo
       run_app "${INSTALL_FOLDER_PATH}/bin/g++${XBB_GCC_SUFFIX}" --version
@@ -967,7 +968,7 @@ __EOF__
       "${INSTALL_FOLDER_PATH}/bin/${MINGW_TARGET}-g++" hello.cpp -o hello
 
       rm -rf hello.cpp hello
-    )
+    ) 2>&1 | tee "${LOGS_FOLDER_PATH}/test-mingw-gcc-step2-output.txt"
 
     hash -r
 
@@ -1168,7 +1169,7 @@ function do_openssl()
 
         echo
         run_app "${INSTALL_FOLDER_PATH}/bin/openssl" version
-      )
+      ) 2>&1 | tee "${LOGS_FOLDER_PATH}/test-openssl-output.txt"
     )
 
     touch "${openssl_stamp_file_path}"
@@ -1271,7 +1272,7 @@ function do_curl()
 
       echo
       run_app "${INSTALL_FOLDER_PATH}/bin/curl" --version
-    )
+    ) 2>&1 | tee "${LOGS_FOLDER_PATH}/test-curl-output.txt"
 
     touch "${curl_stamp_file_path}"
 
@@ -1363,7 +1364,7 @@ function do_xz()
 
       echo
       run_app "${INSTALL_FOLDER_PATH}/bin/xz" --version
-    )
+    ) 2>&1 | tee "${LOGS_FOLDER_PATH}/test-xz-output.txt"
 
     hash -r
 
@@ -1475,7 +1476,7 @@ function do_tar()
 
       echo
       run_app "${INSTALL_FOLDER_PATH}/bin/tar" --version
-    )
+    ) 2>&1 | tee "${LOGS_FOLDER_PATH}/test-tar-output.txt"
 
     hash -r
 
@@ -1629,7 +1630,7 @@ function do_coreutils()
       run_app "${INSTALL_FOLDER_PATH}/bin/touch" --version
       run_app "${INSTALL_FOLDER_PATH}/bin/tr" --version
       run_app "${INSTALL_FOLDER_PATH}/bin/wc" --version
-    )
+    ) 2>&1 | tee "${LOGS_FOLDER_PATH}/test-coreutils-output.txt"
 
     hash -r
 
@@ -1734,7 +1735,7 @@ function do_pkg_config()
 
       echo
       run_app "${INSTALL_FOLDER_PATH}/bin/pkg-config" --version
-    )
+    ) 2>&1 | tee "${LOGS_FOLDER_PATH}/test-pkg_config-output.txt"
 
     hash -r
 
@@ -1836,7 +1837,7 @@ function do_m4()
 
       echo
       run_app "${INSTALL_FOLDER_PATH}/bin/m4" --version
-    )
+    ) 2>&1 | tee "${LOGS_FOLDER_PATH}/test-m4-output.txt"
 
     hash -r
 
@@ -1930,7 +1931,7 @@ function do_gawk()
 
       echo
       run_app "${INSTALL_FOLDER_PATH}/bin/awk" --version
-    )
+    ) 2>&1 | tee "${LOGS_FOLDER_PATH}/test-gawk-output.txt"
 
     hash -r
 
@@ -2023,7 +2024,7 @@ function do_sed()
 
       echo
       run_app "${INSTALL_FOLDER_PATH}/bin/sed" --version
-    )
+    ) 2>&1 | tee "${LOGS_FOLDER_PATH}/test-sed-output.txt"
 
     hash -r
 
@@ -2104,7 +2105,7 @@ function do_autoconf()
 
       echo
       run_app "${INSTALL_FOLDER_PATH}/bin/autoconf" --version
-    )
+    ) 2>&1 | tee "${LOGS_FOLDER_PATH}/test-autoconf-output.txt"
 
     hash -r
 
@@ -2196,7 +2197,7 @@ function do_automake()
 
       echo
       run_app "${INSTALL_FOLDER_PATH}/bin/automake" --version
-    )
+    ) 2>&1 | tee "${LOGS_FOLDER_PATH}/test-automake-output.txt"
 
     hash -r
 
@@ -2290,7 +2291,7 @@ function do_libtool()
 
       echo
       run_app "${INSTALL_FOLDER_PATH}/bin/libtool" --version
-    )
+    ) 2>&1 | tee "${LOGS_FOLDER_PATH}/test-libtool-output.txt"
 
     hash -r
 
@@ -2391,7 +2392,7 @@ function do_gettext()
 
       echo
       run_app "${INSTALL_FOLDER_PATH}/bin/gettext" --version
-    )
+    ) 2>&1 | tee "${LOGS_FOLDER_PATH}/test-gettext-output.txt"
 
     hash -r
 
@@ -2477,7 +2478,7 @@ function do_patch()
 
       echo
       run_app "${INSTALL_FOLDER_PATH}/bin/patch" --version
-    )
+    ) 2>&1 | tee "${LOGS_FOLDER_PATH}/test-patch-output.txt"
 
     hash -r
 
@@ -2563,7 +2564,7 @@ function do_diffutils()
 
       echo
       run_app "${INSTALL_FOLDER_PATH}/bin/diff" --version
-    )
+    ) 2>&1 | tee "${LOGS_FOLDER_PATH}/test-diffutils-output.txt"
 
     hash -r
 
@@ -2661,7 +2662,7 @@ function do_bison()
 
       echo
       run_app "${INSTALL_FOLDER_PATH}/bin/bison" --version
-    )
+    ) 2>&1 | tee "${LOGS_FOLDER_PATH}/test-bison-output.txt"
 
     hash -r
 
@@ -2784,7 +2785,7 @@ function do_flex()
 
       echo
       run_app "${INSTALL_FOLDER_PATH}/bin/flex" --version
-    )
+    ) 2>&1 | tee "${LOGS_FOLDER_PATH}/test-flex-output.txt"
 
     hash -r
 
@@ -2881,7 +2882,7 @@ function do_make()
 
       echo
       run_app "${INSTALL_FOLDER_PATH}/bin/make" --version
-    )
+    ) 2>&1 | tee "${LOGS_FOLDER_PATH}/test-make-output.txt"
 
     hash -r
 
@@ -2983,7 +2984,7 @@ function do_wget()
 
       echo
       run_app "${INSTALL_FOLDER_PATH}/bin/wget" --version
-    )
+    ) 2>&1 | tee "${LOGS_FOLDER_PATH}/test-wget-output.txt"
 
     hash -r
 
@@ -3076,7 +3077,7 @@ function do_texinfo()
 
       echo
       run_app "${INSTALL_FOLDER_PATH}/bin/texi2pdf" --version
-    )
+    ) 2>&1 | tee "${LOGS_FOLDER_PATH}/test-texinfo-output.txt"
 
     hash -r
 
@@ -3194,7 +3195,7 @@ function do_cmake()
 
       echo
       run_app "${INSTALL_FOLDER_PATH}/bin/cmake" --version
-    )
+    ) 2>&1 | tee "${LOGS_FOLDER_PATH}/test-cmake-output.txt"
 
     hash -r
 
@@ -3315,7 +3316,7 @@ function do_perl()
 
       echo
       run_app "${INSTALL_FOLDER_PATH}/bin/perl" --version
-    )
+    ) 2>&1 | tee "${LOGS_FOLDER_PATH}/test-perl-output.txt"
 
     hash -r
 
@@ -3404,7 +3405,7 @@ function do_makedepend()
 
       echo
       run_app "${INSTALL_FOLDER_PATH}/bin/makedepend" || true
-    )
+    ) 2>&1 | tee "${LOGS_FOLDER_PATH}/test-makedepend-output.txt"
 
     hash -r
 
@@ -3496,7 +3497,7 @@ function do_patchelf()
 
       echo
       run_app "${INSTALL_FOLDER_PATH}/bin/patchelf" --version
-    )
+    ) 2>&1 | tee "${LOGS_FOLDER_PATH}/test-patchelf-output.txt"
 
     hash -r
 
@@ -3565,7 +3566,7 @@ function do_dos2unix()
 
       echo
       run_app "${INSTALL_FOLDER_PATH}/bin/unix2dos" --version
-    )
+    ) 2>&1 | tee "${LOGS_FOLDER_PATH}/test-dos2unix-output.txt"
 
     hash -r
 
@@ -3657,7 +3658,7 @@ function do_git()
 
       echo
       run_app "${INSTALL_FOLDER_PATH}/bin/git" --version
-    )
+    ) 2>&1 | tee "${LOGS_FOLDER_PATH}/test-git-output.txt"
 
     hash -r
 
@@ -3808,7 +3809,7 @@ function do_python2()
 
       echo
       run_app "${INSTALL_FOLDER_PATH}/bin/python" --version
-    )
+    ) 2>&1 | tee "${LOGS_FOLDER_PATH}/test-python2-output.txt"
 
     hash -r
 
@@ -4044,7 +4045,7 @@ function do_scons()
       fi
 
       run_app "${INSTALL_FOLDER_PATH}/bin/scons" --version
-    )
+    ) 2>&1 | tee "${LOGS_FOLDER_PATH}/test-scons-output.txt"
 
     hash -r
 
@@ -4080,13 +4081,13 @@ function do_meson
 
       # export LC_CTYPE=en_US.UTF-8 CPPFLAGS= CFLAGS= CXXFLAGS= LDFLAGS=
       # ./run_tests.py
-    )
+    ) 2>&1 | tee "${LOGS_FOLDER_PATH}/install-meson-output.txt"
 
     (
       xbb_activate_installed_bin
 
       run_app "${INSTALL_FOLDER_PATH}/bin/meson" --version
-    )
+    ) 2>&1 | tee "${LOGS_FOLDER_PATH}/test-meson-output.txt"
 
     hash -r
 
@@ -4169,7 +4170,7 @@ function do_ninja()
 
       echo
       run_app "${INSTALL_FOLDER_PATH}/bin/ninja" --version
-    )
+    ) 2>&1 | tee "${LOGS_FOLDER_PATH}/test-ninja-output.txt"
 
     hash -r
 
@@ -4249,7 +4250,7 @@ function do_p7zip()
       bash install.sh
 
       # show_libs "${INSTALL_FOLDER_PATH}/bin/7za"
-    )
+    ) 2>&1 | tee "${LOGS_FOLDER_PATH}/install-p7zip-output.txt"
 
     (
       xbb_activate_installed_bin
@@ -4262,7 +4263,7 @@ function do_p7zip()
         echo
         run_app "${INSTALL_FOLDER_PATH}/bin/7z" --help
       fi
-    )
+    ) 2>&1 | tee "${LOGS_FOLDER_PATH}/test-p7zip-output.txt"
 
     hash -r
 
@@ -4396,7 +4397,7 @@ function do_wine()
       # and populated with lots of files., so subsequent runs
       # will no longer have to do it.
       run_app "${INSTALL_FOLDER_PATH}/bin/wine" "${INSTALL_FOLDER_PATH}"/lib*/wine/fakedlls/netstat.exe
-    )
+    ) 2>&1 | tee "${LOGS_FOLDER_PATH}/test-wine-output.txt"
 
     hash -r
 
@@ -4484,7 +4485,7 @@ function do_nvm()
 
       echo
       # "${INSTALL_FOLDER_PATH}/bin/scons" --version
-    )
+    ) 2>&1 | tee "${LOGS_FOLDER_PATH}/test-nvm-output.txt"
 
     hash -r
 
@@ -4578,7 +4579,7 @@ function do_gnupg()
 
       echo
       "${INSTALL_FOLDER_PATH}/bin/gpg" --version
-    )
+    ) 2>&1 | tee "${LOGS_FOLDER_PATH}/test-gnupg-output.txt"
 
     hash -r
 
@@ -4648,7 +4649,7 @@ function do_ant()
 
       echo
       "${INSTALL_FOLDER_PATH}/bin/ant" -version
-    )
+    ) 2>&1 | tee "${LOGS_FOLDER_PATH}/test-ant-output.txt"
 
     hash -r
 
@@ -4719,7 +4720,7 @@ function do_maven()
 
       echo
       "${INSTALL_FOLDER_PATH}/bin/mvn" -version
-    )
+    ) 2>&1 | tee "${LOGS_FOLDER_PATH}/test-maven-output.txt"
 
     hash -r
 
@@ -4819,7 +4820,7 @@ function do_nodejs()
 
       echo
       "${INSTALL_FOLDER_PATH}/bin/node" --version
-    )
+    ) 2>&1 | tee "${LOGS_FOLDER_PATH}/test-nodejs-output.txt"
 
     hash -r
 
@@ -4919,7 +4920,7 @@ function do_tcl()
 
       echo
       run_app "${INSTALL_FOLDER_PATH}/bin/tclsh${tcl_version_major}.${tcl_version_minor}" <<< 'puts [info patchlevel]'
-    )
+    ) 2>&1 | tee "${LOGS_FOLDER_PATH}/test-tcl-output.txt"
 
     hash -r
 
@@ -5008,7 +5009,7 @@ function do_guile()
 
       echo
       run_app "${INSTALL_FOLDER_PATH}/bin/guile" --version
-    )
+    ) 2>&1 | tee "${LOGS_FOLDER_PATH}/test-guile-output.txt"
 
     hash -r
 
@@ -5098,7 +5099,7 @@ function do_rhash()
 
       echo
       run_app "${INSTALL_FOLDER_PATH}/bin/rhash" --version
-    )
+    ) 2>&1 | tee "${LOGS_FOLDER_PATH}/test-rhash-output.txt"
 
     hash -r
 
@@ -5202,7 +5203,7 @@ function do_re2c()
 
       echo
       run_app "${INSTALL_FOLDER_PATH}/bin/re2c" --version
-    )
+    ) 2>&1 | tee "${LOGS_FOLDER_PATH}/test-re2c-output.txt"
 
     hash -r
 
@@ -5236,7 +5237,7 @@ function do_sphinx()
       env | sort
 
       pip3 install sphinx==${sphinx_version}
-    )
+    ) 2>&1 | tee "${LOGS_FOLDER_PATH}/install-sphinx-output.txt"
 
     hash -r
 
@@ -5244,7 +5245,7 @@ function do_sphinx()
       xbb_activate_installed_bin
 
       run_app "${INSTALL_FOLDER_PATH}/bin/sphinx-build" --version
-    )
+    ) 2>&1 | tee "${LOGS_FOLDER_PATH}/test-sphinx-output.txt"
 
     touch "${sphinx_stamp_file_path}"
 
