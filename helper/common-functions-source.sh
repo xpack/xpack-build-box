@@ -379,6 +379,65 @@ function prepare_xbb_env()
   env | sort
 }
 
+function prepare_gcc_env()
+{
+  local prefix="$1"
+
+  local suffix
+  if [ $# -ge 2 ]
+  then
+    suffix="$2"
+  else
+    suffix=""
+  fi
+
+  export CC="${prefix}gcc${suffix}"
+  export CXX="${prefix}g++${suffix}"
+
+  if [ "${IS_BOOTSTRAP}" == "y" ]
+  then
+    export AR="${prefix}ar"
+    export NM="${prefix}nm"
+    export RANLIB="${prefix}ranlib"
+  else
+    export AR="${prefix}gcc-ar${suffix}"
+    export NM="${prefix}gcc-nm${suffix}"
+    export RANLIB="${prefix}gcc-ranlib${suffix}"
+  fi
+
+  export AS="${prefix}as"
+  export DLLTOOL="${prefix}dlltool"
+  # libmpdec: ld: unrecognized -a option `tic-libgcc'
+  # export LD="${prefix}ld"
+  export OBJCOPY="${prefix}objcopy"
+  export OBJDUMP="${prefix}objdump"
+  export READELF="${prefix}readelf"
+  export SIZE="${prefix}size"
+  export STRIP="${prefix}strip"
+  export WINDRES="${prefix}windres"
+  export WINDMC="${prefix}windmc"
+  export RC="${prefix}windres"
+}
+
+function unset_gcc_env()
+{
+  unset CC
+  unset CXX
+  unset AR
+  unset AS
+  unset DLLTOOL
+  # unset LD
+  unset NM
+  unset OBJCOPY
+  unset OBJDUMP
+  unset RANLIB
+  unset READELF
+  unset SIZE
+  unset STRIP
+  unset WINDRES
+  unset WINDMC
+  unset RC
+}
 # -----------------------------------------------------------------------------
 
 # For the XBB builds, add the freshly built binaries.
