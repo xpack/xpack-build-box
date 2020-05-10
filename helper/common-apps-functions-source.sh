@@ -1931,7 +1931,7 @@ function do_gawk()
 
         make install-strip
 
-        show_libs "${INSTALL_FOLDER_PATH}/bin/awk"
+        show_libs "${INSTALL_FOLDER_PATH}/bin/gawk"
 
       ) 2>&1 | tee "${LOGS_FOLDER_PATH}/make-gawk-output.txt"
     )
@@ -1940,7 +1940,7 @@ function do_gawk()
       xbb_activate_installed_bin
 
       echo
-      run_app "${INSTALL_FOLDER_PATH}/bin/awk" --version
+      run_app "${INSTALL_FOLDER_PATH}/bin/gawk" --version
     ) 2>&1 | tee "${LOGS_FOLDER_PATH}/test-gawk-output.txt"
 
     hash -r
