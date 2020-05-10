@@ -3325,7 +3325,9 @@ function do_perl()
         # TEST_JOBS=$(echo $MAKEFLAGS | sed 's/.*-j\([0-9][0-9]*\).*/\1/') make test_harness
         # make test
 
-        make install-strip
+        # Do not strip, since this interferes with patchelf.
+        # make install-strip
+        make install
 
         show_libs "${INSTALL_FOLDER_PATH}/bin/perl"
 
