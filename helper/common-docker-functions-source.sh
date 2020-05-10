@@ -176,6 +176,7 @@ function xbb_activate()
 
 # =============================================================================
 
+# Used in tex images.
 function docker_prepare_env()
 {
   if [ ! -d "${WORK_FOLDER_PATH}" ]
@@ -185,35 +186,17 @@ function docker_prepare_env()
   fi
   
   IS_BOOTSTRAP=${IS_BOOTSTRAP:-""}
-  XBB_BOOTSTRAP_FOLDER_PATH=${XBB_BOOTSTRAP_FOLDER_PATH:-""}
-  RUN_LONG_TESTS=${RUN_LONG_TESTS:=""}
-
-  if [ "${IS_BOOTSTRAP}" == "y" ]
-  then
-    # Make all tools choose gcc, not the old cc.
-    CC=gcc
-    CXX=g++
-  else
-    # Build the XBB tools with the bootstrap compiler.
-    # Some packages fail, and have to revert to the Apple clang.
-    CC="gcc-8bs"
-    CXX="g++-8bs"
-  fi
-
-  if [ "${IS_BOOTSTRAP}" != "y" -a -n "${XBB_BOOTSTRAP_FOLDER_PATH}" ]
-  then
-    if [ ! -d "${XBB_BOOTSTRAP_FOLDER_PATH}" -o ! -x "${XBB_BOOTSTRAP_FOLDER_PATH}/bin/${CXX}" ]
-    then
-      echo "XBB Bootstrap not found in \"${XBB_BOOTSTRAP_FOLDER_PATH}\""
-      exit 1
-    fi
-  fi
+  # XBB_BOOTSTRAP_FOLDER_PATH=${XBB_BOOTSTRAP_FOLDER_PATH:-""}
+  # RUN_LONG_TESTS=${RUN_LONG_TESTS:=""}
 
   # The place where files are downloaded.
   CACHE_FOLDER_PATH="${WORK_FOLDER_PATH}/cache"
 
-  export CC
-  export CXX
+  # Make all tools choose gcc, not the old cc.
+  export CC=gcc
+  export CXX=g++
+
+  export IS_BOOTSTRAP
 
   echo
   echo "docker env..."
