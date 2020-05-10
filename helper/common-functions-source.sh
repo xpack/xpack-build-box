@@ -374,6 +374,8 @@ function prepare_xbb_env()
   export SHELL="/bin/bash"
   export CONFIG_SHELL="/bin/bash"
 
+  test_functions=()
+
   echo
   echo "xbb env..."
   env | sort
@@ -438,6 +440,20 @@ function unset_gcc_env()
   unset WINDMC
   unset RC
 }
+
+function run_tests()
+{
+  echo
+  echo "Runnng final tests..."
+
+  for test_function in ${test_functions[@]}
+  do
+    echo
+    echo "Running ${test_function}..."
+    ${test_function}
+  done
+}
+
 # -----------------------------------------------------------------------------
 
 # For the XBB builds, add the freshly built binaries.
