@@ -37,6 +37,8 @@ function do_native_binutils()
 
     download_and_extract "${native_binutils_url}" "${native_binutils_archive}" "${native_binutils_folder_name}"
 
+    mkdir -pv "${LOGS_FOLDER_PATH}/${native_binutils_folder_name}"
+
     (
       mkdir -p "${BUILD_FOLDER_PATH}/${native_binutils_build_folder_name}"
       cd "${BUILD_FOLDER_PATH}/${native_binutils_build_folder_name}"
@@ -85,8 +87,8 @@ function do_native_binutils()
             --disable-werror \
             --disable-sim \
 
-          cp "config.log" "${LOGS_FOLDER_PATH}/config-native-binutils-log.txt"
-        ) 2>&1 | tee "${LOGS_FOLDER_PATH}/configure-native-binutils-output.txt"
+          cp "config.log" "${LOGS_FOLDER_PATH}/${native_binutils_folder_name}/config-log.txt"
+        ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${native_binutils_folder_name}/configure-output.txt"
       fi
       (
         echo
@@ -114,7 +116,7 @@ function do_native_binutils()
         show_libs "${INSTALL_FOLDER_PATH}/bin/strings" 
         show_libs "${INSTALL_FOLDER_PATH}/bin/strip" 
 
-      ) 2>&1 | tee "${LOGS_FOLDER_PATH}/make-native-binutils-output.txt"
+      ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${native_binutils_folder_name}/make-output.txt"
     )
 
     (
@@ -171,6 +173,8 @@ function do_native_gcc()
     cd "${SOURCES_FOLDER_PATH}"
 
     download_and_extract "${native_gcc_url}" "${native_gcc_archive}" "${native_gcc_folder_name}" 
+
+    mkdir -pv "${LOGS_FOLDER_PATH}/${native_gcc_folder_name}"
 
     (
       mkdir -p "${BUILD_FOLDER_PATH}/${native_gcc_build_folder_name}"
@@ -305,8 +309,8 @@ function do_native_gcc()
 
           fi
 
-          cp "config.log" "${LOGS_FOLDER_PATH}/config-native-gcc-log.txt"
-        ) 2>&1 | tee "${LOGS_FOLDER_PATH}/configure-native-gcc-output.txt"
+          cp "config.log" "${LOGS_FOLDER_PATH}/${native_gcc_folder_name}/config-log.txt"
+        ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${native_gcc_folder_name}/configure-output.txt"
       fi
 
       (
@@ -327,7 +331,7 @@ function do_native_gcc()
         show_libs "$(${INSTALL_FOLDER_PATH}/bin/gcc${XBB_GCC_SUFFIX} --print-prog-name=lto1)"
         show_libs "$(${INSTALL_FOLDER_PATH}/bin/gcc${XBB_GCC_SUFFIX} --print-prog-name=lto-wrapper)"
 
-      ) 2>&1 | tee "${LOGS_FOLDER_PATH}/make-native-gcc-output.txt"
+      ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${native_gcc_folder_name}/make-output.txt"
     )
 
     (

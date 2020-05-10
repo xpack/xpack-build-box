@@ -34,6 +34,8 @@ function do_zlib()
 
     download_and_extract "${zlib_url}" "${zlib_archive}" "${zlib_folder_name}"
 
+    mkdir -pv "${LOGS_FOLDER_PATH}/${zlib_folder_name}"
+
     (
       if [ ! -d "${LIBS_BUILD_FOLDER_PATH}/${zlib_folder_name}" ]
       then
@@ -64,8 +66,8 @@ function do_zlib()
         bash ${DEBUG} "./configure" \
           --prefix="${INSTALL_FOLDER_PATH}" 
 
-        cp "configure.log" "${LOGS_FOLDER_PATH}/configure-zlib-log.txt"
-      ) 2>&1 | tee "${LOGS_FOLDER_PATH}/configure-zlib-output.txt"
+        cp "configure.log" "${LOGS_FOLDER_PATH}/${zlib_folder_name}/configure-log.txt"
+      ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${zlib_folder_name}/configure-output.txt"
 
       (
         echo
@@ -77,7 +79,7 @@ function do_zlib()
         make test
 
         make install
-      ) 2>&1 | tee "${LOGS_FOLDER_PATH}/make-zlib-output.txt"
+      ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${zlib_folder_name}/make-output.txt"
     )
 
     touch "${zlib_stamp_file_path}"
@@ -113,6 +115,8 @@ function do_gmp()
     cd "${SOURCES_FOLDER_PATH}"
 
     download_and_extract "${gmp_url}" "${gmp_archive}" "${gmp_folder_name}"
+
+    mkdir -pv "${LOGS_FOLDER_PATH}/${gmp_folder_name}"
 
     (
       mkdir -p "${LIBS_BUILD_FOLDER_PATH}/${gmp_folder_name}"
@@ -150,8 +154,8 @@ function do_gmp()
             --enable-cxx \
             --enable-fat
 
-          cp "config.log" "${LOGS_FOLDER_PATH}/config-gmp-log.txt"
-        ) 2>&1 | tee "${LOGS_FOLDER_PATH}/configure-gmp-output.txt"
+          cp "config.log" "${LOGS_FOLDER_PATH}/${gmp_folder_name}/config-log.txt"
+        ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${gmp_folder_name}/configure-output.txt"
       fi
 
       (
@@ -164,7 +168,7 @@ function do_gmp()
         make check
 
         make install-strip
-      ) 2>&1 | tee "${LOGS_FOLDER_PATH}/make-gmp-output.txt"
+      ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${gmp_folder_name}/make-output.txt"
     )
 
     touch "${gmp_stamp_file_path}"
@@ -201,6 +205,8 @@ function do_mpfr()
 
     download_and_extract "${mpfr_url}" "${mpfr_archive}" "${mpfr_folder_name}"
 
+    mkdir -pv "${LOGS_FOLDER_PATH}/${mpfr_folder_name}"
+
     (
       mkdir -p "${LIBS_BUILD_FOLDER_PATH}/${mpfr_folder_name}"
       cd "${LIBS_BUILD_FOLDER_PATH}/${mpfr_folder_name}"
@@ -229,8 +235,8 @@ function do_mpfr()
             --enable-thread-safe \
             --enable-shared \
 
-          cp "config.log" "${LOGS_FOLDER_PATH}/config-mpfr-log.txt"
-        ) 2>&1 | tee "${LOGS_FOLDER_PATH}/configure-mpfr-output.txt"
+          cp "config.log" "${LOGS_FOLDER_PATH}/${mpfr_folder_name}/config-log.txt"
+        ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${mpfr_folder_name}/configure-output.txt"
       fi
 
       (
@@ -249,7 +255,7 @@ function do_mpfr()
         fi
 
         make install-strip
-      ) 2>&1 | tee "${LOGS_FOLDER_PATH}/make-mpfr-output.txt"
+      ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${mpfr_folder_name}/make-output.txt"
     )
 
     touch "${mpfr_stamp_file_path}"
@@ -285,6 +291,8 @@ function do_mpc()
 
     download_and_extract "${mpc_url}" "${mpc_archive}" "${mpc_folder_name}"
 
+    mkdir -pv "${LOGS_FOLDER_PATH}/${mpc_folder_name}"
+
     (
       mkdir -p "${LIBS_BUILD_FOLDER_PATH}/${mpc_folder_name}"
       cd "${LIBS_BUILD_FOLDER_PATH}/${mpc_folder_name}"
@@ -310,8 +318,8 @@ function do_mpc()
           bash ${DEBUG} "${SOURCES_FOLDER_PATH}/${mpc_folder_name}/configure" \
             --prefix="${INSTALL_FOLDER_PATH}" 
 
-          cp "config.log" "${LOGS_FOLDER_PATH}/config-mpc-log.txt"
-        ) 2>&1 | tee "${LOGS_FOLDER_PATH}/configure-mpc-output.txt"
+          cp "config.log" "${LOGS_FOLDER_PATH}/${mpc_folder_name}/config-log.txt"
+        ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${mpc_folder_name}/configure-output.txt"
       fi
 
       (
@@ -324,7 +332,7 @@ function do_mpc()
         make check
 
         make install-strip
-      ) 2>&1 | tee "${LOGS_FOLDER_PATH}/make-mpc-output.txt"
+      ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${mpc_folder_name}/make-output.txt"
     )
 
     touch "${mpc_stamp_file_path}"
@@ -360,6 +368,8 @@ function do_isl()
 
     download_and_extract "${isl_url}" "${isl_archive}" "${isl_folder_name}"
 
+    mkdir -pv "${LOGS_FOLDER_PATH}/${isl_folder_name}"
+
     (
       mkdir -p "${LIBS_BUILD_FOLDER_PATH}/${isl_folder_name}"
       cd "${LIBS_BUILD_FOLDER_PATH}/${isl_folder_name}"
@@ -388,8 +398,8 @@ function do_isl()
             \
             --with-gmp-prefix="${INSTALL_FOLDER_PATH}" \
 
-          cp "config.log" "${LOGS_FOLDER_PATH}/config-isl-log.txt"
-        ) 2>&1 | tee "${LOGS_FOLDER_PATH}/configure-isl-output.txt"
+          cp "config.log" "${LOGS_FOLDER_PATH}/${isl_folder_name}/config-log.txt"
+        ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${isl_folder_name}/configure-output.txt"
       fi
 
       (
@@ -402,7 +412,7 @@ function do_isl()
         make check
 
         make install-strip
-      ) 2>&1 | tee "${LOGS_FOLDER_PATH}/make-isl-output.txt"
+      ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${isl_folder_name}/make-output.txt"
     )
 
     touch "${isl_stamp_file_path}"
