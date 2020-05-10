@@ -234,9 +234,9 @@ function prepare_xbb_env()
 
   if [ "${IS_BOOTSTRAP}" != "y" ]
   then
-    if [ ! -d "${XBB_BOOTSTRAP_FOLDER_PATH}" -o ! -x "${XBB_BOOTSTRAP_FOLDER_PATH}/bin/${CXX}" ]
+    if [ ! -d "${XBB_BOOTSTRAP_FOLDER_PATH}" -o ! -x "${XBB_BOOTSTRAP_FOLDER_PATH}/usr/bin/${CXX}" ]
     then
-      echo "XBB Bootstrap not found in \"${XBB_BOOTSTRAP_FOLDER_PATH}\""
+      echo "XBB Bootstrap compiler not found in \"${XBB_BOOTSTRAP_FOLDER_PATH}\""
       exit 1
     fi
   fi
@@ -267,34 +267,31 @@ function prepare_xbb_env()
   mkdir -p "${INSTALL_FOLDER_PATH}/bin"
   mkdir -p "${INSTALL_FOLDER_PATH}/include"
   mkdir -p "${INSTALL_FOLDER_PATH}/lib"
-
+ 
   # ---------------------------------------------------------------------------
-
-
-  # This is a very important option, which has a higher precedence than 
-  # LD_LIBRARY_PATH, so the binaries use exactly the shared libraries
-  # that were used during link.
-  XBB_RPATH=""
-  
-  # Darwin bootstrap uses clang, which does not enjoy -rpath.
-  if [ ! \( "${IS_BOOTSTRAP}" == "y" -a "${HOST_UNAME}" == "Darwin" \) ]
-  then
-    if [ "${HOST_BITS}" == "64" ]
-    then
-      XBB_RPATH+="-Wl,-rpath,${XBB_FOLDER_PATH}/lib64 "
-    fi
-    XBB_RPATH+="-Wl,-rpath,${XBB_FOLDER_PATH}/lib"
-  fi
 
   XBB_CPPFLAGS=""
 
-  XBB_CFLAGS="-pipe"
-  XBB_CXXFLAGS="-pipe"
+  if [ "${HOST_BITS}" == "32" ]
+  then
+    XBB_CPPFLAGS+=" -D_FILE_OFFSET_BITS=64"
+  fi
 
-  XBB_LDFLAGS="${XBB_RPATH}"
+  # Is is important for all code to be compiled sith separate sections,
+  # to give the linker the chance to optize when building executables.
+  XBB_CFLAGS="-pipe -O2 -ffunction-sections -fdata-sections"
+  XBB_CXXFLAGS="-pipe -O2 -ffunction-sections -fdata-sections"
+
+  XBB_CFLAGS_NO_W="${XBB_CFLAGS} -w"
+  XBB_CXXFLAGS_NO_W="${XBB_CXXFLAGS} -w"
+
+  XBB_LDFLAGS=""
+
+  # -Wl,--gc-sections may make some symbols dissapear, do not use it here.
   XBB_LDFLAGS_LIB="${XBB_LDFLAGS}"
-  XBB_LDFLAGS_LIB_STATIC_GCC="${XBB_LDFLAGS}"
-  XBB_LDFLAGS_APP="${XBB_LDFLAGS}"
+  XBB_LDFLAGS_LIB_STATIC_GCC="${XBB_LDFLAGS_LIB}"
+
+  XBB_LDFLAGS_APP="${XBB_LDFLAGS} -Wl,--gc-sections"
   XBB_LDFLAGS_APP_STATIC="${XBB_LDFLAGS_APP} -static"
   XBB_LDFLAGS_APP_STATIC_GCC="${XBB_LDFLAGS_APP}"
 
@@ -328,21 +325,30 @@ function prepare_xbb_env()
   # Default PATH.
   PATH=${PATH:-""}
 
-  # Default LD_LIBRARY_PATH.
-  LD_LIBRARY_PATH=${LD_LIBRARY_PATH:-""}
-
   # Default empty PKG_CONFIG_PATH.
-  PKG_CONFIG_PATH=${PKG_CONFIG_PATH:-":"}
+  PKG_CONFIG_PATH=${PKG_CONFIG_PATH:-""}
 
   # Prevent pkg-config to search the system folders (configured in the
   # pkg-config at build time).
-  PKG_CONFIG_LIBDIR=${PKG_CONFIG_LIBDIR:-":"}
+  PKG_CONFIG_LIBDIR=${PKG_CONFIG_LIBDIR:-""}
 
   # ---------------------------------------------------------------------------
+
+  export LANGUAGE="en_US:en"
+  export LANG="en_US.UTF-8"
+  export LC_ALL="en_US.UTF-8"
+  export LC_COLLATE="en_US.UTF-8"
+  export LC_CTYPE="UTF-8"
+  export LC_MESSAGES="en_US.UTF-8"
+  export LC_MONETARY="en_US.UTF-8"
+  export LC_NUMERIC="en_US.UTF-8"
+  export LC_TIME="en_US.UTF-8"
 
   export XBB_CPPFLAGS
   export XBB_CFLAGS
   export XBB_CXXFLAGS
+  export XBB_CFLAGS_NO_W
+  export XBB_CXXFLAGS_NO_W
   export XBB_LDFLAGS
   export XBB_LDFLAGS_LIB
   export XBB_LDFLAGS_LIB_STATIC_GCC
@@ -352,15 +358,14 @@ function prepare_xbb_env()
 
   export XBB_RPATH
 
+  export BUILD_FOLDER_PATH
+  export INSTALL_FOLDER_PATH
+
   export PATH
-  export LD_LIBRARY_PATH
   
   export PKG_CONFIG_PATH
   export PKG_CONFIG_LIBDIR
   export PKG_CONFIG
-
-  export CC
-  export CXX
 
   set +e
   local java_home=$(java -XshowSettings:properties -version 2>&1 > /dev/null | grep 'java.home' | sed -e 's/.*= //' | sed -e 's|/jre||' )
