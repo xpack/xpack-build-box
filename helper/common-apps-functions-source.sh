@@ -438,7 +438,7 @@ function do_mingw_binutils()
           bash "${SOURCES_FOLDER_PATH}/${mingw_binutils_folder_name}/configure" --help
 
           bash "${SOURCES_FOLDER_PATH}/${mingw_binutils_folder_name}/configure" \
-            --prefix="${INSTALL_FOLDER_PATH}" \
+            --prefix="${INSTALL_FOLDER_PATH}/usr" \
             \
             --build="${BUILD}" \
             --target="${MINGW_TARGET}" \
@@ -470,18 +470,18 @@ function do_mingw_binutils()
 
         # For just in case, it has nasty consequences when picked 
         # in other builds.
-        rm -fv "${INSTALL_FOLDER_PATH}/lib/libiberty.a" "${INSTALL_FOLDER_PATH}/lib64/libiberty.a"
+        rm -fv "${INSTALL_FOLDER_PATH}/usr/lib/libiberty.a" "${INSTALL_FOLDER_PATH}/usr/lib64/libiberty.a"
 
-        show_libs "${INSTALL_FOLDER_PATH}/bin/${MINGW_TARGET}-ar" 
-        show_libs  "${INSTALL_FOLDER_PATH}/bin/${MINGW_TARGET}-as" 
-        show_libs  "${INSTALL_FOLDER_PATH}/bin/${MINGW_TARGET}-ld" 
-        show_libs  "${INSTALL_FOLDER_PATH}/bin/${MINGW_TARGET}-nm" 
-        show_libs  "${INSTALL_FOLDER_PATH}/bin/${MINGW_TARGET}-objcopy" 
-        show_libs  "${INSTALL_FOLDER_PATH}/bin/${MINGW_TARGET}-objdump" 
-        show_libs  "${INSTALL_FOLDER_PATH}/bin/${MINGW_TARGET}-ranlib" 
-        show_libs  "${INSTALL_FOLDER_PATH}/bin/${MINGW_TARGET}-size" 
-        show_libs  "${INSTALL_FOLDER_PATH}/bin/${MINGW_TARGET}-strings" 
-        show_libs  "${INSTALL_FOLDER_PATH}/bin/${MINGW_TARGET}-strip" 
+        show_libs "${INSTALL_FOLDER_PATH}/usr/bin/${MINGW_TARGET}-ar" 
+        show_libs "${INSTALL_FOLDER_PATH}/usr/bin/${MINGW_TARGET}-as" 
+        show_libs "${INSTALL_FOLDER_PATH}/usr/bin/${MINGW_TARGET}-ld" 
+        show_libs "${INSTALL_FOLDER_PATH}/usr/bin/${MINGW_TARGET}-nm" 
+        show_libs "${INSTALL_FOLDER_PATH}/usr/bin/${MINGW_TARGET}-objcopy" 
+        show_libs "${INSTALL_FOLDER_PATH}/usr/bin/${MINGW_TARGET}-objdump" 
+        show_libs "${INSTALL_FOLDER_PATH}/usr/bin/${MINGW_TARGET}-ranlib" 
+        show_libs "${INSTALL_FOLDER_PATH}/usr/bin/${MINGW_TARGET}-size" 
+        show_libs "${INSTALL_FOLDER_PATH}/usr/bin/${MINGW_TARGET}-strings" 
+        show_libs "${INSTALL_FOLDER_PATH}/usr/bin/${MINGW_TARGET}-strip" 
 
       ) 2>&1 | tee "${LOGS_FOLDER_PATH}/make-mingw-binutils-output.txt"
 
@@ -490,17 +490,17 @@ function do_mingw_binutils()
     (
       xbb_activate_installed_bin
 
-      run_app "${INSTALL_FOLDER_PATH}/bin/${MINGW_TARGET}-ar" --version
-      run_app "${INSTALL_FOLDER_PATH}/bin/${MINGW_TARGET}-as" --version
-      run_app "${INSTALL_FOLDER_PATH}/bin/${MINGW_TARGET}-ld" --version
-      run_app "${INSTALL_FOLDER_PATH}/bin/${MINGW_TARGET}-nm" --version
-      run_app "${INSTALL_FOLDER_PATH}/bin/${MINGW_TARGET}-objcopy" --version
-      run_app "${INSTALL_FOLDER_PATH}/bin/${MINGW_TARGET}-objdump" --version
-      run_app "${INSTALL_FOLDER_PATH}/bin/${MINGW_TARGET}-ranlib" --version
-      run_app "${INSTALL_FOLDER_PATH}/bin/${MINGW_TARGET}-size" --version
-      run_app "${INSTALL_FOLDER_PATH}/bin/${MINGW_TARGET}-strings" --version
-      run_app "${INSTALL_FOLDER_PATH}/bin/${MINGW_TARGET}-strip" --version
-    )
+      run_app "${INSTALL_FOLDER_PATH}/usr/bin/${MINGW_TARGET}-ar" --version
+      run_app "${INSTALL_FOLDER_PATH}/usr/bin/${MINGW_TARGET}-as" --version
+      run_app "${INSTALL_FOLDER_PATH}/usr/bin/${MINGW_TARGET}-ld" --version
+      run_app "${INSTALL_FOLDER_PATH}/usr/bin/${MINGW_TARGET}-nm" --version
+      run_app "${INSTALL_FOLDER_PATH}/usr/bin/${MINGW_TARGET}-objcopy" --version
+      run_app "${INSTALL_FOLDER_PATH}/usr/bin/${MINGW_TARGET}-objdump" --version
+      run_app "${INSTALL_FOLDER_PATH}/usr/bin/${MINGW_TARGET}-ranlib" --version
+      run_app "${INSTALL_FOLDER_PATH}/usr/bin/${MINGW_TARGET}-size" --version
+      run_app "${INSTALL_FOLDER_PATH}/usr/bin/${MINGW_TARGET}-strings" --version
+      run_app "${INSTALL_FOLDER_PATH}/usr/bin/${MINGW_TARGET}-strip" --version
+    ) 2>&1 | tee "${LOGS_FOLDER_PATH}/test-mingw-binutils-output.txt"
 
     hash -r
 
@@ -516,6 +516,12 @@ function do_mingw_all()
 {
   # http://mingw-w64.org/doku.php/start
   # https://sourceforge.net/projects/mingw-w64/files/mingw-w64/mingw-w64-release/
+
+  # https://aur.archlinux.org/cgit/aur.git/tree/PKGBUILD?h=mingw-w64-headers
+  # https://aur.archlinux.org/cgit/aur.git/tree/PKGBUILD?h=mingw-w64-crt
+  # https://aur.archlinux.org/cgit/aur.git/tree/PKGBUILD?h=mingw-w64-winpthreads
+  # https://aur.archlinux.org/cgit/aur.git/tree/PKGBUILD?h=mingw-w64-binutils
+  # https://aur.archlinux.org/cgit/aur.git/tree/PKGBUILD?h=mingw-w64-gcc
 
   # https://aur.archlinux.org/cgit/aur.git/tree/PKGBUILD?h=mingw-w64-gcc
 
@@ -591,16 +597,14 @@ function do_mingw_all()
 
         make install-strip
 
-        # GCC requires the `x86_64-w64-mingw32` folder be mirrored as `mingw` 
-        # in the same root. 
         (
+          # GCC requires the `x86_64-w64-mingw32` folder be mirrored as 
+          # `mingw` in the root. 
           cd "${INSTALL_FOLDER_PATH}"
           rm -f "mingw"
-          ln -s "${MINGW_TARGET}" "mingw"
+          ln -s "usr/${MINGW_TARGET}" "mingw"
         )
 
-        # For non-multilib builds, links to "lib32" and "lib64" are no longer 
-        # needed, "lib" is enough.
       ) 2>&1 | tee "${LOGS_FOLDER_PATH}/make-mingw-headers-output.txt"
     )
 
@@ -679,7 +683,7 @@ function do_mingw_all()
           set +u
 
           bash ${DEBUG} "${SOURCES_FOLDER_PATH}/${mingw_gcc_folder_name}/configure" \
-            --prefix="${INSTALL_FOLDER_PATH}" \
+            --prefix="${INSTALL_FOLDER_PATH}/usr" \
             \
             --build="${BUILD}" \
             --target="${MINGW_TARGET}" \
@@ -789,7 +793,7 @@ function do_mingw_all()
           fi
 
           bash ${DEBUG} "${SOURCES_FOLDER_PATH}/${mingw_folder_name}/mingw-w64-crt/configure" \
-            --prefix="${INSTALL_FOLDER_PATH}/${MINGW_TARGET}" \
+            --prefix="${INSTALL_FOLDER_PATH}/usr/${MINGW_TARGET}" \
             \
             --build="${BUILD}" \
             --host="${MINGW_TARGET}" \
@@ -813,7 +817,7 @@ function do_mingw_all()
 
         make install-strip
 
-        ls -l "${INSTALL_FOLDER_PATH}" "${INSTALL_FOLDER_PATH}/${MINGW_TARGET}"
+        ls -l "${INSTALL_FOLDER_PATH}/usr/${MINGW_TARGET}"
       ) 2>&1 | tee "${LOGS_FOLDER_PATH}/make-mingw-crt-output.txt"
     )
 
@@ -863,7 +867,7 @@ function do_mingw_all()
           bash "${SOURCES_FOLDER_PATH}/${mingw_folder_name}/mingw-w64-crt/configure" --help
 
           bash ${DEBUG} "${SOURCES_FOLDER_PATH}/${mingw_folder_name}/mingw-w64-libraries/winpthreads/configure" \
-            --prefix="${INSTALL_FOLDER_PATH}/${MINGW_TARGET}" \
+            --prefix="${INSTALL_FOLDER_PATH}/usr/${MINGW_TARGET}" \
             \
             --build="${BUILD}" \
             --host="${MINGW_TARGET}" \
@@ -883,7 +887,7 @@ function do_mingw_all()
         make -j ${JOBS}
 
         make install-strip
-        ls -l "${INSTALL_FOLDER_PATH}" "${INSTALL_FOLDER_PATH}/${MINGW_TARGET}"
+        ls -l "${INSTALL_FOLDER_PATH}/usr/${MINGW_TARGET}"
       ) 2>&1 | tee "${LOGS_FOLDER_PATH}/make-mingw-winpthreads-output.txt"
     )
 
@@ -936,30 +940,30 @@ function do_mingw_all()
         find ${MINGW_TARGET} \
           -name '*.so' -type f \
           -print \
-          -exec "${INSTALL_FOLDER_PATH}/bin/${MINGW_TARGET}-strip" --strip-debug {} \;
+          -exec "${INSTALL_FOLDER_PATH}/usr/bin/${MINGW_TARGET}-strip" --strip-debug {} \;
         find ${MINGW_TARGET} \
           -name '*.so.*'  \
           -type f \
           -print \
-          -exec "${INSTALL_FOLDER_PATH}/bin/${MINGW_TARGET}-strip" --strip-debug {} \;
+          -exec "${INSTALL_FOLDER_PATH}/usr/bin/${MINGW_TARGET}-strip" --strip-debug {} \;
         # Note: without ranlib, windows builds failed.
         find ${MINGW_TARGET} lib/gcc/${MINGW_TARGET} \
           -name '*.a'  \
           -type f  \
           -print \
-          -exec "${INSTALL_FOLDER_PATH}/bin/${MINGW_TARGET}-strip" --strip-debug {} \; \
-          -exec "${INSTALL_FOLDER_PATH}/bin/${MINGW_TARGET}-ranlib" {} \;
+          -exec "${INSTALL_FOLDER_PATH}/usr/bin/${MINGW_TARGET}-strip" --strip-debug {} \; \
+          -exec "${INSTALL_FOLDER_PATH}/usr/bin/${MINGW_TARGET}-ranlib" {} \;
         set -e
       
       fi
-    )
+    ) 2>&1 | tee "${LOGS_FOLDER_PATH}/strip-mingw-gcc-step2-output.txt"
 
     (
       xbb_activate_installed_bin
 
-      "${INSTALL_FOLDER_PATH}/bin/${MINGW_TARGET}-g++" --version
-      "${INSTALL_FOLDER_PATH}/bin/${MINGW_TARGET}-g++" -dumpmachine
-      "${INSTALL_FOLDER_PATH}/bin/${MINGW_TARGET}-g++" -print-search-dirs
+      "${INSTALL_FOLDER_PATH}/usr/bin/${MINGW_TARGET}-g++" --version
+      "${INSTALL_FOLDER_PATH}/usr/bin/${MINGW_TARGET}-g++" -dumpmachine
+      "${INSTALL_FOLDER_PATH}/usr/bin/${MINGW_TARGET}-g++" -print-search-dirs
 
       mkdir -p "${HOME}/tmp"
       cd "${HOME}/tmp"
@@ -975,7 +979,7 @@ main(int argc, char* argv[])
 }
 __EOF__
 
-      "${INSTALL_FOLDER_PATH}/bin/${MINGW_TARGET}-g++" hello.cpp -o hello
+      "${INSTALL_FOLDER_PATH}/usr/bin/${MINGW_TARGET}-g++" hello.cpp -o hello
 
       rm -rf hello.cpp hello
     ) 2>&1 | tee "${LOGS_FOLDER_PATH}/test-mingw-gcc-step2-output.txt"
