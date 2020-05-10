@@ -3126,6 +3126,8 @@ function do_cmake()
   # Dec 16, 2019, "3.16.2"
 
   local cmake_version="$1"
+  local cmake_version_major="$(echo ${cmake_version} | sed -e 's|\([0-9][0-9]*\)\..*|\1|')"
+  local cmake_version_minor="$(echo ${cmake_version} | sed -e 's|\([0-9][0-9]*\)\.\([0-9][0-9]*\).*|\2|')"
 
   local cmake_folder_name="cmake-${cmake_version}"
   local cmake_archive="${cmake_folder_name}.tar.gz"
