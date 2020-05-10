@@ -104,7 +104,12 @@ function detect_host()
 
     HOST_DISTRO_RELEASE=$(lsb_release -sr)
 
-    BUILD="$(gcc -dumpmachine)"
+    if [ -x "/usr/share/libtool/build-aux/config.guess" ]
+    then
+      BUILD="$(/usr/share/libtool/build-aux/config.guess)"
+    else
+      BUILD="$(gcc -dumpmachine)"
+    fi
 
   else
     echo "Unsupported uname ${HOST_UNAME}"
