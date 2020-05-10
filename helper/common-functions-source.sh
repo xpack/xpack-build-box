@@ -843,30 +843,65 @@ function check_rpath()
   (
     echo
     echo "Checking rpath in elf files.."
+    echo
 
-    find "${XBB_FOLDER_PATH}/bin" "${XBB_FOLDER_PATH}/libexec" "${XBB_FOLDER_PATH}/openssl" \
+    xbb_activate
+    # xbb_activate_installed_bin
+
+if false
+then
+    bash -x "${helper_folder_path}/check_rpath.sh" /opt/xbb/usr/libexec/gcc/x86_64-w64-mingw32/9.3.0/f951
+    # bash -x "${helper_folder_path}/check_rpath.sh" /opt/xbb/bin/wine64
+
+    # bash -x "${helper_folder_path}/check_rpath.sh" "${INSTALL_FOLDER_PATH}/bin/msginit"
+    # bash -x "${helper_folder_path}/check_rpath.sh" "${INSTALL_FOLDER_PATH}/bin/openssl"
+    # bash "${helper_folder_path}/check_rpath.sh" "${INSTALL_FOLDER_PATH}/usr/lib64/libstdc++.so.6.0.25"
+    # bash "${helper_folder_path}/check_rpath.sh" "${INSTALL_FOLDER_PATH}/usr/bin/ld"
+else
+    folders=("${INSTALL_FOLDER_PATH}/bin")
+    if [ -d "${INSTALL_FOLDER_PATH}/libexec" ]
+    then
+      folders+=("${INSTALL_FOLDER_PATH}/libexec")
+    fi
+    if [ -d "${INSTALL_FOLDER_PATH}/openssl" ]
+    then
+      folders+=("${INSTALL_FOLDER_PATH}/openssl")
+    fi
+    if [ -d "${INSTALL_FOLDER_PATH}/usr/bin" ]
+    then
+      folders+=("${INSTALL_FOLDER_PATH}/usr/bin")
+    fi
+    if [ -d "${INSTALL_FOLDER_PATH}/usr/libexec" ]
+    then
+      folders+=("${INSTALL_FOLDER_PATH}/usr/libexec")
+    fi
+    if [ -d "${INSTALL_FOLDER_PATH}/usr/${BUILD}" ]
+    then
+      folders+=("${INSTALL_FOLDER_PATH}/usr/${BUILD}")
+    fi
+
+    find ${folders[@]} \
       -type f \
       -exec bash ${helper_folder_path}/check_rpath.sh {} \;
 
-    if [ -d "${XBB_FOLDER_PATH}/usr" ]
+    if [ -d "${INSTALL_FOLDER_PATH}/usr" ]
     then
-      find "${XBB_FOLDER_PATH}/usr"  \
+      find "${INSTALL_FOLDER_PATH}/usr"  \
         -type f \
         -exec bash ${helper_folder_path}/check_rpath.sh {} \;
     fi
 
-    find "${XBB_FOLDER_PATH}/lib"  \
+    folders=("${INSTALL_FOLDER_PATH}/lib")
+    if [ -d "${INSTALL_FOLDER_PATH}/usr" ]
+    then
+      folders+=("${INSTALL_FOLDER_PATH}/usr")
+    fi
+
+    find ${folders[@]}  \
       -type f \
       -name '*.so*' \
       -exec bash ${helper_folder_path}/check_rpath.sh {} \;
-
-    if [ -d "${XBB_FOLDER_PATH}/lib64" ]
-    then
-      find "${XBB_FOLDER_PATH}/lib64"  \
-        -type f \
-        -name '*.so*' \
-        -exec bash ${helper_folder_path}/check_rpath.sh {} \;
-    fi
+fi
   ) 2>&1 | tee "${LOGS_FOLDER_PATH}/check-rpath-output.txt"
 }
 
