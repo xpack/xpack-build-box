@@ -511,7 +511,8 @@ function do_native_binutils()
         # Build.
         make -j ${JOBS}
 
-        make install-strip
+        # make install-strip
+        make install
 
         show_libs "${NATIVE_BINUTILS_INSTALL_FOLDER_PATH}/bin/ar" 
         show_libs "${NATIVE_BINUTILS_INSTALL_FOLDER_PATH}/bin/as" 
@@ -808,7 +809,8 @@ function do_native_gcc()
         # Build.
         make -j ${JOBS}
 
-        make install-strip
+         # make install-strip
+        make install
 
         (
           cd "${INSTALL_FOLDER_PATH}/usr/bin"
@@ -1132,7 +1134,8 @@ function do_mingw_binutils()
         # Build.
         make -j ${JOBS}
 
-        make install-strip
+        # make install-strip
+        make install
 
         # For just in case, it has nasty consequences when picked 
         # in other builds.
@@ -1261,7 +1264,8 @@ function do_mingw_all()
         # Build.
         make -j ${JOBS}
 
-        make install-strip
+        # make install-strip
+        make install
 
         (
           # GCC requires the `x86_64-w64-mingw32` folder be mirrored as 
@@ -1480,7 +1484,8 @@ function do_mingw_all()
         # Build.
         make -j ${JOBS}
 
-        make install-strip
+        # make install-strip
+        make install
 
         ls -l "${INSTALL_FOLDER_PATH}/usr/${MINGW_TARGET}"
       ) 2>&1 | tee "${LOGS_FOLDER_PATH}/make-mingw-crt-output.txt"
@@ -1551,7 +1556,9 @@ function do_mingw_all()
         # Build.
         make -j ${JOBS}
 
-        make install-strip
+        # make install-strip
+        make install
+
         ls -l "${INSTALL_FOLDER_PATH}/usr/${MINGW_TARGET}"
       ) 2>&1 | tee "${LOGS_FOLDER_PATH}/make-mingw-winpthreads-output.txt"
     )
@@ -1590,7 +1597,9 @@ function do_mingw_all()
       # Build.
       make -j ${JOBS}
 
-      make install-strip
+      # make install-strip
+      make install
+
     ) 2>&1 | tee "${LOGS_FOLDER_PATH}/make-mingw-gcc-step2-output.txt"
 
     (
@@ -2031,7 +2040,8 @@ function do_xz()
 
         make check
 
-        make install-strip
+        # make install-strip
+        make install
 
         show_libs "${INSTALL_FOLDER_PATH}/bin/xz"
 
@@ -2138,7 +2148,8 @@ function do_tar()
 
         make check || true
 
-        make install-strip
+        # make install-strip
+        make install
 
         show_libs "${INSTALL_FOLDER_PATH}/bin/tar"
 
@@ -2402,7 +2413,8 @@ function do_pkg_config()
         # Build.
         make -j ${JOBS}
 
-        make install-strip
+        # make install-strip
+        make install
 
         show_libs "${INSTALL_FOLDER_PATH}/bin/pkg-config"
 
@@ -2499,7 +2511,8 @@ function do_m4()
           make check
         fi
 
-        make install-strip
+        # make install-strip
+        make install
 
         show_libs "${INSTALL_FOLDER_PATH}/bin/m4"
 
@@ -2598,7 +2611,8 @@ function do_gawk()
           make check
         fi
 
-        make install-strip
+        # make install-strip
+        make install
 
         show_libs "${INSTALL_FOLDER_PATH}/bin/gawk"
 
@@ -2686,7 +2700,8 @@ function do_sed()
         # darwin: FAIL: testsuite/subst-mb-incomplete.sh
         make check || true
 
-        make install-strip
+        # make install-strip
+        make install
 
         show_libs "${INSTALL_FOLDER_PATH}/bin/sed"
 
@@ -2774,7 +2789,8 @@ function do_autoconf()
         # Build.
         make -j ${JOBS}
 
-        make install-strip
+        # make install-strip
+        make install
 
       ) 2>&1 | tee "${LOGS_FOLDER_PATH}/make-autoconf-output.txt"
     )
@@ -2866,7 +2882,8 @@ function do_automake()
         # ...
         # make check
 
-        make install-strip
+        # make install-strip
+        make install
 
       ) 2>&1 | tee "${LOGS_FOLDER_PATH}/make-automake-output.txt"
     )
@@ -2961,7 +2978,8 @@ function do_libtool()
           make check gl_public_submodule_commit=
         fi
 
-        make install-strip
+        # make install-strip
+        make install
 
         echo
         echo "Linking glibtool..."
@@ -2969,6 +2987,7 @@ function do_libtool()
         rm -f glibtool glibtoolize
         ln -s -v libtool glibtool
         ln -s -v libtoolize glibtoolize
+
       ) 2>&1 | tee "${LOGS_FOLDER_PATH}/make-libtool-output.txt"
     )
 
@@ -3049,7 +3068,7 @@ function do_gettext()
             \
             --enable-csharp \
             --enable-nls \
-
+           
           cp "config.log" "${LOGS_FOLDER_PATH}/config-gettext-log.txt"
         ) 2>&1 | tee "${LOGS_FOLDER_PATH}/configure-gettext-output.txt"
       fi
@@ -3067,7 +3086,8 @@ function do_gettext()
         # Darwin: FAIL: lang-sh
         make check || true
 
-        make install-strip
+        # make install-strip
+        make install
 
         show_libs "${INSTALL_FOLDER_PATH}/bin/gettext"
 
@@ -3153,7 +3173,8 @@ function do_patch()
 
         make check
 
-        make install-strip
+        # make install-strip
+        make install
 
         show_libs "${INSTALL_FOLDER_PATH}/bin/patch"
 
@@ -3239,7 +3260,8 @@ function do_diffutils()
 
         make check
 
-        make install-strip
+        # make install-strip
+        make install
 
         show_libs "${INSTALL_FOLDER_PATH}/bin/diff"
 
@@ -3337,7 +3359,8 @@ function do_bison()
           make -j1 check
         fi
 
-        make install-strip
+        # make install-strip
+        make install
 
         show_libs "${INSTALL_FOLDER_PATH}/bin/bison"
 
@@ -3557,9 +3580,10 @@ function do_make()
           make -k check
         fi
 
-        make install-strip
 
         show_libs "${INSTALL_FOLDER_PATH}/bin/make"
+        # make install-strip
+        make install
 
         echo
         echo "Linking gmake..."
@@ -3664,7 +3688,8 @@ function do_wget()
         # x86_64: FAIL:  65
         # make check
 
-        make install-strip
+        # make install-strip
+        make install
 
         show_libs "${INSTALL_FOLDER_PATH}/bin/wget"
 
@@ -3759,7 +3784,8 @@ function do_texinfo()
           make check
         fi
 
-        make install-strip
+        # make install-strip
+        make install
 
       ) 2>&1 | tee "${LOGS_FOLDER_PATH}/make-texinfo-output.txt"
     )
@@ -4122,7 +4148,8 @@ function do_makedepend()
         # Build.
         make -j ${JOBS}
 
-        make install-strip
+        # make install-strip
+        make install
 
       ) 2>&1 | tee "${LOGS_FOLDER_PATH}/make-makedepend-output.txt"
     )
@@ -4212,7 +4239,8 @@ function do_patchelf()
         # x86_64: FAIL: set-interpreter-long.sh (Segmentation fault (core dumped))
         # make -C tests -j1 check
 
-        make install-strip
+        # make install-strip
+        make install
 
         show_libs "${INSTALL_FOLDER_PATH}/bin/patchelf"
 
@@ -4372,6 +4400,7 @@ function do_git()
 
         # make install-strip
         make install
+
         strip -S "${INSTALL_FOLDER_PATH}/bin/git"
         strip -S "${INSTALL_FOLDER_PATH}/bin"/git-[rsu]*
 
@@ -5307,7 +5336,9 @@ function do_gnupg()
 
         make check
 
-        make install-strip
+        # make install-strip
+        make install
+
       ) 2>&1 | tee "${LOGS_FOLDER_PATH}/make-gnupg-output.txt"
     )
 
@@ -5645,6 +5676,7 @@ function do_tcl()
 
         # make install-strip
         make install
+
         strip -S "${INSTALL_FOLDER_PATH}/bin/tclsh${tcl_version_major}.${tcl_version_minor}"
 
         show_libs "${INSTALL_FOLDER_PATH}/bin/tclsh${tcl_version_major}.${tcl_version_minor}"
@@ -5941,7 +5973,8 @@ function do_re2c()
           make tests
         fi
 
-        make install-strip
+        # make install-strip
+        make install
 
         show_libs "${INSTALL_FOLDER_PATH}/bin/re2c"
 

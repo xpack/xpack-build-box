@@ -189,7 +189,9 @@ function do_gmp()
 
         make check
 
-        make install-strip
+        # make install-strip
+        make install
+
       ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${gmp_folder_name}/make-output.txt"
     )
 
@@ -295,7 +297,9 @@ function do_mpfr()
           make check-exported-symbols
         fi
 
-        make install-strip
+        # make install-strip
+        make install
+
       ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${mpfr_folder_name}/make-output.txt"
     )
 
@@ -390,7 +394,9 @@ function do_mpc()
 
         make check
 
-        make install-strip
+        # make install-strip
+        make install
+
       ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${mpc_folder_name}/make-output.txt"
     )
 
@@ -486,7 +492,9 @@ function do_isl()
 
         make check
 
-        make install-strip
+        # make install-strip
+        make install
+
       ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${isl_folder_name}/make-output.txt"
     )
 
@@ -599,6 +607,7 @@ function do_nettle()
         # (`install-info --info-dir="/opt/xbb/share/info" nettle.info` returns 1)
         # Make the other install targets.
         make install-headers install-static install-pkgconfig install-shared-nettle install-shared-hogweed
+
       ) 2>&1 | tee "${LOGS_FOLDER_PATH}/make-nettle-output.txt"
     )
 
@@ -674,7 +683,9 @@ function do_tasn1()
 
         make check
 
-        make install-strip
+        # make install-strip
+        make install
+
       ) 2>&1 | tee "${LOGS_FOLDER_PATH}/make-tasn1-output.txt"
     )
 
@@ -751,7 +762,8 @@ function do_expat()
 
         make check
 
-        make install-strip
+        # make install-strip
+        make install
 
         show_libs "${INSTALL_FOLDER_PATH}/lib/libexpat.so"
 
@@ -852,7 +864,9 @@ function do_libffi()
 
         make check
 
-        make install-strip
+        # make install-strip
+        make install
+
       ) 2>&1 | tee "${LOGS_FOLDER_PATH}/make-libffi-output.txt"
     )
 
@@ -929,7 +943,8 @@ function do_libiconv()
 
         make check
 
-        make install-strip
+        # make install-strip
+        make install
 
         # Does not leave a pkgconfig/iconv.pc;
         # Pass -liconv explicitly.
@@ -1030,7 +1045,9 @@ function do_gnutls()
           make check
         fi
 
-        make install-strip
+        # make install-strip
+        make install
+
       ) 2>&1 | tee "${LOGS_FOLDER_PATH}/make-gnutls-output.txt"
     )
 
@@ -1104,7 +1121,9 @@ function do_util_macros()
         # Build.
         make -j ${JOBS}
 
-        make install-strip
+        # make install-strip
+        make install
+
       ) 2>&1 | tee "${LOGS_FOLDER_PATH}/make-util_macros-output.txt"
     )
 
@@ -1183,7 +1202,9 @@ function do_xorg_xproto()
         # Build.
         make -j ${JOBS}
 
-        make install-strip
+        # make install-strip
+        make install
+
       ) 2>&1 | tee "${LOGS_FOLDER_PATH}/make-xorg_xproto-output.txt"
     )
 
@@ -1265,7 +1286,9 @@ function do_libpng()
         # Takes very long on armhf.
         make check
 
-        make install-strip
+        # make install-strip
+        make install
+
       ) 2>&1 | tee "${LOGS_FOLDER_PATH}/make-libpng-output.txt"
     )
 
@@ -1336,8 +1359,8 @@ function do_libmpdec()
         # Build.
         make -j ${JOBS}
 
-        # make install-strip
         make install
+
       ) 2>&1 | tee "${LOGS_FOLDER_PATH}/make-libmpdec-output.txt"
     )
 
@@ -1411,7 +1434,9 @@ function do_libgpg_error()
 
         make check
 
-        make install-strip
+        # make install-strip
+        make install
+
       ) 2>&1 | tee "${LOGS_FOLDER_PATH}/make-libgpg-error-output.txt"
     )
 
@@ -1502,7 +1527,8 @@ function do_libgcrypt()
         # Build.
         make -j ${JOBS}
 
-        make install-strip
+        # make install-strip
+        make install
 
         # Check after install, otherwise mac test fails:
         # dyld: Library not loaded: /Users/ilg/opt/xbb/lib/libgcrypt.20.dylib
@@ -1583,7 +1609,9 @@ function do_libassuan()
 
         make check
 
-        make install-strip
+        # make install-strip
+        make install
+
       ) 2>&1 | tee "${LOGS_FOLDER_PATH}/make-libassuan-output.txt"
     )
 
@@ -1657,7 +1685,9 @@ function do_libksba()
 
         make check
 
-        make install-strip
+        # make install-strip
+        make install
+
       ) 2>&1 | tee "${LOGS_FOLDER_PATH}/make-libksba-output.txt"
     )
 
@@ -1738,7 +1768,9 @@ function do_npth()
 
         make check
 
-        make install-strip
+        # make install-strip
+        make install
+
       ) 2>&1 | tee "${LOGS_FOLDER_PATH}/make-npth-output.txt"
     )
 
@@ -1855,7 +1887,9 @@ function do_libxcrypt()
           make check
         fi
 
-        make install-strip
+        # make install-strip
+        make install
+
       ) 2>&1 | tee "${LOGS_FOLDER_PATH}/make-libxcrypt-output.txt"
     )
 
@@ -1928,7 +1962,9 @@ function do_libunistring()
 
         make check
 
-        make install-strip
+        # make install-strip
+        make install
+
       ) 2>&1 | tee "${LOGS_FOLDER_PATH}/make-libunistring-output.txt"
     )
 
@@ -2003,7 +2039,9 @@ function do_gc()
 
         make check
 
-        make install-strip
+        # make install-strip
+        make install
+
       ) 2>&1 | tee "${LOGS_FOLDER_PATH}/make-gc-output.txt"
     )
 
@@ -2158,6 +2196,7 @@ function do_ncurses()
         show_libs "$(realpath ${INSTALL_FOLDER_PATH}/lib/libform.so)"
         show_libs "$(realpath ${INSTALL_FOLDER_PATH}/lib/libmenu.so)"
         show_libs "$(realpath ${INSTALL_FOLDER_PATH}/lib/libpanel.so)"
+        
       ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${ncurses_folder_name}/make-output.txt"
     )
 
@@ -2253,6 +2292,7 @@ function do_readline()
 
         show_libs "$(realpath ${INSTALL_FOLDER_PATH}/lib/libreadline.so)"
         show_libs "$(realpath ${INSTALL_FOLDER_PATH}/lib/libhistory.so)"
+
       ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${readline_folder_name}/make-output.txt"
     )
 
