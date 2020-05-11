@@ -7,7 +7,7 @@
 # for any purpose is hereby granted, under the terms of the MIT license.
 # -----------------------------------------------------------------------------
 
-function do_build_versions()
+function build_versioned_components()
 {
   if [[ "${XBB_VERSION}" =~ 3\.[2] ]]
   then

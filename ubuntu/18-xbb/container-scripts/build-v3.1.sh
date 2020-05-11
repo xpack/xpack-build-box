@@ -86,7 +86,7 @@ echo "$(uname) ${HOST_MACHINE} XBB xbb build script started..."
 
 # -----------------------------------------------------------------------------
 
-do_build_versions
+build_versioned_components
 
 strip_static_objects
 

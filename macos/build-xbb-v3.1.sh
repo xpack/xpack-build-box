@@ -89,7 +89,7 @@ function xbb_activate()
 
 # -----------------------------------------------------------------------------
 
-do_build_versions
+build_versioned_components
 
 strip_static_objects
 
