@@ -41,7 +41,7 @@ XBB_FOLDER_PATH="/opt/xbb"
 
 # -----------------------------------------------------------------------------
 
-mkdir -p "${XBB_FOLDER_PATH}/bin"
+mkdir -pv "${XBB_FOLDER_PATH}/bin"
 
 # -----------------------------------------------------------------------------
 # Create a more verbose pkg-config.

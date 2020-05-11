@@ -16,14 +16,14 @@ on how to use them.
 
 ```console
 $ rm -rf "${HOME}/tmp/amd64-ubu14-rootfs"
-$ mkdir -p "${HOME}/tmp/amd64-ubu14-rootfs"
+$ mkdir -pv "${HOME}/tmp/amd64-ubu14-rootfs"
 $ sudo debootstrap --verbose --arch=amd64 --variant=minbase trusty "${HOME}/tmp/amd64-ubu14-rootfs" http://archive.ubuntu.com/ubuntu/
 $ sudo tar cJvf "${HOME}/tmp/amd64-ubu14-rootfs.xz" -C "${HOME}/tmp/amd64-ubu14-rootfs" .
 ```
 
 ```console
 $ rm -rf "${HOME}/tmp/i386-ubu14-rootfs"
-$ mkdir -p "${HOME}/tmp/i386-ubu14-rootfs"
+$ mkdir -pv "${HOME}/tmp/i386-ubu14-rootfs"
 $ sudo debootstrap --verbose --arch=i386 --variant=minbase trusty "${HOME}/tmp/i386-ubu14-rootfs" http://archive.ubuntu.com/ubuntu/
 $ sudo tar cJvf "${HOME}/tmp/i386-ubu14-rootfs.xz" -C "${HOME}/tmp/i386-ubu14-rootfs" .
 ```

@@ -14,14 +14,14 @@ after a while, the `--keyring` options is required.
 
 ```console
 $ rm -rf "${HOME}/tmp/amd64-ubu12-rootfs"
-$ mkdir -p "${HOME}/tmp/amd64-ubu12-rootfs"
+$ mkdir -pv "${HOME}/tmp/amd64-ubu12-rootfs"
 $ sudo debootstrap --verbose --arch=amd64 --variant=minbase --keyring=/usr/share/keyrings/ubuntu-archive-removed-keys.gpg precise "${HOME}/tmp/amd64-ubu12-rootfs" http://old-releases.ubuntu.com/ubuntu/
 $ sudo tar cJvf "${HOME}/tmp/amd64-ubu12-rootfs.xz" -C "${HOME}/tmp/amd64-ubu12-rootfs" .
 ```
 
 ```console
 $ rm -rf "${HOME}/tmp/i386-ubu12-rootfs"
-$ mkdir -p "${HOME}/tmp/i386-ubu12-rootfs"
+$ mkdir -pv "${HOME}/tmp/i386-ubu12-rootfs"
 $ sudo debootstrap --verbose --arch=i386 --variant=minbase --keyring=/usr/share/keyrings/ubuntu-archive-removed-keys.gpg precise "${HOME}/tmp/i386-ubu12-rootfs" http://old-releases.ubuntu.com/ubuntu/
 $ sudo tar cJvf "${HOME}/tmp/i386-ubu12-rootfs.xz" -C "${HOME}/tmp/i386-ubu12-rootfs" .
 ```

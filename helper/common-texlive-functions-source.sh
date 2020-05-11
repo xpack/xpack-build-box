@@ -31,7 +31,7 @@ function do_texlive()
 
   # ---------------------------------------------------------------------------
 
-  mkdir -p "${WORK_FOLDER_PATH}"
+  mkdir -pv "${WORK_FOLDER_PATH}"
   cd "${WORK_FOLDER_PATH}"
 
   # Download the install tools.
@@ -51,7 +51,7 @@ function do_texlive()
 
   local tl_work_folder_path="${WORK_FOLDER_PATH}/${tl_edition_folder_name}"
 
-  mkdir -p "${INSTALL_FOLDER_PATH}"
+  mkdir -pv "${INSTALL_FOLDER_PATH}"
 
   # ---------------------------------------------------------------------------
 
@@ -59,7 +59,7 @@ function do_texlive()
 
   # Create the texlive.profile used to automate the install.
   # These definitions are specific to TeX Live 2016/2018.
-  mkdir -p "${HOME}/tmp"
+  mkdir -pv "${HOME}/tmp"
   local tmp_profile="$(mktemp "${tl_work_folder_path}/texlive-profile-${tl_edition_year}-XXXXXX")"
 
   echo

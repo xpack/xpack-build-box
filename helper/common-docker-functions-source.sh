@@ -34,7 +34,7 @@ function host_init_docker_env()
 function host_init_docker_input()
 {
   rm -rf "${script_folder_path}/input"
-  mkdir -p "${script_folder_path}/input/helper/patches"
+  mkdir -pv "${script_folder_path}/input/helper/patches"
 
   if [ -d "${script_folder_path}/container-scripts" ]
   then
@@ -59,7 +59,7 @@ function host_init_docker_input()
     elif [ -d "$1" ]
     then
       local subfolder=$(basename "$1")
-      mkdir -p "${script_folder_path}/input/helper/${subfolder}"
+      mkdir -pv "${script_folder_path}/input/helper/${subfolder}"
       ln -v "$1"/* "${script_folder_path}/input/helper/${subfolder}"
     fi
 
@@ -76,7 +76,7 @@ function host_run_docker_it()
 {
   # Warning: do not use HOST_MACHINE!
   out="${HOME}/opt/${name}-${distro}-${release}-${arch}"
-  mkdir -p "${out}"
+  mkdir -pv "${out}"
   bootstrap_path="${HOME}/opt/${name}-bootstrap-${distro}-${release}-${arch}"
 
   echo 
@@ -125,7 +125,7 @@ function host_run_docker_it_bs()
 {
   # Warning: do not use HOST_MACHINE!
   out="${HOME}/opt/${name}-${distro}-${release}-${arch}"
-  mkdir -p "${out}"
+  mkdir -pv "${out}"
 
   echo 
   echo "Running parent Docker image ${from}..."
@@ -181,7 +181,7 @@ function docker_prepare_env()
 {
   if [ ! -d "${WORK_FOLDER_PATH}" ]
   then
-    mkdir -p "${WORK_FOLDER_PATH}"
+    mkdir -pv "${WORK_FOLDER_PATH}"
     touch "${WORK_FOLDER_PATH}/.dockerenv"
   fi
   

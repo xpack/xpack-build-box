@@ -255,18 +255,18 @@ function prepare_xbb_env()
 
   # ---------------------------------------------------------------------------
 
-  mkdir -p "${CACHE_FOLDER_PATH}"
-  mkdir -p "${BUILD_FOLDER_PATH}"
-  mkdir -p "${LIBS_BUILD_FOLDER_PATH}"
-  mkdir -p "${SOURCES_FOLDER_PATH}"
-  mkdir -p "${STAMPS_FOLDER_PATH}"
-  mkdir -p "${LOGS_FOLDER_PATH}"
+  mkdir -pv "${CACHE_FOLDER_PATH}"
+  mkdir -pv "${BUILD_FOLDER_PATH}"
+  mkdir -pv "${LIBS_BUILD_FOLDER_PATH}"
+  mkdir -pv "${SOURCES_FOLDER_PATH}"
+  mkdir -pv "${STAMPS_FOLDER_PATH}"
+  mkdir -pv "${LOGS_FOLDER_PATH}"
 
-  mkdir -p "${INSTALL_FOLDER_PATH}"
+  mkdir -pv "${INSTALL_FOLDER_PATH}"
 
-  mkdir -p "${INSTALL_FOLDER_PATH}/bin"
-  mkdir -p "${INSTALL_FOLDER_PATH}/include"
-  mkdir -p "${INSTALL_FOLDER_PATH}/lib"
+  mkdir -pv "${INSTALL_FOLDER_PATH}/bin"
+  mkdir -pv "${INSTALL_FOLDER_PATH}/include"
+  mkdir -pv "${INSTALL_FOLDER_PATH}/lib"
  
   # ---------------------------------------------------------------------------
 
@@ -740,7 +740,7 @@ function _download_one()
   echo
   echo "Downloading \"${archive_name}\" from \"${url}\"..."
   rm -f "${CACHE_FOLDER_PATH}/${archive_name}.download"
-  mkdir -p "${CACHE_FOLDER_PATH}"
+  mkdir -pv "${CACHE_FOLDER_PATH}"
 
   set +e
   curl --fail -L -o "${CACHE_FOLDER_PATH}/${archive_name}.download" "${url}"

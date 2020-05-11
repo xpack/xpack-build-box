@@ -19,14 +19,14 @@ on how to use them.
 
 ```console
 $ rm -rf "${HOME}/tmp/amd64-ubu18-rootfs"
-$ mkdir -p "${HOME}/tmp/amd64-ubu18-rootfs"
+$ mkdir -pv "${HOME}/tmp/amd64-ubu18-rootfs"
 $ sudo debootstrap --verbose --arch=amd64 --variant=minbase bionic "${HOME}/tmp/amd64-ubu18-rootfs" http://archive.ubuntu.com/ubuntu/
 $ sudo tar cJvf "${HOME}/tmp/amd64-ubu18-rootfs.xz" -C "${HOME}/tmp/amd64-ubu18-rootfs" .
 ```
 
 ```console
 $ rm -rf "${HOME}/tmp/i386-ubu18-rootfs"
-$ mkdir -p "${HOME}/tmp/i386-ubu18-rootfs"
+$ mkdir -pv "${HOME}/tmp/i386-ubu18-rootfs"
 $ sudo debootstrap --verbose --arch=i386 --variant=minbase bionic "${HOME}/tmp/i386-ubu18-rootfs" http://archive.ubuntu.com/ubuntu/
 $ sudo tar cJvf "${HOME}/tmp/i386-ubu18-rootfs.xz" -C "${HOME}/tmp/i386-ubu18-rootfs" .
 ```
@@ -36,14 +36,14 @@ from the ports server http://ports.ubuntu.com/.
 
 ```console
 $ rm -f "${HOME}/tmp/arm64v8-ubu18-rootfs"
-$ mkdir -p "${HOME}/tmp/arm64v8-ubu18-rootfs"
+$ mkdir -pv "${HOME}/tmp/arm64v8-ubu18-rootfs"
 $ sudo debootstrap --verbose --arch=arm64 --variant=minbase bionic "${HOME}/tmp/arm64v8-ubu18-rootfs" http://ports.ubuntu.com/
 $ sudo tar cJvf "${HOME}/tmp/arm64v8-ubu18-rootfs.xz" -C "${HOME}/tmp/arm64v8-ubu18-rootfs" .
 ```
 
 ```console
 $ rm -rf "${HOME}/tmp/arm32v7-ubu18-rootfs"
-$ mkdir -p "${HOME}/tmp/arm32v7-ubu18-rootfs"
+$ mkdir -pv "${HOME}/tmp/arm32v7-ubu18-rootfs"
 $ sudo debootstrap --verbose --arch=armhf --variant=minbase bionic "${HOME}/tmp/arm32v7-ubu18-rootfs" http://ports.ubuntu.com/
 $ sudo tar cJvf "${HOME}/tmp/arm32v7-ubu18-rootfs.xz" -C "${HOME}/tmp/arm32v7-ubu18-rootfs" .
 ```

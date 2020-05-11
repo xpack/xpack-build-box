@@ -42,7 +42,7 @@ function do_zlib()
     (
       if [ ! -d "${LIBS_BUILD_FOLDER_PATH}/${zlib_folder_name}" ]
       then
-        mkdir -p "${LIBS_BUILD_FOLDER_PATH}/${zlib_folder_name}"
+        mkdir -pv "${LIBS_BUILD_FOLDER_PATH}/${zlib_folder_name}"
         # Copy the sources in the build folder.
         cp -r "${SOURCES_FOLDER_PATH}/${zlib_src_folder_name}"/* \
           "${LIBS_BUILD_FOLDER_PATH}/${zlib_folder_name}"
@@ -141,7 +141,7 @@ function do_gmp()
     mkdir -pv "${LOGS_FOLDER_PATH}/${gmp_folder_name}"
 
     (
-      mkdir -p "${LIBS_BUILD_FOLDER_PATH}/${gmp_folder_name}"
+      mkdir -pv "${LIBS_BUILD_FOLDER_PATH}/${gmp_folder_name}"
       cd "${LIBS_BUILD_FOLDER_PATH}/${gmp_folder_name}"
 
       xbb_activate
@@ -249,7 +249,7 @@ function do_mpfr()
     mkdir -pv "${LOGS_FOLDER_PATH}/${mpfr_folder_name}"
 
     (
-      mkdir -p "${LIBS_BUILD_FOLDER_PATH}/${mpfr_folder_name}"
+      mkdir -pv "${LIBS_BUILD_FOLDER_PATH}/${mpfr_folder_name}"
       cd "${LIBS_BUILD_FOLDER_PATH}/${mpfr_folder_name}"
 
       xbb_activate
@@ -353,7 +353,7 @@ function do_mpc()
     mkdir -pv "${LOGS_FOLDER_PATH}/${mpc_folder_name}"
 
     (
-      mkdir -p "${LIBS_BUILD_FOLDER_PATH}/${mpc_folder_name}"
+      mkdir -pv "${LIBS_BUILD_FOLDER_PATH}/${mpc_folder_name}"
       cd "${LIBS_BUILD_FOLDER_PATH}/${mpc_folder_name}"
 
       xbb_activate
@@ -446,7 +446,7 @@ function do_isl()
     mkdir -pv "${LOGS_FOLDER_PATH}/${isl_folder_name}"
 
     (
-      mkdir -p "${LIBS_BUILD_FOLDER_PATH}/${isl_folder_name}"
+      mkdir -pv "${LIBS_BUILD_FOLDER_PATH}/${isl_folder_name}"
       cd "${LIBS_BUILD_FOLDER_PATH}/${isl_folder_name}"
 
       xbb_activate
@@ -541,7 +541,7 @@ function do_nettle()
     download_and_extract "${nettle_url}" "${nettle_archive}" "${nettle_folder_name}" "${nettle_patch_file_path}"
 
     (
-      mkdir -p "${LIBS_BUILD_FOLDER_PATH}/${nettle_folder_name}"
+      mkdir -pv "${LIBS_BUILD_FOLDER_PATH}/${nettle_folder_name}"
       cd "${LIBS_BUILD_FOLDER_PATH}/${nettle_folder_name}"
 
       xbb_activate
@@ -637,7 +637,7 @@ function do_tasn1()
     download_and_extract "${tasn1_url}" "${tasn1_archive}" "${tasn1_folder_name}"
 
     (
-      mkdir -p "${LIBS_BUILD_FOLDER_PATH}/${tasn1_folder_name}"
+      mkdir -pv "${LIBS_BUILD_FOLDER_PATH}/${tasn1_folder_name}"
       cd "${LIBS_BUILD_FOLDER_PATH}/${tasn1_folder_name}"
 
       xbb_activate
@@ -714,7 +714,7 @@ function do_expat()
     download_and_extract "${expat_url}" "${expat_archive}" "${expat_folder_name}"
 
     (
-      mkdir -p "${LIBS_BUILD_FOLDER_PATH}/${expat_folder_name}"
+      mkdir -pv "${LIBS_BUILD_FOLDER_PATH}/${expat_folder_name}"
       cd "${LIBS_BUILD_FOLDER_PATH}/${expat_folder_name}"
 
       xbb_activate
@@ -811,7 +811,7 @@ function do_libffi()
     ) 2>&1 | tee "${LOGS_FOLDER_PATH}/autogen-libffi-output.txt"
 
     (
-      mkdir -p "${LIBS_BUILD_FOLDER_PATH}/${libffi_folder_name}"
+      mkdir -pv "${LIBS_BUILD_FOLDER_PATH}/${libffi_folder_name}"
       cd "${LIBS_BUILD_FOLDER_PATH}/${libffi_folder_name}"
 
       xbb_activate
@@ -892,7 +892,7 @@ function do_libiconv()
     download_and_extract "${libiconv_url}" "${libiconv_archive}" "${libiconv_folder_name}"
 
     (
-      mkdir -p "${LIBS_BUILD_FOLDER_PATH}/${libiconv_folder_name}"
+      mkdir -pv "${LIBS_BUILD_FOLDER_PATH}/${libiconv_folder_name}"
       cd "${LIBS_BUILD_FOLDER_PATH}/${libiconv_folder_name}"
 
       xbb_activate
@@ -973,7 +973,7 @@ function do_gnutls()
     download_and_extract "${gnutls_url}" "${gnutls_archive}" "${gnutls_folder_name}"
 
     (
-      mkdir -p "${LIBS_BUILD_FOLDER_PATH}/${gnutls_folder_name}"
+      mkdir -pv "${LIBS_BUILD_FOLDER_PATH}/${gnutls_folder_name}"
       cd "${LIBS_BUILD_FOLDER_PATH}/${gnutls_folder_name}"
 
       xbb_activate
@@ -1069,7 +1069,7 @@ function do_util_macros()
     download_and_extract "${util_macros_url}" "${util_macros_archive}" "${util_macros_folder_name}"
 
     (
-      mkdir -p "${LIBS_BUILD_FOLDER_PATH}/${util_macros_folder_name}"
+      mkdir -pv "${LIBS_BUILD_FOLDER_PATH}/${util_macros_folder_name}"
       cd "${LIBS_BUILD_FOLDER_PATH}/${util_macros_folder_name}"
 
       xbb_activate
@@ -1142,7 +1142,7 @@ function do_xorg_xproto()
     download_and_extract "${xorg_xproto_url}" "${xorg_xproto_archive}" "${xorg_xproto_folder_name}" "${xorg_xproto_patch_file_path}"
 
     (
-      mkdir -p "${LIBS_BUILD_FOLDER_PATH}/${xorg_xproto_folder_name}"
+      mkdir -pv "${LIBS_BUILD_FOLDER_PATH}/${xorg_xproto_folder_name}"
       cd "${LIBS_BUILD_FOLDER_PATH}/${xorg_xproto_folder_name}"
 
       xbb_activate
@@ -1223,7 +1223,7 @@ function do_libpng()
     download_and_extract "${libpng_url}" "${libpng_archive}" "${libpng_folder_name}"
 
     (
-      mkdir -p "${LIBS_BUILD_FOLDER_PATH}/${libpng_folder_name}"
+      mkdir -pv "${LIBS_BUILD_FOLDER_PATH}/${libpng_folder_name}"
       cd "${LIBS_BUILD_FOLDER_PATH}/${libpng_folder_name}"
 
       xbb_activate
@@ -1374,7 +1374,7 @@ function do_libgpg_error()
     download_and_extract "${libgpg_error_url}" "${libgpg_error_archive}" "${libgpg_error_folder_name}"
 
     (
-      mkdir -p "${LIBS_BUILD_FOLDER_PATH}/${libgpg_error_folder_name}"
+      mkdir -pv "${LIBS_BUILD_FOLDER_PATH}/${libgpg_error_folder_name}"
       cd "${LIBS_BUILD_FOLDER_PATH}/${libgpg_error_folder_name}"
 
       xbb_activate
@@ -1447,7 +1447,7 @@ function do_libgcrypt()
     download_and_extract "${libgcrypt_url}" "${libgcrypt_archive}" "${libgcrypt_folder_name}"
 
     (
-      mkdir -p "${LIBS_BUILD_FOLDER_PATH}/${libgcrypt_folder_name}"
+      mkdir -pv "${LIBS_BUILD_FOLDER_PATH}/${libgcrypt_folder_name}"
       cd "${LIBS_BUILD_FOLDER_PATH}/${libgcrypt_folder_name}"
 
       xbb_activate
@@ -1544,7 +1544,7 @@ function do_libassuan()
     download_and_extract "${libassuan_url}" "${libassuan_archive}" "${libassuan_folder_name}"
 
     (
-      mkdir -p "${LIBS_BUILD_FOLDER_PATH}/${libassuan_folder_name}"
+      mkdir -pv "${LIBS_BUILD_FOLDER_PATH}/${libassuan_folder_name}"
       cd "${LIBS_BUILD_FOLDER_PATH}/${libassuan_folder_name}"
 
       xbb_activate
@@ -1618,7 +1618,7 @@ function do_libksba()
     download_and_extract "${libksba_url}" "${libksba_archive}" "${libksba_folder_name}"
 
     (
-      mkdir -p "${LIBS_BUILD_FOLDER_PATH}/${libksba_folder_name}"
+      mkdir -pv "${LIBS_BUILD_FOLDER_PATH}/${libksba_folder_name}"
       cd "${LIBS_BUILD_FOLDER_PATH}/${libksba_folder_name}"
 
       xbb_activate
@@ -1692,7 +1692,7 @@ function do_npth()
     download_and_extract "${npth_url}" "${npth_archive}" "${npth_folder_name}"
 
     (
-      mkdir -p "${LIBS_BUILD_FOLDER_PATH}/${npth_folder_name}"
+      mkdir -pv "${LIBS_BUILD_FOLDER_PATH}/${npth_folder_name}"
       cd "${LIBS_BUILD_FOLDER_PATH}/${npth_folder_name}"
 
       xbb_activate
@@ -1811,7 +1811,7 @@ function do_libxcrypt()
     fi
 
     (
-      mkdir -p "${LIBS_BUILD_FOLDER_PATH}/${libxcrypt_folder_name}"
+      mkdir -pv "${LIBS_BUILD_FOLDER_PATH}/${libxcrypt_folder_name}"
       cd "${LIBS_BUILD_FOLDER_PATH}/${libxcrypt_folder_name}"
 
       xbb_activate
@@ -1891,7 +1891,7 @@ function do_libunistring()
     download_and_extract "${libunistring_url}" "${libunistring_archive}" "${libunistring_folder_name}"
 
     (
-      mkdir -p "${LIBS_BUILD_FOLDER_PATH}/${libunistring_folder_name}"
+      mkdir -pv "${LIBS_BUILD_FOLDER_PATH}/${libunistring_folder_name}"
       cd "${LIBS_BUILD_FOLDER_PATH}/${libunistring_folder_name}"
 
       xbb_activate
@@ -1964,7 +1964,7 @@ function do_gc()
     download_and_extract "${gc_url}" "${gc_archive}" "${gc_folder_name}"
 
     (
-      mkdir -p "${LIBS_BUILD_FOLDER_PATH}/${gc_folder_name}"
+      mkdir -pv "${LIBS_BUILD_FOLDER_PATH}/${gc_folder_name}"
       cd "${LIBS_BUILD_FOLDER_PATH}/${gc_folder_name}"
 
       xbb_activate

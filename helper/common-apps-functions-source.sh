@@ -428,7 +428,7 @@ function do_native_binutils()
     mkdir -pv "${LOGS_FOLDER_PATH}/${native_binutils_folder_name}"
 
     (
-      mkdir -p "${BUILD_FOLDER_PATH}/${native_binutils_folder_name}"
+      mkdir -pv "${BUILD_FOLDER_PATH}/${native_binutils_folder_name}"
       cd "${BUILD_FOLDER_PATH}/${native_binutils_folder_name}"
 
       xbb_activate
@@ -631,7 +631,7 @@ function do_native_gcc()
     mkdir -pv "${LOGS_FOLDER_PATH}/${native_gcc_folder_name}"
 
     (
-      mkdir -p "${BUILD_FOLDER_PATH}/${native_gcc_folder_name}"
+      mkdir -pv "${BUILD_FOLDER_PATH}/${native_gcc_folder_name}"
       cd "${BUILD_FOLDER_PATH}/${native_gcc_folder_name}"
 
       xbb_activate
@@ -970,7 +970,7 @@ function test_native_gcc()
     # /usr/bin/ld: BFD (GNU Binutils for Ubuntu) 2.22 internal error, aborting at ../../bfd/reloc.c line 443 in bfd_get_reloc_size
     xbb_activate_installed_bin
 
-    mkdir -p "${HOME}/tmp"
+    mkdir -pv "${HOME}/tmp"
     cd "${HOME}/tmp"
 
     # Note: __EOF__ is quoted to prevent substitutions here.
@@ -1050,7 +1050,7 @@ function do_mingw_binutils()
     download_and_extract "${mingw_binutils_url}" "${mingw_binutils_archive}" "${mingw_binutils_folder_name}"
 
     (
-      mkdir -p "${BUILD_FOLDER_PATH}/${mingw_binutils_build_folder_name}"
+      mkdir -pv "${BUILD_FOLDER_PATH}/${mingw_binutils_build_folder_name}"
       cd "${BUILD_FOLDER_PATH}/${mingw_binutils_build_folder_name}"
 
       xbb_activate
@@ -1198,7 +1198,7 @@ function do_mingw_all()
     download_and_extract "${mingw_url}" "${mingw_folder_archive}" "${mingw_folder_name}"
 
     (
-      mkdir -p "${BUILD_FOLDER_PATH}/${mingw_build_headers_folder_name}"
+      mkdir -pv "${BUILD_FOLDER_PATH}/${mingw_build_headers_folder_name}"
       cd "${BUILD_FOLDER_PATH}/${mingw_build_headers_folder_name}"
 
       xbb_activate
@@ -1284,7 +1284,7 @@ function do_mingw_all()
     download_and_extract "${mingw_gcc_url}" "${mingw_gcc_archive}" "${mingw_gcc_folder_name}"
 
     (
-      mkdir -p "${BUILD_FOLDER_PATH}/${mingw_build_gcc_folder_name}"
+      mkdir -pv "${BUILD_FOLDER_PATH}/${mingw_build_gcc_folder_name}"
       cd "${BUILD_FOLDER_PATH}/${mingw_build_gcc_folder_name}"
 
       xbb_activate
@@ -1377,7 +1377,7 @@ function do_mingw_all()
   then
 
     (
-      mkdir -p "${BUILD_FOLDER_PATH}/${mingw_build_crt_folder_name}"
+      mkdir -pv "${BUILD_FOLDER_PATH}/${mingw_build_crt_folder_name}"
       cd "${BUILD_FOLDER_PATH}/${mingw_build_crt_folder_name}"
 
       xbb_activate
@@ -1476,7 +1476,7 @@ function do_mingw_all()
   then
 
     (
-      mkdir -p "${BUILD_FOLDER_PATH}/${mingw_build_winpthreads_folder_name}"
+      mkdir -pv "${BUILD_FOLDER_PATH}/${mingw_build_winpthreads_folder_name}"
       cd "${BUILD_FOLDER_PATH}/${mingw_build_winpthreads_folder_name}"
 
       xbb_activate
@@ -1544,7 +1544,7 @@ function do_mingw_all()
       echo
       echo "Running mingw-w64 gcc step 2 make..."
 
-      mkdir -p "${BUILD_FOLDER_PATH}/${mingw_build_gcc_folder_name}"
+      mkdir -pv "${BUILD_FOLDER_PATH}/${mingw_build_gcc_folder_name}"
       cd "${BUILD_FOLDER_PATH}/${mingw_build_gcc_folder_name}"
 
       xbb_activate
@@ -1600,7 +1600,7 @@ function do_mingw_all()
       "${INSTALL_FOLDER_PATH}/usr/bin/${MINGW_TARGET}-g++" -dumpmachine
       "${INSTALL_FOLDER_PATH}/usr/bin/${MINGW_TARGET}-g++" -print-search-dirs
 
-      mkdir -p "${HOME}/tmp"
+      mkdir -pv "${HOME}/tmp"
       cd "${HOME}/tmp"
 
       # Note: __EOF__ is quoted to prevent substitutions here.
@@ -1789,7 +1789,7 @@ function do_openssl()
 
         strip -S "${INSTALL_FOLDER_PATH}/bin/openssl"
 
-        mkdir -p "${INSTALL_FOLDER_PATH}/openssl"
+        mkdir -pv "${INSTALL_FOLDER_PATH}/openssl"
 
         if [ -f "/private/etc/ssl/cert.pem" ]
         then
@@ -1858,7 +1858,7 @@ function do_curl()
     download_and_extract "${curl_url}" "${curl_archive}" "${curl_folder_name}"
 
     (
-      mkdir -p "${BUILD_FOLDER_PATH}/${curl_folder_name}"
+      mkdir -pv "${BUILD_FOLDER_PATH}/${curl_folder_name}"
       cd "${BUILD_FOLDER_PATH}/${curl_folder_name}"
 
       xbb_activate
@@ -1962,7 +1962,7 @@ function do_xz()
     download_and_extract "${xz_url}" "${xz_archive}" "${xz_folder_name}"
 
     (
-      mkdir -p "${BUILD_FOLDER_PATH}/${xz_folder_name}"
+      mkdir -pv "${BUILD_FOLDER_PATH}/${xz_folder_name}"
       cd "${BUILD_FOLDER_PATH}/${xz_folder_name}"
 
       xbb_activate
@@ -2056,7 +2056,7 @@ function do_tar()
     download_and_extract "${tar_url}" "${tar_archive}" "${tar_folder_name}"
 
     (
-      mkdir -p "${BUILD_FOLDER_PATH}/${tar_folder_name}"
+      mkdir -pv "${BUILD_FOLDER_PATH}/${tar_folder_name}"
       cd "${BUILD_FOLDER_PATH}/${tar_folder_name}"
 
       xbb_activate
@@ -2161,7 +2161,7 @@ function do_coreutils()
     download_and_extract "${coreutils_url}" "${coreutils_archive}" "${coreutils_folder_name}"
 
     (
-      mkdir -p "${BUILD_FOLDER_PATH}/${coreutils_folder_name}"
+      mkdir -pv "${BUILD_FOLDER_PATH}/${coreutils_folder_name}"
       cd "${BUILD_FOLDER_PATH}/${coreutils_folder_name}"
 
       xbb_activate
@@ -2316,7 +2316,7 @@ function do_pkg_config()
     download_and_extract "${pkg_config_url}" "${pkg_config_archive}" "${pkg_config_folder_name}"
 
     (
-      mkdir -p "${BUILD_FOLDER_PATH}/${pkg_config_folder_name}"
+      mkdir -pv "${BUILD_FOLDER_PATH}/${pkg_config_folder_name}"
       cd "${BUILD_FOLDER_PATH}/${pkg_config_folder_name}"
 
       xbb_activate
@@ -2422,7 +2422,7 @@ function do_m4()
     download_and_extract "${m4_url}" "${m4_archive}" "${m4_folder_name}" "${m4_patch_file_path}"
 
     (
-      mkdir -p "${BUILD_FOLDER_PATH}/${m4_folder_name}"
+      mkdir -pv "${BUILD_FOLDER_PATH}/${m4_folder_name}"
       cd "${BUILD_FOLDER_PATH}/${m4_folder_name}"
 
       xbb_activate
@@ -2525,7 +2525,7 @@ function do_gawk()
     download_and_extract "${gawk_url}" "${gawk_archive}" "${gawk_folder_name}"
 
     (
-      mkdir -p "${BUILD_FOLDER_PATH}/${gawk_folder_name}"
+      mkdir -pv "${BUILD_FOLDER_PATH}/${gawk_folder_name}"
       cd "${BUILD_FOLDER_PATH}/${gawk_folder_name}"
 
       xbb_activate
@@ -2616,7 +2616,7 @@ function do_sed()
     download_and_extract "${sed_url}" "${sed_archive}" "${sed_folder_name}"
 
     (
-      mkdir -p "${BUILD_FOLDER_PATH}/${sed_folder_name}"
+      mkdir -pv "${BUILD_FOLDER_PATH}/${sed_folder_name}"
       cd "${BUILD_FOLDER_PATH}/${sed_folder_name}"
 
       xbb_activate
@@ -2709,7 +2709,7 @@ function do_autoconf()
     download_and_extract "${autoconf_url}" "${autoconf_archive}" "${autoconf_folder_name}"
 
     (
-      mkdir -p "${BUILD_FOLDER_PATH}/${autoconf_folder_name}"
+      mkdir -pv "${BUILD_FOLDER_PATH}/${autoconf_folder_name}"
       cd "${BUILD_FOLDER_PATH}/${autoconf_folder_name}"
 
       xbb_activate
@@ -2793,7 +2793,7 @@ function do_automake()
     download_and_extract "${automake_url}" "${automake_archive}" "${automake_folder_name}" "${automake_patch_file_path}"
 
     (
-      mkdir -p "${BUILD_FOLDER_PATH}/${automake_folder_name}"
+      mkdir -pv "${BUILD_FOLDER_PATH}/${automake_folder_name}"
       cd "${BUILD_FOLDER_PATH}/${automake_folder_name}"
 
       xbb_activate
@@ -2883,7 +2883,7 @@ function do_libtool()
     download_and_extract "${libtool_url}" "${libtool_archive}" "${libtool_folder_name}"
 
     (
-      mkdir -p "${BUILD_FOLDER_PATH}/${libtool_folder_name}"
+      mkdir -pv "${BUILD_FOLDER_PATH}/${libtool_folder_name}"
       cd "${BUILD_FOLDER_PATH}/${libtool_folder_name}"
 
       xbb_activate
@@ -2985,7 +2985,7 @@ function do_gettext()
     download_and_extract "${gettext_url}" "${gettext_archive}" "${gettext_folder_name}"
 
     (
-      mkdir -p "${BUILD_FOLDER_PATH}/${gettext_folder_name}"
+      mkdir -pv "${BUILD_FOLDER_PATH}/${gettext_folder_name}"
       cd "${BUILD_FOLDER_PATH}/${gettext_folder_name}"
 
       xbb_activate
@@ -3086,7 +3086,7 @@ function do_patch()
     download_and_extract "${patch_url}" "${patch_archive}" "${patch_folder_name}"
 
     (
-      mkdir -p "${BUILD_FOLDER_PATH}/${patch_folder_name}"
+      mkdir -pv "${BUILD_FOLDER_PATH}/${patch_folder_name}"
       cd "${BUILD_FOLDER_PATH}/${patch_folder_name}"
 
       xbb_activate
@@ -3172,7 +3172,7 @@ function do_diffutils()
     download_and_extract "${diffutils_url}" "${diffutils_archive}" "${diffutils_folder_name}"
 
     (
-      mkdir -p "${BUILD_FOLDER_PATH}/${diffutils_folder_name}"
+      mkdir -pv "${BUILD_FOLDER_PATH}/${diffutils_folder_name}"
       cd "${BUILD_FOLDER_PATH}/${diffutils_folder_name}"
 
       xbb_activate
@@ -3260,7 +3260,7 @@ function do_bison()
     download_and_extract "${bison_url}" "${bison_archive}" "${bison_folder_name}"
 
     (
-      mkdir -p "${BUILD_FOLDER_PATH}/${bison_folder_name}"
+      mkdir -pv "${BUILD_FOLDER_PATH}/${bison_folder_name}"
       cd "${BUILD_FOLDER_PATH}/${bison_folder_name}"
 
       xbb_activate
@@ -3392,7 +3392,7 @@ function do_flex()
     ) 2>&1 | tee "${LOGS_FOLDER_PATH}/autogen-flex-output.txt"
 
     (
-      mkdir -p "${BUILD_FOLDER_PATH}/${flex_folder_name}"
+      mkdir -pv "${BUILD_FOLDER_PATH}/${flex_folder_name}"
       cd "${BUILD_FOLDER_PATH}/${flex_folder_name}"
 
       xbb_activate
@@ -3486,7 +3486,7 @@ function do_make()
     download_and_extract "${make_url}" "${make_archive}" "${make_folder_name}" "${make_patch_file_path}"
 
     (
-      mkdir -p "${BUILD_FOLDER_PATH}/${make_folder_name}"
+      mkdir -pv "${BUILD_FOLDER_PATH}/${make_folder_name}"
       cd "${BUILD_FOLDER_PATH}/${make_folder_name}"
 
       xbb_activate
@@ -3583,7 +3583,7 @@ function do_wget()
     download_and_extract "${wget_url}" "${wget_archive}" "${wget_folder_name}"
 
     (
-      mkdir -p "${BUILD_FOLDER_PATH}/${wget_folder_name}"
+      mkdir -pv "${BUILD_FOLDER_PATH}/${wget_folder_name}"
       cd "${BUILD_FOLDER_PATH}/${wget_folder_name}"
 
       xbb_activate
@@ -3684,7 +3684,7 @@ function do_texinfo()
     download_and_extract "${texinfo_url}" "${texinfo_archive}" "${texinfo_folder_name}"
 
     (
-      mkdir -p "${BUILD_FOLDER_PATH}/${texinfo_folder_name}"
+      mkdir -pv "${BUILD_FOLDER_PATH}/${texinfo_folder_name}"
       cd "${BUILD_FOLDER_PATH}/${texinfo_folder_name}"
 
       xbb_activate
@@ -3782,7 +3782,7 @@ function do_cmake()
     download_and_extract "${cmake_url}" "${cmake_archive}" "${cmake_folder_name}"
 
     (
-      mkdir -p "${BUILD_FOLDER_PATH}/${cmake_folder_name}"
+      mkdir -pv "${BUILD_FOLDER_PATH}/${cmake_folder_name}"
       cd "${BUILD_FOLDER_PATH}/${cmake_folder_name}"
 
       xbb_activate
@@ -4050,7 +4050,7 @@ function do_makedepend()
     download_and_extract "${makedepend_url}" "${makedepend_archive}" "${makedepend_folder_name}"
 
     (
-      mkdir -p "${BUILD_FOLDER_PATH}/${makedepend_folder_name}"
+      mkdir -pv "${BUILD_FOLDER_PATH}/${makedepend_folder_name}"
       cd "${BUILD_FOLDER_PATH}/${makedepend_folder_name}"
 
       xbb_activate
@@ -4140,7 +4140,7 @@ function do_patchelf()
     download_and_extract "${patchelf_url}" "${patchelf_archive}" "${patchelf_folder_name}"
 
     (
-      mkdir -p "${BUILD_FOLDER_PATH}/${patchelf_folder_name}"
+      mkdir -pv "${BUILD_FOLDER_PATH}/${patchelf_folder_name}"
       cd "${BUILD_FOLDER_PATH}/${patchelf_folder_name}"
 
       xbb_activate
@@ -4231,7 +4231,7 @@ function do_dos2unix()
     download_and_extract "${dos2unix_url}" "${dos2unix_archive}" "${dos2unix_folder_name}"
 
     (
-      mkdir -p "${BUILD_FOLDER_PATH}/${dos2unix_folder_name}"
+      mkdir -pv "${BUILD_FOLDER_PATH}/${dos2unix_folder_name}"
       cd "${BUILD_FOLDER_PATH}/${dos2unix_folder_name}"
 
       xbb_activate
@@ -4398,7 +4398,7 @@ function do_python2()
     download_and_extract "${python2_url}" "${python2_archive}" "${python2_folder_name}"
 
     (
-      mkdir -p "${BUILD_FOLDER_PATH}/${python2_folder_name}"
+      mkdir -pv "${BUILD_FOLDER_PATH}/${python2_folder_name}"
       cd "${BUILD_FOLDER_PATH}/${python2_folder_name}"
 
       xbb_activate
@@ -4546,7 +4546,7 @@ function do_python3()
     download_and_extract "${python3_url}" "${python3_archive}" "${python3_folder_name}"
 
     (
-      mkdir -p "${BUILD_FOLDER_PATH}/${python3_folder_name}"
+      mkdir -pv "${BUILD_FOLDER_PATH}/${python3_folder_name}"
       cd "${BUILD_FOLDER_PATH}/${python3_folder_name}"
 
       xbb_activate
@@ -4729,7 +4729,7 @@ function do_scons()
         --optimize=1 \
         --standard-lib \
 
-      mkdir -p "${INSTALL_FOLDER_PATH}/share/man/man1"
+      mkdir -pv "${INSTALL_FOLDER_PATH}/share/man/man1"
       mv -v "${INSTALL_FOLDER_PATH}/man/man1"/* "${INSTALL_FOLDER_PATH}/share/man/man1"
       rm -rv "${INSTALL_FOLDER_PATH}/man/man1"
 
@@ -5227,7 +5227,7 @@ function do_gnupg()
     download_and_extract "${gnupg_url}" "${gnupg_archive}" "${gnupg_folder_name}"
 
     (
-      mkdir -p "${BUILD_FOLDER_PATH}/${gnupg_folder_name}"
+      mkdir -pv "${BUILD_FOLDER_PATH}/${gnupg_folder_name}"
       cd "${BUILD_FOLDER_PATH}/${gnupg_folder_name}"
 
       xbb_activate
@@ -5341,7 +5341,7 @@ function do_ant()
         echo "Installing ant..."
 
         rm -rf "${INSTALL_FOLDER_PATH}/share/ant"
-        mkdir -p "${INSTALL_FOLDER_PATH}/share/ant"
+        mkdir -pv "${INSTALL_FOLDER_PATH}/share/ant"
 
         cp -R -v * "${INSTALL_FOLDER_PATH}/share/ant"
 
@@ -5412,7 +5412,7 @@ function do_maven()
         echo "Installing maven..."
 
         rm -rf "${INSTALL_FOLDER_PATH}/share/maven"
-        mkdir -p "${INSTALL_FOLDER_PATH}/share/maven"
+        mkdir -pv "${INSTALL_FOLDER_PATH}/share/maven"
 
         cp -R -v * "${INSTALL_FOLDER_PATH}/share/maven"
 
@@ -5570,7 +5570,7 @@ function do_tcl()
     download_and_extract "${tcl_url}" "${tcl_archive}" "${tcl_folder_name}"
 
     (
-      mkdir -p "${BUILD_FOLDER_PATH}/${tcl_folder_name}"
+      mkdir -pv "${BUILD_FOLDER_PATH}/${tcl_folder_name}"
       cd "${BUILD_FOLDER_PATH}/${tcl_folder_name}"
 
       xbb_activate
@@ -5664,7 +5664,7 @@ function do_guile()
     download_and_extract "${guile_url}" "${guile_archive}" "${guile_folder_name}"
 
     (
-      mkdir -p "${BUILD_FOLDER_PATH}/${guile_folder_name}"
+      mkdir -pv "${BUILD_FOLDER_PATH}/${guile_folder_name}"
       cd "${BUILD_FOLDER_PATH}/${guile_folder_name}"
 
       xbb_activate
@@ -6005,7 +6005,7 @@ function do_autogen()
     mkdir -pv "${LOGS_FOLDER_PATH}/${autogen_folder_name}"
 
     (
-      mkdir -p "${BUILD_FOLDER_PATH}/${autogen_folder_name}"
+      mkdir -pv "${BUILD_FOLDER_PATH}/${autogen_folder_name}"
       cd "${BUILD_FOLDER_PATH}/${autogen_folder_name}"
 
       xbb_activate

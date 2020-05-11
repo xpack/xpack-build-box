@@ -19,14 +19,14 @@ on how to use them.
 
 ```console
 $ rm -rf "${HOME}/tmp/amd64-ubu16-rootfs"
-$ mkdir -p "${HOME}/tmp/amd64-ubu16-rootfs"
+$ mkdir -pv "${HOME}/tmp/amd64-ubu16-rootfs"
 $ sudo debootstrap --verbose --arch=amd64 --variant=minbase xenial "${HOME}/tmp/amd64-ubu16-rootfs" http://archive.ubuntu.com/ubuntu/
 $ sudo tar cJvf "${HOME}/tmp/amd64-ubu16-rootfs.xz" -C "${HOME}/tmp/amd64-ubu16-rootfs" .
 ```
 
 ```console
 $ rm -rf "${HOME}/tmp/i386-ubu16-rootfs"
-$ mkdir -p "${HOME}/tmp/i386-ubu16-rootfs"
+$ mkdir -pv "${HOME}/tmp/i386-ubu16-rootfs"
 $ sudo debootstrap --verbose --arch=i386 --variant=minbase xenial "${HOME}/tmp/i386-ubu16-rootfs" http://archive.ubuntu.com/ubuntu/
 $ sudo tar cJvf "${HOME}/tmp/i386-ubu16-rootfs.xz" -C "${HOME}/tmp/i386-ubu16-rootfs" .
 ```
@@ -36,14 +36,14 @@ from the ports server http://ports.ubuntu.com/.
 
 ```console
 $ sudo rm -rf "${HOME}/tmp/arm64v8-ubu16-rootfs"
-$ mkdir -p "${HOME}/tmp/arm64v8-ubu16-rootfs"
+$ mkdir -pv "${HOME}/tmp/arm64v8-ubu16-rootfs"
 $ sudo debootstrap --verbose --arch=arm64 --variant=minbase xenial "${HOME}/tmp/arm64v8-ubu16-rootfs" http://ports.ubuntu.com/
 $ sudo tar cJvf "${HOME}/tmp/arm64v8-ubu16-rootfs.xz" -C "${HOME}/tmp/arm64v8-ubu16-rootfs" .
 ```
 
 ```console
 $ sudo rm -rf "${HOME}/tmp/arm32v7-ubu16-rootfs"
-$ mkdir -p "${HOME}/tmp/arm32v7-ubu16-rootfs"
+$ mkdir -pv "${HOME}/tmp/arm32v7-ubu16-rootfs"
 $ sudo debootstrap --verbose --arch=armhf --variant=minbase xenial "${HOME}/tmp/arm32v7-ubu16-rootfs" http://ports.ubuntu.com/
 $ sudo tar cJvf "${HOME}/tmp/arm32v7-ubu16-rootfs.xz" -C "${HOME}/tmp/arm32v7-ubu16-rootfs" .
 ```
