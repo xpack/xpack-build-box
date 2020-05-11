@@ -6143,4 +6143,134 @@ function test_autogen()
   )  
 }
 
+function do_bash() 
+{
+  # https://www.gnu.org/software/bash/
+  # https://ftp.gnu.org/gnu/bash/
+  # https://ftp.gnu.org/gnu/bash/bash-5.0.tar.gz
+
+  # https://archlinuxarm.org/packages/aarch64/bash/files/PKGBUILD
+
+  # 2018-01-30, "4.4.18"
+  # 2019-01-07, "5.0"
+
+  local bash_version="$1"
+
+  local bash_src_folder_name="bash-${bash_version}"
+
+  local bash_archive="${bash_src_folder_name}.tar.gz"
+  local bash_url="https://ftp.gnu.org/gnu/bash/${bash_archive}"
+
+  local bash_folder_name="${bash_src_folder_name}"
+
+  local bash_stamp_file_path="${STAMPS_FOLDER_PATH}/stamp-${bash_folder_name}-installed"
+  if [ ! -f "${bash_stamp_file_path}" -o ! -d "${BUILD_FOLDER_PATH}/${bash_folder_name}" ]
+  then
+
+    cd "${SOURCES_FOLDER_PATH}"
+
+    download_and_extract "${bash_url}" "${bash_archive}" "${bash_src_folder_name}"
+
+    mkdir -pv "${LOGS_FOLDER_PATH}/${bash_folder_name}"
+
+    (
+      mkdir -pv "${BUILD_FOLDER_PATH}/${bash_folder_name}"
+      cd "${BUILD_FOLDER_PATH}/${bash_folder_name}"
+
+      xbb_activate
+      xbb_activate_installed_dev
+
+      CPPFLAGS="${XBB_CPPFLAGS}"
+      CFLAGS="${XBB_CFLAGS_NO_W}"
+      CXXFLAGS="${XBB_CXXFLAGS_NO_W}"
+      LDFLAGS="${XBB_LDFLAGS_APP_STATIC_GCC}"
+
+      # Use Apple GCC, since with GNU GCC it fails with some undefined symbols.
+      if false # is_darwin
+      then
+        # Undefined symbols for architecture x86_64:
+        # "_rpl_fchownat", referenced from:
+        export CC=clang
+        export CXX=clang++
+      fi
+
+      export CPPFLAGS
+      export CFLAGS
+      export CXXFLAGS
+      export LDFLAGS
+
+      env | sort
+
+      if [ ! -f "config.status" ]
+      then
+        (
+          echo
+          echo "Running bash configure..."
+
+          bash "${SOURCES_FOLDER_PATH}/${bash_src_folder_name}/configure" --help
+
+          config_options=()
+          config_options+=("--prefix=${INSTALL_FOLDER_PATH}")
+
+          config_options+=("--with-curses")
+          config_options+=("--with-installed-readline")
+          config_options+=("--enable-readline")
+
+          bash ${DEBUG} "${SOURCES_FOLDER_PATH}/${bash_src_folder_name}/configure" \
+            ${config_options[@]}
+
+          cp "config.log" "${LOGS_FOLDER_PATH}/${bash_folder_name}/config-log.txt"
+        ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${bash_folder_name}/configure-output.txt"
+      fi
+
+      (
+        echo
+        echo "Running bash make..."
+
+        # Build.
+        make -j ${JOBS}
+
+        # make check
+
+        # make install-strip
+        make install
+
+        show_libs "${INSTALL_FOLDER_PATH}/bin/bash"
+
+      ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${bash_folder_name}/make-output.txt"
+    )
+
+    (
+      test_bash
+    ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${bash_folder_name}/test-output.txt"
+
+    hash -r
+
+    touch "${bash_stamp_file_path}"
+
+  else
+    echo "Component bash already installed."
+  fi
+
+  test_functions+=("test_bash")
+}
+
+function test_bash()
+{
+  (
+    xbb_activate_installed_bin
+
+    echo
+    echo "Testing if bash binaries start properly..."
+
+    echo
+    run_app "${INSTALL_FOLDER_PATH}/bin/bash" --version
+
+    echo
+    echo "Testing if bash binaries display help..."
+
+    run_app "${INSTALL_FOLDER_PATH}/bin/bash" --help
+  ) 
+}
+
 # -----------------------------------------------------------------------------
