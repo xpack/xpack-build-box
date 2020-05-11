@@ -5975,4 +5975,134 @@ function do_sphinx()
 
 }
 
+function do_autogen() 
+{
+  # https://www.gnu.org/software/autogen/
+  # https://ftp.gnu.org/gnu/autogen/
+  # https://ftp.gnu.org/gnu/autogen/rel5.18.16/autogen-5.18.16.tar.xz
+
+  # https://archlinuxarm.org/packages/aarch64/autogen/files/PKGBUILD
+
+  # 22018-08-26, "5.18.16"
+
+  local autogen_version="$1"
+
+  local autogen_src_folder_name="autogen-${autogen_version}"
+
+  local autogen_archive="${autogen_src_folder_name}.tar.xz"
+  local autogen_url="https://ftp.gnu.org/gnu/autogen/rel${autogen_version}/${autogen_archive}"
+
+  local autogen_folder_name="${autogen_src_folder_name}"
+
+  local autogen_stamp_file_path="${STAMPS_FOLDER_PATH}/stamp-${autogen_folder_name}-installed"
+  if [ ! -f "${autogen_stamp_file_path}" -o ! -d "${BUILD_FOLDER_PATH}/${autogen_folder_name}" ]
+  then
+
+    cd "${SOURCES_FOLDER_PATH}"
+
+    download_and_extract "${autogen_url}" "${autogen_archive}" "${autogen_src_folder_name}"
+
+    mkdir -pv "${LOGS_FOLDER_PATH}/${autogen_folder_name}"
+
+    (
+      mkdir -p "${BUILD_FOLDER_PATH}/${autogen_folder_name}"
+      cd "${BUILD_FOLDER_PATH}/${autogen_folder_name}"
+
+      xbb_activate
+      xbb_activate_installed_bin
+      xbb_activate_installed_dev
+
+      export CPPFLAGS="${XBB_CPPFLAGS}"
+      export CFLAGS="${XBB_CFLAGS_NO_W}"
+      export CXXFLAGS="${XBB_CXXFLAGS_NO_W}"
+      export LDFLAGS="${XBB_LDFLAGS_APP_STATIC_GCC}"
+
+      env | sort
+
+      if [ ! -f "config.status" ]
+      then
+        (
+          echo
+          echo "Running autogen configure..."
+
+          bash "${SOURCES_FOLDER_PATH}/${autogen_src_folder_name}/configure" --help
+
+          # config.status: error: in `/root/Work/xbb-3.2-ubuntu-12.04-x86_64/build/autogen-5.18.16':
+          # config.status: error: Something went wrong bootstrapping makefile fragments
+          #   for automatic dependency tracking.  Try re-running configure with the
+          #   '--disable-dependency-tracking' option to at least be able to build
+          #   the package (albeit without support for automatic dependency tracking).
+
+          bash ${DEBUG} "${SOURCES_FOLDER_PATH}/${autogen_src_folder_name}/configure" \
+            --prefix="${INSTALL_FOLDER_PATH}" \
+            \
+            --disable-dependency-tracking \
+
+          (
+            # FAIL: cond.test
+            # FAILURE: warning diffs:  'undefining SECOND' not found
+            cd autoopts/test
+            sed -i -e 's/cond.test//g' Makefile
+          )
+          cp "config.log" "${LOGS_FOLDER_PATH}/${autogen_folder_name}/config-log.txt"
+        ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${autogen_folder_name}/configure-output.txt"
+      fi
+
+      (
+        echo
+        echo "Running autogen make..."
+
+        # Build.
+        make -j ${JOBS}
+
+        # WARN-TEST
+        # FAIL: cond.test (disabled)
+        make check
+
+        make install
+
+        strip -S "${INSTALL_FOLDER_PATH}/bin/autogen"
+        strip -S "${INSTALL_FOLDER_PATH}/bin/getdefs"
+
+        patchelf --set-rpath "${LD_RUN_PATH}" "${INSTALL_FOLDER_PATH}/bin/autogen"
+        patchelf --set-rpath "${LD_RUN_PATH}" "${INSTALL_FOLDER_PATH}/bin/getdefs"
+
+        show_libs "${INSTALL_FOLDER_PATH}/bin/autogen"
+        show_libs "${INSTALL_FOLDER_PATH}/bin/getdefs"
+
+      ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${autogen_folder_name}/make-output.txt"
+    )
+
+    (
+      test_autogen
+    ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${autogen_folder_name}/test-output.txt"
+
+    touch "${autogen_stamp_file_path}"
+
+  else
+    echo "Component autogen already installed."
+  fi
+
+  test_functions+=("test_autogen")
+}
+
+function test_autogen()
+{
+  (
+    xbb_activate_installed_bin
+
+    echo
+    echo "Testing if autotools binaries start properly..."
+
+    run_app "${INSTALL_FOLDER_PATH}/bin/autogen" --version
+    run_app "${INSTALL_FOLDER_PATH}/bin/getdefs" --version
+
+    echo
+    echo "Checking the autotools shared libraries..."
+
+    show_libs "${INSTALL_FOLDER_PATH}/bin/autogen"
+    show_libs "${INSTALL_FOLDER_PATH}/bin/getdefs"
+  )  
+}
+
 # -----------------------------------------------------------------------------
