@@ -106,7 +106,7 @@ $ chmod -R -w "${HOME}/opt/xbb-bootstrap"
 $ chmod -R -w "${HOME}/opt/xbb"
 ```
 
-### How to use?
+### How to use
 
 The recommended use is similar to all other XBBs:
 

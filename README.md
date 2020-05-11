@@ -81,7 +81,7 @@ In this simple configuration, the builds run with root permissions; with
 more elaborate configurations it is possible to start the Docker images
 with user rights, but they are beyound the scope of this document.
 
-## How to use the XBB tools?
+## How to use the XBB tools
 
 Both on GNU/Linux and macOS, the XBB tools are installed in separate
 folders, and are fully distinct from the system tools.

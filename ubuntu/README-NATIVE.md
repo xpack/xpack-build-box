@@ -17,7 +17,7 @@ The current procedure was tested on an Ubuntu 18 LTS 64-bit.
 For virtual machines, to keep the space requirements low, preferably
 install a **minimal** system (select this during the install).
 
-### How to install?
+### How to install
 
 ```console
 $ rm -rf "${HOME}/Downloads/xpack-build-box.git"
