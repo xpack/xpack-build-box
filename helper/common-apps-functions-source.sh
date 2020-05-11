@@ -3090,15 +3090,13 @@ function do_gettext()
         make install
 
         show_libs "${INSTALL_FOLDER_PATH}/bin/gettext"
+        show_libs "${INSTALL_FOLDER_PATH}/bin/msgcmp"
 
       ) 2>&1 | tee "${LOGS_FOLDER_PATH}/make-gettext-output.txt"
     )
 
     (
-      xbb_activate_installed_bin
-
-      echo
-      run_app "${INSTALL_FOLDER_PATH}/bin/gettext" --version
+      test_gettext
     ) 2>&1 | tee "${LOGS_FOLDER_PATH}/test-gettext-output.txt"
 
     hash -r
@@ -3108,6 +3106,41 @@ function do_gettext()
   else
     echo "Component gettext already installed."
   fi
+
+  test_functions+=("test_gettext")
+}
+
+function test_gettext()
+{
+  (
+    xbb_activate_installed_bin
+
+    echo
+    run_app "${INSTALL_FOLDER_PATH}/bin/gettext" --version
+
+    run_app "${INSTALL_FOLDER_PATH}/bin/msgcmp" --version
+    run_app "${INSTALL_FOLDER_PATH}/bin/msgfmt" --version
+    run_app "${INSTALL_FOLDER_PATH}/bin/msgmerge" --version
+    run_app "${INSTALL_FOLDER_PATH}/bin/msgunfmt" --version
+    run_app "${INSTALL_FOLDER_PATH}/bin/xgettext" --version
+    run_app "${INSTALL_FOLDER_PATH}/bin/msgattrib" --version
+    run_app "${INSTALL_FOLDER_PATH}/bin/msgcat" --version
+    run_app "${INSTALL_FOLDER_PATH}/bin/msgcomm" --version
+    run_app "${INSTALL_FOLDER_PATH}/bin/msgconv" --version
+    run_app "${INSTALL_FOLDER_PATH}/bin/msgen" --version
+    run_app "${INSTALL_FOLDER_PATH}/bin/msgexec" --version
+    run_app "${INSTALL_FOLDER_PATH}/bin/msgfilter" --version
+    run_app "${INSTALL_FOLDER_PATH}/bin/msggrep" --version
+    run_app "${INSTALL_FOLDER_PATH}/bin/msginit" --version
+    run_app "${INSTALL_FOLDER_PATH}/bin/msguniq" --version
+    run_app "${INSTALL_FOLDER_PATH}/bin/recode-sr-latin" --version
+
+    run_app "${INSTALL_FOLDER_PATH}/bin/msguniq" --version
+
+    show_libs "$(realpath ${INSTALL_FOLDER_PATH}/lib/libgettextlib.so)"
+    show_libs "$(realpath ${INSTALL_FOLDER_PATH}/lib/libgettextpo.so)"
+    show_libs "$(realpath ${INSTALL_FOLDER_PATH}/lib/libgettextsrc.so)"
+  )
 }
 
 function do_patch() 
