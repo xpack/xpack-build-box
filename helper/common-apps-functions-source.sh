@@ -568,6 +568,20 @@ function test_native_binutils()
     run_app "${NATIVE_BINUTILS_INSTALL_FOLDER_PATH}/bin/strip" --version
 
     echo
+    echo "Testing if binutils binaries display help..."
+
+    run_app "${NATIVE_BINUTILS_INSTALL_FOLDER_PATH}/bin/ar" --help
+    run_app "${NATIVE_BINUTILS_INSTALL_FOLDER_PATH}/bin/as" --help
+    run_app "${NATIVE_BINUTILS_INSTALL_FOLDER_PATH}/bin/ld" --help
+    run_app "${NATIVE_BINUTILS_INSTALL_FOLDER_PATH}/bin/nm" --help
+    run_app "${NATIVE_BINUTILS_INSTALL_FOLDER_PATH}/bin/objcopy" --help
+    run_app "${NATIVE_BINUTILS_INSTALL_FOLDER_PATH}/bin/objdump" --help
+    run_app "${NATIVE_BINUTILS_INSTALL_FOLDER_PATH}/bin/ranlib" --help
+    run_app "${NATIVE_BINUTILS_INSTALL_FOLDER_PATH}/bin/size" --help
+    run_app "${NATIVE_BINUTILS_INSTALL_FOLDER_PATH}/bin/strings" --help
+    run_app "${NATIVE_BINUTILS_INSTALL_FOLDER_PATH}/bin/strip" --help
+
+    echo
     echo "Checking the binutils shared libraries..."
 
     show_libs "${NATIVE_BINUTILS_INSTALL_FOLDER_PATH}/bin/ar" 
