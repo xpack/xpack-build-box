@@ -5830,10 +5830,7 @@ function do_guile()
     )
 
     (
-      xbb_activate_installed_bin
-
-      echo
-      run_app "${INSTALL_FOLDER_PATH}/bin/guile" --version
+      test_guile
     ) 2>&1 | tee "${LOGS_FOLDER_PATH}/test-guile-output.txt"
 
     hash -r
@@ -5843,6 +5840,18 @@ function do_guile()
   else
     echo "Component guile already installed."
   fi
+
+  test_functions+=("test_guile")
+}
+
+function test_guile()
+{
+  (
+    xbb_activate_installed_bin
+
+    echo
+    run_app "${INSTALL_FOLDER_PATH}/bin/guile" --version
+  )  
 }
 
 function do_rhash() 
