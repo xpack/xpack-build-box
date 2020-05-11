@@ -6128,10 +6128,18 @@ function test_autogen()
     run_app "${INSTALL_FOLDER_PATH}/bin/getdefs" --version
 
     echo
-    echo "Checking the autotools shared libraries..."
+    echo "Testing if autotools binaries display help..."
 
-    show_libs "${INSTALL_FOLDER_PATH}/bin/autogen"
-    show_libs "${INSTALL_FOLDER_PATH}/bin/getdefs"
+    run_app "${INSTALL_FOLDER_PATH}/bin/autogen" --help
+
+    # getdefs error:  invalid option descriptor for version
+    run_app "${INSTALL_FOLDER_PATH}/bin/getdefs" --help || true
+
+    # echo
+    # echo "Checking the autotools shared libraries..."
+
+    # show_libs "${INSTALL_FOLDER_PATH}/bin/autogen"
+    # show_libs "${INSTALL_FOLDER_PATH}/bin/getdefs"
   )  
 }
 
