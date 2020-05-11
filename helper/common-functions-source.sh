@@ -989,10 +989,10 @@ function show_libs()
 
 # -----------------------------------------------------------------------------
 
-function do_strip_debug_libs() 
+function strip_static_objects() 
 {
   echo
-  echo "Stripping debug info from libraries..."
+  echo "Stripping debug info from static libraries and object files..."
   echo
 
   if [ "${HOST_UNAME}" == "Linux" ]
@@ -1001,53 +1001,36 @@ function do_strip_debug_libs()
       cd "${INSTALL_FOLDER_PATH}"
 
       xbb_activate
+      xbb_activate_installed_bin
 
-      local strip
-      if [ -x "${XBB_FOLDER_PATH}/usr/bin/strip" ]
-      then
-        strip="${XBB_FOLDER_PATH}/usr/bin/strip"
-      elif [ -x "${XBB_BOOTSTRAP_FOLDER_PATH}/usr/bin/strip" ]
-      then
-        strip="${XBB_BOOTSTRAP_FOLDER_PATH}/usr/bin/strip"
-      else
-        strip="strip"
-      fi
-
-      local ranlib
-      if [ -x "${XBB_FOLDER_PATH}/usr/bin/ranlib" ]
-      then
-        ranlib="${XBB_FOLDER_PATH}/usr/bin/ranlib"
-      elif [ -x "${XBB_BOOTSTRAP_FOLDER_PATH}/usr/bin/ranlib" ]
-      then
-        ranlib="${XBB_BOOTSTRAP_FOLDER_PATH}/usr/bin/ranlib"
-      else
-        ranlib="ranlib"
-      fi
+      local strip="$(which strip)"
+      local ranlib="$(which ranlib)"
 
       set +e
-      # -type f to skip links.
-      find lib* usr/lib* \
-        -type f \
-        -name '*.so' \
-        -print \
-        -exec chmod +w {} \; \
-        -exec "${strip}" --strip-debug {} \;
-      find lib* usr/lib* \
-        -type f \
-        -name '*.so.*' \
-        -print \
-        -exec chmod +w {} \; \
-        -exec "${strip}" --strip-debug {} \;
 
       # Should we skip mingw libraries?
       # -not -path 'lib/gcc/*-w64-mingw32/*'  \
-      find lib* usr/lib* \
+      find * \
         -type f \
-        -name '*.a' \
+        \( -name '*.a' -o -name '*.o' \) \
+        -not -path '*mingw*' \
         -print \
         -exec chmod +w {} \; \
         -exec "${strip}" --strip-debug {} \; \
         -exec "${ranlib}" {} \;
+
+      if [ "${IS_BOOTSTRAP}" != "y" ]
+      then
+        find * \
+          -type f \
+          \( -name '*.a' -o -name '*.o' \) \
+          -path '*mingw*' \
+          -print \
+          -exec chmod +w {} \; \
+          -exec "${MINGW_TARGET}-strip" --strip-debug {} \;
+
+      fi
+
       set -e
     )
   fi

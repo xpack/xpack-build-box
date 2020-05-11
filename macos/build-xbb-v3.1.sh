@@ -91,7 +91,7 @@ function xbb_activate()
 
 do_build_versions
 
-do_strip_debug_libs
+strip_static_objects
 
 # -----------------------------------------------------------------------------
 

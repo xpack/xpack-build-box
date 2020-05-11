@@ -403,7 +403,7 @@ function do_build_versions()
       # configure: WARNING: No sound system was found. Windows applications will be silent.
     fi
 
-    do_strip_debug_libs
+    strip_static_objects
 
     patch_elf_rpath
 
@@ -738,7 +738,7 @@ function do_build_versions()
       # configure: WARNING: No sound system was found. Windows applications will be silent.
     fi
 
-    do_strip_debug_libs
+    strip_static_objects
 
     patch_elf_rpath
 

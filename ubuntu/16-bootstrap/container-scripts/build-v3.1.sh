@@ -85,7 +85,7 @@ echo "$(uname) ${HOST_MACHINE} XBB bootstrap build script started..."
 
 do_build_versions
 
-do_strip_debug_libs
+strip_static_objects
 
 patch_elf_rpath
 

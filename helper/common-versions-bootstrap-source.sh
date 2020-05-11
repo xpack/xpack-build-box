@@ -229,7 +229,7 @@ function do_build_versions()
 
     # From here on, a reasonable C++11 is available.
 
-    do_strip_debug_libs
+    strip_static_objects
 
     patch_elf_rpath
 
@@ -416,7 +416,7 @@ function do_build_versions()
 
     # From here on, a reasonable C++11 is available.
 
-    do_strip_debug_libs
+    strip_static_objects
 
     patch_elf_rpath
 
