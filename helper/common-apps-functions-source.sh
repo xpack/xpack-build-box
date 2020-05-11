@@ -3981,6 +3981,8 @@ function do_perl()
         # make install-strip
         make install
 
+        strip -S "${INSTALL_FOLDER_PATH}/bin/perl"
+
         # `make` ignores any environment RPATH and fills in the 
         # actual folder path to libperl.so.
         local rpath="$(patchelf --print-rpath "${INSTALL_FOLDER_PATH}/bin/perl")"
