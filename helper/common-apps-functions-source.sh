@@ -963,6 +963,7 @@ function test_native_gcc()
     echo
     echo "Showing configurations..."
 
+    run_app "${INSTALL_FOLDER_PATH}/usr/bin/gcc${XBB_GCC_SUFFIX}" --help
     run_app "${INSTALL_FOLDER_PATH}/usr/bin/gcc${XBB_GCC_SUFFIX}" -v
     run_app "${INSTALL_FOLDER_PATH}/usr/bin/gcc${XBB_GCC_SUFFIX}" -dumpversion
     run_app "${INSTALL_FOLDER_PATH}/usr/bin/gcc${XBB_GCC_SUFFIX}" -dumpmachine
@@ -974,8 +975,23 @@ function test_native_gcc()
     run_app "${INSTALL_FOLDER_PATH}/usr/bin/gcc${XBB_GCC_SUFFIX}" -print-multi-os-directory
     run_app "${INSTALL_FOLDER_PATH}/usr/bin/gcc${XBB_GCC_SUFFIX}" -print-sysroot
     # run_app "${INSTALL_FOLDER_PATH}/usr/bin/gcc${XBB_GCC_SUFFIX}" -print-sysroot-headers-suffix
-    run_app "${INSTALL_FOLDER_PATH}/usr/bin/gcc${XBB_GCC_SUFFIX}" -print-file-name=libstdc++.so
+    run_app "${INSTALL_FOLDER_PATH}/usr/bin/gcc${XBB_GCC_SUFFIX}" -print-file-name=libgcc_s.so
     run_app "${INSTALL_FOLDER_PATH}/usr/bin/gcc${XBB_GCC_SUFFIX}" -print-prog-name=cc1
+
+    run_app "${INSTALL_FOLDER_PATH}/usr/bin/g++${XBB_GCC_SUFFIX}" --help
+    run_app "${INSTALL_FOLDER_PATH}/usr/bin/g++${XBB_GCC_SUFFIX}" -v
+    run_app "${INSTALL_FOLDER_PATH}/usr/bin/g++${XBB_GCC_SUFFIX}" -dumpversion
+    run_app "${INSTALL_FOLDER_PATH}/usr/bin/g++${XBB_GCC_SUFFIX}" -dumpmachine
+
+    run_app "${INSTALL_FOLDER_PATH}/usr/bin/g++${XBB_GCC_SUFFIX}" -print-search-dirs
+    run_app "${INSTALL_FOLDER_PATH}/usr/bin/g++${XBB_GCC_SUFFIX}" -print-libgcc-file-name
+    run_app "${INSTALL_FOLDER_PATH}/usr/bin/g++${XBB_GCC_SUFFIX}" -print-multi-directory
+    run_app "${INSTALL_FOLDER_PATH}/usr/bin/g++${XBB_GCC_SUFFIX}" -print-multi-lib
+    run_app "${INSTALL_FOLDER_PATH}/usr/bin/g++${XBB_GCC_SUFFIX}" -print-multi-os-directory
+    run_app "${INSTALL_FOLDER_PATH}/usr/bin/g++${XBB_GCC_SUFFIX}" -print-sysroot
+    # run_app "${INSTALL_FOLDER_PATH}/usr/bin/g++${XBB_GCC_SUFFIX}" -print-sysroot-headers-suffix
+    run_app "${INSTALL_FOLDER_PATH}/usr/bin/g++${XBB_GCC_SUFFIX}" -print-file-name=libstdc++.so
+    run_app "${INSTALL_FOLDER_PATH}/usr/bin/g++${XBB_GCC_SUFFIX}" -print-prog-name=cc1plus
 
     echo
     echo "Testing if gcc compiles simple Hello programs..."
