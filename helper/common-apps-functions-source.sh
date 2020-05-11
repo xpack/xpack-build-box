@@ -4099,10 +4099,7 @@ function do_perl()
     )
 
     (
-      xbb_activate_installed_bin
-
-      echo
-      run_app "${INSTALL_FOLDER_PATH}/bin/perl" --version
+      test_perl
     ) 2>&1 | tee "${LOGS_FOLDER_PATH}/test-perl-output.txt"
 
     hash -r
@@ -4112,6 +4109,18 @@ function do_perl()
   else
     echo "Component perl already installed."
   fi
+
+  test_functions+=("test_perl")
+}
+
+function test_perl()
+{
+  (
+    xbb_activate_installed_bin
+
+    echo
+    run_app "${INSTALL_FOLDER_PATH}/bin/perl" --version
+  )
 }
 
 function do_makedepend() 
