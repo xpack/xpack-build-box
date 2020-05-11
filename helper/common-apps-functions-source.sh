@@ -5711,7 +5711,13 @@ function do_guile()
         # FAIL: test-out-of-memory (disabled)
         make check
 
-        make install-strip
+        # Do not strip, since this interferes with patchelf.
+        # make install-strip
+        make install
+
+        strip -S "${INSTALL_FOLDER_PATH}/bin/guile"
+
+        patchelf --set-rpath "${LD_RUN_PATH}" "${INSTALL_FOLDER_PATH}/bin/guile"
 
         show_libs "${INSTALL_FOLDER_PATH}/bin/guile"
 
