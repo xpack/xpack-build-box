@@ -3613,8 +3613,6 @@ function do_make()
           make -k check
         fi
 
-
-        show_libs "${INSTALL_FOLDER_PATH}/bin/make"
         # make install-strip
         make install
 
@@ -3623,6 +3621,9 @@ function do_make()
         cd "${INSTALL_FOLDER_PATH}/bin"
         rm -f gmake
         ln -s -v make gmake
+
+        show_libs "${INSTALL_FOLDER_PATH}/bin/make"
+
       ) 2>&1 | tee "${LOGS_FOLDER_PATH}/make-make-output.txt"
     )
 
