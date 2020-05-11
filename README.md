@@ -46,12 +46,12 @@ The Intel images are based on Ubuntu 12.04 (ldd 2.15), and the Arm images are
 based on Ubuntu 16.04 (ldd 2.23); the resulting GNU/Linux binaries
 should run on most modern distributions.
 
-The Windows executables are created with **mingw-w64 v7.0.0** and the
+The Windows executables are created with **mingw-w64 v7.0.0** and
 **mingw-w64 GCC 9.3**, available from the same Docker images; and should
 run on Windows 10 and most modern Windows versions.
 
 The macOS binaries are generated on a macOS 10.10.5, plus a set of new
-GNU tools, installed in a separate folder. 
+GNU tools, installed in a separate folder.
 
 ### TeX
 
