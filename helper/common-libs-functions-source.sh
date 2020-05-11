@@ -57,7 +57,7 @@ function do_zlib()
       export CPPFLAGS="${XBB_CPPFLAGS}" 
       export CFLAGS="${XBB_CFLAGS_NO_W} -fPIC"
       export CXXFLAGS="${XBB_CXXFLAGS_NO_W}"
-      export LDFLAGS="${XBB_LDFLAGS_LIB_STATIC_GCC}"
+      export LDFLAGS="${XBB_LDFLAGS_LIB}"
 
       env | sort
 
@@ -152,7 +152,7 @@ function do_gmp()
       export CXXFLAGS="${XBB_CXXFLAGS_NO_W}"
 
       # Static fails one cxx test (t-misc) on Intel 64
-      # export LDFLAGS="${XBB_LDFLAGS_LIB_STATIC_GCC}"
+      # export LDFLAGS="${XBB_LDFLAGS_LIB}"
       export LDFLAGS="${XBB_LDFLAGS_LIB}"
 
       # Mandatory, it fails on 32-bits. 
@@ -260,7 +260,7 @@ function do_mpfr()
       export CPPFLAGS="${XBB_CPPFLAGS}"
       export CFLAGS="${XBB_CFLAGS_NO_W}"
       export CXXFLAGS="${XBB_CXXFLAGS_NO_W}"
-      export LDFLAGS="${XBB_LDFLAGS_LIB_STATIC_GCC}"
+      export LDFLAGS="${XBB_LDFLAGS_LIB}"
 
       env | sort
 
@@ -366,7 +366,7 @@ function do_mpc()
       export CPPFLAGS="${XBB_CPPFLAGS}"
       export CFLAGS="${XBB_CFLAGS_NO_W}"
       export CXXFLAGS="${XBB_CXXFLAGS_NO_W}"
-      export LDFLAGS="${XBB_LDFLAGS_LIB_STATIC_GCC}"
+      export LDFLAGS="${XBB_LDFLAGS_LIB}"
 
       env | sort
 
@@ -558,7 +558,7 @@ function do_nettle()
       export CPPFLAGS="${XBB_CPPFLAGS}"
       export CFLAGS="${XBB_CFLAGS_NO_W}"
       export CXXFLAGS="${XBB_CXXFLAGS_NO_W}"
-      export LDFLAGS="${XBB_LDFLAGS_LIB_STATIC_GCC}"
+      export LDFLAGS="${XBB_LDFLAGS_LIB}"
 
       env | sort
 
@@ -655,7 +655,7 @@ function do_tasn1()
       export CPPFLAGS="${XBB_CPPFLAGS}"
       export CFLAGS="${XBB_CFLAGS_NO_W}"
       export CXXFLAGS="${XBB_CXXFLAGS_NO_W}"
-      export LDFLAGS="${XBB_LDFLAGS_LIB_STATIC_GCC}"
+      export LDFLAGS="${XBB_LDFLAGS_LIB}"
 
       env | sort
 
@@ -734,7 +734,7 @@ function do_expat()
       export CPPFLAGS="${XBB_CPPFLAGS}"
       export CFLAGS="${XBB_CFLAGS_NO_W}"
       export CXXFLAGS="${XBB_CXXFLAGS_NO_W}"
-      export LDFLAGS="${XBB_LDFLAGS_LIB_STATIC_GCC}"
+      export LDFLAGS="${XBB_LDFLAGS_LIB}"
 
       env | sort
 
@@ -832,7 +832,7 @@ function do_libffi()
       export CPPFLAGS="${XBB_CPPFLAGS}"
       export CFLAGS="${XBB_CFLAGS_NO_W}"
       export CXXFLAGS="${XBB_CXXFLAGS_NO_W}"
-      export LDFLAGS="${XBB_LDFLAGS_LIB_STATIC_GCC}"
+      export LDFLAGS="${XBB_LDFLAGS_LIB}"
 
       env | sort
 
@@ -915,7 +915,7 @@ function do_libiconv()
       export CPPFLAGS="${XBB_CPPFLAGS}"
       export CFLAGS="${XBB_CFLAGS_NO_W}"
       export CXXFLAGS="${XBB_CXXFLAGS_NO_W}"
-      export LDFLAGS="${XBB_LDFLAGS_LIB_STATIC_GCC}"
+      export LDFLAGS="${XBB_LDFLAGS_LIB}"
 
       env | sort
 
@@ -997,7 +997,7 @@ function do_gnutls()
       export CPPFLAGS="${XBB_CPPFLAGS}"
       export CFLAGS="${XBB_CFLAGS_NO_W}"
       export CXXFLAGS="${XBB_CXXFLAGS_NO_W}"
-      export LDFLAGS="${XBB_LDFLAGS_LIB_STATIC_GCC}"
+      export LDFLAGS="${XBB_LDFLAGS_LIB}"
 
       if is_darwin
       then
@@ -1095,7 +1095,7 @@ function do_util_macros()
       export CPPFLAGS="${XBB_CPPFLAGS}"
       export CFLAGS="${XBB_CFLAGS_NO_W}"
       export CXXFLAGS="${XBB_CXXFLAGS_NO_W}"
-      export LDFLAGS="${XBB_LDFLAGS_LIB_STATIC_GCC}"
+      export LDFLAGS="${XBB_LDFLAGS_LIB}"
 
       env | sort
 
@@ -1170,7 +1170,7 @@ function do_xorg_xproto()
       export CPPFLAGS="${XBB_CPPFLAGS}"
       export CFLAGS="${XBB_CFLAGS_NO_W}"
       export CXXFLAGS="${XBB_CXXFLAGS_NO_W}"
-      export LDFLAGS="${XBB_LDFLAGS_LIB_STATIC_GCC}"
+      export LDFLAGS="${XBB_LDFLAGS_LIB}"
 
       env | sort
 
@@ -1253,7 +1253,7 @@ function do_libpng()
       export CPPFLAGS="${XBB_CPPFLAGS}"
       export CFLAGS="${XBB_CFLAGS_NO_W}"
       export CXXFLAGS="${XBB_CXXFLAGS_NO_W}"
-      export LDFLAGS="${XBB_LDFLAGS_LIB_STATIC_GCC}"
+      export LDFLAGS="${XBB_LDFLAGS_LIB}"
 
       env | sort
 
@@ -1333,7 +1333,7 @@ function do_libmpdec()
       export CPPFLAGS="${XBB_CPPFLAGS}"
       export CFLAGS="${XBB_CFLAGS_NO_W}"
       export CXXFLAGS="${XBB_CXXFLAGS_NO_W}"
-      export LDFLAGS="${XBB_LDFLAGS_LIB_STATIC_GCC} -v"
+      export LDFLAGS="${XBB_LDFLAGS_LIB} -v"
 
       env | sort
 
@@ -1406,7 +1406,7 @@ function do_libgpg_error()
       export CPPFLAGS="${XBB_CPPFLAGS}"
       export CFLAGS="${XBB_CFLAGS_NO_W}"
       export CXXFLAGS="${XBB_CXXFLAGS_NO_W}"
-      export LDFLAGS="${XBB_LDFLAGS_LIB_STATIC_GCC}"
+      export LDFLAGS="${XBB_LDFLAGS_LIB}"
 
       env | sort
 
@@ -1481,7 +1481,7 @@ function do_libgcrypt()
       export CPPFLAGS="${XBB_CPPFLAGS}"
       export CFLAGS="${XBB_CFLAGS_NO_W}"
       export CXXFLAGS="${XBB_CXXFLAGS_NO_W}"
-      export LDFLAGS="${XBB_LDFLAGS_LIB_STATIC_GCC}"
+      export LDFLAGS="${XBB_LDFLAGS_LIB}"
 
       env | sort
 
@@ -1579,7 +1579,7 @@ function do_libassuan()
       export CPPFLAGS="${XBB_CPPFLAGS}"
       export CFLAGS="${XBB_CFLAGS_NO_W}"
       export CXXFLAGS="${XBB_CXXFLAGS_NO_W}"
-      export LDFLAGS="${XBB_LDFLAGS_LIB_STATIC_GCC}"
+      export LDFLAGS="${XBB_LDFLAGS_LIB}"
 
       env | sort
 
@@ -1655,7 +1655,7 @@ function do_libksba()
       export CPPFLAGS="${XBB_CPPFLAGS}"
       export CFLAGS="${XBB_CFLAGS_NO_W}"
       export CXXFLAGS="${XBB_CXXFLAGS_NO_W}"
-      export LDFLAGS="${XBB_LDFLAGS_LIB_STATIC_GCC}"
+      export LDFLAGS="${XBB_LDFLAGS_LIB}"
 
       env | sort
 
@@ -1731,7 +1731,7 @@ function do_npth()
       export CPPFLAGS="${XBB_CPPFLAGS}"
       export CFLAGS="${XBB_CFLAGS_NO_W}"
       export CXXFLAGS="${XBB_CXXFLAGS_NO_W}"
-      export LDFLAGS="${XBB_LDFLAGS_LIB_STATIC_GCC}"
+      export LDFLAGS="${XBB_LDFLAGS_LIB}"
 
       if is_darwin
       then
@@ -1852,7 +1852,7 @@ function do_libxcrypt()
       export CPPFLAGS="${XBB_CPPFLAGS}"
       export CFLAGS="${XBB_CFLAGS_NO_W}"
       export CXXFLAGS="${XBB_CXXFLAGS_NO_W}"
-      export LDFLAGS="${XBB_LDFLAGS_LIB_STATIC_GCC}"
+      export LDFLAGS="${XBB_LDFLAGS_LIB}"
 
       env | sort
 
@@ -1934,7 +1934,7 @@ function do_libunistring()
       export CPPFLAGS="${XBB_CPPFLAGS}"
       export CFLAGS="${XBB_CFLAGS_NO_W}"
       export CXXFLAGS="${XBB_CXXFLAGS_NO_W}"
-      export LDFLAGS="${XBB_LDFLAGS_LIB_STATIC_GCC}"
+      export LDFLAGS="${XBB_LDFLAGS_LIB}"
 
       env | sort
 
@@ -2009,7 +2009,7 @@ function do_gc()
       export CPPFLAGS="${XBB_CPPFLAGS}"
       export CFLAGS="${XBB_CFLAGS_NO_W}"
       export CXXFLAGS="${XBB_CXXFLAGS_NO_W}"
-      export LDFLAGS="${XBB_LDFLAGS_LIB_STATIC_GCC}"
+      export LDFLAGS="${XBB_LDFLAGS_LIB}"
 
       env | sort
 
