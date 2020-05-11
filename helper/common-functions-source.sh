@@ -1074,11 +1074,11 @@ function compute_gcc_rpath()
   echo "$(IFS=":"; echo "${!paths[*]}")"
 }
 
-function check_rpath()
+function patch_elf_rpath()
 {
   (
     echo
-    echo "Checking rpath in elf files.."
+    echo "Patching rpath in elf files.."
     echo
 
     xbb_activate
@@ -1086,13 +1086,16 @@ function check_rpath()
 
 if false
 then
-    bash -x "${helper_folder_path}/check_rpath.sh" /opt/xbb/usr/libexec/gcc/x86_64-w64-mingw32/9.3.0/f951
-    # bash -x "${helper_folder_path}/check_rpath.sh" /opt/xbb/bin/wine64
+    bash -x "${helper_folder_path}/patch_elf_rpath.sh" /opt/xbb/bin/wine64
+    # bash -x "${helper_folder_path}/patch_elf_rpath.sh" /opt/xbb/bin/msgcmp
+exit 1
+    # bash -x "${helper_folder_path}/patch_elf_rpath.sh" /opt/xbb/usr/libexec/gcc/x86_64-w64-mingw32/9.3.0/f951
+    # bash -x "${helper_folder_path}/patch_elf_rpath.sh" /opt/xbb/bin/wine64
 
-    # bash -x "${helper_folder_path}/check_rpath.sh" "${INSTALL_FOLDER_PATH}/bin/msginit"
-    # bash -x "${helper_folder_path}/check_rpath.sh" "${INSTALL_FOLDER_PATH}/bin/openssl"
-    # bash "${helper_folder_path}/check_rpath.sh" "${INSTALL_FOLDER_PATH}/usr/lib64/libstdc++.so.6.0.25"
-    # bash "${helper_folder_path}/check_rpath.sh" "${INSTALL_FOLDER_PATH}/usr/bin/ld"
+    # bash -x "${helper_folder_path}/patch_elf_rpath.sh" "${INSTALL_FOLDER_PATH}/bin/msginit"
+    # bash -x "${helper_folder_path}/patch_elf_rpath.sh" "${INSTALL_FOLDER_PATH}/bin/openssl"
+    # bash "${helper_folder_path}/patch_elf_rpath.sh" "${INSTALL_FOLDER_PATH}/usr/lib64/libstdc++.so.6.0.25"
+    # bash "${helper_folder_path}/patch_elf_rpath.sh" "${INSTALL_FOLDER_PATH}/usr/bin/ld"
 else
     folders=("${INSTALL_FOLDER_PATH}/bin")
     if [ -d "${INSTALL_FOLDER_PATH}/libexec" ]
@@ -1118,13 +1121,13 @@ else
 
     find ${folders[@]} \
       -type f \
-      -exec bash ${helper_folder_path}/check_rpath.sh {} \;
+      -exec bash ${helper_folder_path}/patch_elf_rpath.sh {} \;
 
     if [ -d "${INSTALL_FOLDER_PATH}/usr" ]
     then
       find "${INSTALL_FOLDER_PATH}/usr"  \
         -type f \
-        -exec bash ${helper_folder_path}/check_rpath.sh {} \;
+        -exec bash ${helper_folder_path}/patch_elf_rpath.sh {} \;
     fi
 
     folders=("${INSTALL_FOLDER_PATH}/lib")
@@ -1136,7 +1139,7 @@ else
     find ${folders[@]}  \
       -type f \
       -name '*.so*' \
-      -exec bash ${helper_folder_path}/check_rpath.sh {} \;
+      -exec bash ${helper_folder_path}/patch_elf_rpath.sh {} \;
 fi
   ) 2>&1 | tee "${LOGS_FOLDER_PATH}/check-rpath-output.txt"
 }

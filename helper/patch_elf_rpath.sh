@@ -82,6 +82,54 @@ function is_static()
   fi
 }
 
+function is_shared()
+{
+  if [ $# -lt 1 ]
+  then
+    warning "is_static: Missing arguments"
+    exit 1
+  fi
+  local bin="$1"
+
+  # Symlinks do not match.
+  if [ -L "${bin}" ]
+  then
+    return 1
+  fi
+
+  if [ -f "${bin}" ]
+  then
+    # Return 0 (true) if found.
+    file ${bin} | egrep -q "shared object"
+  else
+    return 1
+  fi
+}
+
+function is_executable()
+{
+  if [ $# -lt 1 ]
+  then
+    warning "is_static: Missing arguments"
+    exit 1
+  fi
+  local bin="$1"
+
+  # Symlinks do not match.
+  if [ -L "${bin}" ]
+  then
+    return 1
+  fi
+
+  if [ -f "${bin}" ]
+  then
+    # Return 0 (true) if found.
+    file ${bin} | egrep -q "executable"
+  else
+    return 1
+  fi
+}
+
 function is_linux_sys_so() 
 {
   local lib_name="$1"
@@ -124,6 +172,9 @@ else
     # For the moment they are the same, but a separate glibc may
     # have a different list.
     local sys_lib_names=(\
+      "-"
+    )
+    local sys_lib_names_=(\
       libdl.so.2 \
       libc.so.6 \
       libm.so.6 \
@@ -176,7 +227,7 @@ function main()
 {
   if [ $# -lt 1 ]
   then
-    echo "Usage: check_rpath <file>"
+    echo "Usage: patch_elf_rpath <file>"
     exit 1
   fi
 
@@ -221,19 +272,12 @@ function main()
     exit 0
   fi
 
-  shlibs_names=( $shlibs )
-  found_names=()
-  found_in_system_names=()
-
   runpath="$(readelf -d "${file_path}" | egrep '(RUNPATH)' | sed -e 's|.*\[\(.*\)\].*|\1|')"
   rpath="$(readelf -d "${file_path}" | egrep '(RPATH)' | sed -e 's|.*\[\(.*\)\].*|\1|')"
-  interpreter="$(patchelf --print-interpreter "${file_path}" 2>/dev/null)"
 
   if [ -z "${runpath}${rpath}" ]
   then
-    echo "  ${lib_name} has no rpath"
     folder_paths=()
-    show_details="y"
   else
     save_ifs=${IFS}
     if [ -n "${runpath}" ]
@@ -246,7 +290,85 @@ function main()
     IFS=${save_ifs}
   fi
 
+  declare -A paths 
+
+  for path in ${folder_paths[@]}
+  do
+    # echo ${path}
+    if [[ "${path}" == \$ORIGIN* ]]
+    then
+      local subst_path=$(realpath "$(echo "${path}" | sed -e "s|\$ORIGIN|$(dirname ${file_path})|")")
+      paths+=( ["${subst_path}"]="${subst_path}" )
+    else
+      local abs_path="$(realpath "${path}")"
+      paths+=( ["${abs_path}"]="${abs_path}" )
+    fi
+  done
+
+  save_ifs=${IFS}
+  IFS=: ld_run_paths=( ${LD_RUN_PATH} )
+  IFS=${save_ifs}
+
+  for path in ${ld_run_paths[@]}
+  do
+    # echo ${path}
+    paths+=( ["${path}"]="${path}" )
+  done
+  
+  new_ld_run_paths="$(IFS=":"; echo "${!paths[*]}")"
+
+  # echo "${new_ld_run_paths}"
+
+  if [ "${new_ld_run_paths}" != "${rpath}" ]
+  then
+    echo "  * ${file_path} RPATH ${rpath} -> ${new_ld_run_paths}"
+    # https://manpages.debian.org/unstable/patchelf/patchelf.1.en.html
+    # Removes the DT_RPATH or DT_RUNPATH entry
+    patchelf --remove-rpath "${file_path}"
+    # Forces the use of the obsolete DT_RPATH
+    patchelf --force-rpath --set-rpath "${new_ld_run_paths}" "${file_path}"
+  fi
+
+  if is_shared "${file_path}"
+  then
+    : # strip --strip-debug "${file_path}"
+  elif is_executable "${file_path}"
+  then
+    # warning: allocated section `.dynsym' not in segment
+    # strip --strip-unneeded "${file_path}"
+    # Plus that apparently only --strip-debug is patchelf friendly.
+    : # strip --strip-debug "${file_path}"
+  else
+    echo "  ? $(file ${file_path})"
+    exit 1
+  fi
+
+  # readelf -d "${file_path}"  
+
+  shlibs_names=( $shlibs )
+  found_names=()
+  found_in_system_names=()
+
+  # runpath="$(readelf -d "${file_path}" | egrep '(RUNPATH)' | sed -e 's|.*\[\(.*\)\].*|\1|')"
+  rpath="$(readelf -d "${file_path}" | egrep '(RPATH)' | sed -e 's|.*\[\(.*\)\].*|\1|')"
+  interpreter="$(patchelf --print-interpreter "${file_path}" 2>/dev/null)"
+
+  if [ -z "${rpath}" ]
+  then
+    echo "  ${file_path} has no rpath"
+    folder_paths=()
+    show_details="y"
+  else
+    save_ifs=${IFS}
+    if [ -n "${rpath}" ]
+    then
+      IFS=: folder_paths=( ${rpath} )
+    fi
+    IFS=${save_ifs}
+  fi
+
   set -e
+
 
   if [ -x "/usr/share/libtool/build-aux/config.guess" ]
   then
@@ -331,13 +453,17 @@ function main()
   done
 
   set +u
-  msg="  $(basename ${file_path}) [$(IFS=" "; echo "${found_names[*]}")] [$(IFS=" "; echo "${found_in_system_names[*]}")]"
+  msg="  $(basename ${file_path})"
+  msg+=" [$(IFS=" "; echo "${found_names[*]}")]"
+  msg+=" [$(IFS=" "; echo "${found_in_system_names[*]}")]"
+  
   if [ -n "${runpath}" ]
   then
     msg+=" RUNPATH=${runpath}"
-  else
-    msg+=" RPATH=${rpath}"
   fi
+
+  msg+=" RPATH=$(IFS=":"; echo "${folder_paths[*]}")"
+
   if [ -n "${interpreter}" ]
   then
     msg+=" LD=${interpreter}"

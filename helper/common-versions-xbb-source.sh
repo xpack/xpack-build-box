@@ -405,7 +405,7 @@ function do_build_versions()
 
     do_strip_debug_libs
 
-    check_rpath
+    patch_elf_rpath
 
     run_tests
 
@@ -740,7 +740,7 @@ function do_build_versions()
 
     do_strip_debug_libs
 
-    check_rpath
+    patch_elf_rpath
 
     run_tests
 
