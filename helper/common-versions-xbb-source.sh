@@ -166,6 +166,14 @@ function do_build_versions()
     # Harmful for GCC 9.
     # do_libiconv "1.16" # "1.15"
 
+    # Required by bash.
+    do_ncurses "6.2"
+
+    # depends=('glibc' 'ncurses' 'libncursesw.so')
+    do_readline "8.0"
+    
+    # -------------------------------------------------------------------------
+
     # depends=('glibc' 'glib2 (internal)')
     do_pkg_config "0.29.2"
 
@@ -215,6 +223,9 @@ function do_build_versions()
     # depends=('glibc' 'guile')
     # PATCH!
     do_make "4.3" # "4.2.1"
+
+    # depends=('readline>=7.0' glibc ncurses)
+    do_bash "5.0"
 
     # -------------------------------------------------------------------------
     # Third party tools
@@ -478,6 +489,8 @@ function do_build_versions()
     # depends=()
     # Harmful for GCC 9.
     # do_libiconv "1.16" # "1.15"
+
+    # -------------------------------------------------------------------------
 
     # depends=('glibc' 'glib2 (internal)')
     do_pkg_config "0.29.2"
