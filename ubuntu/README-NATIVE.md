@@ -83,7 +83,7 @@ Preferably add it to the tool bar, for convenient access.
 This is an optional step. Any other Git client is perfectly ok,
 even the command line one.
 
-### How to use?
+### How to use
 
 The recommended use is similar to all other XBBs:
 
