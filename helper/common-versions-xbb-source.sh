@@ -14,7 +14,7 @@ function do_build_versions()
 
     # -------------------------------------------------------------------------
 
-    # Problematic tests
+    # Problematic tests (WARN-TEST)
     # - nettle
     # - gnutls (long)
     # - libxcrypt on darwin
@@ -33,6 +33,8 @@ function do_build_versions()
     # - guile (!)
     # - re2c (darwin)
     # - glibc
+    # - guile (1 test disabled)
+    # - autogen (1 test disabled)
 
     # -------------------------------------------------------------------------
 
@@ -210,10 +212,6 @@ function do_build_versions()
     # depends=('glibc')
     do_bison "3.5" # "3.3.2"
 
-    # Fails a test. Avoid it for now.
-    # depends=(gmp libltdl ncurses texinfo libunistring gc libffi)
-    # do_guile "2.2.7"
-
     # depends=('glibc' 'guile')
     # PATCH!
     do_make "4.3" # "4.2.1"
@@ -318,6 +316,15 @@ function do_build_versions()
     do_re2c "1.3"
 
     do_sphinx "2.4.4"
+
+    # Avoid it for now, apparently has a flimpsy memory test. 
+    # FAIL: test-out-of-memory
+    # https://lists.gnu.org/archive/html/guile-user/2017-11/msg00062.html
+    # depends=(gmp libltdl ncurses texinfo libunistring gc libffi)
+    do_guile "2.2.7"
+
+    # Requires guile.
+    do_autogen "5.18.16"
 
     # -------------------------------------------------------------------------
 
