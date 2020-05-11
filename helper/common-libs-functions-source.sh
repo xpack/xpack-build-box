@@ -2168,4 +2168,99 @@ function do_ncurses()
   fi
 }
 
+function do_readline()
+{
+  # https://tiswww.case.edu/php/chet/readline/rltop.html
+  # https://ftp.gnu.org/gnu/readline/
+  # https://ftp.gnu.org/gnu/readline/readline-8.0.tar.gz
+
+  # depends=(glibc gcc-libs)
+  # https://archlinuxarm.org/packages/aarch64/readline/files/PKGBUILD
+
+  # 2019-01-07, "8.0"
+
+  local readline_version="$1"
+  local readline_version_major="$(echo ${readline_version} | sed -e 's|\([0-9][0-9]*\)\.\([0-9][0-9]*\)|\1|')"
+  local readline_version_minor="$(echo ${readline_version} | sed -e 's|\([0-9][0-9]*\)\.\([0-9][0-9]*\)|\2|')"
+
+  # The folder name as resulted after being extracted from the archive.
+  local readline_src_folder_name="readline-${readline_version}"
+
+  local readline_archive="${readline_src_folder_name}.tar.gz"
+  local readline_url="https://ftp.gnu.org/gnu/readline/${readline_archive}"
+
+  # The folder name  for build, licenses, etc.
+  local readline_folder_name="${readline_src_folder_name}"
+
+  local readline_stamp_file_path="${STAMPS_FOLDER_PATH}/stamp-readline-${readline_version}-installed"
+  if [ ! -f "${readline_stamp_file_path}" ]
+  then
+
+    cd "${SOURCES_FOLDER_PATH}"
+
+    download_and_extract "${readline_url}" "${readline_archive}" \
+      "${readline_src_folder_name}"
+
+    mkdir -pv "${LOGS_FOLDER_PATH}/${readline_folder_name}"
+
+    (
+      mkdir -pv "${LIBS_BUILD_FOLDER_PATH}/${readline_folder_name}"
+      cd "${LIBS_BUILD_FOLDER_PATH}/${readline_folder_name}"
+
+      xbb_activate
+      xbb_activate_installed_dev
+
+      CPPFLAGS="${XBB_CPPFLAGS}"
+      CFLAGS="${XBB_CFLAGS_NO_W}"
+      CXXFLAGS="${XBB_CXXFLAGS_NO_W}"
+      LDFLAGS="${XBB_LDFLAGS_LIB}"
+
+      export CPPFLAGS
+      export CFLAGS
+      export CXXFLAGS
+      export LDFLAGS
+
+      if [ ! -f "config.status" ]
+      then 
+        (
+          echo
+          echo "Running readline configure..."
+
+          bash "${SOURCES_FOLDER_PATH}/${readline_src_folder_name}/configure" --help
+
+          config_options=()
+
+          config_options+=("--prefix=${INSTALL_FOLDER_PATH}")
+            
+          bash ${DEBUG} "${SOURCES_FOLDER_PATH}/${readline_src_folder_name}/configure" \
+            ${config_options[@]}
+
+          cp "config.log" "${LOGS_FOLDER_PATH}/${readline_folder_name}/config-log.txt"
+        ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${readline_folder_name}/configure-output.txt"
+      fi
+
+      (
+        echo
+        echo "Running readline make..."
+
+        # Build.
+        make -j ${JOBS}
+
+        make check
+
+        # make install-strip
+        make install
+
+        show_libs "$(realpath ${INSTALL_FOLDER_PATH}/lib/libreadline.so)"
+        show_libs "$(realpath ${INSTALL_FOLDER_PATH}/lib/libhistory.so)"
+      ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${readline_folder_name}/make-output.txt"
+    )
+
+    touch "${readline_stamp_file_path}"
+
+  else
+    echo "Library readline already installed."
+  fi
+}
+
 # -----------------------------------------------------------------------------
