@@ -399,7 +399,7 @@ function main()
 
   if [ "${new_ld_run_paths}" != "${crt_rpath}" ]
   then
-    echo "  * ${file_path} RPATH ${crt_rpath} -> ${new_ld_run_paths}"
+    # echo "  * ${file_path} RPATH ${crt_rpath} -> ${new_ld_run_paths}"
     # Removes the DT_RPATH or DT_RUNPATH entry
     ${patchelf} \
       --remove-rpath \
