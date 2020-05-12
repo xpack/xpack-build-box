@@ -1107,19 +1107,13 @@ function patch_elf_rpath()
     fi
     export PATCHELF
 
-if false
-then
-    bash -x "${helper_folder_path}/patch_elf_rpath.sh" /opt/xbb/bin/wine64
-    # bash -x "${helper_folder_path}/patch_elf_rpath.sh" /opt/xbb/bin/msgcmp
-exit 1
-    # bash -x "${helper_folder_path}/patch_elf_rpath.sh" /opt/xbb/usr/libexec/gcc/x86_64-w64-mingw32/9.3.0/f951
-    # bash -x "${helper_folder_path}/patch_elf_rpath.sh" /opt/xbb/bin/wine64
+  if false
+  then
+    bash "${helper_folder_path}/patch_elf_rpath.sh" "${INSTALL_FOLDER_PATH}/usr/bin/g++-xbb"
+    "${INSTALL_FOLDER_PATH}/usr/bin/g++-xbb" --version
 
-    # bash -x "${helper_folder_path}/patch_elf_rpath.sh" "${INSTALL_FOLDER_PATH}/bin/msginit"
-    # bash -x "${helper_folder_path}/patch_elf_rpath.sh" "${INSTALL_FOLDER_PATH}/bin/openssl"
-    # bash "${helper_folder_path}/patch_elf_rpath.sh" "${INSTALL_FOLDER_PATH}/usr/lib64/libstdc++.so.6.0.25"
-    # bash "${helper_folder_path}/patch_elf_rpath.sh" "${INSTALL_FOLDER_PATH}/usr/bin/ld"
-else
+    exit 1
+  else
     folders=("${INSTALL_FOLDER_PATH}/bin")
     if [ -d "${INSTALL_FOLDER_PATH}/libexec" ]
     then
@@ -1163,7 +1157,8 @@ else
       -type f \
       -name '*.so*' \
       -exec bash ${helper_folder_path}/patch_elf_rpath.sh {} \;
-fi
+    
+  fi
   ) 2>&1 | tee "${LOGS_FOLDER_PATH}/check-rpath-output.txt"
 }
 
