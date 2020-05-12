@@ -461,8 +461,10 @@ function do_isl()
       export CPPFLAGS="${XBB_CPPFLAGS}"
       export CFLAGS="${XBB_CFLAGS_NO_W}"
       export CXXFLAGS="${XBB_CXXFLAGS_NO_W}"
+      export LDFLAGS="${XBB_LDFLAGS_LIB}"
+
       # The c++ test fails without it.
-      export LDFLAGS="${XBB_LDFLAGS_LIB_STATIC_GCC}"
+      export LD_LIBRARY_PATH="${XBB_LIBRARY_PATH}"
 
       env | sort
 
