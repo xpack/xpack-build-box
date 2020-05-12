@@ -7,6 +7,8 @@
 # for any purpose is hereby granted, under the terms of the MIT license.
 # -----------------------------------------------------------------------------
 
+# -----------------------------------------------------------------------------
+
 function do_zlib() 
 {
   # http://zlib.net
@@ -82,6 +84,7 @@ function do_zlib()
         make test
 
         make install
+
       ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${zlib_folder_name}/make-output.txt"
     )
 
@@ -106,6 +109,8 @@ function test_zlib()
     show_libs "$(realpath ${INSTALL_FOLDER_PATH}/lib/libz.so)"
   )
 }
+
+# -----------------------------------------------------------------------------
 
 function do_gmp() 
 {
@@ -217,6 +222,8 @@ function test_gmp()
   )
 }
 
+# -----------------------------------------------------------------------------
+
 function do_mpfr() 
 {
   # http://www.mpfr.org
@@ -324,6 +331,8 @@ function test_mpfr()
   )
 }
 
+# -----------------------------------------------------------------------------
+
 function do_mpc() 
 {
   # http://www.multiprecision.org/
@@ -418,6 +427,8 @@ function test_mpc()
     show_libs "$(realpath ${INSTALL_FOLDER_PATH}/lib/libmpc.so)"
   )
 }
+
+# -----------------------------------------------------------------------------
 
 function do_isl() 
 {
@@ -521,6 +532,8 @@ function test_isl()
   )
 }
 
+# -----------------------------------------------------------------------------
+
 function do_nettle() 
 {
   # https://www.lysator.liu.se/~nisse/nettle/
@@ -614,12 +627,29 @@ function do_nettle()
       ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${nettle_folder_name}/make-output.txt"
     )
 
+    (
+      test_nettle
+    ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${nettle_folder_name}/test-output.txt"
+
     touch "${nettle_stamp_file_path}"
 
   else
     echo "Library nettle already installed."
   fi
+
+  test_functions+=("test_nettle")
 }
+
+function test_nettle()
+{
+  (
+    xbb_activate
+
+    # TODO: add
+  )
+}
+
+# -----------------------------------------------------------------------------
 
 function do_tasn1() 
 {
@@ -694,12 +724,30 @@ function do_tasn1()
       ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${tasn1_folder_name}/make-output.txt"
     )
 
+    (
+      test_tasn1
+    ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${tasn1_folder_name}/test-output.txt"
+
     touch "${tasn1_stamp_file_path}"
 
   else
     echo "Library tasn1 already installed."
   fi
+
+  test_functions+=("test_tasn1")
 }
+
+
+function test_tasn1()
+{
+  (
+    xbb_activate
+
+    # TODO: add
+  )
+}
+
+# -----------------------------------------------------------------------------
 
 function do_expat() 
 {
@@ -772,17 +820,32 @@ function do_expat()
         # make install-strip
         make install
 
-        show_libs "${INSTALL_FOLDER_PATH}/lib/libexpat.so"
-
       ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${expat_folder_name}/make-output.txt"
     )
+
+    (
+      test_expat
+    ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${expat_folder_name}/test-output.txt"
 
     touch "${expat_stamp_file_path}"
 
   else
     echo "Library expat already installed."
   fi
+
+  test_functions+=("test_expat")
 }
+
+function test_expat()
+{
+  (
+    xbb_activate
+
+    show_libs "${INSTALL_FOLDER_PATH}/lib/libexpat.so"
+  )
+}
+
+# -----------------------------------------------------------------------------
 
 function do_libffi() 
 {
@@ -879,12 +942,29 @@ function do_libffi()
       ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${libffi_folder_name}/make-output.txt"
     )
 
+    (
+      test_libffi
+    ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${libffi_folder_name}/test-output.txt"
+
     touch "${libffi_stamp_file_path}"
 
   else
     echo "Library libffi already installed."
   fi
+
+  test_functions+=("test_libffi")
 }
+
+function test_libffi()
+{
+  (
+    xbb_activate
+
+    # TODO: add
+  )
+}
+
+# -----------------------------------------------------------------------------
 
 # Normally not used.
 function do_libiconv() 
@@ -962,12 +1042,29 @@ function do_libiconv()
       ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${libiconv_folder_name}/make-output.txt"
     )
 
+    (
+      test_libiconv
+    ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${libiconv_folder_name}/test-output.txt"
+
     touch "${libiconv_stamp_file_path}"
 
   else
     echo "Library libiconv already installed."
   fi
+
+  test_functions+=("test_libiconv")
 }
+
+function test_libiconv()
+{
+  (
+    xbb_activate
+
+    # TODO: add
+  )
+}
+
+# -----------------------------------------------------------------------------
 
 function do_gnutls() 
 {
@@ -1064,12 +1161,29 @@ function do_gnutls()
       ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${gnutls_folder_name}/make-output.txt"
     )
 
+    (
+      test_gnutls
+    ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${gnutls_folder_name}/test-output.txt"
+
     touch "${gnutls_stamp_file_path}"
 
   else
     echo "Library gnutls already installed."
   fi
+
+  test_functions+=("test_gnutls")
 }
+
+function test_gnutls()
+{
+  (
+    xbb_activate
+
+    # TODO: add
+  )
+}
+
+# -----------------------------------------------------------------------------
 
 function do_util_macros() 
 {
@@ -1142,12 +1256,29 @@ function do_util_macros()
       ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${util_macros_folder_name}/make-output.txt"
     )
 
+    (
+      test_util_macros
+    ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${util_macros_folder_name}/test-output.txt"
+
     touch "${util_macros_stamp_file_path}"
 
   else
     echo "Library util_macros already installed."
   fi
+
+  test_functions+=("test_util_macros")
 }
+
+function test_util_macros()
+{
+  (
+    xbb_activate
+
+    # TODO: add
+  )
+}
+
+# -----------------------------------------------------------------------------
 
 function do_xorg_xproto() 
 {
@@ -1225,12 +1356,29 @@ function do_xorg_xproto()
       ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${xorg_xproto_folder_name}/make-output.txt"
     )
 
+    (
+      test_xorg_xproto
+    ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${xorg_xproto_folder_name}/test-output.txt"
+
     touch "${xorg_xproto_stamp_file_path}"
 
   else
     echo "Library xorg_xproto already installed."
   fi
+
+  test_functions+=("test_xorg_xproto")
 }
+
+function test_xorg_xproto()
+{
+  (
+    xbb_activate
+
+    # TODO: add
+  )
+}
+
+# -----------------------------------------------------------------------------
 
 function do_libpng()
 {
@@ -1311,12 +1459,29 @@ function do_libpng()
       ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${libpng_folder_name}/make-output.txt"
     )
 
+    (
+      test_libpng
+    ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${libpng_folder_name}/test-output.txt"
+
     touch "${libpng_stamp_file_path}"
 
   else
     echo "Library libpng already installed."
   fi
+
+  test_functions+=("test_libpng")
 }
+
+function test_libpng()
+{
+  (
+    xbb_activate
+
+    # TODO: add
+  )
+}
+
+# -----------------------------------------------------------------------------
 
 function do_libmpdec()
 {
@@ -1385,11 +1550,26 @@ function do_libmpdec()
       ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${libmpdec_folder_name}/make-output.txt"
     )
 
+    (
+      test_libmpdec
+    ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${libmpdec_folder_name}/test-output.txt"
+
     touch "${libmpdec_stamp_file_path}"
 
   else
     echo "Library libmpdec already installed."
   fi
+
+  test_functions+=("test_libmpdec")
+}
+
+function test_libmpdec()
+{
+  (
+    xbb_activate
+
+    # TODO: add
+  )
 }
 
 # -----------------------------------------------------------------------------
@@ -1470,12 +1650,29 @@ function do_libgpg_error()
       ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${libgpg_error_folder_name}/make-output.txt"
     )
 
+    (
+      test_libgpg_error
+    ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${libgpg_error_folder_name}/test-output.txt"
+
     touch "${libgpg_error_stamp_file_path}"
 
   else
     echo "Library libgpg-error already installed."
   fi
+
+  test_functions+=("test_libgpg_error")
 }
+
+function test_libgpg_error()
+{
+  (
+    xbb_activate
+
+    # TODO: add
+  )
+}
+
+# -----------------------------------------------------------------------------
 
 function do_libgcrypt() 
 {
@@ -1570,12 +1767,29 @@ function do_libgcrypt()
       ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${libgcrypt_folder_name}/make-output.txt"
     )
 
+    (
+      test_libgcrypt
+    ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${libgcrypt_folder_name}/test-output.txt"
+
     touch "${libgcrypt_stamp_file_path}"
 
   else
     echo "Library libgcrypt already installed."
   fi
+
+  test_functions+=("test_libgcrypt")
 }
+
+function test_libgcrypt()
+{
+  (
+    xbb_activate
+
+    # TODO: add
+  )
+}
+
+# -----------------------------------------------------------------------------
 
 function do_libassuan() 
 {
@@ -1648,12 +1862,29 @@ function do_libassuan()
       ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${libassuan_folder_name}/make-output.txt"
     )
 
+    (
+      test_libassuan
+    ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${libassuan_folder_name}/test-output.txt"
+
     touch "${libassuan_stamp_file_path}"
 
   else
     echo "Library libassuan already installed."
   fi
+
+  test_functions+=("test_libassuan")
 }
+
+function test_libassuan()
+{
+  (
+    xbb_activate
+
+    # TODO: add
+  )
+}
+
+# -----------------------------------------------------------------------------
 
 function do_libksba() 
 {
@@ -1726,12 +1957,29 @@ function do_libksba()
       ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${libksba_folder_name}/make-output.txt"
     )
 
+    (
+      test_libksba
+    ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${libksba_folder_name}/test-output.txt"
+
     touch "${libksba_stamp_file_path}"
 
   else
     echo "Library libksba already installed."
   fi
+
+  test_functions+=("test_libksba")
 }
+
+function test_libksba()
+{
+  (
+    xbb_activate
+
+    # TODO: add
+  )
+}
+
+# -----------------------------------------------------------------------------
 
 function do_npth() 
 {
@@ -1811,11 +2059,26 @@ function do_npth()
       ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${npth_folder_name}/make-output.txt"
     )
 
+    (
+      test_npth
+    ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${npth_folder_name}/test-output.txt"
+
     touch "${npth_stamp_file_path}"
 
   else
     echo "Library npth already installed."
   fi
+
+  test_functions+=("test_npth")
+}
+
+function test_npth()
+{
+  (
+    xbb_activate
+
+    # TODO: add
+  )
 }
 
 # -----------------------------------------------------------------------------
@@ -1932,12 +2195,29 @@ function do_libxcrypt()
       ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${libxcrypt_folder_name}/make-output.txt"
     )
 
+    (
+      test_libxcrypt
+    ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${libxcrypt_folder_name}/test-output.txt"
+
     touch "${libxcrypt_stamp_file_path}"
 
   else
     echo "Library libxcrypt already installed."
   fi
+
+  test_functions+=("test_libxcrypt")
 }
+
+function test_libxcrypt()
+{
+  (
+    xbb_activate
+
+    # TODO: add
+  )
+}
+
+# -----------------------------------------------------------------------------
 
 function do_libunistring() 
 {
@@ -2009,12 +2289,29 @@ function do_libunistring()
       ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${libunistring_folder_name}/make-output.txt"
     )
 
+    (
+      test_libunistring
+    ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${libunistring_folder_name}/test-output.txt"
+
     touch "${libunistring_stamp_file_path}"
 
   else
     echo "Library libunistring already installed."
   fi
+
+  test_functions+=("test_libunistring")
 }
+
+function test_libunistring()
+{
+  (
+    xbb_activate
+
+    # TODO: add
+  )
+}
+
+# -----------------------------------------------------------------------------
 
 function do_gc() 
 {
@@ -2088,12 +2385,29 @@ function do_gc()
       ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${gc_folder_name}/make-output.txt"
     )
 
+    (
+      test_gc
+    ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${gc_folder_name}/test-output.txt"
+
     touch "${gc_stamp_file_path}"
 
   else
     echo "Library gc already installed."
   fi
+
+  test_functions+=("test_gc")
 }
+
+function test_gc()
+{
+  (
+    xbb_activate
+
+    # TODO: add
+  )
+}
+
+# -----------------------------------------------------------------------------
 
 function do_ncurses()
 {
@@ -2234,21 +2548,36 @@ function do_ncurses()
 
         # make install-strip
         make install
-
-        show_libs "$(realpath ${INSTALL_FOLDER_PATH}/lib/libncurses.so)"
-        show_libs "$(realpath ${INSTALL_FOLDER_PATH}/lib/libform.so)"
-        show_libs "$(realpath ${INSTALL_FOLDER_PATH}/lib/libmenu.so)"
-        show_libs "$(realpath ${INSTALL_FOLDER_PATH}/lib/libpanel.so)"
         
       ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${ncurses_folder_name}/make-output.txt"
     )
+
+    (
+      test_ncurses
+    ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${ncurses_folder_name}/test-output.txt"
 
     touch "${ncurses_stamp_file_path}"
 
   else
     echo "Library ncurses already installed."
   fi
+
+  test_functions+=("test_ncurses")
 }
+
+function test_ncurses()
+{
+  (
+    xbb_activate
+
+    show_libs "$(realpath ${INSTALL_FOLDER_PATH}/lib/libncurses.so)"
+    show_libs "$(realpath ${INSTALL_FOLDER_PATH}/lib/libform.so)"
+    show_libs "$(realpath ${INSTALL_FOLDER_PATH}/lib/libmenu.so)"
+    show_libs "$(realpath ${INSTALL_FOLDER_PATH}/lib/libpanel.so)"
+  )
+}
+
+# -----------------------------------------------------------------------------
 
 function do_readline()
 {
@@ -2333,17 +2662,30 @@ function do_readline()
         # make install-strip
         make install
 
-        show_libs "$(realpath ${INSTALL_FOLDER_PATH}/lib/libreadline.so)"
-        show_libs "$(realpath ${INSTALL_FOLDER_PATH}/lib/libhistory.so)"
-
       ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${readline_folder_name}/make-output.txt"
     )
+
+    (
+      test_readline
+    ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${readline_folder_name}/test-output.txt"
 
     touch "${readline_stamp_file_path}"
 
   else
     echo "Library readline already installed."
   fi
+
+  test_functions+=("test_readline")
+}
+
+function test_readline()
+{
+  (
+    xbb_activate
+
+    show_libs "$(realpath ${INSTALL_FOLDER_PATH}/lib/libreadline.so)"
+    show_libs "$(realpath ${INSTALL_FOLDER_PATH}/lib/libhistory.so)"
+  )
 }
 
 # -----------------------------------------------------------------------------

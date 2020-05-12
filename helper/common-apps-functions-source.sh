@@ -379,6 +379,8 @@ function test_glibc()
   ) 
 }
 
+# -----------------------------------------------------------------------------
+
 function do_native_binutils() 
 {
   # https://www.gnu.org/software/binutils/
@@ -597,6 +599,8 @@ function test_native_binutils()
     show_libs "${NATIVE_BINUTILS_INSTALL_FOLDER_PATH}/bin/strip" 
   ) 
 }
+
+# -----------------------------------------------------------------------------
 
 function do_native_gcc() 
 {
@@ -1113,22 +1117,10 @@ function do_mingw_binutils()
         show_libs "${INSTALL_FOLDER_PATH}/usr/bin/${MINGW_TARGET}-strip" 
 
       ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${mingw_binutils_folder_name}/make-output.txt"
-
     )
 
     (
-      xbb_activate_installed_bin
-
-      run_app "${INSTALL_FOLDER_PATH}/usr/bin/${MINGW_TARGET}-ar" --version
-      run_app "${INSTALL_FOLDER_PATH}/usr/bin/${MINGW_TARGET}-as" --version
-      run_app "${INSTALL_FOLDER_PATH}/usr/bin/${MINGW_TARGET}-ld" --version
-      run_app "${INSTALL_FOLDER_PATH}/usr/bin/${MINGW_TARGET}-nm" --version
-      run_app "${INSTALL_FOLDER_PATH}/usr/bin/${MINGW_TARGET}-objcopy" --version
-      run_app "${INSTALL_FOLDER_PATH}/usr/bin/${MINGW_TARGET}-objdump" --version
-      run_app "${INSTALL_FOLDER_PATH}/usr/bin/${MINGW_TARGET}-ranlib" --version
-      run_app "${INSTALL_FOLDER_PATH}/usr/bin/${MINGW_TARGET}-size" --version
-      run_app "${INSTALL_FOLDER_PATH}/usr/bin/${MINGW_TARGET}-strings" --version
-      run_app "${INSTALL_FOLDER_PATH}/usr/bin/${MINGW_TARGET}-strip" --version
+      test_mingw_binutils
     ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${mingw_binutils_folder_name}/test-output.txt"
 
     hash -r
@@ -1139,7 +1131,60 @@ function do_mingw_binutils()
     echo "Component mingw-w64 binutils already installed."
   fi
 
+  test_functions+=("test_mingw_binutils")
 }
+
+function test_mingw_binutils()
+{
+  (
+    xbb_activate_installed_bin
+
+    echo
+    echo "Testing if mingw binutils binaries start properly..."
+
+    run_app "${INSTALL_FOLDER_PATH}/usr/bin/${MINGW_TARGET}-ar" --version
+    run_app "${INSTALL_FOLDER_PATH}/usr/bin/${MINGW_TARGET}-as" --version
+    run_app "${INSTALL_FOLDER_PATH}/usr/bin/${MINGW_TARGET}-ld" --version
+    run_app "${INSTALL_FOLDER_PATH}/usr/bin/${MINGW_TARGET}-nm" --version
+    run_app "${INSTALL_FOLDER_PATH}/usr/bin/${MINGW_TARGET}-objcopy" --version
+    run_app "${INSTALL_FOLDER_PATH}/usr/bin/${MINGW_TARGET}-objdump" --version
+    run_app "${INSTALL_FOLDER_PATH}/usr/bin/${MINGW_TARGET}-ranlib" --version
+    run_app "${INSTALL_FOLDER_PATH}/usr/bin/${MINGW_TARGET}-size" --version
+    run_app "${INSTALL_FOLDER_PATH}/usr/bin/${MINGW_TARGET}-strings" --version
+    run_app "${INSTALL_FOLDER_PATH}/usr/bin/${MINGW_TARGET}-strip" --version
+
+    echo
+    echo "Testing if binutils binaries display help..."
+
+    run_app "${INSTALL_FOLDER_PATH}/usr/bin/${MINGW_TARGET}-ar" --help
+    run_app "${INSTALL_FOLDER_PATH}/usr/bin/${MINGW_TARGET}-as" --help
+    run_app "${INSTALL_FOLDER_PATH}/usr/bin/${MINGW_TARGET}-ld" --help
+    run_app "${INSTALL_FOLDER_PATH}/usr/bin/${MINGW_TARGET}-nm" --help
+    run_app "${INSTALL_FOLDER_PATH}/usr/bin/${MINGW_TARGET}-objcopy" --help
+    run_app "${INSTALL_FOLDER_PATH}/usr/bin/${MINGW_TARGET}-objdump" --help
+    run_app "${INSTALL_FOLDER_PATH}/usr/bin/${MINGW_TARGET}-ranlib" --help
+    run_app "${INSTALL_FOLDER_PATH}/usr/bin/${MINGW_TARGET}-size" --help
+    run_app "${INSTALL_FOLDER_PATH}/usr/bin/${MINGW_TARGET}-strings" --help
+    run_app "${INSTALL_FOLDER_PATH}/usr/bin/${MINGW_TARGET}-strip" --help
+
+    echo
+    echo "Checking the mingw binutils shared libraries..."
+
+    show_libs "${INSTALL_FOLDER_PATH}/usr/bin/${MINGW_TARGET}-ar" 
+    show_libs "${INSTALL_FOLDER_PATH}/usr/bin/${MINGW_TARGET}-as" 
+    show_libs "${INSTALL_FOLDER_PATH}/usr/bin/${MINGW_TARGET}-ld" 
+    show_libs "${INSTALL_FOLDER_PATH}/usr/bin/${MINGW_TARGET}-nm" 
+    show_libs "${INSTALL_FOLDER_PATH}/usr/bin/${MINGW_TARGET}-objcopy" 
+    show_libs "${INSTALL_FOLDER_PATH}/usr/bin/${MINGW_TARGET}-objdump" 
+    show_libs "${INSTALL_FOLDER_PATH}/usr/bin/${MINGW_TARGET}-ranlib" 
+    show_libs "${INSTALL_FOLDER_PATH}/usr/bin/${MINGW_TARGET}-size" 
+    show_libs "${INSTALL_FOLDER_PATH}/usr/bin/${MINGW_TARGET}-strings" 
+    show_libs "${INSTALL_FOLDER_PATH}/usr/bin/${MINGW_TARGET}-strip" 
+  )
+}
+
+# -----------------------------------------------------------------------------
+# mingw-w64
 
 function do_mingw_all() 
 {
@@ -1604,29 +1649,7 @@ function do_mingw_all()
     ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${mingw_gcc_folder_name}/strip-step2-output.txt"
 
     (
-      xbb_activate_installed_bin
-
-      "${INSTALL_FOLDER_PATH}/usr/bin/${MINGW_TARGET}-g++" --version
-      "${INSTALL_FOLDER_PATH}/usr/bin/${MINGW_TARGET}-g++" -dumpmachine
-      "${INSTALL_FOLDER_PATH}/usr/bin/${MINGW_TARGET}-g++" -print-search-dirs
-
-      mkdir -pv "${HOME}/tmp"
-      cd "${HOME}/tmp"
-
-      # Note: __EOF__ is quoted to prevent substitutions here.
-      cat <<'__EOF__' > hello.cpp
-#include <iostream>
-
-int
-main(int argc, char* argv[])
-{
-  std::cout << "Hello" << std::endl;
-}
-__EOF__
-
-      "${INSTALL_FOLDER_PATH}/usr/bin/${MINGW_TARGET}-g++" hello.cpp -o hello
-
-      rm -rf hello.cpp hello
+      test_mingw_gcc
     ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${mingw_gcc_folder_name}/test-step2-output.txt"
 
     hash -r
@@ -1637,8 +1660,84 @@ __EOF__
     echo "Component mingw-w64 gcc step 2 already installed."
   fi
 
-  # ---------------------------------------------------------------------------
+  test_functions+=("test_mingw_gcc")
+}
 
+function test_mingw_gcc()
+{
+  (
+    xbb_activate_installed_bin
+
+    echo
+    echo "Testing if mingw gcc binaries start properly..."
+
+    run_app "${INSTALL_FOLDER_PATH}/usr/bin/${MINGW_TARGET}-gcc" --version
+    run_app "${INSTALL_FOLDER_PATH}/usr/bin/${MINGW_TARGET}-g++" --version
+
+    run_app "${INSTALL_FOLDER_PATH}/usr/bin/${MINGW_TARGET}-gcc-ar" --version
+    run_app "${INSTALL_FOLDER_PATH}/usr/bin/${MINGW_TARGET}-gcc-nm" --version
+    run_app "${INSTALL_FOLDER_PATH}/usr/bin/${MINGW_TARGET}-gcc-ranlib" --version
+    run_app "${INSTALL_FOLDER_PATH}/usr/bin/${MINGW_TARGET}-gcov" --version
+    run_app "${INSTALL_FOLDER_PATH}/usr/bin/${MINGW_TARGET}-gcov-dump" --version
+    run_app "${INSTALL_FOLDER_PATH}/usr/bin/${MINGW_TARGET}-gcov-tool" --version
+
+    if [ -f "${INSTALL_FOLDER_PATH}/usr/bin/${MINGW_TARGET}-gfortran" ]
+    then
+      run_app "${INSTALL_FOLDER_PATH}/usr/bin/${MINGW_TARGET}-gfortran" --version
+    fi
+
+    echo
+    echo "Showing configurations..."
+
+    run_app "${INSTALL_FOLDER_PATH}/usr/bin/${MINGW_TARGET}-gcc" --help
+    run_app "${INSTALL_FOLDER_PATH}/usr/bin/${MINGW_TARGET}-gcc" -v
+    run_app "${INSTALL_FOLDER_PATH}/usr/bin/${MINGW_TARGET}-gcc" -dumpversion
+    run_app "${INSTALL_FOLDER_PATH}/usr/bin/${MINGW_TARGET}-gcc" -dumpmachine
+
+    run_app "${INSTALL_FOLDER_PATH}/usr/bin/${MINGW_TARGET}-gcc" -print-search-dirs
+    run_app "${INSTALL_FOLDER_PATH}/usr/bin/${MINGW_TARGET}-gcc" -print-libgcc-file-name
+    run_app "${INSTALL_FOLDER_PATH}/usr/bin/${MINGW_TARGET}-gcc" -print-multi-directory
+    run_app "${INSTALL_FOLDER_PATH}/usr/bin/${MINGW_TARGET}-gcc" -print-multi-lib
+    run_app "${INSTALL_FOLDER_PATH}/usr/bin/${MINGW_TARGET}-gcc" -print-multi-os-directory
+    run_app "${INSTALL_FOLDER_PATH}/usr/bin/${MINGW_TARGET}-gcc" -print-sysroot
+    run_app "${INSTALL_FOLDER_PATH}/usr/bin/${MINGW_TARGET}-gcc" -print-file-name=libgcc_s.so
+    run_app "${INSTALL_FOLDER_PATH}/usr/bin/${MINGW_TARGET}-gcc" -print-prog-name=cc1
+
+    run_app "${INSTALL_FOLDER_PATH}/usr/bin/${MINGW_TARGET}-g++" --help
+    run_app "${INSTALL_FOLDER_PATH}/usr/bin/${MINGW_TARGET}-g++" -v
+    run_app "${INSTALL_FOLDER_PATH}/usr/bin/${MINGW_TARGET}-g++" -dumpversion
+    run_app "${INSTALL_FOLDER_PATH}/usr/bin/${MINGW_TARGET}-g++" -dumpmachine
+
+    run_app "${INSTALL_FOLDER_PATH}/usr/bin/${MINGW_TARGET}-g++" -print-search-dirs
+    run_app "${INSTALL_FOLDER_PATH}/usr/bin/${MINGW_TARGET}-g++" -print-libgcc-file-name
+    run_app "${INSTALL_FOLDER_PATH}/usr/bin/${MINGW_TARGET}-g++" -print-multi-directory
+    run_app "${INSTALL_FOLDER_PATH}/usr/bin/${MINGW_TARGET}-g++" -print-multi-lib
+    run_app "${INSTALL_FOLDER_PATH}/usr/bin/${MINGW_TARGET}-g++" -print-multi-os-directory
+    run_app "${INSTALL_FOLDER_PATH}/usr/bin/${MINGW_TARGET}-g++" -print-sysroot
+    run_app "${INSTALL_FOLDER_PATH}/usr/bin/${MINGW_TARGET}-g++" -print-file-name=libstdc++.so
+    run_app "${INSTALL_FOLDER_PATH}/usr/bin/${MINGW_TARGET}-g++" -print-prog-name=cc1plus
+
+    echo
+    echo "Testing if mingw gcc compiles simple Hello programs..."
+
+    mkdir -pv "${HOME}/tmp/mingw-gcc"
+    cd "${HOME}/tmp/mingw-gcc"
+
+    # Note: __EOF__ is quoted to prevent substitutions here.
+    cat <<'__EOF__' > hello.cpp
+#include <iostream>
+
+int
+main(int argc, char* argv[])
+{
+std::cout << "Hello" << std::endl;
+}
+__EOF__
+
+    "${INSTALL_FOLDER_PATH}/usr/bin/${MINGW_TARGET}-g++" hello.cpp -o hello
+
+    # rm -rf hello.cpp hello
+  )
 }
 
 # -----------------------------------------------------------------------------
@@ -1826,10 +1925,7 @@ function do_openssl()
       ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${openssl_folder_name}/make-output.txt"
 
       (
-        xbb_activate_installed_bin
-
-        echo
-        run_app "${INSTALL_FOLDER_PATH}/bin/openssl" version
+        test_openssl
       ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${openssl_folder_name}/test-output.txt"
     )
 
@@ -1838,7 +1934,23 @@ function do_openssl()
   else
     echo "Component openssl already installed."
   fi
+
+  test_functions+=("test_openssl")
 }
+
+function test_openssl()
+{
+  (
+    xbb_activate_installed_bin
+
+    echo
+    echo "Testing if openssl binaries start properly..."
+
+    run_app "${INSTALL_FOLDER_PATH}/bin/openssl" version
+  )
+}
+
+# -----------------------------------------------------------------------------
 
 function do_curl() 
 {
@@ -1931,10 +2043,7 @@ function do_curl()
     )
 
     (
-      xbb_activate_installed_bin
-
-      echo
-      run_app "${INSTALL_FOLDER_PATH}/bin/curl" --version
+      test_curl
     ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${curl_folder_name}/test-output.txt"
 
     touch "${curl_stamp_file_path}"
@@ -1942,7 +2051,23 @@ function do_curl()
   else
     echo "Component curl already installed."
   fi
+
+  test_functions+=("test_curl")
 }
+
+function test_curl()
+{
+  (
+    xbb_activate_installed_bin
+
+    echo
+    echo "Testing if curl binaries start properly..."
+
+    run_app "${INSTALL_FOLDER_PATH}/bin/curl" --version
+  )
+}
+
+# -----------------------------------------------------------------------------
 
 function do_xz() 
 {
@@ -2026,10 +2151,7 @@ function do_xz()
     )
 
     (
-      xbb_activate_installed_bin
-
-      echo
-      run_app "${INSTALL_FOLDER_PATH}/bin/xz" --version
+      test_xz
     ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${xz_folder_name}/test-output.txt"
 
     hash -r
@@ -2039,7 +2161,23 @@ function do_xz()
   else
     echo "Component xz already installed."
   fi
+
+  test_functions+=("test_xz")
 }
+
+function test_xz()
+{
+  (
+    xbb_activate_installed_bin
+
+    echo
+    echo "Testing if xz binaries start properly..."
+
+    run_app "${INSTALL_FOLDER_PATH}/bin/xz" --version
+  )
+}
+
+# -----------------------------------------------------------------------------
 
 function do_tar() 
 {
@@ -2142,10 +2280,7 @@ function do_tar()
     )
 
     (
-      xbb_activate_installed_bin
-
-      echo
-      run_app "${INSTALL_FOLDER_PATH}/bin/tar" --version
+      test_tar
     ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${tar_folder_name}/test-output.txt"
 
     hash -r
@@ -2155,7 +2290,23 @@ function do_tar()
   else
     echo "Component tar already installed."
   fi
+
+  test_functions+=("test_tar")
 }
+
+function test_tar()
+{
+  (
+    xbb_activate_installed_bin
+
+    echo
+    echo "Testing if tar binaries start properly..."
+
+    run_app "${INSTALL_FOLDER_PATH}/bin/tar" --version
+  )
+}
+
+# -----------------------------------------------------------------------------
 
 function do_coreutils() 
 {
@@ -2280,28 +2431,7 @@ function do_coreutils()
     )
 
     (
-      xbb_activate_installed_bin
-
-      echo
-      run_app "${INSTALL_FOLDER_PATH}/bin/basename" --version
-      run_app "${INSTALL_FOLDER_PATH}/bin/cat" --version
-      run_app "${INSTALL_FOLDER_PATH}/bin/chmod" --version
-      run_app "${INSTALL_FOLDER_PATH}/bin/chown" --version
-      run_app "${INSTALL_FOLDER_PATH}/bin/cp" --version
-      run_app "${INSTALL_FOLDER_PATH}/bin/dirname" --version
-      run_app "${INSTALL_FOLDER_PATH}/bin/ln" --version
-      run_app "${INSTALL_FOLDER_PATH}/bin/ls" --version
-      run_app "${INSTALL_FOLDER_PATH}/bin/mkdir" --version
-      run_app "${INSTALL_FOLDER_PATH}/bin/mv" --version
-      run_app "${INSTALL_FOLDER_PATH}/bin/printf" --version
-      run_app "${INSTALL_FOLDER_PATH}/bin/realpath" --version
-      run_app "${INSTALL_FOLDER_PATH}/bin/rm" --version
-      run_app "${INSTALL_FOLDER_PATH}/bin/rmdir" --version
-      run_app "${INSTALL_FOLDER_PATH}/bin/sha256sum" --version
-      run_app "${INSTALL_FOLDER_PATH}/bin/sort" --version
-      run_app "${INSTALL_FOLDER_PATH}/bin/touch" --version
-      run_app "${INSTALL_FOLDER_PATH}/bin/tr" --version
-      run_app "${INSTALL_FOLDER_PATH}/bin/wc" --version
+      test_coreutils
     ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${coreutils_folder_name}/test-output.txt"
 
     hash -r
@@ -2311,7 +2441,42 @@ function do_coreutils()
   else
     echo "Component coreutils already installed."
   fi
+
+  test_functions+=("test_coreutils")
 }
+
+function test_coreutils()
+{
+  (
+    xbb_activate_installed_bin
+
+    echo
+    echo "Testing if coreutils binaries start properly..."
+
+    echo
+    run_app "${INSTALL_FOLDER_PATH}/bin/basename" --version
+    run_app "${INSTALL_FOLDER_PATH}/bin/cat" --version
+    run_app "${INSTALL_FOLDER_PATH}/bin/chmod" --version
+    run_app "${INSTALL_FOLDER_PATH}/bin/chown" --version
+    run_app "${INSTALL_FOLDER_PATH}/bin/cp" --version
+    run_app "${INSTALL_FOLDER_PATH}/bin/dirname" --version
+    run_app "${INSTALL_FOLDER_PATH}/bin/ln" --version
+    run_app "${INSTALL_FOLDER_PATH}/bin/ls" --version
+    run_app "${INSTALL_FOLDER_PATH}/bin/mkdir" --version
+    run_app "${INSTALL_FOLDER_PATH}/bin/mv" --version
+    run_app "${INSTALL_FOLDER_PATH}/bin/printf" --version
+    run_app "${INSTALL_FOLDER_PATH}/bin/realpath" --version
+    run_app "${INSTALL_FOLDER_PATH}/bin/rm" --version
+    run_app "${INSTALL_FOLDER_PATH}/bin/rmdir" --version
+    run_app "${INSTALL_FOLDER_PATH}/bin/sha256sum" --version
+    run_app "${INSTALL_FOLDER_PATH}/bin/sort" --version
+    run_app "${INSTALL_FOLDER_PATH}/bin/touch" --version
+    run_app "${INSTALL_FOLDER_PATH}/bin/tr" --version
+    run_app "${INSTALL_FOLDER_PATH}/bin/wc" --version
+  )
+}
+
+# -----------------------------------------------------------------------------
 
 function do_pkg_config() 
 {
@@ -2406,10 +2571,7 @@ function do_pkg_config()
     )
 
     (
-      xbb_activate_installed_bin
-
-      echo
-      run_app "${INSTALL_FOLDER_PATH}/bin/pkg-config" --version
+      test_pkg_config
     ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${pkg_config_folder_name}/test-output.txt"
 
     hash -r
@@ -2419,7 +2581,23 @@ function do_pkg_config()
   else
     echo "Component pkg_config already installed."
   fi
+
+  test_functions+=("test_pkg_config")
 }
+
+function test_pkg_config()
+{
+  (
+    xbb_activate_installed_bin
+
+    echo
+    echo "Testing if pkg_config binaries start properly..."
+
+    run_app "${INSTALL_FOLDER_PATH}/bin/pkg-config" --version
+  )
+}
+
+# -----------------------------------------------------------------------------
 
 function do_m4() 
 {
@@ -2512,10 +2690,7 @@ function do_m4()
     )
 
     (
-      xbb_activate_installed_bin
-
-      echo
-      run_app "${INSTALL_FOLDER_PATH}/bin/m4" --version
+      test_m4
     ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${m4_folder_name}/test-output.txt"
 
     hash -r
@@ -2525,8 +2700,23 @@ function do_m4()
   else
     echo "Component m4 already installed."
   fi
+
+  test_functions+=("test_m4")
 }
 
+function test_m4()
+{
+  (
+    xbb_activate_installed_bin
+
+    echo
+    echo "Testing if m4 binaries start properly..."
+
+    run_app "${INSTALL_FOLDER_PATH}/bin/m4" --version
+  )
+}
+
+# -----------------------------------------------------------------------------
 
 function do_gawk() 
 {
@@ -2609,10 +2799,7 @@ function do_gawk()
     )
 
     (
-      xbb_activate_installed_bin
-
-      echo
-      run_app "${INSTALL_FOLDER_PATH}/bin/gawk" --version
+      test_gawk
     ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${gawk_folder_name}/test-output.txt"
 
     hash -r
@@ -2622,7 +2809,23 @@ function do_gawk()
   else
     echo "Component gawk already installed."
   fi
+
+  test_functions+=("test_gawk")
 }
+
+function test_gawk()
+{
+  (
+    xbb_activate_installed_bin
+
+    echo
+    echo "Testing if gawk binaries start properly..."
+
+    run_app "${INSTALL_FOLDER_PATH}/bin/gawk" --version
+  )
+}
+
+# -----------------------------------------------------------------------------
 
 function do_sed() 
 {
@@ -2705,10 +2908,7 @@ function do_sed()
     )
 
     (
-      xbb_activate_installed_bin
-
-      echo
-      run_app "${INSTALL_FOLDER_PATH}/bin/sed" --version
+      test_sed
     ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${sed_folder_name}/test-output.txt"
 
     hash -r
@@ -2718,7 +2918,23 @@ function do_sed()
   else
     echo "Component sed already installed."
   fi
+
+  test_functions+=("test_sed")
 }
+
+function test_sed()
+{
+  (
+    xbb_activate_installed_bin
+
+    echo
+    echo "Testing if sed binaries start properly..."
+
+    run_app "${INSTALL_FOLDER_PATH}/bin/sed" --version
+  )
+}
+
+# -----------------------------------------------------------------------------
 
 function do_autoconf() 
 {
@@ -2789,10 +3005,7 @@ function do_autoconf()
     )
 
     (
-      xbb_activate_installed_bin
-
-      echo
-      run_app "${INSTALL_FOLDER_PATH}/bin/autoconf" --version
+      test_autoconf
     ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${autoconf_folder_name}/test-output.txt"
 
     hash -r
@@ -2802,7 +3015,23 @@ function do_autoconf()
   else
     echo "Component autoconf already installed."
   fi
+
+  test_functions+=("test_autoconf")
 }
+
+function test_autoconf()
+{
+  (
+    xbb_activate_installed_bin
+
+    echo
+    echo "Testing if autoconf binaries start properly..."
+
+    run_app "${INSTALL_FOLDER_PATH}/bin/autoconf" --version
+  )
+}
+
+# -----------------------------------------------------------------------------
 
 function do_automake() 
 {
@@ -2884,10 +3113,7 @@ function do_automake()
     )
 
     (
-      xbb_activate_installed_bin
-
-      echo
-      run_app "${INSTALL_FOLDER_PATH}/bin/automake" --version
+      test_automake
     ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${automake_folder_name}/test-output.txt"
 
     hash -r
@@ -2897,7 +3123,23 @@ function do_automake()
   else
     echo "Component automake already installed."
   fi
+
+  test_functions+=("test_automake")
 }
+
+function test_automake()
+{
+  (
+    xbb_activate_installed_bin
+
+    echo
+    echo "Testing if automake binaries start properly..."
+
+    run_app "${INSTALL_FOLDER_PATH}/bin/automake" --version
+  )
+}
+
+# -----------------------------------------------------------------------------
 
 function do_libtool() 
 {
@@ -2989,11 +3231,7 @@ function do_libtool()
     )
 
     (
-      xbb_activate_installed_bin
-
-      echo
-      run_app "${INSTALL_FOLDER_PATH}/bin/libtool" --version
-      run_app "${INSTALL_FOLDER_PATH}/bin/libtool" --help
+      test_libtool
     ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${libtool_folder_name}/test-output.txt"
 
     hash -r
@@ -3003,7 +3241,27 @@ function do_libtool()
   else
     echo "Component libtool already installed."
   fi
+
+  if [ -z "${step}" ]
+  then
+    test_functions+=("test_libtool")
+  fi
 }
+
+function test_libtool()
+{
+  (
+    xbb_activate_installed_bin
+
+    echo
+    echo "Testing if libtool binaries start properly..."
+
+    run_app "${INSTALL_FOLDER_PATH}/bin/libtool" --version
+    run_app "${INSTALL_FOLDER_PATH}/bin/libtool" --help
+  )
+}
+
+# -----------------------------------------------------------------------------
 
 function do_gettext() 
 {
@@ -3115,6 +3373,9 @@ function test_gettext()
     xbb_activate_installed_bin
 
     echo
+    echo "Testing if gettext binaries start properly..."
+
+    echo
     run_app "${INSTALL_FOLDER_PATH}/bin/gettext" --version
 
     run_app "${INSTALL_FOLDER_PATH}/bin/msgcmp" --version
@@ -3136,11 +3397,16 @@ function test_gettext()
 
     run_app "${INSTALL_FOLDER_PATH}/bin/msguniq" --version
 
+    echo
+    echo "Checking the gettext shared libraries..."
+
     show_libs "$(realpath ${INSTALL_FOLDER_PATH}/lib/libgettextlib.so)"
     show_libs "$(realpath ${INSTALL_FOLDER_PATH}/lib/libgettextpo.so)"
     show_libs "$(realpath ${INSTALL_FOLDER_PATH}/lib/libgettextsrc.so)"
   )
 }
+
+# -----------------------------------------------------------------------------
 
 function do_patch() 
 {
@@ -3216,10 +3482,7 @@ function do_patch()
     )
 
     (
-      xbb_activate_installed_bin
-
-      echo
-      run_app "${INSTALL_FOLDER_PATH}/bin/patch" --version
+      test_patch
     ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${patch_folder_name}/test-output.txt"
 
     hash -r
@@ -3229,7 +3492,23 @@ function do_patch()
   else
     echo "Component patch already installed."
   fi
+
+  test_functions+=("test_patch")
 }
+
+function test_patch()
+{
+  (
+    xbb_activate_installed_bin
+
+    echo
+    echo "Testing if patch binaries start properly..."
+
+    run_app "${INSTALL_FOLDER_PATH}/bin/patch" --version
+  )
+}
+
+# -----------------------------------------------------------------------------
 
 function do_diffutils() 
 {
@@ -3305,10 +3584,7 @@ function do_diffutils()
     )
 
     (
-      xbb_activate_installed_bin
-
-      echo
-      run_app "${INSTALL_FOLDER_PATH}/bin/diff" --version
+      test_diffutils
     ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${diffutils_folder_name}/test-output.txt"
 
     hash -r
@@ -3318,7 +3594,23 @@ function do_diffutils()
   else
     echo "Component diffutils already installed."
   fi
+
+  test_functions+=("test_diffutils")
 }
+
+function test_diffutils()
+{
+  (
+    xbb_activate_installed_bin
+
+    echo
+    echo "Testing if diffutils binaries start properly..."
+
+    run_app "${INSTALL_FOLDER_PATH}/bin/diff" --version
+  )
+}
+
+# -----------------------------------------------------------------------------
 
 function do_bison() 
 {
@@ -3406,10 +3698,7 @@ function do_bison()
     )
 
     (
-      xbb_activate_installed_bin
-
-      echo
-      run_app "${INSTALL_FOLDER_PATH}/bin/bison" --version
+      test_bison
     ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${bison_folder_name}/test-output.txt"
 
     hash -r
@@ -3419,7 +3708,23 @@ function do_bison()
   else
     echo "Component bison already installed."
   fi
+
+  test_functions+=("test_bison")
 }
+
+function test_bison()
+{
+  (
+    xbb_activate_installed_bin
+
+    echo
+    echo "Testing if bison binaries start properly..."
+
+    run_app "${INSTALL_FOLDER_PATH}/bin/bison" --version
+  )
+}
+
+# -----------------------------------------------------------------------------
 
 function do_flex() 
 {
@@ -3536,10 +3841,7 @@ function do_flex()
     )
 
     (
-      xbb_activate_installed_bin
-
-      echo
-      run_app "${INSTALL_FOLDER_PATH}/bin/flex" --version
+      test_flex
     ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${flex_folder_name}/test-output.txt"
 
     hash -r
@@ -3549,7 +3851,25 @@ function do_flex()
   else
     echo "Component flex already installed."
   fi
+
+  test_functions+=("test_flex")
 }
+
+function test_flex()
+{
+  (
+    xbb_activate_installed_bin
+
+    echo
+    echo "Testing if flex binaries start properly..."
+
+    show_libs "${INSTALL_FOLDER_PATH}/bin/flex" 
+
+    run_app "${INSTALL_FOLDER_PATH}/bin/flex" --version
+  )
+}
+
+# -----------------------------------------------------------------------------
 
 function do_make() 
 {
@@ -3637,10 +3957,7 @@ function do_make()
     )
 
     (
-      xbb_activate_installed_bin
-
-      echo
-      run_app "${INSTALL_FOLDER_PATH}/bin/make" --version
+      test_make
     ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${make_folder_name}/test-output.txt"
 
     hash -r
@@ -3650,7 +3967,23 @@ function do_make()
   else
     echo "Component make already installed."
   fi
+
+  test_functions+=("test_make")
 }
+
+function test_make()
+{
+  (
+    xbb_activate_installed_bin
+
+    echo
+    echo "Testing if make binaries start properly..."
+
+    run_app "${INSTALL_FOLDER_PATH}/bin/make" --version
+  ) 
+}
+
+# -----------------------------------------------------------------------------
 
 function do_wget() 
 {
@@ -3742,10 +4075,7 @@ function do_wget()
     )
 
     (
-      xbb_activate_installed_bin
-
-      echo
-      run_app "${INSTALL_FOLDER_PATH}/bin/wget" --version
+      test_wget
     ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${wget_folder_name}/test-output.txt"
 
     hash -r
@@ -3755,7 +4085,23 @@ function do_wget()
   else
     echo "Component wget already installed."
   fi
+
+  test_functions+=("test_wget")
 }
+
+function test_wget()
+{
+  (
+    xbb_activate_installed_bin
+
+    echo
+    echo "Testing if wget binaries start properly..."
+
+    run_app "${INSTALL_FOLDER_PATH}/bin/wget" --version
+  ) 
+}
+
+# -----------------------------------------------------------------------------
 
 function do_texinfo() 
 {
@@ -3838,10 +4184,7 @@ function do_texinfo()
     )
 
     (
-      xbb_activate_installed_bin
-
-      echo
-      run_app "${INSTALL_FOLDER_PATH}/bin/texi2pdf" --version
+      test_texinfo
     ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${texinfo_folder_name}/test-output.txt"
 
     hash -r
@@ -3851,7 +4194,23 @@ function do_texinfo()
   else
     echo "Component texinfo already installed."
   fi
+
+  test_functions+=("test_texinfo")
 }
+
+function test_texinfo()
+{
+  (
+    xbb_activate_installed_bin
+
+    echo
+    echo "Testing if texinfo binaries start properly..."
+
+    run_app "${INSTALL_FOLDER_PATH}/bin/texi2pdf" --version
+  )
+}
+
+# -----------------------------------------------------------------------------
 
 function do_cmake() 
 {
@@ -3963,10 +4322,7 @@ function do_cmake()
     )
 
     (
-      xbb_activate_installed_bin
-
-      echo
-      run_app "${INSTALL_FOLDER_PATH}/bin/cmake" --version
+      test_cmake
     ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${cmake_folder_name}/test-output.txt"
 
     hash -r
@@ -3976,7 +4332,25 @@ function do_cmake()
   else
     echo "Component cmake already installed."
   fi
+
+  test_functions+=("test_cmake")
 }
+
+function test_cmake()
+{
+  (
+    xbb_activate_installed_bin
+
+    echo
+    echo "Testing if cmake binaries start properly..."
+
+    run_app "${INSTALL_FOLDER_PATH}/bin/cmake" --version
+    run_app "${INSTALL_FOLDER_PATH}/bin/ctest" --version
+    run_app "${INSTALL_FOLDER_PATH}/bin/cpack" --version
+  )
+}
+
+# -----------------------------------------------------------------------------
 
 function do_perl() 
 {
@@ -4118,14 +4492,18 @@ function test_perl()
   (
     xbb_activate_installed_bin
 
+    echo
+    echo "Testing if perl binaries start properly..."
+
     # To find libssp.so.0.
     # /opt/xbb/bin/perl: error while loading shared libraries: libssp.so.0: cannot open shared object file: No such file or directory
     export LD_LIBRARY_PATH="${XBB_LIBRARY_PATH}"
 
-    echo
     run_app "${INSTALL_FOLDER_PATH}/bin/perl" --version
   )
 }
+
+# -----------------------------------------------------------------------------
 
 function do_makedepend() 
 {
@@ -4204,10 +4582,7 @@ function do_makedepend()
     )
 
     (
-      xbb_activate_installed_bin
-
-      echo
-      run_app "${INSTALL_FOLDER_PATH}/bin/makedepend" || true
+      test_makedepend
     ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${makedepend_folder_name}/test-output.txt"
 
     hash -r
@@ -4217,7 +4592,23 @@ function do_makedepend()
   else
     echo "Component makedepend already installed."
   fi
+
+  test_functions+=("test_makedepend")
 }
+
+function test_makedepend()
+{
+  (
+    xbb_activate_installed_bin
+
+    echo
+    echo "Testing if makedepend binaries start properly..."
+
+    run_app "${INSTALL_FOLDER_PATH}/bin/makedepend" || true
+  )
+}
+
+# -----------------------------------------------------------------------------
 
 function do_patchelf() 
 {
@@ -4299,10 +4690,7 @@ function do_patchelf()
     )
 
     (
-      xbb_activate_installed_bin
-
-      echo
-      run_app "${INSTALL_FOLDER_PATH}/bin/patchelf" --version
+      test_patchelf
     ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${patchelf_folder_name}/test-output.txt"
 
     hash -r
@@ -4312,7 +4700,23 @@ function do_patchelf()
   else
     echo "Component patchelf already installed."
   fi
+
+  test_functions+=("test_patchelf")
 }
+
+function test_patchelf()
+{
+  (
+    xbb_activate_installed_bin
+
+    echo
+    echo "Testing if patchelf binaries start properly..."
+
+    run_app "${INSTALL_FOLDER_PATH}/bin/patchelf" --version
+  )
+}
+
+# -----------------------------------------------------------------------------
 
 function do_dos2unix() 
 {
@@ -4370,10 +4774,7 @@ function do_dos2unix()
     )
 
     (
-      xbb_activate_installed_bin
-
-      echo
-      run_app "${INSTALL_FOLDER_PATH}/bin/unix2dos" --version
+      test_dos2unix
     ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${dos2unix_folder_name}/test-output.txt"
 
     hash -r
@@ -4383,6 +4784,20 @@ function do_dos2unix()
   else
     echo "Component dos2unix already installed."
   fi
+
+  test_functions+=("test_dos2unix")
+}
+
+function test_dos2unix()
+{
+  (
+    xbb_activate_installed_bin
+
+    echo
+    echo "Testing if dos2unix binaries start properly..."
+
+    run_app "${INSTALL_FOLDER_PATH}/bin/unix2dos" --version
+  )
 }
 
 # -----------------------------------------------------------------------------
@@ -4465,10 +4880,7 @@ function do_git()
     )
 
     (
-      xbb_activate_installed_bin
-
-      echo
-      run_app "${INSTALL_FOLDER_PATH}/bin/git" --version
+      test_git
     ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${git_folder_name}/test-output.txt"
 
     hash -r
@@ -4478,6 +4890,20 @@ function do_git()
   else
     echo "Component git already installed."
   fi
+
+  test_functions+=("test_git")
+}
+
+function test_git()
+{
+  (
+    xbb_activate_installed_bin
+
+    echo
+    echo "Testing if git binaries start properly..."
+
+    run_app "${INSTALL_FOLDER_PATH}/bin/git" --version
+  ) 
 }
 
 # -----------------------------------------------------------------------------
@@ -4618,10 +5044,7 @@ function do_python2()
     ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${python2_folder_name}/pip-output.txt"
 
     (
-      xbb_activate_installed_bin
-
-      echo
-      run_app "${INSTALL_FOLDER_PATH}/bin/python" --version
+      test_python2
     ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${python2_folder_name}/test-output.txt"
 
     hash -r
@@ -4631,7 +5054,24 @@ function do_python2()
   else
     echo "Component python2 already installed."
   fi
+
+  test_functions+=("test_python2")
 }
+
+function test_python2()
+{
+  (
+    xbb_activate_installed_bin
+
+    echo
+    echo "Testing if python2 binaries start properly..."
+
+    run_app "${INSTALL_FOLDER_PATH}/bin/python" --version
+    run_app "${INSTALL_FOLDER_PATH}/bin/pip" --version
+  )
+}
+
+# -----------------------------------------------------------------------------
 
 function do_python3() 
 {
@@ -4778,6 +5218,9 @@ function do_python3()
       run_app "${INSTALL_FOLDER_PATH}/bin/pip3" --version
     ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${python3_folder_name}/pip-output.txt"
 
+    (
+      test_python3
+    ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${python3_folder_name}/test-output.txt"
     hash -r
 
     touch "${python3_stamp_file_path}"
@@ -4785,7 +5228,27 @@ function do_python3()
   else
     echo "Component python3 already installed."
   fi
+
+  test_functions+=("test_python3")
 }
+
+function test_python3()
+{
+  (
+    xbb_activate_installed_bin
+
+    echo
+    echo "Testing if python3 binaries start properly..."
+
+    # export PYTHONHOME="${INSTALL_FOLDER_PATH}"
+    export PYTHONPATH="${INSTALL_FOLDER_PATH}/lib/python3.7"
+
+    run_app "${INSTALL_FOLDER_PATH}/bin/python3" --version
+    run_app "${INSTALL_FOLDER_PATH}/bin/pip3" --version
+  )
+}
+
+# -----------------------------------------------------------------------------
 
 function do_scons() 
 {
@@ -4856,18 +5319,7 @@ function do_scons()
     ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${scons_folder_name}/install-output.txt"
 
     (
-      xbb_activate_installed_bin
-
-      echo
-      which python
-      if is_darwin
-      then
-        PYTHONPATH="${INSTALL_FOLDER_PATH}/lib/python2.7/site-packages"
-        export PYTHONPATH
-        echo PYTHONPATH="${PYTHONPATH}"
-      fi
-
-      run_app "${INSTALL_FOLDER_PATH}/bin/scons" --version
+      test_scons
     ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${scons_folder_name}/test-output.txt"
 
     hash -r
@@ -4877,7 +5329,32 @@ function do_scons()
   else
     echo "Component scons already installed."
   fi
+
+  test_functions+=("test_scons")
 }
+
+function test_scons()
+{
+  (
+    xbb_activate_installed_bin
+
+    echo
+    echo "Testing if scons binaries start properly..."
+
+    echo
+    which python
+    if is_darwin
+    then
+      PYTHONPATH="${INSTALL_FOLDER_PATH}/lib/python2.7/site-packages"
+      export PYTHONPATH
+      echo PYTHONPATH="${PYTHONPATH}"
+    fi
+
+    run_app "${INSTALL_FOLDER_PATH}/bin/scons" --version
+  )  
+}
+
+# -----------------------------------------------------------------------------
 
 function do_meson
 {
@@ -4913,11 +5390,7 @@ function do_meson
     ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${meson_folder_name}/install-output.txt"
 
     (
-      xbb_activate_installed_bin
-
-      export PYTHONPATH="${INSTALL_FOLDER_PATH}/lib/python3.7"
-
-      run_app "${INSTALL_FOLDER_PATH}/bin/meson" --version
+      test_meson
     ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${meson_folder_name}/test-output.txt"
 
     hash -r
@@ -4927,6 +5400,22 @@ function do_meson
   else
     echo "Component meson already installed."
   fi
+
+  test_functions+=("test_meson")
+}
+
+function test_meson()
+{
+  (
+    xbb_activate_installed_bin
+
+    echo
+    echo "Testing if python3 binaries start properly..."
+
+    export PYTHONPATH="${INSTALL_FOLDER_PATH}/lib/python3.7"
+
+    run_app "${INSTALL_FOLDER_PATH}/bin/meson" --version
+  )  
 }
 
 # -----------------------------------------------------------------------------
@@ -4999,10 +5488,7 @@ function do_ninja()
     )
 
     (
-      xbb_activate_installed_bin
-
-      echo
-      run_app "${INSTALL_FOLDER_PATH}/bin/ninja" --version
+      test_ninja
     ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${ninja_folder_name}/test-output.txt"
 
     hash -r
@@ -5012,6 +5498,20 @@ function do_ninja()
   else
     echo "Component ninja already installed."
   fi
+
+  test_functions+=("test_ninja")
+}
+
+function test_ninja()
+{
+  (
+    xbb_activate_installed_bin
+
+    echo
+    echo "Testing if ninja binaries start properly..."
+
+    run_app "${INSTALL_FOLDER_PATH}/bin/ninja" --version
+  )  
 }
 
 # -----------------------------------------------------------------------------
@@ -5088,16 +5588,7 @@ function do_p7zip()
     ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${p7zip_folder_name}/install-output.txt"
 
     (
-      xbb_activate_installed_bin
-
-      echo
-      run_app "${INSTALL_FOLDER_PATH}/bin/7za" --help
-
-      if is_linux
-      then
-        echo
-        run_app "${INSTALL_FOLDER_PATH}/bin/7z" --help
-      fi
+      test_p7zip
     ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${p7zip_folder_name}/test-output.txt"
 
     hash -r
@@ -5107,6 +5598,25 @@ function do_p7zip()
   else
     echo "Component p7zip already installed."
   fi
+
+  test_functions+=("test_p7zip")
+}
+
+function test_p7zip()
+{
+  (
+    xbb_activate_installed_bin
+
+    echo
+    echo "Testing if 7za binaries start properly..."
+
+    run_app "${INSTALL_FOLDER_PATH}/bin/7za" --help
+
+    if is_linux
+    then
+      run_app "${INSTALL_FOLDER_PATH}/bin/7z" --help
+    fi
+  )  
 }
 
 # -----------------------------------------------------------------------------
@@ -5222,18 +5732,7 @@ function do_wine()
     )
 
     (
-      xbb_activate_installed_bin
-
-      echo
-      # First check if the program is able to tell its version.
-      run_app "${INSTALL_FOLDER_PATH}/bin/wine" --version
-
-      # This test should check if the program is able to start
-      # a simple executable.
-      # As a side effect, the "${HOME}/.wine" folder is created
-      # and populated with lots of files., so subsequent runs
-      # will no longer have to do it.
-      run_app "${INSTALL_FOLDER_PATH}/bin/wine" "${INSTALL_FOLDER_PATH}"/lib*/wine/fakedlls/netstat.exe
+      test_wine
     ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${wine_folder_name}/test-output.txt"
 
     hash -r
@@ -5243,6 +5742,28 @@ function do_wine()
   else
     echo "Component wine already installed."
   fi
+
+  test_functions+=("test_wine")
+}
+
+function test_wine()
+{
+  (
+    xbb_activate_installed_bin
+
+    echo
+    echo "Testing if wine binaries start properly..."
+
+    # First check if the program is able to tell its version.
+    run_app "${INSTALL_FOLDER_PATH}/bin/wine" --version
+
+    # This test should check if the program is able to start
+    # a simple executable.
+    # As a side effect, the "${HOME}/.wine" folder is created
+    # and populated with lots of files., so subsequent runs
+    # will no longer have to do it.
+    run_app "${INSTALL_FOLDER_PATH}/bin/wine" "${INSTALL_FOLDER_PATH}"/lib*/wine/fakedlls/netstat.exe
+  ) 
 }
 
 # -----------------------------------------------------------------------------
@@ -5316,14 +5837,7 @@ function do_nvm()
     ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${nvm_folder_name}/install-output.txt"
 
     (
-      xbb_activate_installed_bin
-      xbb_install_nvm
-
-      node --version
-      npm --version
-
-      echo
-      # "${INSTALL_FOLDER_PATH}/bin/scons" --version
+      test_nvm
     ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${nvm_folder_name}/test-output.txt"
 
     hash -r
@@ -5333,6 +5847,22 @@ function do_nvm()
   else
     echo "Component nvm already installed."
   fi
+
+  test_functions+=("test_nvm")
+}
+
+function test_nvm()
+{
+  (
+    xbb_activate_installed_bin
+    xbb_install_nvm
+
+    echo
+    echo "Testing if nvm binaries start properly..."
+
+    run_app node --version
+    run_app npm --version
+  )  
 }
 
 # -----------------------------------------------------------------------------
@@ -5418,10 +5948,7 @@ function do_gnupg()
     )
 
     (
-      xbb_activate_installed_bin
-
-      echo
-      "${INSTALL_FOLDER_PATH}/bin/gpg" --version
+      test_gpg
     ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${gnupg_folder_name}/test-output.txt"
 
     hash -r
@@ -5431,6 +5958,20 @@ function do_gnupg()
   else
     echo "Component gnupg already installed."
   fi
+
+  test_functions+=("test_gpg")
+}
+
+function test_gpg()
+{
+  (
+    xbb_activate_installed_bin
+
+    echo
+    echo "Testing if gpg binaries start properly..."
+
+    run_app "${INSTALL_FOLDER_PATH}/bin/gpg" --version
+  )
 }
 
 # -----------------------------------------------------------------------------
@@ -5490,10 +6031,7 @@ function do_ant()
     )
 
     (
-      xbb_activate_installed_bin
-
-      echo
-      "${INSTALL_FOLDER_PATH}/bin/ant" -version
+      test_ant
     ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${ant_folder_name}/test-output.txt"
 
     hash -r
@@ -5503,7 +6041,23 @@ function do_ant()
   else
     echo "Component ant already installed."
   fi
+
+  test_functions+=("test_ant")
 }
+
+function test_ant()
+{
+  (
+    xbb_activate_installed_bin
+
+    echo
+    echo "Testing if ant binaries start properly..."
+
+    run_app "${INSTALL_FOLDER_PATH}/bin/ant" -version
+  )  
+}
+
+# -----------------------------------------------------------------------------
 
 function do_maven()
 {
@@ -5563,10 +6117,7 @@ function do_maven()
     )
 
     (
-      xbb_activate_installed_bin
-
-      echo
-      "${INSTALL_FOLDER_PATH}/bin/mvn" -version
+      test_maven
     ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${maven_folder_name}/test-output.txt"
 
     hash -r
@@ -5576,6 +6127,20 @@ function do_maven()
   else
     echo "Component maven already installed."
   fi
+
+  test_functions+=("test_maven")
+}
+
+function test_maven()
+{
+  (
+    xbb_activate_installed_bin
+
+    echo
+    echo "Testing if maven binaries start properly..."
+
+    run_app "${INSTALL_FOLDER_PATH}/bin/mvn" -version
+  )
 }
 
 # -----------------------------------------------------------------------------
@@ -5665,10 +6230,7 @@ function do_nodejs()
     )
 
     (
-      xbb_activate_installed_bin
-
-      echo
-      "${INSTALL_FOLDER_PATH}/bin/node" --version
+      test_nodefs
     ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${nodejs_folder_name}/test-output.txt"
 
     hash -r
@@ -5678,6 +6240,20 @@ function do_nodejs()
   else
     echo "Component nodejs already installed."
   fi
+
+  test_functions+=("test_nodefs")
+}
+
+function test_nodefs()
+{
+  (
+    xbb_activate_installed_bin
+
+    echo
+    echo "Testing if node binaries start properly..."
+
+    run_app "${INSTALL_FOLDER_PATH}/bin/node" --version
+  )  
 }
 
 # -----------------------------------------------------------------------------
@@ -5696,8 +6272,8 @@ function do_tcl()
 
   local tcl_version="$1"
 
-  local tcl_version_major="$(echo ${tcl_version} | sed -e 's|\([0-9][0-9]*\)\.\([0-9][0-9]*\)\..*|\1|')"
-  local tcl_version_minor="$(echo ${tcl_version} | sed -e 's|\([0-9][0-9]*\)\.\([0-9][0-9]*\)\..*|\2|')"
+  TCL_VERSION_MAJOR="$(echo ${tcl_version} | sed -e 's|\([0-9][0-9]*\)\.\([0-9][0-9]*\)\..*|\1|')"
+  TCL_VERSION_MINOR="$(echo ${tcl_version} | sed -e 's|\([0-9][0-9]*\)\.\([0-9][0-9]*\)\..*|\2|')"
 
   local tcl_folder_name="tcl${tcl_version}"
   local tcl_archive="tcl${tcl_version}-src.tar.gz"
@@ -5760,18 +6336,15 @@ function do_tcl()
         # make install-strip
         make install
 
-        strip -S "${INSTALL_FOLDER_PATH}/bin/tclsh${tcl_version_major}.${tcl_version_minor}"
+        strip -S "${INSTALL_FOLDER_PATH}/bin/tclsh${TCL_VERSION_MAJOR}.${TCL_VERSION_MINOR}"
 
-        show_libs "${INSTALL_FOLDER_PATH}/bin/tclsh${tcl_version_major}.${tcl_version_minor}"
+        show_libs "${INSTALL_FOLDER_PATH}/bin/tclsh${TCL_VERSION_MAJOR}.${TCL_VERSION_MINOR}"
 
       ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${tcl_folder_name}/make-output.txt"
     )
 
     (
-      xbb_activate_installed_bin
-
-      echo
-      run_app "${INSTALL_FOLDER_PATH}/bin/tclsh${tcl_version_major}.${tcl_version_minor}" <<< 'puts [info patchlevel]'
+      test_tcl
     ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${tcl_folder_name}/test-output.txt"
 
     hash -r
@@ -5781,9 +6354,24 @@ function do_tcl()
   else
     echo "Component tcl already installed."
   fi
+
+  test_functions+=("test_tcl")
 }
 
-# Fails a test. Avoid it for now.
+function test_tcl()
+{
+  (
+    xbb_activate_installed_bin
+
+    echo
+    echo "Testing if tcl binaries start properly..."
+
+    run_app "${INSTALL_FOLDER_PATH}/bin/tclsh${TCL_VERSION_MAJOR}.${TCL_VERSION_MINOR}" <<< 'puts [info patchlevel]'
+  )  
+}
+
+# -----------------------------------------------------------------------------
+
 function do_guile() 
 {
   # https://www.gnu.org/software/guile/
@@ -5887,9 +6475,13 @@ function test_guile()
     xbb_activate_installed_bin
 
     echo
+    echo "Testing if guile binaries start properly..."
+
     run_app "${INSTALL_FOLDER_PATH}/bin/guile" --version
   )  
 }
+
+# -----------------------------------------------------------------------------
 
 function do_rhash() 
 {
@@ -5968,10 +6560,7 @@ function do_rhash()
     )
 
     (
-      xbb_activate_installed_bin
-
-      echo
-      run_app "${INSTALL_FOLDER_PATH}/bin/rhash" --version
+      test_rhash
     ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${rhash_folder_name}/test-output.txt"
 
     hash -r
@@ -5981,7 +6570,23 @@ function do_rhash()
   else
     echo "Component rhash already installed."
   fi
+
+  test_functions+=("test_rhash")
 }
+
+function test_rhash()
+{
+  (
+    xbb_activate_installed_bin
+
+    echo
+    echo "Testing if rhash binaries start properly..."
+
+    run_app "${INSTALL_FOLDER_PATH}/bin/rhash" --version
+  )
+}
+
+# -----------------------------------------------------------------------------
 
 function do_re2c() 
 {
@@ -6075,10 +6680,7 @@ function do_re2c()
     )
 
     (
-      xbb_activate_installed_bin
-
-      echo
-      run_app "${INSTALL_FOLDER_PATH}/bin/re2c" --version
+      test_re2c
     ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${re2c_folder_name}/test-output.txt"
 
     hash -r
@@ -6088,6 +6690,20 @@ function do_re2c()
   else
     echo "Component re2c already installed."
   fi
+
+  test_functions+=("test_re2c")
+}
+
+function test_re2c()
+{
+  (
+    xbb_activate_installed_bin
+
+    echo
+    echo "Testing if re2c binaries start properly..."
+
+    run_app "${INSTALL_FOLDER_PATH}/bin/re2c" --version
+  )  
 }
 
 # -----------------------------------------------------------------------------
@@ -6122,9 +6738,7 @@ function do_sphinx()
     hash -r
 
     (
-      xbb_activate_installed_bin
-
-      run_app "${INSTALL_FOLDER_PATH}/bin/sphinx-build" --version
+      test_sphinx
     ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${sphinx_folder_name}/test-output.txt"
 
     touch "${sphinx_stamp_file_path}"
@@ -6133,7 +6747,22 @@ function do_sphinx()
     echo "Component sphinx already installed."
   fi
 
+  test_functions+=("test_sphinx")
 }
+
+function test_sphinx()
+{
+  (
+    xbb_activate_installed_bin
+
+    echo
+    echo "Testing if sphinx binaries start properly..."
+
+    run_app "${INSTALL_FOLDER_PATH}/bin/sphinx-build" --version
+  )  
+}
+
+# -----------------------------------------------------------------------------
 
 function do_autogen() 
 {
@@ -6269,6 +6898,8 @@ function test_autogen()
   )  
 }
 
+# -----------------------------------------------------------------------------
+
 function do_bash() 
 {
   # https://www.gnu.org/software/bash/
@@ -6389,7 +7020,6 @@ function test_bash()
     echo
     echo "Testing if bash binaries start properly..."
 
-    echo
     run_app "${INSTALL_FOLDER_PATH}/bin/bash" --version
 
     echo
