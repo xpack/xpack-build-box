@@ -82,6 +82,30 @@ function is_static()
   fi
 }
 
+function is_dynamic()
+{
+  if [ $# -lt 1 ]
+  then
+    warning "is_dynamic: Missing arguments"
+    exit 1
+  fi
+  local bin="$1"
+
+  # Symlinks do not match.
+  if [ -L "${bin}" ]
+  then
+    return 1
+  fi
+
+  if [ -f "${bin}" ]
+  then
+    # Return 0 (true) if found.
+    file ${bin} | egrep -q "dynamically linked"
+  else
+    return 1
+  fi
+}
+
 function is_shared()
 {
   if [ $# -lt 1 ]
