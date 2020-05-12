@@ -843,50 +843,6 @@ function do_native_gcc()
           fi
         )
 
-if false
-then
-
-        (
-          xbb_activate_installed_bin
-
-          # The glibc location.
-          local new_rpath="${INSTALL_FOLDER_PATH}/usr/lib"
-          if [ "${HOST_BITS}" == "64" ]
-          then
-            new_rpath+=":${INSTALL_FOLDER_PATH}/usr/${BUILD}/lib64"
-          fi
-          new_rpath+=":${INSTALL_FOLDER_PATH}/usr/${BUILD}/lib"
-
-          # set -x
-          binaries=$(find "${INSTALL_FOLDER_PATH}/usr/libexec" -type f -executable)
-          for bin in ${binaries} 
-          do
-            if is_elf "${bin}"
-            then
-              append_linux_elf_rpath "${bin}" "${new_rpath}"
-              # Simple test, broken elfs may crash it.
-              /usr/bin/ldd "${bin}" >/dev/null
-            else
-              file "${bin}"
-            fi
-          done
-
-          binaries=$(find "${INSTALL_FOLDER_PATH}/usr/${BUILD}" -type f -name 'libstdc++*')
-          for bin in ${binaries} 
-          do
-            if is_elf "${bin}"
-            then
-              append_linux_elf_rpath "${bin}" "${new_rpath}"
-              # Simple test, broken elfs may crash it.
-              /usr/bin/ldd "${bin}" >/dev/null
-            else
-              file "${bin}"
-            fi
-          done
-
-        )
-fi
-
         show_libs "${INSTALL_FOLDER_PATH}/usr/bin/gcc${XBB_GCC_SUFFIX}"
         show_libs "${INSTALL_FOLDER_PATH}/usr/bin/g++${XBB_GCC_SUFFIX}"
 
@@ -4067,22 +4023,8 @@ function do_perl()
         # TEST_JOBS=$(echo $MAKEFLAGS | sed 's/.*-j\([0-9][0-9]*\).*/\1/') make test_harness
         # make test
 
-        # Do not strip, since this interferes with patchelf.
         # make install-strip
         make install
-
-        strip -S "${INSTALL_FOLDER_PATH}/bin/perl"
-
-        # `make` ignores any environment RPATH and fills in the 
-        # actual folder path to libperl.so.
-        local rpath="$(patchelf --print-rpath "${INSTALL_FOLDER_PATH}/bin/perl")"
-        rpath+=":${INSTALL_FOLDER_PATH}/lib:$(dirname $(realpath $(${CC} -print-file-name=libssp.so)))"
-        patchelf --set-rpath "${rpath}" "${INSTALL_FOLDER_PATH}/bin/perl"
-
-        local shlib="$(find ${INSTALL_FOLDER_PATH}/lib/perl5/${perl_version} -name HiRes.so)"
-        rpath="$(patchelf --print-rpath "${shlib}")"
-        rpath+=":$(dirname $(realpath $(${CC} -print-file-name=libssp.so)))"
-        patchelf --set-rpath "${rpath}" "${shlib}"
 
         show_libs "${INSTALL_FOLDER_PATH}/bin/perl"
 
@@ -5816,13 +5758,8 @@ function do_guile()
         # FAIL: test-out-of-memory (disabled)
         make check
 
-        # Do not strip, since this interferes with patchelf.
         # make install-strip
         make install
-
-        strip -S "${INSTALL_FOLDER_PATH}/bin/guile"
-
-        patchelf --set-rpath "${LD_RUN_PATH}" "${INSTALL_FOLDER_PATH}/bin/guile"
 
         show_libs "${INSTALL_FOLDER_PATH}/bin/guile"
 
@@ -6175,12 +6112,6 @@ function do_autogen()
         make check
 
         make install
-
-        strip -S "${INSTALL_FOLDER_PATH}/bin/autogen"
-        strip -S "${INSTALL_FOLDER_PATH}/bin/getdefs"
-
-        patchelf --set-rpath "${LD_RUN_PATH}" "${INSTALL_FOLDER_PATH}/bin/autogen"
-        patchelf --set-rpath "${LD_RUN_PATH}" "${INSTALL_FOLDER_PATH}/bin/getdefs"
 
         show_libs "${INSTALL_FOLDER_PATH}/bin/autogen"
         show_libs "${INSTALL_FOLDER_PATH}/bin/getdefs"
