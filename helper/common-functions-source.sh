@@ -1086,6 +1086,19 @@ function patch_elf_rpath()
     xbb_activate
     # xbb_activate_installed_bin
 
+    PATCHELF="$(which patchelf || true)"
+    if [ -z "${PATCHELF:-""}" ]
+    then
+      PATCHELF="$(xbb_activate_installed_bin; which patchelf)"
+    fi
+
+    if [ -z "${PATCHELF}" ]
+    then
+      echo "Missing patchelf, quit."
+      exit 1
+    fi
+    export PATCHELF
+
 if false
 then
     bash -x "${helper_folder_path}/patch_elf_rpath.sh" /opt/xbb/bin/wine64

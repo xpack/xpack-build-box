@@ -285,12 +285,25 @@ function main()
   # echo "${file_path}"
   # exit 0
 
+  # ---------------------------------------------------------------------------
+
+  patchelf="${PATCHELF:-$(which patchelf)}"
+  if [ -z "${patchelf:-""}" ]
+  then
+    echo "Missing patchelf, quit."
+    exit 1
+  fi
+
+  # ---------------------------------------------------------------------------
+
   # http://man7.org/linux/man-pages/man8/ld.so.8.html
   # RPATH if not RUNPATH
   # LD_LIBRARY_PATH
   # RUNPATH
   # /etc/ld.so.cache
   # /lib:/usr/lib or /lib64:/usr/lib64, if not -z nodeflib
+
+  # https://manpages.debian.org/unstable/patchelf/patchelf.1.en.html
 
   # ---------------------------------------------------------------------------
   # Strip.
@@ -333,7 +346,7 @@ function main()
   # ---------------------------------------------------------------------------
   # Get the current rpath/runpath.
 
-  crt_rpath="$(patchelf --print-rpath ${file_path})"
+  crt_rpath="$(${patchelf} --print-rpath ${file_path})"
 
   if [ -z "${crt_rpath}" ]
   then
@@ -351,12 +364,17 @@ function main()
     for path in ${folder_paths[@]}
     do
       # echo ${path}
+      local abs_path
+      set +e
       if [[ "${path}" == \$ORIGIN* ]]
       then
-        local subst_path=$(realpath "$(echo "${path}" | sed -e "s|\$ORIGIN|$(dirname ${file_path})|")")
-        paths+=( ["${subst_path}"]="${subst_path}" )
+        abs_path=$(realpath "$(echo "${path}" | sed -e "s|\$ORIGIN|$(dirname ${file_path})|" 2>/dev/null)")
       else
-        local abs_path="$(realpath "${path}")"
+        abs_path="$(realpath "${path}" 2>/dev/null)"
+      fi
+      set -e
+      if [ ! -z "${abs_path}" ]
+      then
         paths+=( ["${abs_path}"]="${abs_path}" )
       fi
     done
@@ -382,14 +400,13 @@ function main()
   if [ "${new_ld_run_paths}" != "${crt_rpath}" ]
   then
     echo "  * ${file_path} RPATH ${crt_rpath} -> ${new_ld_run_paths}"
-    # https://manpages.debian.org/unstable/patchelf/patchelf.1.en.html
     # Removes the DT_RPATH or DT_RUNPATH entry
-    patchelf \
+    ${patchelf} \
       --remove-rpath \
       "${file_path}"
     # Forces the use of the obsolete DT_RPATH
     # --shrink-rpath does not work.
-    patchelf \
+    ${patchelf} \
       --force-rpath \
       --set-rpath "${new_ld_run_paths}" \
       "${file_path}"
@@ -406,8 +423,8 @@ function main()
   found_names=()
   found_in_system_names=()
 
-  crt_rpath="$(patchelf --print-rpath ${file_path})"
-  interpreter="$(patchelf --print-interpreter "${file_path}" 2>/dev/null)"
+  crt_rpath="$(${patchelf} --print-rpath ${file_path})"
+  interpreter="$(${patchelf} --print-interpreter "${file_path}" 2>/dev/null)"
 
   save_ifs=${IFS}
   IFS=: folder_paths=( ${crt_rpath} )
@@ -450,7 +467,7 @@ function main()
 
   if [ -n "${interpreter}" ]
   then
-    msg+=" LD=${interpreter}"
+    : # msg+=" LD=${interpreter}"
   fi
   echo "${msg}"
   for err in ${errors[@]}
@@ -461,13 +478,7 @@ function main()
 
   if [ "${show_details}" == "y" ]
   then
-    local readelf="$(which readelf)"
     local ldd="$(which ldd)"
-    local patchelf="$(which patchelf)"
-    if [ "${IS_BOOTSTRAP}" == "y" ]
-    then
-      patchelf="${INSTALL_FOLDER_PATH}/bin/patchelf"
-    fi
 
     run_app "${patchelf}" --print-interpreter "${file_path}" || true
     run_app "${patchelf}" --print-rpath "${file_path}" || true
