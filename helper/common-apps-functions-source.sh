@@ -879,8 +879,10 @@ function test_native_gcc()
     # xbb_activate_installed_bin
 
     echo
-    echo "PATH=${PATH}"
-    echo "LD_RUN_PATH=${LD_RUN_PATH}"
+    echo "PATH=${PATH:-""}"
+    # This is important when running from the build code.
+    # When invoked at the end, it should be empty.
+    echo "LD_LIBRARY_PATH=${LD_LIBRARY_PATH:-""}"
 
     run_app which as
     run_app which ld
@@ -907,7 +909,7 @@ function test_native_gcc()
     fi
 
     echo
-    echo "Checking the shared libraries..."
+    echo "Checking the gcc binaries shared libraries..."
 
     show_libs "${INSTALL_FOLDER_PATH}/usr/bin/gcc${XBB_GCC_SUFFIX}"
     show_libs "${INSTALL_FOLDER_PATH}/usr/bin/g++${XBB_GCC_SUFFIX}"
@@ -3974,11 +3976,8 @@ function do_perl()
       CXXFLAGS="${XBB_CPPFLAGS} ${XBB_CXXFLAGS_NO_W}"
       LDFLAGS="${XBB_LDFLAGS_APP} -v"
 
-      # make[1]: Leaving directory '/root/Work/xbb-3.3-ubuntu-12.04-x86_64/build/perl-5.30.1/dist/Unicode-Normalize'
-      # LD_LIBRARY_PATH=/root/Work/xbb-3.3-ubuntu-12.04-x86_64/build/perl-5.30.1  ./perl -Ilib -I. -f pod/buildtoc -q
-      # ./perl: /lib/x86_64-linux-gnu/libcrypt.so.1: version `XCRYPT_2.0' not found (required by /root/Work/xbb-3.3-ubuntu-12.04-x86_64/build/perl-5.30.1/libperl.so)
-      # make: *** [makefile:405: pod/perltoc.pod] Error 1
-      LD_LIBRARY_PATH="${INSTALL_FOLDER_PATH}/lib:$(dirname $(realpath $(${CC} -print-file-name=libssp.so)))"
+      # Required to pick libcrypt and libssp from bootstrap.
+      LD_LIBRARY_PATH="${XBB_LIBRARY_PATH}"
 
       export CPPFLAGS
       export CFLAGS
@@ -4059,6 +4058,10 @@ function test_perl()
 {
   (
     xbb_activate_installed_bin
+
+    # To find libssp.so.0.
+    # /opt/xbb/bin/perl: error while loading shared libraries: libssp.so.0: cannot open shared object file: No such file or directory
+    export LD_LIBRARY_PATH="${XBB_LIBRARY_PATH}"
 
     echo
     run_app "${INSTALL_FOLDER_PATH}/bin/perl" --version
@@ -6068,6 +6071,8 @@ function do_autogen()
       export CFLAGS="${XBB_CFLAGS_NO_W}"
       export CXXFLAGS="${XBB_CXXFLAGS_NO_W}"
       export LDFLAGS="${XBB_LDFLAGS_APP}"
+
+      export LD_LIBRARY_PATH="${XBB_LIBRARY_PATH}"
 
       env | sort
 
