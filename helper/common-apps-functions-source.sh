@@ -964,8 +964,8 @@ function test_native_gcc()
     # /usr/bin/ld: BFD (GNU Binutils for Ubuntu) 2.22 internal error, aborting at ../../bfd/reloc.c line 443 in bfd_get_reloc_size
     xbb_activate_installed_bin
 
-    mkdir -pv "${HOME}/tmp"
-    cd "${HOME}/tmp"
+    mkdir -pv "${HOME}/tmp/native-gcc"
+    cd "${HOME}/tmp/native-gcc"
 
     # Note: __EOF__ is quoted to prevent substitutions here.
     cat <<'__EOF__' > hello.cpp
