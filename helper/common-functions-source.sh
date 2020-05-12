@@ -1030,12 +1030,20 @@ function strip_static_objects()
       # -not -path 'lib/gcc/*-w64-mingw32/*'  \
       find * \
         -type f \
-        \( -name '*.a' -o -name '*.o' \) \
+        -name '*.a'\
         -not -path '*mingw*' \
         -print \
         -exec chmod +w {} \; \
         -exec "${strip}" --strip-debug {} \; \
         -exec "${ranlib}" {} \;
+
+      find * \
+        -type f \
+        -name '*.o' \
+        -not -path '*mingw*' \
+        -print \
+        -exec chmod +w {} \; \
+        -exec "${strip}" --strip-debug {} \; 
 
       if [ "${IS_BOOTSTRAP}" != "y" ]
       then
