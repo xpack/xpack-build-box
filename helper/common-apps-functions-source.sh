@@ -1039,6 +1039,8 @@ function do_mingw_binutils()
 
     download_and_extract "${mingw_binutils_url}" "${mingw_binutils_archive}" "${mingw_binutils_folder_name}"
 
+    mkdir -pv "${LOGS_FOLDER_PATH}/${mingw_binutils_folder_name}"
+
     (
       mkdir -pv "${BUILD_FOLDER_PATH}/${mingw_binutils_build_folder_name}"
       cd "${BUILD_FOLDER_PATH}/${mingw_binutils_build_folder_name}"
@@ -1081,8 +1083,8 @@ function do_mingw_binutils()
             --disable-nls \
             --disable-werror
 
-          cp "config.log" "${LOGS_FOLDER_PATH}/config-mingw-binutils-log.txt"
-        ) 2>&1 | tee "${LOGS_FOLDER_PATH}/configure-mingw-binutils-output.txt"
+          cp "config.log" "${LOGS_FOLDER_PATH}/${mingw_binutils_folder_name}/config-log.txt"
+        ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${mingw_binutils_folder_name}/configure-output.txt"
       fi
 
       (
@@ -1110,7 +1112,7 @@ function do_mingw_binutils()
         show_libs "${INSTALL_FOLDER_PATH}/usr/bin/${MINGW_TARGET}-strings" 
         show_libs "${INSTALL_FOLDER_PATH}/usr/bin/${MINGW_TARGET}-strip" 
 
-      ) 2>&1 | tee "${LOGS_FOLDER_PATH}/make-mingw-binutils-output.txt"
+      ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${mingw_binutils_folder_name}/make-output.txt"
 
     )
 
@@ -1127,7 +1129,7 @@ function do_mingw_binutils()
       run_app "${INSTALL_FOLDER_PATH}/usr/bin/${MINGW_TARGET}-size" --version
       run_app "${INSTALL_FOLDER_PATH}/usr/bin/${MINGW_TARGET}-strings" --version
       run_app "${INSTALL_FOLDER_PATH}/usr/bin/${MINGW_TARGET}-strip" --version
-    ) 2>&1 | tee "${LOGS_FOLDER_PATH}/test-mingw-binutils-output.txt"
+    ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${mingw_binutils_folder_name}/test-output.txt"
 
     hash -r
 
@@ -1188,6 +1190,8 @@ function do_mingw_all()
 
     download_and_extract "${mingw_url}" "${mingw_folder_archive}" "${mingw_folder_name}"
 
+    mkdir -pv "${LOGS_FOLDER_PATH}/${mingw_build_headers_folder_name}"
+
     (
       mkdir -pv "${BUILD_FOLDER_PATH}/${mingw_build_headers_folder_name}"
       cd "${BUILD_FOLDER_PATH}/${mingw_build_headers_folder_name}"
@@ -1211,8 +1215,8 @@ function do_mingw_all()
             --build="${BUILD}" \
             --host="${MINGW_TARGET}" \
 
-          cp "config.log" "${LOGS_FOLDER_PATH}/config-mingw-headers-log.txt"
-        ) 2>&1 | tee "${LOGS_FOLDER_PATH}/configure-mingw-headers-output.txt"
+          cp "config.log" "${LOGS_FOLDER_PATH}/${mingw_build_headers_folder_name}/config-log.txt"
+        ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${mingw_build_headers_folder_name}/configure-output.txt"
       fi
 
       (
@@ -1233,7 +1237,7 @@ function do_mingw_all()
           ln -s "usr/${MINGW_TARGET}" "mingw"
         )
 
-      ) 2>&1 | tee "${LOGS_FOLDER_PATH}/make-mingw-headers-output.txt"
+      ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${mingw_build_headers_folder_name}/make-output.txt"
     )
 
     hash -r
@@ -1274,6 +1278,8 @@ function do_mingw_all()
     cd "${SOURCES_FOLDER_PATH}"
 
     download_and_extract "${mingw_gcc_url}" "${mingw_gcc_archive}" "${mingw_gcc_folder_name}"
+
+    mkdir -pv "${LOGS_FOLDER_PATH}/${mingw_gcc_folder_name}"
 
     (
       mkdir -pv "${BUILD_FOLDER_PATH}/${mingw_build_gcc_folder_name}"
@@ -1334,8 +1340,8 @@ function do_mingw_all()
 
           set -u
 
-          cp "config.log" "${LOGS_FOLDER_PATH}/config-mingw-gcc-step1-log.txt"
-        ) 2>&1 | tee "${LOGS_FOLDER_PATH}/configure-mingw-gcc-step1-output.txt"
+          cp "config.log" "${LOGS_FOLDER_PATH}/${mingw_gcc_folder_name}/config-step1-log.txt"
+        ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${mingw_gcc_folder_name}/configure-step1-output.txt"
       fi
 
       (
@@ -1346,7 +1352,7 @@ function do_mingw_all()
         make -j ${JOBS} all-gcc 
 
         make install-gcc
-      ) 2>&1 | tee "${LOGS_FOLDER_PATH}/make-mingw-gcc-step1-output.txt"
+      ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${mingw_gcc_folder_name}/make-step1-output.txt"
     )
 
     hash -r
@@ -1367,6 +1373,8 @@ function do_mingw_all()
   local mingw_crt_stamp_file_path="${STAMPS_FOLDER_PATH}/stamp-${mingw_build_crt_folder_name}-installed"
   if [ ! -f "${mingw_crt_stamp_file_path}" -o ! -d "${BUILD_FOLDER_PATH}/${mingw_build_crt_folder_name}" ]
   then
+
+    mkdir -pv "${LOGS_FOLDER_PATH}/${mingw_build_crt_folder_name}"
 
     (
       mkdir -pv "${BUILD_FOLDER_PATH}/${mingw_build_crt_folder_name}"
@@ -1431,8 +1439,8 @@ function do_mingw_all()
             ${_crt_configure_lib32} \
             ${_crt_configure_lib64}
 
-          cp "config.log" "${LOGS_FOLDER_PATH}/config-mingw-crt-log.txt"
-        ) 2>&1 | tee "${LOGS_FOLDER_PATH}/configure-mingw-crt-output.txt"
+          cp "config.log" "${LOGS_FOLDER_PATH}/${mingw_build_crt_folder_name}/config-log.txt"
+        ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${mingw_build_crt_folder_name}/configure-output.txt"
       fi
 
       (
@@ -1446,7 +1454,8 @@ function do_mingw_all()
         make install
 
         ls -l "${INSTALL_FOLDER_PATH}/usr/${MINGW_TARGET}"
-      ) 2>&1 | tee "${LOGS_FOLDER_PATH}/make-mingw-crt-output.txt"
+
+      ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${mingw_build_crt_folder_name}/make-output.txt"
     )
 
     hash -r
@@ -1467,6 +1476,8 @@ function do_mingw_all()
   local mingw_winpthreads_stamp_file_path="${STAMPS_FOLDER_PATH}/stamp-${mingw_build_winpthreads_folder_name}-installed"
   if [ ! -f "${mingw_winpthreads_stamp_file_path}" -o ! -d "${BUILD_FOLDER_PATH}/${mingw_build_winpthreads_folder_name}" ]
   then
+
+    mkdir -pv "${LOGS_FOLDER_PATH}/${mingw_build_winpthreads_folder_name}"
 
     (
       mkdir -pv "${BUILD_FOLDER_PATH}/${mingw_build_winpthreads_folder_name}"
@@ -1503,8 +1514,8 @@ function do_mingw_all()
             --enable-static \
             --enable-shared \
 
-         cp "config.log" "${LOGS_FOLDER_PATH}/config-mingw-winpthreads-log.txt"
-        ) 2>&1 | tee "${LOGS_FOLDER_PATH}/configure-mingw-winpthreads-output.txt"
+         cp "config.log" "${LOGS_FOLDER_PATH}/${mingw_build_winpthreads_folder_name}/config-log.txt"
+        ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${mingw_build_winpthreads_folder_name}/configure-output.txt"
       fi
       
       (
@@ -1518,7 +1529,7 @@ function do_mingw_all()
         make install
 
         ls -l "${INSTALL_FOLDER_PATH}/usr/${MINGW_TARGET}"
-      ) 2>&1 | tee "${LOGS_FOLDER_PATH}/make-mingw-winpthreads-output.txt"
+      ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${mingw_build_winpthreads_folder_name}/make-output.txt"
     )
 
     hash -r
@@ -1534,6 +1545,8 @@ function do_mingw_all()
   local mingw_gcc_step2_stamp_file_path="${STAMPS_FOLDER_PATH}/stamp-mingw-gcc-step2-${mingw_gcc_version}-installed"
   if [ ! -f "${mingw_gcc_step2_stamp_file_path}" -o ! -d "${BUILD_FOLDER_PATH}/${mingw_build_gcc_folder_name}" ]
   then
+
+    mkdir -pv "${LOGS_FOLDER_PATH}/${mingw_gcc_folder_name}"
 
     (
       echo
@@ -1558,7 +1571,7 @@ function do_mingw_all()
       # make install-strip
       make install
 
-    ) 2>&1 | tee "${LOGS_FOLDER_PATH}/make-mingw-gcc-step2-output.txt"
+    ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${mingw_gcc_folder_name}/make-step2-output.txt"
 
     (
       xbb_activate_installed_bin
@@ -1588,7 +1601,7 @@ function do_mingw_all()
         set -e
       
       fi
-    ) 2>&1 | tee "${LOGS_FOLDER_PATH}/strip-mingw-gcc-step2-output.txt"
+    ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${mingw_gcc_folder_name}/strip-step2-output.txt"
 
     (
       xbb_activate_installed_bin
@@ -1614,7 +1627,7 @@ __EOF__
       "${INSTALL_FOLDER_PATH}/usr/bin/${MINGW_TARGET}-g++" hello.cpp -o hello
 
       rm -rf hello.cpp hello
-    ) 2>&1 | tee "${LOGS_FOLDER_PATH}/test-mingw-gcc-step2-output.txt"
+    ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${mingw_gcc_folder_name}/test-step2-output.txt"
 
     hash -r
 
@@ -1667,6 +1680,8 @@ function do_openssl()
     cd "${BUILD_FOLDER_PATH}"
 
     download_and_extract "${openssl_url}" "${openssl_archive}" "${openssl_folder_name}"
+
+    mkdir -pv "${LOGS_FOLDER_PATH}/${openssl_folder_name}"
 
     (
       cd "${BUILD_FOLDER_PATH}/${openssl_folder_name}"
@@ -1772,7 +1787,7 @@ function do_openssl()
           touch config.stamp
 
           # cp "configure.log" "${LOGS_FOLDER_PATH}/configure-openssl-log.txt"
-        ) 2>&1 | tee "${LOGS_FOLDER_PATH}/configure-openssl-output.txt"
+        ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${openssl_folder_name}/configure-output.txt"
       fi
 
       (
@@ -1808,14 +1823,14 @@ function do_openssl()
 
         show_libs "${INSTALL_FOLDER_PATH}/bin/openssl"
 
-      ) 2>&1 | tee "${LOGS_FOLDER_PATH}/make-openssl-output.txt"
+      ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${openssl_folder_name}/make-output.txt"
 
       (
         xbb_activate_installed_bin
 
         echo
         run_app "${INSTALL_FOLDER_PATH}/bin/openssl" version
-      ) 2>&1 | tee "${LOGS_FOLDER_PATH}/test-openssl-output.txt"
+      ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${openssl_folder_name}/test-output.txt"
     )
 
     touch "${openssl_stamp_file_path}"
@@ -1853,6 +1868,8 @@ function do_curl()
     cd "${SOURCES_FOLDER_PATH}"
 
     download_and_extract "${curl_url}" "${curl_archive}" "${curl_folder_name}"
+
+    mkdir -pv "${LOGS_FOLDER_PATH}/${curl_folder_name}"
 
     (
       mkdir -pv "${BUILD_FOLDER_PATH}/${curl_folder_name}"
@@ -1893,8 +1910,8 @@ function do_curl()
             --disable-warnings \
             --disable-debug \
 
-          cp "config.log" "${LOGS_FOLDER_PATH}/config-curl-log.txt"
-        ) 2>&1 | tee "${LOGS_FOLDER_PATH}/configure-curl-output.txt"
+          cp "config.log" "${LOGS_FOLDER_PATH}/${curl_folder_name}/config-log.txt"
+        ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${curl_folder_name}/configure-output.txt"
       fi
 
       (
@@ -1910,7 +1927,7 @@ function do_curl()
 
         show_libs "${INSTALL_FOLDER_PATH}/bin/curl"
 
-      ) 2>&1 | tee "${LOGS_FOLDER_PATH}/make-curl-output.txt"
+      ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${curl_folder_name}/make-output.txt"
     )
 
     (
@@ -1918,7 +1935,7 @@ function do_curl()
 
       echo
       run_app "${INSTALL_FOLDER_PATH}/bin/curl" --version
-    ) 2>&1 | tee "${LOGS_FOLDER_PATH}/test-curl-output.txt"
+    ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${curl_folder_name}/test-output.txt"
 
     touch "${curl_stamp_file_path}"
 
@@ -1958,6 +1975,8 @@ function do_xz()
 
     download_and_extract "${xz_url}" "${xz_archive}" "${xz_folder_name}"
 
+    mkdir -pv "${LOGS_FOLDER_PATH}/${xz_folder_name}"
+
     (
       mkdir -pv "${BUILD_FOLDER_PATH}/${xz_folder_name}"
       cd "${BUILD_FOLDER_PATH}/${xz_folder_name}"
@@ -1985,8 +2004,8 @@ function do_xz()
             \
             --disable-werror \
 
-          cp "config.log" "${LOGS_FOLDER_PATH}/config-xz-log.txt"
-        ) 2>&1 | tee "${LOGS_FOLDER_PATH}/configure-xz-output.txt"
+          cp "config.log" "${LOGS_FOLDER_PATH}/${xz_folder_name}/config-log.txt"
+        ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${xz_folder_name}/configure-output.txt"
       fi
 
       (
@@ -2003,7 +2022,7 @@ function do_xz()
 
         show_libs "${INSTALL_FOLDER_PATH}/bin/xz"
 
-      ) 2>&1 | tee "${LOGS_FOLDER_PATH}/make-xz-output.txt"
+      ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${xz_folder_name}/make-output.txt"
     )
 
     (
@@ -2011,7 +2030,7 @@ function do_xz()
 
       echo
       run_app "${INSTALL_FOLDER_PATH}/bin/xz" --version
-    ) 2>&1 | tee "${LOGS_FOLDER_PATH}/test-xz-output.txt"
+    ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${xz_folder_name}/test-output.txt"
 
     hash -r
 
@@ -2053,6 +2072,8 @@ function do_tar()
 
     download_and_extract "${tar_url}" "${tar_archive}" "${tar_folder_name}"
 
+    mkdir -pv "${LOGS_FOLDER_PATH}/${tar_folder_name}"
+
     (
       mkdir -pv "${BUILD_FOLDER_PATH}/${tar_folder_name}"
       cd "${BUILD_FOLDER_PATH}/${tar_folder_name}"
@@ -2081,8 +2102,8 @@ function do_tar()
           bash ${DEBUG} "${SOURCES_FOLDER_PATH}/${tar_folder_name}/configure" \
             --prefix="${INSTALL_FOLDER_PATH}" 
 
-          cp "config.log" "${LOGS_FOLDER_PATH}/config-tar-log.txt"
-        ) 2>&1 | tee "${LOGS_FOLDER_PATH}/configure-tar-output.txt"
+          cp "config.log" "${LOGS_FOLDER_PATH}/${tar_folder_name}/config-log.txt"
+        ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${tar_folder_name}/configure-output.txt"
       fi
 
       (
@@ -2116,7 +2137,8 @@ function do_tar()
         cd "${INSTALL_FOLDER_PATH}/bin"
         rm -f gnutar
         ln -s -v tar gnutar
-      ) 2>&1 | tee "${LOGS_FOLDER_PATH}/make-tar-output.txt"
+
+      ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${tar_folder_name}/make-output.txt"
     )
 
     (
@@ -2124,7 +2146,7 @@ function do_tar()
 
       echo
       run_app "${INSTALL_FOLDER_PATH}/bin/tar" --version
-    ) 2>&1 | tee "${LOGS_FOLDER_PATH}/test-tar-output.txt"
+    ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${tar_folder_name}/test-output.txt"
 
     hash -r
 
@@ -2158,6 +2180,8 @@ function do_coreutils()
     cd "${SOURCES_FOLDER_PATH}"
 
     download_and_extract "${coreutils_url}" "${coreutils_archive}" "${coreutils_folder_name}"
+
+    mkdir -pv "${LOGS_FOLDER_PATH}/${coreutils_folder_name}"
 
     (
       mkdir -pv "${BUILD_FOLDER_PATH}/${coreutils_folder_name}"
@@ -2214,8 +2238,8 @@ function do_coreutils()
 
           set -u
 
-          cp "config.log" "${LOGS_FOLDER_PATH}/config-coreutils-log.txt"
-        ) 2>&1 | tee "${LOGS_FOLDER_PATH}/configure-coreutils-output.txt"
+          cp "config.log" "${LOGS_FOLDER_PATH}/${coreutils_folder_name}/config-log.txt"
+        ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${coreutils_folder_name}/configure-output.txt"
       fi
 
       (
@@ -2252,7 +2276,7 @@ function do_coreutils()
         show_libs "${INSTALL_FOLDER_PATH}/bin/touch"
         show_libs "${INSTALL_FOLDER_PATH}/bin/tr"
         show_libs "${INSTALL_FOLDER_PATH}/bin/wc"
-      ) 2>&1 | tee "${LOGS_FOLDER_PATH}/make-coreutils-output.txt"
+      ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${coreutils_folder_name}/make-output.txt"
     )
 
     (
@@ -2278,7 +2302,7 @@ function do_coreutils()
       run_app "${INSTALL_FOLDER_PATH}/bin/touch" --version
       run_app "${INSTALL_FOLDER_PATH}/bin/tr" --version
       run_app "${INSTALL_FOLDER_PATH}/bin/wc" --version
-    ) 2>&1 | tee "${LOGS_FOLDER_PATH}/test-coreutils-output.txt"
+    ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${coreutils_folder_name}/test-output.txt"
 
     hash -r
 
@@ -2313,6 +2337,8 @@ function do_pkg_config()
     cd "${SOURCES_FOLDER_PATH}"
 
     download_and_extract "${pkg_config_url}" "${pkg_config_archive}" "${pkg_config_folder_name}"
+
+    mkdir -pv "${LOGS_FOLDER_PATH}/${pkg_config_folder_name}"
 
     (
       mkdir -pv "${BUILD_FOLDER_PATH}/${pkg_config_folder_name}"
@@ -2360,8 +2386,8 @@ function do_pkg_config()
             --disable-debug \
             --disable-host-tool \
 
-          cp "config.log" "${LOGS_FOLDER_PATH}/config-pkg_config-log.txt"
-        ) 2>&1 | tee "${LOGS_FOLDER_PATH}/configure-pkg_config-output.txt"
+          cp "config.log" "${LOGS_FOLDER_PATH}/${pkg_config_folder_name}/config-log.txt"
+        ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${pkg_config_folder_name}/configure-output.txt"
       fi
 
       (
@@ -2376,7 +2402,7 @@ function do_pkg_config()
 
         show_libs "${INSTALL_FOLDER_PATH}/bin/pkg-config"
 
-      ) 2>&1 | tee "${LOGS_FOLDER_PATH}/make-pkg_config-output.txt"
+      ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${pkg_config_folder_name}/make-output.txt"
     )
 
     (
@@ -2384,7 +2410,7 @@ function do_pkg_config()
 
       echo
       run_app "${INSTALL_FOLDER_PATH}/bin/pkg-config" --version
-    ) 2>&1 | tee "${LOGS_FOLDER_PATH}/test-pkg_config-output.txt"
+    ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${pkg_config_folder_name}/test-output.txt"
 
     hash -r
 
@@ -2421,6 +2447,8 @@ function do_m4()
 
     download_and_extract "${m4_url}" "${m4_archive}" "${m4_folder_name}" "${m4_patch_file_path}"
 
+    mkdir -pv "${LOGS_FOLDER_PATH}/${m4_folder_name}"
+
     (
       mkdir -pv "${BUILD_FOLDER_PATH}/${m4_folder_name}"
       cd "${BUILD_FOLDER_PATH}/${m4_folder_name}"
@@ -2446,8 +2474,8 @@ function do_m4()
           bash ${DEBUG} "${SOURCES_FOLDER_PATH}/${m4_folder_name}/configure" \
             --prefix="${INSTALL_FOLDER_PATH}" \
 
-          cp "config.log" "${LOGS_FOLDER_PATH}/config-m4-log.txt"
-        ) 2>&1 | tee "${LOGS_FOLDER_PATH}/configure-m4-output.txt"
+          cp "config.log" "${LOGS_FOLDER_PATH}/${m4_folder_name}/config-log.txt"
+        ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${m4_folder_name}/configure-output.txt"
       fi
 
       (
@@ -2479,7 +2507,8 @@ function do_m4()
         cd "${INSTALL_FOLDER_PATH}/bin"
         rm -f gm4
         ln -s -v m4 gm4
-      ) 2>&1 | tee "${LOGS_FOLDER_PATH}/make-m4-output.txt"
+
+      ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${m4_folder_name}/make-output.txt"
     )
 
     (
@@ -2487,7 +2516,7 @@ function do_m4()
 
       echo
       run_app "${INSTALL_FOLDER_PATH}/bin/m4" --version
-    ) 2>&1 | tee "${LOGS_FOLDER_PATH}/test-m4-output.txt"
+    ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${m4_folder_name}/test-output.txt"
 
     hash -r
 
@@ -2525,6 +2554,8 @@ function do_gawk()
 
     download_and_extract "${gawk_url}" "${gawk_archive}" "${gawk_folder_name}"
 
+    mkdir -pv "${LOGS_FOLDER_PATH}/${gawk_folder_name}"
+
     (
       mkdir -pv "${BUILD_FOLDER_PATH}/${gawk_folder_name}"
       cd "${BUILD_FOLDER_PATH}/${gawk_folder_name}"
@@ -2552,8 +2583,8 @@ function do_gawk()
             \
             --without-libsigsegv \
 
-          cp "config.log" "${LOGS_FOLDER_PATH}/config-gawk-log.txt"
-        ) 2>&1 | tee "${LOGS_FOLDER_PATH}/configure-gawk-output.txt"
+          cp "config.log" "${LOGS_FOLDER_PATH}/${gawk_folder_name}/config-log.txt"
+        ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${gawk_folder_name}/configure-output.txt"
       fi
 
       (
@@ -2574,7 +2605,7 @@ function do_gawk()
 
         show_libs "${INSTALL_FOLDER_PATH}/bin/gawk"
 
-      ) 2>&1 | tee "${LOGS_FOLDER_PATH}/make-gawk-output.txt"
+      ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${gawk_folder_name}/make-output.txt"
     )
 
     (
@@ -2582,7 +2613,7 @@ function do_gawk()
 
       echo
       run_app "${INSTALL_FOLDER_PATH}/bin/gawk" --version
-    ) 2>&1 | tee "${LOGS_FOLDER_PATH}/test-gawk-output.txt"
+    ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${gawk_folder_name}/test-output.txt"
 
     hash -r
 
@@ -2616,6 +2647,8 @@ function do_sed()
     cd "${SOURCES_FOLDER_PATH}"
 
     download_and_extract "${sed_url}" "${sed_archive}" "${sed_folder_name}"
+
+    mkdir -pv "${LOGS_FOLDER_PATH}/${sed_folder_name}"
 
     (
       mkdir -pv "${BUILD_FOLDER_PATH}/${sed_folder_name}"
@@ -2668,7 +2701,7 @@ function do_sed()
         cd "${INSTALL_FOLDER_PATH}/bin"
         rm -f gsed
         ln -s -v sed gsed
-      ) 2>&1 | tee "${LOGS_FOLDER_PATH}/make-sed-output.txt"
+      ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${sed_folder_name}/make-output.txt"
     )
 
     (
@@ -2676,7 +2709,7 @@ function do_sed()
 
       echo
       run_app "${INSTALL_FOLDER_PATH}/bin/sed" --version
-    ) 2>&1 | tee "${LOGS_FOLDER_PATH}/test-sed-output.txt"
+    ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${sed_folder_name}/test-output.txt"
 
     hash -r
 
@@ -2711,6 +2744,8 @@ function do_autoconf()
 
     download_and_extract "${autoconf_url}" "${autoconf_archive}" "${autoconf_folder_name}"
 
+    mkdir -pv "${LOGS_FOLDER_PATH}/${autoconf_folder_name}"
+
     (
       mkdir -pv "${BUILD_FOLDER_PATH}/${autoconf_folder_name}"
       cd "${BUILD_FOLDER_PATH}/${autoconf_folder_name}"
@@ -2736,8 +2771,8 @@ function do_autoconf()
           bash ${DEBUG} "${SOURCES_FOLDER_PATH}/${autoconf_folder_name}/configure" \
             --prefix="${INSTALL_FOLDER_PATH}" 
 
-          cp "config.log" "${LOGS_FOLDER_PATH}/config-autoconf-log.txt"
-        ) 2>&1 | tee "${LOGS_FOLDER_PATH}/configure-autoconf-output.txt"
+          cp "config.log" "${LOGS_FOLDER_PATH}/${autoconf_folder_name}/config-log.txt"
+        ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${autoconf_folder_name}/configure-output.txt"
       fi
 
       (
@@ -2750,7 +2785,7 @@ function do_autoconf()
         # make install-strip
         make install
 
-      ) 2>&1 | tee "${LOGS_FOLDER_PATH}/make-autoconf-output.txt"
+      ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${autoconf_folder_name}/make-output.txt"
     )
 
     (
@@ -2758,7 +2793,7 @@ function do_autoconf()
 
       echo
       run_app "${INSTALL_FOLDER_PATH}/bin/autoconf" --version
-    ) 2>&1 | tee "${LOGS_FOLDER_PATH}/test-autoconf-output.txt"
+    ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${autoconf_folder_name}/test-output.txt"
 
     hash -r
 
@@ -2796,6 +2831,8 @@ function do_automake()
 
     download_and_extract "${automake_url}" "${automake_archive}" "${automake_folder_name}" "${automake_patch_file_path}"
 
+    mkdir -pv "${LOGS_FOLDER_PATH}/${automake_folder_name}"
+
     (
       mkdir -pv "${BUILD_FOLDER_PATH}/${automake_folder_name}"
       cd "${BUILD_FOLDER_PATH}/${automake_folder_name}"
@@ -2823,8 +2860,8 @@ function do_automake()
             \
             --build="${BUILD}" \
 
-          cp "config.log" "${LOGS_FOLDER_PATH}/config-automake-log.txt"
-        ) 2>&1 | tee "${LOGS_FOLDER_PATH}/configure-automake-output.txt"
+          cp "config.log" "${LOGS_FOLDER_PATH}/${automake_folder_name}/config-log.txt"
+        ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${automake_folder_name}/configure-output.txt"
       fi
 
       (
@@ -2843,7 +2880,7 @@ function do_automake()
         # make install-strip
         make install
 
-      ) 2>&1 | tee "${LOGS_FOLDER_PATH}/make-automake-output.txt"
+      ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${automake_folder_name}/make-output.txt"
     )
 
     (
@@ -2851,7 +2888,7 @@ function do_automake()
 
       echo
       run_app "${INSTALL_FOLDER_PATH}/bin/automake" --version
-    ) 2>&1 | tee "${LOGS_FOLDER_PATH}/test-automake-output.txt"
+    ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${automake_folder_name}/test-output.txt"
 
     hash -r
 
@@ -2887,6 +2924,8 @@ function do_libtool()
 
     download_and_extract "${libtool_url}" "${libtool_archive}" "${libtool_folder_name}"
 
+    mkdir -pv "${LOGS_FOLDER_PATH}/${libtool_folder_name}"
+
     (
       mkdir -pv "${BUILD_FOLDER_PATH}/${libtool_folder_name}"
       cd "${BUILD_FOLDER_PATH}/${libtool_folder_name}"
@@ -2919,8 +2958,8 @@ function do_libtool()
           bash ${DEBUG} "${SOURCES_FOLDER_PATH}/${libtool_folder_name}/configure" \
             --prefix="${INSTALL_FOLDER_PATH}" 
 
-          cp "config.log" "${LOGS_FOLDER_PATH}/config-libtool-log.txt"
-        ) 2>&1 | tee "${LOGS_FOLDER_PATH}/configure-libtool-output.txt"
+          cp "config.log" "${LOGS_FOLDER_PATH}/${libtool_folder_name}/config-log.txt"
+        ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${libtool_folder_name}/configure-output.txt"
       fi
 
       (
@@ -2946,7 +2985,7 @@ function do_libtool()
         ln -s -v libtool glibtool
         ln -s -v libtoolize glibtoolize
 
-      ) 2>&1 | tee "${LOGS_FOLDER_PATH}/make-libtool-output.txt"
+      ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${libtool_folder_name}/make-output.txt"
     )
 
     (
@@ -2955,7 +2994,7 @@ function do_libtool()
       echo
       run_app "${INSTALL_FOLDER_PATH}/bin/libtool" --version
       run_app "${INSTALL_FOLDER_PATH}/bin/libtool" --help
-    ) 2>&1 | tee "${LOGS_FOLDER_PATH}/test-libtool-output.txt"
+    ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${libtool_folder_name}/test-output.txt"
 
     hash -r
 
@@ -2990,6 +3029,8 @@ function do_gettext()
     cd "${SOURCES_FOLDER_PATH}"
 
     download_and_extract "${gettext_url}" "${gettext_archive}" "${gettext_folder_name}"
+
+    mkdir -pv "${LOGS_FOLDER_PATH}/${gettext_folder_name}"
 
     (
       mkdir -pv "${BUILD_FOLDER_PATH}/${gettext_folder_name}"
@@ -3027,8 +3068,8 @@ function do_gettext()
             --enable-csharp \
             --enable-nls \
            
-          cp "config.log" "${LOGS_FOLDER_PATH}/config-gettext-log.txt"
-        ) 2>&1 | tee "${LOGS_FOLDER_PATH}/configure-gettext-output.txt"
+          cp "config.log" "${LOGS_FOLDER_PATH}/${gettext_folder_name}/config-log.txt"
+        ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${gettext_folder_name}/configure-output.txt"
       fi
 
       (
@@ -3050,12 +3091,12 @@ function do_gettext()
         show_libs "${INSTALL_FOLDER_PATH}/bin/gettext"
         show_libs "${INSTALL_FOLDER_PATH}/bin/msgcmp"
 
-      ) 2>&1 | tee "${LOGS_FOLDER_PATH}/make-gettext-output.txt"
+      ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${gettext_folder_name}/make-output.txt"
     )
 
     (
       test_gettext
-    ) 2>&1 | tee "${LOGS_FOLDER_PATH}/test-gettext-output.txt"
+    ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${gettext_folder_name}/test-output.txt"
 
     hash -r
 
@@ -3126,6 +3167,8 @@ function do_patch()
 
     download_and_extract "${patch_url}" "${patch_archive}" "${patch_folder_name}"
 
+    mkdir -pv "${LOGS_FOLDER_PATH}/${patch_folder_name}"
+
     (
       mkdir -pv "${BUILD_FOLDER_PATH}/${patch_folder_name}"
       cd "${BUILD_FOLDER_PATH}/${patch_folder_name}"
@@ -3151,8 +3194,8 @@ function do_patch()
           bash ${DEBUG} "${SOURCES_FOLDER_PATH}/${patch_folder_name}/configure" \
             --prefix="${INSTALL_FOLDER_PATH}" 
 
-          cp "config.log" "${LOGS_FOLDER_PATH}/config-patch-log.txt"
-        ) 2>&1 | tee "${LOGS_FOLDER_PATH}/configure-patch-output.txt"
+          cp "config.log" "${LOGS_FOLDER_PATH}/${patch_folder_name}/config-log.txt"
+        ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${patch_folder_name}/configure-output.txt"
       fi
 
       (
@@ -3169,7 +3212,7 @@ function do_patch()
 
         show_libs "${INSTALL_FOLDER_PATH}/bin/patch"
 
-      ) 2>&1 | tee "${LOGS_FOLDER_PATH}/make-patch-output.txt"
+      ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${patch_folder_name}/make-output.txt"
     )
 
     (
@@ -3177,7 +3220,7 @@ function do_patch()
 
       echo
       run_app "${INSTALL_FOLDER_PATH}/bin/patch" --version
-    ) 2>&1 | tee "${LOGS_FOLDER_PATH}/test-patch-output.txt"
+    ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${patch_folder_name}/test-output.txt"
 
     hash -r
 
@@ -3213,6 +3256,8 @@ function do_diffutils()
 
     download_and_extract "${diffutils_url}" "${diffutils_archive}" "${diffutils_folder_name}"
 
+    mkdir -pv "${LOGS_FOLDER_PATH}/${diffutils_folder_name}"
+
     (
       mkdir -pv "${BUILD_FOLDER_PATH}/${diffutils_folder_name}"
       cd "${BUILD_FOLDER_PATH}/${diffutils_folder_name}"
@@ -3238,8 +3283,8 @@ function do_diffutils()
           bash ${DEBUG} "${SOURCES_FOLDER_PATH}/${diffutils_folder_name}/configure" \
             --prefix="${INSTALL_FOLDER_PATH}" 
 
-          cp "config.log" "${LOGS_FOLDER_PATH}/config-diffutils-log.txt"
-        ) 2>&1 | tee "${LOGS_FOLDER_PATH}/configure-diffutils-output.txt"
+          cp "config.log" "${LOGS_FOLDER_PATH}/${diffutils_folder_name}/config-log.txt"
+        ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${diffutils_folder_name}/configure-output.txt"
       fi
 
       (
@@ -3256,7 +3301,7 @@ function do_diffutils()
 
         show_libs "${INSTALL_FOLDER_PATH}/bin/diff"
 
-      ) 2>&1 | tee "${LOGS_FOLDER_PATH}/make-diffutils-output.txt"
+      ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${diffutils_folder_name}/make-output.txt"
     )
 
     (
@@ -3264,7 +3309,7 @@ function do_diffutils()
 
       echo
       run_app "${INSTALL_FOLDER_PATH}/bin/diff" --version
-    ) 2>&1 | tee "${LOGS_FOLDER_PATH}/test-diffutils-output.txt"
+    ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${diffutils_folder_name}/test-output.txt"
 
     hash -r
 
@@ -3302,6 +3347,8 @@ function do_bison()
 
     download_and_extract "${bison_url}" "${bison_archive}" "${bison_folder_name}"
 
+    mkdir -pv "${LOGS_FOLDER_PATH}/${bison_folder_name}"
+
     (
       mkdir -pv "${BUILD_FOLDER_PATH}/${bison_folder_name}"
       cd "${BUILD_FOLDER_PATH}/${bison_folder_name}"
@@ -3333,8 +3380,8 @@ function do_bison()
           bash ${DEBUG} "${SOURCES_FOLDER_PATH}/${bison_folder_name}/configure" \
             --prefix="${INSTALL_FOLDER_PATH}" 
 
-          cp "config.log" "${LOGS_FOLDER_PATH}/config-bison-log.txt"
-        ) 2>&1 | tee "${LOGS_FOLDER_PATH}/configure-bison-output.txt"
+          cp "config.log" "${LOGS_FOLDER_PATH}/${bison_folder_name}/config-log.txt"
+        ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${bison_folder_name}/configure-output.txt"
       fi
 
       (
@@ -3355,7 +3402,7 @@ function do_bison()
 
         show_libs "${INSTALL_FOLDER_PATH}/bin/bison"
 
-      ) 2>&1 | tee "${LOGS_FOLDER_PATH}/make-bison-output.txt"
+      ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${bison_folder_name}/make-output.txt"
     )
 
     (
@@ -3363,7 +3410,7 @@ function do_bison()
 
       echo
       run_app "${INSTALL_FOLDER_PATH}/bin/bison" --version
-    ) 2>&1 | tee "${LOGS_FOLDER_PATH}/test-bison-output.txt"
+    ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${bison_folder_name}/test-output.txt"
 
     hash -r
 
@@ -3415,6 +3462,8 @@ function do_flex()
 
     download_and_extract "${flex_url}" "${flex_archive}" "${flex_folder_name}" "${flex_patch_file_path}"
 
+    mkdir -pv "${LOGS_FOLDER_PATH}/${flex_folder_name}"
+
     (
       cd "${SOURCES_FOLDER_PATH}/${flex_folder_name}"
       if [ ! -f "stamp-autogen" ]
@@ -3433,7 +3482,7 @@ function do_flex()
         touch "stamp-autogen"
       
       fi
-    ) 2>&1 | tee "${LOGS_FOLDER_PATH}/autogen-flex-output.txt"
+    ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${flex_folder_name}/autogen-output.txt"
 
     (
       mkdir -pv "${BUILD_FOLDER_PATH}/${flex_folder_name}"
@@ -3460,8 +3509,8 @@ function do_flex()
           bash ${DEBUG} "${SOURCES_FOLDER_PATH}/${flex_folder_name}/configure" \
             --prefix="${INSTALL_FOLDER_PATH}"
 
-          cp "config.log" "${LOGS_FOLDER_PATH}/config-flex-log.txt"
-        ) 2>&1 | tee "${LOGS_FOLDER_PATH}/configure-flex-output.txt"
+          cp "config.log" "${LOGS_FOLDER_PATH}/${flex_folder_name}/config-log.txt"
+        ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${flex_folder_name}/configure-output.txt"
       fi
 
       (
@@ -3483,7 +3532,7 @@ function do_flex()
 
         show_libs "${INSTALL_FOLDER_PATH}/bin/flex"
 
-      ) 2>&1 | tee "${LOGS_FOLDER_PATH}/make-flex-output.txt"
+      ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${flex_folder_name}/make-output.txt"
     )
 
     (
@@ -3491,7 +3540,7 @@ function do_flex()
 
       echo
       run_app "${INSTALL_FOLDER_PATH}/bin/flex" --version
-    ) 2>&1 | tee "${LOGS_FOLDER_PATH}/test-flex-output.txt"
+    ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${flex_folder_name}/test-output.txt"
 
     hash -r
 
@@ -3529,6 +3578,8 @@ function do_make()
 
     download_and_extract "${make_url}" "${make_archive}" "${make_folder_name}" "${make_patch_file_path}"
 
+    mkdir -pv "${LOGS_FOLDER_PATH}/${make_folder_name}"
+
     (
       mkdir -pv "${BUILD_FOLDER_PATH}/${make_folder_name}"
       cd "${BUILD_FOLDER_PATH}/${make_folder_name}"
@@ -3554,8 +3605,8 @@ function do_make()
           bash ${DEBUG} "${SOURCES_FOLDER_PATH}/${make_folder_name}/configure" \
             --prefix="${INSTALL_FOLDER_PATH}"
 
-          cp "config.log" "${LOGS_FOLDER_PATH}/config-make-log.txt"
-        ) 2>&1 | tee "${LOGS_FOLDER_PATH}/configure-make-output.txt"
+          cp "config.log" "${LOGS_FOLDER_PATH}/${make_folder_name}/config-log.txt"
+        ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${make_folder_name}/configure-output.txt"
       fi
 
       (
@@ -3582,7 +3633,7 @@ function do_make()
 
         show_libs "${INSTALL_FOLDER_PATH}/bin/make"
 
-      ) 2>&1 | tee "${LOGS_FOLDER_PATH}/make-make-output.txt"
+      ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${make_folder_name}/make-output.txt"
     )
 
     (
@@ -3590,7 +3641,7 @@ function do_make()
 
       echo
       run_app "${INSTALL_FOLDER_PATH}/bin/make" --version
-    ) 2>&1 | tee "${LOGS_FOLDER_PATH}/test-make-output.txt"
+    ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${make_folder_name}/test-output.txt"
 
     hash -r
 
@@ -3627,6 +3678,8 @@ function do_wget()
     cd "${SOURCES_FOLDER_PATH}"
 
     download_and_extract "${wget_url}" "${wget_archive}" "${wget_folder_name}"
+
+    mkdir -pv "${LOGS_FOLDER_PATH}/${wget_folder_name}"
 
     (
       mkdir -pv "${BUILD_FOLDER_PATH}/${wget_folder_name}"
@@ -3665,8 +3718,8 @@ function do_wget()
             --disable-pcre \
             --disable-pcre2 \
 
-          cp "config.log" "${LOGS_FOLDER_PATH}/config-wget-log.txt"
-        ) 2>&1 | tee "${LOGS_FOLDER_PATH}/configure-wget-output.txt"
+          cp "config.log" "${LOGS_FOLDER_PATH}/${wget_folder_name}/config-log.txt"
+        ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${wget_folder_name}/configure-output.txt"
       fi
 
       (
@@ -3685,7 +3738,7 @@ function do_wget()
 
         show_libs "${INSTALL_FOLDER_PATH}/bin/wget"
 
-      ) 2>&1 | tee "${LOGS_FOLDER_PATH}/make-wget-output.txt"
+      ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${wget_folder_name}/make-output.txt"
     )
 
     (
@@ -3693,7 +3746,7 @@ function do_wget()
 
       echo
       run_app "${INSTALL_FOLDER_PATH}/bin/wget" --version
-    ) 2>&1 | tee "${LOGS_FOLDER_PATH}/test-wget-output.txt"
+    ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${wget_folder_name}/test-output.txt"
 
     hash -r
 
@@ -3730,6 +3783,8 @@ function do_texinfo()
 
     download_and_extract "${texinfo_url}" "${texinfo_archive}" "${texinfo_folder_name}"
 
+    mkdir -pv "${LOGS_FOLDER_PATH}/${texinfo_folder_name}"
+
     (
       mkdir -pv "${BUILD_FOLDER_PATH}/${texinfo_folder_name}"
       cd "${BUILD_FOLDER_PATH}/${texinfo_folder_name}"
@@ -3755,8 +3810,8 @@ function do_texinfo()
           bash ${DEBUG} "${SOURCES_FOLDER_PATH}/${texinfo_folder_name}/configure" \
             --prefix="${INSTALL_FOLDER_PATH}" 
 
-          cp "config.log" "${LOGS_FOLDER_PATH}/config-texinfo-log.txt"
-        ) 2>&1 | tee "${LOGS_FOLDER_PATH}/configure-texinfo-output.txt"
+          cp "config.log" "${LOGS_FOLDER_PATH}/${texinfo_folder_name}/config-log.txt"
+        ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${texinfo_folder_name}/configure-output.txt"
       fi
 
       (
@@ -3779,7 +3834,7 @@ function do_texinfo()
         # make install-strip
         make install
 
-      ) 2>&1 | tee "${LOGS_FOLDER_PATH}/make-texinfo-output.txt"
+      ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${texinfo_folder_name}/make-output.txt"
     )
 
     (
@@ -3787,7 +3842,7 @@ function do_texinfo()
 
       echo
       run_app "${INSTALL_FOLDER_PATH}/bin/texi2pdf" --version
-    ) 2>&1 | tee "${LOGS_FOLDER_PATH}/test-texinfo-output.txt"
+    ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${texinfo_folder_name}/test-output.txt"
 
     hash -r
 
@@ -3829,6 +3884,8 @@ function do_cmake()
 
     download_and_extract "${cmake_url}" "${cmake_archive}" "${cmake_folder_name}"
 
+    mkdir -pv "${LOGS_FOLDER_PATH}/${cmake_folder_name}"
+
     (
       mkdir -pv "${BUILD_FOLDER_PATH}/${cmake_folder_name}"
       cd "${BUILD_FOLDER_PATH}/${cmake_folder_name}"
@@ -3867,7 +3924,7 @@ function do_cmake()
               --parallel="${JOBS}"
 
             cp "Bootstrap.cmk/cmake_bootstrap.log" "${LOGS_FOLDER_PATH}/bootstrap-cmake-log.txt"
-          ) 2>&1 | tee "${LOGS_FOLDER_PATH}/bootstrap-cmake-output.txt"
+          ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${cmake_folder_name}/bootstrap-output.txt"
         fi
       else
         (
@@ -3882,7 +3939,7 @@ function do_cmake()
             -DCMAKE_INSTALL_PREFIX="${INSTALL_FOLDER_PATH}" \
             "${SOURCES_FOLDER_PATH}/${cmake_folder_name}"
 
-        ) 2>&1 | tee "${LOGS_FOLDER_PATH}/cmake-cmake-output.txt"
+        ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${cmake_folder_name}/cmake-output.txt"
       fi
 
       (
@@ -3902,7 +3959,7 @@ function do_cmake()
         mkdir -pv "${INSTALL_FOLDER_PATH}/share/doc"
         mv -v "${INSTALL_FOLDER_PATH}/doc/cmake-${cmake_version_major}.${cmake_version_minor}" "${INSTALL_FOLDER_PATH}/share/doc"
 
-      ) 2>&1 | tee "${LOGS_FOLDER_PATH}/make-cmake-output.txt"
+      ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${cmake_folder_name}/make-output.txt"
     )
 
     (
@@ -3910,7 +3967,7 @@ function do_cmake()
 
       echo
       run_app "${INSTALL_FOLDER_PATH}/bin/cmake" --version
-    ) 2>&1 | tee "${LOGS_FOLDER_PATH}/test-cmake-output.txt"
+    ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${cmake_folder_name}/test-output.txt"
 
     hash -r
 
@@ -3958,6 +4015,8 @@ function do_perl()
     cd "${BUILD_FOLDER_PATH}"
 
     download_and_extract "${perl_url}" "${perl_archive}" "${perl_folder_name}" "${perl_patch_file_path}"
+
+    mkdir -pv "${LOGS_FOLDER_PATH}/${perl_folder_name}"
 
     (
       cd "${BUILD_FOLDER_PATH}/${perl_folder_name}"
@@ -4008,7 +4067,7 @@ function do_perl()
             -Duselargefiles \
             -Dusethreads
 
-        ) 2>&1 | tee "${LOGS_FOLDER_PATH}/configure-perl-output.txt"
+        ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${perl_folder_name}/configure-output.txt"
       fi
 
       (
@@ -4036,12 +4095,12 @@ function do_perl()
         # cpanminus is a quiet version of cpan.
         cpan App::cpanminus
 
-      ) 2>&1 | tee "${LOGS_FOLDER_PATH}/make-perl-output.txt"
+      ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${perl_folder_name}/make-output.txt"
     )
 
     (
       test_perl
-    ) 2>&1 | tee "${LOGS_FOLDER_PATH}/test-perl-output.txt"
+    ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${perl_folder_name}/test-output.txt"
 
     hash -r
 
@@ -4093,6 +4152,8 @@ function do_makedepend()
 
     download_and_extract "${makedepend_url}" "${makedepend_archive}" "${makedepend_folder_name}"
 
+    mkdir -pv "${LOGS_FOLDER_PATH}/${makedepend_folder_name}"
+
     (
       mkdir -pv "${BUILD_FOLDER_PATH}/${makedepend_folder_name}"
       cd "${BUILD_FOLDER_PATH}/${makedepend_folder_name}"
@@ -4125,8 +4186,8 @@ function do_makedepend()
           bash ${DEBUG} "${SOURCES_FOLDER_PATH}/${makedepend_folder_name}/configure" \
             --prefix="${INSTALL_FOLDER_PATH}" 
 
-          cp "config.log" "${LOGS_FOLDER_PATH}/config-makedepend-log.txt"
-        ) 2>&1 | tee "${LOGS_FOLDER_PATH}/configure-makedepend-output.txt"
+          cp "config.log" "${LOGS_FOLDER_PATH}/${makedepend_folder_name}/config-log.txt"
+        ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${makedepend_folder_name}/configure-output.txt"
       fi
 
       (
@@ -4139,7 +4200,7 @@ function do_makedepend()
         # make install-strip
         make install
 
-      ) 2>&1 | tee "${LOGS_FOLDER_PATH}/make-makedepend-output.txt"
+      ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${makedepend_folder_name}/make-output.txt"
     )
 
     (
@@ -4147,7 +4208,7 @@ function do_makedepend()
 
       echo
       run_app "${INSTALL_FOLDER_PATH}/bin/makedepend" || true
-    ) 2>&1 | tee "${LOGS_FOLDER_PATH}/test-makedepend-output.txt"
+    ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${makedepend_folder_name}/test-output.txt"
 
     hash -r
 
@@ -4184,6 +4245,8 @@ function do_patchelf()
 
     download_and_extract "${patchelf_url}" "${patchelf_archive}" "${patchelf_folder_name}"
 
+    mkdir -pv "${LOGS_FOLDER_PATH}/${patchelf_folder_name}"
+
     (
       mkdir -pv "${BUILD_FOLDER_PATH}/${patchelf_folder_name}"
       cd "${BUILD_FOLDER_PATH}/${patchelf_folder_name}"
@@ -4211,8 +4274,8 @@ function do_patchelf()
           bash ${DEBUG} "${SOURCES_FOLDER_PATH}/${patchelf_folder_name}/configure" \
             --prefix="${INSTALL_FOLDER_PATH}" 
 
-          cp "config.log" "${LOGS_FOLDER_PATH}/config-patchelf-log.txt"
-        ) 2>&1 | tee "${LOGS_FOLDER_PATH}/configure-patchelf-output.txt"
+          cp "config.log" "${LOGS_FOLDER_PATH}/${patchelf_folder_name}/config-log.txt"
+        ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${patchelf_folder_name}/configure-output.txt"
       fi
 
       (
@@ -4232,7 +4295,7 @@ function do_patchelf()
 
         show_libs "${INSTALL_FOLDER_PATH}/bin/patchelf"
 
-      ) 2>&1 | tee "${LOGS_FOLDER_PATH}/make-patchelf-output.txt"
+      ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${patchelf_folder_name}/make-output.txt"
     )
 
     (
@@ -4240,7 +4303,7 @@ function do_patchelf()
 
       echo
       run_app "${INSTALL_FOLDER_PATH}/bin/patchelf" --version
-    ) 2>&1 | tee "${LOGS_FOLDER_PATH}/test-patchelf-output.txt"
+    ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${patchelf_folder_name}/test-output.txt"
 
     hash -r
 
@@ -4276,6 +4339,8 @@ function do_dos2unix()
 
     download_and_extract "${dos2unix_url}" "${dos2unix_archive}" "${dos2unix_folder_name}"
 
+    mkdir -pv "${LOGS_FOLDER_PATH}/${dos2unix_folder_name}"
+
     (
       mkdir -pv "${BUILD_FOLDER_PATH}/${dos2unix_folder_name}"
       cd "${BUILD_FOLDER_PATH}/${dos2unix_folder_name}"
@@ -4301,7 +4366,7 @@ function do_dos2unix()
 
         show_libs "${INSTALL_FOLDER_PATH}/bin/unix2dos"
 
-      ) 2>&1 | tee "${LOGS_FOLDER_PATH}/make-dos2unix-output.txt"
+      ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${dos2unix_folder_name}/make-output.txt"
     )
 
     (
@@ -4309,7 +4374,7 @@ function do_dos2unix()
 
       echo
       run_app "${INSTALL_FOLDER_PATH}/bin/unix2dos" --version
-    ) 2>&1 | tee "${LOGS_FOLDER_PATH}/test-dos2unix-output.txt"
+    ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${dos2unix_folder_name}/test-output.txt"
 
     hash -r
 
@@ -4348,6 +4413,8 @@ function do_git()
 
     download_and_extract "${git_url}" "${git_archive}" "${git_folder_name}"
 
+    mkdir -pv "${LOGS_FOLDER_PATH}/${git_folder_name}"
+
     (
       cd "${BUILD_FOLDER_PATH}/${git_folder_name}"
 
@@ -4373,8 +4440,8 @@ function do_git()
           bash ${DEBUG} "./configure" \
             --prefix="${INSTALL_FOLDER_PATH}" 
 
-          cp "config.log" "${LOGS_FOLDER_PATH}/config-git-log.txt"
-        ) 2>&1 | tee "${LOGS_FOLDER_PATH}/configure-git-output.txt"
+          cp "config.log" "${LOGS_FOLDER_PATH}/${git_folder_name}/config-log.txt"
+        ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${git_folder_name}/configure-output.txt"
       fi
 
       (
@@ -4394,7 +4461,7 @@ function do_git()
 
         show_libs "${INSTALL_FOLDER_PATH}/bin/git"
 
-      ) 2>&1 | tee "${LOGS_FOLDER_PATH}/make-git-output.txt"
+      ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${git_folder_name}/make-output.txt"
     )
 
     (
@@ -4402,7 +4469,7 @@ function do_git()
 
       echo
       run_app "${INSTALL_FOLDER_PATH}/bin/git" --version
-    ) 2>&1 | tee "${LOGS_FOLDER_PATH}/test-git-output.txt"
+    ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${git_folder_name}/test-output.txt"
 
     hash -r
 
@@ -4443,6 +4510,8 @@ function do_python2()
     cd "${SOURCES_FOLDER_PATH}"
 
     download_and_extract "${python2_url}" "${python2_archive}" "${python2_folder_name}"
+
+    mkdir -pv "${LOGS_FOLDER_PATH}/${python2_folder_name}"
 
     (
       mkdir -pv "${BUILD_FOLDER_PATH}/${python2_folder_name}"
@@ -4504,8 +4573,8 @@ function do_python2()
             --enable-shared \
             --enable-unicode=ucs4 \
 
-          cp "config.log" "${LOGS_FOLDER_PATH}/config-python2-log.txt"
-        ) 2>&1 | tee "${LOGS_FOLDER_PATH}/configure-python2-output.txt"
+          cp "config.log" "${LOGS_FOLDER_PATH}/${python2_folder_name}/config-log.txt"
+        ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${python2_folder_name}/configure-output.txt"
       fi
 
       (
@@ -4529,7 +4598,7 @@ function do_python2()
 
         show_libs "${INSTALL_FOLDER_PATH}/bin/python"
 
-      ) 2>&1 | tee "${LOGS_FOLDER_PATH}/make-python2-output.txt"
+      ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${python2_folder_name}/make-output.txt"
     )
 
     (
@@ -4546,14 +4615,14 @@ function do_python2()
       run_app "${INSTALL_FOLDER_PATH}/bin/python2" -m pip install --upgrade pip==19.3.1 setuptools==44.0.0 wheel==0.34.2
       
       run_app "${INSTALL_FOLDER_PATH}/bin/pip2" --version
-    ) 2>&1 | tee "${LOGS_FOLDER_PATH}/make-python2-pip-output.txt"
+    ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${python2_folder_name}/pip-output.txt"
 
     (
       xbb_activate_installed_bin
 
       echo
       run_app "${INSTALL_FOLDER_PATH}/bin/python" --version
-    ) 2>&1 | tee "${LOGS_FOLDER_PATH}/test-python2-output.txt"
+    ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${python2_folder_name}/test-output.txt"
 
     hash -r
 
@@ -4591,6 +4660,8 @@ function do_python3()
     cd "${SOURCES_FOLDER_PATH}"
 
     download_and_extract "${python3_url}" "${python3_archive}" "${python3_folder_name}"
+
+    mkdir -pv "${LOGS_FOLDER_PATH}/${python3_folder_name}"
 
     (
       mkdir -pv "${BUILD_FOLDER_PATH}/${python3_folder_name}"
@@ -4660,8 +4731,8 @@ function do_python3()
             --enable-shared \
             --enable-loadable-sqlite-extensions \
              
-          cp "config.log" "${LOGS_FOLDER_PATH}/config-python3-log.txt"
-        ) 2>&1 | tee "${LOGS_FOLDER_PATH}/configure-python3-output.txt"
+          cp "config.log" "${LOGS_FOLDER_PATH}/${python3_folder_name}/config-log.txt"
+        ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${python3_folder_name}/configure-output.txt"
       fi
 
       (
@@ -4685,7 +4756,7 @@ function do_python3()
 
         show_libs "${INSTALL_FOLDER_PATH}/bin/python3"
 
-      ) 2>&1 | tee "${LOGS_FOLDER_PATH}/make-python3-output.txt"
+      ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${python3_folder_name}/make-output.txt"
     )
 
     (
@@ -4705,7 +4776,7 @@ function do_python3()
       run_app "${INSTALL_FOLDER_PATH}/bin/python3" -m pip install --upgrade pip==20.0.2 setuptools==45.2.0 wheel==0.34.2
 
       run_app "${INSTALL_FOLDER_PATH}/bin/pip3" --version
-    ) 2>&1 | tee "${LOGS_FOLDER_PATH}/make-python3-pip-output.txt"
+    ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${python3_folder_name}/pip-output.txt"
 
     hash -r
 
@@ -4749,6 +4820,8 @@ function do_scons()
 
     download_and_extract "${scons_url}" "${scons_archive}" "${scons_folder_name}"
 
+    mkdir -pv "${LOGS_FOLDER_PATH}/${scons_folder_name}"
+
     (
       cd "${BUILD_FOLDER_PATH}/${scons_folder_name}"
 
@@ -4780,7 +4853,7 @@ function do_scons()
       mv -v "${INSTALL_FOLDER_PATH}/man/man1"/* "${INSTALL_FOLDER_PATH}/share/man/man1"
       rm -rv "${INSTALL_FOLDER_PATH}/man/man1"
 
-    ) 2>&1 | tee "${LOGS_FOLDER_PATH}/install-scons-output.txt"
+    ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${scons_folder_name}/install-output.txt"
 
     (
       xbb_activate_installed_bin
@@ -4795,7 +4868,7 @@ function do_scons()
       fi
 
       run_app "${INSTALL_FOLDER_PATH}/bin/scons" --version
-    ) 2>&1 | tee "${LOGS_FOLDER_PATH}/test-scons-output.txt"
+    ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${scons_folder_name}/test-output.txt"
 
     hash -r
 
@@ -4818,9 +4891,13 @@ function do_meson
 
   local meson_version="$1"
 
+  local meson_folder_name="meson-${meson_version}"
+
   local meson_stamp_file_path="${STAMPS_FOLDER_PATH}/stamp-meson-${meson_version}-installed"
   if [ ! -f "${meson_stamp_file_path}" ]
   then
+
+    mkdir -pv "${LOGS_FOLDER_PATH}/${meson_folder_name}"
 
     (
       xbb_activate_installed_bin
@@ -4833,7 +4910,7 @@ function do_meson
 
       # export LC_CTYPE=en_US.UTF-8 CPPFLAGS= CFLAGS= CXXFLAGS= LDFLAGS=
       # ./run_tests.py
-    ) 2>&1 | tee "${LOGS_FOLDER_PATH}/install-meson-output.txt"
+    ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${meson_folder_name}/install-output.txt"
 
     (
       xbb_activate_installed_bin
@@ -4841,7 +4918,7 @@ function do_meson
       export PYTHONPATH="${INSTALL_FOLDER_PATH}/lib/python3.7"
 
       run_app "${INSTALL_FOLDER_PATH}/bin/meson" --version
-    ) 2>&1 | tee "${LOGS_FOLDER_PATH}/test-meson-output.txt"
+    ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${meson_folder_name}/test-output.txt"
 
     hash -r
 
@@ -4882,6 +4959,8 @@ function do_ninja()
 
     download_and_extract "${ninja_url}" "${ninja_archive}" "${ninja_folder_name}"
 
+    mkdir -pv "${LOGS_FOLDER_PATH}/${ninja_folder_name}"
+
     (
       cd "${BUILD_FOLDER_PATH}/${ninja_folder_name}"
 
@@ -4916,7 +4995,7 @@ function do_ninja()
 
         show_libs "${INSTALL_FOLDER_PATH}/bin/ninja"
 
-      ) 2>&1 | tee "${LOGS_FOLDER_PATH}/configure-ninja-output.txt"
+      ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${ninja_folder_name}/configure-output.txt"
     )
 
     (
@@ -4924,7 +5003,7 @@ function do_ninja()
 
       echo
       run_app "${INSTALL_FOLDER_PATH}/bin/ninja" --version
-    ) 2>&1 | tee "${LOGS_FOLDER_PATH}/test-ninja-output.txt"
+    ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${ninja_folder_name}/test-output.txt"
 
     hash -r
 
@@ -4959,6 +5038,8 @@ function do_p7zip()
     cd "${BUILD_FOLDER_PATH}"
 
     download_and_extract "${p7zip_url}" "${p7zip_archive}" "${p7zip_folder_name}"
+
+    mkdir -pv "${LOGS_FOLDER_PATH}/${p7zip_folder_name}"
 
     (
       cd "${BUILD_FOLDER_PATH}/${p7zip_folder_name}"
@@ -5004,7 +5085,7 @@ function do_p7zip()
       bash install.sh
 
       # show_libs "${INSTALL_FOLDER_PATH}/bin/7za"
-    ) 2>&1 | tee "${LOGS_FOLDER_PATH}/install-p7zip-output.txt"
+    ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${p7zip_folder_name}/install-output.txt"
 
     (
       xbb_activate_installed_bin
@@ -5017,7 +5098,7 @@ function do_p7zip()
         echo
         run_app "${INSTALL_FOLDER_PATH}/bin/7z" --help
       fi
-    ) 2>&1 | tee "${LOGS_FOLDER_PATH}/test-p7zip-output.txt"
+    ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${p7zip_folder_name}/test-output.txt"
 
     hash -r
 
@@ -5068,6 +5149,8 @@ function do_wine()
 
     download_and_extract "${wine_url}" "${wine_archive}" "${wine_folder_name}"
 
+    mkdir -pv "${LOGS_FOLDER_PATH}/${wine_folder_name}"
+
     (
       cd "${BUILD_FOLDER_PATH}/${wine_folder_name}"
 
@@ -5111,8 +5194,8 @@ function do_wine()
             --disable-win16 \
             --disable-tests \
 
-          cp "config.log" "${LOGS_FOLDER_PATH}/config-wine-log.txt"
-        ) 2>&1 | tee "${LOGS_FOLDER_PATH}/configure-wine-output.txt"
+          cp "config.log" "${LOGS_FOLDER_PATH}/${wine_folder_name}/config-log.txt"
+        ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${wine_folder_name}/configure-output.txt"
       fi
 
       (
@@ -5135,7 +5218,7 @@ function do_wine()
 
         show_libs "${INSTALL_FOLDER_PATH}/bin/wine"
 
-      ) 2>&1 | tee "${LOGS_FOLDER_PATH}/make-wine-output.txt"
+      ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${wine_folder_name}/make-output.txt"
     )
 
     (
@@ -5151,7 +5234,7 @@ function do_wine()
       # and populated with lots of files., so subsequent runs
       # will no longer have to do it.
       run_app "${INSTALL_FOLDER_PATH}/bin/wine" "${INSTALL_FOLDER_PATH}"/lib*/wine/fakedlls/netstat.exe
-    ) 2>&1 | tee "${LOGS_FOLDER_PATH}/test-wine-output.txt"
+    ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${wine_folder_name}/test-output.txt"
 
     hash -r
 
@@ -5192,6 +5275,8 @@ function do_nvm()
 
     download "${nvm_url}" "${nvm_archive}"
 
+    mkdir -pv "${LOGS_FOLDER_PATH}/${nvm_folder_name}"
+
     (
       xbb_activate
       xbb_activate_installed_dev
@@ -5228,7 +5313,7 @@ function do_nvm()
         npm --version
       fi
 
-    ) 2>&1 | tee "${LOGS_FOLDER_PATH}/install-nvm-output.txt"
+    ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${nvm_folder_name}/install-output.txt"
 
     (
       xbb_activate_installed_bin
@@ -5239,7 +5324,7 @@ function do_nvm()
 
       echo
       # "${INSTALL_FOLDER_PATH}/bin/scons" --version
-    ) 2>&1 | tee "${LOGS_FOLDER_PATH}/test-nvm-output.txt"
+    ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${nvm_folder_name}/test-output.txt"
 
     hash -r
 
@@ -5272,6 +5357,8 @@ function do_gnupg()
     cd "${SOURCES_FOLDER_PATH}"
 
     download_and_extract "${gnupg_url}" "${gnupg_archive}" "${gnupg_folder_name}"
+
+    mkdir -pv "${LOGS_FOLDER_PATH}/${gnupg_folder_name}"
 
     (
       mkdir -pv "${BUILD_FOLDER_PATH}/${gnupg_folder_name}"
@@ -5311,8 +5398,8 @@ function do_gnupg()
             --enable-maintainer-mode \
             --enable-symcryptrun \
 
-          cp "config.log" "${LOGS_FOLDER_PATH}/config-gnupg-log.txt"
-        ) 2>&1 | tee "${LOGS_FOLDER_PATH}/configure-gnupg-output.txt"
+          cp "config.log" "${LOGS_FOLDER_PATH}/${gnupg_folder_name}/config-log.txt"
+        ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${gnupg_folder_name}/configure-output.txt"
       fi
 
       (
@@ -5327,7 +5414,7 @@ function do_gnupg()
         # make install-strip
         make install
 
-      ) 2>&1 | tee "${LOGS_FOLDER_PATH}/make-gnupg-output.txt"
+      ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${gnupg_folder_name}/make-output.txt"
     )
 
     (
@@ -5335,7 +5422,7 @@ function do_gnupg()
 
       echo
       "${INSTALL_FOLDER_PATH}/bin/gpg" --version
-    ) 2>&1 | tee "${LOGS_FOLDER_PATH}/test-gnupg-output.txt"
+    ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${gnupg_folder_name}/test-output.txt"
 
     hash -r
 
@@ -5375,6 +5462,8 @@ function do_ant()
 
     download_and_extract "${ant_url}" "${ant_archive}" "${ant_folder_name}"
 
+    mkdir -pv "${LOGS_FOLDER_PATH}/${ant_folder_name}"
+
     (
       cd "${BUILD_FOLDER_PATH}/${ant_folder_name}"
 
@@ -5397,7 +5486,7 @@ function do_ant()
         rm -f "${INSTALL_FOLDER_PATH}/bin/ant"
         ln -s -v "${INSTALL_FOLDER_PATH}/share/ant/bin/ant" "${INSTALL_FOLDER_PATH}/bin/ant"
 
-      ) 2>&1 | tee "${LOGS_FOLDER_PATH}/build-ant-output.txt"
+      ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${ant_folder_name}/build-output.txt"
     )
 
     (
@@ -5405,7 +5494,7 @@ function do_ant()
 
       echo
       "${INSTALL_FOLDER_PATH}/bin/ant" -version
-    ) 2>&1 | tee "${LOGS_FOLDER_PATH}/test-ant-output.txt"
+    ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${ant_folder_name}/test-output.txt"
 
     hash -r
 
@@ -5445,6 +5534,8 @@ function do_maven()
 
     download_and_extract "${maven_url}" "${maven_archive}" "${maven_folder_name}"
 
+    mkdir -pv "${LOGS_FOLDER_PATH}/${maven_folder_name}"
+
     (
       cd "${BUILD_FOLDER_PATH}/${maven_folder_name}"
 
@@ -5468,7 +5559,7 @@ function do_maven()
         rm -f "${INSTALL_FOLDER_PATH}/bin/mvn"
         ln -s -v "${INSTALL_FOLDER_PATH}/share/maven/bin/mvn" "${INSTALL_FOLDER_PATH}/bin/mvn"
 
-      ) 2>&1 | tee "${LOGS_FOLDER_PATH}/build-maven-output.txt"
+      ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${maven_folder_name}/build-output.txt"
     )
 
     (
@@ -5476,7 +5567,7 @@ function do_maven()
 
       echo
       "${INSTALL_FOLDER_PATH}/bin/mvn" -version
-    ) 2>&1 | tee "${LOGS_FOLDER_PATH}/test-maven-output.txt"
+    ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${maven_folder_name}/test-output.txt"
 
     hash -r
 
@@ -5519,6 +5610,8 @@ function do_nodejs()
 
     download_and_extract "${nodejs_url}" "${nodejs_archive}" "${nodejs_folder_name}" "${nodejs_patch_file_path}"
 
+    mkdir -pv "${LOGS_FOLDER_PATH}/${nodejs_folder_name}"
+
     (
       cd "${BUILD_FOLDER_PATH}/${nodejs_folder_name}"
 
@@ -5554,7 +5647,7 @@ function do_nodejs()
 
 
           # cp "config.log" "${LOGS_FOLDER_PATH}/config-nodejs-log.txt"
-        ) 2>&1 | tee "${LOGS_FOLDER_PATH}/configure-nodejs-output.txt"
+        ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${nodejs_folder_name}/configure-output.txt"
       fi
 
       (
@@ -5568,7 +5661,7 @@ function do_nodejs()
 
         # make install-strip
 
-      ) 2>&1 | tee "${LOGS_FOLDER_PATH}/make-nodejs-output.txt"
+      ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${nodejs_folder_name}/make-output.txt"
     )
 
     (
@@ -5576,7 +5669,7 @@ function do_nodejs()
 
       echo
       "${INSTALL_FOLDER_PATH}/bin/node" --version
-    ) 2>&1 | tee "${LOGS_FOLDER_PATH}/test-nodejs-output.txt"
+    ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${nodejs_folder_name}/test-output.txt"
 
     hash -r
 
@@ -5618,6 +5711,8 @@ function do_tcl()
 
     download_and_extract "${tcl_url}" "${tcl_archive}" "${tcl_folder_name}"
 
+    mkdir -pv "${LOGS_FOLDER_PATH}/${tcl_folder_name}"
+
     (
       mkdir -pv "${BUILD_FOLDER_PATH}/${tcl_folder_name}"
       cd "${BUILD_FOLDER_PATH}/${tcl_folder_name}"
@@ -5646,8 +5741,8 @@ function do_tcl()
             --enable-threads \
             --enable-64bit \
 
-          cp "config.log" "${LOGS_FOLDER_PATH}/config-tcl-log.txt"
-        ) 2>&1 | tee "${LOGS_FOLDER_PATH}/configure-tcl-output.txt"
+          cp "config.log" "${LOGS_FOLDER_PATH}/${tcl_folder_name}/config-log.txt"
+        ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${tcl_folder_name}/configure-output.txt"
       fi
 
       (
@@ -5669,7 +5764,7 @@ function do_tcl()
 
         show_libs "${INSTALL_FOLDER_PATH}/bin/tclsh${tcl_version_major}.${tcl_version_minor}"
 
-      ) 2>&1 | tee "${LOGS_FOLDER_PATH}/make-tcl-output.txt"
+      ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${tcl_folder_name}/make-output.txt"
     )
 
     (
@@ -5677,7 +5772,7 @@ function do_tcl()
 
       echo
       run_app "${INSTALL_FOLDER_PATH}/bin/tclsh${tcl_version_major}.${tcl_version_minor}" <<< 'puts [info patchlevel]'
-    ) 2>&1 | tee "${LOGS_FOLDER_PATH}/test-tcl-output.txt"
+    ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${tcl_folder_name}/test-output.txt"
 
     hash -r
 
@@ -5713,6 +5808,8 @@ function do_guile()
 
     download_and_extract "${guile_url}" "${guile_archive}" "${guile_folder_name}"
 
+    mkdir -pv "${LOGS_FOLDER_PATH}/${guile_folder_name}"
+
     (
       mkdir -pv "${BUILD_FOLDER_PATH}/${guile_folder_name}"
       cd "${BUILD_FOLDER_PATH}/${guile_folder_name}"
@@ -5746,8 +5843,8 @@ function do_guile()
             sed -i -e 's/test-out-of-memory//g' Makefile
           )
 
-          cp "config.log" "${LOGS_FOLDER_PATH}/config-guile-log.txt"
-        ) 2>&1 | tee "${LOGS_FOLDER_PATH}/configure-guile-output.txt"
+          cp "config.log" "${LOGS_FOLDER_PATH}/${guile_folder_name}/config-log.txt"
+        ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${guile_folder_name}/configure-output.txt"
       fi
 
       (
@@ -5766,12 +5863,12 @@ function do_guile()
 
         show_libs "${INSTALL_FOLDER_PATH}/bin/guile"
 
-      ) 2>&1 | tee "${LOGS_FOLDER_PATH}/make-guile-output.txt"
+      ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${guile_folder_name}/make-output.txt"
     )
 
     (
       test_guile
-    ) 2>&1 | tee "${LOGS_FOLDER_PATH}/test-guile-output.txt"
+    ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${guile_folder_name}/test-output.txt"
 
     hash -r
 
@@ -5819,6 +5916,8 @@ function do_rhash()
 
     download_and_extract "${rhash_url}" "${rhash_archive}" "${rhash_folder_name}"
 
+    mkdir -pv "${LOGS_FOLDER_PATH}/${rhash_folder_name}"
+
     (
       cd "${BUILD_FOLDER_PATH}/${rhash_folder_name}"
 
@@ -5846,10 +5945,10 @@ function do_rhash()
             --extra-cflags="${CFLAGS} ${CPPFLAGS}" \
             --extra-ldflags="${LDFLAGS}" \
 
-          cp "config.log" "${LOGS_FOLDER_PATH}/config-rhash-log.txt"
+          cp "config.log" "${LOGS_FOLDER_PATH}/${rhash_folder_name}/config-log.txt"
 
           touch "stamp-configure"
-        ) 2>&1 | tee "${LOGS_FOLDER_PATH}/configure-rhash-output.txt"
+        ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${rhash_folder_name}/configure-output.txt"
       fi
 
       (
@@ -5865,7 +5964,7 @@ function do_rhash()
 
         show_libs "${INSTALL_FOLDER_PATH}/bin/rhash"
 
-      ) 2>&1 | tee "${LOGS_FOLDER_PATH}/make-rhash-output.txt"
+      ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${rhash_folder_name}/make-output.txt"
     )
 
     (
@@ -5873,7 +5972,7 @@ function do_rhash()
 
       echo
       run_app "${INSTALL_FOLDER_PATH}/bin/rhash" --version
-    ) 2>&1 | tee "${LOGS_FOLDER_PATH}/test-rhash-output.txt"
+    ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${rhash_folder_name}/test-output.txt"
 
     hash -r
 
@@ -5909,6 +6008,8 @@ function do_re2c()
 
     download_and_extract "${re2c_url}" "${re2c_archive}" "${re2c_folder_name}"
 
+    mkdir -pv "${LOGS_FOLDER_PATH}/${re2c_folder_name}"
+
     (
       cd "${BUILD_FOLDER_PATH}/${re2c_folder_name}"
       if [ ! -f "stamp-autogen" ]
@@ -5922,7 +6023,7 @@ function do_re2c()
         touch "stamp-autogen"
 
       fi
-    ) 2>&1 | tee "${LOGS_FOLDER_PATH}/autogen-re2c-output.txt"
+    ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${re2c_folder_name}/autogen-output.txt"
 
     (
       cd "${BUILD_FOLDER_PATH}/${re2c_folder_name}"
@@ -5948,8 +6049,8 @@ function do_re2c()
           bash ${DEBUG} "${BUILD_FOLDER_PATH}/${re2c_folder_name}/configure" \
             --prefix="${INSTALL_FOLDER_PATH}" \
 
-          cp "config.log" "${LOGS_FOLDER_PATH}/config-re2c-log.txt"
-        ) 2>&1 | tee "${LOGS_FOLDER_PATH}/configure-re2c-output.txt"
+          cp "config.log" "${LOGS_FOLDER_PATH}/${re2c_folder_name}/config-log.txt"
+        ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${re2c_folder_name}/configure-output.txt"
       fi
 
       (
@@ -5970,7 +6071,7 @@ function do_re2c()
 
         show_libs "${INSTALL_FOLDER_PATH}/bin/re2c"
 
-      ) 2>&1 | tee "${LOGS_FOLDER_PATH}/make-re2c-output.txt"
+      ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${re2c_folder_name}/make-output.txt"
     )
 
     (
@@ -5978,7 +6079,7 @@ function do_re2c()
 
       echo
       run_app "${INSTALL_FOLDER_PATH}/bin/re2c" --version
-    ) 2>&1 | tee "${LOGS_FOLDER_PATH}/test-re2c-output.txt"
+    ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${re2c_folder_name}/test-output.txt"
 
     hash -r
 
@@ -5993,8 +6094,6 @@ function do_re2c()
 
 function do_sphinx()
 {
-  local sphinx_version="$1"
-
   # https://www.sphinx-doc.org/en/master/
 
   # https://archlinuxarm.org/packages/any/python-sphinx/files/PKGBUILD
@@ -6002,17 +6101,23 @@ function do_sphinx()
   # Apr 10, 2020, "3.0.1"
   # Mar 5, 2020, "2.4.4"
 
-  local sphinx_stamp_file_path="${STAMPS_FOLDER_PATH}/stamp-sphinx-${sphinx_version}-installed"
+  local sphinx_version="$1"
 
+  local sphinx_folder_name="sphinx-${sphinx_version}"
+
+  local sphinx_stamp_file_path="${STAMPS_FOLDER_PATH}/stamp-sphinx-${sphinx_version}-installed"
   if [ ! -f "${sphinx_stamp_file_path}" ]
   then
+
+    mkdir -pv "${LOGS_FOLDER_PATH}/${sphinx_folder_name}"
+
     (
       xbb_activate_installed_bin
 
       env | sort
 
       pip3 install sphinx==${sphinx_version}
-    ) 2>&1 | tee "${LOGS_FOLDER_PATH}/install-sphinx-output.txt"
+    ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${sphinx_folder_name}/install-output.txt"
 
     hash -r
 
@@ -6020,7 +6125,7 @@ function do_sphinx()
       xbb_activate_installed_bin
 
       run_app "${INSTALL_FOLDER_PATH}/bin/sphinx-build" --version
-    ) 2>&1 | tee "${LOGS_FOLDER_PATH}/test-sphinx-output.txt"
+    ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${sphinx_folder_name}/test-output.txt"
 
     touch "${sphinx_stamp_file_path}"
 

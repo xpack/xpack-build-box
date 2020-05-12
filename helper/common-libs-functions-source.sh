@@ -49,7 +49,6 @@ function do_zlib()
       fi
       cd "${LIBS_BUILD_FOLDER_PATH}/${zlib_folder_name}"
 
-
       xbb_activate
       xbb_activate_installed_dev
 
@@ -550,6 +549,8 @@ function do_nettle()
 
     download_and_extract "${nettle_url}" "${nettle_archive}" "${nettle_folder_name}" "${nettle_patch_file_path}"
 
+    mkdir -pv "${LOGS_FOLDER_PATH}/${nettle_folder_name}"
+
     (
       mkdir -pv "${LIBS_BUILD_FOLDER_PATH}/${nettle_folder_name}"
       cd "${LIBS_BUILD_FOLDER_PATH}/${nettle_folder_name}"
@@ -582,8 +583,8 @@ function do_nettle()
             --disable-arm-neon \
             --disable-assembler
 
-          cp "config.log" "${LOGS_FOLDER_PATH}/config-nettle-log.txt"
-        ) 2>&1 | tee "${LOGS_FOLDER_PATH}/configure-nettle-output.txt"
+          cp "config.log" "${LOGS_FOLDER_PATH}/${nettle_folder_name}/config-log.txt"
+        ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${nettle_folder_name}/configure-output.txt"
       fi
 
       (
@@ -610,7 +611,7 @@ function do_nettle()
         # Make the other install targets.
         make install-headers install-static install-pkgconfig install-shared-nettle install-shared-hogweed
 
-      ) 2>&1 | tee "${LOGS_FOLDER_PATH}/make-nettle-output.txt"
+      ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${nettle_folder_name}/make-output.txt"
     )
 
     touch "${nettle_stamp_file_path}"
@@ -647,6 +648,8 @@ function do_tasn1()
 
     download_and_extract "${tasn1_url}" "${tasn1_archive}" "${tasn1_folder_name}"
 
+    mkdir -pv "${LOGS_FOLDER_PATH}/${tasn1_folder_name}"
+
     (
       mkdir -pv "${LIBS_BUILD_FOLDER_PATH}/${tasn1_folder_name}"
       cd "${LIBS_BUILD_FOLDER_PATH}/${tasn1_folder_name}"
@@ -672,8 +675,8 @@ function do_tasn1()
           bash ${DEBUG} "${SOURCES_FOLDER_PATH}/${tasn1_folder_name}/configure" \
             --prefix="${INSTALL_FOLDER_PATH}" 
 
-          cp "config.log" "${LOGS_FOLDER_PATH}/config-tasn1-log.txt"
-        ) 2>&1 | tee "${LOGS_FOLDER_PATH}/configure-tasn1-output.txt"
+          cp "config.log" "${LOGS_FOLDER_PATH}/${tasn1_folder_name}/config-log.txt"
+        ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${tasn1_folder_name}/configure-output.txt"
       fi
 
       (
@@ -688,7 +691,7 @@ function do_tasn1()
         # make install-strip
         make install
 
-      ) 2>&1 | tee "${LOGS_FOLDER_PATH}/make-tasn1-output.txt"
+      ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${tasn1_folder_name}/make-output.txt"
     )
 
     touch "${tasn1_stamp_file_path}"
@@ -726,6 +729,8 @@ function do_expat()
 
     download_and_extract "${expat_url}" "${expat_archive}" "${expat_folder_name}"
 
+    mkdir -pv "${LOGS_FOLDER_PATH}/${expat_folder_name}"
+
     (
       mkdir -pv "${LIBS_BUILD_FOLDER_PATH}/${expat_folder_name}"
       cd "${LIBS_BUILD_FOLDER_PATH}/${expat_folder_name}"
@@ -751,8 +756,8 @@ function do_expat()
           bash ${DEBUG} "${SOURCES_FOLDER_PATH}/${expat_folder_name}/configure" \
             --prefix="${INSTALL_FOLDER_PATH}" 
 
-          cp "config.log" "${LOGS_FOLDER_PATH}/config-expat-log.txt"
-        ) 2>&1 | tee "${LOGS_FOLDER_PATH}/configure-expat-output.txt"
+          cp "config.log" "${LOGS_FOLDER_PATH}/${expat_folder_name}/config-log.txt"
+        ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${expat_folder_name}/configure-output.txt"
       fi
 
       (
@@ -769,7 +774,7 @@ function do_expat()
 
         show_libs "${INSTALL_FOLDER_PATH}/lib/libexpat.so"
 
-      ) 2>&1 | tee "${LOGS_FOLDER_PATH}/make-expat-output.txt"
+      ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${expat_folder_name}/make-output.txt"
     )
 
     touch "${expat_stamp_file_path}"
@@ -810,6 +815,8 @@ function do_libffi()
 
     download_and_extract "${libffi_url}" "${libffi_archive}" "${libffi_folder_name}"
 
+    mkdir -pv "${LOGS_FOLDER_PATH}/${libffi_folder_name}"
+
     (
       if [ ! -x "${SOURCES_FOLDER_PATH}/${libffi_folder_name}/configure" ]
       then
@@ -822,7 +829,7 @@ function do_libffi()
         run_app bash ${DEBUG} "autogen.sh"
 
       fi
-    ) 2>&1 | tee "${LOGS_FOLDER_PATH}/autogen-libffi-output.txt"
+    ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${libffi_folder_name}/autogen-output.txt"
 
     (
       mkdir -pv "${LIBS_BUILD_FOLDER_PATH}/${libffi_folder_name}"
@@ -853,8 +860,8 @@ function do_libffi()
             \
             --enable-pax_emutramp \
 
-          cp "config.log" "${LOGS_FOLDER_PATH}/config-libffi-log.txt"
-        ) 2>&1 | tee "${LOGS_FOLDER_PATH}/configure-libffi-output.txt"
+          cp "config.log" "${LOGS_FOLDER_PATH}/${libffi_folder_name}/config-log.txt"
+        ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${libffi_folder_name}/configure-output.txt"
       fi
 
       (
@@ -869,7 +876,7 @@ function do_libffi()
         # make install-strip
         make install
 
-      ) 2>&1 | tee "${LOGS_FOLDER_PATH}/make-libffi-output.txt"
+      ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${libffi_folder_name}/make-output.txt"
     )
 
     touch "${libffi_stamp_file_path}"
@@ -907,6 +914,8 @@ function do_libiconv()
 
     download_and_extract "${libiconv_url}" "${libiconv_archive}" "${libiconv_folder_name}"
 
+    mkdir -pv "${LOGS_FOLDER_PATH}/${libiconv_folder_name}"
+
     (
       mkdir -pv "${LIBS_BUILD_FOLDER_PATH}/${libiconv_folder_name}"
       cd "${LIBS_BUILD_FOLDER_PATH}/${libiconv_folder_name}"
@@ -932,8 +941,8 @@ function do_libiconv()
           bash ${DEBUG} "${SOURCES_FOLDER_PATH}/${libiconv_folder_name}/configure" \
             --prefix="${INSTALL_FOLDER_PATH}/libiconv" 
 
-          cp "config.log" "${LOGS_FOLDER_PATH}/config-libiconv-log.txt"
-        ) 2>&1 | tee "${LOGS_FOLDER_PATH}/configure-libiconv-output.txt"
+          cp "config.log" "${LOGS_FOLDER_PATH}/${libiconv_folder_name}/config-log.txt"
+        ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${libiconv_folder_name}/configure-output.txt"
       fi
 
       (
@@ -950,7 +959,7 @@ function do_libiconv()
 
         # Does not leave a pkgconfig/iconv.pc;
         # Pass -liconv explicitly.
-      ) 2>&1 | tee "${LOGS_FOLDER_PATH}/make-libiconv-output.txt"
+      ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${libiconv_folder_name}/make-output.txt"
     )
 
     touch "${libiconv_stamp_file_path}"
@@ -988,6 +997,8 @@ function do_gnutls()
     cd "${SOURCES_FOLDER_PATH}"
 
     download_and_extract "${gnutls_url}" "${gnutls_archive}" "${gnutls_folder_name}"
+
+    mkdir -pv "${LOGS_FOLDER_PATH}/${gnutls_folder_name}"
 
     (
       mkdir -pv "${LIBS_BUILD_FOLDER_PATH}/${gnutls_folder_name}"
@@ -1029,8 +1040,8 @@ function do_gnutls()
             \
             --enable-guile \
 
-          cp "config.log" "${LOGS_FOLDER_PATH}/config-gnutls-log.txt"
-        ) 2>&1 | tee "${LOGS_FOLDER_PATH}/configure-gnutls-output.txt"
+          cp "config.log" "${LOGS_FOLDER_PATH}/${gnutls_folder_name}/config-log.txt"
+        ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${gnutls_folder_name}/configure-output.txt"
       fi
 
       (
@@ -1050,7 +1061,7 @@ function do_gnutls()
         # make install-strip
         make install
 
-      ) 2>&1 | tee "${LOGS_FOLDER_PATH}/make-gnutls-output.txt"
+      ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${gnutls_folder_name}/make-output.txt"
     )
 
     touch "${gnutls_stamp_file_path}"
@@ -1087,6 +1098,8 @@ function do_util_macros()
 
     download_and_extract "${util_macros_url}" "${util_macros_archive}" "${util_macros_folder_name}"
 
+    mkdir -pv "${LOGS_FOLDER_PATH}/${util_macros_folder_name}"
+
     (
       mkdir -pv "${LIBS_BUILD_FOLDER_PATH}/${util_macros_folder_name}"
       cd "${LIBS_BUILD_FOLDER_PATH}/${util_macros_folder_name}"
@@ -1112,8 +1125,8 @@ function do_util_macros()
           bash ${DEBUG} "${SOURCES_FOLDER_PATH}/${util_macros_folder_name}/configure" \
             --prefix="${INSTALL_FOLDER_PATH}" 
 
-          cp "config.log" "${LOGS_FOLDER_PATH}/config-util_macros-log.txt"
-        ) 2>&1 | tee "${LOGS_FOLDER_PATH}/configure-util_macros-output.txt"
+          cp "config.log" "${LOGS_FOLDER_PATH}/${util_macros_folder_name}/config-log.txt"
+        ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${util_macros_folder_name}/configure-output.txt"
       fi
 
       (
@@ -1126,7 +1139,7 @@ function do_util_macros()
         # make install-strip
         make install
 
-      ) 2>&1 | tee "${LOGS_FOLDER_PATH}/make-util_macros-output.txt"
+      ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${util_macros_folder_name}/make-output.txt"
     )
 
     touch "${util_macros_stamp_file_path}"
@@ -1162,6 +1175,8 @@ function do_xorg_xproto()
 
     download_and_extract "${xorg_xproto_url}" "${xorg_xproto_archive}" "${xorg_xproto_folder_name}" "${xorg_xproto_patch_file_path}"
 
+    mkdir -pv "${LOGS_FOLDER_PATH}/${xorg_xproto_folder_name}"
+
     (
       mkdir -pv "${LIBS_BUILD_FOLDER_PATH}/${xorg_xproto_folder_name}"
       cd "${LIBS_BUILD_FOLDER_PATH}/${xorg_xproto_folder_name}"
@@ -1193,8 +1208,8 @@ function do_xorg_xproto()
             --without-xsltproc \
             --without-fop
 
-          cp "config.log" "${LOGS_FOLDER_PATH}/config-xorg_xproto-log.txt"
-        ) 2>&1 | tee "${LOGS_FOLDER_PATH}/configure-xorg_xproto-output.txt"
+          cp "config.log" "${LOGS_FOLDER_PATH}/${xorg_xproto_folder_name}/config-log.txt"
+        ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${xorg_xproto_folder_name}/configure-output.txt"
       fi
 
       (
@@ -1207,7 +1222,7 @@ function do_xorg_xproto()
         # make install-strip
         make install
 
-      ) 2>&1 | tee "${LOGS_FOLDER_PATH}/make-xorg_xproto-output.txt"
+      ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${xorg_xproto_folder_name}/make-output.txt"
     )
 
     touch "${xorg_xproto_stamp_file_path}"
@@ -1245,6 +1260,8 @@ function do_libpng()
 
     download_and_extract "${libpng_url}" "${libpng_archive}" "${libpng_folder_name}"
 
+    mkdir -pv "${LOGS_FOLDER_PATH}/${libpng_folder_name}"
+
     (
       mkdir -pv "${LIBS_BUILD_FOLDER_PATH}/${libpng_folder_name}"
       cd "${LIBS_BUILD_FOLDER_PATH}/${libpng_folder_name}"
@@ -1274,8 +1291,8 @@ function do_libpng()
             \
             --enable-arm-neon=no \
 
-          cp "config.log" "${LOGS_FOLDER_PATH}/config-libpng-log.txt"
-        ) 2>&1 | tee "${LOGS_FOLDER_PATH}/configure-libpng-output.txt"
+          cp "config.log" "${LOGS_FOLDER_PATH}/${libpng_folder_name}/config-log.txt"
+        ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${libpng_folder_name}/configure-output.txt"
       fi
 
       (
@@ -1291,7 +1308,7 @@ function do_libpng()
         # make install-strip
         make install
 
-      ) 2>&1 | tee "${LOGS_FOLDER_PATH}/make-libpng-output.txt"
+      ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${libpng_folder_name}/make-output.txt"
     )
 
     touch "${libpng_stamp_file_path}"
@@ -1326,6 +1343,8 @@ function do_libmpdec()
 
     download_and_extract "${libmpdec_url}" "${libmpdec_archive}" "${libmpdec_folder_name}"
 
+    mkdir -pv "${LOGS_FOLDER_PATH}/${libmpdec_folder_name}"
+
     (
       cd "${LIBS_BUILD_FOLDER_PATH}/${libmpdec_folder_name}"
 
@@ -1350,8 +1369,8 @@ function do_libmpdec()
           bash ${DEBUG} "configure" \
             --prefix="${INSTALL_FOLDER_PATH}" 
 
-          cp "config.log" "${LOGS_FOLDER_PATH}/config-libmpdec-log.txt"
-        ) 2>&1 | tee "${LOGS_FOLDER_PATH}/configure-libmpdec-output.txt"
+          cp "config.log" "${LOGS_FOLDER_PATH}/${libmpdec_folder_name}/config-log.txt"
+        ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${libmpdec_folder_name}/configure-output.txt"
       fi
 
       (
@@ -1363,7 +1382,7 @@ function do_libmpdec()
 
         make install
 
-      ) 2>&1 | tee "${LOGS_FOLDER_PATH}/make-libmpdec-output.txt"
+      ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${libmpdec_folder_name}/make-output.txt"
     )
 
     touch "${libmpdec_stamp_file_path}"
@@ -1398,6 +1417,8 @@ function do_libgpg_error()
 
     download_and_extract "${libgpg_error_url}" "${libgpg_error_archive}" "${libgpg_error_folder_name}"
 
+    mkdir -pv "${LOGS_FOLDER_PATH}/${libgpg_error_folder_name}"
+
     (
       mkdir -pv "${LIBS_BUILD_FOLDER_PATH}/${libgpg_error_folder_name}"
       cd "${LIBS_BUILD_FOLDER_PATH}/${libgpg_error_folder_name}"
@@ -1426,8 +1447,8 @@ function do_libgpg_error()
           # WARN-TEST
           sed -i -e 's|t-syserror$(EXEEXT)||' "tests/Makefile"
 
-          cp "config.log" "${LOGS_FOLDER_PATH}/config-libgpg-error-log.txt"
-        ) 2>&1 | tee "${LOGS_FOLDER_PATH}/configure-libgpg-error-output.txt"
+          cp "config.log" "${LOGS_FOLDER_PATH}/${libgpg_error_folder_name}/config-log.txt"
+        ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${libgpg_error_folder_name}/configure-output.txt"
       fi
 
       (
@@ -1446,7 +1467,7 @@ function do_libgpg_error()
         # make install-strip
         make install
 
-      ) 2>&1 | tee "${LOGS_FOLDER_PATH}/make-libgpg-error-output.txt"
+      ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${libgpg_error_folder_name}/make-output.txt"
     )
 
     touch "${libgpg_error_stamp_file_path}"
@@ -1471,7 +1492,6 @@ function do_libgcrypt()
   local libgcrypt_archive="${libgcrypt_folder_name}.tar.bz2"
   local libgcrypt_url="https://gnupg.org/ftp/gcrypt/libgcrypt/${libgcrypt_archive}"
 
-
   local libgcrypt_stamp_file_path="${STAMPS_FOLDER_PATH}/stamp-libgcrypt-${libgcrypt_version}-installed"
   if [ ! -f "${libgcrypt_stamp_file_path}" -o ! -d "${LIBS_BUILD_FOLDER_PATH}/${libgcrypt_folder_name}" ]
   then
@@ -1479,6 +1499,8 @@ function do_libgcrypt()
     cd "${SOURCES_FOLDER_PATH}"
 
     download_and_extract "${libgcrypt_url}" "${libgcrypt_archive}" "${libgcrypt_folder_name}"
+
+    mkdir -pv "${LOGS_FOLDER_PATH}/${libgcrypt_folder_name}"
 
     (
       mkdir -pv "${LIBS_BUILD_FOLDER_PATH}/${libgcrypt_folder_name}"
@@ -1525,8 +1547,8 @@ function do_libgcrypt()
             sed -i '/HAVE_GCC_INLINE_ASM_NEON 1/d' config.h
           fi
 
-          cp "config.log" "${LOGS_FOLDER_PATH}/config-libgcrypt-log.txt"
-        ) 2>&1 | tee "${LOGS_FOLDER_PATH}/configure-libgcrypt-output.txt"
+          cp "config.log" "${LOGS_FOLDER_PATH}/${libgcrypt_folder_name}/config-log.txt"
+        ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${libgcrypt_folder_name}/configure-output.txt"
       fi
 
       (
@@ -1545,7 +1567,7 @@ function do_libgcrypt()
 
         make check
 
-      ) 2>&1 | tee "${LOGS_FOLDER_PATH}/make-libgcrypt-output.txt"
+      ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${libgcrypt_folder_name}/make-output.txt"
     )
 
     touch "${libgcrypt_stamp_file_path}"
@@ -1578,6 +1600,8 @@ function do_libassuan()
 
     download_and_extract "${libassuan_url}" "${libassuan_archive}" "${libassuan_folder_name}"
 
+    mkdir -pv "${LOGS_FOLDER_PATH}/${libassuan_folder_name}"
+
     (
       mkdir -pv "${LIBS_BUILD_FOLDER_PATH}/${libassuan_folder_name}"
       cd "${LIBS_BUILD_FOLDER_PATH}/${libassuan_folder_name}"
@@ -1605,8 +1629,8 @@ function do_libassuan()
             \
             --with-libgpg-error-prefix="${INSTALL_FOLDER_PATH}" \
 
-          cp "config.log" "${LOGS_FOLDER_PATH}/config-libassuan-log.txt"
-        ) 2>&1 | tee "${LOGS_FOLDER_PATH}/configure-libassuan-output.txt"
+          cp "config.log" "${LOGS_FOLDER_PATH}/${libassuan_folder_name}/config-log.txt"
+        ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${libassuan_folder_name}/configure-output.txt"
       fi
 
       (
@@ -1621,7 +1645,7 @@ function do_libassuan()
         # make install-strip
         make install
 
-      ) 2>&1 | tee "${LOGS_FOLDER_PATH}/make-libassuan-output.txt"
+      ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${libassuan_folder_name}/make-output.txt"
     )
 
     touch "${libassuan_stamp_file_path}"
@@ -1654,6 +1678,8 @@ function do_libksba()
 
     download_and_extract "${libksba_url}" "${libksba_archive}" "${libksba_folder_name}"
 
+    mkdir -pv "${LOGS_FOLDER_PATH}/${libksba_folder_name}"
+
     (
       mkdir -pv "${LIBS_BUILD_FOLDER_PATH}/${libksba_folder_name}"
       cd "${LIBS_BUILD_FOLDER_PATH}/${libksba_folder_name}"
@@ -1681,8 +1707,8 @@ function do_libksba()
             \
             --with-libgpg-error-prefix="${INSTALL_FOLDER_PATH}" \
 
-          cp "config.log" "${LOGS_FOLDER_PATH}/config-libksba-log.txt"
-        ) 2>&1 | tee "${LOGS_FOLDER_PATH}/configure-libksba-output.txt"
+          cp "config.log" "${LOGS_FOLDER_PATH}/${libksba_folder_name}/config-log.txt"
+        ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${libksba_folder_name}/configure-output.txt"
       fi
 
       (
@@ -1697,7 +1723,7 @@ function do_libksba()
         # make install-strip
         make install
 
-      ) 2>&1 | tee "${LOGS_FOLDER_PATH}/make-libksba-output.txt"
+      ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${libksba_folder_name}/make-output.txt"
     )
 
     touch "${libksba_stamp_file_path}"
@@ -1729,6 +1755,8 @@ function do_npth()
     cd "${SOURCES_FOLDER_PATH}"
 
     download_and_extract "${npth_url}" "${npth_archive}" "${npth_folder_name}"
+
+    mkdir -pv "${LOGS_FOLDER_PATH}/${npth_folder_name}"
 
     (
       mkdir -pv "${LIBS_BUILD_FOLDER_PATH}/${npth_folder_name}"
@@ -1764,8 +1792,8 @@ function do_npth()
           bash ${DEBUG} "${SOURCES_FOLDER_PATH}/${npth_folder_name}/configure" \
             --prefix="${INSTALL_FOLDER_PATH}" 
 
-          cp "config.log" "${LOGS_FOLDER_PATH}/config-npth-log.txt"
-        ) 2>&1 | tee "${LOGS_FOLDER_PATH}/configure-npth-output.txt"
+          cp "config.log" "${LOGS_FOLDER_PATH}/${npth_folder_name}/config-log.txt"
+        ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${npth_folder_name}/configure-output.txt"
       fi
 
       (
@@ -1780,7 +1808,7 @@ function do_npth()
         # make install-strip
         make install
 
-      ) 2>&1 | tee "${LOGS_FOLDER_PATH}/make-npth-output.txt"
+      ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${npth_folder_name}/make-output.txt"
     )
 
     touch "${npth_stamp_file_path}"
@@ -1823,6 +1851,8 @@ function do_libxcrypt()
 
     download_and_extract "${libxcrypt_url}" "${libxcrypt_archive}" "${libxcrypt_folder_name}" "${libxcrypt_patch_file_path}"
 
+    mkdir -pv "${LOGS_FOLDER_PATH}/${libxcrypt_folder_name}"
+
     if [ ! -x "${SOURCES_FOLDER_PATH}/${libxcrypt_folder_name}/configure" ]
     then
       (
@@ -1847,7 +1877,7 @@ function do_libxcrypt()
           autoreconf -fiv
         fi
 
-      ) 2>&1 | tee "${LOGS_FOLDER_PATH}/autogen-libxcrypt-output.txt"
+      ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${libxcrypt_folder_name}/autogen-output.txt"
 
     fi
 
@@ -1876,8 +1906,8 @@ function do_libxcrypt()
           bash ${DEBUG} "${SOURCES_FOLDER_PATH}/${libxcrypt_folder_name}/configure" \
             --prefix="${INSTALL_FOLDER_PATH}" \
 
-          cp "config.log" "${LOGS_FOLDER_PATH}/config-libxcrypt-log.txt"
-        ) 2>&1 | tee "${LOGS_FOLDER_PATH}/configure-libxcrypt-output.txt"
+          cp "config.log" "${LOGS_FOLDER_PATH}/${libxcrypt_folder_name}/config-log.txt"
+        ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${libxcrypt_folder_name}/configure-output.txt"
       fi
 
       (
@@ -1899,7 +1929,7 @@ function do_libxcrypt()
         # make install-strip
         make install
 
-      ) 2>&1 | tee "${LOGS_FOLDER_PATH}/make-libxcrypt-output.txt"
+      ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${libxcrypt_folder_name}/make-output.txt"
     )
 
     touch "${libxcrypt_stamp_file_path}"
@@ -1933,6 +1963,8 @@ function do_libunistring()
 
     download_and_extract "${libunistring_url}" "${libunistring_archive}" "${libunistring_folder_name}"
 
+    mkdir -pv "${LOGS_FOLDER_PATH}/${libunistring_folder_name}"
+
     (
       mkdir -pv "${LIBS_BUILD_FOLDER_PATH}/${libunistring_folder_name}"
       cd "${LIBS_BUILD_FOLDER_PATH}/${libunistring_folder_name}"
@@ -1958,8 +1990,8 @@ function do_libunistring()
           bash ${DEBUG} "${SOURCES_FOLDER_PATH}/${libunistring_folder_name}/configure" \
             --prefix="${INSTALL_FOLDER_PATH}" \
 
-          cp "config.log" "${LOGS_FOLDER_PATH}/config-libunistring-log.txt"
-        ) 2>&1 | tee "${LOGS_FOLDER_PATH}/configure-libunistring-output.txt"
+          cp "config.log" "${LOGS_FOLDER_PATH}/${libunistring_folder_name}/config-log.txt"
+        ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${libunistring_folder_name}/configure-output.txt"
       fi
 
       (
@@ -1974,7 +2006,7 @@ function do_libunistring()
         # make install-strip
         make install
 
-      ) 2>&1 | tee "${LOGS_FOLDER_PATH}/make-libunistring-output.txt"
+      ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${libunistring_folder_name}/make-output.txt"
     )
 
     touch "${libunistring_stamp_file_path}"
@@ -2008,6 +2040,8 @@ function do_gc()
 
     download_and_extract "${gc_url}" "${gc_archive}" "${gc_folder_name}"
 
+    mkdir -pv "${LOGS_FOLDER_PATH}/${gc_folder_name}"
+
     (
       mkdir -pv "${LIBS_BUILD_FOLDER_PATH}/${gc_folder_name}"
       cd "${LIBS_BUILD_FOLDER_PATH}/${gc_folder_name}"
@@ -2035,8 +2069,8 @@ function do_gc()
             \
             --enable-cplusplus \
 
-          cp "config.log" "${LOGS_FOLDER_PATH}/config-gc-log.txt"
-        ) 2>&1 | tee "${LOGS_FOLDER_PATH}/configure-gc-output.txt"
+          cp "config.log" "${LOGS_FOLDER_PATH}/${gc_folder_name}/config-log.txt"
+        ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${gc_folder_name}/configure-output.txt"
       fi
 
       (
@@ -2051,7 +2085,7 @@ function do_gc()
         # make install-strip
         make install
 
-      ) 2>&1 | tee "${LOGS_FOLDER_PATH}/make-gc-output.txt"
+      ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${gc_folder_name}/make-output.txt"
     )
 
     touch "${gc_stamp_file_path}"
