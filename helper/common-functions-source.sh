@@ -1058,7 +1058,8 @@ function compute_gcc_rpath()
 {
   local cc="$1"
 
-  local lib_names=( libc.so libm.so libstdc++.so libgcc_s.so libdl.so libpthread.so libnsl.so librt.so )
+  # liblto_plugin.so ?
+  local lib_names=( libc.so libm.so libstdc++.so libgcc_s.so libcc1.so libdl.so libpthread.so libnsl.so librt.so )
   # Local by definition.
   declare -A paths
   for lib_name in ${lib_names[@]}
