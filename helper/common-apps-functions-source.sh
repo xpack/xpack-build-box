@@ -3154,17 +3154,28 @@ function do_libtool()
 
   local libtool_version="$1"
 
-  local libtool_folder_name="libtool-${libtool_version}"
-  local libtool_archive="${libtool_folder_name}.tar.xz"
+  local step
+  if [ $# -ge 2 ]
+  then
+    step="$2"
+  else
+    step=""
+  fi
+
+  local libtool_src_folder_name="libtool-${libtool_version}"
+
+  local libtool_archive="${libtool_src_folder_name}.tar.xz"
   local libtool_url="http://ftp.hosteurope.de/mirror/ftp.gnu.org/gnu/libtool/${libtool_archive}"
 
-  local libtool_stamp_file_path="${STAMPS_FOLDER_PATH}/stamp-libtool-${libtool_version}-installed"
+  local libtool_folder_name="libtool${step}-${libtool_version}"
+
+  local libtool_stamp_file_path="${STAMPS_FOLDER_PATH}/stamp-${libtool_folder_name}-installed"
   if [ ! -f "${libtool_stamp_file_path}" -o ! -d "${BUILD_FOLDER_PATH}/${libtool_folder_name}" ]
   then
 
     cd "${SOURCES_FOLDER_PATH}"
 
-    download_and_extract "${libtool_url}" "${libtool_archive}" "${libtool_folder_name}"
+    download_and_extract "${libtool_url}" "${libtool_archive}" "${libtool_src_folder_name}"
 
     mkdir -pv "${LOGS_FOLDER_PATH}/${libtool_folder_name}"
 
@@ -3173,8 +3184,16 @@ function do_libtool()
       cd "${BUILD_FOLDER_PATH}/${libtool_folder_name}"
 
       xbb_activate
-      if [ "${IS_BOOTSTRAP}" != "y" ]
+      if [ "${IS_BOOTSTRAP}" == "y" ]
       then
+        if [ "${step}" == "-2" ]
+        then
+          # To pick the new GCC.
+          xbb_activate_installed_bin
+
+          prepare_gcc_env "" "-xbs"
+        fi
+      else
         # To pick the new GCC.
         xbb_activate_installed_bin
 
@@ -3195,9 +3214,9 @@ function do_libtool()
           echo
           echo "Running libtool configure..."
 
-          bash "${SOURCES_FOLDER_PATH}/${libtool_folder_name}/configure" --help
+          bash "${SOURCES_FOLDER_PATH}/${libtool_src_folder_name}/configure" --help
 
-          bash ${DEBUG} "${SOURCES_FOLDER_PATH}/${libtool_folder_name}/configure" \
+          bash ${DEBUG} "${SOURCES_FOLDER_PATH}/${libtool_src_folder_name}/configure" \
             --prefix="${INSTALL_FOLDER_PATH}" 
 
           cp "config.log" "${LOGS_FOLDER_PATH}/${libtool_folder_name}/config-log.txt"

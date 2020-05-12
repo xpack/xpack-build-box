@@ -68,9 +68,11 @@ function build_versioned_components()
     # PATCH! .xz!
     do_automake "1.16"
 
+    # Required by libxcrypt
     # depends=('sh' 'tar' 'glibc')
-    # Notice: will use the system compiler
-    do_libtool "2.4.6"
+    # Notice: will use the old compiler
+    libtool_version="2.4.6"
+    do_libtool "${libtool_version}"
 
     # Replacement for the old libcrypt.so.1.
     # ! Requires new autotools.
@@ -216,6 +218,10 @@ function build_versioned_components()
 
     # Requires gmp, mpfr, mpc, isl.
     do_native_gcc "${XBB_GCC_VERSION}"
+
+    # depends=('sh' 'tar' 'glibc')
+    # Do it again with the new compiler
+    do_libtool "${libtool_version}" "-2"
 
     # From here on, a reasonable C++11 is available.
 
