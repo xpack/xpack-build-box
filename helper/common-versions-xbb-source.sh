@@ -58,13 +58,10 @@ function build_versioned_components()
     XBB_MINGW_GCC_BRANDING="xPack Build Box Mingw-w64 GCC\x2C ${HOST_BITS}-bit"
 
     # -------------------------------------------------------------------------
-    # Native compiler.
-
-    # For stable builds, compile everything with the bootstrap compiler.
-    prepare_gcc_env "" "-xbs"
 
     if is_linux
     then
+      # Uses CC to compute the library path.
       prepare_library_path
 
       LD_RUN_PATH="${XBB_LIBRARY_PATH}"
@@ -72,6 +69,12 @@ function build_versioned_components()
       echo "LD_RUN_PATH=${LD_RUN_PATH}"
       export LD_RUN_PATH
     fi
+
+    # For stable builds, compile everything with the bootstrap compiler,
+    # not the newly compiled GCC.
+
+    # -------------------------------------------------------------------------
+    # Native compiler.
 
     # New zlib, used in most of the tools.
     # depends=('glibc')
@@ -106,6 +109,8 @@ function build_versioned_components()
     # depends=('sh' 'tar' 'glibc')
     do_libtool "2.4.6"
 
+if true
+then
     # -------------------------------------------------------------------------
     # mingw compiler
 
@@ -396,7 +401,7 @@ function build_versioned_components()
     fi
 
     strip_static_objects
-
+fi
     patch_elf_rpath
 
     run_tests

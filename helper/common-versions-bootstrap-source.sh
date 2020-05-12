@@ -27,11 +27,6 @@ function build_versioned_components()
 
     # -------------------------------------------------------------------------
 
-    # All of he following are compiled with the original Ubuntu compiler 
-    # (GCC 6.x) and should be locked to system shared libraries.
-
-    prepare_gcc_env "" ""
-
     if is_linux
     then
       prepare_library_path
@@ -41,6 +36,11 @@ function build_versioned_components()
       echo "LD_RUN_PATH=${LD_RUN_PATH}"
       export LD_RUN_PATH
     fi
+
+    # All of he following are compiled with the original Ubuntu compiler 
+    # (GCC 6.x) and should be locked to system shared libraries.
+
+    # -------------------------------------------------------------------------
 
     # depends ?
     do_patchelf "0.10"
