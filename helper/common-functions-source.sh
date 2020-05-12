@@ -11,8 +11,32 @@
 
 # =============================================================================
 
+function start_timer() 
+{
+  CONTAINER_BEGIN_SECOND=$(date +%s)
+  echo
+  echo "Container script \"$(basename "$0")\" started at $(date)."
+}
+
+function stop_timer() 
+{
+  local end_second=$(date +%s)
+  echo
+  echo "Container script \"$(basename "$0")\" completed at $(date)."
+  local delta_seconds=$((end_second-CONTAINER_BEGIN_SECOND))
+  if [ ${delta_seconds} -lt 100 ]
+  then
+    echo "Duration: ${delta_seconds} seconds."
+  else
+    local delta_minutes=$(((delta_seconds+30)/60))
+    echo "Duration: ${delta_minutes} minutes."
+  fi
+}
+
 function do_prerequisites()
 {
+  start_timer
+
   detect_host
 
   docker_prepare_env

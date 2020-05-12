@@ -92,7 +92,6 @@ echo "$(uname) ${HOST_MACHINE} XBB created in \"${INSTALL_FOLDER_PATH}\""
 
 do_cleanup
 
-echo
-echo "Container done."
+stop_timer
 
 # -----------------------------------------------------------------------------
