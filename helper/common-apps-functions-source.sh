@@ -1898,8 +1898,6 @@ function do_openssl()
 
         make install_sw
 
-        strip -S "${INSTALL_FOLDER_PATH}/bin/openssl"
-
         mkdir -pv "${INSTALL_FOLDER_PATH}/openssl"
 
         if [ -f "/private/etc/ssl/cert.pem" ]
@@ -2034,8 +2032,6 @@ function do_curl()
         make -j ${JOBS}
 
         make install
-
-        strip -S "${INSTALL_FOLDER_PATH}/bin/curl"
 
         show_libs "${INSTALL_FOLDER_PATH}/bin/curl"
 
@@ -3852,8 +3848,6 @@ function do_flex()
         # make install-strip
         make install
 
-        strip -S "${INSTALL_FOLDER_PATH}/bin/flex"
-
         show_libs "${INSTALL_FOLDER_PATH}/bin/flex"
 
       ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${flex_folder_name}/make-output.txt"
@@ -4330,8 +4324,6 @@ function do_cmake()
         # make install-strip
         make install
 
-        strip -S "${INSTALL_FOLDER_PATH}/bin/cmake"
-
         show_libs "${INSTALL_FOLDER_PATH}/bin/cmake"
 
         mkdir -pv "${INSTALL_FOLDER_PATH}/share/doc"
@@ -4785,7 +4777,7 @@ function do_dos2unix()
         # Build.
         make -j ${JOBS} prefix="${INSTALL_FOLDER_PATH}" ENABLE_NLS=
 
-        make prefix="${INSTALL_FOLDER_PATH}" strip install
+        make prefix="${INSTALL_FOLDER_PATH}" install
 
         show_libs "${INSTALL_FOLDER_PATH}/bin/unix2dos"
 
@@ -4889,9 +4881,6 @@ function do_git()
 
         # make install-strip
         make install
-
-        strip -S "${INSTALL_FOLDER_PATH}/bin/git"
-        strip -S "${INSTALL_FOLDER_PATH}/bin"/git-[rsu]*
 
         show_libs "${INSTALL_FOLDER_PATH}/bin/git"
 
@@ -5033,13 +5022,6 @@ function do_python2()
 
         # make install-strip
         make install
-
-        if is_darwin
-        then
-          strip "${INSTALL_FOLDER_PATH}/bin/python"
-        else
-          strip --strip-all "${INSTALL_FOLDER_PATH}/bin/python"
-        fi
 
         show_libs "${INSTALL_FOLDER_PATH}/bin/python"
 
@@ -5205,13 +5187,6 @@ function do_python3()
 
         # make install-strip
         make install
-
-        if is_darwin
-        then
-          strip "${INSTALL_FOLDER_PATH}/bin/python3"
-        else
-          strip --strip-all "${INSTALL_FOLDER_PATH}/bin/python3"
-        fi
 
         show_libs "${INSTALL_FOLDER_PATH}/bin/python3"
 
@@ -5498,8 +5473,6 @@ function do_ninja()
           --with-python=$(which python2) 
 
         /usr/bin/install -m755 -c ninja "${INSTALL_FOLDER_PATH}/bin"
-
-        strip -S "${INSTALL_FOLDER_PATH}/bin/ninja"
 
         show_libs "${INSTALL_FOLDER_PATH}/bin/ninja"
 
@@ -6244,6 +6217,7 @@ function do_nodejs()
         # make check
 
         # make install-strip
+        # make install
 
       ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${nodejs_folder_name}/make-output.txt"
     )
@@ -6354,10 +6328,6 @@ function do_tcl()
 
         # make install-strip
         make install
-
-        strip -S "${INSTALL_FOLDER_PATH}/bin/tclsh${TCL_VERSION_MAJOR}.${TCL_VERSION_MINOR}"
-
-        show_libs "${INSTALL_FOLDER_PATH}/bin/tclsh${TCL_VERSION_MAJOR}.${TCL_VERSION_MINOR}"
 
       ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${tcl_folder_name}/make-output.txt"
     )
