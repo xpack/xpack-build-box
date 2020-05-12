@@ -446,6 +446,24 @@ function unset_gcc_env()
   unset RC
 }
 
+function prepare_library_path()
+{
+  # Start the path with the local XBB folder, to pick the newly compiled 
+  # libraries.
+  if [ "${HOST_BITS}" == "64" ]
+  then
+    XBB_LIBRARY_PATH="${INSTALL_FOLDER_PATH}/lib64:${INSTALL_FOLDER_PATH}/lib"
+  else
+    XBB_LIBRARY_PATH="${INSTALL_FOLDER_PATH}/lib"
+  fi
+
+  # Add the system paths.
+  XBB_LIBRARY_PATH+=":$(xbb_activate; compute_gcc_rpath "${CC}")"
+
+  echo "XBB_LIBRARY_PATH=${XBB_LIBRARY_PATH}"
+  export XBB_LIBRARY_PATH
+}
+
 function run_tests()
 {
   echo

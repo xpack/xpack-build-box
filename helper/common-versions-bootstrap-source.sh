@@ -30,23 +30,13 @@ function build_versioned_components()
     # All of he following are compiled with the original Ubuntu compiler 
     # (GCC 6.x) and should be locked to system shared libraries.
 
-    # TODO: Use ldconfig to get the folders.
-    # libc is in /lib/x86_64-linux-gnu
-    # libstdc++ is in /usr/lib/x86_64-linux-gnu
+    prepare_gcc_env "" ""
+
     if is_linux
     then
-      # Start the path with the local XBB folder, to pick the newly compiled 
-      # libraries.
-      if [ "${HOST_BITS}" == "64" ]
-      then
-        LD_RUN_PATH="${INSTALL_FOLDER_PATH}/lib64:${INSTALL_FOLDER_PATH}/lib"
-      else
-        LD_RUN_PATH="${INSTALL_FOLDER_PATH}/lib"
-      fi
+      prepare_library_path
 
-      # Add the system paths.
-      readarray -t lines <<< "$(ldconfig -v 2>/dev/null | grep ':' | sed -e 's|:||')"
-      LD_RUN_PATH+=":$(IFS=":"; echo "${lines[*]}")"
+      LD_RUN_PATH="${XBB_LIBRARY_PATH}"
 
       echo "LD_RUN_PATH=${LD_RUN_PATH}"
       export LD_RUN_PATH

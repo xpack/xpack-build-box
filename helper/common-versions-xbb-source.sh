@@ -65,17 +65,9 @@ function build_versioned_components()
 
     if is_linux
     then
-      # Start the path with the local XBB folder, to pick the newly compiled 
-      # libraries.
-      if [ "${HOST_BITS}" == "64" ]
-      then
-        LD_RUN_PATH="${INSTALL_FOLDER_PATH}/lib64:${INSTALL_FOLDER_PATH}/lib"
-      else
-        LD_RUN_PATH="${INSTALL_FOLDER_PATH}/lib"
-      fi
+      prepare_library_path
 
-      # Add the system paths.
-      LD_RUN_PATH+=":$(xbb_activate; compute_gcc_rpath "${CC}")"
+      LD_RUN_PATH="${XBB_LIBRARY_PATH}"
 
       echo "LD_RUN_PATH=${LD_RUN_PATH}"
       export LD_RUN_PATH
