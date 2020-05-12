@@ -1015,9 +1015,13 @@ function show_libs()
       "${readelf}" -d "${app_path}" | egrep -i '(SONAME)' || true
       "${readelf}" -d "${app_path}" | egrep -i '(RUNPATH|RPATH)' || true
       "${readelf}" -d "${app_path}" | egrep -i '(NEEDED)' || true
-      echo
-      echo "${patchelf} --print-interpreter ${app_path}"
-      "${patchelf}" --print-interpreter "${app_path}" || true
+      interpreter=$("${patchelf}" --print-interpreter "${app_path}" 2>/dev/null || true)
+      if [ ! -z "${interpreter}" ]
+      then
+        echo
+        echo "${patchelf} --print-interpreter ${app_path}"
+        echo "${interpreter}"
+      fi
       echo
       echo "${ldd} -v ${app_path}"
       "${ldd}" -v "${app_path}" || true
