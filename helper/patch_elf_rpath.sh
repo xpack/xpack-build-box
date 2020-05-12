@@ -110,7 +110,7 @@ function is_shared()
 {
   if [ $# -lt 1 ]
   then
-    warning "is_static: Missing arguments"
+    warning "is_shared: Missing arguments"
     exit 1
   fi
   local bin="$1"
@@ -257,6 +257,11 @@ function main()
 
   file_path="$1"
 
+  if [ -L "${file_path}" ]
+  then
+    exit 0
+  fi
+
   if [[ "${file_path}" == *\.dll ]]
   then
     exit 0
@@ -272,12 +277,13 @@ function main()
     exit 0
   fi
 
-  if [ -L "${file_path}" ]
+  if ! is_dynamic "${file_path}"
   then
     exit 0
   fi
 
-  show_details=""
+  # echo "${file_path}"
+  # exit 0
 
   # http://man7.org/linux/man-pages/man8/ld.so.8.html
   # RPATH if not RUNPATH
@@ -286,51 +292,78 @@ function main()
   # /etc/ld.so.cache
   # /lib:/usr/lib or /lib64:/usr/lib64, if not -z nodeflib
 
-  set +e
+  # ---------------------------------------------------------------------------
+  # Strip.
+
+  # Anecdotal evidences show that strip and patchelf do not work together.
+
+  if false
+  then
+    if is_shared "${file_path}"
+    then
+      strip --strip-debug "${file_path}"
+    elif is_executable "${file_path}"
+    then
+      if [[ "${file_path}" == "${INSTALL_FOLDER_PATH}/usr/"* ]]
+      then
+        : # Skip compiler files, they get damaged.
+      else
+        # warning: allocated section `.dynsym' not in segment
+        # strip --strip-unneeded "${file_path}"
+        # Plus that apparently only --strip-debug is patchelf friendly.
+        strip --strip-debug "${file_path}"
+      fi
+    else
+      echo "  ? $(file ${file_path})"
+      exit 1
+    fi
+  fi
+
+  # ---------------------------------------------------------------------------
+  # Be sure there are shared dependencies.
 
   shlibs="$(readelf -d "${file_path}" | grep '(NEEDED)' | sed -e 's|.*\[\(.*\)\].*|\1|')"
-  if [ -z "${shlibs}" ]
+  if [ -z "${shlibs:-""}" ]
   then
     # Has no dependencies.
     echo "  $(basename ${file_path}) -"
     exit 0
   fi
 
-  runpath="$(readelf -d "${file_path}" | egrep '(RUNPATH)' | sed -e 's|.*\[\(.*\)\].*|\1|')"
-  rpath="$(readelf -d "${file_path}" | egrep '(RPATH)' | sed -e 's|.*\[\(.*\)\].*|\1|')"
+  # ---------------------------------------------------------------------------
+  # Get the current rpath/runpath.
 
-  if [ -z "${runpath}${rpath}" ]
+  crt_rpath="$(patchelf --print-rpath ${file_path})"
+
+  if [ -z "${crt_rpath}" ]
   then
     folder_paths=()
   else
     save_ifs=${IFS}
-    if [ -n "${runpath}" ]
-    then
-      IFS=: folder_paths=( ${runpath} )
-    elif [ -n "${rpath}" ]
-    then
-      IFS=: folder_paths=( ${rpath} )
-    fi
+    IFS=: folder_paths=( ${crt_rpath} )
     IFS=${save_ifs}
   fi
 
   declare -A paths 
 
-  for path in ${folder_paths[@]}
-  do
-    # echo ${path}
-    if [[ "${path}" == \$ORIGIN* ]]
-    then
-      local subst_path=$(realpath "$(echo "${path}" | sed -e "s|\$ORIGIN|$(dirname ${file_path})|")")
-      paths+=( ["${subst_path}"]="${subst_path}" )
-    else
-      local abs_path="$(realpath "${path}")"
-      paths+=( ["${abs_path}"]="${abs_path}" )
-    fi
-  done
+  if [ ${#folder_paths[@]} -gt 0 ]
+  then
+    for path in ${folder_paths[@]}
+    do
+      # echo ${path}
+      if [[ "${path}" == \$ORIGIN* ]]
+      then
+        local subst_path=$(realpath "$(echo "${path}" | sed -e "s|\$ORIGIN|$(dirname ${file_path})|")")
+        paths+=( ["${subst_path}"]="${subst_path}" )
+      else
+        local abs_path="$(realpath "${path}")"
+        paths+=( ["${abs_path}"]="${abs_path}" )
+      fi
+    done
+  fi
 
   save_ifs=${IFS}
-  IFS=: ld_run_paths=( ${LD_RUN_PATH} )
+  IFS=: ld_run_paths=( ${XBB_LIBRARY_PATH} )
   IFS=${save_ifs}
 
   for path in ${ld_run_paths[@]}
@@ -343,78 +376,42 @@ function main()
 
   # echo "${new_ld_run_paths}"
 
-  if [ "${new_ld_run_paths}" != "${rpath}" ]
+  # ---------------------------------------------------------------------------
+  # Patch.
+
+  if [ "${new_ld_run_paths}" != "${crt_rpath}" ]
   then
-    echo "  * ${file_path} RPATH ${rpath} -> ${new_ld_run_paths}"
+    echo "  * ${file_path} RPATH ${crt_rpath} -> ${new_ld_run_paths}"
     # https://manpages.debian.org/unstable/patchelf/patchelf.1.en.html
     # Removes the DT_RPATH or DT_RUNPATH entry
-    patchelf --remove-rpath "${file_path}"
+    patchelf \
+      --remove-rpath \
+      "${file_path}"
     # Forces the use of the obsolete DT_RPATH
-    patchelf --force-rpath --set-rpath "${new_ld_run_paths}" "${file_path}"
-  fi
+    # --shrink-rpath does not work.
+    patchelf \
+      --force-rpath \
+      --set-rpath "${new_ld_run_paths}" \
+      "${file_path}"
 
-  if is_shared "${file_path}"
-  then
-    : # strip --strip-debug "${file_path}"
-  elif is_executable "${file_path}"
-  then
-    # warning: allocated section `.dynsym' not in segment
-    # strip --strip-unneeded "${file_path}"
-    # Plus that apparently only --strip-debug is patchelf friendly.
-    : # strip --strip-debug "${file_path}"
-  else
-    echo "  ? $(file ${file_path})"
-    exit 1
   fi
 
   # readelf -d "${file_path}"  
+
+  # ---------------------------------------------------------------------------
+
+  show_details=""
 
   shlibs_names=( $shlibs )
   found_names=()
   found_in_system_names=()
 
-  # runpath="$(readelf -d "${file_path}" | egrep '(RUNPATH)' | sed -e 's|.*\[\(.*\)\].*|\1|')"
-  rpath="$(readelf -d "${file_path}" | egrep '(RPATH)' | sed -e 's|.*\[\(.*\)\].*|\1|')"
+  crt_rpath="$(patchelf --print-rpath ${file_path})"
   interpreter="$(patchelf --print-interpreter "${file_path}" 2>/dev/null)"
 
-  if [ -z "${rpath}" ]
-  then
-    echo "  ${file_path} has no rpath"
-    folder_paths=()
-    show_details="y"
-  else
-    save_ifs=${IFS}
-    if [ -n "${rpath}" ]
-    then
-      IFS=: folder_paths=( ${rpath} )
-    fi
-    IFS=${save_ifs}
-  fi
-
-  set -e
-
-
-  if [ -x "/usr/share/libtool/build-aux/config.guess" ]
-  then
-    build="$(/usr/share/libtool/build-aux/config.guess)"
-  else
-    build="$(gcc -dumpmachine)"
-  fi
-
-  if [ "${build}" == "i686-linux-gnu" ]
-  then
-    build="i386-linux-gnu"
-  fi
-
-  sys_libs_folder_paths=(
-    "/lib64" \
-    "/lib" \
-    "/usr/lib64" \
-    "/usr/lib" \
-    "/usr/${build}" \
-    "/lib/${build}" \
-    "/usr/lib/${build}" \
-  )
+  save_ifs=${IFS}
+  IFS=: folder_paths=( ${crt_rpath} )
+  IFS=${save_ifs}
 
   # echo ${shlibs_names[@]}
   # echo ${folder_paths[@]}
@@ -423,52 +420,21 @@ function main()
   for lib_name in ${shlibs_names[@]}
   do
     found=""
-    found_in_sys=""
 
-    for folder_path in ${folder_paths[@]}
-    do
-      if [[ "${folder_path}" == \$ORIGIN* ]]
-      then
-        local subst_path=$(echo "${folder_path}" | sed -e "s|\$ORIGIN|$(dirname ${file_path})|")
-        if [ -f "${subst_path}/${lib_name}" ]
-        then
-          found="y"
-          found_names+=( "${lib_name}" )
-          break
-        fi
-      else
-        if [ -f "${folder_path}/${lib_name}" ]
-        then
-          found="y"
-          found_names+=( "${lib_name}" )
-          break
-        fi
-      fi
-    done
-
-    if [ "${found}" != "y" ]
+    if [ ${#folder_paths[@]} -gt 0 ]
     then
-      for folder_path in ${sys_libs_folder_paths[@]}
+      for folder_path in ${folder_paths[@]}
       do
         if [ -f "${folder_path}/${lib_name}" ]
         then
-          found_in_sys="y"
-          found_in_system_names+=( "${lib_name}" )
+          found="y"
+          found_names+=( "${lib_name}" )
           break
         fi
       done
-
-      if [ "${found_in_sys}" == "y" ]
-      then
-        if ! is_linux_sys_so "${lib_name}"
-        then
-          errors+=("    ${lib_name} not expected here")
-          show_details="y"
-        fi
-      fi
     fi
 
-    if [ "${found}" != "y" -a "${found_in_sys}" != "y" ]
+    if [ "${found}" != "y" ]
     then
       errors+=("    ${lib_name} not found")
       show_details="y"
@@ -479,13 +445,7 @@ function main()
   set +u
   msg="  $(basename ${file_path})"
   msg+=" [$(IFS=" "; echo "${found_names[*]}")]"
-  msg+=" [$(IFS=" "; echo "${found_in_system_names[*]}")]"
   
-  if [ -n "${runpath}" ]
-  then
-    msg+=" RUNPATH=${runpath}"
-  fi
-
   msg+=" RPATH=$(IFS=":"; echo "${folder_paths[*]}")"
 
   if [ -n "${interpreter}" ]
