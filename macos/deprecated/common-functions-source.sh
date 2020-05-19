@@ -56,7 +56,7 @@ function prepare_xbb_env()
 
   # ---------------------------------------------------------------------------
 
-  install -m 755 -c "$(dirname "${script_folder_path}")/scripts/pkg-config-verbose" "${INSTALL_FOLDER_PATH}/bin/pkg-config-verbose" 
+  install -m 755 -c "$(dirname "${script_folder_path}")/helper/pkg-config-verbose" "${INSTALL_FOLDER_PATH}/bin/pkg-config-verbose" 
 
   PKG_CONFIG="${INSTALL_FOLDER_PATH}/bin/pkg-config-verbose"
 

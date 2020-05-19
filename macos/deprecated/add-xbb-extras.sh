@@ -46,7 +46,7 @@ mkdir -p "${XBB_FOLDER}"/bin
 
 echo
 echo "Copying ${XBB_FOLDER}/bin/pkg-config-verbose..."
-cp "$(dirname "${script_folder_path}")"/scripts/pkg-config-verbose "${XBB_FOLDER}"/bin
+cp "$(dirname "${script_folder_path}")"/helper/pkg-config-verbose "${XBB_FOLDER}"/bin
 chmod +x "${XBB_FOLDER}"/bin/pkg-config-verbose
 
 # -----------------------------------------------------------------------------
