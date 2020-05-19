@@ -16,7 +16,6 @@ function build_versioned_components()
 
     # The main characteristic of XBB Bootstrap is the compiler version.
     XBB_GCC_VERSION="8.4.0" # "8.3.0" "7.5.0" "7.4.0"
-    XBB_GCC_SUFFIX="-xbs" # "-$(echo ${XBB_GCC_VERSION} | sed -e 's|\([0-9][0-9]*\)\..*|\1|')bs"
     
     XBB_BINUTILS_VERSION="2.32" # "2.31"
     XBB_GLIBC_VERSION="2.30"

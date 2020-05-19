@@ -326,6 +326,13 @@ function prepare_xbb_env()
     XBB_LDFLAGS_APP_STATIC_GCC+=" -static-libgcc -static-libstdc++"
   fi
 
+  if [ "${IS_BOOTSTRAP}" == "y" ]
+  then
+    XBB_GCC_SUFFIX="-xbs"
+  else
+    XBB_GCC_SUFFIX="-xbb"
+  fi
+
   # Applications should generally use STATIC_GCC, otherwise XBB apps which
   # require GCC shared libs from bootstrap might not find them.
 
