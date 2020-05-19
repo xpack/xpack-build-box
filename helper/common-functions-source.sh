@@ -1330,6 +1330,37 @@ function patch_elf_rpath()
   ) 2>&1 | tee "${LOGS_FOLDER_PATH}/check-rpath-output.txt"
 }
 
+function patch_file_libtool_rpath()
+{
+  local file_path="$1"
+
+  # -exec sed -i -e 's|finalize_rpath="$finalize_rpath $libdir"|finalize_rpath=""|' {} \;
+
+  sed -i \
+      -e 's|finalize_rpath=".*"|finalize_rpath=""|' \
+      -e 's|finalize_rpath=$rpath|finalize_rpath=""|' \
+      -e 's|finalize_rpath+=" $libdir"|finalize_rpath=""|' \
+      -e 's|func_append finalize_rpath " $libdir"||' \
+      -e 's|dep_rpath+=" $flag"||' \
+      -e 's|func_append dep_rpath " $flag"||' \
+      -e 's|compile_rpath=$rpath|compile_rpath=""|' \
+      -e 's|func_append compile_rpath " $absdir"||' \
+      ${file_path}
+}
+
+export -f patch_file_libtool_rpath
+
+# Workaround to avoid libtool issuing -rpath to the linker, since
+# this prevents it using the global LD_RUN_PATH.
+function patch_all_libtool_rpath()
+{
+  for file in $(find . -name libtool)
+  do
+    echo ${file}
+    patch_file_libtool_rpath ${file}
+  done
+}
+
 # -----------------------------------------------------------------------------
 
 function do_cleaunup() 
