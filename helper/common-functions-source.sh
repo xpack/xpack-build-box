@@ -488,8 +488,9 @@ function prepare_library_path()
     XBB_LIBRARY_PATH="${INSTALL_FOLDER_PATH}/lib"
   fi
 
-  # Add the system paths.
+  # Add the compiler and system paths.
   XBB_LIBRARY_PATH+=":$(xbb_activate; compute_gcc_rpath "${CC}")"
+  XBB_LIBRARY_PATH+=":$(xbb_activate; compute_glibc_rpath "${CC}")"
 
   echo "XBB_LIBRARY_PATH=${XBB_LIBRARY_PATH}"
   export XBB_LIBRARY_PATH
@@ -1235,7 +1236,29 @@ function compute_gcc_rpath()
   local cc="$1"
 
   # liblto_plugin.so ?
-  local lib_names=( libc.so libm.so libstdc++.so libgcc_s.so libcc1.so libdl.so libpthread.so libnsl.so librt.so )
+  local lib_names=( libstdc++.so libgcc_s.so libcc1.so )
+  # Local by definition.
+  declare -A paths
+  for lib_name in ${lib_names[@]}
+  do
+    local file_path=$(${cc} -print-file-name="${lib_name}")
+    if [ "${file_path}" == "${lib_name}" ]
+    then
+      continue
+    fi
+    local folder_path=$(dirname $(realpath ${file_path}))
+    paths+=( ["${folder_path}"]="${folder_path}" )
+  done
+
+  echo "$(IFS=":"; echo "${!paths[*]}")"
+}
+
+function compute_glibc_rpath()
+{
+  local cc="$1"
+
+  # liblto_plugin.so ?
+  local lib_names=( libdl.so libpthread.so libnsl.so librt.so libc.so libm.so )
   # Local by definition.
   declare -A paths
   for lib_name in ${lib_names[@]}
