@@ -688,6 +688,139 @@ function xbb_activate_tex()
 __EOF__
 # The above marker must start in the first column.
 
+  # Note: __EOF__ is quoted to prevent substitutions here.
+  cat <<'__EOF__' > "${INSTALL_FOLDER_PATH}/bin/get-gcc-rpath"
+#!/usr/bin/env bash
+
+# -----------------------------------------------------------------------------
+# Safety settings (see https://gist.github.com/ilg-ul/383869cbb01f61a51c4d).
+
+if [[ ! -z ${DEBUG} ]]
+then
+  set ${DEBUG} # Activate the expand mode if DEBUG is anything but empty.
+else
+  DEBUG=""
+fi
+
+set -o errexit # Exit if command failed.
+set -o pipefail # Exit if pipe failed.
+set -o nounset # Exit if variable not set.
+
+# Remove the initial space and instead use '\n'.
+IFS=$'\n\t'
+
+# -----------------------------------------------------------------------------
+# Identify the script location, to reach, for example, the helper scripts.
+
+script_path="$0"
+if [[ "${script_path}" != /* ]]
+then
+  # Make relative path absolute.
+  script_path="$(pwd)/$0"
+fi
+
+script_name="$(basename "${script_path}")"
+
+script_folder_path="$(dirname "${script_path}")"
+script_folder_name="$(basename "${script_folder_path}")"
+
+# -----------------------------------------------------------------------------
+
+function compute_gcc_rpath()
+{
+  local cc="$1"
+
+  # liblto_plugin.so ?
+  local lib_names=( libstdc++.so libgcc_s.so libcc1.so )
+  # Local by definition.
+  declare -A paths
+  for lib_name in ${lib_names[@]}
+  do
+    local file_path=$(${cc} -print-file-name="${lib_name}")
+    if [ "${file_path}" == "${lib_name}" ]
+    then
+      continue
+    fi
+    local folder_path=$(dirname $(realpath ${file_path}))
+    paths+=( ["${folder_path}"]="${folder_path}" )
+  done
+
+  echo "$(IFS=":"; echo "${!paths[*]}")"
+}
+
+function compute_glibc_rpath()
+{
+  local cc="$1"
+
+  # liblto_plugin.so ?
+  local lib_names=( libdl.so libpthread.so libnsl.so librt.so libc.so libm.so )
+  # Local by definition.
+  declare -A paths
+  for lib_name in ${lib_names[@]}
+  do
+    local file_path=$(${cc} -print-file-name="${lib_name}")
+    if [ "${file_path}" == "${lib_name}" ]
+    then
+      continue
+    fi
+    local folder_path=$(dirname $(realpath ${file_path}))
+    paths+=( ["${folder_path}"]="${folder_path}" )
+  done
+
+  echo "$(IFS=":"; echo "${!paths[*]}")"
+}
+
+# -----------------------------------------------------------------------------
+
+if [ $# -gt 0 ]
+then
+  cc="$1"
+else
+__EOF__
+# The above marker must start in the first column.
+
+  # Note: __EOF__ is NOT quoted to allow substitutions.
+  cat <<__EOF__ >> "${INSTALL_FOLDER_PATH}/bin/get-gcc-rpath"
+  cc="${INSTALL_FOLDER_PATH}/usr/bin/gcc${XBB_GCC_SUFFIX}"
+fi
+
+__EOF__
+# The above marker must start in the first column.
+
+  if [ "${HOST_BITS}" == "32" ]
+  then
+
+    # Note: __EOF__ is NOT quoted to allow substitutions.
+    cat <<__EOF__ >> "${INSTALL_FOLDER_PATH}/bin/get-gcc-rpath"
+gcc_rpath="${INSTALL_FOLDER_PATH}/lib"
+__EOF__
+# The above marker must start in the first column.
+
+  else
+
+    # Note: __EOF__ is NOT quoted to allow substitutions.
+    cat <<__EOF__ >> "${INSTALL_FOLDER_PATH}/bin/get-gcc-rpath"
+gcc_rpath="${INSTALL_FOLDER_PATH}/lib64:${INSTALL_FOLDER_PATH}/lib"
+__EOF__
+# The above marker must start in the first column.
+
+  fi
+
+  # Note: __EOF__ is quoted to prevent substitutions here.
+  cat <<'__EOF__' >> "${INSTALL_FOLDER_PATH}/bin/get-gcc-rpath"
+gcc_rpath+=":$(compute_gcc_rpath "${cc}")"
+gcc_rpath+=":$(compute_glibc_rpath "${cc}")"
+
+echo "${gcc_rpath}"
+
+# -----------------------------------------------------------------------------
+__EOF__
+# The above marker must start in the first column.
+
+  chmod +x "${INSTALL_FOLDER_PATH}/bin/get-gcc-rpath"
+
+  # ---------------------------------------------------------------------------
+
   if false
   then
 
