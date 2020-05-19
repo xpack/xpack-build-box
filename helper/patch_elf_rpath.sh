@@ -262,6 +262,8 @@ function main()
     exit 0
   fi
 
+  # echo "${file_path}"
+
   if [[ "${file_path}" == *\.dll ]]
   then
     exit 0
@@ -310,22 +312,17 @@ function main()
 
   # Anecdotal evidences show that strip and patchelf do not work together.
 
-  if false
+  if true
   then
     if is_shared "${file_path}"
     then
       strip --strip-debug "${file_path}"
     elif is_executable "${file_path}"
     then
-      if [[ "${file_path}" == "${INSTALL_FOLDER_PATH}/usr/"* ]]
-      then
-        : # Skip compiler files, they get damaged.
-      else
-        # warning: allocated section `.dynsym' not in segment
-        # strip --strip-unneeded "${file_path}"
-        # Plus that apparently only --strip-debug is patchelf friendly.
-        strip --strip-debug "${file_path}"
-      fi
+      # warning: allocated section `.dynsym' not in segment
+      strip --strip-unneeded "${file_path}"
+      # Plus that apparently only --strip-debug is patchelf friendly.
+      # strip --strip-debug "${file_path}"
     else
       echo "  ? $(file ${file_path})"
       exit 1
@@ -346,7 +343,11 @@ function main()
   # ---------------------------------------------------------------------------
   # Get the current rpath/runpath.
 
-  crt_rpath="$(${patchelf} --print-rpath ${file_path})"
+  set +e
+  runpath="$(readelf -d "${file_path}" | egrep '(RUNPATH)' | sed -e 's|.*\[\(.*\)\].*|\1|')"
+  crt_rpath="$(readelf -d "${file_path}" | egrep '(RPATH)' | sed -e 's|.*\[\(.*\)\].*|\1|')"
+  set -e
+  # crt_rpath="$(${patchelf} --print-rpath ${file_path})"
 
   if [ -z "${crt_rpath}" ]
   then
@@ -395,29 +396,14 @@ function main()
   # echo "${new_ld_run_paths}"
 
   # ---------------------------------------------------------------------------
-  # Patch.
-
-  if [ "${new_ld_run_paths}" != "${crt_rpath}" ]
-  then
-    # echo "  * ${file_path} RPATH ${crt_rpath} -> ${new_ld_run_paths}"
-    # Removes the DT_RPATH or DT_RUNPATH entry
-    ${patchelf} \
-      --remove-rpath \
-      "${file_path}"
-    # Forces the use of the obsolete DT_RPATH
-    # --shrink-rpath does not work.
-    ${patchelf} \
-      --force-rpath \
-      --set-rpath "${new_ld_run_paths}" \
-      "${file_path}"
-
-  fi
-
-  # readelf -d "${file_path}"  
-
-  # ---------------------------------------------------------------------------
 
   show_details=""
+
+  if [ -n "${runpath}" ]
+  then
+    errors+=("    has RUNPATH")
+    show_details="y"
+  fi
 
   shlibs_names=( $shlibs )
   found_names=()
@@ -484,6 +470,13 @@ function main()
     run_app "${patchelf}" --print-rpath "${file_path}" || true
     run_app "${ldd}" -v "${file_path}"
     echo
+
+    echo "${msg}" >> "${CHECK_RPATH_LOG}"
+    for err in ${errors[@]}
+    do
+      echo "${err}" >> "${CHECK_RPATH_LOG}"
+    done
+
   fi
 }
 

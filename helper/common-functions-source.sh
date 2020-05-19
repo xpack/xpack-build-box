@@ -1262,7 +1262,9 @@ function patch_elf_rpath()
     xbb_activate
     # xbb_activate_installed_bin
 
-    PATCHELF="$(which patchelf || true)"
+    set +e
+    PATCHELF="$(which patchelf)"
+    set -e
     if [ -z "${PATCHELF:-""}" ]
     then
       PATCHELF="$(xbb_activate_installed_bin; which patchelf)"
@@ -1275,58 +1277,96 @@ function patch_elf_rpath()
     fi
     export PATCHELF
 
-  if false
-  then
-    bash "${helper_folder_path}/patch_elf_rpath.sh" "${INSTALL_FOLDER_PATH}/usr/bin/g++-xbb"
-    "${INSTALL_FOLDER_PATH}/usr/bin/g++-xbb" --version
+    export CHECK_RPATH_LOG="${LOGS_FOLDER_PATH}/check-rpath-log.txt"
+    rm -rf "${CHECK_RPATH_LOG}"
+    touch "${CHECK_RPATH_LOG}"
 
-    exit 1
-  else
-    folders=("${INSTALL_FOLDER_PATH}/bin")
-    if [ -d "${INSTALL_FOLDER_PATH}/libexec" ]
+    if false
     then
-      folders+=("${INSTALL_FOLDER_PATH}/libexec")
-    fi
-    if [ -d "${INSTALL_FOLDER_PATH}/openssl" ]
-    then
-      folders+=("${INSTALL_FOLDER_PATH}/openssl")
-    fi
-    if [ -d "${INSTALL_FOLDER_PATH}/usr/bin" ]
-    then
-      folders+=("${INSTALL_FOLDER_PATH}/usr/bin")
-    fi
-    if [ -d "${INSTALL_FOLDER_PATH}/usr/libexec" ]
-    then
-      folders+=("${INSTALL_FOLDER_PATH}/usr/libexec")
-    fi
-    if [ -d "${INSTALL_FOLDER_PATH}/usr/${BUILD}" ]
-    then
-      folders+=("${INSTALL_FOLDER_PATH}/usr/${BUILD}")
+      bash "${helper_folder_path}/patch_elf_rpath.sh" "${INSTALL_FOLDER_PATH}/bin/flex"
+      "${INSTALL_FOLDER_PATH}/bin/flex" --version
+
+      # bash "${helper_folder_path}/patch_elf_rpath.sh" "${INSTALL_FOLDER_PATH}/usr/bin/g++-xbb"
+      # "${INSTALL_FOLDER_PATH}/usr/bin/g++-xbb" --version
+
+      exit 1
+    else
+      if [ "${IS_BOOTSTRAP}" == "y" ]
+      then
+
+        # All files.
+        find "${INSTALL_FOLDER_PATH}" \
+          -type f \
+          ! -path '/*/*/include/*' \
+          ! -path '/*/*/share/*' \
+          ! -path '/*/*/usr/include/*' \
+          ! -path '/*/*/usr/share/*' \
+          ! -path '/*/*/lib/perl*/*' \
+          ! -path '/*/*/lib/python*/*' \
+          -exec bash ${helper_folder_path}/patch_elf_rpath.sh {} \;
+
+      else
+
+        folders=("${INSTALL_FOLDER_PATH}/bin")
+        if [ -d "${INSTALL_FOLDER_PATH}/libexec" ]
+        then
+          folders+=("${INSTALL_FOLDER_PATH}/libexec")
+        fi
+        if [ -d "${INSTALL_FOLDER_PATH}/openssl" ]
+        then
+          folders+=("${INSTALL_FOLDER_PATH}/openssl")
+        fi
+        if [ -d "${INSTALL_FOLDER_PATH}/usr/bin" ]
+        then
+          folders+=("${INSTALL_FOLDER_PATH}/usr/bin")
+        fi
+        if [ -d "${INSTALL_FOLDER_PATH}/usr/libexec" ]
+        then
+          folders+=("${INSTALL_FOLDER_PATH}/usr/libexec")
+        fi
+        if [ -d "${INSTALL_FOLDER_PATH}/usr/${BUILD}" ]
+        then
+          folders+=("${INSTALL_FOLDER_PATH}/usr/${BUILD}")
+        fi
+
+        find ${folders[@]} \
+          -type f \
+          -exec bash ${helper_folder_path}/patch_elf_rpath.sh {} \;
+
+        if [ -d "${INSTALL_FOLDER_PATH}/usr" ]
+        then
+          find "${INSTALL_FOLDER_PATH}/usr"  \
+            -type f \
+            -exec bash ${helper_folder_path}/patch_elf_rpath.sh {} \;
+        fi
+
+        folders=("${INSTALL_FOLDER_PATH}/lib")
+        if [ -d "${INSTALL_FOLDER_PATH}/usr" ]
+        then
+          folders+=("${INSTALL_FOLDER_PATH}/usr")
+        fi
+
+        find ${folders[@]}  \
+          -type f \
+          -name '*.so*' \
+          -exec bash ${helper_folder_path}/patch_elf_rpath.sh {} \;
+        fi
+
     fi
 
-    find ${folders[@]} \
-      -type f \
-      -exec bash ${helper_folder_path}/patch_elf_rpath.sh {} \;
+    number_of_log_lines=$(cat "${CHECK_RPATH_LOG}" | wc -l)
 
-    if [ -d "${INSTALL_FOLDER_PATH}/usr" ]
+    if [ ${number_of_log_lines} -gt 0 ]
     then
-      find "${INSTALL_FOLDER_PATH}/usr"  \
-        -type f \
-        -exec bash ${helper_folder_path}/patch_elf_rpath.sh {} \;
+      echo 
+      echo "Check rpath failed:"
+      cat "${CHECK_RPATH_LOG}"
+      exit 1
+    else
+      echo
+      echo "No rpath issues detected."
     fi
 
-    folders=("${INSTALL_FOLDER_PATH}/lib")
-    if [ -d "${INSTALL_FOLDER_PATH}/usr" ]
-    then
-      folders+=("${INSTALL_FOLDER_PATH}/usr")
-    fi
-
-    find ${folders[@]}  \
-      -type f \
-      -name '*.so*' \
-      -exec bash ${helper_folder_path}/patch_elf_rpath.sh {} \;
-    
-  fi
   ) 2>&1 | tee "${LOGS_FOLDER_PATH}/check-rpath-output.txt"
 }
 
