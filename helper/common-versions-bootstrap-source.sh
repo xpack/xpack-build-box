@@ -42,7 +42,10 @@ function build_versioned_components()
     # -------------------------------------------------------------------------
 
     # depends ?
+    # Warning: buggy!
     do_patchelf "0.10"
+
+    # do_chrpath "0.16"
 
     # New zlib, it is used in most of the tools.
     # depends=('glibc')

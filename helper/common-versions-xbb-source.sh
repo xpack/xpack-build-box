@@ -12,7 +12,7 @@ function build_versioned_components()
   if [[ "${XBB_VERSION}" =~ 3\.[2] ]]
   then
 
-    # -------------------------------------------------------------------------
+    # =========================================================================
 
     # Problematic tests (WARN-TEST)
     # - nettle
@@ -108,8 +108,6 @@ function build_versioned_components()
     # depends=('sh' 'tar' 'glibc')
     do_libtool "2.4.6"
 
-if true
-then
     # -------------------------------------------------------------------------
     # mingw compiler
 
@@ -232,8 +230,11 @@ then
     # Required to build PDF manuals.
     # depends=('coreutils')
     do_texinfo "6.7" # "6.6"
+
     # depends ?
+    # Warning: buggy!
     do_patchelf "0.10"
+
     # depends=('glibc')
     do_dos2unix "7.4.1" # "7.4.0"
 
@@ -399,18 +400,22 @@ then
       # configure: WARNING: No sound system was found. Windows applications will be silent.
     fi
 
+    # -------------------------------------------------------------------------
+
+    # At this point we're mostly done, there is only some polishing to do.
+    
     strip_static_objects
-fi
+
     patch_elf_rpath
 
     run_tests
 
-    # -------------------------------------------------------------------------
+    # =========================================================================
 
   elif [[ "${XBB_VERSION}" =~ 3\.[1] ]]
   then
 
-    # -------------------------------------------------------------------------
+    # =========================================================================
 
     # The main characteristic of XBB is the compiler version.
     XBB_GCC_VERSION="9.3.0" # "9.2.0" # "8.3.0" # "7.4.0"
@@ -740,7 +745,7 @@ fi
 
     run_tests
 
-    # -------------------------------------------------------------------------
+    # =========================================================================
 
   else
     echo 
