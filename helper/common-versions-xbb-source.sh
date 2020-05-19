@@ -293,6 +293,9 @@ then
       # sunaudiodev  
     fi
 
+    # depends=('python2')
+    do_scons "3.1.2" # "3.0.5"
+
     if true # is_linux
     then
       # require xz, openssl
@@ -305,9 +308,6 @@ then
       # depends=('python3')
       do_meson "0.53.1" # "0.50.0"
     fi
-
-    # depends=('python2')
-    do_scons "3.1.2" # "3.0.5"
 
     # Requires scons
     # depends=('python2')
