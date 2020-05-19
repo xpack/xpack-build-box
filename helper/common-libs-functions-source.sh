@@ -106,6 +106,9 @@ function test_zlib()
   (
     xbb_activate
 
+    echo
+    echo "Checking the zlib shared libraries..."
+
     show_libs "$(realpath ${INSTALL_FOLDER_PATH}/lib/libz.so)"
   )
 }
@@ -217,6 +220,9 @@ function test_gmp()
   (
     xbb_activate
 
+    echo
+    echo "Checking the gmp shared libraries..."
+
     show_libs "$(realpath ${INSTALL_FOLDER_PATH}/lib/libgmp.so)"
     show_libs "$(realpath ${INSTALL_FOLDER_PATH}/lib/libgmpxx.so)"
   )
@@ -327,6 +333,9 @@ function test_mpfr()
   (
     xbb_activate
 
+    echo
+    echo "Checking the mpfr shared libraries..."
+
     show_libs "$(realpath ${INSTALL_FOLDER_PATH}/lib/libmpfr.so)"
   )
 }
@@ -417,12 +426,17 @@ function do_mpc()
   else
     echo "Library mpc already installed."
   fi
+
+  test_functions+=("test_mpc")
 }
 
 function test_mpc()
 {
   (
     xbb_activate
+
+    echo
+    echo "Checking the mpc shared libraries..."
 
     show_libs "$(realpath ${INSTALL_FOLDER_PATH}/lib/libmpc.so)"
   )
@@ -527,6 +541,9 @@ function test_isl()
 {
   (
     xbb_activate
+
+    echo
+    echo "Checking the isl shared libraries..."
 
     show_libs "$(realpath ${INSTALL_FOLDER_PATH}/lib/libisl.so)"
   )
@@ -645,7 +662,10 @@ function test_nettle()
   (
     xbb_activate
 
-    # TODO: add
+    echo
+    echo "Checking the nettle shared libraries..."
+
+    show_libs "$(realpath ${INSTALL_FOLDER_PATH}/lib/libnettle.so)"
   )
 }
 
@@ -743,7 +763,10 @@ function test_tasn1()
   (
     xbb_activate
 
-    # TODO: add
+    echo
+    echo "Checking the tasn1 shared libraries..."
+
+    show_libs "$(realpath ${INSTALL_FOLDER_PATH}/lib/libtasn1.so)"
   )
 }
 
@@ -841,7 +864,10 @@ function test_expat()
   (
     xbb_activate
 
-    show_libs "${INSTALL_FOLDER_PATH}/lib/libexpat.so"
+    echo
+    echo "Checking the expat shared libraries..."
+
+    show_libs "$(realpath ${INSTALL_FOLDER_PATH}/lib/libexpat.so)"
   )
 }
 
@@ -960,7 +986,11 @@ function test_libffi()
   (
     xbb_activate
 
-    # TODO: add
+    echo
+    echo "Checking the libffi shared libraries..."
+
+    local libffi="$(find ${INSTALL_FOLDER_PATH}/lib* -name libffi.so)"
+    show_libs "$(realpath ${libffi})"
   )
 }
 
@@ -1057,6 +1087,9 @@ function test_libiconv()
 {
   (
     xbb_activate
+
+    echo
+    echo "Checking the libiconv shared libraries..."
 
     # TODO: add
   )
@@ -1177,7 +1210,22 @@ function test_gnutls()
   (
     xbb_activate
 
-    # TODO: add
+    echo
+    echo "Testing if gnutls binaries start properly..."
+
+    run_app "${INSTALL_FOLDER_PATH}/bin/psktool" --version
+    run_app "${INSTALL_FOLDER_PATH}/bin/certtool" --version
+
+    echo
+    echo "Checking the gnutls shared libraries..."
+
+    show_libs "${INSTALL_FOLDER_PATH}/bin/psktool"
+    show_libs "${INSTALL_FOLDER_PATH}/bin/gnutls-cli-debug"
+    show_libs "${INSTALL_FOLDER_PATH}/bin/certtool"
+    show_libs "${INSTALL_FOLDER_PATH}/bin/srptool"
+    show_libs "${INSTALL_FOLDER_PATH}/bin/ocsptool"
+    show_libs "${INSTALL_FOLDER_PATH}/bin/gnutls-serv"
+    show_libs "${INSTALL_FOLDER_PATH}/bin/gnutls-cli"
   )
 }
 
@@ -1274,7 +1322,8 @@ function test_util_macros()
   (
     xbb_activate
 
-    # TODO: add
+    echo
+    echo "Nothing to test..."
   )
 }
 
@@ -1376,7 +1425,7 @@ function test_xorg_xproto()
   (
     xbb_activate
 
-    # TODO: add
+    echo "Nothing to test..."
   )
 }
 
@@ -1482,7 +1531,17 @@ function test_libpng()
   (
     xbb_activate
 
-    # TODO: add
+    # echo
+    # echo "Testing if libpng binaries start properly..."
+
+    # Has no --version and returns error.
+    # run_app "${INSTALL_FOLDER_PATH}/bin/pngfix"
+
+    echo
+    echo "Checking the libpng shared libraries..."
+
+    show_libs "$(realpath ${INSTALL_FOLDER_PATH}/lib/libpng16.so)"
+    show_libs "${INSTALL_FOLDER_PATH}/bin/pngfix"
   )
 }
 
@@ -1575,7 +1634,10 @@ function test_libmpdec()
   (
     xbb_activate
 
-    # TODO: add
+    echo
+    echo "Checking the libmpdec shared libraries..."
+
+    show_libs "$(realpath ${INSTALL_FOLDER_PATH}/lib/libmpdec.so)"
   )
 }
 
@@ -1675,7 +1737,10 @@ function test_libgpg_error()
   (
     xbb_activate
 
-    # TODO: add
+    echo
+    echo "Checking the libpng_error shared libraries..."
+
+    show_libs "$(realpath ${INSTALL_FOLDER_PATH}/lib/libgpg-error.so)"
   )
 }
 
@@ -1793,7 +1858,23 @@ function test_libgcrypt()
   (
     xbb_activate
 
-    # TODO: add
+    echo
+    echo "Testing if libgcrypt binaries start properly..."
+
+    run_app "${INSTALL_FOLDER_PATH}/bin/libgcrypt-config" --version
+    run_app "${INSTALL_FOLDER_PATH}/bin/dumpsexp" --version
+    run_app "${INSTALL_FOLDER_PATH}/bin/hmac256" --version
+    run_app "${INSTALL_FOLDER_PATH}/bin/mpicalc" --version
+    
+    echo
+    echo "Checking the libgcrypt shared libraries..."
+
+    # show_libs "${INSTALL_FOLDER_PATH}/bin/libgcrypt-config"
+    show_libs "${INSTALL_FOLDER_PATH}/bin/dumpsexp"
+    show_libs "${INSTALL_FOLDER_PATH}/bin/hmac256"
+    show_libs "${INSTALL_FOLDER_PATH}/bin/mpicalc"
+
+    show_libs "$(realpath ${INSTALL_FOLDER_PATH}/lib/libgcrypt.so)"
   )
 }
 
@@ -1888,7 +1969,16 @@ function test_libassuan()
   (
     xbb_activate
 
-    # TODO: add
+    echo
+    echo "Testing if libassuan binaries start properly..."
+
+    run_app "${INSTALL_FOLDER_PATH}/bin/libassuan-config" --version
+
+    echo
+    echo "Checking the libassuan shared libraries..."
+
+    # show_libs "${INSTALL_FOLDER_PATH}/bin/libassuan-config"
+    show_libs "$(realpath ${INSTALL_FOLDER_PATH}/lib/libassuan.so)"
   )
 }
 
@@ -1983,7 +2073,16 @@ function test_libksba()
   (
     xbb_activate
 
-    # TODO: add
+    echo
+    echo "Testing if libksba binaries start properly..."
+
+    run_app "${INSTALL_FOLDER_PATH}/bin/ksba-config" --version
+
+    echo
+    echo "Checking the libksba shared libraries..."
+
+    # show_libs "${INSTALL_FOLDER_PATH}/bin/ksba-config"
+    show_libs "$(realpath ${INSTALL_FOLDER_PATH}/lib/libksba.so)"
   )
 }
 
@@ -2085,7 +2184,10 @@ function test_npth()
   (
     xbb_activate
 
-    # TODO: add
+    echo
+    echo "Checking the npth shared libraries..."
+
+    show_libs "$(realpath ${INSTALL_FOLDER_PATH}/lib/libnpth.so)"
   )
 }
 
@@ -2221,7 +2323,10 @@ function test_libxcrypt()
   (
     xbb_activate
 
-    # TODO: add
+    echo
+    echo "Checking the libxcrypt shared libraries..."
+
+    show_libs "$(realpath ${INSTALL_FOLDER_PATH}/lib/libcrypt.so)"
   )
 }
 
@@ -2315,7 +2420,10 @@ function test_libunistring()
   (
     xbb_activate
 
-    # TODO: add
+    echo
+    echo "Checking the libunistring shared libraries..."
+
+    show_libs "$(realpath ${INSTALL_FOLDER_PATH}/lib/libunistring.so)"
   )
 }
 
@@ -2411,7 +2519,12 @@ function test_gc()
   (
     xbb_activate
 
-    # TODO: add
+    echo
+    echo "Checking the gc shared libraries..."
+
+    show_libs "$(realpath ${INSTALL_FOLDER_PATH}/lib/libgc.so)"
+    show_libs "$(realpath ${INSTALL_FOLDER_PATH}/lib/libgccpp.so)"
+    show_libs "$(realpath ${INSTALL_FOLDER_PATH}/lib/libcord.so)"
   )
 }
 
@@ -2578,10 +2691,13 @@ function test_ncurses()
   (
     xbb_activate
 
+    echo
+    echo "Checking the ncurses shared libraries..."
+
     show_libs "$(realpath ${INSTALL_FOLDER_PATH}/lib/libncurses.so)"
-    show_libs "$(realpath ${INSTALL_FOLDER_PATH}/lib/libform.so)"
-    show_libs "$(realpath ${INSTALL_FOLDER_PATH}/lib/libmenu.so)"
     show_libs "$(realpath ${INSTALL_FOLDER_PATH}/lib/libpanel.so)"
+    show_libs "$(realpath ${INSTALL_FOLDER_PATH}/lib/libmenu.so)"
+    show_libs "$(realpath ${INSTALL_FOLDER_PATH}/lib/libform.so)"
   )
 }
 
@@ -2690,6 +2806,9 @@ function test_readline()
 {
   (
     xbb_activate
+
+    echo
+    echo "Checking the readline shared libraries..."
 
     show_libs "$(realpath ${INSTALL_FOLDER_PATH}/lib/libreadline.so)"
     show_libs "$(realpath ${INSTALL_FOLDER_PATH}/lib/libhistory.so)"

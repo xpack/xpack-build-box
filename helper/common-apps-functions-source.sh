@@ -310,30 +310,10 @@ function do_glibc()
 
         )
 
-        # ---------------------------------------------------------------------
-
-        show_libs "${GLIBC_INSTALL_FOLDER_PATH}/usr/lib/ld-${glibc_version}.so"
-
-        show_libs "${GLIBC_INSTALL_FOLDER_PATH}/usr/lib/libc-${glibc_version}.so"
-        show_libs "${GLIBC_INSTALL_FOLDER_PATH}/usr/lib/libm-${glibc_version}.so"
-        show_libs "${GLIBC_INSTALL_FOLDER_PATH}/usr/lib/libpthread-${glibc_version}.so"
-
-        show_libs "${GLIBC_INSTALL_FOLDER_PATH}/usr/bin/locale"
-        show_libs "${GLIBC_INSTALL_FOLDER_PATH}/usr/bin/gencat"
-        show_libs "${GLIBC_INSTALL_FOLDER_PATH}/usr/bin/getent"
-        show_libs "${GLIBC_INSTALL_FOLDER_PATH}/usr/bin/iconv"
-        show_libs "${GLIBC_INSTALL_FOLDER_PATH}/usr/bin/locale"
-        # show_libs "${GLIBC_INSTALL_FOLDER_PATH}/usr/bin/mtrace"
-        # show_libs "${GLIBC_INSTALL_FOLDER_PATH}/usr/bin/xtrace"
-
-        show_libs "${GLIBC_INSTALL_FOLDER_PATH}/usr/sbin/ldconfig"
-        show_libs "${GLIBC_INSTALL_FOLDER_PATH}/usr/sbin/iconvconfig"
-
       ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${glibc_folder_name}/make-output.txt"
 
       (
-        # TODO
-        echo test_glibc
+        test_glibc
       ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${glibc_folder_name}/test-output.txt"
     )
     touch "${glibc_stamp_file_path}"
@@ -375,7 +355,16 @@ function test_glibc()
     show_libs "${GLIBC_INSTALL_FOLDER_PATH}/usr/lib/libpthread-${XBB_GLIBC_VERSION}.so"
     run_app "${GLIBC_INSTALL_FOLDER_PATH}/usr/bin/ldd" -v "${GLIBC_INSTALL_FOLDER_PATH}/usr/lib/libpthread-${XBB_GLIBC_VERSION}.so"
 
-    show_libs "${GLIBC_INSTALL_FOLDER_PATH}/usr/sbin/ldconfig" 
+    show_libs "${GLIBC_INSTALL_FOLDER_PATH}/usr/bin/locale"
+    show_libs "${GLIBC_INSTALL_FOLDER_PATH}/usr/bin/gencat"
+    show_libs "${GLIBC_INSTALL_FOLDER_PATH}/usr/bin/getent"
+    show_libs "${GLIBC_INSTALL_FOLDER_PATH}/usr/bin/iconv"
+    show_libs "${GLIBC_INSTALL_FOLDER_PATH}/usr/bin/locale"
+    # show_libs "${GLIBC_INSTALL_FOLDER_PATH}/usr/bin/mtrace"
+    # show_libs "${GLIBC_INSTALL_FOLDER_PATH}/usr/bin/xtrace"
+
+    show_libs "${GLIBC_INSTALL_FOLDER_PATH}/usr/sbin/ldconfig"
+    show_libs "${GLIBC_INSTALL_FOLDER_PATH}/usr/sbin/iconvconfig"
   ) 
 }
 
@@ -515,17 +504,6 @@ function do_native_binutils()
 
         # make install-strip
         make install
-
-        show_libs "${NATIVE_BINUTILS_INSTALL_FOLDER_PATH}/bin/ar" 
-        show_libs "${NATIVE_BINUTILS_INSTALL_FOLDER_PATH}/bin/as" 
-        show_libs "${NATIVE_BINUTILS_INSTALL_FOLDER_PATH}/bin/ld" 
-        show_libs "${NATIVE_BINUTILS_INSTALL_FOLDER_PATH}/bin/nm" 
-        show_libs "${NATIVE_BINUTILS_INSTALL_FOLDER_PATH}/bin/objcopy" 
-        show_libs "${NATIVE_BINUTILS_INSTALL_FOLDER_PATH}/bin/objdump" 
-        show_libs "${NATIVE_BINUTILS_INSTALL_FOLDER_PATH}/bin/ranlib" 
-        show_libs "${NATIVE_BINUTILS_INSTALL_FOLDER_PATH}/bin/size" 
-        show_libs "${NATIVE_BINUTILS_INSTALL_FOLDER_PATH}/bin/strings" 
-        show_libs "${NATIVE_BINUTILS_INSTALL_FOLDER_PATH}/bin/strip" 
 
       ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${native_binutils_folder_name}/make-output.txt"
     )
@@ -847,15 +825,6 @@ function do_native_gcc()
           fi
         )
 
-        show_libs "${INSTALL_FOLDER_PATH}/usr/bin/gcc${XBB_GCC_SUFFIX}"
-        show_libs "${INSTALL_FOLDER_PATH}/usr/bin/g++${XBB_GCC_SUFFIX}"
-
-        show_libs "$(${INSTALL_FOLDER_PATH}/usr/bin/gcc${XBB_GCC_SUFFIX} --print-prog-name=cc1)"
-        show_libs "$(${INSTALL_FOLDER_PATH}/usr/bin/gcc${XBB_GCC_SUFFIX} --print-prog-name=cc1plus)"
-        show_libs "$(${INSTALL_FOLDER_PATH}/usr/bin/gcc${XBB_GCC_SUFFIX} --print-prog-name=collect2)"
-        show_libs "$(${INSTALL_FOLDER_PATH}/usr/bin/gcc${XBB_GCC_SUFFIX} --print-prog-name=lto1)"
-        show_libs "$(${INSTALL_FOLDER_PATH}/usr/bin/gcc${XBB_GCC_SUFFIX} --print-prog-name=lto-wrapper)"
-
       ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${native_gcc_folder_name}/make-output.txt"
     )
 
@@ -1104,17 +1073,6 @@ function do_mingw_binutils()
         # For just in case, it has nasty consequences when picked 
         # in other builds.
         rm -fv "${INSTALL_FOLDER_PATH}/usr/lib/libiberty.a" "${INSTALL_FOLDER_PATH}/usr/lib64/libiberty.a"
-
-        show_libs "${INSTALL_FOLDER_PATH}/usr/bin/${MINGW_TARGET}-ar" 
-        show_libs "${INSTALL_FOLDER_PATH}/usr/bin/${MINGW_TARGET}-as" 
-        show_libs "${INSTALL_FOLDER_PATH}/usr/bin/${MINGW_TARGET}-ld" 
-        show_libs "${INSTALL_FOLDER_PATH}/usr/bin/${MINGW_TARGET}-nm" 
-        show_libs "${INSTALL_FOLDER_PATH}/usr/bin/${MINGW_TARGET}-objcopy" 
-        show_libs "${INSTALL_FOLDER_PATH}/usr/bin/${MINGW_TARGET}-objdump" 
-        show_libs "${INSTALL_FOLDER_PATH}/usr/bin/${MINGW_TARGET}-ranlib" 
-        show_libs "${INSTALL_FOLDER_PATH}/usr/bin/${MINGW_TARGET}-size" 
-        show_libs "${INSTALL_FOLDER_PATH}/usr/bin/${MINGW_TARGET}-strings" 
-        show_libs "${INSTALL_FOLDER_PATH}/usr/bin/${MINGW_TARGET}-strip" 
 
       ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${mingw_binutils_folder_name}/make-output.txt"
     )
@@ -1916,8 +1874,6 @@ function do_openssl()
           /usr/bin/install -v -c -m 644 "$(dirname "${script_folder_path}")/ca-bundle/ca-bundle.crt" "${INSTALL_FOLDER_PATH}/openssl"
         fi
 
-
-        show_libs "${INSTALL_FOLDER_PATH}/bin/openssl"
         make -j1 test
 
       ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${openssl_folder_name}/make-output.txt"
@@ -1945,6 +1901,13 @@ function test_openssl()
     echo "Testing if openssl binaries start properly..."
 
     run_app "${INSTALL_FOLDER_PATH}/bin/openssl" version
+
+    echo
+    echo "Checking the openssl shared libraries..."
+
+    show_libs "${INSTALL_FOLDER_PATH}/bin/openssl"
+    show_libs "$(realpath ${INSTALL_FOLDER_PATH}/lib/libcrypto.so)"
+    show_libs "$(realpath ${INSTALL_FOLDER_PATH}/lib/libssl.so)"
   )
 }
 
@@ -2033,7 +1996,6 @@ function do_curl()
 
         make install
 
-        show_libs "${INSTALL_FOLDER_PATH}/bin/curl"
         if [ "${RUN_LONG_TESTS}" == "y" ]
         then
           # It takes very long (1200+ tests).
@@ -2065,6 +2027,11 @@ function test_curl()
     echo "Testing if curl binaries start properly..."
 
     run_app "${INSTALL_FOLDER_PATH}/bin/curl" --version
+
+    echo
+    echo "Checking the curl shared libraries..."
+
+    show_libs "${INSTALL_FOLDER_PATH}/bin/curl"
   )
 }
 
@@ -2144,7 +2111,6 @@ function do_xz()
         # make install-strip
         make install
 
-        show_libs "${INSTALL_FOLDER_PATH}/bin/xz"
         # After install, to find its libaries.
         make -j1 check
 
@@ -2175,6 +2141,17 @@ function test_xz()
     echo "Testing if xz binaries start properly..."
 
     run_app "${INSTALL_FOLDER_PATH}/bin/xz" --version
+    run_app "${INSTALL_FOLDER_PATH}/bin/xzdec" --version
+    run_app "${INSTALL_FOLDER_PATH}/bin/lzmainfo" --version
+
+    echo
+    echo "Checking the xz shared libraries..."
+
+    show_libs "${INSTALL_FOLDER_PATH}/bin/xz"
+    show_libs "${INSTALL_FOLDER_PATH}/bin/xzdec"
+    show_libs "${INSTALL_FOLDER_PATH}/bin/lzmainfo"
+
+    show_libs "$(realpath ${INSTALL_FOLDER_PATH}/lib/liblzma.so)"
   )
 }
 
@@ -2307,6 +2284,11 @@ function test_tar()
     echo "Testing if tar binaries start properly..."
 
     run_app "${INSTALL_FOLDER_PATH}/bin/tar" --version
+
+    echo
+    echo "Checking the xz shared libraries..."
+
+    show_libs "${INSTALL_FOLDER_PATH}/bin/tar"
   )
 }
 
@@ -2413,25 +2395,6 @@ function do_coreutils()
         # WARN-TEST
         # make -j1 check
 
-        show_libs "${INSTALL_FOLDER_PATH}/bin/basename"
-        show_libs "${INSTALL_FOLDER_PATH}/bin/cat"
-        show_libs "${INSTALL_FOLDER_PATH}/bin/chmod"
-        show_libs "${INSTALL_FOLDER_PATH}/bin/chown"
-        show_libs "${INSTALL_FOLDER_PATH}/bin/cp"
-        show_libs "${INSTALL_FOLDER_PATH}/bin/dirname"
-        show_libs "${INSTALL_FOLDER_PATH}/bin/ln"
-        show_libs "${INSTALL_FOLDER_PATH}/bin/ls"
-        show_libs "${INSTALL_FOLDER_PATH}/bin/mkdir"
-        show_libs "${INSTALL_FOLDER_PATH}/bin/mv"
-        show_libs "${INSTALL_FOLDER_PATH}/bin/printf"
-        show_libs "${INSTALL_FOLDER_PATH}/bin/realpath"
-        show_libs "${INSTALL_FOLDER_PATH}/bin/rm"
-        show_libs "${INSTALL_FOLDER_PATH}/bin/rmdir"
-        show_libs "${INSTALL_FOLDER_PATH}/bin/sha256sum"
-        show_libs "${INSTALL_FOLDER_PATH}/bin/sort"
-        show_libs "${INSTALL_FOLDER_PATH}/bin/touch"
-        show_libs "${INSTALL_FOLDER_PATH}/bin/tr"
-        show_libs "${INSTALL_FOLDER_PATH}/bin/wc"
       ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${coreutils_folder_name}/make-output.txt"
     )
 
@@ -2478,6 +2441,29 @@ function test_coreutils()
     run_app "${INSTALL_FOLDER_PATH}/bin/touch" --version
     run_app "${INSTALL_FOLDER_PATH}/bin/tr" --version
     run_app "${INSTALL_FOLDER_PATH}/bin/wc" --version
+
+    echo
+    echo "Checking the coreutils binaries shared libraries..."
+
+    show_libs "${INSTALL_FOLDER_PATH}/bin/basename"
+    show_libs "${INSTALL_FOLDER_PATH}/bin/cat"
+    show_libs "${INSTALL_FOLDER_PATH}/bin/chmod"
+    show_libs "${INSTALL_FOLDER_PATH}/bin/chown"
+    show_libs "${INSTALL_FOLDER_PATH}/bin/cp"
+    show_libs "${INSTALL_FOLDER_PATH}/bin/dirname"
+    show_libs "${INSTALL_FOLDER_PATH}/bin/ln"
+    show_libs "${INSTALL_FOLDER_PATH}/bin/ls"
+    show_libs "${INSTALL_FOLDER_PATH}/bin/mkdir"
+    show_libs "${INSTALL_FOLDER_PATH}/bin/mv"
+    show_libs "${INSTALL_FOLDER_PATH}/bin/printf"
+    show_libs "${INSTALL_FOLDER_PATH}/bin/realpath"
+    show_libs "${INSTALL_FOLDER_PATH}/bin/rm"
+    show_libs "${INSTALL_FOLDER_PATH}/bin/rmdir"
+    show_libs "${INSTALL_FOLDER_PATH}/bin/sha256sum"
+    show_libs "${INSTALL_FOLDER_PATH}/bin/sort"
+    show_libs "${INSTALL_FOLDER_PATH}/bin/touch"
+    show_libs "${INSTALL_FOLDER_PATH}/bin/tr"
+    show_libs "${INSTALL_FOLDER_PATH}/bin/wc"
   )
 }
 
@@ -2570,7 +2556,6 @@ function do_pkg_config()
         # make install-strip
         make install
 
-        show_libs "${INSTALL_FOLDER_PATH}/bin/pkg-config"
         make -j1 check
 
 
@@ -2601,6 +2586,11 @@ function test_pkg_config()
     echo "Testing if pkg_config binaries start properly..."
 
     run_app "${INSTALL_FOLDER_PATH}/bin/pkg-config" --version
+
+    echo
+    echo "Checking the pkg_config binaries shared libraries..."
+
+    show_libs "${INSTALL_FOLDER_PATH}/bin/pkg-config"
   )
 }
 
@@ -2685,8 +2675,6 @@ function do_m4()
         # make install-strip
         make install
 
-        show_libs "${INSTALL_FOLDER_PATH}/bin/m4"
-
         echo
         echo "Linking gm4..."
         cd "${INSTALL_FOLDER_PATH}/bin"
@@ -2720,6 +2708,11 @@ function test_m4()
     echo "Testing if m4 binaries start properly..."
 
     run_app "${INSTALL_FOLDER_PATH}/bin/m4" --version
+
+    echo
+    echo "Checking the m4 binaries shared libraries..."
+
+    show_libs "${INSTALL_FOLDER_PATH}/bin/m4"
   )
 }
 
@@ -2794,7 +2787,6 @@ function do_gawk()
         # make install-strip
         make install
 
-        show_libs "${INSTALL_FOLDER_PATH}/bin/gawk"
         if [ "${IS_BOOTSTRAP}" == "y" -a "${HOST_BITS}" == "32" ]
         then
           # apiterm
@@ -2845,6 +2837,11 @@ function test_gawk()
     echo "Testing if gawk binaries start properly..."
 
     run_app "${INSTALL_FOLDER_PATH}/bin/gawk" --version
+
+    echo
+    echo "Checking the gawk binaries shared libraries..."
+
+    show_libs "${INSTALL_FOLDER_PATH}/bin/gawk"
   )
 }
 
@@ -2915,7 +2912,6 @@ function do_sed()
         # make install-strip
         make install
 
-        show_libs "${INSTALL_FOLDER_PATH}/bin/sed"
 
         # Some tests fail due to missing locales.
         # darwin: FAIL: testsuite/subst-mb-incomplete.sh
@@ -2956,6 +2952,11 @@ function test_sed()
     echo "Testing if sed binaries start properly..."
 
     run_app "${INSTALL_FOLDER_PATH}/bin/sed" --version
+
+    echo
+    echo "Checking the sed binaries shared libraries..."
+
+    show_libs "${INSTALL_FOLDER_PATH}/bin/sed"
   )
 }
 
@@ -3059,6 +3060,11 @@ function test_autoconf()
     echo "Testing if autoconf binaries start properly..."
 
     run_app "${INSTALL_FOLDER_PATH}/bin/autoconf" --version
+    run_app "${INSTALL_FOLDER_PATH}/bin/autoheader" --version
+    run_app "${INSTALL_FOLDER_PATH}/bin/autoscan" --version
+    run_app "${INSTALL_FOLDER_PATH}/bin/autoupdate" --version
+
+    # No ELFs, only scripts.
   )
 }
 
@@ -3314,7 +3320,16 @@ function test_libtool()
     echo "Testing if libtool binaries start properly..."
 
     run_app "${INSTALL_FOLDER_PATH}/bin/libtool" --version
+
+    echo
+    echo "Testing if libtool binaries display help..."
+    
     run_app "${INSTALL_FOLDER_PATH}/bin/libtool" --help
+
+    echo
+    echo "Checking the libtool shared libraries..."
+        
+    show_libs "$(realpath ${INSTALL_FOLDER_PATH}/lib/libltdl.so)"
   )
 }
 
@@ -3397,8 +3412,6 @@ function do_gettext()
         # make install-strip
         make install
 
-        show_libs "${INSTALL_FOLDER_PATH}/bin/gettext"
-        show_libs "${INSTALL_FOLDER_PATH}/bin/msgcmp"
         (
           # Fails on Ubuntu 14 bootstrap 
           # aarch64, armv8l: FAIL: test-thread_create
@@ -3471,6 +3484,9 @@ function test_gettext()
 
     echo
     echo "Checking the gettext shared libraries..."
+
+    show_libs "${INSTALL_FOLDER_PATH}/bin/gettext"
+    show_libs "${INSTALL_FOLDER_PATH}/bin/msgcmp"
 
     show_libs "$(realpath ${INSTALL_FOLDER_PATH}/lib/libgettextlib.so)"
     show_libs "$(realpath ${INSTALL_FOLDER_PATH}/lib/libgettextpo.so)"
@@ -3546,7 +3562,6 @@ function do_patch()
         # make install-strip
         make install
 
-        show_libs "${INSTALL_FOLDER_PATH}/bin/patch"
         make -j1 check
 
       ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${patch_folder_name}/make-output.txt"
@@ -3576,6 +3591,11 @@ function test_patch()
     echo "Testing if patch binaries start properly..."
 
     run_app "${INSTALL_FOLDER_PATH}/bin/patch" --version
+
+    echo
+    echo "Checking the patch binaries shared libraries..."
+
+    show_libs "${INSTALL_FOLDER_PATH}/bin/patch"
   )
 }
 
@@ -3647,7 +3667,6 @@ function do_diffutils()
         # make install-strip
         make install
 
-        show_libs "${INSTALL_FOLDER_PATH}/bin/diff"
         make -j1 check
 
       ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${diffutils_folder_name}/make-output.txt"
@@ -3677,6 +3696,17 @@ function test_diffutils()
     echo "Testing if diffutils binaries start properly..."
 
     run_app "${INSTALL_FOLDER_PATH}/bin/diff" --version
+    run_app "${INSTALL_FOLDER_PATH}/bin/cmp" --version
+    run_app "${INSTALL_FOLDER_PATH}/bin/diff3" --version
+    run_app "${INSTALL_FOLDER_PATH}/bin/sdiff" --version
+
+    echo
+    echo "Checking the diffutils binaries shared libraries..."
+
+    show_libs "${INSTALL_FOLDER_PATH}/bin/diff"
+    show_libs "${INSTALL_FOLDER_PATH}/bin/cmp"
+    show_libs "${INSTALL_FOLDER_PATH}/bin/diff3"
+    show_libs "${INSTALL_FOLDER_PATH}/bin/sdiff"
   )
 }
 
@@ -3763,8 +3793,6 @@ function do_bison()
         # make install-strip
         make install
 
-        show_libs "${INSTALL_FOLDER_PATH}/bin/bison"
-
       ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${bison_folder_name}/make-output.txt"
     )
 
@@ -3792,6 +3820,13 @@ function test_bison()
     echo "Testing if bison binaries start properly..."
 
     run_app "${INSTALL_FOLDER_PATH}/bin/bison" --version
+    run_app "${INSTALL_FOLDER_PATH}/bin/yacc" --version
+
+    echo
+    echo "Checking the bison binaries shared libraries..."
+
+    show_libs "${INSTALL_FOLDER_PATH}/bin/bison"
+    # yacc is a script.
   )
 }
 
@@ -3900,7 +3935,6 @@ function do_flex()
         # make install-strip
         make install
 
-        show_libs "${INSTALL_FOLDER_PATH}/bin/flex"
         # cxx_restart fails - https://github.com/westes/flex/issues/98
         # make -k check || true
         make -k check
@@ -3931,9 +3965,13 @@ function test_flex()
     echo
     echo "Testing if flex binaries start properly..."
 
-    show_libs "${INSTALL_FOLDER_PATH}/bin/flex" 
-
     run_app "${INSTALL_FOLDER_PATH}/bin/flex" --version
+
+    echo
+    echo "Checking the flex shared libraries..."
+
+    show_libs "${INSTALL_FOLDER_PATH}/bin/flex"
+    show_libs "$(realpath ${INSTALL_FOLDER_PATH}/lib/libfl.so)"
   )
 }
 
@@ -4013,7 +4051,6 @@ function do_make()
         rm -f gmake
         ln -s -v make gmake
 
-        show_libs "${INSTALL_FOLDER_PATH}/bin/make"
         # Takes too long.
         if [ "${RUN_LONG_TESTS}" == "y" ]
         then
@@ -4049,6 +4086,11 @@ function test_make()
     echo "Testing if make binaries start properly..."
 
     run_app "${INSTALL_FOLDER_PATH}/bin/make" --version
+
+    echo
+    echo "Checking the make binaries shared libraries..."
+
+    show_libs "${INSTALL_FOLDER_PATH}/bin/make"
   ) 
 }
 
@@ -4138,7 +4180,6 @@ function do_wget()
         # make install-strip
         make install
 
-        show_libs "${INSTALL_FOLDER_PATH}/bin/wget"
         # Fails
         # x86_64: FAIL:  65
         # WARN-TEST
@@ -4171,6 +4212,11 @@ function test_wget()
     echo "Testing if wget binaries start properly..."
 
     run_app "${INSTALL_FOLDER_PATH}/bin/wget" --version
+
+    echo
+    echo "Checking the wget binaries shared libraries..."
+
+    show_libs "${INSTALL_FOLDER_PATH}/bin/wget"
   ) 
 }
 
@@ -4384,8 +4430,6 @@ function do_cmake()
         # make install-strip
         make install
 
-        show_libs "${INSTALL_FOLDER_PATH}/bin/cmake"
-
         mkdir -pv "${INSTALL_FOLDER_PATH}/share/doc"
         mv -v "${INSTALL_FOLDER_PATH}/doc/cmake-${cmake_version_major}.${cmake_version_minor}" "${INSTALL_FOLDER_PATH}/share/doc"
 
@@ -4418,6 +4462,13 @@ function test_cmake()
     run_app "${INSTALL_FOLDER_PATH}/bin/cmake" --version
     run_app "${INSTALL_FOLDER_PATH}/bin/ctest" --version
     run_app "${INSTALL_FOLDER_PATH}/bin/cpack" --version
+
+    echo
+    echo "Checking the cmake binaries shared libraries..."
+
+    show_libs "${INSTALL_FOLDER_PATH}/bin/cmake"
+    show_libs "${INSTALL_FOLDER_PATH}/bin/ctest"
+    show_libs "${INSTALL_FOLDER_PATH}/bin/cpack"
   )
 }
 
@@ -4529,10 +4580,6 @@ function do_perl()
         # make install-strip
         make install
 
-        show_libs "${INSTALL_FOLDER_PATH}/bin/perl"
-
-        show_libs "$(find ${INSTALL_FOLDER_PATH}/lib/perl5/${perl_version} -name libperl.so)"
-        show_libs "$(find ${INSTALL_FOLDER_PATH}/lib/perl5/${perl_version} -name HiRes.so)"
         # Takes very, very long, and some fail.
         if false # [ "${RUN_LONG_TESTS}" == "y" ]
         then
@@ -4587,11 +4634,18 @@ function test_perl()
     echo
     echo "Testing if perl binaries start properly..."
 
-    # To find libssp.so.0.
-    # /opt/xbb/bin/perl: error while loading shared libraries: libssp.so.0: cannot open shared object file: No such file or directory
-    export LD_LIBRARY_PATH="${XBB_LIBRARY_PATH}"
+    (
+      # To find libssp.so.0.
+      # /opt/xbb/bin/perl: error while loading shared libraries: libssp.so.0: cannot open shared object file: No such file or directory
+      export LD_LIBRARY_PATH="${XBB_LIBRARY_PATH}"
 
-    run_app "${INSTALL_FOLDER_PATH}/bin/perl" --version
+      run_app "${INSTALL_FOLDER_PATH}/bin/perl" --version
+    )
+
+    echo
+    echo "Checking the perl binaries shared libraries..."
+
+    show_libs "${INSTALL_FOLDER_PATH}/bin/perl"
   )
 }
 
@@ -4778,8 +4832,6 @@ function do_patchelf()
         # make install-strip
         make install
 
-        show_libs "${INSTALL_FOLDER_PATH}/bin/patchelf"
-
       ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${patchelf_folder_name}/make-output.txt"
     )
 
@@ -4807,6 +4859,11 @@ function test_patchelf()
     echo "Testing if patchelf binaries start properly..."
 
     run_app "${INSTALL_FOLDER_PATH}/bin/patchelf" --version
+
+    echo
+    echo "Checking the patchelf binaries shared libraries..."
+
+    show_libs "${INSTALL_FOLDER_PATH}/bin/patchelf"
   )
 }
 
@@ -4862,8 +4919,6 @@ function do_dos2unix()
 
         make prefix="${INSTALL_FOLDER_PATH}" install
 
-        show_libs "${INSTALL_FOLDER_PATH}/bin/unix2dos"
-
         make -j1 check
         
       ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${dos2unix_folder_name}/make-output.txt"
@@ -4893,6 +4948,13 @@ function test_dos2unix()
     echo "Testing if dos2unix binaries start properly..."
 
     run_app "${INSTALL_FOLDER_PATH}/bin/unix2dos" --version
+    run_app "${INSTALL_FOLDER_PATH}/bin/dos2unix" --version
+
+    echo
+    echo "Checking the dos2unix binaries shared libraries..."
+
+    show_libs "${INSTALL_FOLDER_PATH}/bin/unix2dos"
+    show_libs "${INSTALL_FOLDER_PATH}/bin/dos2unix"
   )
 }
 
@@ -4967,7 +5029,6 @@ function do_git()
         # make install-strip
         make install
 
-        show_libs "${INSTALL_FOLDER_PATH}/bin/git"
 
       ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${git_folder_name}/make-output.txt"
     )
@@ -4996,6 +5057,12 @@ function test_git()
     echo "Testing if git binaries start properly..."
 
     run_app "${INSTALL_FOLDER_PATH}/bin/git" --version
+
+    echo
+    echo "Checking the git binaries shared libraries..."
+
+    show_libs "${INSTALL_FOLDER_PATH}/bin/git"
+
   ) 
 }
 
@@ -5108,7 +5175,6 @@ function do_python2()
         # make install-strip
         make install
 
-        show_libs "${INSTALL_FOLDER_PATH}/bin/python"
 
       ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${python2_folder_name}/make-output.txt"
     )
@@ -5152,8 +5218,13 @@ function test_python2()
     echo
     echo "Testing if python2 binaries start properly..."
 
-    run_app "${INSTALL_FOLDER_PATH}/bin/python" --version
-    run_app "${INSTALL_FOLDER_PATH}/bin/pip" --version
+    run_app "${INSTALL_FOLDER_PATH}/bin/python2" --version
+    run_app "${INSTALL_FOLDER_PATH}/bin/pip2" --version
+
+    echo
+    echo "Checking the python2 binaries shared libraries..."
+
+    show_libs "${INSTALL_FOLDER_PATH}/bin/python2.7"
   )
 }
 
@@ -5273,8 +5344,6 @@ function do_python3()
         # make install-strip
         make install
 
-        show_libs "${INSTALL_FOLDER_PATH}/bin/python3"
-
       ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${python3_folder_name}/make-output.txt"
     )
 
@@ -5324,6 +5393,11 @@ function test_python3()
 
     run_app "${INSTALL_FOLDER_PATH}/bin/python3" --version
     run_app "${INSTALL_FOLDER_PATH}/bin/pip3" --version
+
+    echo
+    echo "Checking the python3 bynaries shared libraries..."
+
+    show_libs "${INSTALL_FOLDER_PATH}/bin/python3.7"
   )
 }
 
@@ -5559,7 +5633,6 @@ function do_ninja()
 
         /usr/bin/install -m755 -c ninja "${INSTALL_FOLDER_PATH}/bin"
 
-        show_libs "${INSTALL_FOLDER_PATH}/bin/ninja"
 
       ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${ninja_folder_name}/configure-output.txt"
     )
@@ -5588,6 +5661,11 @@ function test_ninja()
     echo "Testing if ninja binaries start properly..."
 
     run_app "${INSTALL_FOLDER_PATH}/bin/ninja" --version
+
+    echo
+    echo "Checking the ninja binaries shared libraries..."
+
+    show_libs "${INSTALL_FOLDER_PATH}/bin/ninja"
   )  
 }
 
@@ -5689,10 +5767,20 @@ function test_p7zip()
 
     run_app "${INSTALL_FOLDER_PATH}/bin/7za" --help
 
-    if is_linux
+    if [ -f "${INSTALL_FOLDER_PATH}/bin/7z" ]
     then
       run_app "${INSTALL_FOLDER_PATH}/bin/7z" --help
     fi
+
+    echo
+    echo "Checking the 7za shared libraries..."
+
+    show_libs "${INSTALL_FOLDER_PATH}/lib/p7zip/7za"
+    if [ -f "${INSTALL_FOLDER_PATH}/bin/7z" ]
+    then
+      show_libs "${INSTALL_FOLDER_PATH}/lib/p7zip/7z"
+    fi
+    show_libs "${INSTALL_FOLDER_PATH}/lib/p7zip/7z.so"
   )  
 }
 
@@ -5803,7 +5891,6 @@ function do_wine()
           )
         fi
 
-        show_libs "${INSTALL_FOLDER_PATH}/bin/wine"
 
       ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${wine_folder_name}/make-output.txt"
     )
@@ -5834,12 +5921,35 @@ function test_wine()
     # First check if the program is able to tell its version.
     run_app "${INSTALL_FOLDER_PATH}/bin/wine" --version
 
+    # Require gcc-xbs
+    # run_app "${INSTALL_FOLDER_PATH}/bin/winegcc" --version
+    # run_app "${INSTALL_FOLDER_PATH}/bin/wineg++" --version
+
+    run_app "${INSTALL_FOLDER_PATH}/bin/winebuild" --version
+    run_app "${INSTALL_FOLDER_PATH}/bin/winecfg" --version
+    # run_app "${INSTALL_FOLDER_PATH}/bin/wineconsole" dir
+
     # This test should check if the program is able to start
     # a simple executable.
     # As a side effect, the "${HOME}/.wine" folder is created
     # and populated with lots of files., so subsequent runs
     # will no longer have to do it.
-    run_app "${INSTALL_FOLDER_PATH}/bin/wine" "${INSTALL_FOLDER_PATH}"/lib*/wine/fakedlls/netstat.exe
+    local netstat=$(find "${INSTALL_FOLDER_PATH}"/lib* -name netstat.exe)
+    run_app "${INSTALL_FOLDER_PATH}/bin/wine" ${netstat}
+
+
+    echo
+    echo "Checking the wine shared libraries..."
+
+    show_libs "$(realpath ${INSTALL_FOLDER_PATH}/bin/wine)"
+    show_libs "$(realpath ${INSTALL_FOLDER_PATH}/bin/winebuild)"
+    # show_libs "$(realpath ${INSTALL_FOLDER_PATH}/bin/winecfg)"
+    # show_libs "$(realpath ${INSTALL_FOLDER_PATH}/bin/wineconsole)"
+    show_libs "$(realpath ${INSTALL_FOLDER_PATH}/bin/winegcc)"
+    show_libs "$(realpath ${INSTALL_FOLDER_PATH}/bin/wineg++)"
+
+    libwine=$(find ${INSTALL_FOLDER_PATH}/lib* -name 'libwine.so')
+    show_libs "$(realpath ${libwine})"
   ) 
 }
 
@@ -6048,6 +6158,27 @@ function test_gpg()
     echo "Testing if gpg binaries start properly..."
 
     run_app "${INSTALL_FOLDER_PATH}/bin/gpg" --version
+    run_app "${INSTALL_FOLDER_PATH}/bin/gpgv" --version
+    run_app "${INSTALL_FOLDER_PATH}/bin/gpgsm" --version
+    run_app "${INSTALL_FOLDER_PATH}/bin/gpg-agent" --version
+
+    run_app "${INSTALL_FOLDER_PATH}/bin/kbxutil" --version
+
+    run_app "${INSTALL_FOLDER_PATH}/bin/gpgconf" --version
+    run_app "${INSTALL_FOLDER_PATH}/bin/gpg-connect-agent" --version
+    run_app "${INSTALL_FOLDER_PATH}/bin/symcryptrun" --version
+    run_app "${INSTALL_FOLDER_PATH}/bin/watchgnupg" --version
+    # run_app "${INSTALL_FOLDER_PATH}/bin/gpgparsemail" --version
+    run_app "${INSTALL_FOLDER_PATH}/bin/gpg-wks-server" --version
+    run_app "${INSTALL_FOLDER_PATH}/bin/gpgtar" --version
+
+    # run_app "${INSTALL_FOLDER_PATH}/sbin/addgnupghome" --version
+    # run_app "${INSTALL_FOLDER_PATH}/sbin/applygnupgdefaults" --version
+
+    echo
+    echo "Checking the gpg binaries shared libraries..."
+
+    show_libs "${INSTALL_FOLDER_PATH}/bin/gpg"
   )
 }
 
@@ -6441,6 +6572,18 @@ function test_tcl()
     echo "Testing if tcl binaries start properly..."
 
     run_app "${INSTALL_FOLDER_PATH}/bin/tclsh${TCL_VERSION_MAJOR}.${TCL_VERSION_MINOR}" <<< 'puts [info patchlevel]'
+
+    echo
+    echo "Checking the tcl binaries shared libraries..."
+
+    show_libs "${INSTALL_FOLDER_PATH}/bin/tclsh${TCL_VERSION_MAJOR}.${TCL_VERSION_MINOR}"
+    show_libs "$(find ${INSTALL_FOLDER_PATH}/lib/thread* -name 'libthread*.so')"
+    for lib in $(find ${INSTALL_FOLDER_PATH}/lib/tdb* -name 'libtdb*.so')
+    do
+      show_libs "${lib}"
+    done
+    show_libs "$(find ${INSTALL_FOLDER_PATH}/lib/itcl* -name 'libitcl*.so')"
+    show_libs "$(find ${INSTALL_FOLDER_PATH}/lib/sqlite* -name 'libsqlite*.so')"
   )  
 }
 
@@ -6519,7 +6662,6 @@ function do_guile()
         # make install-strip
         make install
 
-        show_libs "${INSTALL_FOLDER_PATH}/bin/guile"
         # WARN-TEST
         # FAIL: test-out-of-memory (disabled)
         make -j1 check
@@ -6551,6 +6693,14 @@ function test_guile()
     echo "Testing if guile binaries start properly..."
 
     run_app "${INSTALL_FOLDER_PATH}/bin/guile" --version
+    run_app "${INSTALL_FOLDER_PATH}/bin/guile-config" --version
+
+    echo
+    echo "Checking the guile shared libraries..."
+
+    show_libs "${INSTALL_FOLDER_PATH}/bin/guile"
+    show_libs "$(realpath ${INSTALL_FOLDER_PATH}/lib/libguile-2.2.so)"
+    show_libs "$(realpath ${INSTALL_FOLDER_PATH}/lib/guile/2.2/extensions/guile-readline.so)"
   )  
 }
 
@@ -6625,7 +6775,6 @@ function do_rhash()
 
         make install
 
-        show_libs "${INSTALL_FOLDER_PATH}/bin/rhash"
         make -j1 test test-lib
 
       ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${rhash_folder_name}/make-output.txt"
@@ -6655,6 +6804,12 @@ function test_rhash()
     echo "Testing if rhash binaries start properly..."
 
     run_app "${INSTALL_FOLDER_PATH}/bin/rhash" --version
+
+    echo
+    echo "Checking the flex shared libraries..."
+
+    show_libs "${INSTALL_FOLDER_PATH}/bin/rhash"
+    show_libs "$(realpath ${INSTALL_FOLDER_PATH}/lib/librhash.so.0)"
   )
 }
 
@@ -6746,8 +6901,6 @@ function do_re2c()
         # make install-strip
         make install
 
-        show_libs "${INSTALL_FOLDER_PATH}/bin/re2c"
-
       ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${re2c_folder_name}/make-output.txt"
     )
 
@@ -6775,6 +6928,11 @@ function test_re2c()
     echo "Testing if re2c binaries start properly..."
 
     run_app "${INSTALL_FOLDER_PATH}/bin/re2c" --version
+
+    echo
+    echo "Checking the flex shared libraries..."
+
+    show_libs "${INSTALL_FOLDER_PATH}/bin/re2c"
   )  
 }
 
@@ -6920,8 +7078,6 @@ function do_autogen()
 
         make install
 
-        show_libs "${INSTALL_FOLDER_PATH}/bin/autogen"
-        show_libs "${INSTALL_FOLDER_PATH}/bin/getdefs"
         # WARN-TEST
         # FAIL: cond.test (disabled)
         make -j1 check
@@ -6948,24 +7104,29 @@ function test_autogen()
     xbb_activate_installed_bin
 
     echo
-    echo "Testing if autotools binaries start properly..."
+    echo "Testing if autogen binaries start properly..."
 
     run_app "${INSTALL_FOLDER_PATH}/bin/autogen" --version
+    run_app "${INSTALL_FOLDER_PATH}/bin/autoopts-config" --version
+    run_app "${INSTALL_FOLDER_PATH}/bin/columns" --version
     run_app "${INSTALL_FOLDER_PATH}/bin/getdefs" --version
 
     echo
-    echo "Testing if autotools binaries display help..."
+    echo "Testing if autogen binaries display help..."
 
     run_app "${INSTALL_FOLDER_PATH}/bin/autogen" --help
 
     # getdefs error:  invalid option descriptor for version
     run_app "${INSTALL_FOLDER_PATH}/bin/getdefs" --help || true
 
-    # echo
-    # echo "Checking the autotools shared libraries..."
+    echo
+    echo "Checking the autogen shared libraries..."
 
-    # show_libs "${INSTALL_FOLDER_PATH}/bin/autogen"
-    # show_libs "${INSTALL_FOLDER_PATH}/bin/getdefs"
+    show_libs "${INSTALL_FOLDER_PATH}/bin/autogen"
+    show_libs "${INSTALL_FOLDER_PATH}/bin/columns"
+    show_libs "${INSTALL_FOLDER_PATH}/bin/getdefs"
+
+    show_libs "$(realpath ${INSTALL_FOLDER_PATH}/lib/libopts.so)"
   )  
 }
 
@@ -7061,7 +7222,6 @@ function do_bash()
         # make install-strip
         make install
 
-        show_libs "${INSTALL_FOLDER_PATH}/bin/bash"
         if [ "${RUN_LONG_TESTS}" == "y" ]
         then
           make -j1 check
@@ -7099,6 +7259,11 @@ function test_bash()
     echo "Testing if bash binaries display help..."
 
     run_app "${INSTALL_FOLDER_PATH}/bin/bash" --help
+
+    echo
+    echo "Checking the bash binaries shared libraries..."
+
+    show_libs "${INSTALL_FOLDER_PATH}/bin/bash"
   ) 
 }
 
