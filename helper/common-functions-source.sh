@@ -976,7 +976,7 @@ function run_app()
 
   echo
   echo "${app_path} $@"
-  "${app_path}" $@ 2>&1
+  "${app_path}" "$@" 2>&1
 }
 
 function show_libs()
