@@ -81,9 +81,9 @@ function do_zlib()
         # Build.
         make -j ${JOBS}
 
-        make test
-
         make install
+
+        make -j1 test
 
       ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${zlib_folder_name}/make-output.txt"
     )
@@ -191,10 +191,10 @@ function do_gmp()
         # Build.
         make -j ${JOBS}
 
-        make check
-
         # make install-strip
         make install
+
+        make -j1 check
 
       ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${gmp_folder_name}/make-output.txt"
     )
@@ -295,12 +295,12 @@ function do_mpfr()
         # Build.
         make -j ${JOBS}
 
-        make check
+        make -j1 check
 
         if [[ "${mpfr_version}" =~ 4\.* ]]
         then
           # Not available in 3.x
-          make check-exported-symbols
+          make -j1 check-exported-symbols
         fi
 
         # make install-strip
@@ -400,10 +400,10 @@ function do_mpc()
         # Build.
         make -j ${JOBS}
 
-        make check
-
         # make install-strip
         make install
+
+        make -j1 check
 
       ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${mpc_folder_name}/make-output.txt"
     )
@@ -502,10 +502,10 @@ function do_isl()
         # Build.
         make -j ${JOBS}
 
-        make check
-
         # make install-strip
         make install
+
+        make -j1 check
 
       ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${isl_folder_name}/make-output.txt"
     )
@@ -615,7 +615,7 @@ function do_nettle()
           make -k check || true
         else
           # Takes very long on armhf.
-          make -k check || true
+          make -k check
         fi
 
         # make install-strip
@@ -716,10 +716,10 @@ function do_tasn1()
         # Build.
         CODE_COVERAGE_LDFLAGS=${LDFLAGS} make -j ${JOBS}
 
-        make check
-
         # make install-strip
         make install
+
+        make -j1 check
 
       ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${tasn1_folder_name}/make-output.txt"
     )
@@ -815,10 +815,10 @@ function do_expat()
         # Build.
         make -j ${JOBS}
 
-        make check
-
         # make install-strip
         make install
+
+        make -j1 check
 
       ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${expat_folder_name}/make-output.txt"
     )
@@ -934,10 +934,10 @@ function do_libffi()
         # Build.
         make -j ${JOBS}
 
-        make check
-
         # make install-strip
         make install
+
+        make -j1 check
 
       ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${libffi_folder_name}/make-output.txt"
     )
@@ -1032,13 +1032,11 @@ function do_libiconv()
         # Build.
         make -j ${JOBS}
 
-        make check
-
         # make install-strip
         make install
 
-        # Does not leave a pkgconfig/iconv.pc;
-        # Pass -liconv explicitly.
+        make -j1 check
+
       ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${libiconv_folder_name}/make-output.txt"
     )
 
@@ -1152,7 +1150,7 @@ function do_gnutls()
         # i386: FAIL: srp
         if [ "${RUN_LONG_TESTS}" == "y" ]
         then
-          make check
+          make -j1 check
         fi
 
         # make install-strip
@@ -1252,6 +1250,8 @@ function do_util_macros()
 
         # make install-strip
         make install
+
+        make -j1 check
 
       ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${util_macros_folder_name}/make-output.txt"
     )
@@ -1353,6 +1353,8 @@ function do_xorg_xproto()
         # make install-strip
         make install
 
+        make -j1 check
+
       ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${xorg_xproto_folder_name}/make-output.txt"
     )
 
@@ -1450,11 +1452,14 @@ function do_libpng()
         # Build.
         make -j ${JOBS}
 
-        # Takes very long on armhf.
-        make check
-
         # make install-strip
         make install
+
+        (
+          export LD_LIBRARY_PATH="${LD_RUN_PATH}"
+          # Takes very long on armhf.
+          make -j1 check
+        )
 
       ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${libpng_folder_name}/make-output.txt"
     )
@@ -1546,6 +1551,8 @@ function do_libmpdec()
         make -j ${JOBS}
 
         make install
+
+        make -j1 check
 
       ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${libmpdec_folder_name}/make-output.txt"
     )
@@ -1642,10 +1649,10 @@ function do_libgpg_error()
         # FAIL: t-syserror (disabled) 
         # Interestingly enough, initially (before dismissing install-strip)
         # it passed.
-        make check
 
         # make install-strip
         make install
+        make -j1 check
 
       ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${libgpg_error_folder_name}/make-output.txt"
     )
@@ -1762,7 +1769,8 @@ function do_libgcrypt()
         # dyld: Library not loaded: /Users/ilg/opt/xbb/lib/libgcrypt.20.dylib
         # Referenced from: /Users/ilg/Work/xbb-3.1-macosx-10.15.3-x86_64/build/libs/libgcrypt-1.8.5/tests/.libs/random
 
-        make check
+        make -j1 check
+
 
       ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${libgcrypt_folder_name}/make-output.txt"
     )
@@ -1854,10 +1862,10 @@ function do_libassuan()
         # Build.
         make -j ${JOBS}
 
-        make check
-
         # make install-strip
         make install
+
+        make -j1 check
 
       ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${libassuan_folder_name}/make-output.txt"
     )
@@ -1949,10 +1957,10 @@ function do_libksba()
         # Build.
         make -j ${JOBS}
 
-        make check
-
         # make install-strip
         make install
+
+        make -j1 check
 
       ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${libksba_folder_name}/make-output.txt"
     )
@@ -2051,10 +2059,10 @@ function do_npth()
         # Build.
         make -j ${JOBS}
 
-        make check
-
         # make install-strip
         make install
+
+        make -j1 check
 
       ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${npth_folder_name}/make-output.txt"
     )
@@ -2184,9 +2192,9 @@ function do_libxcrypt()
         then
           # macOS FAIL: test/symbols-static.sh
           # macOS FAIL: test/symbols-renames.sh
-          make check || true
+          make -j1 check || true
         else
-          make check
+          make -j1 check
         fi
 
         # make install-strip
@@ -2281,10 +2289,10 @@ function do_libunistring()
         # Build.
         make -j ${JOBS}
 
-        make check
-
         # make install-strip
         make install
+
+        make -j1 check
 
       ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${libunistring_folder_name}/make-output.txt"
     )
@@ -2377,10 +2385,10 @@ function do_gc()
         # Build.
         make -j ${JOBS}
 
-        make check
-
         # make install-strip
         make install
+
+        make -j1 check
 
       ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${gc_folder_name}/make-output.txt"
     )
@@ -2657,10 +2665,10 @@ function do_readline()
         # Build.
         make -j ${JOBS}
 
-        make check
-
         # make install-strip
         make install
+
+        make -j1 check
 
       ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${readline_folder_name}/make-output.txt"
     )
