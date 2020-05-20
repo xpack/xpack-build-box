@@ -6825,12 +6825,10 @@ function do_guile()
             --disable-error-on-warning
 
 
-          # patch_all_libtool_rpath
+          patch_all_libtool_rpath
 
           # Remove the failing test.
           sed -i -e 's|test-out-of-memory||g' test-suite/standalone/Makefile
-
-          # sed -i -e 's|all-local: guile-procedures.texi|all-local:|' libguile/Makefile
 
           cp "config.log" "${LOGS_FOLDER_PATH}/${guile_folder_name}/config-log.txt"
         ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${guile_folder_name}/configure-output.txt"
