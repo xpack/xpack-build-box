@@ -455,6 +455,8 @@ function ubuntu_install_develop()
     echo 2 | update-alternatives --config gcc
   fi
 
+  apt-get install --yes gdb
+
   # ---------------------------------------------------------------------------
 
   apt-get install --yes openjdk-8-jdk
@@ -485,6 +487,7 @@ function ubuntu_install_develop()
   flex --version
   g++ --version
   gawk --version
+  gdb --version
   git --version
   java -version
   m4 --version
