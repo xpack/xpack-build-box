@@ -3314,12 +3314,15 @@ function do_libtool()
         # make install-strip
         make install
 
-        echo
-        echo "Linking glibtool..."
-        cd "${INSTALL_FOLDER_PATH}/bin"
-        rm -f glibtool glibtoolize
-        ln -s -v libtool glibtool
-        ln -s -v libtoolize glibtoolize
+        (
+          echo
+          echo "Linking glibtool..."
+          cd "${INSTALL_FOLDER_PATH}/bin"
+          rm -f glibtool glibtoolize
+          ln -s -v libtool glibtool
+          ln -s -v libtoolize glibtoolize
+        )
+
         # amd64: ERROR: 139 tests were run,
         # 11 failed (5 expected failures).
         # 31 tests were skipped.
@@ -4103,11 +4106,13 @@ function do_make()
         # make install-strip
         make install
 
-        echo
-        echo "Linking gmake..."
-        cd "${INSTALL_FOLDER_PATH}/bin"
-        rm -f gmake
-        ln -s -v make gmake
+        (
+          echo
+          echo "Linking gmake..."
+          cd "${INSTALL_FOLDER_PATH}/bin"
+          rm -f gmake
+          ln -s -v make gmake
+        )
 
         # Takes too long.
         if [ "${RUN_LONG_TESTS}" == "y" ]
