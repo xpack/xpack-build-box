@@ -6809,6 +6809,9 @@ function do_guile()
       export CXXFLAGS="${XBB_CXXFLAGS_NO_W}"
       export LDFLAGS="${XBB_LDFLAGS_APP}"
 
+      # Otherwise guile-config displays the verbosity.
+      unset PKG_CONFIG
+
       env | sort
 
       if [ ! -f "config.status" ]
