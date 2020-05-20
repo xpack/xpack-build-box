@@ -5284,7 +5284,7 @@ function do_python2()
         export CXX=clang++
       fi
 
-      CPPFLAGS="${XBB_CPPFLAGS}"
+      CPPFLAGS="${XBB_CPPFLAGS} -I${INSTALL_FOLDER_PATH}/include/ncurses"
       CFLAGS="${XBB_CFLAGS_NO_W}"
       CXXFLAGS="${XBB_CXXFLAGS_NO_W}"
       LDFLAGS="${XBB_LDFLAGS_APP}"
