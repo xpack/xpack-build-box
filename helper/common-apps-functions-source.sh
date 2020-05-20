@@ -966,6 +966,10 @@ main(int argc, char* argv[])
 }
 __EOF__
 
+    # Use the newly created script.
+    export LD_RUN_PATH="$(get-gcc-rpath)"
+    echo "LD_RUN_PATH=${LD_RUN_PATH}"
+
     "${INSTALL_FOLDER_PATH}/usr/bin/g++${XBB_GCC_SUFFIX}" hello.cpp -o hello1 -v 
 
     show_libs hello1
