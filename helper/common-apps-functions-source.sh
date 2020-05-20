@@ -2229,6 +2229,17 @@ function do_tar()
         # Build.
         make -j ${JOBS}
 
+        # make install-strip
+        make install
+
+        (
+          echo
+          echo "Linking gnutar..."
+          cd "${INSTALL_FOLDER_PATH}/bin"
+          rm -f gnutar
+          ln -s -v tar gnutar
+        )
+
         # It takes very long (220 tests).
         # arm64: 118: explicitly named directory removed before reading FAILED (dirrem02.at:34)
         # amd64: 92: link mismatch FAILED (difflink.at:19)
@@ -2241,16 +2252,6 @@ function do_tar()
         # darwin: 173: file truncated in sparse region while comparing FAILED (sptrdiff00.at:30)
         # darwin: 174: file truncated in data region while comparing   FAILED (sptrdiff01.at:30)
 
-        # make install-strip
-        make install
-
-        show_libs "${INSTALL_FOLDER_PATH}/bin/tar"
-
-        echo
-        echo "Linking gnutar..."
-        cd "${INSTALL_FOLDER_PATH}/bin"
-        rm -f gnutar
-        ln -s -v tar gnutar
         if [ "${RUN_LONG_TESTS}" == "y" ]
         then
           # WARN-TEST
@@ -2386,12 +2387,12 @@ function do_coreutils()
         # Build.
         make -j ${JOBS}
 
+        # make install-strip
+        make install
+
         # Takes very long and fails.
         # x86_64: FAIL: tests/misc/chroot-credentials.sh
         # x86_64: ERROR: tests/du/long-from-unreadable.sh
-
-        # make install-strip
-        make install
         # WARN-TEST
         # make -j1 check
 
@@ -2660,6 +2661,17 @@ function do_m4()
         # Build.
         make -j ${JOBS}
 
+        # make install-strip
+        make install
+
+        (
+          echo
+          echo "Linking gm4..."
+          cd "${INSTALL_FOLDER_PATH}/bin"
+          rm -f gm4
+          ln -s -v m4 gm4
+        )
+
         if is_darwin
         then
           # On macOS 10.15
@@ -2671,15 +2683,6 @@ function do_m4()
         else
           make -j1 check
         fi
-
-        # make install-strip
-        make install
-
-        echo
-        echo "Linking gm4..."
-        cd "${INSTALL_FOLDER_PATH}/bin"
-        rm -f gm4
-        ln -s -v m4 gm4
 
       ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${m4_folder_name}/make-output.txt"
     )
@@ -2912,6 +2915,13 @@ function do_sed()
         # make install-strip
         make install
 
+        (
+          echo
+          echo "Linking gsed..."
+          cd "${INSTALL_FOLDER_PATH}/bin"
+          rm -f gsed
+          ln -s -v sed gsed
+        )
 
         # Some tests fail due to missing locales.
         # darwin: FAIL: testsuite/subst-mb-incomplete.sh
@@ -2920,11 +2930,6 @@ function do_sed()
         # WARN-TEST
         make -j1 check
 
-        echo
-        echo "Linking gsed..."
-        cd "${INSTALL_FOLDER_PATH}/bin"
-        rm -f gsed
-        ln -s -v sed gsed
       ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${sed_folder_name}/make-output.txt"
     )
 
@@ -3137,12 +3142,13 @@ function do_automake()
         # Build.
         make -j ${JOBS}
 
+        # make install-strip
+        make install
+
         # Takes too long and some tests fail.
         # XFAIL: t/pm/Cond2.pl
         # XFAIL: t/pm/Cond3.pl
         # ...
-        # make install-strip
-        make install
         if [ "${RUN_LONG_TESTS}" == "y" ]
         then
           : # make -j1 check
@@ -3783,15 +3789,15 @@ function do_bison()
         # Build.
         make -j ${JOBS}
 
+        # make install-strip
+        make install
+
         # Takes too long.
         if [ "${RUN_LONG_TESTS}" == "y" ]
         then
           # 596, 7 failed
           : # make -j1 check
         fi
-
-        # make install-strip
-        make install
 
       ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${bison_folder_name}/make-output.txt"
     )
@@ -4286,6 +4292,9 @@ function do_texinfo()
         # Build.
         make -j ${JOBS}
 
+        # make install-strip
+        make install
+
         # Darwin: FAIL: t/94htmlxref.t 11 - htmlxref errors file_html
         # Darwin: ERROR: t/94htmlxref.t - exited with status 2
 
@@ -4295,9 +4304,6 @@ function do_texinfo()
         else
           make -j1 check
         fi
-
-        # make install-strip
-        make install
 
       ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${texinfo_folder_name}/make-output.txt"
     )
@@ -4824,13 +4830,13 @@ function do_patchelf()
         # Build.
         make -j ${JOBS}
 
+        # make install-strip
+        make install
+
         # Fails.
         # x86_64: FAIL: set-rpath-library.sh (Segmentation fault (core dumped))
         # x86_64: FAIL: set-interpreter-long.sh (Segmentation fault (core dumped))
         # make -C tests -j1 check
-
-        # make install-strip
-        make install
 
       ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${patchelf_folder_name}/make-output.txt"
     )
@@ -5723,6 +5729,13 @@ function do_p7zip()
       # Build.
       make -j ${JOBS}
 
+      run_app ls -lL bin
+
+      # Override the hard-coded '/usr/local'.
+      run_app sed -i -e "s|DEST_HOME=/usr/local|DEST_HOME=${INSTALL_FOLDER_PATH}|" install.sh
+
+      bash install.sh
+
       if is_darwin
       then
         # 7z cannot load library on macOS.
@@ -5732,14 +5745,6 @@ function do_p7zip()
         make all_test
       fi
 
-      ls -lL bin
-
-      # Override the hard-coded '/usr/local'.
-      sed -i -e "s|DEST_HOME=/usr/local|DEST_HOME=${INSTALL_FOLDER_PATH}|" install.sh
-
-      bash install.sh
-
-      # show_libs "${INSTALL_FOLDER_PATH}/bin/7za"
     ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${p7zip_folder_name}/install-output.txt"
 
     (
@@ -6537,13 +6542,13 @@ function do_tcl()
         # Build.
         make -j ${JOBS}
 
+        # make install-strip
+        make install
+
         if [ "${RUN_LONG_TESTS}" == "y" ]
         then
           make -j1 test
         fi
-
-        # make install-strip
-        make install
 
       ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${tcl_folder_name}/make-output.txt"
     )
@@ -6892,14 +6897,14 @@ function do_re2c()
         # Build.
         make -j ${JOBS}
 
+        # make install-strip
+        make install
+
         if [ "${HOST_UNAME}" == "Linux" ]
         then
           # darwin: Error: 5 out 2010 tests failed.
           make -j1 tests
         fi
-
-        # make install-strip
-        make install
 
       ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${re2c_folder_name}/make-output.txt"
     )

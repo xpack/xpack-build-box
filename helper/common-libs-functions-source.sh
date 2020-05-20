@@ -301,6 +301,9 @@ function do_mpfr()
         # Build.
         make -j ${JOBS}
 
+        # make install-strip
+        make install
+
         make -j1 check
 
         if [[ "${mpfr_version}" =~ 4\.* ]]
@@ -308,9 +311,6 @@ function do_mpfr()
           # Not available in 3.x
           make -j1 check-exported-symbols
         fi
-
-        # make install-strip
-        make install
 
       ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${mpfr_folder_name}/make-output.txt"
     )
@@ -624,22 +624,23 @@ function do_nettle()
         # Build.
         make -j ${JOBS}
 
-        if is_darwin
-        then
-          # dlopen failed: dlopen(../libnettle.so, 2): image not found
-          # /Users/ilg/Work/xbb-3.1-macosx-x86_64/sources/nettle-3.5.1/run-tests: line 57: 46731 Abort trap: 6           "$1" $testflags
-          # darwin: FAIL: dlopen
-          make -k check || true
-        else
-          # Takes very long on armhf.
-          make -k check
-        fi
-
         # make install-strip
         # For unknown reasons, on 32-bits make install-info fails 
         # (`install-info --info-dir="/opt/xbb/share/info" nettle.info` returns 1)
         # Make the other install targets.
         make install-headers install-static install-pkgconfig install-shared-nettle install-shared-hogweed
+
+        if is_darwin
+        then
+          # dlopen failed: dlopen(../libnettle.so, 2): image not found
+          # /Users/ilg/Work/xbb-3.1-macosx-x86_64/sources/nettle-3.5.1/run-tests: line 57: 46731 Abort trap: 6           "$1" $testflags
+          # darwin: FAIL: dlopen
+          # WARN-TEST
+          make -k check || true
+        else
+          # Takes very long on armhf.
+          make -k check
+        fi
 
       ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${nettle_folder_name}/make-output.txt"
     )
@@ -1179,15 +1180,15 @@ function do_gnutls()
         # Build.
         make -j ${JOBS}
 
+        # make install-strip
+        make install
+
         # It takes very, very long.
         # i386: FAIL: srp
         if [ "${RUN_LONG_TESTS}" == "y" ]
         then
           make -j1 check
         fi
-
-        # make install-strip
-        make install
 
       ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${gnutls_folder_name}/make-output.txt"
     )
@@ -1707,13 +1708,13 @@ function do_libgpg_error()
         # Build.
         make -j ${JOBS}
 
+        # make install-strip
+        make install
+
         # # WARN-TEST
         # FAIL: t-syserror (disabled) 
         # Interestingly enough, initially (before dismissing install-strip)
         # it passed.
-
-        # make install-strip
-        make install
         make -j1 check
 
       ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${libgpg_error_folder_name}/make-output.txt"
@@ -1827,15 +1828,14 @@ function do_libgcrypt()
         # Build.
         make -j ${JOBS}
 
-        # make install-strip
-        make install
-
         # Check after install, otherwise mac test fails:
         # dyld: Library not loaded: /Users/ilg/opt/xbb/lib/libgcrypt.20.dylib
         # Referenced from: /Users/ilg/Work/xbb-3.1-macosx-10.15.3-x86_64/build/libs/libgcrypt-1.8.5/tests/.libs/random
 
         make -j1 check
 
+        # make install-strip
+        make install
 
       ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${libgcrypt_folder_name}/make-output.txt"
     )
@@ -2290,6 +2290,9 @@ function do_libxcrypt()
         # Build.
         make -j ${JOBS}
 
+        # make install-strip
+        make install
+
         if is_darwin
         then
           # macOS FAIL: test/symbols-static.sh
@@ -2298,9 +2301,6 @@ function do_libxcrypt()
         else
           make -j1 check
         fi
-
-        # make install-strip
-        make install
 
       ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${libxcrypt_folder_name}/make-output.txt"
     )
