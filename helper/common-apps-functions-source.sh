@@ -7253,6 +7253,11 @@ function do_autogen()
 
           patch_all_libtool_rpath
 
+          run_app find . \
+            -name Makefile \
+            -print \
+            -exec sed -i -e "s|-Wl,-rpath -Wl,${INSTALL_FOLDER_PATH}/lib||" {} \;
+
           cp "config.log" "${LOGS_FOLDER_PATH}/${autogen_folder_name}/config-log.txt"
         ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${autogen_folder_name}/configure-output.txt"
       fi
