@@ -644,10 +644,10 @@ function do_nettle()
           # /Users/ilg/Work/xbb-3.1-macosx-x86_64/sources/nettle-3.5.1/run-tests: line 57: 46731 Abort trap: 6           "$1" $testflags
           # darwin: FAIL: dlopen
           # WARN-TEST
-          make -k check || true
+          make -j1 -k check || true
         else
           # Takes very long on armhf.
-          make -k check
+          make -j1 -k check
         fi
 
       ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${nettle_folder_name}/make-output.txt"

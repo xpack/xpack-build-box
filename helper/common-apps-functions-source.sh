@@ -5922,7 +5922,7 @@ function do_p7zip()
         make -j1 test
       else
         # make -j1 test test_7z
-        make all_test
+        make -j1 all_test
       fi
 
     ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${p7zip_folder_name}/install-output.txt"
