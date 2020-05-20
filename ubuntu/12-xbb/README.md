@@ -10,8 +10,8 @@ There are several scripts:
 $ bash ~/Downloads/xpack-build-box.git/ubuntu/12-xbb/amd64-build-v3.1.sh
 $ bash ~/Downloads/xpack-build-box.git/ubuntu/12-xbb/i386-build-v3.1.sh
 
-$ bash ~/Downloads/xpack-build-box.git/ubuntu/12-xbb/amd64-build-v3.3.sh
-$ bash ~/Downloads/xpack-build-box.git/ubuntu/12-xbb/i386-build-v3.3.sh
+$ bash ~/Downloads/xpack-build-box.git/ubuntu/12-xbb/amd64-build-v3.2.sh
+$ bash ~/Downloads/xpack-build-box.git/ubuntu/12-xbb/i386-build-v3.2.sh
 
 $ docker images
 ```
