@@ -4614,6 +4614,9 @@ function do_perl()
 
           bash "./Configure" --help || true
 
+          # -Uusedl prevents building libperl.so and so there is no need
+          # worry about the weird rpath.
+
           bash ${DEBUG} "./Configure" -d -e -s \
             -Dprefix="${INSTALL_FOLDER_PATH}" \
             \
@@ -4624,7 +4627,8 @@ function do_perl()
             -Dldflags="${LDFLAGS}" \
             -Duseshrplib \
             -Duselargefiles \
-            -Dusethreads
+            -Dusethreads \
+            -Uusedl \
 
         ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${perl_folder_name}/configure-output.txt"
       fi
