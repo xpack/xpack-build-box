@@ -7220,7 +7220,8 @@ function do_autogen()
       export CXXFLAGS="${XBB_CXXFLAGS_NO_W}"
       export LDFLAGS="${XBB_LDFLAGS_APP}"
 
-      export LD_LIBRARY_PATH="${XBB_LIBRARY_PATH}"
+      # To find libopts.so during build.
+      export LD_LIBRARY_PATH="${XBB_LIBRARY_PATH}:${BUILD_FOLDER_PATH}/${autogen_folder_name}/autoopts/.libs"
 
       env | sort
 
