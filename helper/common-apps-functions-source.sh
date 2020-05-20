@@ -5960,12 +5960,33 @@ function test_p7zip()
     echo
     echo "Checking the 7za shared libraries..."
 
-    show_libs "${INSTALL_FOLDER_PATH}/lib/p7zip/7za"
+    if [ -f "${INSTALL_FOLDER_PATH}/bin/7za" ]
+    then
+      show_libs "${INSTALL_FOLDER_PATH}/bin/7za"
+    fi
+
     if [ -f "${INSTALL_FOLDER_PATH}/bin/7z" ]
     then
       show_libs "${INSTALL_FOLDER_PATH}/lib/p7zip/7z"
     fi
-    show_libs "${INSTALL_FOLDER_PATH}/lib/p7zip/7z.so"
+
+    if [ -f "${INSTALL_FOLDER_PATH}/lib/p7zip/7z" ]
+    then
+      show_libs "${INSTALL_FOLDER_PATH}/lib/p7zip/7z"
+    fi
+    if [ -f "${INSTALL_FOLDER_PATH}/lib/p7zip/7za" ]
+    then
+      show_libs "${INSTALL_FOLDER_PATH}/lib/p7zip/7za"
+    fi
+    if [ -f "${INSTALL_FOLDER_PATH}/lib/p7zip/7zr" ]
+    then
+      show_libs "${INSTALL_FOLDER_PATH}/lib/p7zip/7zr"
+    fi
+
+    if [ -f "${INSTALL_FOLDER_PATH}/lib/p7zip/7z.so" ]
+    then
+      show_libs "${INSTALL_FOLDER_PATH}/lib/p7zip/7z.so"
+    fi
   )  
 }
 
