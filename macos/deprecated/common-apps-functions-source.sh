@@ -2001,7 +2001,7 @@ function do_perl()
         # Build.
         make -j ${JOBS}
         # 
-        # make test
+        # make -j1 test
         make install-strip
 
         # https://www.cpan.org/modules/INSTALL.html
@@ -2700,7 +2700,7 @@ function do_p7zip()
       sed -i -e "s|CXXFLAGS=|CXXFLAGS+=|" makefile.glb
 
       # 7z cannot load library on macOS.
-      make test
+      make -j1 test
 
       ls -lL bin
 
