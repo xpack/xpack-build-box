@@ -37,7 +37,8 @@ function do_zlib()
 
     cd "${SOURCES_FOLDER_PATH}"
 
-    download_and_extract "${zlib_url}" "${zlib_archive}" "${zlib_src_folder_name}"
+    download_and_extract "${zlib_url}" "${zlib_archive}" \
+      "${zlib_src_folder_name}"
 
     mkdir -pv "${LOGS_FOLDER_PATH}/${zlib_folder_name}"
 
@@ -143,7 +144,8 @@ function do_gmp()
 
     cd "${SOURCES_FOLDER_PATH}"
 
-    download_and_extract "${gmp_url}" "${gmp_archive}" "${gmp_src_folder_name}"
+    download_and_extract "${gmp_url}" "${gmp_archive}" \
+      "${gmp_src_folder_name}"
 
     mkdir -pv "${LOGS_FOLDER_PATH}/${gmp_folder_name}"
 
@@ -260,7 +262,8 @@ function do_mpfr()
 
     cd "${SOURCES_FOLDER_PATH}"
 
-    download_and_extract "${mpfr_url}" "${mpfr_archive}" "${mpfr_src_folder_name}"
+    download_and_extract "${mpfr_url}" "${mpfr_archive}" \
+      "${mpfr_src_folder_name}"
 
     mkdir -pv "${LOGS_FOLDER_PATH}/${mpfr_folder_name}"
 
@@ -373,7 +376,8 @@ function do_mpc()
 
     cd "${SOURCES_FOLDER_PATH}"
 
-    download_and_extract "${mpc_url}" "${mpc_archive}" "${mpc_src_folder_name}"
+    download_and_extract "${mpc_url}" "${mpc_archive}" \
+      "${mpc_src_folder_name}"
 
     mkdir -pv "${LOGS_FOLDER_PATH}/${mpc_folder_name}"
 
@@ -477,7 +481,8 @@ function do_isl()
 
     cd "${SOURCES_FOLDER_PATH}"
 
-    download_and_extract "${isl_url}" "${isl_archive}" "${isl_src_folder_name}"
+    download_and_extract "${isl_url}" "${isl_archive}" \
+      "${isl_src_folder_name}"
 
     mkdir -pv "${LOGS_FOLDER_PATH}/${isl_folder_name}"
 
@@ -573,19 +578,22 @@ function do_nettle()
 
   local nettle_version="$1"
 
-  local nettle_folder_name="nettle-${nettle_version}"
-  local nettle_archive="${nettle_folder_name}.tar.gz"
+  local nettle_src_folder_name="nettle-${nettle_version}"
+
+  local nettle_archive="${nettle_src_folder_name}.tar.gz"
   local nettle_url="ftp://ftp.gnu.org/gnu/nettle/${nettle_archive}"
 
-  local  nettle_patch_file_path="${helper_folder_path}/patches/${nettle_folder_name}.patch"
+  local nettle_folder_name="${nettle_src_folder_name}"
 
-  local nettle_stamp_file_path="${STAMPS_FOLDER_PATH}/stamp-nettle-${nettle_version}-installed"
+  local nettle_patch_file_path="${helper_folder_path}/patches/${nettle_folder_name}.patch"
+  local nettle_stamp_file_path="${STAMPS_FOLDER_PATH}/stamp-${nettle_folder_name}-installed"
   if [ ! -f "${nettle_stamp_file_path}" -o ! -d "${LIBS_BUILD_FOLDER_PATH}/${nettle_folder_name}" ]
   then
 
     cd "${SOURCES_FOLDER_PATH}"
 
-    download_and_extract "${nettle_url}" "${nettle_archive}" "${nettle_folder_name}" "${nettle_patch_file_path}"
+    download_and_extract "${nettle_url}" "${nettle_archive}" \
+      "${nettle_src_folder_name}" "${nettle_patch_file_path}"
 
     mkdir -pv "${LOGS_FOLDER_PATH}/${nettle_folder_name}"
 
@@ -609,11 +617,11 @@ function do_nettle()
           echo
           echo "Running nettle configure..."
 
-          bash "${SOURCES_FOLDER_PATH}/${nettle_folder_name}/configure" --help
+          bash "${SOURCES_FOLDER_PATH}/${nettle_src_folder_name}/configure" --help
 
           # -disable-static
 
-          bash ${DEBUG} "${SOURCES_FOLDER_PATH}/${nettle_folder_name}/configure" \
+          bash ${DEBUG} "${SOURCES_FOLDER_PATH}/${nettle_src_folder_name}/configure" \
             --prefix="${INSTALL_FOLDER_PATH}" \
             \
             --enable-mini-gmp \
@@ -695,17 +703,21 @@ function do_tasn1()
 
   local tasn1_version="$1"
 
-  local tasn1_folder_name="libtasn1-${tasn1_version}"
-  local tasn1_archive="${tasn1_folder_name}.tar.gz"
+  local tasn1_src_folder_name="libtasn1-${tasn1_version}"
+
+  local tasn1_archive="${tasn1_src_folder_name}.tar.gz"
   local tasn1_url="ftp://ftp.gnu.org/gnu/libtasn1/${tasn1_archive}"
 
-  local tasn1_stamp_file_path="${STAMPS_FOLDER_PATH}/stamp-tasn1-${tasn1_version}-installed"
+  local tasn1_folder_name="${tasn1_src_folder_name}"
+
+  local tasn1_stamp_file_path="${STAMPS_FOLDER_PATH}/stamp-${tasn1_folder_name}-installed"
   if [ ! -f "${tasn1_stamp_file_path}" -o ! -d "${LIBS_BUILD_FOLDER_PATH}/${tasn1_folder_name}" ]
   then
 
     cd "${SOURCES_FOLDER_PATH}"
 
-    download_and_extract "${tasn1_url}" "${tasn1_archive}" "${tasn1_folder_name}"
+    download_and_extract "${tasn1_url}" "${tasn1_archive}" \
+      "${tasn1_src_folder_name}"
 
     mkdir -pv "${LOGS_FOLDER_PATH}/${tasn1_folder_name}"
 
@@ -729,9 +741,9 @@ function do_tasn1()
           echo
           echo "Running tasn1 configure..."
 
-          bash "${SOURCES_FOLDER_PATH}/${tasn1_folder_name}/configure" --help
+          bash "${SOURCES_FOLDER_PATH}/${tasn1_src_folder_name}/configure" --help
 
-          bash ${DEBUG} "${SOURCES_FOLDER_PATH}/${tasn1_folder_name}/configure" \
+          bash ${DEBUG} "${SOURCES_FOLDER_PATH}/${tasn1_src_folder_name}/configure" \
             --prefix="${INSTALL_FOLDER_PATH}" 
 
           patch_all_libtool_rpath
@@ -797,19 +809,23 @@ function do_expat()
 
   local expat_version="$1"
 
-  local expat_folder_name="expat-${expat_version}"
-  local expat_archive="${expat_folder_name}.tar.bz2"
+  local expat_src_folder_name="expat-${expat_version}"
+
+  local expat_archive="${expat_src_folder_name}.tar.bz2"
   local expat_release="R_$(echo ${expat_version} | sed -e 's|[.]|_|g')"
   # local expat_url="ftp://ftp.gnu.org/gnu/expat/${expat_archive}"
   local expat_url="https://github.com/libexpat/libexpat/releases/download/${expat_release}/${expat_archive}"
 
-  local expat_stamp_file_path="${STAMPS_FOLDER_PATH}/stamp-expat-${expat_version}-installed"
+  local expat_folder_name="${expat_src_folder_name}"
+
+  local expat_stamp_file_path="${STAMPS_FOLDER_PATH}/stamp-${expat_folder_name}-installed"
   if [ ! -f "${expat_stamp_file_path}" -o ! -d "${LIBS_BUILD_FOLDER_PATH}/${expat_folder_name}" ]
   then
 
     cd "${SOURCES_FOLDER_PATH}"
 
-    download_and_extract "${expat_url}" "${expat_archive}" "${expat_folder_name}"
+    download_and_extract "${expat_url}" "${expat_archive}" \
+      "${expat_src_folder_name}"
 
     mkdir -pv "${LOGS_FOLDER_PATH}/${expat_folder_name}"
 
@@ -833,9 +849,9 @@ function do_expat()
           echo
           echo "Running expat configure..."
 
-          bash "${SOURCES_FOLDER_PATH}/${expat_folder_name}/configure" --help
+          bash "${SOURCES_FOLDER_PATH}/${expat_src_folder_name}/configure" --help
 
-          bash ${DEBUG} "${SOURCES_FOLDER_PATH}/${expat_folder_name}/configure" \
+          bash ${DEBUG} "${SOURCES_FOLDER_PATH}/${expat_src_folder_name}/configure" \
             --prefix="${INSTALL_FOLDER_PATH}" 
 
           patch_all_libtool_rpath
@@ -901,29 +917,33 @@ function do_libffi()
 
   local libffi_version="$1"
 
-  local libffi_folder_name="libffi-${libffi_version}"
+  local libffi_src_folder_name="libffi-${libffi_version}"
+
   # .gz only.
-  local libffi_archive="${libffi_folder_name}.tar.gz"
+  local libffi_archive="${libffi_src_folder_name}.tar.gz"
   # local libffi_url="ftp://ftp.gnu.org/gnu/libffi/${libffi_archive}"
   # local libffi_url="https://sourceware.org/pub/libffi/${libffi_archive}"
   # GitHub release archive.
   local libffi_url="https://github.com/libffi/libffi/archive/v${libffi_version}.tar.gz"
 
-  local libffi_stamp_file_path="${STAMPS_FOLDER_PATH}/stamp-libffi-${libffi_version}-installed"
+  local libffi_folder_name="${libffi_src_folder_name}"
+
+  local libffi_stamp_file_path="${STAMPS_FOLDER_PATH}/stamp-${libffi_folder_name}-installed"
   if [ ! -f "${libffi_stamp_file_path}" -o ! -d "${LIBS_BUILD_FOLDER_PATH}/${libffi_folder_name}" ]
   then
 
     cd "${SOURCES_FOLDER_PATH}"
 
-    download_and_extract "${libffi_url}" "${libffi_archive}" "${libffi_folder_name}"
+    download_and_extract "${libffi_url}" "${libffi_archive}" \
+      "${libffi_src_folder_name}"
 
     mkdir -pv "${LOGS_FOLDER_PATH}/${libffi_folder_name}"
 
     (
-      if [ ! -x "${SOURCES_FOLDER_PATH}/${libffi_folder_name}/configure" ]
+      if [ ! -x "${SOURCES_FOLDER_PATH}/${libffi_src_folder_name}/configure" ]
       then
 
-        cd "${SOURCES_FOLDER_PATH}/${libffi_folder_name}"
+        cd "${SOURCES_FOLDER_PATH}/${libffi_src_folder_name}"
         
         xbb_activate
         xbb_activate_installed_dev
@@ -953,11 +973,11 @@ function do_libffi()
           echo
           echo "Running libffi configure..."
 
-          bash "${SOURCES_FOLDER_PATH}/${libffi_folder_name}/configure" --help
+          bash "${SOURCES_FOLDER_PATH}/${libffi_src_folder_name}/configure" --help
 
           #  --disable-static
 
-          bash ${DEBUG} "${SOURCES_FOLDER_PATH}/${libffi_folder_name}/configure" \
+          bash ${DEBUG} "${SOURCES_FOLDER_PATH}/${libffi_src_folder_name}/configure" \
             --prefix="${INSTALL_FOLDER_PATH}" \
             \
             --enable-pax_emutramp \
@@ -1027,17 +1047,21 @@ function do_libiconv()
 
   local libiconv_version="$1"
 
-  local libiconv_folder_name="libiconv-${libiconv_version}"
-  local libiconv_archive="${libiconv_folder_name}.tar.gz"
+  local libiconv_src_folder_name="libiconv-${libiconv_version}"
+
+  local libiconv_archive="${libiconv_src_folder_name}.tar.gz"
   local libiconv_url="ftp://ftp.gnu.org/gnu/libiconv/${libiconv_archive}"
 
-  local libiconv_stamp_file_path="${STAMPS_FOLDER_PATH}/stamp-libiconv-${libiconv_version}-installed"
+  local libiconv_folder_name="${libiconv_src_folder_name}"
+
+  local libiconv_stamp_file_path="${STAMPS_FOLDER_PATH}/stamp-${libiconv_folder_name}-installed"
   if [ ! -f "${libiconv_stamp_file_path}" -o ! -d "${LIBS_BUILD_FOLDER_PATH}/${libiconv_folder_name}" ]
   then
 
     cd "${SOURCES_FOLDER_PATH}"
 
-    download_and_extract "${libiconv_url}" "${libiconv_archive}" "${libiconv_folder_name}"
+    download_and_extract "${libiconv_url}" "${libiconv_archive}" \
+      "${libiconv_src_folder_name}"
 
     mkdir -pv "${LOGS_FOLDER_PATH}/${libiconv_folder_name}"
 
@@ -1061,9 +1085,9 @@ function do_libiconv()
           echo
           echo "Running libiconv configure..."
 
-          bash "${SOURCES_FOLDER_PATH}/${libiconv_folder_name}/configure" --help
+          bash "${SOURCES_FOLDER_PATH}/${libiconv_src_folder_name}/configure" --help
 
-          bash ${DEBUG} "${SOURCES_FOLDER_PATH}/${libiconv_folder_name}/configure" \
+          bash ${DEBUG} "${SOURCES_FOLDER_PATH}/${libiconv_src_folder_name}/configure" \
             --prefix="${INSTALL_FOLDER_PATH}/libiconv" 
 
           cp "config.log" "${LOGS_FOLDER_PATH}/${libiconv_folder_name}/config-log.txt"
@@ -1129,17 +1153,21 @@ function do_gnutls()
   # The first two digits.
   local gnutls_version_major_minor="$(echo ${gnutls_version} | sed -e 's|\([0-9][0-9]*\.[0-9][0-9]*\)\.[0-9].*|\1|')"
 
-  local gnutls_folder_name="gnutls-${gnutls_version}"
-  local gnutls_archive="${gnutls_folder_name}.tar.xz"
+  local gnutls_src_folder_name="gnutls-${gnutls_version}"
+
+  local gnutls_archive="${gnutls_src_folder_name}.tar.xz"
   local gnutls_url="https://www.gnupg.org/ftp/gcrypt/gnutls/v${gnutls_version_major_minor}/${gnutls_archive}"
 
-  local gnutls_stamp_file_path="${STAMPS_FOLDER_PATH}/stamp-gnutls-${gnutls_version}-installed"
+  local gnutls_folder_name="${gnutls_src_folder_name}"
+
+  local gnutls_stamp_file_path="${STAMPS_FOLDER_PATH}/stamp-${gnutls_folder_name}-installed"
   if [ ! -f "${gnutls_stamp_file_path}" -o ! -d "${LIBS_BUILD_FOLDER_PATH}/${gnutls_folder_name}" ]
   then
 
     cd "${SOURCES_FOLDER_PATH}"
 
-    download_and_extract "${gnutls_url}" "${gnutls_archive}" "${gnutls_folder_name}"
+    download_and_extract "${gnutls_url}" "${gnutls_archive}" \
+      "${gnutls_src_folder_name}"
 
     mkdir -pv "${LOGS_FOLDER_PATH}/${gnutls_folder_name}"
 
@@ -1170,11 +1198,11 @@ function do_gnutls()
           echo
           echo "Running gnutls configure..."
 
-          bash "${SOURCES_FOLDER_PATH}/${gnutls_folder_name}/configure" --help
+          bash "${SOURCES_FOLDER_PATH}/${gnutls_src_folder_name}/configure" --help
 
           # --disable-static 
 
-          bash ${DEBUG} "${SOURCES_FOLDER_PATH}/${gnutls_folder_name}/configure" \
+          bash ${DEBUG} "${SOURCES_FOLDER_PATH}/${gnutls_src_folder_name}/configure" \
             --prefix="${INSTALL_FOLDER_PATH}" \
             \
             --with-guile-site-dir=no \
@@ -1263,17 +1291,21 @@ function do_util_macros()
 
   local util_macros_version="$1"
 
-  local util_macros_folder_name="util-macros-${util_macros_version}"
-  local util_macros_archive="${util_macros_folder_name}.tar.bz2"
+  local util_macros_src_folder_name="util-macros-${util_macros_version}"
+
+  local util_macros_archive="${util_macros_src_folder_name}.tar.bz2"
   local util_macros_url="http://xorg.freedesktop.org/releases/individual/util/${util_macros_archive}"
 
-  local util_macros_stamp_file_path="${STAMPS_FOLDER_PATH}/stamp-util_macros-${util_macros_version}-installed"
+  local util_macros_folder_name="${util_macros_src_folder_name}"
+
+  local util_macros_stamp_file_path="${STAMPS_FOLDER_PATH}/stamp-${util_macros_folder_name}-installed"
   if [ ! -f "${util_macros_stamp_file_path}" -o ! -d "${LIBS_BUILD_FOLDER_PATH}/${util_macros_folder_name}" ]
   then
 
     cd "${SOURCES_FOLDER_PATH}"
 
-    download_and_extract "${util_macros_url}" "${util_macros_archive}" "${util_macros_folder_name}"
+    download_and_extract "${util_macros_url}" "${util_macros_archive}" \
+      "${util_macros_src_folder_name}"
 
     mkdir -pv "${LOGS_FOLDER_PATH}/${util_macros_folder_name}"
 
@@ -1297,9 +1329,9 @@ function do_util_macros()
           echo
           echo "Running util_macros configure..."
 
-          bash "${SOURCES_FOLDER_PATH}/${util_macros_folder_name}/configure" --help
+          bash "${SOURCES_FOLDER_PATH}/${util_macros_src_folder_name}/configure" --help
 
-          bash ${DEBUG} "${SOURCES_FOLDER_PATH}/${util_macros_folder_name}/configure" \
+          bash ${DEBUG} "${SOURCES_FOLDER_PATH}/${util_macros_src_folder_name}/configure" \
             --prefix="${INSTALL_FOLDER_PATH}" 
 
           cp "config.log" "${LOGS_FOLDER_PATH}/${util_macros_folder_name}/config-log.txt"
@@ -1357,20 +1389,23 @@ function do_xorg_xproto()
 
   local xorg_xproto_version="$1"
 
-  local xorg_xproto_folder_name="xproto-${xorg_xproto_version}"
-  local xorg_xproto_archive="${xorg_xproto_folder_name}.tar.bz2"
+  local xorg_xproto_src_folder_name="xproto-${xorg_xproto_version}"
+
+  local xorg_xproto_archive="${xorg_xproto_src_folder_name}.tar.bz2"
   local xorg_xproto_url="https://www.x.org/releases/individual/proto/${xorg_xproto_archive}"
 
-  # Add aarch64 to the list of Arm architectures.
-  local  xorg_xproto_patch_file_path="${helper_folder_path}/patches/${xorg_xproto_folder_name}.patch"
+  local xorg_xproto_folder_name="${xorg_xproto_src_folder_name}"
 
-  local xorg_xproto_stamp_file_path="${STAMPS_FOLDER_PATH}/stamp-xorg_xproto-${xorg_xproto_version}-installed"
+  # Add aarch64 to the list of Arm architectures.
+  local xorg_xproto_patch_file_path="${helper_folder_path}/patches/${xorg_xproto_folder_name}.patch"
+  local xorg_xproto_stamp_file_path="${STAMPS_FOLDER_PATH}/stamp-${xorg_xproto_folder_name}-installed"
   if [ ! -f "${xorg_xproto_stamp_file_path}" -o ! -d "${LIBS_BUILD_FOLDER_PATH}/${xorg_xproto_folder_name}" ]
   then
 
     cd "${SOURCES_FOLDER_PATH}"
 
-    download_and_extract "${xorg_xproto_url}" "${xorg_xproto_archive}" "${xorg_xproto_folder_name}" "${xorg_xproto_patch_file_path}"
+    download_and_extract "${xorg_xproto_url}" "${xorg_xproto_archive}" \
+      "${xorg_xproto_src_folder_name}" "${xorg_xproto_patch_file_path}"
 
     mkdir -pv "${LOGS_FOLDER_PATH}/${xorg_xproto_folder_name}"
 
@@ -1394,9 +1429,9 @@ function do_xorg_xproto()
           echo
           echo "Running xorg_xproto configure..."
 
-          bash "${SOURCES_FOLDER_PATH}/${xorg_xproto_folder_name}/configure" --help
+          bash "${SOURCES_FOLDER_PATH}/${xorg_xproto_src_folder_name}/configure" --help
 
-          bash ${DEBUG} "${SOURCES_FOLDER_PATH}/${xorg_xproto_folder_name}/configure" \
+          bash ${DEBUG} "${SOURCES_FOLDER_PATH}/${xorg_xproto_src_folder_name}/configure" \
             --prefix="${INSTALL_FOLDER_PATH}" \
             \
             --build="${BUILD}" \
@@ -1464,17 +1499,21 @@ function do_libpng()
 
   local libpng_version="$1"
 
-  local libpng_folder_name="libpng-${libpng_version}"
-  local libpng_archive="${libpng_folder_name}.tar.gz"
+  local libpng_src_folder_name="libpng-${libpng_version}"
+
+  local libpng_archive="${libpng_src_folder_name}.tar.gz"
   local libpng_url="https://sourceforge.net/projects/libpng/files/libpng16/${libpng_version}/${libpng_archive}"
 
-  local libpng_stamp_file_path="${STAMPS_FOLDER_PATH}/stamp-libpng-${libpng_version}-installed"
+  local libpng_folder_name="${libpng_src_folder_name}"
+
+  local libpng_stamp_file_path="${STAMPS_FOLDER_PATH}/stamp-${libpng_folder_name}-installed"
   if [ ! -f "${libpng_stamp_file_path}" -o ! -d "${LIBS_BUILD_FOLDER_PATH}/${libpng_folder_name}" ]
   then
 
     cd "${SOURCES_FOLDER_PATH}"
 
-    download_and_extract "${libpng_url}" "${libpng_archive}" "${libpng_folder_name}"
+    download_and_extract "${libpng_url}" "${libpng_archive}" \
+      "${libpng_src_folder_name}"
 
     mkdir -pv "${LOGS_FOLDER_PATH}/${libpng_folder_name}"
 
@@ -1498,11 +1537,11 @@ function do_libpng()
           echo
           echo "Running libpng configure..."
 
-          bash "${SOURCES_FOLDER_PATH}/${libpng_folder_name}/configure" --help
+          bash "${SOURCES_FOLDER_PATH}/${libpng_src_folder_name}/configure" --help
 
           # --disable-static
 
-          bash ${DEBUG} "${SOURCES_FOLDER_PATH}/${libpng_folder_name}/configure" \
+          bash ${DEBUG} "${SOURCES_FOLDER_PATH}/${libpng_src_folder_name}/configure" \
             --prefix="${INSTALL_FOLDER_PATH}" \
             \
             --enable-arm-neon=no \
@@ -1578,23 +1617,36 @@ function do_libmpdec()
 
   local libmpdec_version="$1"
 
-  local libmpdec_folder_name="mpdecimal-${libmpdec_version}"
-  local libmpdec_archive="${libmpdec_folder_name}.tar.gz"
+  local libmpdec_src_folder_name="mpdecimal-${libmpdec_version}"
+
+  local libmpdec_archive="${libmpdec_src_folder_name}.tar.gz"
   local libmpdec_url="https://www.bytereef.org/software/mpdecimal/releases/${libmpdec_archive}"
 
-  local libmpdec_stamp_file_path="${STAMPS_FOLDER_PATH}/stamp-libmpdec-${libmpdec_version}-installed"
+  local libmpdec_folder_name="${libmpdec_src_folder_name}"
+
+  local libmpdec_stamp_file_path="${STAMPS_FOLDER_PATH}/stamp-${libmpdec_folder_name}-installed"
   if [ ! -f "${libmpdec_stamp_file_path}" -o ! -d "${LIBS_BUILD_FOLDER_PATH}/${libmpdec_folder_name}" ]
   then
 
     # In-source build
-    cd "${LIBS_BUILD_FOLDER_PATH}"
 
-    download_and_extract "${libmpdec_url}" "${libmpdec_archive}" "${libmpdec_folder_name}"
+    if [ ! -d "${LIBS_BUILD_FOLDER_PATH}/${libmpdec_folder_name}" ]
+    then
+      cd "${LIBS_BUILD_FOLDER_PATH}"
+
+      download_and_extract "${libmpdec_url}" "${libmpdec_archive}" \
+        "${libmpdec_src_folder_name}"
+
+      if [ "${libmpdec_src_folder_name}" != "${libmpdec_folder_name}" ]
+      then
+        mv -v "${libmpdec_src_folder_name}" "${libmpdec_folder_name}"
+      fi
+    fi
 
     mkdir -pv "${LOGS_FOLDER_PATH}/${libmpdec_folder_name}"
 
     (
-      cd "${LIBS_BUILD_FOLDER_PATH}/${libmpdec_folder_name}"
+      cd "${LIBS_BUILD_FOLDER_PATH}/${libmpdec_src_folder_name}"
 
       xbb_activate
       xbb_activate_installed_dev
@@ -1674,18 +1726,21 @@ function do_libgpg_error()
 
   local libgpg_error_version="$1"
 
-  local libgpg_error_folder_name="libgpg-error-${libgpg_error_version}"
-  local libgpg_error_archive="${libgpg_error_folder_name}.tar.bz2"
+  local libgpg_error_src_folder_name="libgpg-error-${libgpg_error_version}"
+
+  local libgpg_error_archive="${libgpg_error_src_folder_name}.tar.bz2"
   local libgpg_error_url="https://gnupg.org/ftp/gcrypt/libgpg-error/${libgpg_error_archive}"
 
+  local libgpg_error_folder_name="${libgpg_error_src_folder_name}"
 
-  local libgpg_error_stamp_file_path="${STAMPS_FOLDER_PATH}/stamp-libgpg-error-${libgpg_error_version}-installed"
+  local libgpg_error_stamp_file_path="${STAMPS_FOLDER_PATH}/stamp-${libgpg_error_folder_name}-installed"
   if [ ! -f "${libgpg_error_stamp_file_path}" -o ! -d "${LIBS_BUILD_FOLDER_PATH}/${libgpg_error_folder_name}" ]
   then
 
     cd "${SOURCES_FOLDER_PATH}"
 
-    download_and_extract "${libgpg_error_url}" "${libgpg_error_archive}" "${libgpg_error_folder_name}"
+    download_and_extract "${libgpg_error_url}" "${libgpg_error_archive}" \
+      "${libgpg_error_src_folder_name}"
 
     mkdir -pv "${LOGS_FOLDER_PATH}/${libgpg_error_folder_name}"
 
@@ -1709,9 +1764,9 @@ function do_libgpg_error()
           echo
           echo "Running libgpg-error configure..."
 
-          bash "${SOURCES_FOLDER_PATH}/${libgpg_error_folder_name}/configure" --help
+          bash "${SOURCES_FOLDER_PATH}/${libgpg_error_src_folder_name}/configure" --help
 
-          bash ${DEBUG} "${SOURCES_FOLDER_PATH}/${libgpg_error_folder_name}/configure" \
+          bash ${DEBUG} "${SOURCES_FOLDER_PATH}/${libgpg_error_src_folder_name}/configure" \
             --prefix="${INSTALL_FOLDER_PATH}" 
 
           patch_all_libtool_rpath
@@ -1780,17 +1835,21 @@ function do_libgcrypt()
 
   local libgcrypt_version="$1"
 
-  local libgcrypt_folder_name="libgcrypt-${libgcrypt_version}"
-  local libgcrypt_archive="${libgcrypt_folder_name}.tar.bz2"
+  local libgcrypt_src_folder_name="libgcrypt-${libgcrypt_version}"
+
+  local libgcrypt_archive="${libgcrypt_src_folder_name}.tar.bz2"
   local libgcrypt_url="https://gnupg.org/ftp/gcrypt/libgcrypt/${libgcrypt_archive}"
 
-  local libgcrypt_stamp_file_path="${STAMPS_FOLDER_PATH}/stamp-libgcrypt-${libgcrypt_version}-installed"
+  local libgcrypt_folder_name="${libgcrypt_src_folder_name}"
+
+  local libgcrypt_stamp_file_path="${STAMPS_FOLDER_PATH}/stamp-${libgcrypt_folder_name}-installed"
   if [ ! -f "${libgcrypt_stamp_file_path}" -o ! -d "${LIBS_BUILD_FOLDER_PATH}/${libgcrypt_folder_name}" ]
   then
 
     cd "${SOURCES_FOLDER_PATH}"
 
-    download_and_extract "${libgcrypt_url}" "${libgcrypt_archive}" "${libgcrypt_folder_name}"
+    download_and_extract "${libgcrypt_url}" "${libgcrypt_archive}" \
+      "${libgcrypt_src_folder_name}"
 
     mkdir -pv "${LOGS_FOLDER_PATH}/${libgcrypt_folder_name}"
 
@@ -1814,7 +1873,7 @@ function do_libgcrypt()
           echo
           echo "Running libgcrypt configure..."
 
-          bash "${SOURCES_FOLDER_PATH}/${libgcrypt_folder_name}/configure" --help
+          bash "${SOURCES_FOLDER_PATH}/${libgcrypt_src_folder_name}/configure" --help
 
           config_options=()
           if [ "${HOST_MACHINE}" != "aarch64" ]
@@ -1823,14 +1882,11 @@ function do_libgcrypt()
             config_options+=("--disable-arm-crypto-support")
           fi
 
-          set +u
+          config_options+=("--prefix=${INSTALL_FOLDER_PATH}")
+          config_options+=("--with-libgpg-error-prefix=${INSTALL_FOLDER_PATH}")
 
-          bash ${DEBUG} "${SOURCES_FOLDER_PATH}/${libgcrypt_folder_name}/configure" \
-            --prefix="${INSTALL_FOLDER_PATH}" \
-            \
-            --with-libgpg-error-prefix="${INSTALL_FOLDER_PATH}" \
-
-          set -u
+          bash ${DEBUG} "${SOURCES_FOLDER_PATH}/${libgcrypt_src_folder_name}/configure" \
+            ${config_options[@]}
 
           patch_all_libtool_rpath
 
@@ -1915,17 +1971,21 @@ function do_libassuan()
 
   local libassuan_version="$1"
 
-  local libassuan_folder_name="libassuan-${libassuan_version}"
-  local libassuan_archive="${libassuan_folder_name}.tar.bz2"
+  local libassuan_src_folder_name="libassuan-${libassuan_version}"
+
+  local libassuan_archive="${libassuan_src_folder_name}.tar.bz2"
   local libassuan_url="https://gnupg.org/ftp/gcrypt/libassuan/${libassuan_archive}"
 
-  local libassuan_stamp_file_path="${STAMPS_FOLDER_PATH}/stamp-libassuan-${libassuan_version}-installed"
+  local libassuan_folder_name="${libassuan_src_folder_name}"
+
+  local libassuan_stamp_file_path="${STAMPS_FOLDER_PATH}/stamp-${libassuan_folder_name}-installed"
   if [ ! -f "${libassuan_stamp_file_path}" -o ! -d "${LIBS_BUILD_FOLDER_PATH}/${libassuan_folder_name}" ]
   then
 
     cd "${SOURCES_FOLDER_PATH}"
 
-    download_and_extract "${libassuan_url}" "${libassuan_archive}" "${libassuan_folder_name}"
+    download_and_extract "${libassuan_url}" "${libassuan_archive}" \
+      "${libassuan_src_folder_name}"
 
     mkdir -pv "${LOGS_FOLDER_PATH}/${libassuan_folder_name}"
 
@@ -1949,9 +2009,9 @@ function do_libassuan()
           echo
           echo "Running libassuan configure..."
 
-          bash "${SOURCES_FOLDER_PATH}/${libassuan_folder_name}/configure" --help
+          bash "${SOURCES_FOLDER_PATH}/${libassuan_src_folder_name}/configure" --help
 
-          bash ${DEBUG} "${SOURCES_FOLDER_PATH}/${libassuan_folder_name}/configure" \
+          bash ${DEBUG} "${SOURCES_FOLDER_PATH}/${libassuan_src_folder_name}/configure" \
             --prefix="${INSTALL_FOLDER_PATH}" \
             \
             --with-libgpg-error-prefix="${INSTALL_FOLDER_PATH}" \
@@ -2021,17 +2081,21 @@ function do_libksba()
 
   local libksba_version="$1"
 
-  local libksba_folder_name="libksba-${libksba_version}"
-  local libksba_archive="${libksba_folder_name}.tar.bz2"
+  local libksba_src_folder_name="libksba-${libksba_version}"
+
+  local libksba_archive="${libksba_src_folder_name}.tar.bz2"
   local libksba_url="https://gnupg.org/ftp/gcrypt/libksba/${libksba_archive}"
 
-  local libksba_stamp_file_path="${STAMPS_FOLDER_PATH}/stamp-libksba-${libksba_version}-installed"
+  local libksba_folder_name="${libksba_src_folder_name}"
+
+  local libksba_stamp_file_path="${STAMPS_FOLDER_PATH}/stamp-${libksba_folder_name}-installed"
   if [ ! -f "${libksba_stamp_file_path}" -o ! -d "${LIBS_BUILD_FOLDER_PATH}/${libksba_folder_name}" ]
   then
 
     cd "${SOURCES_FOLDER_PATH}"
 
-    download_and_extract "${libksba_url}" "${libksba_archive}" "${libksba_folder_name}"
+    download_and_extract "${libksba_url}" "${libksba_archive}" \
+      "${libksba_src_folder_name}"
 
     mkdir -pv "${LOGS_FOLDER_PATH}/${libksba_folder_name}"
 
@@ -2055,9 +2119,9 @@ function do_libksba()
           echo
           echo "Running libksba configure..."
 
-          bash "${SOURCES_FOLDER_PATH}/${libksba_folder_name}/configure" --help
+          bash "${SOURCES_FOLDER_PATH}/${libksba_src_folder_name}/configure" --help
 
-          bash ${DEBUG} "${SOURCES_FOLDER_PATH}/${libksba_folder_name}/configure" \
+          bash ${DEBUG} "${SOURCES_FOLDER_PATH}/${libksba_src_folder_name}/configure" \
             --prefix="${INSTALL_FOLDER_PATH}" \
             \
             --with-libgpg-error-prefix="${INSTALL_FOLDER_PATH}" \
@@ -2127,17 +2191,21 @@ function do_npth()
 
   local npth_version="$1"
 
-  local npth_folder_name="npth-${npth_version}"
-  local npth_archive="${npth_folder_name}.tar.bz2"
+  local npth_src_folder_name="npth-${npth_version}"
+
+  local npth_archive="${npth_src_folder_name}.tar.bz2"
   local npth_url="https://gnupg.org/ftp/gcrypt/npth/${npth_archive}"
 
-  local npth_stamp_file_path="${STAMPS_FOLDER_PATH}/stamp-npth-${npth_version}-installed"
+  local npth_folder_name="${npth_src_folder_name}"
+
+  local npth_stamp_file_path="${STAMPS_FOLDER_PATH}/stamp-${npth_folder_name}-installed"
   if [ ! -f "${npth_stamp_file_path}" -o ! -d "${LIBS_BUILD_FOLDER_PATH}/${npth_folder_name}" ]
   then
 
     cd "${SOURCES_FOLDER_PATH}"
 
-    download_and_extract "${npth_url}" "${npth_archive}" "${npth_folder_name}"
+    download_and_extract "${npth_url}" "${npth_archive}" \
+      "${npth_src_folder_name}"
 
     mkdir -pv "${LOGS_FOLDER_PATH}/${npth_folder_name}"
 
@@ -2170,9 +2238,9 @@ function do_npth()
           echo
           echo "Running npth configure..."
 
-          bash "${SOURCES_FOLDER_PATH}/${npth_folder_name}/configure" --help
+          bash "${SOURCES_FOLDER_PATH}/${npth_src_folder_name}/configure" --help
 
-          bash ${DEBUG} "${SOURCES_FOLDER_PATH}/${npth_folder_name}/configure" \
+          bash ${DEBUG} "${SOURCES_FOLDER_PATH}/${npth_src_folder_name}/configure" \
             --prefix="${INSTALL_FOLDER_PATH}" 
 
           cp "config.log" "${LOGS_FOLDER_PATH}/${npth_folder_name}/config-log.txt"
@@ -2237,27 +2305,30 @@ function do_libxcrypt()
 
   local libxcrypt_version="$1"
 
-  local libxcrypt_folder_name="libxcrypt-${libxcrypt_version}"
-  local libxcrypt_archive="${libxcrypt_folder_name}.tar.gz"
+  local libxcrypt_src_folder_name="libxcrypt-${libxcrypt_version}"
+
+  local libxcrypt_archive="${libxcrypt_src_folder_name}.tar.gz"
   # GitHub release archive.
   local libxcrypt_url="https://github.com/besser82/libxcrypt/archive/v${libxcrypt_version}.tar.gz"
 
-  local libxcrypt_patch_file_path="${helper_folder_path}/patches/${libxcrypt_folder_name}.patch"
+  local libxcrypt_folder_name="${libxcrypt_src_folder_name}"
 
-  local libxcrypt_stamp_file_path="${STAMPS_FOLDER_PATH}/stamp-libxcrypt-${libxcrypt_version}-installed"
+  local libxcrypt_patch_file_path="${helper_folder_path}/patches/${libxcrypt_folder_name}.patch"
+  local libxcrypt_stamp_file_path="${STAMPS_FOLDER_PATH}/stamp-${libxcrypt_folder_name}-installed"
   if [ ! -f "${libxcrypt_stamp_file_path}" -o ! -d "${LIBS_BUILD_FOLDER_PATH}/${libxcrypt_folder_name}" ]
   then
 
     cd "${SOURCES_FOLDER_PATH}"
 
-    download_and_extract "${libxcrypt_url}" "${libxcrypt_archive}" "${libxcrypt_folder_name}" "${libxcrypt_patch_file_path}"
+    download_and_extract "${libxcrypt_url}" "${libxcrypt_archive}" \
+      "${libxcrypt_src_folder_name}" "${libxcrypt_patch_file_path}"
 
     mkdir -pv "${LOGS_FOLDER_PATH}/${libxcrypt_folder_name}"
 
-    if [ ! -x "${SOURCES_FOLDER_PATH}/${libxcrypt_folder_name}/configure" ]
+    if [ ! -x "${SOURCES_FOLDER_PATH}/${libxcrypt_src_folder_name}/configure" ]
     then
       (
-        cd "${SOURCES_FOLDER_PATH}/${libxcrypt_folder_name}"
+        cd "${SOURCES_FOLDER_PATH}/${libxcrypt_src_folder_name}"
 
         xbb_activate
         if [ "${IS_BOOTSTRAP}" == "y" ]
@@ -2302,9 +2373,9 @@ function do_libxcrypt()
           echo
           echo "Running libxcrypt configure..."
 
-          bash "${SOURCES_FOLDER_PATH}/${libxcrypt_folder_name}/configure" --help
+          bash "${SOURCES_FOLDER_PATH}/${libxcrypt_src_folder_name}/configure" --help
 
-          bash ${DEBUG} "${SOURCES_FOLDER_PATH}/${libxcrypt_folder_name}/configure" \
+          bash ${DEBUG} "${SOURCES_FOLDER_PATH}/${libxcrypt_src_folder_name}/configure" \
             --prefix="${INSTALL_FOLDER_PATH}" \
 
           patch_all_libtool_rpath
@@ -2320,6 +2391,7 @@ function do_libxcrypt()
         # Build.
         make -j ${JOBS}
 
+        # install is not able to rewrite them.
         rm -rfv "${INSTALL_FOLDER_PATH}"/lib*/libxcrypt.*
         rm -rfv "${INSTALL_FOLDER_PATH}"/lib*/libowcrypt.*
         rm -rfv "${INSTALL_FOLDER_PATH}"/lib/pkgconfig/libcrypt.pc
@@ -2378,17 +2450,21 @@ function do_libunistring()
 
   local libunistring_version="$1"
 
-  local libunistring_folder_name="libunistring-${libunistring_version}"
-  local libunistring_archive="${libunistring_folder_name}.tar.xz"
+  local libunistring_src_folder_name="libunistring-${libunistring_version}"
+
+  local libunistring_archive="${libunistring_src_folder_name}.tar.xz"
   local libunistring_url="https://ftp.gnu.org/gnu/libunistring/${libunistring_archive}"
 
-  local libunistring_stamp_file_path="${STAMPS_FOLDER_PATH}/stamp-libunistring-${libunistring_version}-installed"
+  local libunistring_folder_name="${libunistring_src_folder_name}"
+
+  local libunistring_stamp_file_path="${STAMPS_FOLDER_PATH}/stamp-${libunistring_folder_name}-installed"
   if [ ! -f "${libunistring_stamp_file_path}" -o ! -d "${LIBS_BUILD_FOLDER_PATH}/${libunistring_folder_name}" ]
   then
 
     cd "${SOURCES_FOLDER_PATH}"
 
-    download_and_extract "${libunistring_url}" "${libunistring_archive}" "${libunistring_folder_name}"
+    download_and_extract "${libunistring_url}" "${libunistring_archive}" \
+      "${libunistring_src_folder_name}"
 
     mkdir -pv "${LOGS_FOLDER_PATH}/${libunistring_folder_name}"
 
@@ -2412,9 +2488,9 @@ function do_libunistring()
           echo
           echo "Running libunistring configure..."
 
-          bash "${SOURCES_FOLDER_PATH}/${libunistring_folder_name}/configure" --help
+          bash "${SOURCES_FOLDER_PATH}/${libunistring_src_folder_name}/configure" --help
 
-          bash ${DEBUG} "${SOURCES_FOLDER_PATH}/${libunistring_folder_name}/configure" \
+          bash ${DEBUG} "${SOURCES_FOLDER_PATH}/${libunistring_src_folder_name}/configure" \
             --prefix="${INSTALL_FOLDER_PATH}" \
 
           patch_all_libtool_rpath
@@ -2477,17 +2553,21 @@ function do_gc()
 
   local gc_version="$1"
 
-  local gc_folder_name="gc-${gc_version}"
-  local gc_archive="${gc_folder_name}.tar.gz"
+  local gc_src_folder_name="gc-${gc_version}"
+
+  local gc_archive="${gc_src_folder_name}.tar.gz"
   local gc_url="https://github.com/ivmai/bdwgc/releases/download/v${gc_version}/${gc_archive}"
 
-  local gc_stamp_file_path="${STAMPS_FOLDER_PATH}/stamp-gc-${gc_version}-installed"
+  local gc_folder_name="${gc_src_folder_name}"
+
+  local gc_stamp_file_path="${STAMPS_FOLDER_PATH}/stamp-${gc_folder_name}-installed"
   if [ ! -f "${gc_stamp_file_path}" -o ! -d "${LIBS_BUILD_FOLDER_PATH}/${gc_folder_name}" ]
   then
 
     cd "${SOURCES_FOLDER_PATH}"
 
-    download_and_extract "${gc_url}" "${gc_archive}" "${gc_folder_name}"
+    download_and_extract "${gc_url}" "${gc_archive}" \
+      "${gc_src_folder_name}"
 
     mkdir -pv "${LOGS_FOLDER_PATH}/${gc_folder_name}"
 
@@ -2511,9 +2591,9 @@ function do_gc()
           echo
           echo "Running gc configure..."
 
-          bash "${SOURCES_FOLDER_PATH}/${gc_folder_name}/configure" --help
+          bash "${SOURCES_FOLDER_PATH}/${gc_src_folder_name}/configure" --help
 
-          bash ${DEBUG} "${SOURCES_FOLDER_PATH}/${gc_folder_name}/configure" \
+          bash ${DEBUG} "${SOURCES_FOLDER_PATH}/${gc_src_folder_name}/configure" \
             --prefix="${INSTALL_FOLDER_PATH}" \
             \
             --enable-cplusplus \
@@ -2614,7 +2694,7 @@ function do_ncurses()
   # The folder name  for build, licenses, etc.
   local ncurses_folder_name="${ncurses_src_folder_name}"
 
-  local ncurses_stamp_file_path="${STAMPS_FOLDER_PATH}/stamp-ncurses-${ncurses_version}-installed"
+  local ncurses_stamp_file_path="${STAMPS_FOLDER_PATH}/stamp-${ncurses_folder_name}-installed"
   if [ ! -f "${ncurses_stamp_file_path}" ]
   then
 
@@ -2774,7 +2854,7 @@ function do_readline()
   # The folder name  for build, licenses, etc.
   local readline_folder_name="${readline_src_folder_name}"
 
-  local readline_stamp_file_path="${STAMPS_FOLDER_PATH}/stamp-readline-${readline_version}-installed"
+  local readline_stamp_file_path="${STAMPS_FOLDER_PATH}/stamp-${readline_folder_name}-installed"
   if [ ! -f "${readline_stamp_file_path}" ]
   then
 

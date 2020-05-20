@@ -44,10 +44,11 @@ function do_kernel_headers()
   local kernel_headers_version_minor="$(echo ${kernel_headers_version} | sed -e 's|\([0-9][0-9]*\)\.\([0-9][0-9]*\).*|\2|')"
 
   local kernel_headers_src_folder_name="linux-${kernel_headers_version}"
-  local kernel_headers_folder_name="kernel-headers-${kernel_headers_version}"
 
   local kernel_headers_archive="${kernel_headers_src_folder_name}.tar.xz"
   local kernel_headers_url="https://mirrors.edge.kernel.org/pub/linux/kernel/v${kernel_headers_version_major}.x/${kernel_headers_archive}"
+
+  local kernel_headers_folder_name="kernel-headers-${kernel_headers_version}"
 
   local kernel_headers_stamp_file_path="${STAMPS_FOLDER_PATH}/stamp-${kernel_headers_folder_name}-installed"
   if [ ! -f "${kernel_headers_stamp_file_path}" ]
@@ -58,7 +59,10 @@ function do_kernel_headers()
     if [ ! -d "${BUILD_FOLDER_PATH}/${kernel_headers_folder_name}" ]
     then
       cd "${BUILD_FOLDER_PATH}"
-      download_and_extract "${kernel_headers_url}" "${kernel_headers_archive}" "${kernel_headers_src_folder_name}"
+
+      download_and_extract "${kernel_headers_url}" "${kernel_headers_archive}" \
+        "${kernel_headers_src_folder_name}"
+      
       if [ "${kernel_headers_src_folder_name}" != "${kernel_headers_folder_name}" ]
       then
         mv -v "${kernel_headers_src_folder_name}" "${kernel_headers_folder_name}"
@@ -150,11 +154,12 @@ function do_glibc()
 
   # The folder name as resulted after being extracted from the archive.
   local glibc_src_folder_name="glibc-${glibc_version}"
-  # The folder name for build, licenses, etc.
-  local glibc_folder_name="glibc${step}-${glibc_version}"
 
   local glibc_archive="${glibc_src_folder_name}.tar.xz"
   local glibc_url="https://ftp.gnu.org/gnu/glibc/${glibc_archive}"
+
+  # The folder name for build, licenses, etc.
+  local glibc_folder_name="glibc${step}-${glibc_version}"
 
   local glibc_patch_file_name="glibc-${glibc_version}.patch"
   local glibc_stamp_file_path="${STAMPS_FOLDER_PATH}/stamp-${glibc_folder_name}-installed"
@@ -164,7 +169,8 @@ function do_glibc()
     cd "${SOURCES_FOLDER_PATH}"
 
     download_and_extract "${glibc_url}" "${glibc_archive}" \
-      "${glibc_src_folder_name}" "${glibc_patch_file_name}"
+      "${glibc_src_folder_name}" \
+      "${glibc_patch_file_name}"
 
     mkdir -pv "${LOGS_FOLDER_PATH}/${glibc_folder_name}"
 
@@ -405,7 +411,6 @@ function do_native_binutils()
   local native_binutils_folder_name="native-binutils${step}-${native_binutils_version}"
 
   local native_binutils_patch_file_path="${helper_folder_path}/patches/binutils-${native_binutils_version}.patch"
-
   local native_binutils_stamp_file_path="${STAMPS_FOLDER_PATH}/stamp-${native_binutils_folder_name}-installed"
   if [ ! -f "${native_binutils_stamp_file_path}" -o ! -d "${BUILD_FOLDER_PATH}/${native_binutils_folder_name}" ]
   then
@@ -628,6 +633,7 @@ function do_native_gcc()
   fi
 
   local native_gcc_src_folder_name="gcc-${native_gcc_version}"
+
   local native_gcc_archive="${native_gcc_src_folder_name}.tar.xz"
   local native_gcc_url="https://ftp.gnu.org/gnu/gcc/gcc-${native_gcc_version}/${native_gcc_archive}"
 
@@ -639,7 +645,8 @@ function do_native_gcc()
 
     cd "${SOURCES_FOLDER_PATH}"
 
-    download_and_extract "${native_gcc_url}" "${native_gcc_archive}" "${native_gcc_src_folder_name}" 
+    download_and_extract "${native_gcc_url}" "${native_gcc_archive}" \
+      "${native_gcc_src_folder_name}" 
 
     mkdir -pv "${LOGS_FOLDER_PATH}/${native_gcc_folder_name}"
 
@@ -1019,25 +1026,27 @@ function do_mingw_binutils()
 
   local mingw_binutils_version="$1"
 
-  local mingw_binutils_folder_name="binutils-${mingw_binutils_version}"
-  local mingw_binutils_archive="${mingw_binutils_folder_name}.tar.xz"
+  local mingw_binutils_src_folder_name="binutils-${mingw_binutils_version}"
+
+  local mingw_binutils_archive="${mingw_binutils_src_folder_name}.tar.xz"
   local mingw_binutils_url="https://ftp.gnu.org/gnu/binutils/${mingw_binutils_archive}"
 
-  local mingw_binutils_build_folder_name="mingw-binutils-${mingw_binutils_version}"
+  local mingw_binutils_folder_name="mingw-binutils-${mingw_binutils_version}"
 
-  local mingw_binutils_stamp_file_path="${STAMPS_FOLDER_PATH}/stamp-${mingw_binutils_build_folder_name}-installed"
-  if [ ! -f "${mingw_binutils_stamp_file_path}" -o ! -d "${BUILD_FOLDER_PATH}/${mingw_binutils_build_folder_name}" ]
+  local mingw_binutils_stamp_file_path="${STAMPS_FOLDER_PATH}/stamp-${mingw_binutils_folder_name}-installed"
+  if [ ! -f "${mingw_binutils_stamp_file_path}" -o ! -d "${BUILD_FOLDER_PATH}/${mingw_binutils_folder_name}" ]
   then
 
     cd "${SOURCES_FOLDER_PATH}"
 
-    download_and_extract "${mingw_binutils_url}" "${mingw_binutils_archive}" "${mingw_binutils_folder_name}"
+    download_and_extract "${mingw_binutils_url}" "${mingw_binutils_archive}" \
+      "${mingw_binutils_src_folder_name}"
 
     mkdir -pv "${LOGS_FOLDER_PATH}/${mingw_binutils_folder_name}"
 
     (
-      mkdir -pv "${BUILD_FOLDER_PATH}/${mingw_binutils_build_folder_name}"
-      cd "${BUILD_FOLDER_PATH}/${mingw_binutils_build_folder_name}"
+      mkdir -pv "${BUILD_FOLDER_PATH}/${mingw_binutils_folder_name}"
+      cd "${BUILD_FOLDER_PATH}/${mingw_binutils_folder_name}"
 
       xbb_activate
       xbb_activate_installed_dev
@@ -1057,9 +1066,9 @@ function do_mingw_binutils()
           echo "Running mingw-w64 binutils configure..."
 
           # --build used conservatively
-          bash "${SOURCES_FOLDER_PATH}/${mingw_binutils_folder_name}/configure" --help
+          bash "${SOURCES_FOLDER_PATH}/${mingw_binutils_src_folder_name}/configure" --help
 
-          bash "${SOURCES_FOLDER_PATH}/${mingw_binutils_folder_name}/configure" \
+          bash "${SOURCES_FOLDER_PATH}/${mingw_binutils_src_folder_name}/configure" \
             --prefix="${INSTALL_FOLDER_PATH}/usr" \
             \
             --build="${BUILD}" \
@@ -1190,13 +1199,14 @@ function do_mingw_all()
   local mingw_version_major=$(echo ${mingw_version} | sed -e 's|\([0-9][0-9]*\)\..*|\1|')
 
   # The original SourceForge location.
-  local mingw_folder_name="mingw-w64-v${mingw_version}"
-  local mingw_folder_archive="${mingw_folder_name}.tar.bz2"
+  local mingw_src_folder_name="mingw-w64-v${mingw_version}"
+
+  local mingw_folder_archive="${mingw_src_folder_name}.tar.bz2"
   local mingw_url="https://sourceforge.net/projects/mingw-w64/files/mingw-w64/mingw-w64-release/${mingw_folder_archive}"
   
   # If SourceForge is down, there is also a GitHub mirror.
   # https://github.com/mirror/mingw-w64
-  # mingw_folder_name="mingw-w64-${mingw_version}"
+  # mingw_src_folder_name="mingw-w64-${mingw_version}"
   # mingw_folder_archive="v${mingw_version}.tar.gz"
   # mingw_url="https://github.com/mirror/mingw-w64/archive/${mingw_folder_archive}"
  
@@ -1205,21 +1215,22 @@ function do_mingw_all()
 
   # ---------------------------------------------------------------------------
 
-  local mingw_build_headers_folder_name="mingw-${mingw_version}-headers"
+  local mingw_headers_folder_name="mingw-${mingw_version}-headers"
 
-  local mingw_headers_stamp_file_path="${STAMPS_FOLDER_PATH}/stamp-${mingw_build_headers_folder_name}-installed"
-  if [ ! -f "${mingw_headers_stamp_file_path}" -o ! -d "${BUILD_FOLDER_PATH}/${mingw_build_headers_folder_name}" ]
+  local mingw_headers_stamp_file_path="${STAMPS_FOLDER_PATH}/stamp-${mingw_headers_folder_name}-installed"
+  if [ ! -f "${mingw_headers_stamp_file_path}" -o ! -d "${BUILD_FOLDER_PATH}/${mingw_headers_folder_name}" ]
   then
 
     cd "${SOURCES_FOLDER_PATH}"
 
-    download_and_extract "${mingw_url}" "${mingw_folder_archive}" "${mingw_folder_name}"
+    download_and_extract "${mingw_url}" "${mingw_folder_archive}" \
+      "${mingw_src_folder_name}"
 
-    mkdir -pv "${LOGS_FOLDER_PATH}/${mingw_build_headers_folder_name}"
+    mkdir -pv "${LOGS_FOLDER_PATH}/${mingw_headers_folder_name}"
 
     (
-      mkdir -pv "${BUILD_FOLDER_PATH}/${mingw_build_headers_folder_name}"
-      cd "${BUILD_FOLDER_PATH}/${mingw_build_headers_folder_name}"
+      mkdir -pv "${BUILD_FOLDER_PATH}/${mingw_headers_folder_name}"
+      cd "${BUILD_FOLDER_PATH}/${mingw_headers_folder_name}"
 
       xbb_activate
       xbb_activate_installed_dev
@@ -1232,16 +1243,16 @@ function do_mingw_all()
           echo
           echo "Running mingw-w64 headers configure..."
 
-          bash "${SOURCES_FOLDER_PATH}/${mingw_folder_name}/mingw-w64-headers/configure" --help
+          bash "${SOURCES_FOLDER_PATH}/${mingw_src_folder_name}/mingw-w64-headers/configure" --help
           
-          bash ${DEBUG} "${SOURCES_FOLDER_PATH}/${mingw_folder_name}/mingw-w64-headers/configure" \
+          bash ${DEBUG} "${SOURCES_FOLDER_PATH}/${mingw_src_folder_name}/mingw-w64-headers/configure" \
             --prefix="${INSTALL_FOLDER_PATH}/usr/${MINGW_TARGET}" \
             \
             --build="${BUILD}" \
             --host="${MINGW_TARGET}" \
 
-          cp "config.log" "${LOGS_FOLDER_PATH}/${mingw_build_headers_folder_name}/config-log.txt"
-        ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${mingw_build_headers_folder_name}/configure-output.txt"
+          cp "config.log" "${LOGS_FOLDER_PATH}/${mingw_headers_folder_name}/config-log.txt"
+        ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${mingw_headers_folder_name}/configure-output.txt"
       fi
 
       (
@@ -1262,7 +1273,7 @@ function do_mingw_all()
           ln -s "usr/${MINGW_TARGET}" "mingw"
         )
 
-      ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${mingw_build_headers_folder_name}/make-output.txt"
+      ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${mingw_headers_folder_name}/make-output.txt"
     )
 
     hash -r
@@ -1290,25 +1301,27 @@ function do_mingw_all()
   # Number
   local mingw_gcc_version_major=$(echo ${mingw_gcc_version} | sed -e 's|\([0-9][0-9]*\)\..*|\1|')
 
-  local mingw_gcc_folder_name="gcc-${mingw_gcc_version}"
-  local mingw_gcc_archive="${mingw_gcc_folder_name}.tar.xz"
+  local mingw_gcc_src_folder_name="gcc-${mingw_gcc_version}"
+
+  local mingw_gcc_archive="${mingw_gcc_src_folder_name}.tar.xz"
   local mingw_gcc_url="https://ftp.gnu.org/gnu/gcc/gcc-${mingw_gcc_version}/${mingw_gcc_archive}"
 
-  local mingw_build_gcc_folder_name="mingw-gcc-${mingw_gcc_version}"
+  local mingw_gcc_folder_name="mingw-gcc-${mingw_gcc_version}"
 
   local mingw_gcc_step1_stamp_file_path="${STAMPS_FOLDER_PATH}/stamp-mingw-gcc-step1-${mingw_gcc_version}-installed"
-  if [ ! -f "${mingw_gcc_step1_stamp_file_path}" -o ! -d "${BUILD_FOLDER_PATH}/${mingw_build_gcc_folder_name}" ]
+  if [ ! -f "${mingw_gcc_step1_stamp_file_path}" -o ! -d "${BUILD_FOLDER_PATH}/${mingw_gcc_folder_name}" ]
   then
 
     cd "${SOURCES_FOLDER_PATH}"
 
-    download_and_extract "${mingw_gcc_url}" "${mingw_gcc_archive}" "${mingw_gcc_folder_name}"
+    download_and_extract "${mingw_gcc_url}" "${mingw_gcc_archive}" \
+      "${mingw_gcc_src_folder_name}"
 
     mkdir -pv "${LOGS_FOLDER_PATH}/${mingw_gcc_folder_name}"
 
     (
-      mkdir -pv "${BUILD_FOLDER_PATH}/${mingw_build_gcc_folder_name}"
-      cd "${BUILD_FOLDER_PATH}/${mingw_build_gcc_folder_name}"
+      mkdir -pv "${BUILD_FOLDER_PATH}/${mingw_gcc_folder_name}"
+      cd "${BUILD_FOLDER_PATH}/${mingw_gcc_folder_name}"
 
       xbb_activate
       xbb_activate_installed_dev
@@ -1327,8 +1340,8 @@ function do_mingw_all()
           echo "Running mingw gcc step 1 configure..."
 
           # For the native build, --disable-shared failed with errors in libstdc++-v3
-          bash "${SOURCES_FOLDER_PATH}/${mingw_gcc_folder_name}/configure" --help
-          bash "${SOURCES_FOLDER_PATH}/${mingw_gcc_folder_name}/gcc/configure" --help
+          bash "${SOURCES_FOLDER_PATH}/${mingw_gcc_src_folder_name}/configure" --help
+          bash "${SOURCES_FOLDER_PATH}/${mingw_gcc_src_folder_name}/gcc/configure" --help
 
           config_options=()
           if [ ${mingw_version_major} -ge 7 -a ${mingw_gcc_version} -ge 9 ]
@@ -1340,7 +1353,7 @@ function do_mingw_all()
 
           set +u
 
-          bash ${DEBUG} "${SOURCES_FOLDER_PATH}/${mingw_gcc_folder_name}/configure" \
+          bash ${DEBUG} "${SOURCES_FOLDER_PATH}/${mingw_gcc_src_folder_name}/configure" \
             --prefix="${INSTALL_FOLDER_PATH}/usr" \
             \
             --build="${BUILD}" \
@@ -1394,17 +1407,17 @@ function do_mingw_all()
   # https://aur.archlinux.org/cgit/aur.git/tree/PKGBUILD?h=mingw-w64-crt
   # https://aur.archlinux.org/cgit/aur.git/tree/PKGBUILD?h=mingw-w64-crt-git
 
-  local mingw_build_crt_folder_name="mingw-${mingw_version}-crt"
+  local mingw_crt_folder_name="mingw-${mingw_version}-crt"
 
-  local mingw_crt_stamp_file_path="${STAMPS_FOLDER_PATH}/stamp-${mingw_build_crt_folder_name}-installed"
-  if [ ! -f "${mingw_crt_stamp_file_path}" -o ! -d "${BUILD_FOLDER_PATH}/${mingw_build_crt_folder_name}" ]
+  local mingw_crt_stamp_file_path="${STAMPS_FOLDER_PATH}/stamp-${mingw_crt_folder_name}-installed"
+  if [ ! -f "${mingw_crt_stamp_file_path}" -o ! -d "${BUILD_FOLDER_PATH}/${mingw_crt_folder_name}" ]
   then
 
-    mkdir -pv "${LOGS_FOLDER_PATH}/${mingw_build_crt_folder_name}"
+    mkdir -pv "${LOGS_FOLDER_PATH}/${mingw_crt_folder_name}"
 
     (
-      mkdir -pv "${BUILD_FOLDER_PATH}/${mingw_build_crt_folder_name}"
-      cd "${BUILD_FOLDER_PATH}/${mingw_build_crt_folder_name}"
+      mkdir -pv "${BUILD_FOLDER_PATH}/${mingw_crt_folder_name}"
+      cd "${BUILD_FOLDER_PATH}/${mingw_crt_folder_name}"
 
       xbb_activate
       xbb_activate_installed_bin
@@ -1439,7 +1452,7 @@ function do_mingw_all()
           echo
           echo "Running mingw-w64 crt configure..."
 
-          bash "${SOURCES_FOLDER_PATH}/${mingw_folder_name}/mingw-w64-crt/configure" --help
+          bash "${SOURCES_FOLDER_PATH}/${mingw_src_folder_name}/mingw-w64-crt/configure" --help
 
           if [ "${HOST_BITS}" == "64" ]
           then
@@ -1453,7 +1466,7 @@ function do_mingw_all()
             exit 1
           fi
 
-          bash ${DEBUG} "${SOURCES_FOLDER_PATH}/${mingw_folder_name}/mingw-w64-crt/configure" \
+          bash ${DEBUG} "${SOURCES_FOLDER_PATH}/${mingw_src_folder_name}/mingw-w64-crt/configure" \
             --prefix="${INSTALL_FOLDER_PATH}/usr/${MINGW_TARGET}" \
             \
             --build="${BUILD}" \
@@ -1465,8 +1478,8 @@ function do_mingw_all()
             ${_crt_configure_lib32} \
             ${_crt_configure_lib64}
 
-          cp "config.log" "${LOGS_FOLDER_PATH}/${mingw_build_crt_folder_name}/config-log.txt"
-        ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${mingw_build_crt_folder_name}/configure-output.txt"
+          cp "config.log" "${LOGS_FOLDER_PATH}/${mingw_crt_folder_name}/config-log.txt"
+        ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${mingw_crt_folder_name}/configure-output.txt"
       fi
 
       (
@@ -1481,7 +1494,7 @@ function do_mingw_all()
 
         ls -l "${INSTALL_FOLDER_PATH}/usr/${MINGW_TARGET}"
 
-      ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${mingw_build_crt_folder_name}/make-output.txt"
+      ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${mingw_crt_folder_name}/make-output.txt"
     )
 
     hash -r
@@ -1529,9 +1542,9 @@ function do_mingw_all()
           echo
           echo "Running mingw-w64 winpthreads configure..."
 
-          bash "${SOURCES_FOLDER_PATH}/${mingw_folder_name}/mingw-w64-crt/configure" --help
+          bash "${SOURCES_FOLDER_PATH}/${mingw_src_folder_name}/mingw-w64-crt/configure" --help
 
-          bash ${DEBUG} "${SOURCES_FOLDER_PATH}/${mingw_folder_name}/mingw-w64-libraries/winpthreads/configure" \
+          bash ${DEBUG} "${SOURCES_FOLDER_PATH}/${mingw_src_folder_name}/mingw-w64-libraries/winpthreads/configure" \
             --prefix="${INSTALL_FOLDER_PATH}/usr/${MINGW_TARGET}" \
             \
             --build="${BUILD}" \
@@ -1570,7 +1583,7 @@ function do_mingw_all()
   # ---------------------------------------------------------------------------
 
   local mingw_gcc_step2_stamp_file_path="${STAMPS_FOLDER_PATH}/stamp-mingw-gcc-step2-${mingw_gcc_version}-installed"
-  if [ ! -f "${mingw_gcc_step2_stamp_file_path}" -o ! -d "${BUILD_FOLDER_PATH}/${mingw_build_gcc_folder_name}" ]
+  if [ ! -f "${mingw_gcc_step2_stamp_file_path}" -o ! -d "${BUILD_FOLDER_PATH}/${mingw_gcc_folder_name}" ]
   then
 
     mkdir -pv "${LOGS_FOLDER_PATH}/${mingw_gcc_folder_name}"
@@ -1579,8 +1592,8 @@ function do_mingw_all()
       echo
       echo "Running mingw-w64 gcc step 2 make..."
 
-      mkdir -pv "${BUILD_FOLDER_PATH}/${mingw_build_gcc_folder_name}"
-      cd "${BUILD_FOLDER_PATH}/${mingw_build_gcc_folder_name}"
+      mkdir -pv "${BUILD_FOLDER_PATH}/${mingw_gcc_folder_name}"
+      cd "${BUILD_FOLDER_PATH}/${mingw_gcc_folder_name}"
 
       xbb_activate
       xbb_activate_installed_dev
@@ -1749,18 +1762,31 @@ function do_openssl()
   local openssl_version_major=$(echo ${openssl_version} | sed -e 's|\([0-9][0-9]*\)\.\([0-9][0-9]*\)\..*|\1|')
   local openssl_version_minor=$(echo ${openssl_version} | sed -e 's|\([0-9][0-9]*\)\.\([0-9][0-9]*\)\..*|\2|')
 
-  local openssl_folder_name="openssl-${openssl_version}"
-  local openssl_archive="${openssl_folder_name}.tar.gz"
+  local openssl_src_folder_name="openssl-${openssl_version}"
+
+  local openssl_archive="${openssl_src_folder_name}.tar.gz"
   local openssl_url="https://www.openssl.org/source/${openssl_archive}"
 
-  local openssl_stamp_file_path="${STAMPS_FOLDER_PATH}/stamp-openssl-${openssl_version}-installed"
+  local openssl_folder_name="${openssl_src_folder_name}"
+
+  local openssl_stamp_file_path="${STAMPS_FOLDER_PATH}/stamp-${openssl_folder_name}-installed"
   if [ ! -f "${openssl_stamp_file_path}" -o ! -d "${BUILD_FOLDER_PATH}/${openssl_folder_name}" ]
   then
 
     # In-source build.
-    cd "${BUILD_FOLDER_PATH}"
 
-    download_and_extract "${openssl_url}" "${openssl_archive}" "${openssl_folder_name}"
+    if [ ! -d "${BUILD_FOLDER_PATH}/${openssl_folder_name}" ]
+    then
+      cd "${BUILD_FOLDER_PATH}"
+
+      download_and_extract "${openssl_url}" "${openssl_archive}" \
+        "${openssl_src_folder_name}"
+
+      if [ "${openssl_src_folder_name}" != "${openssl_folder_name}" ]
+      then
+        mv -v "${openssl_src_folder_name}" "${openssl_folder_name}"
+      fi
+    fi
 
     mkdir -pv "${LOGS_FOLDER_PATH}/${openssl_folder_name}"
 
@@ -1959,17 +1985,21 @@ function do_curl()
 
   local curl_version="$1"
 
-  local curl_folder_name="curl-${curl_version}"
-  local curl_archive="${curl_folder_name}.tar.xz"
+  local curl_src_folder_name="curl-${curl_version}"
+
+  local curl_archive="${curl_src_folder_name}.tar.xz"
   local curl_url="https://curl.haxx.se/download/${curl_archive}"
 
-  local curl_stamp_file_path="${STAMPS_FOLDER_PATH}/stamp-curl-${curl_version}-installed"
+  local curl_folder_name="curl-${curl_version}"
+
+  local curl_stamp_file_path="${STAMPS_FOLDER_PATH}/stamp-${curl_folder_name}-installed"
   if [ ! -f "${curl_stamp_file_path}" -o ! -d "${BUILD_FOLDER_PATH}/${curl_folder_name}" ]
   then
 
     cd "${SOURCES_FOLDER_PATH}"
 
-    download_and_extract "${curl_url}" "${curl_archive}" "${curl_folder_name}"
+    download_and_extract "${curl_url}" "${curl_archive}" \
+      "${curl_src_folder_name}"
 
     mkdir -pv "${LOGS_FOLDER_PATH}/${curl_folder_name}"
 
@@ -1993,9 +2023,9 @@ function do_curl()
           echo
           echo "Running curl configure..."
 
-          bash "${SOURCES_FOLDER_PATH}/${curl_folder_name}/configure" --help
+          bash "${SOURCES_FOLDER_PATH}/${curl_src_folder_name}/configure" --help
 
-          bash ${DEBUG} "${SOURCES_FOLDER_PATH}/${curl_folder_name}/configure" \
+          bash ${DEBUG} "${SOURCES_FOLDER_PATH}/${curl_src_folder_name}/configure" \
             --prefix="${INSTALL_FOLDER_PATH}" \
             \
             --with-gssapi \
@@ -2082,22 +2112,26 @@ function do_xz()
 
   local xz_version="$1"
 
-  local xz_folder_name="xz-${xz_version}"
+  local xz_src_folder_name="xz-${xz_version}"
+
   if [ "${IS_BOOTSTRAP}" == "y" ]
   then
-    local xz_archive="${xz_folder_name}.tar.gz"
+    local xz_archive="${xz_src_folder_name}.tar.gz"
   else
-    local xz_archive="${xz_folder_name}.tar.xz"
+    local xz_archive="${xz_src_folder_name}.tar.xz"
   fi
   local xz_url="https://tukaani.org/xz/${xz_archive}"
 
-  local xz_stamp_file_path="${STAMPS_FOLDER_PATH}/stamp-xz-${xz_version}-installed"
+  local xz_folder_name="${xz_src_folder_name}"
+
+  local xz_stamp_file_path="${STAMPS_FOLDER_PATH}/stamp-${xz_folder_name}-installed"
   if [ ! -f "${xz_stamp_file_path}" -o ! -d "${BUILD_FOLDER_PATH}/${xz_folder_name}" ]
   then
 
     cd "${SOURCES_FOLDER_PATH}"
 
-    download_and_extract "${xz_url}" "${xz_archive}" "${xz_folder_name}"
+    download_and_extract "${xz_url}" "${xz_archive}" \
+      "${xz_src_folder_name}"
 
     mkdir -pv "${LOGS_FOLDER_PATH}/${xz_folder_name}"
 
@@ -2121,9 +2155,9 @@ function do_xz()
           echo
           echo "Running xz configure..."
 
-          bash "${SOURCES_FOLDER_PATH}/${xz_folder_name}/configure" --help
+          bash "${SOURCES_FOLDER_PATH}/${xz_src_folder_name}/configure" --help
 
-          bash ${DEBUG} "${SOURCES_FOLDER_PATH}/${xz_folder_name}/configure" \
+          bash ${DEBUG} "${SOURCES_FOLDER_PATH}/${xz_src_folder_name}/configure" \
             --prefix="${INSTALL_FOLDER_PATH}" \
             \
             --disable-werror \
@@ -2204,22 +2238,26 @@ function do_tar()
 
   local tar_version="$1"
 
-  local tar_folder_name="tar-${tar_version}"
+  local tar_src_folder_name="tar-${tar_version}"
+
   if [ "${IS_BOOTSTRAP}" == "y" ]
   then
-    local tar_archive="${tar_folder_name}.tar.gz"
+    local tar_archive="${tar_src_folder_name}.tar.gz"
   else
-    local tar_archive="${tar_folder_name}.tar.xz"
+    local tar_archive="${tar_src_folder_name}.tar.xz"
   fi
   local tar_url="https://ftp.gnu.org/gnu/tar/${tar_archive}"
-  
-  local tar_stamp_file_path="${STAMPS_FOLDER_PATH}/stamp-tar-${tar_version}-installed"
+
+  local tar_folder_name="${tar_src_folder_name}"
+ 
+  local tar_stamp_file_path="${STAMPS_FOLDER_PATH}/stamp-${tar_folder_name}-installed"
   if [ ! -f "${tar_stamp_file_path}" -o ! -d "${BUILD_FOLDER_PATH}/${tar_folder_name}" ]
   then
 
     cd "${SOURCES_FOLDER_PATH}"
 
-    download_and_extract "${tar_url}" "${tar_archive}" "${tar_folder_name}"
+    download_and_extract "${tar_url}" "${tar_archive}" \
+      "${tar_src_folder_name}"
 
     mkdir -pv "${LOGS_FOLDER_PATH}/${tar_folder_name}"
 
@@ -2246,9 +2284,9 @@ function do_tar()
           echo
           echo "Running tar configure..."
 
-          bash "${SOURCES_FOLDER_PATH}/${tar_folder_name}/configure" --help
+          bash "${SOURCES_FOLDER_PATH}/${tar_src_folder_name}/configure" --help
 
-          bash ${DEBUG} "${SOURCES_FOLDER_PATH}/${tar_folder_name}/configure" \
+          bash ${DEBUG} "${SOURCES_FOLDER_PATH}/${tar_src_folder_name}/configure" \
             --prefix="${INSTALL_FOLDER_PATH}" 
 
           cp "config.log" "${LOGS_FOLDER_PATH}/${tar_folder_name}/config-log.txt"
@@ -2340,17 +2378,21 @@ function do_coreutils()
 
   local coreutils_version="$1"
 
-  local coreutils_folder_name="coreutils-${coreutils_version}"
-  local coreutils_archive="${coreutils_folder_name}.tar.xz"
+  local coreutils_src_folder_name="coreutils-${coreutils_version}"
+
+  local coreutils_archive="${coreutils_src_folder_name}.tar.xz"
   local coreutils_url="https://ftp.gnu.org/gnu/coreutils/${coreutils_archive}"
 
-  local coreutils_stamp_file_path="${STAMPS_FOLDER_PATH}/stamp-coreutils-${coreutils_version}-installed"
+  local coreutils_folder_name="${coreutils_src_folder_name}"
+
+  local coreutils_stamp_file_path="${STAMPS_FOLDER_PATH}/stamp-${coreutils_folder_name}-installed"
   if [ ! -f "${coreutils_stamp_file_path}" -o ! -d "${BUILD_FOLDER_PATH}/${coreutils_folder_name}" ]
   then
 
     cd "${SOURCES_FOLDER_PATH}"
 
-    download_and_extract "${coreutils_url}" "${coreutils_archive}" "${coreutils_folder_name}"
+    download_and_extract "${coreutils_url}" "${coreutils_archive}" \
+      "${coreutils_src_folder_name}"
 
     mkdir -pv "${LOGS_FOLDER_PATH}/${coreutils_folder_name}"
 
@@ -2383,7 +2425,7 @@ function do_coreutils()
           echo
           echo "Running coreutils configure..."
 
-          bash "${SOURCES_FOLDER_PATH}/${coreutils_folder_name}/configure" --help
+          bash "${SOURCES_FOLDER_PATH}/${coreutils_src_folder_name}/configure" --help
 
           if [ -f "/.dockerenv" ]
           then
@@ -2401,7 +2443,7 @@ function do_coreutils()
           set +u
 
           # `ar` must be excluded, it interferes with Apple similar program.
-          bash ${DEBUG} "${SOURCES_FOLDER_PATH}/${coreutils_folder_name}/configure" \
+          bash ${DEBUG} "${SOURCES_FOLDER_PATH}/${coreutils_src_folder_name}/configure" \
             --prefix="${INSTALL_FOLDER_PATH}" \
             \
             --with-openssl \
@@ -2515,18 +2557,22 @@ function do_pkg_config()
 
   local pkg_config_version="$1"
 
-  local pkg_config_folder_name="pkg-config-${pkg_config_version}"
-  local pkg_config_archive="${pkg_config_folder_name}.tar.gz"
+  local pkg_config_src_folder_name="pkg-config-${pkg_config_version}"
+
+  local pkg_config_archive="${pkg_config_src_folder_name}.tar.gz"
   local pkg_config_url="https://pkgconfig.freedesktop.org/releases/${pkg_config_archive}"
   # local pkg_config_url="https://github.com/gnu-mcu-eclipse/files/raw/master/libs/${pkg_config_archive}"
 
-  local pkg_config_stamp_file_path="${STAMPS_FOLDER_PATH}/stamp-pkg_config-${pkg_config_version}-installed"
+  local pkg_config_folder_name="${pkg_config_src_folder_name}"
+
+  local pkg_config_stamp_file_path="${STAMPS_FOLDER_PATH}/stamp-${pkg_config_folder_name}-installed"
   if [ ! -f "${pkg_config_stamp_file_path}" -o ! -d "${BUILD_FOLDER_PATH}/${pkg_config_folder_name}" ]
   then
 
     cd "${SOURCES_FOLDER_PATH}"
 
-    download_and_extract "${pkg_config_url}" "${pkg_config_archive}" "${pkg_config_folder_name}"
+    download_and_extract "${pkg_config_url}" "${pkg_config_archive}" \
+      "${pkg_config_src_folder_name}"
 
     mkdir -pv "${LOGS_FOLDER_PATH}/${pkg_config_folder_name}"
 
@@ -2562,12 +2608,12 @@ function do_pkg_config()
           echo
           echo "Running pkg_config configure..."
 
-          bash "${SOURCES_FOLDER_PATH}/${pkg_config_folder_name}/configure" --help
-          bash "${SOURCES_FOLDER_PATH}/${pkg_config_folder_name}/glib/configure" --help
+          bash "${SOURCES_FOLDER_PATH}/${pkg_config_src_folder_name}/configure" --help
+          bash "${SOURCES_FOLDER_PATH}/${pkg_config_src_folder_name}/glib/configure" --help
 
           # --with-internal-glib fails with
           # gconvert.c:61:2: error: #error GNU libiconv not in use but included iconv.h is from libiconv          
-          bash ${DEBUG} "${SOURCES_FOLDER_PATH}/${pkg_config_folder_name}/configure" \
+          bash ${DEBUG} "${SOURCES_FOLDER_PATH}/${pkg_config_src_folder_name}/configure" \
             --prefix="${INSTALL_FOLDER_PATH}" \
             \
             --with-internal-glib \
@@ -2591,7 +2637,6 @@ function do_pkg_config()
         make install
 
         make -j1 check
-
 
       ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${pkg_config_folder_name}/make-output.txt"
     )
@@ -2642,19 +2687,23 @@ function do_m4()
 
   local m4_version="$1"
 
-  local m4_folder_name="m4-${m4_version}"
-  local m4_archive="${m4_folder_name}.tar.xz"
+  local m4_src_folder_name="m4-${m4_version}"
+
+  local m4_archive="${m4_src_folder_name}.tar.xz"
   local m4_url="https://ftp.gnu.org/gnu/m4/${m4_archive}"
 
-  local m4_patch_file_path="${helper_folder_path}/patches/${m4_folder_name}.patch"
+  local m4_folder_name="${m4_src_folder_name}"
 
-  local m4_stamp_file_path="${STAMPS_FOLDER_PATH}/stamp-m4-${m4_version}-installed"
+  local m4_patch_file_path="${helper_folder_path}/patches/${m4_folder_name}.patch"
+  local m4_stamp_file_path="${STAMPS_FOLDER_PATH}/stamp-${m4_folder_name}-installed"
   if [ ! -f "${m4_stamp_file_path}" -o ! -d "${BUILD_FOLDER_PATH}/${m4_folder_name}" ]
   then
 
     cd "${SOURCES_FOLDER_PATH}"
 
-    download_and_extract "${m4_url}" "${m4_archive}" "${m4_folder_name}" "${m4_patch_file_path}"
+    download_and_extract "${m4_url}" "${m4_archive}" \
+      "${m4_src_folder_name}" \
+      "${m4_patch_file_path}"
 
     mkdir -pv "${LOGS_FOLDER_PATH}/${m4_folder_name}"
 
@@ -2678,9 +2727,9 @@ function do_m4()
           echo
           echo "Running m4 configure..."
 
-          bash "${SOURCES_FOLDER_PATH}/${m4_folder_name}/configure" --help
+          bash "${SOURCES_FOLDER_PATH}/${m4_src_folder_name}/configure" --help
 
-          bash ${DEBUG} "${SOURCES_FOLDER_PATH}/${m4_folder_name}/configure" \
+          bash ${DEBUG} "${SOURCES_FOLDER_PATH}/${m4_src_folder_name}/configure" \
             --prefix="${INSTALL_FOLDER_PATH}" \
 
           cp "config.log" "${LOGS_FOLDER_PATH}/${m4_folder_name}/config-log.txt"
@@ -2768,17 +2817,21 @@ function do_gawk()
 
   local gawk_version="$1"
 
-  local gawk_folder_name="gawk-${gawk_version}"
-  local gawk_archive="${gawk_folder_name}.tar.xz"
+  local gawk_src_folder_name="gawk-${gawk_version}"
+
+  local gawk_archive="${gawk_src_folder_name}.tar.xz"
   local gawk_url="https://ftp.gnu.org/gnu/gawk/${gawk_archive}"
 
-  local gawk_stamp_file_path="${STAMPS_FOLDER_PATH}/stamp-gawk-${gawk_version}-installed"
+  local gawk_folder_name="${gawk_src_folder_name}"
+
+  local gawk_stamp_file_path="${STAMPS_FOLDER_PATH}/stamp-${gawk_folder_name}-installed"
   if [ ! -f "${gawk_stamp_file_path}" -o ! -d "${BUILD_FOLDER_PATH}/${gawk_folder_name}" ]
   then
 
     cd "${SOURCES_FOLDER_PATH}"
 
-    download_and_extract "${gawk_url}" "${gawk_archive}" "${gawk_folder_name}"
+    download_and_extract "${gawk_url}" "${gawk_archive}" \
+      "${gawk_src_folder_name}"
 
     mkdir -pv "${LOGS_FOLDER_PATH}/${gawk_folder_name}"
 
@@ -2802,9 +2855,9 @@ function do_gawk()
           echo
           echo "Running gawk configure..."
 
-          bash "${SOURCES_FOLDER_PATH}/${gawk_folder_name}/configure" --help
+          bash "${SOURCES_FOLDER_PATH}/${gawk_src_folder_name}/configure" --help
 
-          bash ${DEBUG} "${SOURCES_FOLDER_PATH}/${gawk_folder_name}/configure" \
+          bash ${DEBUG} "${SOURCES_FOLDER_PATH}/${gawk_src_folder_name}/configure" \
             --prefix="${INSTALL_FOLDER_PATH}" \
             \
             --without-libsigsegv \
@@ -2895,17 +2948,21 @@ function do_sed()
 
   local sed_version="$1"
 
-  local sed_folder_name="sed-${sed_version}"
-  local sed_archive="${sed_folder_name}.tar.xz"
+  local sed_src_folder_name="sed-${sed_version}"
+
+  local sed_archive="${sed_src_folder_name}.tar.xz"
   local sed_url="https://ftp.gnu.org/gnu/sed/${sed_archive}"
-  
-  local sed_stamp_file_path="${STAMPS_FOLDER_PATH}/stamp-sed-${sed_version}-installed"
+
+  local sed_folder_name="${sed_src_folder_name}"
+
+  local sed_stamp_file_path="${STAMPS_FOLDER_PATH}/stamp-${sed_folder_name}-installed"
   if [ ! -f "${sed_stamp_file_path}" -o ! -d "${BUILD_FOLDER_PATH}/${sed_folder_name}" ]
   then
 
     cd "${SOURCES_FOLDER_PATH}"
 
-    download_and_extract "${sed_url}" "${sed_archive}" "${sed_folder_name}"
+    download_and_extract "${sed_url}" "${sed_archive}" \
+      "${sed_src_folder_name}"
 
     mkdir -pv "${LOGS_FOLDER_PATH}/${sed_folder_name}"
 
@@ -2929,9 +2986,9 @@ function do_sed()
           echo
           echo "Running sed configure..."
 
-          bash "${SOURCES_FOLDER_PATH}/${sed_folder_name}/configure" --help
+          bash "${SOURCES_FOLDER_PATH}/${sed_src_folder_name}/configure" --help
 
-          bash ${DEBUG} "${SOURCES_FOLDER_PATH}/${sed_folder_name}/configure" \
+          bash ${DEBUG} "${SOURCES_FOLDER_PATH}/${sed_src_folder_name}/configure" \
             --prefix="${INSTALL_FOLDER_PATH}" 
 
           (
@@ -3017,17 +3074,21 @@ function do_autoconf()
 
   local autoconf_version="$1"
 
-  local autoconf_folder_name="autoconf-${autoconf_version}"
-  local autoconf_archive="${autoconf_folder_name}.tar.xz"
+  local autoconf_src_folder_name="autoconf-${autoconf_version}"
+
+  local autoconf_archive="${autoconf_src_folder_name}.tar.xz"
   local autoconf_url="https://ftp.gnu.org/gnu/autoconf/${autoconf_archive}"
 
-  local autoconf_stamp_file_path="${STAMPS_FOLDER_PATH}/stamp-autoconf-${autoconf_version}-installed"
+  local autoconf_folder_name="${autoconf_src_folder_name}"
+
+  local autoconf_stamp_file_path="${STAMPS_FOLDER_PATH}/stamp-${autoconf_folder_name}-installed"
   if [ ! -f "${autoconf_stamp_file_path}" -o ! -d "${BUILD_FOLDER_PATH}/${autoconf_folder_name}" ]
   then
 
     cd "${SOURCES_FOLDER_PATH}"
 
-    download_and_extract "${autoconf_url}" "${autoconf_archive}" "${autoconf_folder_name}"
+    download_and_extract "${autoconf_url}" "${autoconf_archive}" \
+      "${autoconf_src_folder_name}"
 
     mkdir -pv "${LOGS_FOLDER_PATH}/${autoconf_folder_name}"
 
@@ -3051,9 +3112,9 @@ function do_autoconf()
           echo
           echo "Running autoconf configure..."
 
-          bash "${SOURCES_FOLDER_PATH}/${autoconf_folder_name}/configure" --help
+          bash "${SOURCES_FOLDER_PATH}/${autoconf_src_folder_name}/configure" --help
 
-          bash ${DEBUG} "${SOURCES_FOLDER_PATH}/${autoconf_folder_name}/configure" \
+          bash ${DEBUG} "${SOURCES_FOLDER_PATH}/${autoconf_src_folder_name}/configure" \
             --prefix="${INSTALL_FOLDER_PATH}" 
 
           cp "config.log" "${LOGS_FOLDER_PATH}/${autoconf_folder_name}/config-log.txt"
@@ -3126,19 +3187,23 @@ function do_automake()
 
   local automake_version="$1"
 
-  local automake_folder_name="automake-${automake_version}"
-  local automake_archive="${automake_folder_name}.tar.xz"
+  local automake_src_folder_name="automake-${automake_version}"
+
+  local automake_archive="${automake_src_folder_name}.tar.xz"
   local automake_url="https://ftp.gnu.org/gnu/automake/${automake_archive}"
 
-  local automake_patch_file_path="${helper_folder_path}/patches/${automake_folder_name}.patch"
+  local automake_folder_name="${automake_src_folder_name}"
 
-  local automake_stamp_file_path="${STAMPS_FOLDER_PATH}/stamp-automake-${automake_version}-installed"
+  local automake_patch_file_path="${helper_folder_path}/patches/${automake_folder_name}.patch"
+  local automake_stamp_file_path="${STAMPS_FOLDER_PATH}/stamp-${automake_folder_name}-installed"
   if [ ! -f "${automake_stamp_file_path}" -o ! -d "${BUILD_FOLDER_PATH}/${automake_folder_name}" ]
   then
 
     cd "${SOURCES_FOLDER_PATH}"
 
-    download_and_extract "${automake_url}" "${automake_archive}" "${automake_folder_name}" "${automake_patch_file_path}"
+    download_and_extract "${automake_url}" "${automake_archive}" \
+      "${automake_src_folder_name}" \
+      "${automake_patch_file_path}"
 
     mkdir -pv "${LOGS_FOLDER_PATH}/${automake_folder_name}"
 
@@ -3162,9 +3227,9 @@ function do_automake()
           echo
           echo "Running automake configure..."
 
-          bash "${SOURCES_FOLDER_PATH}/${automake_folder_name}/configure" --help
+          bash "${SOURCES_FOLDER_PATH}/${automake_src_folder_name}/configure" --help
 
-          bash ${DEBUG} "${SOURCES_FOLDER_PATH}/${automake_folder_name}/configure" \
+          bash ${DEBUG} "${SOURCES_FOLDER_PATH}/${automake_src_folder_name}/configure" \
             --prefix="${INSTALL_FOLDER_PATH}" \
             \
             --build="${BUILD}" \
@@ -3258,7 +3323,8 @@ function do_libtool()
 
     cd "${SOURCES_FOLDER_PATH}"
 
-    download_and_extract "${libtool_url}" "${libtool_archive}" "${libtool_src_folder_name}"
+    download_and_extract "${libtool_url}" "${libtool_archive}" \
+      "${libtool_src_folder_name}"
 
     mkdir -pv "${LOGS_FOLDER_PATH}/${libtool_folder_name}"
 
@@ -3395,17 +3461,21 @@ function do_gettext()
 
   local gettext_version="$1"
 
-  local gettext_folder_name="gettext-${gettext_version}"
-  local gettext_archive="${gettext_folder_name}.tar.xz"
+  local gettext_src_folder_name="gettext-${gettext_version}"
+
+  local gettext_archive="${gettext_src_folder_name}.tar.xz"
   local gettext_url="https://ftp.gnu.org/gnu/gettext/${gettext_archive}"
 
-  local gettext_stamp_file_path="${STAMPS_FOLDER_PATH}/stamp-gettext-${gettext_version}-installed"
+  local gettext_folder_name="${gettext_src_folder_name}"
+
+  local gettext_stamp_file_path="${STAMPS_FOLDER_PATH}/stamp-${gettext_folder_name}-installed"
   if [ ! -f "${gettext_stamp_file_path}" -o ! -d "${BUILD_FOLDER_PATH}/${gettext_folder_name}" ]
   then
 
     cd "${SOURCES_FOLDER_PATH}"
 
-    download_and_extract "${gettext_url}" "${gettext_archive}" "${gettext_folder_name}"
+    download_and_extract "${gettext_url}" "${gettext_archive}" \
+      "${gettext_src_folder_name}"
 
     mkdir -pv "${LOGS_FOLDER_PATH}/${gettext_folder_name}"
 
@@ -3434,9 +3504,9 @@ function do_gettext()
           echo
           echo "Running gettext configure..."
 
-          bash "${SOURCES_FOLDER_PATH}/${gettext_folder_name}/configure" --help
+          bash "${SOURCES_FOLDER_PATH}/${gettext_src_folder_name}/configure" --help
 
-          bash ${DEBUG} "${SOURCES_FOLDER_PATH}/${gettext_folder_name}/configure" \
+          bash ${DEBUG} "${SOURCES_FOLDER_PATH}/${gettext_src_folder_name}/configure" \
             --prefix="${INSTALL_FOLDER_PATH}" \
             \
             --with-xz \
@@ -3567,17 +3637,21 @@ function do_patch()
 
   local patch_version="$1"
 
-  local patch_folder_name="patch-${patch_version}"
-  local patch_archive="${patch_folder_name}.tar.xz"
+  local patch_src_folder_name="patch-${patch_version}"
+
+  local patch_archive="${patch_src_folder_name}.tar.xz"
   local patch_url="https://ftp.gnu.org/gnu/patch/${patch_archive}"
 
-  local patch_stamp_file_path="${STAMPS_FOLDER_PATH}/stamp-patch-${patch_version}-installed"
+  local patch_folder_name="${patch_src_folder_name}"
+
+  local patch_stamp_file_path="${STAMPS_FOLDER_PATH}/stamp-${patch_folder_name}-installed"
   if [ ! -f "${patch_stamp_file_path}" -o ! -d "${BUILD_FOLDER_PATH}/${patch_folder_name}" ]
   then
 
     cd "${SOURCES_FOLDER_PATH}"
 
-    download_and_extract "${patch_url}" "${patch_archive}" "${patch_folder_name}"
+    download_and_extract "${patch_url}" "${patch_archive}" \
+      "${patch_src_folder_name}"
 
     mkdir -pv "${LOGS_FOLDER_PATH}/${patch_folder_name}"
 
@@ -3601,9 +3675,9 @@ function do_patch()
           echo
           echo "Running patch configure..."
 
-          bash "${SOURCES_FOLDER_PATH}/${patch_folder_name}/configure" --help
+          bash "${SOURCES_FOLDER_PATH}/${patch_src_folder_name}/configure" --help
 
-          bash ${DEBUG} "${SOURCES_FOLDER_PATH}/${patch_folder_name}/configure" \
+          bash ${DEBUG} "${SOURCES_FOLDER_PATH}/${patch_src_folder_name}/configure" \
             --prefix="${INSTALL_FOLDER_PATH}" 
 
           cp "config.log" "${LOGS_FOLDER_PATH}/${patch_folder_name}/config-log.txt"
@@ -3672,17 +3746,21 @@ function do_diffutils()
 
   local diffutils_version="$1"
 
-  local diffutils_folder_name="diffutils-${diffutils_version}"
-  local diffutils_archive="${diffutils_folder_name}.tar.xz"
+  local diffutils_src_folder_name="diffutils-${diffutils_version}"
+
+  local diffutils_archive="${diffutils_src_folder_name}.tar.xz"
   local diffutils_url="https://ftp.gnu.org/gnu/diffutils/${diffutils_archive}"
 
-  local diffutils_stamp_file_path="${STAMPS_FOLDER_PATH}/stamp-diffutils-${diffutils_version}-installed"
+  local diffutils_folder_name="${diffutils_src_folder_name}"
+
+  local diffutils_stamp_file_path="${STAMPS_FOLDER_PATH}/stamp-${diffutils_folder_name}-installed"
   if [ ! -f "${diffutils_stamp_file_path}" -o ! -d "${BUILD_FOLDER_PATH}/${diffutils_folder_name}" ]
   then
 
     cd "${SOURCES_FOLDER_PATH}"
 
-    download_and_extract "${diffutils_url}" "${diffutils_archive}" "${diffutils_folder_name}"
+    download_and_extract "${diffutils_url}" "${diffutils_archive}" \
+      "${diffutils_src_folder_name}"
 
     mkdir -pv "${LOGS_FOLDER_PATH}/${diffutils_folder_name}"
 
@@ -3706,9 +3784,9 @@ function do_diffutils()
           echo
           echo "Running diffutils configure..."
 
-          bash "${SOURCES_FOLDER_PATH}/${diffutils_folder_name}/configure" --help
+          bash "${SOURCES_FOLDER_PATH}/${diffutils_src_folder_name}/configure" --help
 
-          bash ${DEBUG} "${SOURCES_FOLDER_PATH}/${diffutils_folder_name}/configure" \
+          bash ${DEBUG} "${SOURCES_FOLDER_PATH}/${diffutils_src_folder_name}/configure" \
             --prefix="${INSTALL_FOLDER_PATH}" 
 
           cp "config.log" "${LOGS_FOLDER_PATH}/${diffutils_folder_name}/config-log.txt"
@@ -3785,17 +3863,21 @@ function do_bison()
 
   local bison_version="$1"
 
-  local bison_folder_name="bison-${bison_version}"
-  local bison_archive="${bison_folder_name}.tar.xz"
+  local bison_src_folder_name="bison-${bison_version}"
+
+  local bison_archive="${bison_src_folder_name}.tar.xz"
   local bison_url="https://ftp.gnu.org/gnu/bison/${bison_archive}"
 
-  local bison_stamp_file_path="${STAMPS_FOLDER_PATH}/stamp-bison-${bison_version}-installed"
+  local bison_folder_name="${bison_src_folder_name}"
+
+  local bison_stamp_file_path="${STAMPS_FOLDER_PATH}/stamp-${bison_folder_name}-installed"
   if [ ! -f "${bison_stamp_file_path}" -o ! -d "${BUILD_FOLDER_PATH}/${bison_folder_name}" ]
   then
 
     cd "${SOURCES_FOLDER_PATH}"
 
-    download_and_extract "${bison_url}" "${bison_archive}" "${bison_folder_name}"
+    download_and_extract "${bison_url}" "${bison_archive}" \
+      "${bison_src_folder_name}"
 
     mkdir -pv "${LOGS_FOLDER_PATH}/${bison_folder_name}"
 
@@ -3825,9 +3907,9 @@ function do_bison()
           echo
           echo "Running bison configure..."
 
-          bash "${SOURCES_FOLDER_PATH}/${bison_folder_name}/configure" --help
+          bash "${SOURCES_FOLDER_PATH}/${bison_src_folder_name}/configure" --help
 
-          bash ${DEBUG} "${SOURCES_FOLDER_PATH}/${bison_folder_name}/configure" \
+          bash ${DEBUG} "${SOURCES_FOLDER_PATH}/${bison_src_folder_name}/configure" \
             --prefix="${INSTALL_FOLDER_PATH}" 
 
           run_app find . \
@@ -3922,24 +4004,28 @@ function do_flex()
   
   local flex_version="$1"
 
-  local flex_folder_name="flex-${flex_version}"
-  local flex_archive="${flex_folder_name}.tar.gz"
+  local flex_src_folder_name="flex-${flex_version}"
+
+  local flex_archive="${flex_src_folder_name}.tar.gz"
   local flex_url="https://github.com/westes/flex/releases/download/v${flex_version}/${flex_archive}"
 
-  local flex_patch_file_path="${helper_folder_path}/patches/${flex_folder_name}.patch"
+  local flex_folder_name="${flex_src_folder_name}"
 
-  local flex_stamp_file_path="${STAMPS_FOLDER_PATH}/stamp-flex-${flex_version}-installed"
+  local flex_patch_file_path="${helper_folder_path}/patches/${flex_folder_name}.patch"
+  local flex_stamp_file_path="${STAMPS_FOLDER_PATH}/stamp-${flex_folder_name}-installed"
   if [ ! -f "${flex_stamp_file_path}" -o ! -d "${BUILD_FOLDER_PATH}/${flex_folder_name}" ]
   then
 
     cd "${SOURCES_FOLDER_PATH}"
 
-    download_and_extract "${flex_url}" "${flex_archive}" "${flex_folder_name}" "${flex_patch_file_path}"
+    download_and_extract "${flex_url}" "${flex_archive}" \
+      "${flex_src_folder_name}" \
+      "${flex_patch_file_path}"
 
     mkdir -pv "${LOGS_FOLDER_PATH}/${flex_folder_name}"
 
     (
-      cd "${SOURCES_FOLDER_PATH}/${flex_folder_name}"
+      cd "${SOURCES_FOLDER_PATH}/${flex_src_folder_name}"
       if [ ! -f "stamp-autogen" ]
       then
 
@@ -3978,9 +4064,9 @@ function do_flex()
           echo
           echo "Running flex configure..."
 
-          bash "${SOURCES_FOLDER_PATH}/${flex_folder_name}/configure" --help
+          bash "${SOURCES_FOLDER_PATH}/${flex_src_folder_name}/configure" --help
 
-          bash ${DEBUG} "${SOURCES_FOLDER_PATH}/${flex_folder_name}/configure" \
+          bash ${DEBUG} "${SOURCES_FOLDER_PATH}/${flex_src_folder_name}/configure" \
             --prefix="${INSTALL_FOLDER_PATH}"
 
           cp "config.log" "${LOGS_FOLDER_PATH}/${flex_folder_name}/config-log.txt"
@@ -4051,20 +4137,24 @@ function do_make()
 
   local make_version="$1"
 
-  local make_folder_name="make-${make_version}"
+  local make_src_folder_name="make-${make_version}"
+
   # bz2 available up to 4.2.1, gz available on all.
-  local make_archive="${make_folder_name}.tar.gz"
+  local make_archive="${make_src_folder_name}.tar.gz"
   local make_url="https://ftp.gnu.org/gnu/make/${make_archive}"
 
-  local make_patch_file_path="${helper_folder_path}/patches/${make_folder_name}.patch"
+  local make_folder_name="${make_src_folder_name}"
 
-  local make_stamp_file_path="${STAMPS_FOLDER_PATH}/stamp-make-${make_version}-installed"
+  local make_patch_file_path="${helper_folder_path}/patches/${make_folder_name}.patch"
+  local make_stamp_file_path="${STAMPS_FOLDER_PATH}/stamp-${make_folder_name}-installed"
   if [ ! -f "${make_stamp_file_path}" -o ! -d "${BUILD_FOLDER_PATH}/${make_folder_name}" ]
   then
 
     cd "${SOURCES_FOLDER_PATH}"
 
-    download_and_extract "${make_url}" "${make_archive}" "${make_folder_name}" "${make_patch_file_path}"
+    download_and_extract "${make_url}" "${make_archive}" \
+      "${make_src_folder_name}" \
+      "${make_patch_file_path}"
 
     mkdir -pv "${LOGS_FOLDER_PATH}/${make_folder_name}"
 
@@ -4088,9 +4178,9 @@ function do_make()
           echo
           echo "Running make configure..."
 
-          bash "${SOURCES_FOLDER_PATH}/${make_folder_name}/configure" --help
+          bash "${SOURCES_FOLDER_PATH}/${make_src_folder_name}/configure" --help
 
-          bash ${DEBUG} "${SOURCES_FOLDER_PATH}/${make_folder_name}/configure" \
+          bash ${DEBUG} "${SOURCES_FOLDER_PATH}/${make_src_folder_name}/configure" \
             --prefix="${INSTALL_FOLDER_PATH}"
 
           cp "config.log" "${LOGS_FOLDER_PATH}/${make_folder_name}/config-log.txt"
@@ -4175,17 +4265,21 @@ function do_wget()
 
   local wget_version="$1"
 
-  local wget_folder_name="wget-${wget_version}"
-  local wget_archive="${wget_folder_name}.tar.gz"
+  local wget_src_folder_name="wget-${wget_version}"
+
+  local wget_archive="${wget_src_folder_name}.tar.gz"
   local wget_url="https://ftp.gnu.org/gnu/wget/${wget_archive}"
 
-  local wget_stamp_file_path="${STAMPS_FOLDER_PATH}/stamp-wget-${wget_version}-installed"
+  local wget_folder_name="${wget_src_folder_name}"
+
+  local wget_stamp_file_path="${STAMPS_FOLDER_PATH}/stamp-${wget_folder_name}-installed"
   if [ ! -f "${wget_stamp_file_path}" -o ! -d "${BUILD_FOLDER_PATH}/${wget_folder_name}" ]
   then
 
     cd "${SOURCES_FOLDER_PATH}"
 
-    download_and_extract "${wget_url}" "${wget_archive}" "${wget_folder_name}"
+    download_and_extract "${wget_url}" "${wget_archive}" \
+      "${wget_src_folder_name}"
 
     mkdir -pv "${LOGS_FOLDER_PATH}/${wget_folder_name}"
 
@@ -4211,10 +4305,10 @@ function do_wget()
           echo
           echo "Running wget configure..."
 
-          bash "${SOURCES_FOLDER_PATH}/${wget_folder_name}/configure" --help
+          bash "${SOURCES_FOLDER_PATH}/${wget_src_folder_name}/configure" --help
 
           # libpsl is not available anyway.
-          bash ${DEBUG} "${SOURCES_FOLDER_PATH}/${wget_folder_name}/configure" \
+          bash ${DEBUG} "${SOURCES_FOLDER_PATH}/${wget_src_folder_name}/configure" \
             --prefix="${INSTALL_FOLDER_PATH}" \
             \
             --with-ssl=gnutls \
@@ -4301,17 +4395,21 @@ function do_texinfo()
 
   local texinfo_version="$1"
 
-  local texinfo_folder_name="texinfo-${texinfo_version}"
-  local texinfo_archive="${texinfo_folder_name}.tar.gz"
+  local texinfo_src_folder_name="texinfo-${texinfo_version}"
+
+  local texinfo_archive="${texinfo_src_folder_name}.tar.gz"
   local texinfo_url="https://ftp.gnu.org/gnu/texinfo/${texinfo_archive}"
 
-  local texinfo_stamp_file_path="${STAMPS_FOLDER_PATH}/stamp-texinfo-${texinfo_version}-installed"
+  local texinfo_folder_name="${texinfo_src_folder_name}"
+
+  local texinfo_stamp_file_path="${STAMPS_FOLDER_PATH}/stamp-${texinfo_folder_name}-installed"
   if [ ! -f "${texinfo_stamp_file_path}" -o ! -d "${BUILD_FOLDER_PATH}/${texinfo_folder_name}" ]
   then
 
     cd "${SOURCES_FOLDER_PATH}"
 
-    download_and_extract "${texinfo_url}" "${texinfo_archive}" "${texinfo_folder_name}"
+    download_and_extract "${texinfo_url}" "${texinfo_archive}" \
+      "${texinfo_src_folder_name}"
 
     mkdir -pv "${LOGS_FOLDER_PATH}/${texinfo_folder_name}"
 
@@ -4335,9 +4433,9 @@ function do_texinfo()
           echo
           echo "Running texinfo configure..."
 
-          bash "${SOURCES_FOLDER_PATH}/${texinfo_folder_name}/configure" --help
+          bash "${SOURCES_FOLDER_PATH}/${texinfo_src_folder_name}/configure" --help
 
-          bash ${DEBUG} "${SOURCES_FOLDER_PATH}/${texinfo_folder_name}/configure" \
+          bash ${DEBUG} "${SOURCES_FOLDER_PATH}/${texinfo_src_folder_name}/configure" \
             --prefix="${INSTALL_FOLDER_PATH}" 
 
           cp "config.log" "${LOGS_FOLDER_PATH}/${texinfo_folder_name}/config-log.txt"
@@ -4417,17 +4515,21 @@ function do_cmake()
   local cmake_version_major="$(echo ${cmake_version} | sed -e 's|\([0-9][0-9]*\)\..*|\1|')"
   local cmake_version_minor="$(echo ${cmake_version} | sed -e 's|\([0-9][0-9]*\)\.\([0-9][0-9]*\).*|\2|')"
 
-  local cmake_folder_name="cmake-${cmake_version}"
-  local cmake_archive="${cmake_folder_name}.tar.gz"
+  local cmake_src_folder_name="cmake-${cmake_version}"
+
+  local cmake_archive="${cmake_src_folder_name}.tar.gz"
   local cmake_url="https://github.com/Kitware/CMake/releases/download/v${cmake_version}/${cmake_archive}"
 
-  local cmake_stamp_file_path="${STAMPS_FOLDER_PATH}/stamp-cmake-${cmake_version}-installed"
+  local cmake_folder_name="${cmake_src_folder_name}"
+
+  local cmake_stamp_file_path="${STAMPS_FOLDER_PATH}/stamp-${cmake_folder_name}-installed"
   if [ ! -f "${cmake_stamp_file_path}" -o ! -d "${BUILD_FOLDER_PATH}/${cmake_folder_name}" ]
   then
 
     cd "${SOURCES_FOLDER_PATH}"
 
-    download_and_extract "${cmake_url}" "${cmake_archive}" "${cmake_folder_name}"
+    download_and_extract "${cmake_url}" "${cmake_archive}" \
+      "${cmake_src_folder_name}"
 
     mkdir -pv "${LOGS_FOLDER_PATH}/${cmake_folder_name}"
 
@@ -4461,9 +4563,9 @@ function do_cmake()
             echo
             echo "Running cmake bootstrap..."
 
-            bash "${SOURCES_FOLDER_PATH}/${cmake_folder_name}/bootstrap" --help || true
+            bash "${SOURCES_FOLDER_PATH}/${cmake_src_folder_name}/bootstrap" --help || true
 
-            bash ${DEBUG} "${SOURCES_FOLDER_PATH}/${cmake_folder_name}/bootstrap" \
+            bash ${DEBUG} "${SOURCES_FOLDER_PATH}/${cmake_src_folder_name}/bootstrap" \
               --prefix="${INSTALL_FOLDER_PATH}" \
               \
               --parallel="${JOBS}"
@@ -4482,7 +4584,7 @@ function do_cmake()
           # Use the existing cmake to configure this one.
           cmake \
             -DCMAKE_INSTALL_PREFIX="${INSTALL_FOLDER_PATH}" \
-            "${SOURCES_FOLDER_PATH}/${cmake_folder_name}"
+            "${SOURCES_FOLDER_PATH}/${cmake_src_folder_name}"
 
         ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${cmake_folder_name}/cmake-output.txt"
       fi
@@ -4577,22 +4679,35 @@ function do_perl()
   PERL_VERSION="$1"
   local perl_version_major="$(echo "${PERL_VERSION}" | sed -e 's/\([0-9]*\)\..*/\1.0/')"
  
-  local perl_folder_name="perl-${PERL_VERSION}"
-  local perl_archive="${perl_folder_name}.tar.gz"
+  local perl_src_folder_name="perl-${PERL_VERSION}"
+
+  local perl_archive="${perl_src_folder_name}.tar.gz"
   local perl_url="http://www.cpan.org/src/${perl_version_major}/${perl_archive}"
+
+  local perl_folder_name="${perl_src_folder_name}"
 
   # Fix an incompatibility with libxcrypt and glibc.
   # https://groups.google.com/forum/#!topic/perl.perl5.porters/BTMp2fQg8q4
   local perl_patch_file_path="${helper_folder_path}/patches/${perl_folder_name}.patch"
-
-  local perl_stamp_file_path="${STAMPS_FOLDER_PATH}/stamp-perl-${PERL_VERSION}-installed"
+  local perl_stamp_file_path="${STAMPS_FOLDER_PATH}/stamp-${perl_folder_name}-installed"
   if [ ! -f "${perl_stamp_file_path}" -o ! -d "${BUILD_FOLDER_PATH}/${perl_folder_name}" ]
   then
 
     # In-source build.
-    cd "${BUILD_FOLDER_PATH}"
 
-    download_and_extract "${perl_url}" "${perl_archive}" "${perl_folder_name}" "${perl_patch_file_path}"
+    if [ ! -d "${BUILD_FOLDER_PATH}/${perl_folder_name}" ]
+    then
+      cd "${BUILD_FOLDER_PATH}"
+
+      download_and_extract "${perl_url}" "${perl_archive}" \
+        "${perl_src_folder_name}" \
+        "${perl_patch_file_path}"
+
+      if [ "${perl_src_folder_name}" != "${perl_folder_name}" ]
+      then
+        mv -v "${perl_src_folder_name}" "${perl_folder_name}"
+      fi
+    fi
 
     mkdir -pv "${LOGS_FOLDER_PATH}/${perl_folder_name}"
 
@@ -4746,17 +4861,21 @@ function do_makedepend()
 
   local makedepend_version="$1"
 
-  local makedepend_folder_name="makedepend-${makedepend_version}"
-  local makedepend_archive="${makedepend_folder_name}.tar.bz2"
+  local makedepend_src_folder_name="makedepend-${makedepend_version}"
+
+  local makedepend_archive="${makedepend_src_folder_name}.tar.bz2"
   local makedepend_url="http://xorg.freedesktop.org/archive/individual/util/${makedepend_archive}"
   
-  local makedepend_stamp_file_path="${STAMPS_FOLDER_PATH}/stamp-makedepend-${makedepend_version}-installed"
+  local makedepend_folder_name="${makedepend_src_folder_name}"
+
+  local makedepend_stamp_file_path="${STAMPS_FOLDER_PATH}/stamp-${makedepend_folder_name}-installed"
   if [ ! -f "${makedepend_stamp_file_path}" -o ! -d "${BUILD_FOLDER_PATH}/${makedepend_folder_name}" ]
   then
 
     cd "${SOURCES_FOLDER_PATH}"
 
-    download_and_extract "${makedepend_url}" "${makedepend_archive}" "${makedepend_folder_name}"
+    download_and_extract "${makedepend_url}" "${makedepend_archive}" \
+      "${makedepend_src_folder_name}"
 
     mkdir -pv "${LOGS_FOLDER_PATH}/${makedepend_folder_name}"
 
@@ -4787,9 +4906,9 @@ function do_makedepend()
           echo
           echo "Running makedepend configure..."
 
-          bash "${SOURCES_FOLDER_PATH}/${makedepend_folder_name}/configure" --help
+          bash "${SOURCES_FOLDER_PATH}/${makedepend_src_folder_name}/configure" --help
 
-          bash ${DEBUG} "${SOURCES_FOLDER_PATH}/${makedepend_folder_name}/configure" \
+          bash ${DEBUG} "${SOURCES_FOLDER_PATH}/${makedepend_src_folder_name}/configure" \
             --prefix="${INSTALL_FOLDER_PATH}" 
 
           cp "config.log" "${LOGS_FOLDER_PATH}/${makedepend_folder_name}/config-log.txt"
@@ -4854,17 +4973,21 @@ function do_patchelf()
 
   local patchelf_version="$1"
 
-  local patchelf_folder_name="patchelf-${patchelf_version}"
-  local patchelf_archive="${patchelf_folder_name}.tar.bz2"
-  local patchelf_url="https://nixos.org/releases/patchelf/${patchelf_folder_name}/${patchelf_archive}"
+  local patchelf_src_folder_name="patchelf-${patchelf_version}"
 
-  local patchelf_stamp_file_path="${STAMPS_FOLDER_PATH}/stamp-patchelf-${patchelf_version}-installed"
+  local patchelf_archive="${patchelf_src_folder_name}.tar.bz2"
+  local patchelf_url="https://nixos.org/releases/patchelf/${patchelf_src_folder_name}/${patchelf_archive}"
+
+  local patchelf_folder_name="${patchelf_src_folder_name}"
+
+  local patchelf_stamp_file_path="${STAMPS_FOLDER_PATH}/stamp-${patchelf_folder_name}-installed"
   if [ ! -f "${patchelf_stamp_file_path}" -o ! -d "${BUILD_FOLDER_PATH}/${patchelf_folder_name}" ]
   then
 
     cd "${SOURCES_FOLDER_PATH}"
 
-    download_and_extract "${patchelf_url}" "${patchelf_archive}" "${patchelf_folder_name}"
+    download_and_extract "${patchelf_url}" "${patchelf_archive}" \
+      "${patchelf_src_folder_name}"
 
     mkdir -pv "${LOGS_FOLDER_PATH}/${patchelf_folder_name}"
 
@@ -4890,9 +5013,9 @@ function do_patchelf()
           echo
           echo "Running patchelf configure..."
 
-          bash "${SOURCES_FOLDER_PATH}/${patchelf_folder_name}/configure" --help
+          bash "${SOURCES_FOLDER_PATH}/${patchelf_src_folder_name}/configure" --help
 
-          bash ${DEBUG} "${SOURCES_FOLDER_PATH}/${patchelf_folder_name}/configure" \
+          bash ${DEBUG} "${SOURCES_FOLDER_PATH}/${patchelf_src_folder_name}/configure" \
             --prefix="${INSTALL_FOLDER_PATH}" 
 
           cp "config.log" "${LOGS_FOLDER_PATH}/${patchelf_folder_name}/config-log.txt"
@@ -4962,10 +5085,11 @@ function do_chrpath()
   local chrpath_version="$1"
 
   local chrpath_src_folder_name="chrpath-${chrpath_version}"
+
   local chrpath_archive="chrpath_${chrpath_version}.orig.tar.gz"
   local chrpath_url="http://http.debian.net/debian/pool/main/c/chrpath/${chrpath_archive}"
 
-  local chrpath_folder_name="chrpath-${chrpath_version}"
+  local chrpath_folder_name="${chrpath_src_folder_name}"
 
   local chrpath_stamp_file_path="${STAMPS_FOLDER_PATH}/stamp-${chrpath_folder_name}-installed"
   if [ ! -f "${chrpath_stamp_file_path}" -o ! -d "${BUILD_FOLDER_PATH}/${chrpath_folder_name}" ]
@@ -4973,7 +5097,8 @@ function do_chrpath()
 
     cd "${SOURCES_FOLDER_PATH}"
 
-    download_and_extract "${chrpath_url}" "${chrpath_archive}" "${chrpath_src_folder_name}"
+    download_and_extract "${chrpath_url}" "${chrpath_archive}" \
+      "${chrpath_src_folder_name}"
 
     mkdir -pv "${LOGS_FOLDER_PATH}/${chrpath_folder_name}"
 
@@ -4997,9 +5122,9 @@ function do_chrpath()
           echo
           echo "Running chrpath configure..."
 
-          bash "${SOURCES_FOLDER_PATH}/${chrpath_folder_name}/configure" --help
+          bash "${SOURCES_FOLDER_PATH}/${chrpath_src_folder_name}/configure" --help
 
-          bash ${DEBUG} "${SOURCES_FOLDER_PATH}/${chrpath_folder_name}/configure" \
+          bash ${DEBUG} "${SOURCES_FOLDER_PATH}/${chrpath_src_folder_name}/configure" \
             --prefix="${INSTALL_FOLDER_PATH}" 
 
           cp "config.log" "${LOGS_FOLDER_PATH}/${chrpath_folder_name}/config-log.txt"
@@ -5068,17 +5193,21 @@ function do_dos2unix()
 
   local dos2unix_version="$1"
 
-  local dos2unix_folder_name="dos2unix-${dos2unix_version}"
-  local dos2unix_archive="${dos2unix_folder_name}.tar.gz"
+  local dos2unix_src_folder_name="dos2unix-${dos2unix_version}"
+
+  local dos2unix_archive="${dos2unix_src_folder_name}.tar.gz"
   local dos2unix_url="https://waterlan.home.xs4all.nl/dos2unix/${dos2unix_archive}"
 
-  local dos2unix_stamp_file_path="${STAMPS_FOLDER_PATH}/stamp-dos2unix-${dos2unix_version}-installed"
+  local dos2unix_folder_name="${dos2unix_src_folder_name}"
+
+  local dos2unix_stamp_file_path="${STAMPS_FOLDER_PATH}/stamp-${dos2unix_folder_name}-installed"
   if [ ! -f "${dos2unix_stamp_file_path}" -o ! -d "${BUILD_FOLDER_PATH}/${dos2unix_folder_name}" ]
   then
 
     cd "${BUILD_FOLDER_PATH}"
 
-    download_and_extract "${dos2unix_url}" "${dos2unix_archive}" "${dos2unix_folder_name}"
+    download_and_extract "${dos2unix_url}" "${dos2unix_archive}" \
+      "${dos2unix_src_folder_name}"
 
     mkdir -pv "${LOGS_FOLDER_PATH}/${dos2unix_folder_name}"
 
@@ -5159,18 +5288,31 @@ function do_git()
 
   local git_version="$1"
 
-  local git_folder_name="git-${git_version}"
-  local git_archive="${git_folder_name}.tar.xz"
+  local git_src_folder_name="git-${git_version}"
+
+  local git_archive="${git_src_folder_name}.tar.xz"
   local git_url="https://www.kernel.org/pub/software/scm/git/${git_archive}"
 
-  local git_stamp_file_path="${STAMPS_FOLDER_PATH}/stamp-git-${git_version}-installed"
+  local git_folder_name="${git_src_folder_name}"
+
+  local git_stamp_file_path="${STAMPS_FOLDER_PATH}/stamp-${git_folder_name}-installed"
   if [ ! -f "${git_stamp_file_path}" -o ! -d "${BUILD_FOLDER_PATH}/${git_folder_name}" ]
   then
 
     # In-source build.
-    cd "${BUILD_FOLDER_PATH}"
 
-    download_and_extract "${git_url}" "${git_archive}" "${git_folder_name}"
+    if [ ! -d "${BUILD_FOLDER_PATH}/${git_folder_name}" ]
+    then
+      cd "${BUILD_FOLDER_PATH}"
+
+      download_and_extract "${git_url}" "${git_archive}" \
+        "${git_src_folder_name}"
+
+      if [ "${git_src_folder_name}" != "${git_folder_name}" ]
+      then
+        mv -v "${git_src_folder_name}" "${git_folder_name}"
+      fi
+    fi
 
     mkdir -pv "${LOGS_FOLDER_PATH}/${git_folder_name}"
 
@@ -5270,17 +5412,21 @@ function do_python2()
 
   local python2_version="$1"
 
-  local python2_folder_name="Python-${python2_version}"
-  local python2_archive="${python2_folder_name}.tar.xz"
+  local python2_src_folder_name="Python-${python2_version}"
+
+  local python2_archive="${python2_src_folder_name}.tar.xz"
   local python2_url="https://www.python.org/ftp/python/${python2_version}/${python2_archive}"
 
-  local python2_stamp_file_path="${STAMPS_FOLDER_PATH}/stamp-python2-${python2_version}-installed"
+  local python2_folder_name="python-${python2_version}"
+
+  local python2_stamp_file_path="${STAMPS_FOLDER_PATH}/stamp-${python2_folder_name}-installed"
   if [ ! -f "${python2_stamp_file_path}" -o ! -d "${BUILD_FOLDER_PATH}/${python2_folder_name}" ]
   then
 
     cd "${SOURCES_FOLDER_PATH}"
 
-    download_and_extract "${python2_url}" "${python2_archive}" "${python2_folder_name}"
+    download_and_extract "${python2_url}" "${python2_archive}" \
+      "${python2_src_folder_name}"
 
     mkdir -pv "${LOGS_FOLDER_PATH}/${python2_folder_name}"
 
@@ -5319,7 +5465,7 @@ function do_python2()
           echo
           echo "Running python2 configure..."
 
-          bash "${SOURCES_FOLDER_PATH}/${python2_folder_name}/configure" --help
+          bash "${SOURCES_FOLDER_PATH}/${python2_src_folder_name}/configure" --help
 
           # Fail on macOS:
           # --enable-universalsdk 
@@ -5331,7 +5477,7 @@ function do_python2()
           # --with-lto takes way too long on Ubuntu 14 aarch64.
           # --enable-optimizations takes too long
 
-          bash ${DEBUG} "${SOURCES_FOLDER_PATH}/${python2_folder_name}/configure" \
+          bash ${DEBUG} "${SOURCES_FOLDER_PATH}/${python2_src_folder_name}/configure" \
             --prefix="${INSTALL_FOLDER_PATH}" \
             \
             --with-threads \
@@ -5430,17 +5576,21 @@ function do_python3()
 
   local python3_version="$1"
 
-  local python3_folder_name="Python-${python3_version}"
-  local python3_archive="${python3_folder_name}.tar.xz"
+  local python3_src_folder_name="Python-${python3_version}"
+
+  local python3_archive="${python3_src_folder_name}.tar.xz"
   local python3_url="https://www.python.org/ftp/python/${python3_version}/${python3_archive}"
 
-  local python3_stamp_file_path="${STAMPS_FOLDER_PATH}/stamp-python3-${python3_version}-installed"
+  local python3_folder_name="python-${python3_version}"
+
+  local python3_stamp_file_path="${STAMPS_FOLDER_PATH}/stamp-${python3_folder_name}-installed"
   if [ ! -f "${python3_stamp_file_path}" -o ! -d "${BUILD_FOLDER_PATH}/${python3_folder_name}" ]
   then
 
     cd "${SOURCES_FOLDER_PATH}"
 
-    download_and_extract "${python3_url}" "${python3_archive}" "${python3_folder_name}"
+    download_and_extract "${python3_url}" "${python3_archive}" \
+      "${python3_src_folder_name}"
 
     mkdir -pv "${LOGS_FOLDER_PATH}/${python3_folder_name}"
 
@@ -5485,7 +5635,7 @@ function do_python3()
           echo
           echo "Running python3 configure..."
 
-          bash "${SOURCES_FOLDER_PATH}/${python3_folder_name}/configure" --help
+          bash "${SOURCES_FOLDER_PATH}/${python3_src_folder_name}/configure" --help
 
           # Fail on macOS:
           # --enable-universalsdk
@@ -5496,7 +5646,7 @@ function do_python3()
 
           # --enable-optimizations takes too long
 
-          bash ${DEBUG} "${SOURCES_FOLDER_PATH}/${python3_folder_name}/configure" \
+          bash ${DEBUG} "${SOURCES_FOLDER_PATH}/${python3_src_folder_name}/configure" \
             --prefix="${INSTALL_FOLDER_PATH}" \
             \
             --with-universal-archs=${HOST_BITS}-bit \
@@ -5606,20 +5756,33 @@ function do_scons()
 
   local scons_version="$1"
 
-  local scons_folder_name="scons-${scons_version}"
-  local scons_archive="${scons_folder_name}.tar.gz"
+  local scons_src_folder_name="scons-${scons_version}"
+
+  local scons_archive="${scons_src_folder_name}.tar.gz"
 
   local scons_url
   scons_url="https://sourceforge.net/projects/scons/files/scons/${scons_version}/${scons_archive}"
 
-  local scons_stamp_file_path="${STAMPS_FOLDER_PATH}/stamp-scons-${scons_version}-installed"
+  local scons_folder_name="${scons_src_folder_name}"
+
+  local scons_stamp_file_path="${STAMPS_FOLDER_PATH}/stamp-${scons_folder_name}-installed"
   if [ ! -f "${scons_stamp_file_path}" -o ! -d "${BUILD_FOLDER_PATH}/${scons_folder_name}" ]
   then
 
     # In-source build
-    cd "${BUILD_FOLDER_PATH}"
 
-    download_and_extract "${scons_url}" "${scons_archive}" "${scons_folder_name}"
+    if [ ! -d "${BUILD_FOLDER_PATH}/${scons_folder_name}" ]
+    then
+      cd "${BUILD_FOLDER_PATH}"
+
+      download_and_extract "${scons_url}" "${scons_archive}" \
+        "${scons_src_folder_name}"
+
+      if [ "${scons_src_folder_name}" != "${scons_folder_name}" ]
+      then
+        mv -v "${scons_src_folder_name}" "${scons_folder_name}"
+      fi
+    fi
 
     mkdir -pv "${LOGS_FOLDER_PATH}/${scons_folder_name}"
 
@@ -5708,7 +5871,7 @@ function do_meson
 
   local meson_folder_name="meson-${meson_version}"
 
-  local meson_stamp_file_path="${STAMPS_FOLDER_PATH}/stamp-meson-${meson_version}-installed"
+  local meson_stamp_file_path="${STAMPS_FOLDER_PATH}/stamp-${meson_folder_name}-installed"
   if [ ! -f "${meson_stamp_file_path}" ]
   then
 
@@ -5772,19 +5935,32 @@ function do_ninja()
 
   local ninja_version="$1"
 
-  local ninja_folder_name="ninja-${ninja_version}"
-  local ninja_archive="${ninja_folder_name}.tar.gz"
+  local ninja_src_folder_name="ninja-${ninja_version}"
+
+  local ninja_archive="${ninja_src_folder_name}.tar.gz"
   # GitHub release archive.
   local ninja_url="https://github.com/ninja-build/ninja/archive/v${ninja_version}.tar.gz"
 
-  local ninja_stamp_file_path="${STAMPS_FOLDER_PATH}/stamp-ninja-${ninja_version}-installed"
+  local ninja_folder_name="${ninja_src_folder_name}"
+
+  local ninja_stamp_file_path="${STAMPS_FOLDER_PATH}/stamp-${ninja_folder_name}-installed"
   if [ ! -f "${ninja_stamp_file_path}" -o ! -d "${BUILD_FOLDER_PATH}/${ninja_folder_name}" ]
   then
 
     # In-source build
-    cd "${BUILD_FOLDER_PATH}"
 
-    download_and_extract "${ninja_url}" "${ninja_archive}" "${ninja_folder_name}"
+    if [ ! -d "${BUILD_FOLDER_PATH}/${ninja_folder_name}" ]
+    then
+      cd "${BUILD_FOLDER_PATH}"
+
+      download_and_extract "${ninja_url}" "${ninja_archive}" \
+        "${ninja_src_folder_name}"
+
+      if [ "${ninja_src_folder_name}" != "${ninja_folder_name}" ]
+      then
+        mv -v "${ninja_src_folder_name}" "${ninja_folder_name}"
+      fi
+    fi
 
     mkdir -pv "${LOGS_FOLDER_PATH}/${ninja_folder_name}"
 
@@ -5868,17 +6044,21 @@ function do_p7zip()
 
   local p7zip_version="$1"
 
-  local p7zip_folder_name="p7zip_${p7zip_version}"
-  local p7zip_archive="${p7zip_folder_name}_src_all.tar.bz2"
+  local p7zip_src_folder_name="p7zip_${p7zip_version}"
+
+  local p7zip_archive="${p7zip_src_folder_name}_src_all.tar.bz2"
   local p7zip_url="https://sourceforge.net/projects/p7zip/files/p7zip/${p7zip_version}/${p7zip_archive}"
 
-  local p7zip_stamp_file_path="${STAMPS_FOLDER_PATH}/stamp-p7zip-${p7zip_version}-installed"
+  local p7zip_folder_name="${p7zip_src_folder_name}"
+
+  local p7zip_stamp_file_path="${STAMPS_FOLDER_PATH}/stamp-${p7zip_folder_name}-installed"
   if [ ! -f "${p7zip_stamp_file_path}" -o ! -d "${BUILD_FOLDER_PATH}/${p7zip_folder_name}" ]
   then
 
     cd "${BUILD_FOLDER_PATH}"
 
-    download_and_extract "${p7zip_url}" "${p7zip_archive}" "${p7zip_folder_name}"
+    download_and_extract "${p7zip_url}" "${p7zip_archive}" \
+      "${p7zip_src_folder_name}"
 
     mkdir -pv "${LOGS_FOLDER_PATH}/${p7zip_folder_name}"
 
@@ -6012,8 +6192,9 @@ function do_wine()
   local wine_version_major="$(echo ${wine_version} | sed -e 's|\([0-9][0-9]*\)\.\([0-9][0-9]*\)|\1|')"
   local wine_version_minor="$(echo ${wine_version} | sed -e 's|\([0-9][0-9]*\)\.\([0-9][0-9]*\)|\2|')"
 
-  local wine_folder_name="wine-${wine_version}"
-  local wine_archive="${wine_folder_name}.tar.xz"
+  local wine_src_folder_name="wine-${wine_version}"
+
+  local wine_archive="${wine_src_folder_name}.tar.xz"
 
   if [ "${wine_version_minor}" != "0" ]
   then
@@ -6021,14 +6202,26 @@ function do_wine()
   fi
   local wine_url="https://dl.winehq.org/wine/source/${wine_version_major}.${wine_version_minor}/${wine_archive}"
 
-  local wine_stamp_file_path="${STAMPS_FOLDER_PATH}/stamp-wine-${wine_version}-installed"
+  local wine_folder_name="${wine_src_folder_name}"
+
+  local wine_stamp_file_path="${STAMPS_FOLDER_PATH}/stamp-${wine_folder_name}-installed"
   if [ ! -f "${wine_stamp_file_path}" -o ! -d "${BUILD_FOLDER_PATH}/${wine_folder_name}" ]
   then
 
     # In-source build.
-    cd "${BUILD_FOLDER_PATH}"
 
-    download_and_extract "${wine_url}" "${wine_archive}" "${wine_folder_name}"
+    if [ ! -d "${BUILD_FOLDER_PATH}/${wine_folder_name}" ]
+    then
+      cd "${BUILD_FOLDER_PATH}"
+
+      download_and_extract "${wine_url}" "${wine_archive}" \
+        "${wine_src_folder_name}"
+
+      if [ "${wine_src_folder_name}" != "${wine_folder_name}" ]
+      then
+        mv -v "${wine_src_folder_name}" "${wine_folder_name}"
+      fi
+    fi
 
     mkdir -pv "${LOGS_FOLDER_PATH}/${wine_folder_name}"
 
@@ -6071,7 +6264,7 @@ function do_wine()
 
           bash configure --help
 
-          bash configure \
+          bash ${DEBUG} configure \
             --prefix="${INSTALL_FOLDER_PATH}" \
             \
             --with-png \
@@ -6184,12 +6377,15 @@ function do_nvm()
   local node_version="$2"
   local npm_version="$3"
 
-  local nvm_folder_name="nvm-${nvm_version}"
-  local nvm_archive="${nvm_folder_name}.tar.gz"
+  local nvm_src_folder_name="nvm-${nvm_version}"
+
+  local nvm_archive="${nvm_src_folder_name}.tar.gz"
   # GitHub release archive.
   local nvm_url="https://github.com/nvm-sh/nvm/archive/v${nvm_version}.tar.gz"
 
-  local nvm_stamp_file_path="${STAMPS_FOLDER_PATH}/stamp-nvm-${nvm_version}-installed"
+  local nvm_folder_name="${nvm_src_folder_name}"
+
+  local nvm_stamp_file_path="${STAMPS_FOLDER_PATH}/stamp-${nvm_folder_name}-installed"
   if [ ! -f "${nvm_stamp_file_path}" -o ! -d "${BUILD_FOLDER_PATH}/${nvm_folder_name}" -o ! -d "${INSTALL_FOLDER_PATH}/nvm" ]
   then
 
@@ -6277,17 +6473,21 @@ function do_gnupg()
 
   local gnupg_version="$1"
 
-  local gnupg_folder_name="gnupg-${gnupg_version}"
-  local gnupg_archive="${gnupg_folder_name}.tar.bz2"
+  local gnupg_src_folder_name="gnupg-${gnupg_version}"
+
+  local gnupg_archive="${gnupg_src_folder_name}.tar.bz2"
   local gnupg_url="https://www.gnupg.org/ftp/gcrypt/gnupg/${gnupg_archive}"
 
-  local gnupg_stamp_file_path="${STAMPS_FOLDER_PATH}/stamp-gnupg-${gnupg_version}-installed"
+  local gnupg_folder_name="${gnupg_src_folder_name}"
+
+  local gnupg_stamp_file_path="${STAMPS_FOLDER_PATH}/stamp-${gnupg_folder_name}-installed"
   if [ ! -f "${gnupg_stamp_file_path}" -o ! -d "${BUILD_FOLDER_PATH}/${gnupg_folder_name}" ]
   then
 
     cd "${SOURCES_FOLDER_PATH}"
 
-    download_and_extract "${gnupg_url}" "${gnupg_archive}" "${gnupg_folder_name}"
+    download_and_extract "${gnupg_url}" "${gnupg_archive}" \
+      "${gnupg_src_folder_name}"
 
     mkdir -pv "${LOGS_FOLDER_PATH}/${gnupg_folder_name}"
 
@@ -6315,9 +6515,9 @@ function do_gnupg()
           echo
           echo "Running gnupg configure..."
 
-          bash "${SOURCES_FOLDER_PATH}/${gnupg_folder_name}/configure" --help
+          bash "${SOURCES_FOLDER_PATH}/${gnupg_src_folder_name}/configure" --help
 
-          bash ${DEBUG} "${SOURCES_FOLDER_PATH}/${gnupg_folder_name}/configure" \
+          bash ${DEBUG} "${SOURCES_FOLDER_PATH}/${gnupg_src_folder_name}/configure" \
             --prefix="${INSTALL_FOLDER_PATH}" \
             \
             --with-libgpg-error-prefix="${INSTALL_FOLDER_PATH}" \
@@ -6412,18 +6612,31 @@ function do_ant()
 
   local ant_version="$1"
 
-  local ant_folder_name="apache-ant-${ant_version}"
-  local ant_archive="${ant_folder_name}-bin.tar.xz"
+  local ant_src_folder_name="apache-ant-${ant_version}"
+
+  local ant_archive="${ant_src_folder_name}-bin.tar.xz"
   local ant_url="https://downloads.apache.org/ant/binaries/${ant_archive}"
 
-  local ant_stamp_file_path="${STAMPS_FOLDER_PATH}/stamp-ant-${ant_version}-installed"
+  local ant_folder_name="${ant_src_folder_name}"
+
+  local ant_stamp_file_path="${STAMPS_FOLDER_PATH}/stamp-${ant_folder_name}-installed"
   if [ ! -f "${ant_stamp_file_path}" -o ! -d "${BUILD_FOLDER_PATH}/${ant_folder_name}" ]
   then
 
     # In-source build.
-    cd "${BUILD_FOLDER_PATH}"
 
-    download_and_extract "${ant_url}" "${ant_archive}" "${ant_folder_name}"
+    if [ ! -d "${BUILD_FOLDER_PATH}/${ant_folder_name}" ]
+    then
+      cd "${BUILD_FOLDER_PATH}"
+
+      download_and_extract "${ant_url}" "${ant_archive}" \
+        "${ant_src_folder_name}"
+
+      if [ "${ant_src_folder_name}" != "${ant_folder_name}" ]
+      then
+        mv -v "${ant_src_folder_name}" "${ant_folder_name}"
+      fi
+    fi
 
     mkdir -pv "${LOGS_FOLDER_PATH}/${ant_folder_name}"
 
@@ -6497,18 +6710,31 @@ function do_maven()
   local maven_version="$1"
   local maven_version_major="$(echo "${maven_version}" | sed -e 's/\([0-9]*\)\..*/\1/')"
 
-  local maven_folder_name="apache-maven-${maven_version}"
-  local maven_archive="${maven_folder_name}-bin.tar.gz"
+  local maven_src_folder_name="apache-maven-${maven_version}"
+
+  local maven_archive="${maven_src_folder_name}-bin.tar.gz"
   local maven_url="https://www-eu.apache.org/dist/maven/maven-${maven_version_major}/${maven_version}/binaries/${maven_archive}"
 
-  local maven_stamp_file_path="${STAMPS_FOLDER_PATH}/stamp-maven-${maven_version}-installed"
+  local maven_folder_name="${maven_src_folder_name}"
+
+  local maven_stamp_file_path="${STAMPS_FOLDER_PATH}/stamp-${maven_folder_name}-installed"
   if [ ! -f "${maven_stamp_file_path}" -o ! -d "${BUILD_FOLDER_PATH}/${maven_folder_name}" ]
   then
 
     # In-source build.
-    cd "${BUILD_FOLDER_PATH}"
 
-    download_and_extract "${maven_url}" "${maven_archive}" "${maven_folder_name}"
+    if [ ! -d "${BUILD_FOLDER_PATH}/${maven_folder_name}" ]
+    then
+      cd "${BUILD_FOLDER_PATH}"
+
+      download_and_extract "${maven_url}" "${maven_archive}" \
+        "${maven_src_folder_name}"
+      
+      if [ "${maven_src_folder_name}" != "${maven_folder_name}" ]
+      then
+        mv -v "${maven_src_folder_name}" "${maven_folder_name}"
+      fi
+    fi
 
     mkdir -pv "${LOGS_FOLDER_PATH}/${maven_folder_name}"
 
@@ -6521,7 +6747,6 @@ function do_maven()
       env | sort
 
       (
-
         # https://maven.apache.org/guides/development/guide-building-maven.html
 
         echo
@@ -6581,21 +6806,34 @@ function do_nodejs()
 
   local nodejs_version="$1"
 
-  local nodejs_folder_name="node-${nodejs_version}"
-  local nodejs_archive="${nodejs_folder_name}.tar.gz"
+  local nodejs_src_folder_name="node-${nodejs_version}"
+
+  local nodejs_archive="${nodejs_src_folder_name}.tar.gz"
   # GitHub release archive.
   local nodejs_url="https://github.com/nodejs/node/archive/v${nodejs_version}.tar.gz"
 
-  local nodejs_patch_file_path="${helper_folder_path}/patches/${nodejs_folder_name}.patch"
+  local nodejs_folder_name="${nodejs_src_folder_name}"
 
-  local nodejs_stamp_file_path="${STAMPS_FOLDER_PATH}/stamp-nodejs-${nodejs_version}-installed"
+  local nodejs_patch_file_path="${helper_folder_path}/patches/${nodejs_folder_name}.patch"
+  local nodejs_stamp_file_path="${STAMPS_FOLDER_PATH}/stamp-${nodejs_folder_name}-installed"
   if [ ! -f "${nodejs_stamp_file_path}" -o ! -d "${BUILD_FOLDER_PATH}/${nodejs_folder_name}" ]
   then
 
     # In-source build.
-    cd "${BUILD_FOLDER_PATH}"
 
-    download_and_extract "${nodejs_url}" "${nodejs_archive}" "${nodejs_folder_name}" "${nodejs_patch_file_path}"
+    if [ ! -d "${BUILD_FOLDER_PATH}/${nodejs_folder_name}" ]
+    then
+      cd "${BUILD_FOLDER_PATH}"
+
+      download_and_extract "${nodejs_url}" "${nodejs_archive}" \
+        "${nodejs_src_folder_name}" \
+        "${nodejs_patch_file_path}"
+
+      if [ "${nodejs_src_folder_name}" != "${nodejs_folder_name}" ]
+      then
+        mv -v "${nodejs_src_folder_name}" "${nodejs_folder_name}"
+      fi
+    fi
 
     mkdir -pv "${LOGS_FOLDER_PATH}/${nodejs_folder_name}"
 
@@ -6698,17 +6936,21 @@ function do_tcl()
   TCL_VERSION_MAJOR="$(echo ${tcl_version} | sed -e 's|\([0-9][0-9]*\)\.\([0-9][0-9]*\)\..*|\1|')"
   TCL_VERSION_MINOR="$(echo ${tcl_version} | sed -e 's|\([0-9][0-9]*\)\.\([0-9][0-9]*\)\..*|\2|')"
 
-  local tcl_folder_name="tcl${tcl_version}"
+  local tcl_src_folder_name="tcl${tcl_version}"
+
   local tcl_archive="tcl${tcl_version}-src.tar.gz"
   local tcl_url="https://sourceforge.net/projects/tcl/files/Tcl/${tcl_version}/${tcl_archive}"
 
-  local tcl_stamp_file_path="${STAMPS_FOLDER_PATH}/stamp-tcl-${tcl_version}-installed"
+  local tcl_folder_name="${tcl_src_folder_name}"
+
+  local tcl_stamp_file_path="${STAMPS_FOLDER_PATH}/stamp-${tcl_folder_name}-installed"
   if [ ! -f "${tcl_stamp_file_path}" -o ! -d "${BUILD_FOLDER_PATH}/${tcl_folder_name}" ]
   then
 
     cd "${SOURCES_FOLDER_PATH}"
 
-    download_and_extract "${tcl_url}" "${tcl_archive}" "${tcl_folder_name}"
+    download_and_extract "${tcl_url}" "${tcl_archive}" \
+      "${tcl_src_folder_name}"
 
     mkdir -pv "${LOGS_FOLDER_PATH}/${tcl_folder_name}"
 
@@ -6732,9 +6974,9 @@ function do_tcl()
           echo
           echo "Running tcl configure..."
 
-          bash "${SOURCES_FOLDER_PATH}/${tcl_folder_name}/unix/configure" --help
+          bash "${SOURCES_FOLDER_PATH}/${tcl_src_folder_name}/unix/configure" --help
 
-          bash ${DEBUG} "${SOURCES_FOLDER_PATH}/${tcl_folder_name}/unix/configure" \
+          bash ${DEBUG} "${SOURCES_FOLDER_PATH}/${tcl_src_folder_name}/unix/configure" \
             --prefix="${INSTALL_FOLDER_PATH}" \
             \
             --enable-threads \
@@ -6820,17 +7062,21 @@ function do_guile()
 
   local guile_version="$1"
 
-  local guile_folder_name="guile-${guile_version}"
-  local guile_archive="${guile_folder_name}.tar.xz"
+  local guile_src_folder_name="guile-${guile_version}"
+
+  local guile_archive="${guile_src_folder_name}.tar.xz"
   local guile_url="https://ftp.gnu.org/gnu/guile/${guile_archive}"
 
-  local guile_stamp_file_path="${STAMPS_FOLDER_PATH}/stamp-guile-${guile_version}-installed"
+  local guile_folder_name="${guile_src_folder_name}"
+
+  local guile_stamp_file_path="${STAMPS_FOLDER_PATH}/stamp-${guile_folder_name}-installed"
   if [ ! -f "${guile_stamp_file_path}" -o ! -d "${BUILD_FOLDER_PATH}/${guile_folder_name}" ]
   then
 
     cd "${SOURCES_FOLDER_PATH}"
 
-    download_and_extract "${guile_url}" "${guile_archive}" "${guile_folder_name}"
+    download_and_extract "${guile_url}" "${guile_archive}" \
+      "${guile_src_folder_name}"
 
     mkdir -pv "${LOGS_FOLDER_PATH}/${guile_folder_name}"
 
@@ -6849,6 +7095,8 @@ function do_guile()
       # Otherwise guile-config displays the verbosity.
       unset PKG_CONFIG
 
+      export LD_LIBRARY_PATH="${XBB_LIBRARY_PATH}:${BUILD_FOLDER_PATH}/${guile_folder_name}/libguile/.libs"
+
       env | sort
 
       if [ ! -f "config.status" ]
@@ -6857,9 +7105,9 @@ function do_guile()
           echo
           echo "Running guile configure..."
 
-          bash "${SOURCES_FOLDER_PATH}/${guile_folder_name}/configure" --help
+          bash "${SOURCES_FOLDER_PATH}/${guile_src_folder_name}/configure" --help
 
-          bash ${DEBUG} "${SOURCES_FOLDER_PATH}/${guile_folder_name}/configure" \
+          bash ${DEBUG} "${SOURCES_FOLDER_PATH}/${guile_src_folder_name}/configure" \
             --prefix="${INSTALL_FOLDER_PATH}" \
             \
             --disable-error-on-warning \
@@ -6940,18 +7188,31 @@ function do_rhash()
 
   local rhash_version="$1"
 
-  local rhash_folder_name="RHash-${rhash_version}"
-  local rhash_archive="${rhash_folder_name}.tar.gz"
+  local rhash_src_folder_name="RHash-${rhash_version}"
+
+  local rhash_archive="${rhash_src_folder_name}.tar.gz"
   local rhash_url="https://github.com/rhash/RHash/archive/v${rhash_version}.tar.gz"
 
-  local rhash_stamp_file_path="${STAMPS_FOLDER_PATH}/stamp-rhash-${rhash_version}-installed"
+  local rhash_folder_name="rhash-${rhash_version}"
+
+  local rhash_stamp_file_path="${STAMPS_FOLDER_PATH}/stamp-${rhash_folder_name}-installed"
   if [ ! -f "${rhash_stamp_file_path}" -o ! -d "${BUILD_FOLDER_PATH}/${rhash_folder_name}" ]
   then
 
     # In-source build.
-    cd "${BUILD_FOLDER_PATH}"
 
-    download_and_extract "${rhash_url}" "${rhash_archive}" "${rhash_folder_name}"
+    if [ ! -d "${BUILD_FOLDER_PATH}/${rhash_folder_name}" ]
+    then
+      cd "${BUILD_FOLDER_PATH}"
+
+      download_and_extract "${rhash_url}" "${rhash_archive}" \
+        "${rhash_src_folder_name}"
+
+      if [ "${rhash_src_folder_name}" != "${rhash_folder_name}" ]
+      then
+        mv -v "${rhash_src_folder_name}" "${rhash_folder_name}"
+      fi
+    fi
 
     mkdir -pv "${LOGS_FOLDER_PATH}/${rhash_folder_name}"
 
@@ -6974,9 +7235,9 @@ function do_rhash()
           echo
           echo "Running rhash configure..."
 
-          bash "${BUILD_FOLDER_PATH}/${rhash_folder_name}/configure" --help
+          bash configure --help
 
-          bash ${DEBUG} "${BUILD_FOLDER_PATH}/${rhash_folder_name}/configure" \
+          bash ${DEBUG} configure \
             --prefix="${INSTALL_FOLDER_PATH}" \
             \
             --extra-cflags="${CFLAGS} ${CPPFLAGS}" \
@@ -7049,18 +7310,31 @@ function do_re2c()
 
   local re2c_version="$1"
 
-  local re2c_folder_name="re2c-${re2c_version}"
-  local re2c_archive="${re2c_folder_name}.tar.xz"
+  local re2c_src_folder_name="re2c-${re2c_version}"
+
+  local re2c_archive="${re2c_src_folder_name}.tar.xz"
   local re2c_url="https://github.com/skvadrik/re2c/releases/download/${re2c_version}/${re2c_archive}"
 
-  local re2c_stamp_file_path="${STAMPS_FOLDER_PATH}/stamp-re2c-${re2c_version}-installed"
+  local re2c_folder_name="${re2c_src_folder_name}"
+
+  local re2c_stamp_file_path="${STAMPS_FOLDER_PATH}/stamp-${re2c_folder_name}-installed"
   if [ ! -f "${re2c_stamp_file_path}" -o ! -d "${BUILD_FOLDER_PATH}/${re2c_folder_name}" ]
   then
 
     # In-source build.
-    cd "${BUILD_FOLDER_PATH}"
 
-    download_and_extract "${re2c_url}" "${re2c_archive}" "${re2c_folder_name}"
+    if [ ! -d "${BUILD_FOLDER_PATH}/${re2c_folder_name}" ]
+    then
+      cd "${BUILD_FOLDER_PATH}"
+
+      download_and_extract "${re2c_url}" "${re2c_archive}" \
+        "${re2c_src_folder_name}"
+
+      if [ "${re2c_src_folder_name}" != "${re2c_folder_name}" ]
+      then
+        mv -v "${re2c_src_folder_name}" "${re2c_folder_name}"
+      fi
+    fi
 
     mkdir -pv "${LOGS_FOLDER_PATH}/${re2c_folder_name}"
 
@@ -7098,9 +7372,9 @@ function do_re2c()
           echo
           echo "Running re2c configure..."
 
-          bash "${BUILD_FOLDER_PATH}/${re2c_folder_name}/configure" --help
+          bash configure --help
 
-          bash ${DEBUG} "${BUILD_FOLDER_PATH}/${re2c_folder_name}/configure" \
+          bash ${DEBUG} configure \
             --prefix="${INSTALL_FOLDER_PATH}" \
 
           cp "config.log" "${LOGS_FOLDER_PATH}/${re2c_folder_name}/config-log.txt"
@@ -7173,7 +7447,7 @@ function do_sphinx()
 
   local sphinx_folder_name="sphinx-${sphinx_version}"
 
-  local sphinx_stamp_file_path="${STAMPS_FOLDER_PATH}/stamp-sphinx-${sphinx_version}-installed"
+  local sphinx_stamp_file_path="${STAMPS_FOLDER_PATH}/stamp-${sphinx_folder_name}-installed"
   if [ ! -f "${sphinx_stamp_file_path}" ]
   then
 
@@ -7242,7 +7516,8 @@ function do_autogen()
 
     cd "${SOURCES_FOLDER_PATH}"
 
-    download_and_extract "${autogen_url}" "${autogen_archive}" "${autogen_src_folder_name}"
+    download_and_extract "${autogen_url}" "${autogen_archive}" \
+      "${autogen_src_folder_name}"
 
     mkdir -pv "${LOGS_FOLDER_PATH}/${autogen_folder_name}"
 
@@ -7390,7 +7665,8 @@ function do_bash()
 
     cd "${SOURCES_FOLDER_PATH}"
 
-    download_and_extract "${bash_url}" "${bash_archive}" "${bash_src_folder_name}"
+    download_and_extract "${bash_url}" "${bash_archive}" \
+      "${bash_src_folder_name}"
 
     mkdir -pv "${LOGS_FOLDER_PATH}/${bash_folder_name}"
 
