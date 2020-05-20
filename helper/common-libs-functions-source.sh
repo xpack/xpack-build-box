@@ -58,7 +58,7 @@ function do_zlib()
       export CPPFLAGS="${XBB_CPPFLAGS}" 
       export CFLAGS="${XBB_CFLAGS_NO_W} -fPIC"
       export CXXFLAGS="${XBB_CXXFLAGS_NO_W}"
-      export LDFLAGS="${XBB_LDFLAGS_LIB}"
+      export LDFLAGS="${XBB_LDFLAGS_LIB} -v"
 
       env | sort
 
@@ -160,7 +160,7 @@ function do_gmp()
 
       # Static fails one cxx test (t-misc) on Intel 64
       # export LDFLAGS="${XBB_LDFLAGS_LIB}"
-      export LDFLAGS="${XBB_LDFLAGS_LIB}"
+      export LDFLAGS="${XBB_LDFLAGS_LIB} -v"
 
       # Mandatory, it fails on 32-bits. 
       # export ABI="${HOST_BITS}"
@@ -274,7 +274,7 @@ function do_mpfr()
       export CPPFLAGS="${XBB_CPPFLAGS}"
       export CFLAGS="${XBB_CFLAGS_NO_W}"
       export CXXFLAGS="${XBB_CXXFLAGS_NO_W}"
-      export LDFLAGS="${XBB_LDFLAGS_LIB}"
+      export LDFLAGS="${XBB_LDFLAGS_LIB} -v"
 
       env | sort
 
@@ -1802,7 +1802,7 @@ function do_libgcrypt()
       export CPPFLAGS="${XBB_CPPFLAGS}"
       export CFLAGS="${XBB_CFLAGS_NO_W}"
       export CXXFLAGS="${XBB_CXXFLAGS_NO_W}"
-      export LDFLAGS="${XBB_LDFLAGS_LIB}"
+      export LDFLAGS="${XBB_LDFLAGS_LIB} -v"
 
       env | sort
 
