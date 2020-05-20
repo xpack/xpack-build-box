@@ -491,6 +491,7 @@ function do_native_binutils()
           bash ${DEBUG} "${SOURCES_FOLDER_PATH}/${native_binutils_src_folder_name}/configure" \
             ${config_options[@]}
 
+          make configure-host
 
           # Workaround to avoid libtool issuing -rpath to the linker, since
           # this prevents it using the global LD_RUN_PATH.
@@ -503,8 +504,6 @@ function do_native_binutils()
       (
         echo
         echo "Running native binutils make..."
-
-        make configure-host
 
         # Build.
         make -j ${JOBS}
@@ -866,6 +865,7 @@ function do_native_gcc()
 function test_native_gcc()
 {
   (
+    # better not, to check if they pick their own deps.
     # xbb_activate_installed_bin
 
     echo
@@ -1377,6 +1377,7 @@ function do_mingw_all()
         make -j ${JOBS} all-gcc 
 
         make install-gcc
+
       ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${mingw_gcc_folder_name}/make-step1-output.txt"
     )
 
@@ -1553,7 +1554,8 @@ function do_mingw_all()
         # make install-strip
         make install
 
-        ls -l "${INSTALL_FOLDER_PATH}/usr/${MINGW_TARGET}"
+        run_app ls -l "${INSTALL_FOLDER_PATH}/usr/${MINGW_TARGET}"
+
       ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${mingw_build_winpthreads_folder_name}/make-output.txt"
     )
 
@@ -3991,7 +3993,6 @@ function do_flex()
 
         # Build.
         make -j ${JOBS}
-        # make
 
         # make install-strip
         make install
@@ -4241,10 +4242,6 @@ function do_wget()
         # Build.
         make -j ${JOBS}
 
-        # Fails
-        # x86_64: FAIL:  65
-        # make check
-
         # make install-strip
         make install
 
@@ -4394,6 +4391,8 @@ function test_texinfo()
     echo "Testing if texinfo binaries start properly..."
 
     run_app "${INSTALL_FOLDER_PATH}/bin/texi2pdf" --version
+
+    # No ELFs, it is a script.
   )
 }
 
@@ -4499,7 +4498,22 @@ function do_cmake()
         make install
 
         mkdir -pv "${INSTALL_FOLDER_PATH}/share/doc"
+        rm -rfv "${INSTALL_FOLDER_PATH}/share/doc/cmake-${cmake_version_major}.${cmake_version_minor}"
         mv -v "${INSTALL_FOLDER_PATH}/doc/cmake-${cmake_version_major}.${cmake_version_minor}" "${INSTALL_FOLDER_PATH}/share/doc"
+
+        if [ "${RUN_LONG_TESTS}" == "y" ]
+        then
+          # 7 tests failed out of 563:
+          #   5 - kwsys.testSystemTools (Failed)
+          #  41 - VSGNUFortran (Failed)
+          #  157 - complex (Failed)
+          #  158 - complexOneConfig (Failed)
+          #  274 - Fortran (Failed)
+          #  372 - RunCMake.GenerateExportHeader (Failed)
+          #  467 - RunCMake.FindPkgConfig (Failed)
+          # WARN-TEST
+          : # make -j1 test
+        fi
 
       ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${cmake_folder_name}/make-output.txt"
     )
@@ -4644,10 +4658,6 @@ function do_perl()
 
         # Build.
         make -j ${JOBS}
-
-        # Takes too long.
-        # TEST_JOBS=$(echo $MAKEFLAGS | sed 's/.*-j\([0-9][0-9]*\).*/\1/') make test_harness
-        # make test
 
         # make install-strip
         make install
@@ -5200,11 +5210,10 @@ function do_git()
         # Build.
         make -j ${JOBS}
 
-        # Tests are quite complicated
-
         # make install-strip
         make install
 
+        # Tests are quite complicated
 
       ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${git_folder_name}/make-output.txt"
     )
@@ -5346,11 +5355,10 @@ function do_python2()
         # Build.
         make -j ${JOBS}
 
-        # Tests are quite complicated
-
         # make install-strip
         make install
 
+        # Tests are quite complicated
 
       ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${python2_folder_name}/make-output.txt"
     )
@@ -5515,11 +5523,11 @@ function do_python3()
         # Build.
         make -j ${JOBS} # build_all
 
-        # Tests are quite complicated
-
         # make install-strip
         make install
 
+        # Tests are quite complicated
+ 
       ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${python3_folder_name}/make-output.txt"
     )
 
@@ -5545,6 +5553,7 @@ function do_python3()
     (
       test_python3
     ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${python3_folder_name}/test-output.txt"
+
     hash -r
 
     touch "${python3_stamp_file_path}"
@@ -5809,6 +5818,7 @@ function do_ninja()
 
         /usr/bin/install -m755 -c ninja "${INSTALL_FOLDER_PATH}/bin"
 
+        # TODO: No tests?
 
       ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${ninja_folder_name}/configure-output.txt"
     )
@@ -6073,6 +6083,7 @@ function do_wine()
           )
         fi
 
+        # TODO: no tests?
 
       ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${wine_folder_name}/make-output.txt"
     )
@@ -6830,8 +6841,7 @@ function do_guile()
           bash ${DEBUG} "${SOURCES_FOLDER_PATH}/${guile_folder_name}/configure" \
             --prefix="${INSTALL_FOLDER_PATH}" \
             \
-            --disable-error-on-warning
-
+            --disable-error-on-warning \
 
           patch_all_libtool_rpath
 
@@ -6847,6 +6857,7 @@ function do_guile()
         echo "Running guile make..."
 
         # Build.
+        # Requires GC with dynamic load support.
         make -j ${JOBS}
 
         # make install-strip
@@ -7153,6 +7164,7 @@ function do_sphinx()
       env | sort
 
       pip3 install sphinx==${sphinx_version}
+
     ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${sphinx_folder_name}/install-output.txt"
 
     hash -r

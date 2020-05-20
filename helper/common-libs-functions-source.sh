@@ -619,7 +619,7 @@ function do_nettle()
             --enable-mini-gmp \
             --disable-documentation \
             --disable-arm-neon \
-            --disable-assembler
+            --disable-assembler \
 
           cp "config.log" "${LOGS_FOLDER_PATH}/${nettle_folder_name}/config-log.txt"
         ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${nettle_folder_name}/configure-output.txt"
@@ -1403,7 +1403,7 @@ function do_xorg_xproto()
             \
             --without-xmlto \
             --without-xsltproc \
-            --without-fop
+            --without-fop \
 
           cp "config.log" "${LOGS_FOLDER_PATH}/${xorg_xproto_folder_name}/config-log.txt"
         ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${xorg_xproto_folder_name}/configure-output.txt"
@@ -2517,6 +2517,8 @@ function do_gc()
             --prefix="${INSTALL_FOLDER_PATH}" \
             \
             --enable-cplusplus \
+            --disable-docs \
+
           # Skip the tests folder from patching, since the tests use 
           # internal shared libraries.
           run_app find . \
@@ -2532,6 +2534,9 @@ function do_gc()
       (
         echo
         echo "Running gc make..."
+
+        # TODO: check if required
+        # make clean
 
         # Build.
         make -j ${JOBS}
@@ -2649,7 +2654,6 @@ function do_ncurses()
 
           config_options+=("--prefix=${INSTALL_FOLDER_PATH}")
             
-
           # Without --with-pkg-config-libdir= it'll try to write the .pc files in the
           # xbb folder, probbaly by using the dirname of pkg-config.
 
@@ -2708,10 +2712,10 @@ function do_ncurses()
         # Build.
         make -j ${JOBS}
 
-        # The test-programs are interactive
-
         # make install-strip
         make install
+
+        # The test programs are interactive
         
       ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${ncurses_folder_name}/make-output.txt"
     )
