@@ -4555,10 +4555,10 @@ function do_perl()
   # 2019-04-19, "5.28.2" # Fails in bootstrap on mac.
   # 2019-11-10, "5.30.1"
 
-  local perl_version="$1"
-  local perl_version_major="$(echo "${perl_version}" | sed -e 's/\([0-9]*\)\..*/\1.0/')"
+  PERL_VERSION="$1"
+  local perl_version_major="$(echo "${PERL_VERSION}" | sed -e 's/\([0-9]*\)\..*/\1.0/')"
  
-  local perl_folder_name="perl-${perl_version}"
+  local perl_folder_name="perl-${PERL_VERSION}"
   local perl_archive="${perl_folder_name}.tar.gz"
   local perl_url="http://www.cpan.org/src/${perl_version_major}/${perl_archive}"
 
@@ -4566,7 +4566,7 @@ function do_perl()
   # https://groups.google.com/forum/#!topic/perl.perl5.porters/BTMp2fQg8q4
   local perl_patch_file_path="${helper_folder_path}/patches/${perl_folder_name}.patch"
 
-  local perl_stamp_file_path="${STAMPS_FOLDER_PATH}/stamp-perl-${perl_version}-installed"
+  local perl_stamp_file_path="${STAMPS_FOLDER_PATH}/stamp-perl-${PERL_VERSION}-installed"
   if [ ! -f "${perl_stamp_file_path}" -o ! -d "${BUILD_FOLDER_PATH}/${perl_folder_name}" ]
   then
 
