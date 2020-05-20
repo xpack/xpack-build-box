@@ -4464,7 +4464,7 @@ function do_cmake()
               \
               --parallel="${JOBS}"
 
-            cp "Bootstrap.cmk/cmake_bootstrap.log" "${LOGS_FOLDER_PATH}/bootstrap-cmake-log.txt"
+            cp "Bootstrap.cmk/cmake_bootstrap.log" "${LOGS_FOLDER_PATH}/${cmake_folder_name}/bootstrap-log.txt"
           ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${cmake_folder_name}/bootstrap-output.txt"
         fi
       else
