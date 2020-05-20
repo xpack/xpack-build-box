@@ -50,6 +50,14 @@ Inside the container, run the build script:
 # bash /input/build-v3.sh
 ```
 
+There are several environment variables that can be passed to the script:
+
+```console
+# RUN_LONG_TESTS=y bash /input/build-v3.sh
+# JOBS=1 bash /input/build-v3.sh
+# DEBUG=-x bash /input/build-v3.sh
+```
+
 ## Test
 
 The following tests were performed on an Ubuntu Server
