@@ -209,47 +209,47 @@ $ docker run -it <image> ldd --version
 
 ### [Debian](https://en.wikipedia.org/wiki/Debian_version_history)
 
-- `debian:6` - squeeze - 2011-2016, 2.11.3
-- `debian:7` - wheezy - 2013-2016, 2.13, kernel 3.2 - 3.10
-- `debian:8` - jessie - 2015-2018, 2.19
-- `debian:9` - stretch - 2017-2020, 2.24 (first with arm64)
-- `debian:10` - buster - 2019-2022, 2.28
+- `debian:6` - squeeze - 2011-2016, 2.11.3, kernel 2.6.32
+- `debian:7` - wheezy - 2013-2016, 2.13, kernel 3.2
+- `debian:8` - jessie - 2015-2018, 2.19, kernel 3.16
+- `debian:9` - stretch - 2017-2020, 2.24, kernel 4.9.0-6 (first with arm64)
+- `debian:10` - buster - 2019-2022, 2.28, kernel 4.19.0-6
 
 ### [Ubuntu](https://en.wikipedia.org/wiki/Ubuntu_version_history)
 
 - `ubuntu:10.04` - lucy - 2010-2015, 2.11.1
-- `ubuntu:12.04` - precise - 2012-2019, 2.15, kernel 3.2 <--- Intel Linux choice
-- `ubuntu:14.04` - trusty - 2014-2022, 2.19
-- `ubuntu:16.04` - xenial - 2016-2024, 2.23 <--- Arm Linux choice
-- `ubuntu:18.04` - bionic - 2018-2028, 2.27
-- `ubuntu:20.04` - focal - 2020-2-30, ?
+- `ubuntu:12.04` - precise - 2012-2019, 2.15, kernel **3.2** <--- Intel Linux choice
+- `ubuntu:14.04` - trusty - 2014-2022, 2.19, kernel 3.16
+- `ubuntu:16.04` - xenial - 2016-2024, 2.23, kernel 4.4 <--- Arm Linux choice
+- `ubuntu:18.04` - bionic - 2018-2028, 2.27, kernel 4.15
+- `ubuntu:20.04` - focal - 2020-2-30, ?, kernel 5.4
 
 ### [RHEL](https://access.redhat.com/support/policy/updates/errata/#Life_Cycle_Dates)
 
 - `registry.access.redhat.com/rhel6` - 2.12 <--- no longer supported
-- `registry.access.redhat.com/rhel7` - 2.17 <--- supported
+- `registry.access.redhat.com/rhel7` - 2.17, kernel 3.10 <--- supported
 
 ### [CentOS](https://en.wikipedia.org/wiki/CentOS)
 
 - `centos:6` - 2011-2020, 2.12 <--- no longer supported
 - `centos:7` - 2014-2024, 2.17, kernel 3.10 <--- must be supported
-- `centos:8` - 2019-2029, 2.28
+- `centos:8` - 2019-2029, 2.28, kernel 4.18
 
 ### [Fedora](https://en.wikipedia.org/wiki/Fedora_version_history)
 
-- `fedora:20` - 2013-12, 2.18, kernel 3.6 <-- Intel
-- `fedora:21` - 2014-12, 2.20
-- `fedora:22` - 2015-05, 2.21
-- `fedora:23` - 2015-11, 2.22
-- `fedora:24` - 2016-06, 2.23 <-- Arm
-- `fedora:25` - 2016-11, 2.24
+- `fedora:20` - 2013-12, 2.18, kernel 3.11 <-- Intel
+- `fedora:21` - 2014-12, 2.20, kernel 3.17
+- `fedora:22` - 2015-05, 2.21, kernel 4.0
+- `fedora:23` - 2015-11, 2.22, kernel 4.2
+- `fedora:24` - 2016-06, 2.23, kernel 4.5 <-- Arm
+- `fedora:25` - 2016-11, 2.24, kernel 4.8
 - `fedora:26` - 2017-07,
-- `fedora:27` - 2017-11, 2.26
+- `fedora:27` - 2017-11, 2.26, kernel 4.13
 - `fedora:28` - 2018-05,
-- `fedora:29` - 2018-10, 2.28
+- `fedora:29` - 2018-10, 2.28, kernel 4.18
 - `fedora:30` - 2019-05,
-- `fedora:31` - 2019-10, 2.30
-- `fedora:32` - 2020-04, 2.20
+- `fedora:31` - 2019-10, 2.30, kernel 5.3
+- `fedora:32` - 2020-04, 2.20, kernel 5.6
 
 ## Credits
 
@@ -276,9 +276,9 @@ $ git clone https://github.com/xpack/xpack-build-box.git \
 
 Things to be considered for future versions:
 
-- add bash
+- add gdb
 - cleanup `man` folder
-- investigate why isl_test_cpp fails 
+- investigate why isl_test_cpp fails
 
 - build nodejs
 
@@ -292,6 +292,7 @@ Fixed
 - build Python 3 in bootstrap
 - guille (1 test disabled)
 - autogen (1 test disabled)
+- add bash
 
 ## Conclusions
 
