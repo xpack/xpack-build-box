@@ -4925,6 +4925,110 @@ function test_patchelf()
 
 # -----------------------------------------------------------------------------
 
+function do_chrpath() 
+{
+  # http://http.debian.net/debian/pool/main/c/chrpath/chrpath_0.16.orig.tar.gz
+
+  # https://archlinuxarm.org/packages/aarch64/chrpath/files/PKGBUILD
+
+  # 04 Jan 2014, "0.16"
+  
+  local chrpath_version="$1"
+
+  local chrpath_src_folder_name="chrpath-${chrpath_version}"
+  local chrpath_archive="chrpath_${chrpath_version}.orig.tar.gz"
+  local chrpath_url="http://http.debian.net/debian/pool/main/c/chrpath/${chrpath_archive}"
+
+  local chrpath_folder_name="chrpath-${chrpath_version}"
+
+  local chrpath_stamp_file_path="${STAMPS_FOLDER_PATH}/stamp-${chrpath_folder_name}-installed"
+  if [ ! -f "${chrpath_stamp_file_path}" -o ! -d "${BUILD_FOLDER_PATH}/${chrpath_folder_name}" ]
+  then
+
+    cd "${SOURCES_FOLDER_PATH}"
+
+    download_and_extract "${chrpath_url}" "${chrpath_archive}" "${chrpath_src_folder_name}"
+
+    mkdir -pv "${LOGS_FOLDER_PATH}/${chrpath_folder_name}"
+
+    (
+      mkdir -pv "${BUILD_FOLDER_PATH}/${chrpath_folder_name}"
+      cd "${BUILD_FOLDER_PATH}/${chrpath_folder_name}"
+
+      xbb_activate
+      xbb_activate_installed_dev
+
+      export CPPFLAGS="${XBB_CPPFLAGS}"
+      export CFLAGS="${XBB_CFLAGS_NO_W}"
+      export CXXFLAGS="${XBB_CXXFLAGS_NO_W}"
+      export LDFLAGS="${XBB_LDFLAGS_APP}"
+
+      env | sort
+
+      if [ ! -f "config.status" ]
+      then
+        (
+          echo
+          echo "Running chrpath configure..."
+
+          bash "${SOURCES_FOLDER_PATH}/${chrpath_folder_name}/configure" --help
+
+          bash ${DEBUG} "${SOURCES_FOLDER_PATH}/${chrpath_folder_name}/configure" \
+            --prefix="${INSTALL_FOLDER_PATH}" 
+
+          cp "config.log" "${LOGS_FOLDER_PATH}/${chrpath_folder_name}/config-log.txt"
+        ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${chrpath_folder_name}/configure-output.txt"
+      fi
+
+      (
+        echo
+        echo "Running chrpath make..."
+
+        # Build.
+        make -j ${JOBS}
+        
+        # make install-strip
+        make install
+
+        make -j1 check
+
+      ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${chrpath_folder_name}/make-output.txt"
+    )
+
+    (
+      test_chrpath
+    ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${chrpath_folder_name}/test-output.txt"
+
+    hash -r
+
+    touch "${chrpath_stamp_file_path}"
+
+  else
+    echo "Component chrpath already installed."
+  fi
+
+  test_functions+=("test_chrpath")
+}
+
+function test_chrpath()
+{
+  (
+    xbb_activate_installed_bin
+
+    echo
+    echo "Testing if chrpath binaries start properly..."
+
+    run_app "${INSTALL_FOLDER_PATH}/bin/chrpath" --version
+
+    echo
+    echo "Checking the chrpath binutils shared libraries..."
+
+    show_libs "${INSTALL_FOLDER_PATH}/bin/chrpath"
+  )
+}
+
+# -----------------------------------------------------------------------------
+
 function do_dos2unix() 
 {
   # https://waterlan.home.xs4all.nl/dos2unix.html
