@@ -183,6 +183,8 @@ function do_gmp()
             --enable-cxx \
             --enable-fat
 
+          patch_all_libtool_rpath
+
           cp "config.log" "${LOGS_FOLDER_PATH}/${gmp_folder_name}/config-log.txt"
         ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${gmp_folder_name}/configure-output.txt"
       fi
@@ -289,6 +291,8 @@ function do_mpfr()
             \
             --enable-thread-safe \
             --enable-shared \
+
+          patch_all_libtool_rpath
 
           cp "config.log" "${LOGS_FOLDER_PATH}/${mpfr_folder_name}/config-log.txt"
         ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${mpfr_folder_name}/configure-output.txt"
@@ -398,6 +402,8 @@ function do_mpc()
           bash ${DEBUG} "${SOURCES_FOLDER_PATH}/${mpc_src_folder_name}/configure" \
             --prefix="${INSTALL_FOLDER_PATH}" 
 
+          patch_all_libtool_rpath
+
           cp "config.log" "${LOGS_FOLDER_PATH}/${mpc_folder_name}/config-log.txt"
         ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${mpc_folder_name}/configure-output.txt"
       fi
@@ -504,6 +510,8 @@ function do_isl()
             --prefix="${INSTALL_FOLDER_PATH}" \
             \
             --with-gmp-prefix="${INSTALL_FOLDER_PATH}" \
+
+          patch_all_libtool_rpath
 
           cp "config.log" "${LOGS_FOLDER_PATH}/${isl_folder_name}/config-log.txt"
         ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${isl_folder_name}/configure-output.txt"
@@ -726,6 +734,8 @@ function do_tasn1()
           bash ${DEBUG} "${SOURCES_FOLDER_PATH}/${tasn1_folder_name}/configure" \
             --prefix="${INSTALL_FOLDER_PATH}" 
 
+          patch_all_libtool_rpath
+
           cp "config.log" "${LOGS_FOLDER_PATH}/${tasn1_folder_name}/config-log.txt"
         ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${tasn1_folder_name}/configure-output.txt"
       fi
@@ -827,6 +837,8 @@ function do_expat()
 
           bash ${DEBUG} "${SOURCES_FOLDER_PATH}/${expat_folder_name}/configure" \
             --prefix="${INSTALL_FOLDER_PATH}" 
+
+          patch_all_libtool_rpath
 
           cp "config.log" "${LOGS_FOLDER_PATH}/${expat_folder_name}/config-log.txt"
         ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${expat_folder_name}/configure-output.txt"
@@ -949,6 +961,8 @@ function do_libffi()
             --prefix="${INSTALL_FOLDER_PATH}" \
             \
             --enable-pax_emutramp \
+
+          patch_all_libtool_rpath
 
           cp "config.log" "${LOGS_FOLDER_PATH}/${libffi_folder_name}/config-log.txt"
         ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${libffi_folder_name}/configure-output.txt"
@@ -1168,6 +1182,8 @@ function do_gnutls()
             --without-p11-kit \
             \
             --enable-guile \
+
+          patch_all_libtool_rpath
 
           cp "config.log" "${LOGS_FOLDER_PATH}/${gnutls_folder_name}/config-log.txt"
         ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${gnutls_folder_name}/configure-output.txt"
@@ -1491,6 +1507,8 @@ function do_libpng()
             \
             --enable-arm-neon=no \
 
+          patch_all_libtool_rpath
+
           cp "config.log" "${LOGS_FOLDER_PATH}/${libpng_folder_name}/config-log.txt"
         ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${libpng_folder_name}/configure-output.txt"
       fi
@@ -1598,6 +1616,8 @@ function do_libmpdec()
 
           bash ${DEBUG} "configure" \
             --prefix="${INSTALL_FOLDER_PATH}" 
+
+          patch_all_libtool_rpath
 
           cp "config.log" "${LOGS_FOLDER_PATH}/${libmpdec_folder_name}/config-log.txt"
         ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${libmpdec_folder_name}/configure-output.txt"
@@ -1810,6 +1830,8 @@ function do_libgcrypt()
 
           set -u
 
+          patch_all_libtool_rpath
+
           if [ "${HOST_MACHINE}" != "aarch64" ]
           then
             # fix screwed up capability detection
@@ -1932,6 +1954,8 @@ function do_libassuan()
             \
             --with-libgpg-error-prefix="${INSTALL_FOLDER_PATH}" \
 
+          patch_all_libtool_rpath
+
           cp "config.log" "${LOGS_FOLDER_PATH}/${libassuan_folder_name}/config-log.txt"
         ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${libassuan_folder_name}/configure-output.txt"
       fi
@@ -2035,6 +2059,8 @@ function do_libksba()
             --prefix="${INSTALL_FOLDER_PATH}" \
             \
             --with-libgpg-error-prefix="${INSTALL_FOLDER_PATH}" \
+
+          patch_all_libtool_rpath
 
           cp "config.log" "${LOGS_FOLDER_PATH}/${libksba_folder_name}/config-log.txt"
         ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${libksba_folder_name}/configure-output.txt"
@@ -2279,6 +2305,8 @@ function do_libxcrypt()
           bash ${DEBUG} "${SOURCES_FOLDER_PATH}/${libxcrypt_folder_name}/configure" \
             --prefix="${INSTALL_FOLDER_PATH}" \
 
+          patch_all_libtool_rpath
+
           cp "config.log" "${LOGS_FOLDER_PATH}/${libxcrypt_folder_name}/config-log.txt"
         ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${libxcrypt_folder_name}/configure-output.txt"
       fi
@@ -2289,6 +2317,10 @@ function do_libxcrypt()
 
         # Build.
         make -j ${JOBS}
+
+        rm -rfv "${INSTALL_FOLDER_PATH}"/lib*/libxcrypt.*
+        rm -rfv "${INSTALL_FOLDER_PATH}"/lib*/libowcrypt.*
+        rm -rfv "${INSTALL_FOLDER_PATH}"/lib/pkgconfig/libcrypt.pc
 
         # make install-strip
         make install
@@ -2382,6 +2414,8 @@ function do_libunistring()
 
           bash ${DEBUG} "${SOURCES_FOLDER_PATH}/${libunistring_folder_name}/configure" \
             --prefix="${INSTALL_FOLDER_PATH}" \
+
+          patch_all_libtool_rpath
 
           cp "config.log" "${LOGS_FOLDER_PATH}/${libunistring_folder_name}/config-log.txt"
         ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${libunistring_folder_name}/configure-output.txt"
@@ -2481,6 +2515,13 @@ function do_gc()
             --prefix="${INSTALL_FOLDER_PATH}" \
             \
             --enable-cplusplus \
+          # Skip the tests folder from patching, since the tests use 
+          # internal shared libraries.
+          run_app find . \
+            -name "libtool" \
+            ! -path 'tests' \
+            -print \
+            -exec bash patch_file_libtool_rpath {} \;
 
           cp "config.log" "${LOGS_FOLDER_PATH}/${gc_folder_name}/config-log.txt"
         ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${gc_folder_name}/configure-output.txt"
@@ -2769,6 +2810,11 @@ function do_readline()
             
           bash ${DEBUG} "${SOURCES_FOLDER_PATH}/${readline_src_folder_name}/configure" \
             ${config_options[@]}
+
+          run_app find . \
+            -name Makefile \
+            -print \
+            -exec sed -i -e 's|-Wl,-rpath,$(libdir)||' {} \;
 
           cp "config.log" "${LOGS_FOLDER_PATH}/${readline_folder_name}/config-log.txt"
         ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${readline_folder_name}/configure-output.txt"

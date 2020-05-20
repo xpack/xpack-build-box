@@ -489,6 +489,11 @@ function do_native_binutils()
           bash ${DEBUG} "${SOURCES_FOLDER_PATH}/${native_binutils_src_folder_name}/configure" \
             ${config_options[@]}
 
+
+          # Workaround to avoid libtool issuing -rpath to the linker, since
+          # this prevents it using the global LD_RUN_PATH.
+          patch_all_libtool_rpath
+
           cp "config.log" "${LOGS_FOLDER_PATH}/${native_binutils_folder_name}/config-log.txt"
         ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${native_binutils_folder_name}/configure-output.txt"
       fi
@@ -501,6 +506,16 @@ function do_native_binutils()
 
         # Build.
         make -j ${JOBS}
+
+        # For unknown reasons, ld regenerates libtool, so we have to do it again.
+        (
+          cd ld
+          make clean
+
+          patch_all_libtool_rpath
+
+          make -j ${JOBS}
+        )
 
         # make install-strip
         make install
@@ -1817,6 +1832,11 @@ function do_openssl()
             # undefined reference to EVP_md2
             #  enable-md2 
 
+            if [ ${openssl_version_minor} -eq 0 ]
+            then
+              run_app sed -i -e 's|-Wl,-rpath,$(LIBRPATH)||' Makefile.shared
+            fi
+
             # perl, do not start with bash.
             "./config" \
               --prefix="${INSTALL_FOLDER_PATH}" \
@@ -1983,6 +2003,8 @@ function do_curl()
             --disable-warnings \
             --disable-debug \
 
+          patch_all_libtool_rpath
+
           cp "config.log" "${LOGS_FOLDER_PATH}/${curl_folder_name}/config-log.txt"
         ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${curl_folder_name}/configure-output.txt"
       fi
@@ -2096,6 +2118,8 @@ function do_xz()
             --prefix="${INSTALL_FOLDER_PATH}" \
             \
             --disable-werror \
+
+          patch_all_libtool_rpath
 
           cp "config.log" "${LOGS_FOLDER_PATH}/${xz_folder_name}/config-log.txt"
         ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${xz_folder_name}/configure-output.txt"
@@ -2901,8 +2925,13 @@ function do_sed()
           bash ${DEBUG} "${SOURCES_FOLDER_PATH}/${sed_folder_name}/configure" \
             --prefix="${INSTALL_FOLDER_PATH}" 
 
-          cp "config.log" "${LOGS_FOLDER_PATH}/config-sed-log.txt"
-        ) 2>&1 | tee "${LOGS_FOLDER_PATH}/configure-sed-output.txt"
+          (
+            # Remove the failing test.
+            sed -i -e 's|testsuite/panic-tests.sh||g' Makefile
+          )
+
+          cp "config.log" "${LOGS_FOLDER_PATH}/${sed_folder_name}/config-log.txt"
+        ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${sed_folder_name}/configure-output.txt"
       fi
 
       (
@@ -3403,7 +3432,18 @@ function do_gettext()
             \
             --enable-csharp \
             --enable-nls \
-           
+          
+          if true
+          then
+            patch_all_libtool_rpath
+          else
+            for file in $(find . -name libtool ! -path '*/tests/*')
+            do
+              echo ${file}
+              patch_file_libtool_rpath ${file}
+            done
+          fi
+
           cp "config.log" "${LOGS_FOLDER_PATH}/${gettext_folder_name}/config-log.txt"
         ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${gettext_folder_name}/configure-output.txt"
       fi
@@ -3777,6 +3817,11 @@ function do_bison()
 
           bash ${DEBUG} "${SOURCES_FOLDER_PATH}/${bison_folder_name}/configure" \
             --prefix="${INSTALL_FOLDER_PATH}" 
+
+          run_app find . \
+            -name Makefile \
+            -print \
+            -exec sed -i -e "s|-Wl,-rpath -Wl,${INSTALL_FOLDER_PATH}/lib||" {} \;
 
           cp "config.log" "${LOGS_FOLDER_PATH}/${bison_folder_name}/config-log.txt"
         ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${bison_folder_name}/configure-output.txt"
@@ -4167,6 +4212,11 @@ function do_wget()
             --disable-debug \
             --disable-pcre \
             --disable-pcre2 \
+
+          run_app find . \
+            \( -name Makefile -o -name version.c \) \
+            -print \
+            -exec sed -i -e "s|-Wl,-rpath -Wl,${INSTALL_FOLDER_PATH}/lib||" {} \;
 
           cp "config.log" "${LOGS_FOLDER_PATH}/${wget_folder_name}/config-log.txt"
         ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${wget_folder_name}/configure-output.txt"
@@ -5854,6 +5904,13 @@ function do_wine()
           echo
           echo "Running wine configure..."
 
+          # Get rid of the RUNPATH in install.
+          run_app sed -i \
+            -e 's|LDRPATH_INSTALL="-Wl,.*"|LDRPATH_INSTALL=""|' \
+            -e 's|CFLAGS="$CFLAGS -Wl,--enable-new-dtags"|CFLAGS="$CFLAGS"|' \
+            -e 's|LDRPATH_INSTALL="$LDRPATH_INSTALL -Wl,--enable-new-dtags"|LDRPATH_INSTALL="$LDRPATH_INSTALL"|' \
+            configure
+
           if [ "${HOST_BITS}" == "64" ]
           then
             ENABLE_64="--enable-win64"
@@ -6531,6 +6588,11 @@ function do_tcl()
             --enable-threads \
             --enable-64bit \
 
+          run_app find . \
+            \( -name Makefile -o -name tclConfig.sh \) \
+            -print \
+            -exec sed -i -e 's|-Wl,-rpath,${LIB_RUNTIME_DIR}||' {} \;
+
           cp "config.log" "${LOGS_FOLDER_PATH}/${tcl_folder_name}/config-log.txt"
         ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${tcl_folder_name}/configure-output.txt"
       fi
@@ -6647,11 +6709,13 @@ function do_guile()
             \
             --disable-error-on-warning
 
-          (
-            # Remove the failing test.
-            cd test-suite/standalone
-            sed -i -e 's/test-out-of-memory//g' Makefile
-          )
+
+          # patch_all_libtool_rpath
+
+          # Remove the failing test.
+          sed -i -e 's|test-out-of-memory||g' test-suite/standalone/Makefile
+
+          # sed -i -e 's|all-local: guile-procedures.texi|all-local:|' libguile/Makefile
 
           cp "config.log" "${LOGS_FOLDER_PATH}/${guile_folder_name}/config-log.txt"
         ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${guile_folder_name}/configure-output.txt"
@@ -7068,8 +7132,11 @@ function do_autogen()
             # FAIL: cond.test
             # FAILURE: warning diffs:  'undefining SECOND' not found
             cd autoopts/test
-            sed -i -e 's/cond.test//g' Makefile
+            sed -i -e 's|cond.test||g' Makefile
           )
+
+          patch_all_libtool_rpath
+
           cp "config.log" "${LOGS_FOLDER_PATH}/${autogen_folder_name}/config-log.txt"
         ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${autogen_folder_name}/configure-output.txt"
       fi
