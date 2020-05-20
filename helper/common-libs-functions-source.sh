@@ -1714,6 +1714,8 @@ function do_libgpg_error()
           bash ${DEBUG} "${SOURCES_FOLDER_PATH}/${libgpg_error_folder_name}/configure" \
             --prefix="${INSTALL_FOLDER_PATH}" 
 
+          patch_all_libtool_rpath
+
           # WARN-TEST
           sed -i -e 's|t-syserror$(EXEEXT)||' "tests/Makefile"
 
