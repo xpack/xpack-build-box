@@ -485,6 +485,8 @@ function do_native_binutils()
           config_options+=("--disable-gdb")
           config_options+=("--disable-werror")
           config_options+=("--disable-sim")
+          # Prevent ld to set DT_RUNPATH.
+          config_options+=("--disable-new-dtags")
 
           bash ${DEBUG} "${SOURCES_FOLDER_PATH}/${native_binutils_src_folder_name}/configure" \
             ${config_options[@]}
