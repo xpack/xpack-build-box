@@ -53,7 +53,7 @@ version="3.1"
 arch="i386"
 distro="ubuntu"
 release="12.04"
-from="ilegeul/${distro}:${arch}-${release}-tex-v${version}"
+from="ilegeul/${distro}:${arch}-${release}-tex-v3.1"
 name="xbb-bootstrap"
 
 host_run_docker_it
