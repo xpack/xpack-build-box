@@ -336,6 +336,8 @@ function ubuntu_install_develop()
 
   # These tools should be enough to build the bootstrap tools.
 
+  apt-get update
+   
   apt-get install --yes \
   \
   autoconf \
