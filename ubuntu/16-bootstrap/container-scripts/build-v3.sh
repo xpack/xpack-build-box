@@ -54,6 +54,11 @@ source "${helper_folder_path}/common-apps-functions-source.sh"
 
 source "${helper_folder_path}/common-versions-bootstrap-source.sh"
 
+function xbb_activate()
+{
+  :
+}
+
 function do_cleanup()
 {
   if [ -f "${WORK_FOLDER_PATH}/.dockerenv" ]
@@ -62,21 +67,9 @@ function do_cleanup()
   fi
 }
 
-function xbb_activate()
-{
-  xbb_activate_installed_bin  # Use bootstrap binaries
-  xbb_activate_installed_dev  # Use bootstrap libraries and headers
-}
-
 # -----------------------------------------------------------------------------
 
-detect_host
-
-docker_prepare_env
-
-prepare_xbb_env
-
-create_xbb_source
+do_prerequisites
 
 echo
 echo "$(uname) ${HOST_MACHINE} XBB bootstrap build script started..."
@@ -85,10 +78,6 @@ echo "$(uname) ${HOST_MACHINE} XBB bootstrap build script started..."
 
 build_versioned_components
 
-strip_static_objects
-
-patch_elf_rpath
-
 # -----------------------------------------------------------------------------
 
 echo
@@ -96,7 +85,6 @@ echo "$(uname) ${HOST_MACHINE} XBB bootstrap created in \"${INSTALL_FOLDER_PATH}
 
 do_cleanup
 
-echo
-echo "Container done."
+stop_timer
 
 # -----------------------------------------------------------------------------
