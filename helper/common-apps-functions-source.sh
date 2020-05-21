@@ -3514,6 +3514,7 @@ function do_gettext()
             \
             --enable-csharp \
             --enable-nls \
+            --enable-threads \
           
           if true
           then
