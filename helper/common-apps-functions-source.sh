@@ -3516,6 +3516,7 @@ function do_gettext()
             --enable-nls \
             --enable-threads \
           
+          # TODO: cleanups
           if true
           then
             patch_all_libtool_rpath
@@ -3525,6 +3526,18 @@ function do_gettext()
               echo ${file}
               patch_file_libtool_rpath ${file}
             done
+          fi
+
+          if [ "${IS_BOOTSTRAP}" == "y" ]
+          then
+            if is_arm
+            then
+              # WARN-TEST
+              run_app sed -i \
+                -e 's|test-thread_create$(EXEEXT) ||' \
+                -e 's|test-tls$(EXEEXT) ||' \
+                gettext-tools/gnulib-tests/Makefile
+            fi
           fi
 
           cp "config.log" "${LOGS_FOLDER_PATH}/${gettext_folder_name}/config-log.txt"
