@@ -4672,6 +4672,14 @@ function do_cmake()
         ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${cmake_folder_name}/cmake-output.txt"
       fi
 
+      if [ -n "${XBB_PARENT_FOLDER_PATH}" ]
+      then
+        run_app find . \
+          -name link.txt \
+          -print \
+          -exec sed -i -e "s|-Wl,-rpath,${XBB_PARENT_FOLDER_PATH}/lib||" {} \;
+      fi
+
       (
         echo
         echo "Running cmake make..."
@@ -4729,6 +4737,10 @@ function test_cmake()
     run_app "${INSTALL_FOLDER_PATH}/bin/cmake" --version
     run_app "${INSTALL_FOLDER_PATH}/bin/ctest" --version
     run_app "${INSTALL_FOLDER_PATH}/bin/cpack" --version
+    if [ -f "${INSTALL_FOLDER_PATH}/bin/ccmake" ]
+    then
+      run_app "${INSTALL_FOLDER_PATH}/bin/ccmake" --version
+    fi
 
     echo
     echo "Checking the cmake binaries shared libraries..."
@@ -4736,6 +4748,10 @@ function test_cmake()
     show_libs "${INSTALL_FOLDER_PATH}/bin/cmake"
     show_libs "${INSTALL_FOLDER_PATH}/bin/ctest"
     show_libs "${INSTALL_FOLDER_PATH}/bin/cpack"
+    if [ -f "${INSTALL_FOLDER_PATH}/bin/ccmake" ]
+    then
+      show_libs "${INSTALL_FOLDER_PATH}/bin/ccmake"
+    fi
   )
 }
 
