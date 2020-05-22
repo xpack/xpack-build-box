@@ -1008,7 +1008,49 @@ __EOF__
       exit 1
     fi
 
-    # rm -rf hello.cpp hello
+  # Note: __EOF__ is quoted to prevent substitutions here.
+  cat <<'__EOF__' > except.cpp
+#include <iostream>
+#include <exception>
+
+struct MyException : public std::exception {
+   const char* what() const throw () {
+      return "MyException";
+   }
+};
+ 
+void
+func(void)
+{
+  throw MyException();
+}
+
+int
+main(int argc, char* argv[])
+{
+  try {
+    func();
+  } catch(MyException& e) {
+    std::cout << e.what() << std::endl;
+  } catch(std::exception& e) {
+    std::cout << "Other" << std::endl;
+  }  
+
+  return 0;
+}
+__EOF__
+
+    "${INSTALL_FOLDER_PATH}/usr/bin/g++${XBB_GCC_SUFFIX}" except.cpp -o except -v 
+
+    show_libs except
+
+    output=$(./except)
+    echo ${output}
+
+    if [ "x${output}x" != "xMyExceptionx" ]
+    then
+      exit 1
+    fi
   ) 
 }
 
