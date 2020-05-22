@@ -112,7 +112,7 @@ export TEXLIVE_FOLDER="${HOME}/opt/texlive"
 __EOF__
 # The above marker must start in the first column.
 
-  if [ "${IS_BOOTSTRAP}" == "y" ]
+  if [ "${XBB_LAYER}" == "xbb-bootstrap" ]
   then
     echo "export XBB_BOOTSTRAP_FOLDER=\"\${HOME}/opt/$(basename "${XBB_FOLDER}")\"" >> "${INSTALL_FOLDER_PATH}/xbb-source.sh"
   else
@@ -121,7 +121,7 @@ __EOF__
 
   echo "export XBB_VERSION=\"${XBB_VERSION}\"" >> "${INSTALL_FOLDER_PATH}/xbb-source.sh"
 
-  if [ "${IS_BOOTSTRAP}" == "y" ]
+  if [ "${XBB_LAYER}" == "xbb-bootstrap" ]
   then
 
     # Note: __EOF__ is quoted to prevent substitutions here.
