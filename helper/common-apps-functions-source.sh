@@ -794,6 +794,7 @@ function do_native_gcc()
             fi
 
             if false # [ "${IS_BOOTSTRAP}" != "y" ]
+            config_options+=("--disable-rpath")
             then
               config_options+=("--with-sysroot=${INSTALL_FOLDER_PATH}")
             fi
@@ -1374,6 +1375,7 @@ function do_mingw_all()
             --enable-checking=release \
             --disable-dw2-exceptions \
             --disable-multilib \
+            --disable-rpath \
             ${config_options[@]} \
 
           set -u
@@ -2161,6 +2163,7 @@ function do_xz()
             --prefix="${INSTALL_FOLDER_PATH}" \
             \
             --disable-werror \
+            --disable-rpath \
 
           patch_all_libtool_rpath
 
@@ -2287,7 +2290,9 @@ function do_tar()
           bash "${SOURCES_FOLDER_PATH}/${tar_src_folder_name}/configure" --help
 
           bash ${DEBUG} "${SOURCES_FOLDER_PATH}/${tar_src_folder_name}/configure" \
-            --prefix="${INSTALL_FOLDER_PATH}" 
+            --prefix="${INSTALL_FOLDER_PATH}" \
+            \
+            --disable-rpath \
 
           cp "config.log" "${LOGS_FOLDER_PATH}/${tar_folder_name}/config-log.txt"
         ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${tar_folder_name}/configure-output.txt"
@@ -2447,6 +2452,7 @@ function do_coreutils()
             --prefix="${INSTALL_FOLDER_PATH}" \
             \
             --with-openssl \
+            --disable-rpath \
             ${config_options[@]}
 
           set -u
@@ -2731,6 +2737,8 @@ function do_m4()
 
           bash ${DEBUG} "${SOURCES_FOLDER_PATH}/${m4_src_folder_name}/configure" \
             --prefix="${INSTALL_FOLDER_PATH}" \
+            \
+            --disable-rpath \
 
           cp "config.log" "${LOGS_FOLDER_PATH}/${m4_folder_name}/config-log.txt"
         ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${m4_folder_name}/configure-output.txt"
@@ -2861,6 +2869,7 @@ function do_gawk()
             --prefix="${INSTALL_FOLDER_PATH}" \
             \
             --without-libsigsegv \
+            --disable-rpath \
 
           cp "config.log" "${LOGS_FOLDER_PATH}/${gawk_folder_name}/config-log.txt"
         ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${gawk_folder_name}/configure-output.txt"
@@ -2989,7 +2998,9 @@ function do_sed()
           bash "${SOURCES_FOLDER_PATH}/${sed_src_folder_name}/configure" --help
 
           bash ${DEBUG} "${SOURCES_FOLDER_PATH}/${sed_src_folder_name}/configure" \
-            --prefix="${INSTALL_FOLDER_PATH}" 
+            --prefix="${INSTALL_FOLDER_PATH}" \
+            \
+            --disable-rpath \
 
           (
             # Remove the failing test.
@@ -3515,6 +3526,7 @@ function do_gettext()
             --enable-csharp \
             --enable-nls \
             --enable-threads \
+            --disable-rpath \
           
           # TODO: cleanups
           if true
@@ -3801,7 +3813,9 @@ function do_diffutils()
           bash "${SOURCES_FOLDER_PATH}/${diffutils_src_folder_name}/configure" --help
 
           bash ${DEBUG} "${SOURCES_FOLDER_PATH}/${diffutils_src_folder_name}/configure" \
-            --prefix="${INSTALL_FOLDER_PATH}" 
+            --prefix="${INSTALL_FOLDER_PATH}" \
+            \
+            --disable-rpath \
 
           cp "config.log" "${LOGS_FOLDER_PATH}/${diffutils_folder_name}/config-log.txt"
         ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${diffutils_folder_name}/configure-output.txt"
@@ -3924,7 +3938,9 @@ function do_bison()
           bash "${SOURCES_FOLDER_PATH}/${bison_src_folder_name}/configure" --help
 
           bash ${DEBUG} "${SOURCES_FOLDER_PATH}/${bison_src_folder_name}/configure" \
-            --prefix="${INSTALL_FOLDER_PATH}" 
+            --prefix="${INSTALL_FOLDER_PATH}" \
+            \
+            --disable-rpath \
 
           run_app find . \
             -name Makefile \
@@ -4081,7 +4097,9 @@ function do_flex()
           bash "${SOURCES_FOLDER_PATH}/${flex_src_folder_name}/configure" --help
 
           bash ${DEBUG} "${SOURCES_FOLDER_PATH}/${flex_src_folder_name}/configure" \
-            --prefix="${INSTALL_FOLDER_PATH}"
+            --prefix="${INSTALL_FOLDER_PATH}" \
+            \
+            --disable-rpath \
 
           cp "config.log" "${LOGS_FOLDER_PATH}/${flex_folder_name}/config-log.txt"
         ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${flex_folder_name}/configure-output.txt"
@@ -4195,7 +4213,9 @@ function do_make()
           bash "${SOURCES_FOLDER_PATH}/${make_src_folder_name}/configure" --help
 
           bash ${DEBUG} "${SOURCES_FOLDER_PATH}/${make_src_folder_name}/configure" \
-            --prefix="${INSTALL_FOLDER_PATH}"
+            --prefix="${INSTALL_FOLDER_PATH}" \
+            \
+            --disable-rpath \
 
           cp "config.log" "${LOGS_FOLDER_PATH}/${make_folder_name}/config-log.txt"
         ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${make_folder_name}/configure-output.txt"
@@ -4333,6 +4353,7 @@ function do_wget()
             --disable-debug \
             --disable-pcre \
             --disable-pcre2 \
+            --disable-rpath \
 
           run_app find . \
             \( -name Makefile -o -name version.c \) \
@@ -4450,7 +4471,9 @@ function do_texinfo()
           bash "${SOURCES_FOLDER_PATH}/${texinfo_src_folder_name}/configure" --help
 
           bash ${DEBUG} "${SOURCES_FOLDER_PATH}/${texinfo_src_folder_name}/configure" \
-            --prefix="${INSTALL_FOLDER_PATH}" 
+            --prefix="${INSTALL_FOLDER_PATH}" \
+            \
+            --disable-rpath \
 
           cp "config.log" "${LOGS_FOLDER_PATH}/${texinfo_folder_name}/config-log.txt"
         ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${texinfo_folder_name}/configure-output.txt"
@@ -6542,6 +6565,7 @@ function do_gnupg()
             \
             --enable-maintainer-mode \
             --enable-symcryptrun \
+            --disable-rpath \
 
           cp "config.log" "${LOGS_FOLDER_PATH}/${gnupg_folder_name}/config-log.txt"
         ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${gnupg_folder_name}/configure-output.txt"
@@ -6995,6 +7019,7 @@ function do_tcl()
             \
             --enable-threads \
             --enable-64bit \
+            --disable-rpath \
 
           run_app find . \
             \( -name Makefile -o -name tclConfig.sh \) \
@@ -7125,6 +7150,7 @@ function do_guile()
             --prefix="${INSTALL_FOLDER_PATH}" \
             \
             --disable-error-on-warning \
+            --disable-rpath \
 
           patch_all_libtool_rpath
 
@@ -7571,6 +7597,7 @@ function do_autogen()
             --prefix="${INSTALL_FOLDER_PATH}" \
             \
             --disable-dependency-tracking \
+            --disable-rpath \
 
           (
             # FAIL: cond.test
@@ -7726,6 +7753,7 @@ function do_bash()
           config_options+=("--with-curses")
           config_options+=("--with-installed-readline")
           config_options+=("--enable-readline")
+          config_options+=("--disable-rpath")
 
           bash ${DEBUG} "${SOURCES_FOLDER_PATH}/${bash_src_folder_name}/configure" \
             ${config_options[@]}

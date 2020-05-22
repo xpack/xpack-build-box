@@ -1559,6 +1559,7 @@ function do_libpng()
             --prefix="${INSTALL_FOLDER_PATH}" \
             \
             --enable-arm-neon=no \
+            --disable-rpath \
 
           patch_all_libtool_rpath
 
@@ -2506,6 +2507,8 @@ function do_libunistring()
 
           bash ${DEBUG} "${SOURCES_FOLDER_PATH}/${libunistring_src_folder_name}/configure" \
             --prefix="${INSTALL_FOLDER_PATH}" \
+            \
+            --disable-rpath \
 
           patch_all_libtool_rpath
 
@@ -2784,6 +2787,7 @@ function do_ncurses()
 
           config_options+=("--disable-lib-suffixes")
           config_options+=("--disable-overwrite")
+          config_options+=("--disable-rpath")
 
           NCURSES_DISABLE_WIDEC=${NCURSES_DISABLE_WIDEC:-""}
 
