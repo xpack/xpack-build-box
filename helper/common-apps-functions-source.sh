@@ -2909,11 +2909,32 @@ function do_gawk()
 
           bash "${SOURCES_FOLDER_PATH}/${gawk_src_folder_name}/configure" --help
 
+          # --disable-extensions
+          # Extension tests fail:
+          # apiterm
+          # /root/Work/xbb-bootstrap-3.2-ubuntu-12.04-i686/sources/gawk-4.2.1/test/apiterm.ok _apiterm differ: byte 1, line 1
+          # filefuncs
+          # cmp: EOF on /root/Work/xbb-bootstrap-3.2-ubuntu-12.04-i686/sources/gawk-4.2.1/test/filefuncs.ok
+          # fnmatch
+          # /root/Work/xbb-bootstrap-3.2-ubuntu-12.04-i686/sources/gawk-4.2.1/test/fnmatch.ok _fnmatch differ: byte 1, line 1
+          # fork
+          # cmp: EOF on /root/Work/xbb-bootstrap-3.2-ubuntu-12.04-i686/sources/gawk-4.2.1/test/fork.ok
+          # fork2
+          # cmp: EOF on /root/Work/xbb-bootstrap-3.2-ubuntu-12.04-i686/sources/gawk-4.2.1/test/fork2.ok
+          # fts
+          # gawk: /root/Work/xbb-bootstrap-3.2-ubuntu-12.04-i686/sources/gawk-4.2.1/test/fts.awk:2: fatal: load_ext: library `../extension/.libs/filefuncs.so': does not define `plugin_is_GPL_compatible' (../extension/.libs/filefuncs.so: undefined symbol: plugin_is_GPL_compatible)
+
+          # --enable-builtin-intdiv0
+          # ! gawk: mpfrsqrt.awk:13: error: can't open shared library `intdiv' for reading (No such file or directory)
+          # ! EXIT CODE: 1
+
           bash ${DEBUG} "${SOURCES_FOLDER_PATH}/${gawk_src_folder_name}/configure" \
             --prefix="${INSTALL_FOLDER_PATH}" \
             \
             --without-libsigsegv \
             --disable-rpath \
+            --disable-extensions \
+            --enable-builtin-intdiv0 \
 
           cp "config.log" "${LOGS_FOLDER_PATH}/${gawk_folder_name}/config-log.txt"
         ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${gawk_folder_name}/configure-output.txt"
@@ -2933,25 +2954,7 @@ function do_gawk()
         # WARN-TEST
         if [ "${RUN_LONG_TESTS}" == "y" ]
         then
-          # apiterm
-          # /root/Work/xbb-bootstrap-3.2-ubuntu-12.04-i686/sources/gawk-4.2.1/test/apiterm.ok _apiterm differ: byte 1, line 1
-          # filefuncs
-          # cmp: EOF on /root/Work/xbb-bootstrap-3.2-ubuntu-12.04-i686/sources/gawk-4.2.1/test/filefuncs.ok
-          # fnmatch
-          # /root/Work/xbb-bootstrap-3.2-ubuntu-12.04-i686/sources/gawk-4.2.1/test/fnmatch.ok _fnmatch differ: byte 1, line 1
-          # fork
-          # cmp: EOF on /root/Work/xbb-bootstrap-3.2-ubuntu-12.04-i686/sources/gawk-4.2.1/test/fork.ok
-          # fork2
-          # cmp: EOF on /root/Work/xbb-bootstrap-3.2-ubuntu-12.04-i686/sources/gawk-4.2.1/test/fork2.ok
-          # fts
-          # gawk: /root/Work/xbb-bootstrap-3.2-ubuntu-12.04-i686/sources/gawk-4.2.1/test/fts.awk:2: fatal: load_ext: library `../extension/.libs/filefuncs.so': does not define `plugin_is_GPL_compatible' (../extension/.libs/filefuncs.so: undefined symbol: plugin_is_GPL_compatible)
-          :
-        else
-          # 2 tests fail.
-          if [ "${RUN_LONG_TESTS}" == "y" ]
-          then
-            make -j1 check
-          fi
+          : # make -j1 check
         fi
 
       ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${gawk_folder_name}/make-output.txt"
