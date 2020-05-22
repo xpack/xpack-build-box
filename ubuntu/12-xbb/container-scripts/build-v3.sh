@@ -37,10 +37,8 @@ script_folder_name="$(basename "${script_folder_path}")"
 
 WORK_FOLDER_PATH="${HOME}/Work"
 
-XBB_FOLDER_PATH="/opt/xbb"
-XBB_BOOTSTRAP_FOLDER_PATH="/opt/xbb-bootstrap"
-
-IS_BOOTSTRAP="n"
+XBB_INSTALL_FOLDER_PATH="/opt/xbb"
+XBB_PARENT_FOLDER_PATH="/opt/xbb-bootstrap"
 
 # -----------------------------------------------------------------------------
 
@@ -54,7 +52,7 @@ source "${helper_folder_path}/common-apps-functions-source.sh"
 
 source "${helper_folder_path}/common-versions-xbb-source.sh"
 
-source "${XBB_BOOTSTRAP_FOLDER_PATH}/xbb-source.sh"
+source "${XBB_PARENT_FOLDER_PATH}/xbb-source.sh"
 
 # Override function, must be here.
 function xbb_activate()

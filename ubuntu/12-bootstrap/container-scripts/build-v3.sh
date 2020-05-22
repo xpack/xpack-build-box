@@ -37,10 +37,7 @@ script_folder_name="$(basename "${script_folder_path}")"
 
 WORK_FOLDER_PATH="${HOME}/Work"
 
-XBB_FOLDER_PATH="/opt/xbb-bootstrap"
-XBB_BOOTSTRAP_FOLDER_PATH="${XBB_FOLDER_PATH}"
-
-IS_BOOTSTRAP="y"
+XBB_INSTALL_FOLDER_PATH="/opt/xbb-bootstrap"
 
 # -----------------------------------------------------------------------------
 

@@ -72,32 +72,33 @@ function host_clean_docker_input()
   rm -rf "${script_folder_path}/input"
 }
 
-function host_run_docker_it()
+function host_run_docker_it_with_volume()
 {
   # Warning: do not use HOST_MACHINE!
-  out="${HOME}/opt/${name}-${distro}-${release}-${arch}"
+  out="${HOME}/opt/${layer}-${distro}-${release}-${arch}"
   mkdir -pv "${out}"
-  bootstrap_path="${HOME}/opt/${name}-bootstrap-${distro}-${release}-${arch}"
 
   echo 
   echo "Running parent Docker image ${from}..."
 
-  if [[ "${name}" == *-bootstrap ]]
+  if [[ "${layer}" == *-bootstrap ]]
   then
     docker run \
       --interactive \
       --tty \
-      --hostname "${name}-${arch}" \
+      --hostname "${layer}-${arch}" \
       --workdir="/root" \
       --env DEBUG="${DEBUG}" \
       --env JOBS="${JOBS:-${NPROC}}" \
       --env XBB_VERSION="${version}" \
+      --env XBB_LAYER="${layer}" \
       --env RUN_LONG_TESTS="${RUN_LONG_TESTS:-""}" \
       --volume="${WORK_FOLDER_PATH}:/root/Work" \
       --volume="${script_folder_path}/input:/input" \
-      --volume="${out}:/opt/${name}" \
+      --volume="${out}:/opt/${layer}" \
       ${from}
   else
+    bootstrap_path="${HOME}/opt/${layer}-bootstrap-${distro}-${release}-${arch}"
     if [ ! -d "${bootstrap_path}" ]
     then
       echo "Missing bootstrap folder ${bootstrap_path}."
@@ -107,24 +108,25 @@ function host_run_docker_it()
     docker run \
       --interactive \
       --tty \
-      --hostname "${name}-${arch}" \
+      --hostname "${layer}-${arch}" \
       --workdir="/root" \
       --env DEBUG="${DEBUG}" \
       --env JOBS="${JOBS:-${NPROC}}" \
       --env XBB_VERSION="${version}" \
+      --env XBB_LAYER="${layer}" \
       --env RUN_LONG_TESTS="${RUN_LONG_TESTS:-""}" \
       --volume="${WORK_FOLDER_PATH}:/root/Work" \
       --volume="${script_folder_path}/input:/input" \
-      --volume="${out}:/opt/${name}" \
-      --volume="${bootstrap_path}:/opt/${name}-bootstrap" \
+      --volume="${out}:/opt/${layer}" \
+      --volume="${bootstrap_path}:/opt/${layer}-bootstrap" \
       ${from}
   fi
 }
 
-function host_run_docker_it_bs()
+function host_run_docker_it_with_image()
 {
   # Warning: do not use HOST_MACHINE!
-  out="${HOME}/opt/${name}-${distro}-${release}-${arch}"
+  out="${HOME}/opt/${layer}-${distro}-${release}-${arch}"
   mkdir -pv "${out}"
 
   echo 
@@ -133,15 +135,16 @@ function host_run_docker_it_bs()
     docker run \
       --interactive \
       --tty \
-      --hostname "${name}-${arch}" \
+      --hostname "${layer}-${arch}" \
       --workdir="/root" \
       --env DEBUG="${DEBUG}" \
       --env JOBS="${JOBS:-${NPROC}}" \
       --env XBB_VERSION="${version}" \
+      --env XBB_LAYER="${layer}" \
       --env RUN_LONG_TESTS="${RUN_LONG_TESTS:-""}" \
       --volume="${WORK_FOLDER_PATH}:/root/Work" \
       --volume="${script_folder_path}/input:/input" \
-      --volume="${out}:/opt/${name}" \
+      --volume="${out}:/opt/${layer}" \
       ${from}
 }
 
@@ -150,6 +153,7 @@ function host_run_docker_build()
   local version="$1"
   local tag="$2"
   local dockerfile="$3"
+  local layer="$4"
 
   set +e
   docker rmi "${tag}"
@@ -161,6 +165,7 @@ function host_run_docker_build()
     --build-arg DEBUG="${DEBUG}" \
     --build-arg JOBS="${JOBS:-${NPROC}}" \
     --build-arg XBB_VERSION="${version}" \
+    --build-arg XBB_LAYER="${layer}"
     --build-arg RUN_LONG_TESTS="${RUN_LONG_TESTS:-""}" \
     --tag "${tag}" \
     --file "${dockerfile}" \
@@ -185,18 +190,17 @@ function docker_prepare_env()
     touch "${WORK_FOLDER_PATH}/.dockerenv"
   fi
   
-  IS_BOOTSTRAP=${IS_BOOTSTRAP:-""}
-  # XBB_BOOTSTRAP_FOLDER_PATH=${XBB_BOOTSTRAP_FOLDER_PATH:-""}
-  # RUN_LONG_TESTS=${RUN_LONG_TESTS:=""}
-
   # The place where files are downloaded.
   CACHE_FOLDER_PATH="${WORK_FOLDER_PATH}/cache"
 
+  # ---------------------------------------------------------------------------
+
   # Make all tools choose gcc, not the old cc.
+  # Redefined more elaborately.
   export CC=gcc
   export CXX=g++
 
-  export IS_BOOTSTRAP
+  export CACHE_FOLDER_PATH
 
   echo
   echo "docker env..."

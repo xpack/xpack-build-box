@@ -47,7 +47,7 @@ host_init_docker_input \
   "$(dirname $(dirname "${script_folder_path}"))/ca-bundle/ca-bundle.crt" \
 
 version="3.2"
-layer="bootstrap"
+layer="xbb-bootstrap"
 
 arch="arm32v7"
 distro="ubuntu"
@@ -56,7 +56,7 @@ release="16.04"
 tag="ilegeul/${distro}:${arch}-${release}-${layer}-v${version}"
 dockerfile="${arch}-Dockerfile-v${version}"
 
-host_run_docker_build "${version}" "${tag}" "${dockerfile}"
+host_run_docker_build "${version}" "${tag}" "${dockerfile}" "${layer}"
 
 host_clean_docker_input
 

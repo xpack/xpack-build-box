@@ -48,15 +48,15 @@ host_init_docker_env
 host_init_docker_input \
   "$(dirname $(dirname "${script_folder_path}"))/ca-bundle/ca-bundle.crt" \
 
-version="3.1"
+version="3.2"
 
 arch="i386"
 distro="ubuntu"
 release="12.04"
-from="ilegeul/${distro}:${arch}-${release}-tex-v3.1"
-name="xbb"
+from="ilegeul/${distro}:${arch}-${release}-bootstrap-v${version}"
+layer="xbb"
 
-host_run_docker_it
+host_run_docker_it_with_image
 
 host_clean_docker_input
 

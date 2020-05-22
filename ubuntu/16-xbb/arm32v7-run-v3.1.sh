@@ -54,9 +54,9 @@ arch="arm32v7"
 distro="ubuntu"
 release="16.04"
 from="ilegeul/${distro}:${arch}-${release}-bootstrap-v3.1"
-name="xbb"
+layer="xbb"
 
-host_run_docker_it
+host_run_docker_it_with_volume
 
 host_clean_docker_input
 

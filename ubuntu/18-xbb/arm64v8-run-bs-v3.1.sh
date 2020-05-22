@@ -54,9 +54,9 @@ arch="arm64v8"
 distro="ubuntu"
 release="18.04"
 from="ilegeul/${distro}:${arch}-${release}-bootstrap-v3.1"
-name="xbb"
+layer="xbb"
 
-host_run_docker_it_bs
+host_run_docker_it_with_image
 
 host_clean_docker_input
 

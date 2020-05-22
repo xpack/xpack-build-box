@@ -26,22 +26,22 @@ The following commands can be used to create the docker container
 based on the bootstrap image:
 
 ```console
-$ bash ~/Downloads/xpack-build-box.git/ubuntu/12-xbb/amd64-run-bs-v3.1.sh
-$ bash ~/Downloads/xpack-build-box.git/ubuntu/12-xbb/i386-run-bs-v3.1.sh
+$ bash ~/Downloads/xpack-build-box.git/ubuntu/12-xbb/amd64-run-with-image-v3.1.sh
+$ bash ~/Downloads/xpack-build-box.git/ubuntu/12-xbb/i386-run-with-image-v3.1.sh
 
-$ bash ~/Downloads/xpack-build-box.git/ubuntu/12-xbb/amd64-run-bs-v3.2.sh
-$ bash ~/Downloads/xpack-build-box.git/ubuntu/12-xbb/i386-run-bs-v3.2.sh
+$ bash ~/Downloads/xpack-build-box.git/ubuntu/12-xbb/amd64-run-with-image-v3.2.sh
+$ bash ~/Downloads/xpack-build-box.git/ubuntu/12-xbb/i386-run-with-image-v3.2.sh
 ```
 
 The following commands can be used to create the docker container
 with the bootstrap also mounted from the host:
 
 ```console
-$ bash ~/Downloads/xpack-build-box.git/ubuntu/12-xbb/amd64-run-v3.1.sh
-$ bash ~/Downloads/xpack-build-box.git/ubuntu/12-xbb/i386-run-v3.1.sh
+$ bash ~/Downloads/xpack-build-box.git/ubuntu/12-xbb/amd64-run-with-volume-v3.1.sh
+$ bash ~/Downloads/xpack-build-box.git/ubuntu/12-xbb/i386-run-with-volume-v3.1.sh
 
-$ bash ~/Downloads/xpack-build-box.git/ubuntu/12-xbb/amd64-run-v3.2.sh
-$ bash ~/Downloads/xpack-build-box.git/ubuntu/12-xbb/i386-run-v3.2.sh
+$ bash ~/Downloads/xpack-build-box.git/ubuntu/12-xbb/amd64-run-with-volume-v3.2.sh
+$ bash ~/Downloads/xpack-build-box.git/ubuntu/12-xbb/i386-run-with-volume-v3.2.sh
 ```
 
 Inside the container, run the build script:

@@ -50,13 +50,13 @@ host_init_docker_input \
 
 version="3.2"
 
-arch="i386"
+arch="amd64"
 distro="ubuntu"
 release="12.04"
-from="ilegeul/${distro}:${arch}-${release}-bootstrap-v${version}"
-name="xbb"
+from="ilegeul/${distro}:${arch}-${release}-tex-v3.1"
+layer="xbb"
 
-host_run_docker_it_bs
+host_run_docker_it_with_volume
 
 host_clean_docker_input
 
