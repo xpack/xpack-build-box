@@ -178,6 +178,13 @@ function build_versioned_components()
     # depends=('glibc')
     do_tar "1.32"
 
+    # depends=(gmp libltdl ncurses texinfo libunistring gc libffi)
+    do_guile "2.2.7"
+
+    # Requires guile.
+    do_autogen "5.18.16"
+
+    # After autogen, requires libopts.so.25.
     # depends=('glibc' 'libidn2' 'libtasn1' 'libunistring' 'nettle' 'p11-kit' 'readline' 'zlib')
     do_gnutls "3.6.11.1" # "3.6.7"
 
@@ -324,15 +331,6 @@ function build_versioned_components()
     do_re2c "1.3"
 
     do_sphinx "2.4.4"
-
-    # Avoid it for now, apparently has a flimpsy memory test. 
-    # FAIL: test-out-of-memory
-    # https://lists.gnu.org/archive/html/guile-user/2017-11/msg00062.html
-    # depends=(gmp libltdl ncurses texinfo libunistring gc libffi)
-    do_guile "2.2.7"
-
-    # Requires guile.
-    do_autogen "5.18.16"
 
     # -------------------------------------------------------------------------
 
