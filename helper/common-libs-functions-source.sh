@@ -1181,7 +1181,7 @@ function do_gnutls()
       export CPPFLAGS="${XBB_CPPFLAGS}"
       export CFLAGS="${XBB_CFLAGS_NO_W}"
       export CXXFLAGS="${XBB_CXXFLAGS_NO_W}"
-      export LDFLAGS="${XBB_LDFLAGS_LIB}"
+      export LDFLAGS="${XBB_LDFLAGS_LIB} -v"
 
       if is_darwin
       then
@@ -1209,9 +1209,23 @@ function do_gnutls()
             --with-included-unistring \
             --without-p11-kit \
             \
-            --enable-guile \
+            --disable-doc \
+            --disable-full-test-suite \
+            --disable-guile \
+            --disable-rpath \
 
           patch_all_libtool_rpath
+
+          #    -e 's|-rpath $(guileextensiondir)||' \
+          #    -e 's|-rpath $(pkglibdir)||' \
+          #    -e 's|-rpath $(libdir)||' \
+
+          run_app find . \
+            -name Makefile \
+            -print \
+            -exec sed -i \
+              -e "s|-Wl,-rpath -Wl,${INSTALL_FOLDER_PATH}/lib||" \
+              {} \;
 
           cp "config.log" "${LOGS_FOLDER_PATH}/${gnutls_folder_name}/config-log.txt"
         ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${gnutls_folder_name}/configure-output.txt"
@@ -1227,7 +1241,7 @@ function do_gnutls()
         # make install-strip
         make install
 
-        # It takes very, very long.
+        # It takes very, very long. use --disable-full-test-suite
         # i386: FAIL: srp
         if [ "${RUN_LONG_TESTS}" == "y" ]
         then
