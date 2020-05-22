@@ -3254,6 +3254,9 @@ function do_automake()
 
   local automake_folder_name="${automake_src_folder_name}"
 
+  # help2man: can't get `--help' info from automake-1.16
+  # Try `--no-discard-stderr' if option outputs to stderr
+
   local automake_patch_file_path="${helper_folder_path}/patches/${automake_folder_name}.patch"
   local automake_stamp_file_path="${STAMPS_FOLDER_PATH}/stamp-${automake_folder_name}-installed"
   if [ ! -f "${automake_stamp_file_path}" -o ! -d "${BUILD_FOLDER_PATH}/${automake_folder_name}" ]
@@ -7216,6 +7219,8 @@ function do_guile()
 
           patch_all_libtool_rpath
 
+          # FAIL: test-out-of-memory
+          # https://lists.gnu.org/archive/html/guile-user/2017-11/msg00062.html
           # Remove the failing test.
           sed -i -e 's|test-out-of-memory||g' test-suite/standalone/Makefile
 

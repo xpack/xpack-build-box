@@ -412,6 +412,8 @@ function build_versioned_components()
     # Requires gmp, mpfr, mpc, isl.
     do_native_gcc "${XBB_GCC_VERSION}"
 
+    # -------------------------------------------------------------------------
+
     # From here on, a reasonable C++11 is available.
 
     strip_static_objects
