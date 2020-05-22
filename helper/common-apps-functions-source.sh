@@ -3457,11 +3457,7 @@ function do_libtool()
         # It takes too long (170 tests).
         if [ "${RUN_LONG_TESTS}" == "y" ]
         then
-          # It takes too long (170 tests).
-          if [ "${RUN_LONG_TESTS}" == "y" ]
-          then
-            make -j1 check gl_public_submodule_commit=
-          fi
+          : # make -j1 check gl_public_submodule_commit=
         fi
 
       ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${libtool_folder_name}/make-output.txt"
