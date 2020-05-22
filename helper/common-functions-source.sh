@@ -229,8 +229,8 @@ function is_arm()
 }
 
 function prepare_xbb_env()
-{
-  IS_BOOTSTRAP=${IS_BOOTSTRAP:-""}
+{  
+  XBB_PARENT_FOLDER_PATH=${XBB_PARENT_FOLDER_PATH:=""}
   RUN_LONG_TESTS=${RUN_LONG_TESTS:=""}
 
   if [ "${HOST_UNAME}" == "Darwin" ]
@@ -238,7 +238,7 @@ function prepare_xbb_env()
     macos_version=$(defaults read loginwindow SystemVersionStampAsString)
     xclt_version=$(xcode-select --version | sed -e 's/xcode-select version \([0-9]*\)\./\1/')
 
-    if [ "${IS_BOOTSTRAP}" == "y" ]
+    if [ "${XBB_LAYER}" == "xbb-bootstrap" ]
     then
       # TODO
       CC=${CC:-"clang"}
@@ -248,26 +248,40 @@ function prepare_xbb_env()
       prepare_gcc_env "" "-8bs"
     fi
   else
-    if [ "${IS_BOOTSTRAP}" == "y" ]
+    if [ "${XBB_LAYER}" == "xbb-bootstrap" ]
     then
       prepare_gcc_env ""
-    else
+    elif [ "${XBB_LAYER}" == "xbb" ]
+    then
       prepare_gcc_env "" "-xbs"
+    elif [ "${XBB_LAYER}" == "xbb-test" ]
+    then
+      prepare_gcc_env "" "-xbb"
+    else
+      echo "XBB_LAYER ${XBB_LAYER} not supported."
+      exit 1
     fi
   fi
 
-  if [ "${IS_BOOTSTRAP}" != "y" ]
+  if [ "${XBB_LAYER}" == "xbb" ]
   then
-    if [ ! -d "${XBB_BOOTSTRAP_FOLDER_PATH}" -o ! -x "${XBB_BOOTSTRAP_FOLDER_PATH}/usr/bin/${CXX}" ]
+    if [ ! -d "${XBB_PARENT_FOLDER_PATH}" -o ! -x "${XBB_PARENT_FOLDER_PATH}/usr/bin/${CXX}" ]
     then
-      echo "XBB Bootstrap compiler not found in \"${XBB_BOOTSTRAP_FOLDER_PATH}\""
+      echo "XBB Bootstrap compiler not found in \"${XBB_PARENT_FOLDER_PATH}\""
+      exit 1
+    fi
+  elif [ "${XBB_LAYER}" == "xbb-test" ]
+  then
+    if [ ! -d "${XBB_PARENT_FOLDER_PATH}" -o ! -x "${XBB_PARENT_FOLDER_PATH}/usr/bin/${CXX}" ]
+    then
+      echo "XBB compiler not found in \"${XBB_PARENT_FOLDER_PATH}\""
       exit 1
     fi
   fi
   
   CACHE_FOLDER_PATH="${WORK_FOLDER_PATH}/cache"
 
-  XBB_WORK_FOLDER_PATH="${WORK_FOLDER_PATH}/$(basename "${XBB_FOLDER_PATH}")-${XBB_VERSION}-${HOST_DISTRO_LC_NAME}-${HOST_DISTRO_RELEASE}-${HOST_MACHINE}"
+  XBB_WORK_FOLDER_PATH="${WORK_FOLDER_PATH}/$(basename "${XBB_INSTALL_FOLDER_PATH}")-${XBB_VERSION}-${HOST_DISTRO_LC_NAME}-${HOST_DISTRO_RELEASE}-${HOST_MACHINE}"
 
   BUILD_FOLDER_PATH="${XBB_WORK_FOLDER_PATH}/build"
   LIBS_BUILD_FOLDER_PATH="${XBB_WORK_FOLDER_PATH}/build/libs"
@@ -275,7 +289,7 @@ function prepare_xbb_env()
   STAMPS_FOLDER_PATH="${XBB_WORK_FOLDER_PATH}/stamps"
   LOGS_FOLDER_PATH="${XBB_WORK_FOLDER_PATH}/logs"
 
-  INSTALL_FOLDER_PATH="${XBB_FOLDER_PATH}"
+  INSTALL_FOLDER_PATH="${XBB_INSTALL_FOLDER_PATH}"
 
   # ---------------------------------------------------------------------------
 
@@ -326,11 +340,18 @@ function prepare_xbb_env()
     XBB_LDFLAGS_APP_STATIC_GCC+=" -static-libgcc -static-libstdc++"
   fi
 
-  if [ "${IS_BOOTSTRAP}" == "y" ]
+  if [ "${XBB_LAYER}" == "xbb-bootstrap" ]
   then
     XBB_GCC_SUFFIX="-xbs"
-  else
+  elif [ "${XBB_LAYER}" == "xbb" ]
+  then
     XBB_GCC_SUFFIX="-xbb"
+  elif [ "${XBB_LAYER}" == "xbb-test" ] 
+  then
+    XBB_GCC_SUFFIX="-xbt"
+  else
+    echo "IS_* not defined."
+    exit 1
   fi
 
   # Applications should generally use STATIC_GCC, otherwise XBB apps which
@@ -431,8 +452,9 @@ function prepare_gcc_env()
 
   export CC="${prefix}gcc${suffix}"
   export CXX="${prefix}g++${suffix}"
+  export CPP="${prefix}cpp${suffix}"
 
-  if [ "${IS_BOOTSTRAP}" == "y" ]
+  if [ "${XBB_LAYER}" == "xbb-bootstrap" ]
   then
     export AR="${prefix}ar"
     export NM="${prefix}nm"
@@ -602,68 +624,84 @@ function create_xbb_source()
 __EOF__
 # The above marker must start in the first column.
 
+if false
+then
   if [ -f "/.dockerenv" ]
   then
-    if [ "${IS_BOOTSTRAP}" == "y" ]
+    if [ "${XBB_LAYER}" == "xbb-bootstrap" ]
     then
-      echo "export XBB_BOOTSTRAP_FOLDER_PATH=\"/opt/$(basename "${XBB_FOLDER_PATH}")\"" >> "${INSTALL_FOLDER_PATH}/xbb-source.sh"
-    else
-      echo "export XBB_FOLDER_PATH=\"/opt/$(basename "${XBB_FOLDER_PATH}")\"" >> "${INSTALL_FOLDER_PATH}/xbb-source.sh"
+      echo "export XBB_BOOTSTRAP_FOLDER_PATH=\"${INSTALL_FOLDER_PATH}\"" >> "${INSTALL_FOLDER_PATH}/xbb-source.sh"
+    elif [ "${XBB_LAYER}" == "xbb" ]
+    then
+      echo "export XBB_FOLDER_PATH=\"${INSTALL_FOLDER_PATH}\"" >> "${INSTALL_FOLDER_PATH}/xbb-source.sh"
+    elif [ "${XBB_LAYER}" == "xbb-test" ]
+    then
+      echo "export XBB_TEST_FOLDER_PATH=\"/opt/$(basename "${XBB_TEST_FOLDER_PATH}")\"" >> "${INSTALL_FOLDER_PATH}/xbb-source.sh"
     fi
   else
-    if [ "${IS_BOOTSTRAP}" == "y" ]
+    if [ "${XBB_LAYER}" == "xbb-bootstrap" ]
     then
       echo "export XBB_BOOTSTRAP_FOLDER_PATH=\"\${HOME}/opt/$(basename "${XBB_FOLDER_PATH}")\"" >> "${INSTALL_FOLDER_PATH}/xbb-source.sh"
-    else
+    elif [ "${XBB_LAYER}" == "xbb" ]
+    then
       echo "export XBB_FOLDER_PATH=\"\${HOME}/opt/$(basename "${XBB_FOLDER_PATH}")\"" >> "${INSTALL_FOLDER_PATH}/xbb-source.sh"
+    elif [ "${XBB_LAYER}" == "xbb-test" ]
+    then
+      echo "export XBB_TEST_FOLDER_PATH=\"\${HOME}/opt/$(basename "${XBB_TEST_FOLDER_PATH}")\"" >> "${INSTALL_FOLDER_PATH}/xbb-source.sh"
     fi
   fi
+fi
 
   echo "export TEXLIVE_FOLDER_PATH=\"/opt/texlive\"" >> "${INSTALL_FOLDER_PATH}/xbb-source.sh"
 
-  if [ "${IS_BOOTSTRAP}" == "y" ]
+  if [ "${XBB_LAYER}" == "xbb-bootstrap" ]
   then
 
-    # Note: __EOF__ is quoted to prevent substitutions here.
-    cat <<'__EOF__' >> "${INSTALL_FOLDER_PATH}/xbb-source.sh"
+    # Note: __EOF__ is NOT quoted to allow substitutions.
+    cat <<__EOF__ >> "${INSTALL_FOLDER_PATH}/xbb-source.sh"
 
 # Adjust PATH to prefer the XBB bootstrap binaries.
 function xbb_activate_bootstrap()
-{
-  if [ -z "${PATH:-""}" ]
-  then
-    PATH="${XBB_BOOTSTRAP_FOLDER_PATH}/usr/sbin:${XBB_BOOTSTRAP_FOLDER_PATH}/usr/bin:${XBB_BOOTSTRAP_FOLDER_PATH}/sbin:${XBB_BOOTSTRAP_FOLDER_PATH}/bin"
-  else
-    PATH="${XBB_BOOTSTRAP_FOLDER_PATH}/usr/sbin:${XBB_BOOTSTRAP_FOLDER_PATH}/usr/bin:${XBB_BOOTSTRAP_FOLDER_PATH}/sbin:${XBB_BOOTSTRAP_FOLDER_PATH}/bin:${PATH}"
-  fi
-
-  export PATH
-}
-
 __EOF__
 # The above marker must start in the first column.
 
-  else
+  elif [ "${XBB_LAYER}" == "xbb" ]
+  then
 
-    # Note: __EOF__ is quoted to prevent substitutions here.
-    cat <<'__EOF__' >> "${INSTALL_FOLDER_PATH}/xbb-source.sh"
+    # Note: __EOF__ is NOT quoted to allow substitutions.
+    cat <<__EOF__ >> "${INSTALL_FOLDER_PATH}/xbb-source.sh"
 
 # Adjust PATH to prefer the XBB binaries.
 function xbb_activate()
-{
-  if [ -z "${PATH:-""}" ]
+__EOF__
+
+  elif [ "${XBB_LAYER}" == "xbb-test" ]
   then
-    PATH="${XBB_FOLDER_PATH}/usr/sbin:${XBB_FOLDER_PATH}/usr/bin:${XBB_FOLDER_PATH}/sbin:${XBB_FOLDER_PATH}/bin"
+
+    # Note: __EOF__ is NOT quoted to allow substitutions.
+    cat <<__EOF__ >> "${INSTALL_FOLDER_PATH}/xbb-source.sh"
+
+# Adjust PATH to prefer the XBB Test binaries.
+function xbb_activate()
+__EOF__
+
+  fi
+
+  # Note: __EOF__ is NOT quoted to allow substitutions.
+  cat <<__EOF__ >> "${INSTALL_FOLDER_PATH}/xbb-source.sh"
+{
+  if [ -z "\${PATH:-""}" ]
+  then
+    PATH="${INSTALL_FOLDER_PATH}/usr/sbin:${INSTALL_FOLDER_PATH}/usr/bin:${INSTALL_FOLDER_PATH}/sbin:${INSTALL_FOLDER_PATH}/bin"
   else
-    PATH="${XBB_FOLDER_PATH}/usr/sbin:${XBB_FOLDER_PATH}/usr/bin:${XBB_FOLDER_PATH}/sbin:${XBB_FOLDER_PATH}/bin:${PATH}"
+    PATH="${INSTALL_FOLDER_PATH}/usr/sbin:${INSTALL_FOLDER_PATH}/usr/bin:${INSTALL_FOLDER_PATH}/sbin:${INSTALL_FOLDER_PATH}/bin:\${PATH}"
   fi
 
   export PATH
 }
+
 __EOF__
 # The above marker must start in the first column.
-
-  fi
 
   # Adjust to TexLive conventions.
   tl_machine="${HOST_MACHINE}"
@@ -825,7 +863,7 @@ __EOF__
   if false
   then
 
-    echo "export NVM_DIR=\"/opt/$(basename "${XBB_FOLDER_PATH}")/nvm\"" >> "${INSTALL_FOLDER_PATH}/xbb-source.sh"
+    echo "export NVM_DIR=\"${INSTALL_FOLDER_PATH}/nvm\"" >> "${INSTALL_FOLDER_PATH}/xbb-source.sh"
 
     # Note: __EOF__ is quoted to prevent substitutions here.
     cat <<'__EOF__' >> "${INSTALL_FOLDER_PATH}/xbb-source.sh"
@@ -843,7 +881,7 @@ __EOF__
 
   fi
 
-  if [ "${IS_BOOTSTRAP}" != "y" ]
+  if [ "${XBB_LAYER}" != "xbb-bootstrap" ]
   then
 
     set +e
@@ -1055,8 +1093,8 @@ function patch_linux_elf_origin()
   then
     file "${file_path}"
   else
-    # No need for separate lib64, it was linked to lib.
-    patchelf --set-rpath "${XBB_FOLDER_PATH}/lib" "${tmp_path}"
+    # No need for separate lib64, it was linked to lib. (Uh?)
+    patchelf --set-rpath "${INSTALL_FOLDER_PATH}/lib" "${tmp_path}"
   fi
   cp "${tmp_path}" "${file_path}"
   rm -rf "${tmp_path}"
@@ -1144,7 +1182,7 @@ function show_libs()
     if [ "${HOST_UNAME}" == "Linux" ]
     then
       local patchelf="$(which_patchelf)"
-      if [ "${IS_BOOTSTRAP}" == "y" ]
+      if [ "${XBB_LAYER}" == "xbb-bootstrap" ]
       then
         patchelf="${INSTALL_FOLDER_PATH}/bin/patchelf"
       fi
@@ -1214,7 +1252,7 @@ function strip_static_objects()
         -exec chmod +w {} \; \
         -exec "${strip}" --strip-debug {} \; 
 
-      if [ "${IS_BOOTSTRAP}" != "y" ]
+      if [ "${XBB_LAYER}" != "xbb-bootstrap" ]
       then
         find * \
           -type f \
@@ -1314,7 +1352,7 @@ function patch_elf_rpath()
 
       exit 1
     else
-      if [ "${IS_BOOTSTRAP}" == "y" ]
+      if [ "${XBB_LAYER}" == "xbb-bootstrap" ]
       then
 
         # All files.
@@ -1384,7 +1422,10 @@ function patch_elf_rpath()
       echo 
       echo "Check rpath failed:"
       cat "${CHECK_RPATH_LOG}"
-      exit 1
+      if [ "${XBB_LAYER}" != "xbb-test" ]
+      then
+        exit 1
+      fi
     else
       echo
       echo "No rpath issues detected."
@@ -1429,7 +1470,7 @@ function patch_all_libtool_rpath()
 function do_cleaunup() 
 {
   # In bootstrap preserve download, it'll be used by xbb and removed later.
-  if [ "${IS_BOOTSTRAP}" != "y" ]
+  if [ "${XBB_LAYER}" != "xbb-bootstrap" ]
   then
     rm -rf "${CACHE_FOLDER_PATH}"
   fi
