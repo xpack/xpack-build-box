@@ -2346,7 +2346,7 @@ function do_libxcrypt()
         cd "${SOURCES_FOLDER_PATH}/${libxcrypt_src_folder_name}"
 
         xbb_activate
-        if [ "${IS_BOOTSTRAP}" == "y" ]
+        if [ "${XBB_LAYER}" == "xbb-bootstrap" ]
         then
           # Requires the new autotools.
           xbb_activate_installed_bin
