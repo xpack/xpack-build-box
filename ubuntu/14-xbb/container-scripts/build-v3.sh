@@ -37,10 +37,8 @@ script_folder_name="$(basename "${script_folder_path}")"
 
 WORK_FOLDER_PATH="${HOME}/Work"
 
-XBB_FOLDER_PATH="/opt/xbb"
-XBB_BOOTSTRAP_FOLDER_PATH="/opt/xbb-bootstrap"
-
-IS_BOOTSTRAP="n"
+XBB_INSTALL_FOLDER_PATH="/opt/xbb"
+XBB_PARENT_FOLDER_PATH="/opt/xbb-bootstrap"
 
 # -----------------------------------------------------------------------------
 
@@ -54,6 +52,18 @@ source "${helper_folder_path}/common-apps-functions-source.sh"
 
 source "${helper_folder_path}/common-versions-xbb-source.sh"
 
+source "${XBB_PARENT_FOLDER_PATH}/xbb-source.sh"
+
+# Override function, must be here.
+function xbb_activate()
+{
+  xbb_activate_bootstrap      # Use only bootstrap binaries, not xbb
+  if [ -f "${BUILD_FOLDER_PATH}/.activate_installed_bin" ]
+  then
+    xbb_activate_installed_bin
+  fi
+}
+
 function do_cleanup()
 {
   if [ -f "${WORK_FOLDER_PATH}/.dockerenv" ]
@@ -64,24 +74,7 @@ function do_cleanup()
 
 # -----------------------------------------------------------------------------
 
-detect_host
-
-docker_prepare_env
-
-prepare_xbb_env
-
-saved_version=${XBB_VERSION}
-source "${XBB_BOOTSTRAP_FOLDER_PATH}/xbb-source.sh"
-XBB_VERSION=${saved_version}
-
-# Override function, must be here.
-function xbb_activate()
-{
-  xbb_activate_bootstrap      # Use only bootstrap binaries, not xbb
-  xbb_activate_installed_dev  # Use xbb libraries and headers
-}
-
-create_xbb_source
+do_prerequisites
 
 echo
 echo "$(uname) ${HOST_MACHINE} XBB xbb build script started..."
@@ -90,10 +83,6 @@ echo "$(uname) ${HOST_MACHINE} XBB xbb build script started..."
 
 build_versioned_components
 
-strip_static_objects
-
-patch_elf_rpath
-
 # -----------------------------------------------------------------------------
 
 echo
@@ -101,7 +90,6 @@ echo "$(uname) ${HOST_MACHINE} XBB xbb created in \"${INSTALL_FOLDER_PATH}\""
 
 do_cleanup
 
-echo
-echo "Container done."
+stop_timer
 
 # -----------------------------------------------------------------------------
