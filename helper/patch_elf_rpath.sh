@@ -165,7 +165,7 @@ function is_linux_sys_so()
 
   # Shared libraries that are expected to be present on any Linux.
   # Note the X11 libraries.
-if [ "${IS_BOOTSTRAP}" == "y" ]
+if [ "${XBB_LAYER}" == "xbb-bootstrap" ]
 then
   local sys_lib_names=(\
     librt.so.1 \
