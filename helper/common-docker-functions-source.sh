@@ -165,7 +165,7 @@ function host_run_docker_build()
     --build-arg DEBUG="${DEBUG}" \
     --build-arg JOBS="${JOBS:-${NPROC}}" \
     --build-arg XBB_VERSION="${version}" \
-    --build-arg XBB_LAYER="${layer}"
+    --build-arg XBB_LAYER="${layer}" \
     --build-arg RUN_LONG_TESTS="${RUN_LONG_TESTS:-""}" \
     --tag "${tag}" \
     --file "${dockerfile}" \
