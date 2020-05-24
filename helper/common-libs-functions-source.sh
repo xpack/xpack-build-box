@@ -1787,6 +1787,9 @@ function do_libgpg_error()
           patch_all_libtool_rpath
 
           # WARN-TEST
+          # FAIL: t-syserror (disabled) 
+          # Interestingly enough, initially (before dismissing install-strip)
+          # it passed.
           sed -i -e 's|t-syserror$(EXEEXT)||' "tests/Makefile"
 
           cp "config.log" "${LOGS_FOLDER_PATH}/${libgpg_error_folder_name}/config-log.txt"
@@ -1803,10 +1806,7 @@ function do_libgpg_error()
         # make install-strip
         make install
 
-        # # WARN-TEST
-        # FAIL: t-syserror (disabled) 
-        # Interestingly enough, initially (before dismissing install-strip)
-        # it passed.
+        # WARN-TEST
         make -j1 check
 
       ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${libgpg_error_folder_name}/make-output.txt"
