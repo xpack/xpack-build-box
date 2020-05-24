@@ -794,6 +794,7 @@ function do_native_gcc()
             fi
 
             config_options+=("--disable-rpath")
+            config_options+=("--disable-new-dtags")
 
 
             if false # [ "${XBB_LAYER}" != "xbb-bootstrap" ]
@@ -5198,7 +5199,10 @@ function do_patchelf()
           bash "${SOURCES_FOLDER_PATH}/${patchelf_src_folder_name}/configure" --help
 
           bash ${DEBUG} "${SOURCES_FOLDER_PATH}/${patchelf_src_folder_name}/configure" \
-            --prefix="${INSTALL_FOLDER_PATH}" 
+            --prefix="${INSTALL_FOLDER_PATH}" \
+            \
+            --disable-new-dtags \
+
 
           cp "config.log" "${LOGS_FOLDER_PATH}/${patchelf_folder_name}/config-log.txt"
         ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${patchelf_folder_name}/configure-output.txt"
@@ -5671,6 +5675,7 @@ function do_python2()
             \
             --enable-shared \
             --enable-unicode=ucs4 \
+            --disable-new-dtags \
 
           cp "config.log" "${LOGS_FOLDER_PATH}/${python2_folder_name}/config-log.txt"
         ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${python2_folder_name}/configure-output.txt"
@@ -5843,6 +5848,7 @@ function do_python3()
             \
             --enable-shared \
             --enable-loadable-sqlite-extensions \
+            --disable-new-dtags \
              
           cp "config.log" "${LOGS_FOLDER_PATH}/${python3_folder_name}/config-log.txt"
         ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${python3_folder_name}/configure-output.txt"

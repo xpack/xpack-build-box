@@ -294,6 +294,7 @@ function do_mpfr()
             \
             --enable-thread-safe \
             --enable-shared \
+            --disable-new-dtags \
 
           patch_all_libtool_rpath
 
