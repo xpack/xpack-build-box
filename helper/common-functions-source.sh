@@ -323,7 +323,7 @@ function prepare_xbb_env()
   XBB_CFLAGS_NO_W="${XBB_CFLAGS} -w"
   XBB_CXXFLAGS_NO_W="${XBB_CXXFLAGS} -w"
 
-  XBB_LDFLAGS=""
+  XBB_LDFLAGS="-Wl,--disable-new-dtags"
 
   # -Wl,--gc-sections may make some symbols dissapear, do not use it here.
   XBB_LDFLAGS_LIB="${XBB_LDFLAGS}"
