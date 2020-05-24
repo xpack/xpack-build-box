@@ -398,6 +398,7 @@ function main()
   # ---------------------------------------------------------------------------
 
   show_details=""
+  errors=()
 
   if [ -n "${runpath}" ]
   then
@@ -418,7 +419,6 @@ function main()
 
   # echo ${shlibs_names[@]}
   # echo ${folder_paths[@]}
-  errors=()
 
   for lib_name in ${shlibs_names[@]}
   do
@@ -446,8 +446,7 @@ function main()
   done
 
   set +u
-  msg="  $(basename ${file_path})"
-  msg+=" [$(IFS=" "; echo "${found_names[*]}")]"
+  msg="[$(IFS=" "; echo "${found_names[*]}")]"
   
   msg+=" RPATH=$(IFS=":"; echo "${folder_paths[*]}")"
 
@@ -455,7 +454,7 @@ function main()
   then
     : # msg+=" LD=${interpreter}"
   fi
-  echo "${msg}"
+  echo "  $(basename ${file_path}) ${msg}"
   for err in ${errors[@]}
   do
     echo "${err}"
@@ -471,7 +470,7 @@ function main()
     run_app "${ldd}" -v "${file_path}"
     echo
 
-    echo "${msg}" >> "${CHECK_RPATH_LOG}"
+    echo "  ${file_path} ${msg}" >> "${CHECK_RPATH_LOG}"
     for err in ${errors[@]}
     do
       echo "${err}" >> "${CHECK_RPATH_LOG}"
