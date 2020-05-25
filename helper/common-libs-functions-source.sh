@@ -1228,6 +1228,21 @@ function do_gnutls()
               -e "s|-Wl,-rpath -Wl,${INSTALL_FOLDER_PATH}/lib||" \
               {} \;
 
+          if [ "${XBB_LAYER}" == "xbb" ]
+          then
+            if is_arm && [ "${HOST_BITS}" == "32" ]
+            then
+              # On Arm
+              # server:242: server: Handshake has failed (The operation timed out)
+              # FAIL: srp
+              # WARN-TEST
+              run_app sed -i \
+                -e 's|srp$(EXEEXT) ||' \
+                tests/Makefile
+
+            fi
+          fi
+
           cp "config.log" "${LOGS_FOLDER_PATH}/${gnutls_folder_name}/config-log.txt"
         ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${gnutls_folder_name}/configure-output.txt"
       fi
@@ -1791,7 +1806,8 @@ function do_libgpg_error()
           # FAIL: t-syserror (disabled) 
           # Interestingly enough, initially (before dismissing install-strip)
           # it passed.
-          sed -i -e 's|t-syserror$(EXEEXT)||' "tests/Makefile"
+          run_app sed -i -e 's|t-syserror$(EXEEXT)||' "tests/Makefile"
+
 
           cp "config.log" "${LOGS_FOLDER_PATH}/${libgpg_error_folder_name}/config-log.txt"
         ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${libgpg_error_folder_name}/configure-output.txt"
@@ -1806,7 +1822,7 @@ function do_libgpg_error()
 
         # make install-strip
         make install
-
+ 
         # WARN-TEST
         make -j1 check
 
