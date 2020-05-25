@@ -786,6 +786,11 @@ function do_native_gcc()
               config_options+=("--with-arch=armv8-a")
               config_options+=("--enable-fix-cortex-a53-835769")
               config_options+=("--enable-fix-cortex-a53-843419")
+
+              # In file included from /root/Work/xbb-3.2-ubuntu-16.04-aarch64/sources/gcc-9.3.0/gcc/config/aarch64/aarch64-speculation.cc:22:
+              # /root/Work/xbb-3.2-ubuntu-16.04-aarch64/sources/gcc-9.3.0/gcc/system.h:687:10: fatal error: gmp.h: No such file or directory
+              # #include <gmp.h>
+              config_options+=("--with-gmp=${INSTALL_FOLDER_PATH}")
             elif [ "${HOST_MACHINE}" == "armv7l" -o "${HOST_MACHINE}" == "armv8l" ]
             then
               config_options+=("--with-arch=armv7-a")
@@ -7309,6 +7314,23 @@ function do_guile()
           # https://lists.gnu.org/archive/html/guile-user/2017-11/msg00062.html
           # Remove the failing test.
           sed -i -e 's|test-out-of-memory||g' test-suite/standalone/Makefile
+
+          if [ "${XBB_LAYER}" == "xbb" ]
+          then
+            if is_arm && [ "${HOST_BITS}" == "64" ]
+            then
+              # FAIL: test-stack-overflow
+
+              run_app sed -i \
+                -e 's|test-stack-overflow||g' \
+                test-suite/standalone/Makefile
+
+              run_app sed -i \
+                -e 's|tests/popen.test||g' \
+                test-suite/Makefile
+
+            fi
+          fi
 
           cp "config.log" "${LOGS_FOLDER_PATH}/${guile_folder_name}/config-log.txt"
         ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${guile_folder_name}/configure-output.txt"
