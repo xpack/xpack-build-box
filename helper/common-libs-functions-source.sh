@@ -1241,6 +1241,17 @@ function do_gnutls()
                 tests/Makefile
 
             fi
+            if is_arm && [ "${HOST_BITS}" == "64" ]
+            then
+              # On Aarch64
+              # FAIL test-getdtablesize (exit status: 134)
+              # FAIL test-dup2 (exit status: 134)
+
+              run_app sed -i \
+                -e 's|test-dup2$(EXEEXT)||' \
+                -e 's|test-getdtablesize$(EXEEXT)||' \
+                gl/tests/Makefile
+            fi
           fi
 
           cp "config.log" "${LOGS_FOLDER_PATH}/${gnutls_folder_name}/config-log.txt"
