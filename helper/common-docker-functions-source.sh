@@ -33,34 +33,35 @@ function host_init_docker_env()
 
 function host_init_docker_input()
 {
-  rm -rf "${script_folder_path}/input"
-  mkdir -pv "${script_folder_path}/input/helper/patches"
+  local input_folder_name="input-${distro}-${release}-${arch}"
+  rm -rf "${script_folder_path}/${input_folder_name}"
+  mkdir -pv "${script_folder_path}/${input_folder_name}/helper/patches"
 
   if [ -d "${script_folder_path}/container-scripts" ]
   then
-    ln -v "${script_folder_path}/container-scripts"/*.sh "${script_folder_path}/input"
+    ln -v "${script_folder_path}/container-scripts"/*.sh "${script_folder_path}/${input_folder_name}"
   fi
 
   # Using hard links simplifies development, since edits will no longer 
   # need to be propagated back.
 
   # Hard link the entire content of the helper folder.
-  ln -v "${helper_folder_path}"/*.sh "${script_folder_path}/input/helper"
-  ln -v "${helper_folder_path}"/pkg-config-verbose "${script_folder_path}/input/helper"
+  ln -v "${helper_folder_path}"/*.sh "${script_folder_path}/${input_folder_name}/helper"
+  ln -v "${helper_folder_path}"/pkg-config-verbose "${script_folder_path}/${input_folder_name}/helper"
 
-  ln -v "${helper_folder_path}/patches"/*.patch "${script_folder_path}/input/helper/patches"
+  ln -v "${helper_folder_path}/patches"/*.patch "${script_folder_path}/${input_folder_name}/helper/patches"
   
   # Possibly hard link additional files.
   while [ $# -gt 0 ]
   do
     if [ -f "$1" ]
     then
-      ln -v "$1" "${script_folder_path}/input/helper"
+      ln -v "$1" "${script_folder_path}/${input_folder_name}/helper"
     elif [ -d "$1" ]
     then
       local subfolder=$(basename "$1")
-      mkdir -pv "${script_folder_path}/input/helper/${subfolder}"
-      ln -v "$1"/* "${script_folder_path}/input/helper/${subfolder}"
+      mkdir -pv "${script_folder_path}/${input_folder_name}/helper/${subfolder}"
+      ln -v "$1"/* "${script_folder_path}/${input_folder_name}/helper/${subfolder}"
     fi
 
     shift
@@ -126,8 +127,10 @@ function host_run_docker_it_with_volume()
 function host_run_docker_it_with_image()
 {
   # Warning: do not use HOST_MACHINE!
-  out="${HOME}/opt/${layer}-${distro}-${release}-${arch}"
+  local out="${HOME}/opt/${layer}-${distro}-${release}-${arch}"
   mkdir -pv "${out}"
+
+  local input_folder_name="input-${distro}-${release}-${arch}"
 
   echo 
   echo "Running parent Docker image ${from}..."
@@ -143,7 +146,7 @@ function host_run_docker_it_with_image()
       --env XBB_LAYER="${layer}" \
       --env RUN_LONG_TESTS="${RUN_LONG_TESTS:-""}" \
       --volume="${WORK_FOLDER_PATH}:/root/Work" \
-      --volume="${script_folder_path}/input:/input" \
+      --volume="${script_folder_path}/${input_folder_name}:/input" \
       --volume="${out}:/opt/${layer}" \
       ${from}
 }

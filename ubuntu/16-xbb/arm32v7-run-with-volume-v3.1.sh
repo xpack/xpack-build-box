@@ -42,12 +42,6 @@ source "${helper_folder_path}/common-docker-functions-source.sh"
 
 # -----------------------------------------------------------------------------
 
-detect_host
-
-host_init_docker_env
-host_init_docker_input \
-  "$(dirname $(dirname "${script_folder_path}"))/ca-bundle/ca-bundle.crt" \
-
 version="3.1"
 
 arch="arm32v7"
@@ -55,6 +49,14 @@ distro="ubuntu"
 release="16.04"
 from="ilegeul/${distro}:${arch}-${release}-bootstrap-v3.1"
 layer="xbb"
+
+# -----------------------------------------------------------------------------
+
+detect_host
+
+host_init_docker_env
+host_init_docker_input \
+  "$(dirname $(dirname "${script_folder_path}"))/ca-bundle/ca-bundle.crt" \
 
 host_run_docker_it_with_volume
 
