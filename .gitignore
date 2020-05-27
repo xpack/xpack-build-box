@@ -4,3 +4,4 @@
 *.xz
 
 ubuntu/*/input
+ubuntu/*/input-*
