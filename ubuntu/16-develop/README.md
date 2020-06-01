@@ -27,8 +27,8 @@ $ docker run --interactive --tty ilegeul/ubuntu:amd64-16.04-develop-v3.1
 $ docker run --interactive --tty ilegeul/ubuntu:i386-16.04-develop-v3.1
 ```
 
-The following tests were performed on an Ubuntu Server
-18.04 running on a Raspberry Pi 4B.
+The following tests were performed on a Debian 9
+running on a ROCK Pi 4.
 
 ```console
 $ docker run --interactive --tty ilegeul/ubuntu:arm64v8-16.04-develop-v3.1

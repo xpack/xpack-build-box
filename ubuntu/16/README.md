@@ -109,8 +109,8 @@ root@556059ae4b51:/# exit
 exit
 ```
 
-The following tests were performed on an Ubuntu Server
-18.04 running on a Raspberry Pi 4B.
+The following tests were performed on an Debian 9
+running on a ROCK Pi 4.
 
 ```console
 $ docker run --interactive --tty ilegeul/ubuntu:arm64v8-16.04

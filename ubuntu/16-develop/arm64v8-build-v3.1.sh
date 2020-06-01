@@ -42,15 +42,17 @@ source "${helper_folder_path}/common-docker-functions-source.sh"
 
 # -----------------------------------------------------------------------------
 
-host_init_docker_env
-host_init_docker_input
-
 version="3.1"
 layer="develop"
 
 arch="arm64v8"
 distro="ubuntu"
 release="16.04"
+
+# -----------------------------------------------------------------------------
+
+host_init_docker_env
+host_init_docker_input
 
 tag="ilegeul/${distro}:${arch}-${release}-${layer}-v${version}"
 dockerfile="${arch}-Dockerfile-v${version}"

@@ -4,7 +4,7 @@ LABEL repository="https://github.com/xpack/xpack-build-box.git"
 LABEL docs="https://github.com/xpack/xpack-build-box/tree/master/ubuntu/16/README.md"
 ENTRYPOINT ["linux32"]
 
-ADD input/i386-ubu16-rootfs.xz /
+ADD input-ubuntu-16.04-i386/i386-ubu16-rootfs.xz /
 RUN linux32 apt-get update && apt-get -y upgrade
 
 CMD ["/bin/bash"]

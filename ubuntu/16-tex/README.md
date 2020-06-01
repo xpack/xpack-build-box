@@ -25,9 +25,14 @@ The following tests were performed on an Ubuntu Server
 ```console
 $ docker run --interactive --tty ilegeul/ubuntu:amd64-16.04-tex-v3.1
 $ docker run --interactive --tty ilegeul/ubuntu:i386-16.04-tex-v3.1
+```
+
+The following tests were performed on a Debian 9
+running on a ROCK Pi 4.
+
+```console
 $ docker run --interactive --tty ilegeul/ubuntu:arm64v8-16.04-tex-v3.1
 $ docker run --interactive --tty ilegeul/ubuntu:arm32v7-16.04-tex-v3.1
-```
 
 ## Publish
 

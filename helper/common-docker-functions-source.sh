@@ -222,14 +222,24 @@ function docker_download_rootfs()
 
 function docker_build_from_archive()
 {
+  if [ $# -lt 5 ]
+  then
+    echo "docker_build_from_archive needs 5 params"
+    exit 1
+  fi
+
   arch="$1"
-  archive_name="$2"
-  tag="$3"
+  distro="$2"
+  release="$3"
+  archive_name="$4"
+  tag="$5"
+
+  local input_folder_name="input-${distro}-${release}-${arch}"
 
   docker_download_rootfs "${archive_name}"
 
   # Assume "input" was created by init_input().
-  cp "${CACHE_FOLDER_PATH}/${archive_name}" "input"
+  cp -v "${CACHE_FOLDER_PATH}/${archive_name}" "${input_folder_name}"
 
   echo 
   echo "Building Docker image ${tag}..."

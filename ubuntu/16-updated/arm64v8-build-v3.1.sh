@@ -42,9 +42,6 @@ source "${helper_folder_path}/common-docker-functions-source.sh"
 
 # -----------------------------------------------------------------------------
 
-host_init_docker_env
-host_init_docker_input
-
 version="3.1"
 layer="updated"
 
@@ -54,6 +51,11 @@ release="16.04"
 
 tag="ilegeul/${distro}:${arch}-${release}-${layer}-v${version}"
 dockerfile="${arch}-Dockerfile-v${version}"
+
+# -----------------------------------------------------------------------------
+
+host_init_docker_env
+host_init_docker_input
 
 host_run_docker_build "${version}" "${tag}" "${dockerfile}" "${layer}"
 

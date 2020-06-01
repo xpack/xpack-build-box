@@ -13,7 +13,7 @@ ARG JOBS
 ARG XBB_VERSION
 ARG XBB_LAYER
 
-ADD input /input
+ADD input-ubuntu-16.04-arm32v7 /input
 RUN linux32 bash /input/build-v3.sh
 
 CMD ["/bin/bash"]
