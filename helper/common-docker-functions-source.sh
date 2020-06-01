@@ -76,8 +76,9 @@ function host_clean_docker_input()
 function host_run_docker_it_with_volume()
 {
   # Warning: do not use HOST_MACHINE!
-  out="${HOME}/opt/${layer}-${distro}-${release}-${arch}"
-  mkdir -pv "${out}"
+  local input_folder_name="input-${distro}-${release}-${arch}"
+  local output_folder_name="${HOME}/opt/${layer}-${distro}-${release}-${arch}"
+  mkdir -pv "${output_folder_name}"
 
   echo 
   echo "Running parent Docker image ${from}..."
@@ -95,8 +96,8 @@ function host_run_docker_it_with_volume()
       --env XBB_LAYER="${layer}" \
       --env RUN_LONG_TESTS="${RUN_LONG_TESTS:-""}" \
       --volume="${WORK_FOLDER_PATH}:/root/Work" \
-      --volume="${script_folder_path}/input:/input" \
-      --volume="${out}:/opt/${layer}" \
+      --volume="${script_folder_path}/${input_folder_name}:/input" \
+      --volume="${output_folder_name}:/opt/${layer}" \
       ${from}
   else
     bootstrap_path="${HOME}/opt/${layer}-bootstrap-${distro}-${release}-${arch}"
@@ -117,8 +118,8 @@ function host_run_docker_it_with_volume()
       --env XBB_LAYER="${layer}" \
       --env RUN_LONG_TESTS="${RUN_LONG_TESTS:-""}" \
       --volume="${WORK_FOLDER_PATH}:/root/Work" \
-      --volume="${script_folder_path}/input:/input" \
-      --volume="${out}:/opt/${layer}" \
+      --volume="${script_folder_path}/${input_folder_name}:/input" \
+      --volume="${output_folder_name}:/opt/${layer}" \
       --volume="${bootstrap_path}:/opt/${layer}-bootstrap" \
       ${from}
   fi
@@ -127,8 +128,8 @@ function host_run_docker_it_with_volume()
 function host_run_docker_it_with_image()
 {
   # Warning: do not use HOST_MACHINE!
-  local out="${HOME}/opt/${layer}-${distro}-${release}-${arch}"
-  mkdir -pv "${out}"
+  local output_folder_name="${HOME}/opt/${layer}-${distro}-${release}-${arch}"
+  mkdir -pv "${output_folder_name}"
 
   local input_folder_name="input-${distro}-${release}-${arch}"
 
@@ -147,7 +148,7 @@ function host_run_docker_it_with_image()
       --env RUN_LONG_TESTS="${RUN_LONG_TESTS:-""}" \
       --volume="${WORK_FOLDER_PATH}:/root/Work" \
       --volume="${script_folder_path}/${input_folder_name}:/input" \
-      --volume="${out}:/opt/${layer}" \
+      --volume="${output_folder_name}:/opt/${layer}" \
       ${from}
 }
 
