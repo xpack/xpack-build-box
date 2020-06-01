@@ -2307,10 +2307,51 @@ function do_tar()
   if [ ! -f "${tar_stamp_file_path}" -o ! -d "${BUILD_FOLDER_PATH}/${tar_folder_name}" ]
   then
 
-    cd "${SOURCES_FOLDER_PATH}"
+    # In-source build, to patch out tests.
 
-    download_and_extract "${tar_url}" "${tar_archive}" \
-      "${tar_src_folder_name}"
+    if [ ! -d "${BUILD_FOLDER_PATH}/${tar_folder_name}" ]
+    then
+      cd "${BUILD_FOLDER_PATH}"
+
+      download_and_extract "${tar_url}" "${tar_archive}" \
+        "${tar_src_folder_name}"
+
+      if [ "${tar_src_folder_name}" != "${tar_folder_name}" ]
+      then
+        mv -v "${tar_src_folder_name}" "${tar_folder_name}"
+      fi
+
+      if [ "${XBB_LAYER}" == "xbb-bootstrap" ]
+      then
+        if is_arm && [ "${HOST_BITS}" == "32" ]
+        then
+          # 117: directory removed before reading
+          # FAILED (dirrem01.at:37)
+          # 118: explicitly named directory removed before reading
+          # FAILED (dirrem02.at:34)
+
+          run_app sed -i \
+            -e 's|dirrem01.at||' \
+            -e 's|dirrem02.at||' \
+            "${tar_folder_name}/tests/Makefile.am"
+
+          run_app sed -i \
+            -e 's|dirrem01.at||' \
+            -e 's|dirrem02.at||' \
+            "${tar_folder_name}/tests/Makefile.in"
+
+          run_app sed -i \
+            -e '/dirrem01.at/d' \
+            -e '/dirrem02.at/d' \
+            -e '/Directories removed while archiving/d' \
+            "${tar_folder_name}/tests/testsuite.at"
+
+          run_app rm -rfv \
+            "${tar_folder_name}/tests/dirrem01.at" \
+            "${tar_folder_name}/tests/dirrem02.at"
+        fi
+      fi
+    fi
 
     mkdir -pv "${LOGS_FOLDER_PATH}/${tar_folder_name}"
 
@@ -2337,9 +2378,9 @@ function do_tar()
           echo
           echo "Running tar configure..."
 
-          bash "${SOURCES_FOLDER_PATH}/${tar_src_folder_name}/configure" --help
+          bash "configure" --help
 
-          bash ${DEBUG} "${SOURCES_FOLDER_PATH}/${tar_src_folder_name}/configure" \
+          bash ${DEBUG} "configure" \
             --prefix="${INSTALL_FOLDER_PATH}" \
             \
             --disable-rpath \
@@ -2377,20 +2418,6 @@ function do_tar()
         # darwin: 172: sparse file truncated while archiving           FAILED (sptrcreat.at:36)
         # darwin: 173: file truncated in sparse region while comparing FAILED (sptrdiff00.at:30)
         # darwin: 174: file truncated in data region while comparing   FAILED (sptrdiff01.at:30)
-
-        if [ "${XBB_LAYER}" == "xbb-bootstrap" ]
-        then
-          if is_arm && [ "${HOST_DISTRO_RELEASE}" == "18.04" ]
-          then
-            # 117: directory removed before reading                FAILED (dirrem01.at:37)
-            # 118: explicitly named directory removed before reading FAILED (dirrem02.at:34)
-
-            run_app sed -i \
-              -e 's|dirrem01.at||' \
-              -e 's|dirrem02.at||' \
-              tests/Makefile
-          fi
-        fi
 
         if [ "${RUN_LONG_TESTS}" == "y" ]
         then
