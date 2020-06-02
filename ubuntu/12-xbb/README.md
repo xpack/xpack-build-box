@@ -47,13 +47,12 @@ $ bash ~/Downloads/xpack-build-box.git/ubuntu/12-xbb/i386-run-with-volume-v3.2.s
 Inside the container, run the build script:
 
 ```console
-# bash /input/build-v3.sh
+# RUN_LONG_TESTS=y bash /input/build-v3.sh
 ```
 
 There are several environment variables that can be passed to the script:
 
 ```console
-# RUN_LONG_TESTS=y bash /input/build-v3.sh
 # JOBS=1 bash /input/build-v3.sh
 # DEBUG=-x bash /input/build-v3.sh
 ```
