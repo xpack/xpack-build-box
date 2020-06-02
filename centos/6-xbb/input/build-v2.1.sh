@@ -96,38 +96,38 @@ then
 
   # New zlib, used in most of the tools.
   # depends=('glibc')
-  do_zlib "1.2.11"
+  build_zlib "1.2.11"
 
   # Libraries, required by gcc.
   # depends=('gcc-libs' 'sh')
-  do_gmp "6.1.2"
+  build_gmp "6.1.2"
   # depends=('gmp>=5.0')
-  do_mpfr "3.1.6"
+  build_mpfr "3.1.6"
   # depends=('mpfr')
-  do_mpc "1.0.3"
+  build_mpc "1.0.3"
   # depends=('gmp')
-  do_isl "0.21"
+  build_isl "0.21"
 
   # Libraries, required by gnutls.
   # depends=('glibc' 'gmp')
-  do_nettle "3.4.1"
+  build_nettle "3.4.1"
   # depends=('glibc')
-  do_tasn1 "4.13"
+  build_tasn1 "4.13"
   # Library, required by Python.
   # depends=('glibc')
-  do_expat "2.2.6"
+  build_expat "2.2.6"
   # depends=('glibc')
-  do_libffi "3.2.1"
+  build_libffi "3.2.1"
 
   # Libary, required by tar. 
   # depends=('sh')
-  do_xz "5.2.4"
+  build_xz "5.2.4"
 
   # depends=('perl')
-  do_openssl "1.0.2r" # "1.1.1b"
+  build_openssl "1.0.2r" # "1.1.1b"
 
   # Needed by wine.
-  do_libpng "1.6.36"
+  build_libpng "1.6.36"
 
 fi
 
@@ -136,17 +136,17 @@ then
 
   # Library, required by wget.
   # depends=()
-  do_libiconv "1.15"
+  build_libiconv "1.15"
 
   # depends=('glibc' 'glib2 (internal)')
-  do_pkg_config "0.29.2"
+  build_pkg_config "0.29.2"
 
   # depends=('ca-certificates' 'krb5' 'libssh2' 'openssl' 'zlib' 'libpsl' 'libnghttp2')
-  do_curl "7.64.1"
+  build_curl "7.64.1"
 
   # tar with xz support.
   # depends=('glibc')
-  do_tar "1.32"
+  build_tar "1.32"
 
 fi
 
@@ -154,60 +154,60 @@ if true
 then
 
   # depends=('glibc' 'libidn2' 'libtasn1' 'libunistring' 'nettle' 'p11-kit' 'readline' 'zlib')
-  do_gnutls "3.6.7"
+  build_gnutls "3.6.7"
 
-  do_coreutils "8.31"
+  build_coreutils "8.31"
 
   # GNU tools.
   # depends=('glibc')
-  do_m4 "1.4.18"
+  build_m4 "1.4.18"
 
   # depends=('glibc' 'mpfr')
-  do_gawk "4.2.1"
+  build_gawk "4.2.1"
 
-  do_sed "4.7"
+  build_sed "4.7"
 
   # depends=('sh' 'perl' 'awk' 'm4' 'texinfo')
-  do_autoconf "2.69"
+  build_autoconf "2.69"
   # depends=('sh' 'perl')
-  do_automake "1.16"
+  build_automake "1.16"
 
   # depends=('sh' 'tar' 'glibc')
-  do_libtool "2.4.6"
+  build_libtool "2.4.6"
 
   # depends=('glibc' 'glib2' 'libunistring' 'ncurses')
-  do_gettext "0.19.8"
+  build_gettext "0.19.8"
 
   # depends=('glibc' 'attr')
-  do_patch "2.7.6"
+  build_patch "2.7.6"
 
   # depends=('libsigsegv')
-  do_diffutils "3.7"
+  build_diffutils "3.7"
 
   # depends=('glibc')
-  do_bison "3.3.2"
+  build_bison "3.3.2"
 
   # depends=('glibc' 'guile')
-  do_make "4.2.1"
+  build_make "4.2.1"
 
   # Third party tools.
 
   # depends=('libutil-linux' 'gnutls' 'libidn' 'libpsl>=0.7.1-3' 'gpgme')
-  do_wget "1.20.1"
+  build_wget "1.20.1"
 
   # Required to build PDF manuals.
   # depends=('coreutils')
-  do_texinfo "6.6"
+  build_texinfo "6.6"
   # depends ?
-  do_patchelf "0.10"
+  build_patchelf "0.10"
   # depends=('glibc')
-  do_dos2unix "7.4.0"
+  build_dos2unix "7.4.0"
 
   # depends=('glibc' 'm4' 'sh')
-  do_flex "2.6.4"
+  build_flex "2.6.4"
 
   # depends=('gdbm' 'db' 'glibc')
-  do_perl "5.28.1"
+  build_perl "5.28.1"
 
 fi
 
@@ -215,50 +215,50 @@ if true
 then
 
   # depends=('curl' 'libarchive' 'shared-mime-info' 'jsoncpp' 'rhash')
-  do_cmake "3.13.4"
+  build_cmake "3.13.4"
 
   # depends=('bzip2' 'gdbm' 'openssl' 'zlib' 'expat' 'sqlite' 'libffi')
   do_python "2.7.16"
 
   # require xz, openssl
-  do_python3 "3.7.3"
+  build_python3 "3.7.3"
 
   # depends=('python2')
-  do_scons "3.0.5"
+  build_scons "3.0.5"
 
   # depends=('python2')
-  do_ninja "1.9.0"
+  build_ninja "1.9.0"
 
   # depends=('python3')
-  do_meson "0.50.0"
+  build_meson "0.50.0"
 
   # depends=('curl' 'expat>=2.0' 'perl-error' 'perl>=5.14.0' 'openssl' 'pcre2' 'grep' 'shadow')
-  do_git "2.21.0"
+  build_git "2.21.0"
 
 fi
 
 if true
 then
-  do_p7zip "16.02"
+  build_p7zip "16.02"
 
-  do_wine "4.3"
+  build_wine "4.3"
 fi
 
 if true
 then
   # Native binutils and gcc.
-  do_native_binutils "2.31"
+  build_native_binutils "2.31"
   # makedepends=('binutils>=2.26' 'libmpc' 'gcc-ada' 'doxygen' 'git')
-  do_native_gcc "7.4.0"
+  build_native_gcc "7.4.0"
 fi
 
 if true
 then
   # mingw-w64 binutils and gcc.
   # depends=('zlib')
-  do_mingw_binutils "2.31"
+  build_mingw_binutils "2.31"
   # depends=('zlib' 'libmpc' 'mingw-w64-crt' 'mingw-w64-binutils' 'mingw-w64-winpthreads' 'mingw-w64-headers')
-  do_mingw_all "5.0.4" "7.4.0"
+  build_mingw_all "5.0.4" "7.4.0"
 fi
 
 # -----------------------------------------------------------------------------

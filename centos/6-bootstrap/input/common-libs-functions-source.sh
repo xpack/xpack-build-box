@@ -11,7 +11,7 @@
 # Support functions to be used in all versions of the containers.
 # -----------------------------------------------------------------------------
 
-function do_zlib() 
+function build_zlib() 
 {
   # http://zlib.net
   # http://zlib.net/fossils/
@@ -61,7 +61,7 @@ function do_zlib()
 
 # -----------------------------------------------------------------------------
 
-function do_xz() 
+function build_xz() 
 {
   # https://tukaani.org/xz/
   # https://sourceforge.net/projects/lzmautils/files/
@@ -116,7 +116,7 @@ function do_xz()
 
 # -----------------------------------------------------------------------------
 
-function do_gmp() 
+function build_gmp() 
 {
   # https://gmplib.org
   # https://gmplib.org/download/gmp/
@@ -162,7 +162,7 @@ function do_gmp()
   )
 }
 
-function do_mpfr() 
+function build_mpfr() 
 {
   # http://www.mpfr.org
   # http://www.mpfr.org/mpfr-3.1.6
@@ -205,7 +205,7 @@ function do_mpfr()
   )
 }
 
-function do_mpc() 
+function build_mpc() 
 {
   # http://www.multiprecision.org/
   # ftp://ftp.gnu.org/gnu/mpc/
@@ -247,7 +247,7 @@ function do_mpc()
   )
 }
 
-function do_isl() 
+function build_isl() 
 {
   # http://isl.gforge.inria.fr
   # https://aur.archlinux.org/cgit/aur.git/tree/PKGBUILD?h=isl

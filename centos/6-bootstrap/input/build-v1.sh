@@ -250,7 +250,7 @@ function eval_bool()
 
 # -----------------------------------------------------------------------------
 
-function do_zlib() 
+function build_zlib() 
 {
   # http://zlib.net
   # http://zlib.net/fossils/
@@ -293,7 +293,7 @@ function do_zlib()
 
 # -----------------------------------------------------------------------------
 
-function do_xz() 
+function build_xz() 
 {
   # https://tukaani.org/xz/
   # https://sourceforge.net/projects/lzmautils/files/
@@ -339,7 +339,7 @@ function do_xz()
   hash -r
 }
 
-function do_tar() 
+function build_tar() 
 {
   # https://www.gnu.org/software/tar/
   # https://ftp.gnu.org/gnu/tar/
@@ -392,7 +392,7 @@ function do_tar()
 
 # -----------------------------------------------------------------------------
 
-function do_openssl() 
+function build_openssl() 
 {
   # https://www.openssl.org
   # https://www.openssl.org/source/
@@ -467,7 +467,7 @@ function do_openssl()
 
 # -----------------------------------------------------------------------------
 
-function do_curl() 
+function build_curl() 
 {
   # https://curl.haxx.se
   # https://curl.haxx.se/download/
@@ -531,7 +531,7 @@ function do_curl()
 
 # -----------------------------------------------------------------------------
 
-function do_m4() 
+function build_m4() 
 {
   # https://www.gnu.org/software/m4/
   # https://ftp.gnu.org/gnu/m4/
@@ -574,7 +574,7 @@ function do_m4()
   hash -r
 }
 
-function do_gawk() 
+function build_gawk() 
 {
   # https://www.gnu.org/software/gawk/
   # https://ftp.gnu.org/gnu/gawk/
@@ -618,7 +618,7 @@ function do_gawk()
   hash -r
 }
 
-function do_autoconf() 
+function build_autoconf() 
 {
   # https://www.gnu.org/software/autoconf/
   # https://ftp.gnu.org/gnu/autoconf/
@@ -661,7 +661,7 @@ function do_autoconf()
   hash -r
 }
 
-function do_automake() 
+function build_automake() 
 {
   # https://www.gnu.org/software/automake/
   # https://ftp.gnu.org/gnu/automake/
@@ -704,7 +704,7 @@ function do_automake()
   hash -r
 }
 
-function do_libtool() 
+function build_libtool() 
 {
   # https://www.gnu.org/software/libtool/
   # http://gnu.mirrors.linux.ro/libtool/
@@ -748,7 +748,7 @@ function do_libtool()
   hash -r
 }
 
-function do_gettext() 
+function build_gettext() 
 {
   # https://www.gnu.org/software/gettext/
   # https://ftp.gnu.org/gnu/gettext/
@@ -793,7 +793,7 @@ function do_gettext()
   hash -r
 }
 
-function do_patch() 
+function build_patch() 
 {
   # https://www.gnu.org/software/patch/
   # https://ftp.gnu.org/gnu/patch/
@@ -836,7 +836,7 @@ function do_patch()
   hash -r
 }
 
-function do_diffutils() 
+function build_diffutils() 
 {
   # https://www.gnu.org/software/diffutils/
   # https://ftp.gnu.org/gnu/diffutils/
@@ -879,7 +879,7 @@ function do_diffutils()
   hash -r
 }
 
-function do_bison() 
+function build_bison() 
 {
   # https://www.gnu.org/software/bison/
   # https://ftp.gnu.org/gnu/bison/
@@ -922,7 +922,7 @@ function do_bison()
   hash -r
 }
 
-function do_make() 
+function build_make() 
 {
   # https://www.gnu.org/software/make/
   # https://ftp.gnu.org/gnu/make/
@@ -968,7 +968,7 @@ function do_make()
 
 # -----------------------------------------------------------------------------
 
-function do_pkg_config() 
+function build_pkg_config() 
 {
   # https://www.freedesktop.org/wiki/Software/pkg-config/
   # https://pkgconfig.freedesktop.org/releases/
@@ -1014,7 +1014,7 @@ function do_pkg_config()
   hash -r
 }
 
-function do_flex() 
+function build_flex() 
 {
   # https://github.com/westes/flex
   # https://github.com/westes/flex/releases
@@ -1060,7 +1060,7 @@ function do_flex()
   hash -r
 }
 
-function do_perl() 
+function build_perl() 
 {
   # https://www.cpan.org
   # http://www.cpan.org/src/
@@ -1117,7 +1117,7 @@ function do_perl()
 
 # -----------------------------------------------------------------------------
 
-function do_cmake() 
+function build_cmake() 
 {
   # https://cmake.org
   # https://cmake.org/download/
@@ -1255,7 +1255,7 @@ function do_python()
   hash -r
 }
 
-function do_scons() 
+function build_scons() 
 {
   # http://scons.org
   # https://sourceforge.net/projects/scons/files/scons/3.0.1/
@@ -1291,7 +1291,7 @@ function do_scons()
 
 # -----------------------------------------------------------------------------
 
-function do_gmp() 
+function build_gmp() 
 {
   # https://gmplib.org
   # https://gmplib.org/download/gmp/
@@ -1330,7 +1330,7 @@ function do_gmp()
   )
 }
 
-function do_mpfr() 
+function build_mpfr() 
 {
   # http://www.mpfr.org
   # http://www.mpfr.org/mpfr-3.1.6
@@ -1366,7 +1366,7 @@ function do_mpfr()
   )
 }
 
-function do_mpc() 
+function build_mpc() 
 {
   # http://www.multiprecision.org/
   # ftp://ftp.gnu.org/gnu/mpc/
@@ -1401,7 +1401,7 @@ function do_mpc()
   )
 }
 
-function do_isl() 
+function build_isl() 
 {
   # http://isl.gforge.inria.fr
   # https://aur.archlinux.org/cgit/aur.git/tree/PKGBUILD?h=isl
@@ -1458,7 +1458,7 @@ function do_isl()
 
 # -----------------------------------------------------------------------------
 
-function do_native_binutils() 
+function build_native_binutils() 
 {
   # https://www.gnu.org/software/binutils/
   # https://ftp.gnu.org/gnu/binutils/
@@ -1514,7 +1514,7 @@ function do_native_binutils()
 
 # -----------------------------------------------------------------------------
 
-function do_native_gcc() 
+function build_native_gcc() 
 {
   # https://gcc.gnu.org
   # https://ftp.gnu.org/gnu/gcc/
@@ -1669,21 +1669,21 @@ if true
 then
 
   # New zlib, it is used in most of the tools.
-  do_zlib
+  build_zlib
 
   # Library, required by tar. 
-  do_xz
+  build_xz
 
   # New tar, with xz support.
-  do_tar # Requires xz.
+  build_tar # Requires xz.
 
   # From this moment on, .xz archives can be processed.
 
   # New openssl, required by curl, cmake, python, etc.
-  do_openssl
+  build_openssl
 
   # New curl, that better understands all protocols.
-  do_curl
+  build_curl
 
 fi
 
@@ -1691,24 +1691,24 @@ if true
 then
 
   # GNU tools. 
-  do_m4
-  do_gawk
-  do_autoconf
-  do_automake
-  do_libtool
-  do_gettext
-  do_patch
-  do_diffutils
-  do_bison
-  do_make
+  build_m4
+  build_gawk
+  build_autoconf
+  build_automake
+  build_libtool
+  build_gettext
+  build_patch
+  build_diffutils
+  build_bison
+  build_make
 
   # Third party tools.
-  do_pkg_config
+  build_pkg_config
 
-  do_flex # Requires gettext.
+  build_flex # Requires gettext.
 
-  do_perl
-  do_cmake
+  build_perl
+  build_cmake
 
 fi
 
@@ -1716,7 +1716,7 @@ if true
 then
 
   do_python
-  do_scons
+  build_scons
 
 fi
 
@@ -1724,10 +1724,10 @@ if true
 then
 
   # Libraries, required by gcc.
-  do_gmp
-  do_mpfr
-  do_mpc
-  do_isl
+  build_gmp
+  build_mpfr
+  build_mpc
+  build_isl
 
 fi
 
@@ -1735,8 +1735,8 @@ if true
 then
 
   # Native binutils and gcc.
-  do_native_binutils # Requires gmp, mpfr, mpc, isl.
-  do_native_gcc # Requires gmp, mpfr, mpc, isl.
+  build_native_binutils # Requires gmp, mpfr, mpc, isl.
+  build_native_gcc # Requires gmp, mpfr, mpc, isl.
 
 fi
 

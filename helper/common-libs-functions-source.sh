@@ -9,7 +9,7 @@
 
 # -----------------------------------------------------------------------------
 
-function do_zlib() 
+function build_zlib() 
 {
   # http://zlib.net
   # http://zlib.net/fossils/
@@ -116,7 +116,7 @@ function test_zlib()
 
 # -----------------------------------------------------------------------------
 
-function do_gmp() 
+function build_gmp() 
 {
   # https://gmplib.org
   # https://gmplib.org/download/gmp/
@@ -234,7 +234,7 @@ function test_gmp()
 
 # -----------------------------------------------------------------------------
 
-function do_mpfr() 
+function build_mpfr() 
 {
   # http://www.mpfr.org
   # https://ftp.gnu.org/gnu/mpfr/
@@ -350,7 +350,7 @@ function test_mpfr()
 
 # -----------------------------------------------------------------------------
 
-function do_mpc() 
+function build_mpc() 
 {
   # http://www.multiprecision.org/
   # https://ftp.gnu.org/gnu/mpc
@@ -455,7 +455,7 @@ function test_mpc()
 
 # -----------------------------------------------------------------------------
 
-function do_isl() 
+function build_isl() 
 {
   # http://isl.gforge.inria.fr
   # http://isl.gforge.inria.fr/isl-0.21.tar.xz
@@ -565,7 +565,7 @@ function test_isl()
 
 # -----------------------------------------------------------------------------
 
-function do_nettle() 
+function build_nettle() 
 {
   # https://www.lysator.liu.se/~nisse/nettle/
   # https://ftp.gnu.org/gnu/nettle/
@@ -689,7 +689,7 @@ function test_nettle()
 
 # -----------------------------------------------------------------------------
 
-function do_tasn1() 
+function build_tasn1() 
 {
   # https://www.gnu.org/software/libtasn1/
   # http://ftp.gnu.org/gnu/libtasn1/
@@ -796,7 +796,7 @@ function test_tasn1()
 
 # -----------------------------------------------------------------------------
 
-function do_expat() 
+function build_expat() 
 {
   # https://libexpat.github.io
   # https://github.com/libexpat/libexpat/releases
@@ -903,7 +903,7 @@ function test_expat()
 
 # -----------------------------------------------------------------------------
 
-function do_libffi() 
+function build_libffi() 
 {
   # https://github.com/libffi/libffi
   # https://sourceware.org/libffi/ (deprecated?)
@@ -1033,7 +1033,7 @@ function test_libffi()
 # -----------------------------------------------------------------------------
 
 # Normally not used.
-function do_libiconv() 
+function build_libiconv() 
 {
   # https://www.gnu.org/software/libiconv/
   # https://ftp.gnu.org/pub/gnu/libiconv/
@@ -1137,7 +1137,7 @@ function test_libiconv()
 
 # -----------------------------------------------------------------------------
 
-function do_gnutls() 
+function build_gnutls() 
 {
   # http://www.gnutls.org/
   # https://www.gnupg.org/ftp/gcrypt/gnutls/
@@ -1317,7 +1317,7 @@ function test_gnutls()
 
 # -----------------------------------------------------------------------------
 
-function do_util_macros() 
+function build_util_macros() 
 {
   # http://www.linuxfromscratch.org/blfs/view/
   # http://www.linuxfromscratch.org/blfs/view/7.4/x/util-macros.html
@@ -1419,7 +1419,7 @@ function test_util_macros()
 
 # -----------------------------------------------------------------------------
 
-function do_xorg_xproto() 
+function build_xorg_xproto() 
 {
   # https://www.x.org/releases/individual/proto/
   # https://www.x.org/releases/individual/proto/xproto-7.0.31.tar.bz2
@@ -1524,7 +1524,7 @@ function test_xorg_xproto()
 
 # -----------------------------------------------------------------------------
 
-function do_libpng()
+function build_libpng()
 {
   # To ensure builds stability, use slightly older releases.
   # https://sourceforge.net/projects/libpng/files/libpng16/
@@ -1647,7 +1647,7 @@ function test_libpng()
 
 # -----------------------------------------------------------------------------
 
-function do_libmpdec()
+function build_libmpdec()
 {
   # http://www.bytereef.org/mpdecimal/index.html
   # https://www.bytereef.org/mpdecimal/download.html
@@ -1758,7 +1758,7 @@ function test_libmpdec()
 
 # -----------------------------------------------------------------------------
 
-function do_libgpg_error() 
+function build_libgpg_error() 
 {
   # https://gnupg.org/ftp/gcrypt/libgpg-error
   
@@ -1866,7 +1866,7 @@ function test_libgpg_error()
 
 # -----------------------------------------------------------------------------
 
-function do_libgcrypt() 
+function build_libgcrypt() 
 {
   # https://gnupg.org/ftp/gcrypt/libgcrypt
   # https://gnupg.org/ftp/gcrypt/libgcrypt/libgcrypt-1.8.5.tar.bz2
@@ -2002,7 +2002,7 @@ function test_libgcrypt()
 
 # -----------------------------------------------------------------------------
 
-function do_libassuan() 
+function build_libassuan() 
 {
   # https://gnupg.org/ftp/gcrypt/libassuan
   # https://gnupg.org/ftp/gcrypt/libassuan/libassuan-2.5.3.tar.bz2
@@ -2112,7 +2112,7 @@ function test_libassuan()
 
 # -----------------------------------------------------------------------------
 
-function do_libksba() 
+function build_libksba() 
 {
   # https://gnupg.org/ftp/gcrypt/libksba
   # https://gnupg.org/ftp/gcrypt/libksba/libksba-1.3.5.tar.bz2
@@ -2222,7 +2222,7 @@ function test_libksba()
 
 # -----------------------------------------------------------------------------
 
-function do_npth() 
+function build_npth() 
 {
   # https://gnupg.org/ftp/gcrypt/npth
   # https://gnupg.org/ftp/gcrypt/npth/npth-1.6.tar.bz2
@@ -2331,7 +2331,7 @@ function test_npth()
 
 # -----------------------------------------------------------------------------
 
-function do_libxcrypt() 
+function build_libxcrypt() 
 {
   # Replacement for the old libcrypt.so.1.
 
@@ -2480,7 +2480,7 @@ function test_libxcrypt()
 
 # -----------------------------------------------------------------------------
 
-function do_libunistring() 
+function build_libunistring() 
 {
   # https://www.gnu.org/software/libunistring/
   # https://ftp.gnu.org/gnu/libunistring/
@@ -2585,7 +2585,7 @@ function test_libunistring()
 
 # -----------------------------------------------------------------------------
 
-function do_gc() 
+function build_gc() 
 {
   # https://www.hboehm.info/gc
   # https://github.com/ivmai/bdwgc/releases/
@@ -2702,7 +2702,7 @@ function test_gc()
 
 # -----------------------------------------------------------------------------
 
-function do_ncurses()
+function build_ncurses()
 {
   # https://invisible-island.net/ncurses/
   # ftp://ftp.invisible-island.net/pub/ncurses
@@ -2875,7 +2875,7 @@ function test_ncurses()
 
 # -----------------------------------------------------------------------------
 
-function do_readline()
+function build_readline()
 {
   # https://tiswww.case.edu/php/chet/readline/rltop.html
   # https://ftp.gnu.org/gnu/readline/

@@ -92,61 +92,61 @@ XBB_GCC_SUFFIX="-7bs"
 if true
 then
   # New zlib, it is used in most of the tools.
-  do_zlib "1.2.11"
+  build_zlib "1.2.11"
 
   # Library, required by tar. 
-  do_xz "5.2.3"
+  build_xz "5.2.3"
 
   # New tar, with xz support.
-  do_tar "1.30" # Requires xz.
+  build_tar "1.30" # Requires xz.
 
   # From this moment on, .xz archives can be processed.
 
   # New openssl, required by curl, cmake, python, etc.
-  do_openssl "1.0.2r"
+  build_openssl "1.0.2r"
 
   # New curl, that better understands all protocols.
-  do_curl "7.57.0"
+  build_curl "7.57.0"
 fi
 
 if true
 then
   # GNU tools. 
-  do_m4 "1.4.18"
-  do_gawk "4.2.0"
-  do_autoconf "2.69"
+  build_m4 "1.4.18"
+  build_gawk "4.2.0"
+  build_autoconf "2.69"
 
   # Requires autoconf 2.65 or better
-  do_automake "1.15"
-  do_libtool "2.4.6"
-  do_gettext "0.19.8"
-  do_patch "2.7.5"
-  do_diffutils "3.6"
-  do_bison "3.0.4"
-  do_make "4.2.1"
+  build_automake "1.15"
+  build_libtool "2.4.6"
+  build_gettext "0.19.8"
+  build_patch "2.7.5"
+  build_diffutils "3.6"
+  build_bison "3.0.4"
+  build_make "4.2.1"
 
   # Third party tools.
-  do_pkg_config "0.29.2"
+  build_pkg_config "0.29.2"
 
-  do_flex "2.6.4" # Requires gettext.
+  build_flex "2.6.4" # Requires gettext.
 
-  do_perl "5.24.1"
+  build_perl "5.24.1"
 fi
 
 if true
 then
   # Libraries, required by gcc.
-  do_gmp "6.1.2"
-  do_mpfr "3.1.6"
-  do_mpc "1.0.3"
-  do_isl "0.18"
+  build_gmp "6.1.2"
+  build_mpfr "3.1.6"
+  build_mpc "1.0.3"
+  build_isl "0.18"
 fi
 
 if true
 then
   # Native binutils and gcc.
-  do_native_binutils "2.31" # Requires gmp, mpfr, mpc, isl.
-  do_native_gcc "7.4.0" # Requires gmp, mpfr, mpc, isl.
+  build_native_binutils "2.31" # Requires gmp, mpfr, mpc, isl.
+  build_native_gcc "7.4.0" # Requires gmp, mpfr, mpc, isl.
 fi
 
 # Switch to the newly compiled GCC.
@@ -163,13 +163,13 @@ export CXX="g++${XBB_GCC_SUFFIX}"
 if true
 then
   # Recent versions require C++11.
-  do_cmake "3.13.4"
+  build_cmake "3.13.4"
 fi
 
 if true
 then
   do_python "2.7.14"
-  do_scons "3.0.1"
+  build_scons "3.0.1"
 fi
 
 if true

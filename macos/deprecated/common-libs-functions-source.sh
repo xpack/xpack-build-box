@@ -7,7 +7,7 @@
 # for any purpose is hereby granted, under the terms of the MIT license.
 # -----------------------------------------------------------------------------
 
-function do_zlib() 
+function build_zlib() 
 {
   # http://zlib.net
   # http://zlib.net/fossils/
@@ -76,7 +76,7 @@ function do_zlib()
   fi
 }
 
-function do_gmp() 
+function build_gmp() 
 {
   # https://gmplib.org
   # https://gmplib.org/download/gmp/
@@ -147,7 +147,7 @@ function do_gmp()
   fi
 }
 
-function do_mpfr() 
+function build_mpfr() 
 {
   # http://www.mpfr.org
   # http://www.mpfr.org/mpfr-3.1.6
@@ -218,7 +218,7 @@ function do_mpfr()
   fi
 }
 
-function do_mpc() 
+function build_mpc() 
 {
   # http://www.multiprecision.org/
   # ftp://ftp.gnu.org/gnu/mpc
@@ -285,7 +285,7 @@ function do_mpc()
   fi
 }
 
-function do_isl() 
+function build_isl() 
 {
   # http://isl.gforge.inria.fr
   # http://isl.gforge.inria.fr/isl-0.21.tar.xz
@@ -355,7 +355,7 @@ function do_isl()
   fi
 }
 
-function do_nettle() 
+function build_nettle() 
 {
   # https://www.lysator.liu.se/~nisse/nettle/
   # https://ftp.gnu.org/gnu/nettle/
@@ -428,7 +428,7 @@ function do_nettle()
   fi
 }
 
-function do_tasn1() 
+function build_tasn1() 
 {
   # https://www.gnu.org/software/libtasn1/
   # http://ftp.gnu.org/gnu/libtasn1/
@@ -496,7 +496,7 @@ function do_tasn1()
   fi
 }
 
-function do_expat() 
+function build_expat() 
 {
   # https://libexpat.github.io
   # https://github.com/libexpat/libexpat/releases
@@ -565,7 +565,7 @@ function do_expat()
   fi
 }
 
-function do_libffi() 
+function build_libffi() 
 {
   # https://sourceware.org/libffi/
   # https://sourceware.org/pub/libffi/
@@ -634,7 +634,7 @@ function do_libffi()
   fi
 }
 
-function do_libiconv() 
+function build_libiconv() 
 {
   # https://www.gnu.org/software/libiconv/
   # https://ftp.gnu.org/pub/gnu/libiconv/
@@ -703,7 +703,7 @@ function do_libiconv()
   fi
 }
 
-function do_gnutls() 
+function build_gnutls() 
 {
   # http://www.gnutls.org/
   # https://www.gnupg.org/ftp/gcrypt/gnutls/
@@ -778,7 +778,7 @@ function do_gnutls()
   fi
 }
 
-function do_util_macros() 
+function build_util_macros() 
 {
   # http://www.linuxfromscratch.org/blfs/view/7.4/x/util-macros.html
   # http://xorg.freedesktop.org/releases/individual/util/util-macros-1.17.1.tar.bz2
@@ -841,7 +841,7 @@ function do_util_macros()
   fi
 }
 
-function do_xorg_xproto() 
+function build_xorg_xproto() 
 {
   # http://www.linuxfromscratch.org/blfs/view/7.4/x/x7proto.html
   # https://www.x.org/releases/individual/proto/xproto-7.0.31.tar.bz2

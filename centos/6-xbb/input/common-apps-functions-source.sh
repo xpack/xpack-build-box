@@ -8,7 +8,7 @@
 # for any purpose is hereby granted, under the terms of the MIT license.
 # -----------------------------------------------------------------------------
 
-function do_native_binutils() 
+function build_native_binutils() 
 {
   # https://ftp.gnu.org/gnu/binutils/
   # https://aur.archlinux.org/cgit/aur.git/tree/PKGBUILD?h=binutils-git
@@ -70,7 +70,7 @@ function do_native_binutils()
 
 # -----------------------------------------------------------------------------
 
-function do_native_gcc() 
+function build_native_gcc() 
 {
   # https://gcc.gnu.org
   # https://ftp.gnu.org/gnu/gcc/
@@ -184,7 +184,7 @@ __EOF__
 # -----------------------------------------------------------------------------
 # mingw-w64
 
-function do_mingw_binutils() 
+function build_mingw_binutils() 
 {
   # https://ftp.gnu.org/gnu/binutils/
   # https://aur.archlinux.org/cgit/aur.git/tree/PKGBUILD?h=mingw-w64-binutils-weak
@@ -246,7 +246,7 @@ function do_mingw_binutils()
   hash -r
 }
 
-function do_mingw_all() 
+function build_mingw_all() 
 {
   # http://mingw-w64.org/doku.php/start
   # https://sourceforge.net/projects/mingw-w64/files/mingw-w64/mingw-w64-release/
@@ -575,7 +575,7 @@ __EOF__
 
 # =============================================================================
 
-function do_openssl() 
+function build_openssl() 
 {
   # https://www.openssl.org
   # https://www.openssl.org/source/
@@ -657,7 +657,7 @@ function do_openssl()
   hash -r
 }
 
-function do_tar() 
+function build_tar() 
 {
   # https://www.gnu.org/software/tar/
   # https://ftp.gnu.org/gnu/tar/
@@ -713,7 +713,7 @@ function do_tar()
   hash -r
 }
 
-function do_curl() 
+function build_curl() 
 {
   # https://curl.haxx.se
   # https://curl.haxx.se/download/
@@ -778,7 +778,7 @@ function do_curl()
   hash -r
 }
 
-function do_pkg_config() 
+function build_pkg_config() 
 {
   # https://www.freedesktop.org/wiki/Software/pkg-config/
   # https://pkgconfig.freedesktop.org/releases/
@@ -834,7 +834,7 @@ function do_pkg_config()
 }
 
 
-function do_coreutils()
+function build_coreutils()
 {
   # https://ftp.gnu.org/gnu/coreutils/
 
@@ -886,7 +886,7 @@ function do_coreutils()
   hash -r
 }
 
-function do_m4() 
+function build_m4() 
 {
   # https://www.gnu.org/software/m4/
   # https://ftp.gnu.org/gnu/m4/
@@ -936,7 +936,7 @@ function do_m4()
   hash -r
 }
 
-function do_gawk() 
+function build_gawk() 
 {
   # https://www.gnu.org/software/gawk/
   # https://ftp.gnu.org/gnu/gawk/
@@ -987,7 +987,7 @@ function do_gawk()
   hash -r
 }
 
-function do_sed() 
+function build_sed() 
 {
   # https://www.gnu.org/software/sed/
   # https://ftp.gnu.org/gnu/sed/
@@ -1036,7 +1036,7 @@ function do_sed()
   hash -r
 }
 
-function do_autoconf() 
+function build_autoconf() 
 {
   # https://www.gnu.org/software/autoconf/
   # https://ftp.gnu.org/gnu/autoconf/
@@ -1086,7 +1086,7 @@ function do_autoconf()
   hash -r
 }
 
-function do_automake() 
+function build_automake() 
 {
   # https://www.gnu.org/software/automake/
   # https://ftp.gnu.org/gnu/automake/
@@ -1136,7 +1136,7 @@ function do_automake()
   hash -r
 }
 
-function do_libtool() 
+function build_libtool() 
 {
   # https://www.gnu.org/software/libtool/
   # http://gnu.mirrors.linux.ro/libtool/
@@ -1187,7 +1187,7 @@ function do_libtool()
   hash -r
 }
 
-function do_gettext() 
+function build_gettext() 
 {
   # https://www.gnu.org/software/gettext/
   # https://ftp.gnu.org/gnu/gettext/
@@ -1237,7 +1237,7 @@ function do_gettext()
   hash -r
 }
 
-function do_diffutils() 
+function build_diffutils() 
 {
   # https://www.gnu.org/software/diffutils/
   # https://ftp.gnu.org/gnu/diffutils/
@@ -1287,7 +1287,7 @@ function do_diffutils()
   hash -r
 }
 
-function do_patch() 
+function build_patch() 
 {
   # https://www.gnu.org/software/patch/
   # https://ftp.gnu.org/gnu/patch/
@@ -1337,7 +1337,7 @@ function do_patch()
   hash -r
 }
 
-function do_bison() 
+function build_bison() 
 {
   # https://www.gnu.org/software/bison/
   # https://ftp.gnu.org/gnu/bison/
@@ -1387,7 +1387,7 @@ function do_bison()
   hash -r
 }
 
-function do_make() 
+function build_make() 
 {
   # https://www.gnu.org/software/make/
   # https://ftp.gnu.org/gnu/make/
@@ -1439,7 +1439,7 @@ function do_make()
   hash -r
 }
 
-function do_wget() 
+function build_wget() 
 {  
   # https://www.gnu.org/software/wget/
   # https://ftp.gnu.org/gnu/wget/
@@ -1503,7 +1503,7 @@ function do_wget()
   hash -r
 }
 
-function do_texinfo() 
+function build_texinfo() 
 {
   # https://www.gnu.org/software/texinfo/
   # https://ftp.gnu.org/gnu/texinfo/
@@ -1556,7 +1556,7 @@ function do_texinfo()
   hash -r
 }
 
-function do_patchelf() 
+function build_patchelf() 
 {
   # https://nixos.org/patchelf.html
   # https://nixos.org/releases/patchelf/
@@ -1607,7 +1607,7 @@ function do_patchelf()
   hash -r
 }
 
-function do_dos2unix() 
+function build_dos2unix() 
 {
   # http://dos2unix.sourceforge.net
   # https://sourceforge.net/projects/dos2unix/files/dos2unix/
@@ -1652,7 +1652,7 @@ function do_dos2unix()
   hash -r
 }
 
-function do_flex() 
+function build_flex() 
 {
   # https://github.com/westes/flex
   # https://github.com/westes/flex/releases
@@ -1703,7 +1703,7 @@ function do_flex()
   hash -r
 }
 
-function do_perl() 
+function build_perl() 
 {
   # https://www.cpan.org
   # http://www.cpan.org/src/
@@ -1765,7 +1765,7 @@ function do_perl()
   hash -r
 }
 
-function do_cmake() 
+function build_cmake() 
 {
   # https://cmake.org
   # https://cmake.org/download/
@@ -1924,7 +1924,7 @@ function do_python()
   hash -r
 }
 
-function do_python3() 
+function build_python3() 
 {
   # https://www.python.org
   # https://www.python.org/downloads/source/
@@ -2017,7 +2017,7 @@ function do_python3()
   hash -r
 }
 
-function do_meson
+function build_meson
 {
   # http://mesonbuild.com/
   # https://pypi.org/project/meson/0.50.0/#description
@@ -2032,7 +2032,7 @@ function do_meson
   hash -r
 }
 
-function do_scons() 
+function build_scons() 
 {
   # http://scons.org
   # https://sourceforge.net/projects/scons/files/scons/
@@ -2068,7 +2068,7 @@ function do_scons()
   hash -r
 }
 
-function do_wine()
+function build_wine()
 {
   # https://www.winehq.org
   # https://dl.winehq.org/wine/source/
@@ -2152,7 +2152,7 @@ function do_wine()
   hash -r
 }
 
-function do_ninja()
+function build_ninja()
 {
   # https://ninja-build.org
   # https://github.com/ninja-build/ninja/archive/v1.9.0.zip
@@ -2204,7 +2204,7 @@ function do_ninja()
   hash -r
 }
 
-function do_git() 
+function build_git() 
 {
   # https://git-scm.com/
   # https://www.kernel.org/pub/software/scm/git/
@@ -2266,7 +2266,7 @@ function do_git()
   hash -r
 }
 
-function do_p7zip()
+function build_p7zip()
 {
   # https://sourceforge.net/projects/p7zip/
   # https://sourceforge.net/projects/p7zip/files/p7zip/16.02/p7zip_16.02_src_all.tar.bz2/download

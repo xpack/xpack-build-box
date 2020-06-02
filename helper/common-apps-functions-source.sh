@@ -13,7 +13,7 @@
 # The linux headers are used by glibc.
 # Currently not used.
 
-function do_kernel_headers()
+function build_kernel_headers()
 {
   # This creates the following folders in ${INSTALL_FOLDER_PATH}/usr/include
   # total 96
@@ -118,7 +118,7 @@ function do_kernel_headers()
 # Installs GLIBC in a separate location compared to the other libs.
 # Currently not used.
 
-function do_glibc()
+function build_glibc()
 {
   # https://www.gnu.org/software/libc/
   # https://sourceware.org/glibc/wiki/FAQ
@@ -376,7 +376,7 @@ function test_glibc()
 
 # -----------------------------------------------------------------------------
 
-function do_native_binutils() 
+function build_native_binutils() 
 {
   # https://www.gnu.org/software/binutils/
   # https://ftp.gnu.org/gnu/binutils/
@@ -601,7 +601,7 @@ function test_native_binutils()
 
 # -----------------------------------------------------------------------------
 
-function do_native_gcc() 
+function build_native_gcc() 
 {
   # https://gcc.gnu.org
   # https://ftp.gnu.org/gnu/gcc/
@@ -1063,7 +1063,7 @@ __EOF__
 # -----------------------------------------------------------------------------
 # mingw-w64
 
-function do_mingw_binutils() 
+function build_mingw_binutils() 
 {
   # https://ftp.gnu.org/gnu/binutils/
 
@@ -1226,7 +1226,7 @@ function test_mingw_binutils()
 # -----------------------------------------------------------------------------
 # mingw-w64
 
-function do_mingw_all() 
+function build_mingw_all() 
 {
   # http://mingw-w64.org/doku.php/start
   # https://sourceforge.net/projects/mingw-w64/files/mingw-w64/mingw-w64-release/
@@ -1789,7 +1789,7 @@ __EOF__
 
 # -----------------------------------------------------------------------------
 
-function do_openssl() 
+function build_openssl() 
 {
   # https://www.openssl.org
   # https://www.openssl.org/source/
@@ -2020,7 +2020,7 @@ function test_openssl()
 
 # -----------------------------------------------------------------------------
 
-function do_curl() 
+function build_curl() 
 {
   # https://curl.haxx.se
   # https://curl.haxx.se/download/
@@ -2150,7 +2150,7 @@ function test_curl()
 
 # -----------------------------------------------------------------------------
 
-function do_xz() 
+function build_xz() 
 {
   # https://tukaani.org/xz/
   # https://sourceforge.net/projects/lzmautils/files/
@@ -2277,7 +2277,7 @@ function test_xz()
 
 # -----------------------------------------------------------------------------
 
-function do_tar() 
+function build_tar() 
 {
   # https://www.gnu.org/software/tar/
   # https://ftp.gnu.org/gnu/tar/
@@ -2462,7 +2462,7 @@ function test_tar()
 
 # -----------------------------------------------------------------------------
 
-function do_coreutils() 
+function build_coreutils() 
 {
   # https://www.gnu.org/software/coreutils/
   # https://ftp.gnu.org/gnu/coreutils/
@@ -2642,7 +2642,7 @@ function test_coreutils()
 
 # -----------------------------------------------------------------------------
 
-function do_pkg_config() 
+function build_pkg_config() 
 {
   # https://www.freedesktop.org/wiki/Software/pkg-config/
   # https://pkgconfig.freedesktop.org/releases/
@@ -2772,7 +2772,7 @@ function test_pkg_config()
 
 # -----------------------------------------------------------------------------
 
-function do_m4() 
+function build_m4() 
 {
   # https://www.gnu.org/software/m4/
   # https://ftp.gnu.org/gnu/m4/
@@ -2916,7 +2916,7 @@ function test_m4()
 
 # -----------------------------------------------------------------------------
 
-function do_gawk() 
+function build_gawk() 
 {
   # https://www.gnu.org/software/gawk/
   # https://ftp.gnu.org/gnu/gawk/
@@ -3055,7 +3055,7 @@ function test_gawk()
 
 # -----------------------------------------------------------------------------
 
-function do_sed() 
+function build_sed() 
 {
   # https://www.gnu.org/software/sed/
   # https://ftp.gnu.org/gnu/sed/
@@ -3197,7 +3197,7 @@ function test_sed()
 
 # -----------------------------------------------------------------------------
 
-function do_autoconf() 
+function build_autoconf() 
 {
   # https://www.gnu.org/software/autoconf/
   # https://ftp.gnu.org/gnu/autoconf/
@@ -3309,7 +3309,7 @@ function test_autoconf()
 
 # -----------------------------------------------------------------------------
 
-function do_automake() 
+function build_automake() 
 {
   # https://www.gnu.org/software/automake/
   # https://ftp.gnu.org/gnu/automake/
@@ -3427,7 +3427,7 @@ function test_automake()
 
 # -----------------------------------------------------------------------------
 
-function do_libtool() 
+function build_libtool() 
 {
   # https://www.gnu.org/software/libtool/
   # http://ftpmirror.gnu.org/libtool/
@@ -3583,7 +3583,7 @@ function test_libtool()
 
 # -----------------------------------------------------------------------------
 
-function do_gettext() 
+function build_gettext() 
 {
   # https://www.gnu.org/software/gettext/
   # https://ftp.gnu.org/gnu/gettext/
@@ -3787,7 +3787,7 @@ function test_gettext()
 
 # -----------------------------------------------------------------------------
 
-function do_patch() 
+function build_patch() 
 {
   # https://www.gnu.org/software/patch/
   # https://ftp.gnu.org/gnu/patch/
@@ -3896,7 +3896,7 @@ function test_patch()
 
 # -----------------------------------------------------------------------------
 
-function do_diffutils() 
+function build_diffutils() 
 {
   # https://www.gnu.org/software/diffutils/
   # https://ftp.gnu.org/gnu/diffutils/
@@ -4031,7 +4031,7 @@ function test_diffutils()
 
 # -----------------------------------------------------------------------------
 
-function do_bison() 
+function build_bison() 
 {
   # https://www.gnu.org/software/bison/
   # https://ftp.gnu.org/gnu/bison/
@@ -4162,7 +4162,7 @@ function test_bison()
 
 # -----------------------------------------------------------------------------
 
-function do_flex() 
+function build_flex() 
 {
   # https://www.gnu.org/software/flex/
   # https://github.com/westes/flex/releases
@@ -4312,7 +4312,7 @@ function test_flex()
 
 # -----------------------------------------------------------------------------
 
-function do_make() 
+function build_make() 
 {
   # https://www.gnu.org/software/make/
   # https://ftp.gnu.org/gnu/make/
@@ -4443,7 +4443,7 @@ function test_make()
 
 # -----------------------------------------------------------------------------
 
-function do_wget() 
+function build_wget() 
 {
   # https://www.gnu.org/software/wget/
   # https://ftp.gnu.org/gnu/wget/
@@ -4575,7 +4575,7 @@ function test_wget()
 
 # -----------------------------------------------------------------------------
 
-function do_texinfo() 
+function build_texinfo() 
 {
   # https://www.gnu.org/software/texinfo/
   # https://ftp.gnu.org/gnu/texinfo/
@@ -4692,7 +4692,7 @@ function test_texinfo()
 
 # -----------------------------------------------------------------------------
 
-function do_cmake() 
+function build_cmake() 
 {
   # https://cmake.org
   # https://github.com/Kitware/CMake/releases/
@@ -4870,7 +4870,7 @@ function test_cmake()
 
 # -----------------------------------------------------------------------------
 
-function do_perl() 
+function build_perl() 
 {
   # https://www.cpan.org
   # http://www.cpan.org/src/
@@ -5060,7 +5060,7 @@ function test_perl()
 
 # -----------------------------------------------------------------------------
 
-function do_makedepend() 
+function build_makedepend() 
 {
   # http://www.linuxfromscratch.org/blfs/view/7.4/x/makedepend.html
   # http://xorg.freedesktop.org/archive/individual/util
@@ -5171,7 +5171,7 @@ function test_makedepend()
 
 # -----------------------------------------------------------------------------
 
-function do_patchelf() 
+function build_patchelf() 
 {
   # https://nixos.org/patchelf.html
   # https://nixos.org/releases/patchelf/
@@ -5289,7 +5289,7 @@ function test_patchelf()
 
 # -----------------------------------------------------------------------------
 
-function do_chrpath() 
+function build_chrpath() 
 {
   # http://http.debian.net/debian/pool/main/c/chrpath/chrpath_0.16.orig.tar.gz
 
@@ -5395,7 +5395,7 @@ function test_chrpath()
 
 # -----------------------------------------------------------------------------
 
-function do_dos2unix() 
+function build_dos2unix() 
 {
   # https://waterlan.home.xs4all.nl/dos2unix.html
   # http://dos2unix.sourceforge.net
@@ -5490,7 +5490,7 @@ function test_dos2unix()
 
 # -----------------------------------------------------------------------------
 
-function do_git() 
+function build_git() 
 {
   # https://git-scm.com/
   # https://www.kernel.org/pub/software/scm/git/
@@ -5610,7 +5610,7 @@ function test_git()
 
 # -----------------------------------------------------------------------------
 
-function do_python2() 
+function build_python2() 
 {
   # https://www.python.org
   # https://www.python.org/downloads/source/
@@ -5776,7 +5776,7 @@ function test_python2()
 
 # -----------------------------------------------------------------------------
 
-function do_python3() 
+function build_python3() 
 {
   # https://www.python.org
   # https://www.python.org/downloads/source/
@@ -5955,7 +5955,7 @@ function test_python3()
 
 # -----------------------------------------------------------------------------
 
-function do_scons() 
+function build_scons() 
 {
   # http://scons.org
   # http://prdownloads.sourceforge.net/scons/
@@ -6074,7 +6074,7 @@ function test_scons()
 
 # -----------------------------------------------------------------------------
 
-function do_meson
+function build_meson
 {
   # http://mesonbuild.com/
   # https://pypi.org/project/meson/
@@ -6138,7 +6138,7 @@ function test_meson()
 
 # -----------------------------------------------------------------------------
 
-function do_ninja() 
+function build_ninja() 
 {
   # https://ninja-build.org
   # https://github.com/ninja-build/ninja/releases
@@ -6250,7 +6250,7 @@ function test_ninja()
 
 # -----------------------------------------------------------------------------
 
-function do_p7zip()
+function build_p7zip()
 {
   # https://sourceforge.net/projects/p7zip/files/p7zip
   # https://sourceforge.net/projects/p7zip/files/p7zip/16.02/p7zip_16.02_src_all.tar.bz2/download
@@ -6389,7 +6389,7 @@ function test_p7zip()
 
 # -----------------------------------------------------------------------------
 
-function do_wine()
+function build_wine()
 {
   # https://www.winehq.org
   # https://dl.winehq.org/wine/source/
@@ -6580,7 +6580,7 @@ function test_wine()
 # -----------------------------------------------------------------------------
 
 # Not yet functional.
-function do_nvm() 
+function build_nvm() 
 {
   # https://github.com/nvm-sh/nvm
   # curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.35.2/install.sh | bash
@@ -6681,7 +6681,7 @@ function test_nvm()
 
 # -----------------------------------------------------------------------------
 
-function do_gnupg() 
+function build_gnupg() 
 {
   # https://www.gnupg.org
   # https://www.gnupg.org/ftp/gcrypt/gnupg/gnupg-2.2.19.tar.bz2
@@ -6831,7 +6831,7 @@ function test_gpg()
 
 # -----------------------------------------------------------------------------
 
-function do_ant()
+function build_ant()
 {
   # https://ant.apache.org/srcdownload.cgi
   # https://downloads.apache.org/ant/binaries/
@@ -6927,7 +6927,7 @@ function test_ant()
 
 # -----------------------------------------------------------------------------
 
-function do_maven()
+function build_maven()
 {
   # https://maven.apache.org
   # https://www-eu.apache.org/dist/maven/source/
@@ -7026,7 +7026,7 @@ function test_maven()
 # -----------------------------------------------------------------------------
 
 # Not functional.
-function do_nodejs() 
+function build_nodejs() 
 {
   # https://nodejs.org/
   # https://github.com/nodejs/node/releases
@@ -7152,7 +7152,7 @@ function test_nodefs()
 
 # -----------------------------------------------------------------------------
 
-function do_tcl() 
+function build_tcl() 
 {
   # https://www.tcl.tk/
   # https://www.tcl.tk/software/tcltk/download.html
@@ -7284,7 +7284,7 @@ function test_tcl()
 
 # -----------------------------------------------------------------------------
 
-function do_guile() 
+function build_guile() 
 {
   # https://www.gnu.org/software/guile/
   # https://ftp.gnu.org/gnu/guile/
@@ -7437,7 +7437,7 @@ function test_guile()
 
 # -----------------------------------------------------------------------------
 
-function do_rhash() 
+function build_rhash() 
 {
   # https://github.com/rhash/RHash
   # https://github.com/rhash/RHash/releases
@@ -7559,7 +7559,7 @@ function test_rhash()
 
 # -----------------------------------------------------------------------------
 
-function do_re2c() 
+function build_re2c() 
 {
   # https://github.com/skvadrik/re2c
   # https://github.com/skvadrik/re2c/releases
@@ -7695,7 +7695,7 @@ function test_re2c()
 
 # -----------------------------------------------------------------------------
 
-function do_sphinx()
+function build_sphinx()
 {
   # https://www.sphinx-doc.org/en/master/
 
@@ -7752,7 +7752,7 @@ function test_sphinx()
 
 # -----------------------------------------------------------------------------
 
-function do_autogen() 
+function build_autogen() 
 {
   # https://www.gnu.org/software/autogen/
   # https://ftp.gnu.org/gnu/autogen/
@@ -7914,7 +7914,7 @@ function test_autogen()
 
 # -----------------------------------------------------------------------------
 
-function do_bash() 
+function build_bash() 
 {
   # https://www.gnu.org/software/bash/
   # https://ftp.gnu.org/gnu/bash/

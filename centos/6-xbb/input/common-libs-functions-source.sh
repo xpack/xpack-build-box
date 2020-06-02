@@ -9,7 +9,7 @@
 # -----------------------------------------------------------------------------
 
 
-function do_zlib() 
+function build_zlib() 
 {
   # http://zlib.net
   # http://zlib.net/fossils/
@@ -57,7 +57,7 @@ function do_zlib()
   )
 }
 
-function do_gmp() 
+function build_gmp() 
 {
   # https://gmplib.org
   # https://gmplib.org/download/gmp/
@@ -103,7 +103,7 @@ function do_gmp()
   )
 }
 
-function do_mpfr() 
+function build_mpfr() 
 {
   # http://www.mpfr.org
   # http://www.mpfr.org/mpfr-3.1.6
@@ -146,7 +146,7 @@ function do_mpfr()
   )
 }
 
-function do_mpc() 
+function build_mpc() 
 {
   # http://www.multiprecision.org/
   # ftp://ftp.gnu.org/gnu/mpc
@@ -189,7 +189,7 @@ function do_mpc()
 }
 
 
-function do_isl() 
+function build_isl() 
 {
   # http://isl.gforge.inria.fr
   # https://aur.archlinux.org/cgit/aur.git/tree/PKGBUILD?h=isl
@@ -231,7 +231,7 @@ function do_isl()
   )
 }
 
-function do_nettle() 
+function build_nettle() 
 {
   # https://www.lysator.liu.se/~nisse/nettle/
   # https://ftp.gnu.org/gnu/nettle/
@@ -289,7 +289,7 @@ function do_nettle()
   )
 }
 
-function do_tasn1() 
+function build_tasn1() 
 {
   # https://www.gnu.org/software/libtasn1/
   # http://ftp.gnu.org/gnu/libtasn1/
@@ -338,7 +338,7 @@ function do_tasn1()
   )
 }
 
-function do_expat()
+function build_expat()
 {
   # https://libexpat.github.io
   # https://github.com/libexpat/libexpat/releases
@@ -381,7 +381,7 @@ function do_expat()
   )
 }
 
-function do_libffi() 
+function build_libffi() 
 {
   # https://sourceware.org/libffi/
   # https://sourceware.org/pub/libffi/
@@ -431,7 +431,7 @@ function do_libffi()
   )
 }
 
-function do_libiconv() 
+function build_libiconv() 
 {
   # https://www.gnu.org/software/libiconv/
   # https://ftp.gnu.org/pub/gnu/libiconv/
@@ -477,7 +477,7 @@ function do_libiconv()
   )
 }
 
-function do_gnutls() 
+function build_gnutls() 
 {
   # http://www.gnutls.org/
   # https://www.gnupg.org/ftp/gcrypt/gnutls/
@@ -535,7 +535,7 @@ function do_gnutls()
   )
 }
 
-function do_xz() 
+function build_xz() 
 {
   # https://tukaani.org/xz/
   # https://sourceforge.net/projects/lzmautils/files/
@@ -587,7 +587,7 @@ function do_xz()
   hash -r
 }
 
-function do_libpng()
+function build_libpng()
 {
   # To ensure builds stability, use slightly older releases.
   # https://sourceforge.net/projects/libpng/files/libpng16/

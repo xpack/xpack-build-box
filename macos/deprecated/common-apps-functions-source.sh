@@ -177,7 +177,7 @@ __EOF__
 
 # -----------------------------------------------------------------------------
 
-function do_openssl() 
+function build_openssl() 
 {
   # https://www.openssl.org
   # https://www.openssl.org/source/
@@ -285,7 +285,7 @@ function do_openssl()
   fi
 }
 
-function do_curl() 
+function build_curl() 
 {
   # https://curl.haxx.se
   # https://curl.haxx.se/download/
@@ -376,7 +376,7 @@ function do_curl()
   fi
 }
 
-function do_xz() 
+function build_xz() 
 {
   # https://tukaani.org/xz/
   # https://sourceforge.net/projects/lzmautils/files/
@@ -455,7 +455,7 @@ function do_xz()
   fi
 }
 
-function do_tar() 
+function build_tar() 
 {
   # https://www.gnu.org/software/tar/
   # https://ftp.gnu.org/gnu/tar/
@@ -540,7 +540,7 @@ function do_tar()
   fi
 }
 
-function do_coreutils() 
+function build_coreutils() 
 {
   # https://www.gnu.org/software/coreutils/
   # https://ftp.gnu.org/gnu/coreutils/
@@ -622,7 +622,7 @@ function do_coreutils()
   fi
 }
 
-function do_pkg_config() 
+function build_pkg_config() 
 {
   # https://www.freedesktop.org/wiki/Software/pkg-config/
   # https://pkgconfig.freedesktop.org/releases/
@@ -709,7 +709,7 @@ function do_pkg_config()
   fi
 }
 
-function do_m4() 
+function build_m4() 
 {
   # https://www.gnu.org/software/m4/
   # https://ftp.gnu.org/gnu/m4/
@@ -794,7 +794,7 @@ function do_m4()
 }
 
 
-function do_gawk() 
+function build_gawk() 
 {
   # https://www.gnu.org/software/gawk/
   # https://ftp.gnu.org/gnu/gawk/
@@ -872,7 +872,7 @@ function do_gawk()
   fi
 }
 
-function do_sed() 
+function build_sed() 
 {
   # https://www.gnu.org/software/sed/
   # https://ftp.gnu.org/gnu/sed/
@@ -952,7 +952,7 @@ function do_sed()
   fi
 }
 
-function do_autoconf() 
+function build_autoconf() 
 {
   # https://www.gnu.org/software/autoconf/
   # https://ftp.gnu.org/gnu/autoconf/
@@ -1028,7 +1028,7 @@ function do_autoconf()
   fi
 }
 
-function do_automake() 
+function build_automake() 
 {
   # https://www.gnu.org/software/automake/
   # https://ftp.gnu.org/gnu/automake/
@@ -1105,7 +1105,7 @@ function do_automake()
   fi
 }
 
-function do_libtool() 
+function build_libtool() 
 {
   # https://www.gnu.org/software/libtool/
   # http://gnu.mirrors.linux.ro/libtool/
@@ -1188,7 +1188,7 @@ function do_libtool()
   fi
 }
 
-function do_gettext() 
+function build_gettext() 
 {
   # https://www.gnu.org/software/gettext/
   # https://ftp.gnu.org/gnu/gettext/
@@ -1265,7 +1265,7 @@ function do_gettext()
   fi
 }
 
-function do_patch() 
+function build_patch() 
 {
   # https://www.gnu.org/software/patch/
   # https://ftp.gnu.org/gnu/patch/
@@ -1342,7 +1342,7 @@ function do_patch()
   fi
 }
 
-function do_diffutils() 
+function build_diffutils() 
 {
   # https://www.gnu.org/software/diffutils/
   # https://ftp.gnu.org/gnu/diffutils/
@@ -1419,7 +1419,7 @@ function do_diffutils()
   fi
 }
 
-function do_bison() 
+function build_bison() 
 {
   # https://www.gnu.org/software/bison/
   # https://ftp.gnu.org/gnu/bison/
@@ -1499,7 +1499,7 @@ function do_bison()
 }
 
 # Not functional, it requires libtoolize
-function do_flex() 
+function build_flex() 
 {
   # https://www.gnu.org/software/flex/
   # https://github.com/westes/flex/releases
@@ -1585,7 +1585,7 @@ function do_flex()
   fi
 }
 
-function do_make() 
+function build_make() 
 {
   # https://www.gnu.org/software/make/
   # https://ftp.gnu.org/gnu/make/
@@ -1667,7 +1667,7 @@ function do_make()
   fi
 }
 
-function do_wget() 
+function build_wget() 
 {
   # https://www.gnu.org/software/wget/
   # https://ftp.gnu.org/gnu/wget/
@@ -1756,7 +1756,7 @@ function do_wget()
   fi
 }
 
-function do_texinfo() 
+function build_texinfo() 
 {
   # https://www.gnu.org/software/texinfo/
   # https://ftp.gnu.org/gnu/texinfo/
@@ -1833,7 +1833,7 @@ function do_texinfo()
   fi
 }
 
-function do_cmake() 
+function build_cmake() 
 {
   # https://cmake.org
   # https://github.com/Kitware/CMake/releases/
@@ -1939,7 +1939,7 @@ function do_cmake()
   fi
 }
 
-function do_perl() 
+function build_perl() 
 {
   # https://www.cpan.org
   # http://www.cpan.org/src/
@@ -2026,7 +2026,7 @@ function do_perl()
   fi
 }
 
-function do_makedepend() 
+function build_makedepend() 
 {
   # http://www.linuxfromscratch.org/blfs/view/7.4/x/makedepend.html
   # http://xorg.freedesktop.org/archive/individual/util/makedepend-1.0.5.tar.bz2
@@ -2101,7 +2101,7 @@ function do_makedepend()
   fi
 }
 
-function do_patchelf() 
+function build_patchelf() 
 {
   # https://nixos.org/patchelf.html
   # https://nixos.org/releases/patchelf/
@@ -2178,7 +2178,7 @@ function do_patchelf()
   fi
 }
 
-function do_dos2unix() 
+function build_dos2unix() 
 {
   # https://waterlan.home.xs4all.nl/dos2unix.html
   # http://dos2unix.sourceforge.net
@@ -2239,7 +2239,7 @@ function do_dos2unix()
   fi
 }
 
-function do_git() 
+function build_git() 
 {
   # https://git-scm.com/
   # https://www.kernel.org/pub/software/scm/git/
@@ -2413,7 +2413,7 @@ function do_python()
   fi
 }
 
-function do_python3() 
+function build_python3() 
 {
   # https://www.python.org
   # https://www.python.org/downloads/source/
@@ -2507,7 +2507,7 @@ function do_python3()
   fi
 }
 
-function do_scons() 
+function build_scons() 
 {
   # http://scons.org
   # https://sourceforge.net/projects/scons/files/scons/
@@ -2570,7 +2570,7 @@ function do_scons()
   fi
 }
 
-function do_meson
+function build_meson
 {
   # http://mesonbuild.com/
   # https://pypi.org/project/meson/0.50.0/#description
@@ -2585,7 +2585,7 @@ function do_meson
   hash -r
 }
 
-function do_ninja() 
+function build_ninja() 
 {
   # https://ninja-build.org
   # https://github.com/ninja-build/ninja/releases
@@ -2655,7 +2655,7 @@ function do_ninja()
   fi
 }
 
-function do_p7zip()
+function build_p7zip()
 {
   # https://sourceforge.net/projects/p7zip/files/p7zip/16.02/p7zip_16.02_src_all.tar.bz2/download
 

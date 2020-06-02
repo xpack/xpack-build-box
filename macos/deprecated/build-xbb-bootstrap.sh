@@ -86,46 +86,46 @@ XBB_GCC_BRANDING="xPack Build Box Bootstrap GCC\x2C 64-bit"
 
 # Libraries
 
-do_zlib "1.2.11"
+build_zlib "1.2.11"
 
-do_gmp "6.1.2"
-do_mpfr "3.1.6"
-do_mpc "1.0.3"
-do_isl "0.21"
+build_gmp "6.1.2"
+build_mpfr "3.1.6"
+build_mpc "1.0.3"
+build_isl "0.21"
 
 # Applications
 
-do_coreutils "8.31"
+build_coreutils "8.31"
 
-do_pkg_config "0.29.2"
+build_pkg_config "0.29.2"
 
-do_m4 "1.4.18"
+build_m4 "1.4.18"
 
-do_gawk "4.2.1"
-do_sed "4.7"
-do_autoconf "2.69"
-do_automake "1.16"
-do_libtool "2.4.6"
+build_gawk "4.2.1"
+build_sed "4.7"
+build_autoconf "2.69"
+build_automake "1.16"
+build_libtool "2.4.6"
 
-do_diffutils "3.7"
-do_patch "2.7.6"
+build_diffutils "3.7"
+build_patch "2.7.6"
 
-do_bison "3.3.2"
+build_bison "3.3.2"
 
 # macOS 10.10 uses 2.5.3, an update is not mandatory.
-# do_flex "2.6.4"
+# build_flex "2.6.4"
 
-do_make "4.2.1"
+build_make "4.2.1"
 
 # macOS 10.10 uses 5.18.2, an update is not mandatory.
-# do_perl "5.28.1"
+# build_perl "5.28.1"
 
-do_cmake "3.13.4"
+build_cmake "3.13.4"
 
 # makedepend is needed by openssl
-do_util_macros "1.17.1"
-do_xorg_xproto "7.0.31"
-do_makedepend "1.0.5"
+build_util_macros "1.17.1"
+build_xorg_xproto "7.0.31"
+build_makedepend "1.0.5"
 
 # By all means DO NOT build binutils, since this will override Apple 
 # specific tools (ar, strip, etc) and break the build in multiple ways.
