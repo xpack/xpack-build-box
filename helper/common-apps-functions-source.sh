@@ -1921,7 +1921,7 @@ function build_openssl()
 
             if [ ${openssl_version_minor} -eq 0 ]
             then
-              run_app sed -i -e 's|-Wl,-rpath,$(LIBRPATH)||' Makefile.shared
+              run_app sed -i -e 's|-Wl,-rpath,$(LIBRPATH)||' "Makefile.shared"
             fi
 
             # perl, do not start with bash.
@@ -2831,20 +2831,6 @@ function build_m4()
             \
             --disable-rpath \
 
-          if false # is_arm && [ "${HOST_BITS}" == "64" ]
-          then
-            # On Aarch64 && Arm
-            # /root/Work/xbb-bootstrap-3.2-ubuntu-16.04-aarch64/sources/m4-1.4.18/tests/test-getdtablesize.c:32: assertion 'dup2 (0, getdtablesize() - 1) == getdtablesize () - 1' failed
-            # FAIL test-getdtablesize (exit status: 134)
-            # /root/Work/xbb-bootstrap-3.2-ubuntu-16.04-aarch64/sources/m4-1.4.18/tests/test-dup2.c:160: assertion 'dup2 (fd, bad_fd - 1) == bad_fd - 1' failed
-            # FAIL test-dup2 (exit status: 134)
-
-            run_app sed -i \
-              -e 's|test-dup2$(EXEEXT)||' \
-              -e 's|test-getdtablesize$(EXEEXT)||' \
-              tests/Makefile
-          fi
-
           cp "config.log" "${LOGS_FOLDER_PATH}/${m4_folder_name}/config-log.txt"
         ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${m4_folder_name}/configure-output.txt"
       fi
@@ -3115,23 +3101,8 @@ function build_sed()
           # Fails on Intel and Arm, better disable it completely.
           run_app sed -i \
             -e 's|testsuite/panic-tests.sh||g' \
-            Makefile
+            "Makefile"
        
-          if false # is_arm && [ "${HOST_BITS}" == "64" ]
-          then
-            # On Aarch64 & Arm
-            # /root/Work/xbb-bootstrap-3.2-ubuntu-16.04-aarch64/sources/sed-4.7/gnulib-tests/test-getdtablesize.c:32: assertion 'dup2 (0, getdtablesize() - 1) == getdtablesize () - 1' failed
-            # FAIL test-getdtablesize (exit status: 134)
-            # /root/Work/xbb-bootstrap-3.2-ubuntu-16.04-aarch64/sources/sed-4.7/gnulib-tests/test-dup2.c:164: assertion 'dup2 (fd, bad_fd - 1) == bad_fd - 1' failed
-            # FAIL test-dup2 (exit status: 134)
-            # WARN-TEST
-            run_app sed -i \
-              -e 's|test-dup2$(EXEEXT)||' \
-              -e 's|test-getdtablesize$(EXEEXT)||' \
-              gnulib-tests/Makefile
-
-          fi
-
           # Some tests fail due to missing locales.
           # darwin: FAIL: testsuite/subst-mb-incomplete.sh
 
@@ -3664,35 +3635,23 @@ function build_gettext()
             done
           fi
 
+          # Tests fail on Ubuntu 14 bootstrap 
+          # Darwin: FAIL: lang-sh
           if [ "${XBB_LAYER}" == "xbb-bootstrap" ]
           then
             # Both 32 & 64.
             if is_arm
             then
               # Fails on 18.04 32-bit too.
+              # aarch64, armv8l: FAIL: test-thread_create
+              # aarch64, armv8l: FAIL: test-tls
               # WARN-TEST
               run_app sed -i \
                 -e 's|test-thread_create$(EXEEXT) ||' \
                 -e 's|test-tls$(EXEEXT) ||' \
-                gettext-tools/gnulib-tests/Makefile
+                "gettext-tools/gnulib-tests/Makefile"
             fi
           fi
-          if false # is_arm && [ "${HOST_BITS}" == "64" ]
-          then
-            # On Aarch64
-            # FAIL test-getdtablesize (exit status: 134)
-            # FAIL test-dup2 (exit status: 134)
-            # WARN-TEST
-            run_app sed -i \
-              -e 's|test-dup2$(EXEEXT)||' \
-              -e 's|test-getdtablesize$(EXEEXT)||' \
-              gettext-tools/gnulib-tests/Makefile
-            fi
-
-          # Tests fail on Ubuntu 14 bootstrap 
-          # aarch64, armv8l: FAIL: test-thread_create
-          # aarch64, armv8l: FAIL: test-tls
-          # Darwin: FAIL: lang-sh
 
           cp "config.log" "${LOGS_FOLDER_PATH}/${gettext_folder_name}/config-log.txt"
         ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${gettext_folder_name}/configure-output.txt"
@@ -3954,18 +3913,6 @@ function build_diffutils()
             \
             --disable-rpath \
 
-          if false # is_arm  && [ "${HOST_BITS}" == "64" ]
-          then
-            # On Aarch64
-            # FAIL test-getdtablesize (exit status: 134)
-            # FAIL test-dup2 (exit status: 134)
-            # WARN-TEST
-            run_app sed -i \
-              -e 's|test-dup2$(EXEEXT)||' \
-              -e 's|test-getdtablesize$(EXEEXT)||' \
-              gnulib-tests/Makefile
-          fi
-
           cp "config.log" "${LOGS_FOLDER_PATH}/${diffutils_folder_name}/config-log.txt"
         ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${diffutils_folder_name}/configure-output.txt"
       fi
@@ -3979,11 +3926,6 @@ function build_diffutils()
 
         # make install-strip
         make install
-
-            run_app sed -i \
-              -e 's|test-dup2$(EXEEXT)||' \
-              -e 's|test-getdtablesize$(EXEEXT)||' \
-              gnulib-tests/Makefile
 
         # WARN-TEST
         make -j1 check
@@ -6296,22 +6238,22 @@ function build_p7zip()
       echo "Running p7zip make..."
 
       # Override the hard-coded gcc & g++.
-      sed -i -e "s|CXX=g++.*|CXX=${CXX}|" makefile.machine
-      sed -i -e "s|CC=gcc.*|CC=${CC}|" makefile.machine
+      sed -i -e "s|CXX=g++.*|CXX=${CXX}|" "makefile.machine"
+      sed -i -e "s|CC=gcc.*|CC=${CC}|" "makefile.machine"
 
       # Do not override the environment variables, append to them.
-      sed -i -e "s|CFLAGS=|CFLAGS+=|" makefile.glb
-      sed -i -e "s|CXXFLAGS=|CXXFLAGS+=|" makefile.glb
+      sed -i -e "s|CFLAGS=|CFLAGS+=|" "makefile.glb"
+      sed -i -e "s|CXXFLAGS=|CXXFLAGS+=|" "makefile.glb"
 
       # Build.
       make -j ${JOBS}
 
-      run_app ls -lL bin
+      run_app ls -lL "bin"
 
       # Override the hard-coded '/usr/local'.
-      run_app sed -i -e "s|DEST_HOME=/usr/local|DEST_HOME=${INSTALL_FOLDER_PATH}|" install.sh
+      run_app sed -i -e "s|DEST_HOME=/usr/local|DEST_HOME=${INSTALL_FOLDER_PATH}|" "install.sh"
 
-      bash install.sh
+      bash "install.sh"
 
       if is_darwin
       then
@@ -6470,7 +6412,7 @@ function build_wine()
             -e 's|LDRPATH_INSTALL="-Wl,.*"|LDRPATH_INSTALL=""|' \
             -e 's|CFLAGS="$CFLAGS -Wl,--enable-new-dtags"|CFLAGS="$CFLAGS"|' \
             -e 's|LDRPATH_INSTALL="$LDRPATH_INSTALL -Wl,--enable-new-dtags"|LDRPATH_INSTALL="$LDRPATH_INSTALL"|' \
-            configure
+            "configure"
 
           if [ "${HOST_BITS}" == "64" ]
           then
@@ -6479,9 +6421,9 @@ function build_wine()
             ENABLE_64=""
           fi
 
-          bash configure --help
+          bash "configure" --help
 
-          bash ${DEBUG} configure \
+          bash ${DEBUG} "configure" \
             --prefix="${INSTALL_FOLDER_PATH}" \
             \
             --with-png \
@@ -6747,16 +6689,6 @@ function build_gnupg()
             --enable-symcryptrun \
             --disable-rpath \
 
-          if false # [ "${XBB_LAYER}" == "xbb" ] && is_arm && [ "${HOST_BITS}" == "64" ]
-          then
-
-            # Aarch64 Ubuntu 16 
-            run_app sed -i \
-              -e 's|#define HAVE_SETRLIMIT 1|#undef HAVE_SETRLIMIT|' \
-              config.h
-
-          fi
-
           cp "config.log" "${LOGS_FOLDER_PATH}/${gnupg_folder_name}/config-log.txt"
         ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${gnupg_folder_name}/configure-output.txt"
       fi
@@ -6771,12 +6703,7 @@ function build_gnupg()
         # make install-strip
         make install
 
-        if false # [ "${XBB_LAYER}" == "xbb" ] && is_arm && [ "${HOST_BITS}" == "64" ]
-        then
-          make -j1 check || true
-        else
-          make -j1 check
-        fi
+        make -j1 check
 
       ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${gnupg_folder_name}/make-output.txt"
     )
@@ -7352,24 +7279,7 @@ function build_guile()
           # FAIL: test-out-of-memory
           # https://lists.gnu.org/archive/html/guile-user/2017-11/msg00062.html
           # Remove the failing test.
-          sed -i -e 's|test-out-of-memory||g' test-suite/standalone/Makefile
-
-          if [ "${XBB_LAYER}" == "xbb" ]
-          then
-            if false # is_arm && [ "${HOST_BITS}" == "64" ]
-            then
-              # FAIL: test-stack-overflow
-
-              run_app sed -i \
-                -e 's|test-stack-overflow||g' \
-                test-suite/standalone/Makefile
-
-              run_app sed -i \
-                -e 's|tests/popen.test||g' \
-                test-suite/Makefile
-
-            fi
-          fi
+          sed -i -e 's|test-out-of-memory||g' "test-suite/standalone/Makefile"
 
           cp "config.log" "${LOGS_FOLDER_PATH}/${guile_folder_name}/config-log.txt"
         ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${guile_folder_name}/configure-output.txt"
@@ -7386,16 +7296,8 @@ function build_guile()
         # make install-strip
         make install
           
-        if false # [ "${XBB_LAYER}" == "xbb" -a "${HOST_MACHINE}" == "aarch64" ]
-        then
-          # WARN-TEST
-          # FAIL: popen.test: open-output-pipe: no duplicate
-          # Could not find an easy way to disable it.
-          make -j1 check || true
-        else
-          # WARN-TEST
-          make -j1 check
-        fi
+        # WARN-TEST
+        make -j1 check
 
       ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${guile_folder_name}/make-output.txt"
     )
@@ -7824,7 +7726,7 @@ function build_autogen()
             # FAIL: cond.test
             # FAILURE: warning diffs:  'undefining SECOND' not found
             cd autoopts/test
-            sed -i -e 's|cond.test||g' Makefile
+            sed -i -e 's|cond.test||g' "Makefile"
           )
 
           patch_all_libtool_rpath
@@ -7833,20 +7735,6 @@ function build_autogen()
             -name Makefile \
             -print \
             -exec sed -i -e "s|-Wl,-rpath -Wl,${INSTALL_FOLDER_PATH}/lib||" {} \;
-
-          if [ "${XBB_LAYER}" == "xbb" ]
-          then
-            if false # is_arm && [ "${HOST_BITS}" == "64" ]
-            then
-              # On Aarch64
-              # FAIL: agen5/error.test
-              # GC Warning: pthread_getattr_np or pthread_attr_getstack failed for main thread
-
-              run_app sed -i \
-                -e 's| error.test | |' \
-                agen5/test/Makefile
-            fi
-          fi
 
           cp "config.log" "${LOGS_FOLDER_PATH}/${autogen_folder_name}/config-log.txt"
         ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${autogen_folder_name}/configure-output.txt"

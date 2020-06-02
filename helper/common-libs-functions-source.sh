@@ -1241,17 +1241,6 @@ function build_gnutls()
                 tests/Makefile
 
             fi
-            if false # is_arm && [ "${HOST_BITS}" == "64" ]
-            then
-              # On Aarch64
-              # FAIL test-getdtablesize (exit status: 134)
-              # FAIL test-dup2 (exit status: 134)
-
-              run_app sed -i \
-                -e 's|test-dup2$(EXEEXT)||' \
-                -e 's|test-getdtablesize$(EXEEXT)||' \
-                gl/tests/Makefile
-            fi
           fi
 
           cp "config.log" "${LOGS_FOLDER_PATH}/${gnutls_folder_name}/config-log.txt"
@@ -1935,8 +1924,8 @@ function build_libgcrypt()
           if [ "${HOST_MACHINE}" != "aarch64" ]
           then
             # fix screwed up capability detection
-            sed -i '/HAVE_GCC_INLINE_ASM_AARCH32_CRYPTO 1/d' config.h
-            sed -i '/HAVE_GCC_INLINE_ASM_NEON 1/d' config.h
+            sed -i -e '/HAVE_GCC_INLINE_ASM_AARCH32_CRYPTO 1/d' "config.h"
+            sed -i -e '/HAVE_GCC_INLINE_ASM_NEON 1/d' "config.h"
           fi
 
           cp "config.log" "${LOGS_FOLDER_PATH}/${libgcrypt_folder_name}/config-log.txt"
