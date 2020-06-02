@@ -13,7 +13,7 @@ ARG JOBS
 ARG XBB_VERSION
 ARG XBB_LAYER
 
-ADD input /input
+ADD input-ubuntu-12.04-i386 /input
 RUN linux32 bash /input/build-v3.sh
 
 ENV LANG en_US.UTF-8

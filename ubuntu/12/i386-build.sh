@@ -42,12 +42,19 @@ source "${helper_folder_path}/common-docker-functions-source.sh"
 
 # -----------------------------------------------------------------------------
 
+arch="i386"
+distro="ubuntu"
+release="12.04"
+
+# -----------------------------------------------------------------------------
+
 host_init_docker_env
 host_init_docker_input
 
-arch="i386"
-
-docker_build_from_archive "${arch}" "${arch}-ubu12-rootfs.xz" "ilegeul/ubuntu:${arch}-12.04"
+docker_build_from_archive \
+  "${arch}" "${distro}" "${release}" \
+  "${arch}-ubu12-rootfs.xz" \
+  "ilegeul/ubuntu:${arch}-12.04"
 
 host_clean_docker_input
 

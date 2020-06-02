@@ -14,7 +14,7 @@ ARG XBB_VERSION
 ARG XBB_LAYER
 ARG RUN_LONG_TESTS
 
-ADD input /input
+ADD input-ubuntu-12.04-i386 /input
 RUN linux32 bash /input/build-v3.sh
 
 CMD ["/bin/bash"]

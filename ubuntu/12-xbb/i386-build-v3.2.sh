@@ -42,16 +42,18 @@ source "${helper_folder_path}/common-docker-functions-source.sh"
 
 # -----------------------------------------------------------------------------
 
-host_init_docker_env
-host_init_docker_input \
-  "$(dirname $(dirname "${script_folder_path}"))/ca-bundle/ca-bundle.crt" \
-
 version="3.2"
 layer="xbb"
 
 arch="i386"
 distro="ubuntu"
 release="12.04"
+
+# -----------------------------------------------------------------------------
+
+host_init_docker_env
+host_init_docker_input \
+  "$(dirname $(dirname "${script_folder_path}"))/ca-bundle/ca-bundle.crt" \
 
 tag="ilegeul/${distro}:${arch}-${release}-${layer}-v${version}"
 dockerfile="${arch}-Dockerfile-v${version}"

@@ -13,9 +13,6 @@ There are several scripts:
 $ bash ~/Downloads/xpack-build-box.git/ubuntu/12-tex/amd64-build-v3.1.sh
 $ bash ~/Downloads/xpack-build-box.git/ubuntu/12-tex/i386-build-v3.1.sh
 
-$ bash ~/Downloads/xpack-build-box.git/ubuntu/12-tex/amd64-build-v3.2.sh
-$ bash ~/Downloads/xpack-build-box.git/ubuntu/12-tex/i386-build-v3.2.sh
-
 $ docker images
 ```
 
@@ -27,9 +24,6 @@ The following tests were performed on an Ubuntu Server
 ```console
 $ docker run --interactive --tty ilegeul/ubuntu:amd64-12.04-tex-v3.1
 $ docker run --interactive --tty ilegeul/ubuntu:i386-12.04-tex-v3.1
-
-$ docker run --interactive --tty ilegeul/ubuntu:amd64-12.04-tex-v3.2
-$ docker run --interactive --tty ilegeul/ubuntu:i386-12.04-tex-v3.2
 ```
 
 ## Publish
@@ -39,7 +33,4 @@ To publish, use:
 ```console
 $ docker push "ilegeul/ubuntu:amd64-12.04-tex-v3.1"
 $ docker push "ilegeul/ubuntu:i386-12.04-tex-v3.1"
-
-$ docker push "ilegeul/ubuntu:amd64-12.04-tex-v3.2"
-$ docker push "ilegeul/ubuntu:i386-12.04-tex-v3.2"
 ```
