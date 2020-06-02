@@ -6,15 +6,15 @@ There are several scripts:
 - `amd64-build-v3.1.sh` -> `ilegeul/ubuntu:amd64-12.04-bootstrap-v3.1`
 - `i386-build-v3.1.sh` -> `ilegeul/ubuntu:i386-12.04-bootstrap-v3.1`
 
-- `amd64-build-v3.2.sh` -> `ilegeul/ubuntu:amd64-12.04-bootstrap-v3.2`
-- `i386-build-v3.1.sh` -> `ilegeul/ubuntu:i386-12.04-bootstrap-v3.2`
+- `amd64-build-v3.2.sh` -> `ilegeul/ubuntu:amd64-12.04-xbb-bootstrap-v3.2`
+- `i386-build-v3.1.sh` -> `ilegeul/ubuntu:i386-12.04-xbb-bootstrap-v3.2`
 
 ```console
-$ bash ~/Downloads/xpack-build-box.git/ubuntu/12-bootstrap/amd64-build-v3.1.sh
-$ bash ~/Downloads/xpack-build-box.git/ubuntu/12-bootstrap/i386-build-v3.1.sh
+$ bash ~/Downloads/xpack-build-box.git/ubuntu/12-xbb-bootstrap/amd64-build-v3.1.sh
+$ bash ~/Downloads/xpack-build-box.git/ubuntu/12-xbb-bootstrap/i386-build-v3.1.sh
 
-$ bash ~/Downloads/xpack-build-box.git/ubuntu/12-bootstrap/amd64-build-v3.2.sh
-$ bash ~/Downloads/xpack-build-box.git/ubuntu/12-bootstrap/i386-build-v3.2.sh
+$ bash ~/Downloads/xpack-build-box.git/ubuntu/12-xbb-bootstrap/amd64-build-v3.2.sh
+$ bash ~/Downloads/xpack-build-box.git/ubuntu/12-xbb-bootstrap/i386-build-v3.2.sh
 
 $ docker images
 ```
@@ -28,11 +28,11 @@ build.
 The following commands can be used to create the docker container:
 
 ```console
-$ bash ~/Downloads/xpack-build-box.git/ubuntu/12-bootstrap/amd64-run-v3.1.sh
-$ bash ~/Downloads/xpack-build-box.git/ubuntu/12-bootstrap/i386-run-v3.1.sh
+$ bash ~/Downloads/xpack-build-box.git/ubuntu/12-xbb-bootstrap/amd64-run-v3.1.sh
+$ bash ~/Downloads/xpack-build-box.git/ubuntu/12-xbb-bootstrap/i386-run-v3.1.sh
 
-$ bash ~/Downloads/xpack-build-box.git/ubuntu/12-bootstrap/amd64-run-v3.2.sh
-$ bash ~/Downloads/xpack-build-box.git/ubuntu/12-bootstrap/i386-run-v3.2.sh
+$ bash ~/Downloads/xpack-build-box.git/ubuntu/12-xbb-bootstrap/amd64-run-v3.2.sh
+$ bash ~/Downloads/xpack-build-box.git/ubuntu/12-xbb-bootstrap/i386-run-v3.2.sh
 ```
 
 Inside the container, run the build script:
@@ -56,8 +56,8 @@ The following tests were performed on an Ubuntu Server
 $ docker run --interactive --tty ilegeul/ubuntu:amd64-12.04-bootstrap-v3.1
 $ docker run --interactive --tty ilegeul/ubuntu:i386-12.04-bootstrap-v3.1
 
-$ docker run --interactive --tty ilegeul/ubuntu:amd64-12.04-bootstrap-v3.2
-$ docker run --interactive --tty ilegeul/ubuntu:i386-12.04-bootstrap-v3.2
+$ docker run --interactive --tty ilegeul/ubuntu:amd64-12.04-xbb-bootstrap-v3.2
+$ docker run --interactive --tty ilegeul/ubuntu:i386-12.04-xbb-bootstrap-v3.2
 ```
 
 ## Publish
@@ -68,6 +68,6 @@ To publish, use:
 $ docker push "ilegeul/ubuntu:amd64-12.04-bootstrap-v3.1"
 $ docker push "ilegeul/ubuntu:i386-12.04-bootstrap-v3.1"
 
-$ docker push "ilegeul/ubuntu:amd64-12.04-bootstrap-v3.2"
-$ docker push "ilegeul/ubuntu:i386-12.04-bootstrap-v3.2"
+$ docker push "ilegeul/ubuntu:amd64-12.04-xbb-bootstrap-v3.2"
+$ docker push "ilegeul/ubuntu:i386-12.04-xbb-bootstrap-v3.2"
 ```
