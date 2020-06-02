@@ -9,8 +9,8 @@ There are several scripts:
 - `i386-build-v3.1.sh` -> `ilegeul/ubuntu:i386-14.04-bootstrap-v3.1`
 
 ```console
-$ bash ~/Downloads/xpack-build-box.git/ubuntu/14-bootstrap/amd64-build-v3.1.sh
-$ bash ~/Downloads/xpack-build-box.git/ubuntu/14-bootstrap/i386-build-v3.1.sh
+$ bash ~/Downloads/xpack-build-box.git/ubuntu/14-xbb-bootstrap/amd64-build-v3.1.sh
+$ bash ~/Downloads/xpack-build-box.git/ubuntu/14-xbb-bootstrap/i386-build-v3.1.sh
 
 $ docker images
 ```
