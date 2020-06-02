@@ -2831,7 +2831,7 @@ function do_m4()
             \
             --disable-rpath \
 
-          if is_arm && [ "${HOST_BITS}" == "64" ]
+          if false # is_arm && [ "${HOST_BITS}" == "64" ]
           then
             # On Aarch64 && Arm
             # /root/Work/xbb-bootstrap-3.2-ubuntu-16.04-aarch64/sources/m4-1.4.18/tests/test-getdtablesize.c:32: assertion 'dup2 (0, getdtablesize() - 1) == getdtablesize () - 1' failed
@@ -3117,7 +3117,7 @@ function do_sed()
             -e 's|testsuite/panic-tests.sh||g' \
             Makefile
        
-          if is_arm && [ "${HOST_BITS}" == "64" ]
+          if false # is_arm && [ "${HOST_BITS}" == "64" ]
           then
             # On Aarch64 & Arm
             # /root/Work/xbb-bootstrap-3.2-ubuntu-16.04-aarch64/sources/sed-4.7/gnulib-tests/test-getdtablesize.c:32: assertion 'dup2 (0, getdtablesize() - 1) == getdtablesize () - 1' failed
@@ -3666,6 +3666,7 @@ function do_gettext()
 
           if [ "${XBB_LAYER}" == "xbb-bootstrap" ]
           then
+            # Both 32 & 64.
             if is_arm
             then
               # Fails on 18.04 32-bit too.
@@ -3676,7 +3677,7 @@ function do_gettext()
                 gettext-tools/gnulib-tests/Makefile
             fi
           fi
-          if is_arm && [ "${HOST_BITS}" == "64" ]
+          if false # is_arm && [ "${HOST_BITS}" == "64" ]
           then
             # On Aarch64
             # FAIL test-getdtablesize (exit status: 134)
@@ -3953,7 +3954,7 @@ function do_diffutils()
             \
             --disable-rpath \
 
-          if is_arm  && [ "${HOST_BITS}" == "64" ]
+          if false # is_arm  && [ "${HOST_BITS}" == "64" ]
           then
             # On Aarch64
             # FAIL test-getdtablesize (exit status: 134)
@@ -6746,7 +6747,7 @@ function do_gnupg()
             --enable-symcryptrun \
             --disable-rpath \
 
-          if [ "${XBB_LAYER}" == "xbb" ] && is_arm && [ "${HOST_BITS}" == "64" ]
+          if false # [ "${XBB_LAYER}" == "xbb" ] && is_arm && [ "${HOST_BITS}" == "64" ]
           then
 
             # Aarch64 Ubuntu 16 
@@ -6770,7 +6771,7 @@ function do_gnupg()
         # make install-strip
         make install
 
-        if [ "${XBB_LAYER}" == "xbb" ] && is_arm && [ "${HOST_BITS}" == "64" ]
+        if false # [ "${XBB_LAYER}" == "xbb" ] && is_arm && [ "${HOST_BITS}" == "64" ]
         then
           make -j1 check || true
         else
@@ -7355,7 +7356,7 @@ function do_guile()
 
           if [ "${XBB_LAYER}" == "xbb" ]
           then
-            if is_arm && [ "${HOST_BITS}" == "64" ]
+            if false # is_arm && [ "${HOST_BITS}" == "64" ]
             then
               # FAIL: test-stack-overflow
 
@@ -7385,7 +7386,7 @@ function do_guile()
         # make install-strip
         make install
           
-        if [ "${XBB_LAYER}" == "xbb" -a "${HOST_MACHINE}" == "aarch64" ]
+        if false # [ "${XBB_LAYER}" == "xbb" -a "${HOST_MACHINE}" == "aarch64" ]
         then
           # WARN-TEST
           # FAIL: popen.test: open-output-pipe: no duplicate
@@ -7835,7 +7836,7 @@ function do_autogen()
 
           if [ "${XBB_LAYER}" == "xbb" ]
           then
-            if is_arm && [ "${HOST_BITS}" == "64" ]
+            if false # is_arm && [ "${HOST_BITS}" == "64" ]
             then
               # On Aarch64
               # FAIL: agen5/error.test
@@ -7859,7 +7860,6 @@ function do_autogen()
         make -j ${JOBS}
 
         make install
-
 
         # WARN-TEST
         make -j1 check

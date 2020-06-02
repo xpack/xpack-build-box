@@ -1241,7 +1241,7 @@ function do_gnutls()
                 tests/Makefile
 
             fi
-            if is_arm && [ "${HOST_BITS}" == "64" ]
+            if false # is_arm && [ "${HOST_BITS}" == "64" ]
             then
               # On Aarch64
               # FAIL test-getdtablesize (exit status: 134)
@@ -1818,7 +1818,6 @@ function do_libgpg_error()
           # Interestingly enough, initially (before dismissing install-strip)
           # it passed.
           run_app sed -i -e 's|t-syserror$(EXEEXT)||' "tests/Makefile"
-
 
           cp "config.log" "${LOGS_FOLDER_PATH}/${libgpg_error_folder_name}/config-log.txt"
         ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${libgpg_error_folder_name}/configure-output.txt"
