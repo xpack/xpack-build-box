@@ -283,8 +283,11 @@ $ git submodule update --init
 Things to be considered for future versions:
 
 - add gdb
+- add doxygen
 - cleanup `man` folder
 - investigate why isl_test_cpp fails
+- gnutls requires several other libs
+- gnutls certificates folder
 
 - build nodejs
 
