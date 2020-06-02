@@ -45,7 +45,7 @@ source "${helper_folder_path}/common-docker-functions-source.sh"
 version="3.2"
 layer="xbb"
 
-arch="arm32v7"
+arch="amd64"
 distro="ubuntu"
 release="16.04"
 
