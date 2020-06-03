@@ -1137,6 +1137,8 @@ function build_mingw_binutils()
             --disable-nls \
             --disable-werror
 
+          patch_all_libtool_rpath
+
           cp "config.log" "${LOGS_FOLDER_PATH}/${mingw_binutils_folder_name}/config-log.txt"
         ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${mingw_binutils_folder_name}/configure-output.txt"
       fi
