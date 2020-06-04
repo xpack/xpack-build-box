@@ -69,7 +69,9 @@ source "${helper_folder_path}/common-versions-bootstrap-source.sh"
 
 function xbb_activate()
 {
-  :
+  # Use it for consistency reasons with macOS, where many tools are 
+  # not available and must be provided by the bootstrap.
+  xbb_activate_installed_bin
 }
 
 function do_cleanup()
