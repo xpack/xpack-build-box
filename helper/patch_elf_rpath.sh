@@ -34,6 +34,26 @@ script_folder_name="$(basename "${script_folder_path}")"
 
 # -----------------------------------------------------------------------------
 
+function is_linux()
+{
+  if [ "$(uname)" == "Linux" ]
+  then
+    return 0
+  fi
+
+  return 1
+}
+
+function is_darwin()
+{
+  if [ "$(uname)" == "Darwin" ]
+  then
+    return 0
+  fi
+
+  return 1
+}
+
 function is_elf()
 {
   if [ $# -lt 1 ]
@@ -124,7 +144,7 @@ function is_shared()
   if [ -f "${bin}" ]
   then
     # Return 0 (true) if found.
-    file ${bin} | egrep -q "shared object"
+    file ${bin} | egrep -q "shared"
   else
     return 1
   fi
@@ -262,7 +282,7 @@ function main()
     exit 0
   fi
 
-  # echo "${file_path}"
+# echo "${file_path}"
 
   if [[ "${file_path}" == *\.dll ]]
   then
@@ -274,6 +294,18 @@ function main()
     exit 0
   fi
 
+  if is_darwin
+  then
+    strip -S "${file_path}"
+
+    # TODO add possible other checks.
+
+    echo "  $(basename ${file_path}) ${file_path}"
+    exit 0
+  fi
+
+  # ---------------------------------------------------------------------------
+
   if is_static "${file_path}"
   then
     exit 0
@@ -284,7 +316,7 @@ function main()
     exit 0
   fi
 
-  # echo "${file_path}"
+  echo "${file_path} passed"
   # exit 0
 
   # ---------------------------------------------------------------------------
@@ -312,21 +344,18 @@ function main()
 
   # Anecdotal evidences show that strip and patchelf do not work together.
 
-  if true
+  if is_shared "${file_path}"
   then
-    if is_shared "${file_path}"
-    then
-      strip --strip-debug "${file_path}"
-    elif is_executable "${file_path}"
-    then
-      # warning: allocated section `.dynsym' not in segment
-      strip --strip-unneeded "${file_path}"
-      # Plus that apparently only --strip-debug is patchelf friendly.
-      # strip --strip-debug "${file_path}"
-    else
-      echo "  ? $(file ${file_path})"
-      exit 1
-    fi
+    strip --strip-debug "${file_path}"
+  elif is_executable "${file_path}"
+  then
+    # warning: allocated section `.dynsym' not in segment
+    strip --strip-unneeded "${file_path}"
+    # Plus that apparently only --strip-debug is patchelf friendly.
+    # strip --strip-debug "${file_path}"
+  else
+    echo "  ? $(file ${file_path})"
+    exit 1
   fi
 
   # ---------------------------------------------------------------------------
