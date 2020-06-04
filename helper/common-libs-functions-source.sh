@@ -1224,7 +1224,7 @@ function build_gnutls()
           run_app find . \
             -name Makefile \
             -print \
-            -exec sed -i \
+            -exec sed -i.bak \
               -e "s|-Wl,-rpath -Wl,${INSTALL_FOLDER_PATH}/lib||" \
               {} \;
 
@@ -1236,7 +1236,7 @@ function build_gnutls()
               # server:242: server: Handshake has failed (The operation timed out)
               # FAIL: srp
               # WARN-TEST
-              run_app sed -i \
+              run_app sed -i.bak \
                 -e 's|srp$(EXEEXT) ||' \
                 tests/Makefile
 
@@ -1806,7 +1806,7 @@ function build_libgpg_error()
           # FAIL: t-syserror (disabled) 
           # Interestingly enough, initially (before dismissing install-strip)
           # it passed.
-          run_app sed -i -e 's|t-syserror$(EXEEXT)||' "tests/Makefile"
+          run_app sed -i.bak -e 's|t-syserror$(EXEEXT)||' "tests/Makefile"
 
           cp "config.log" "${LOGS_FOLDER_PATH}/${libgpg_error_folder_name}/config-log.txt"
         ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${libgpg_error_folder_name}/configure-output.txt"
@@ -1924,8 +1924,8 @@ function build_libgcrypt()
           if [ "${HOST_MACHINE}" != "aarch64" ]
           then
             # fix screwed up capability detection
-            sed -i -e '/HAVE_GCC_INLINE_ASM_AARCH32_CRYPTO 1/d' "config.h"
-            sed -i -e '/HAVE_GCC_INLINE_ASM_NEON 1/d' "config.h"
+            sed -i.bak -e '/HAVE_GCC_INLINE_ASM_AARCH32_CRYPTO 1/d' "config.h"
+            sed -i.bak -e '/HAVE_GCC_INLINE_ASM_NEON 1/d' "config.h"
           fi
 
           cp "config.log" "${LOGS_FOLDER_PATH}/${libgcrypt_folder_name}/config-log.txt"
@@ -2934,7 +2934,7 @@ function build_readline()
           run_app find . \
             -name Makefile \
             -print \
-            -exec sed -i -e 's|-Wl,-rpath,$(libdir)||' {} \;
+            -exec sed -i.bak -e 's|-Wl,-rpath,$(libdir)||' {} \;
 
           cp "config.log" "${LOGS_FOLDER_PATH}/${readline_folder_name}/config-log.txt"
         ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${readline_folder_name}/configure-output.txt"

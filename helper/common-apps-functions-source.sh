@@ -1923,7 +1923,7 @@ function build_openssl()
 
             if [ ${openssl_version_minor} -eq 0 ]
             then
-              run_app sed -i -e 's|-Wl,-rpath,$(LIBRPATH)||' "Makefile.shared"
+              run_app sed -i.bak -e 's|-Wl,-rpath,$(LIBRPATH)||' "Makefile.shared"
             fi
 
             # perl, do not start with bash.
@@ -2332,17 +2332,17 @@ function build_tar()
           # 118: explicitly named directory removed before reading
           # FAILED (dirrem02.at:34)
 
-          run_app sed -i \
+          run_app sed -i.bak \
             -e 's|dirrem01.at||' \
             -e 's|dirrem02.at||' \
             "${tar_folder_name}/tests/Makefile.am"
 
-          run_app sed -i \
+          run_app sed -i.bak \
             -e 's|dirrem01.at||' \
             -e 's|dirrem02.at||' \
             "${tar_folder_name}/tests/Makefile.in"
 
-          run_app sed -i \
+          run_app sed -i.bak \
             -e '/dirrem01.at/d' \
             -e '/dirrem02.at/d' \
             -e '/Directories removed while archiving/d' \
@@ -3101,7 +3101,7 @@ function build_sed()
             --disable-rpath \
 
           # Fails on Intel and Arm, better disable it completely.
-          run_app sed -i \
+          run_app sed -i.bak \
             -e 's|testsuite/panic-tests.sh||g' \
             "Makefile"
        
@@ -3648,7 +3648,7 @@ function build_gettext()
               # aarch64, armv8l: FAIL: test-thread_create
               # aarch64, armv8l: FAIL: test-tls
               # WARN-TEST
-              run_app sed -i \
+              run_app sed -i.bak \
                 -e 's|test-thread_create$(EXEEXT) ||' \
                 -e 's|test-tls$(EXEEXT) ||' \
                 "gettext-tools/gnulib-tests/Makefile"
@@ -4044,7 +4044,7 @@ function build_bison()
           run_app find . \
             -name Makefile \
             -print \
-            -exec sed -i -e "s|-Wl,-rpath -Wl,${INSTALL_FOLDER_PATH}/lib||" {} \;
+            -exec sed -i.bak -e "s|-Wl,-rpath -Wl,${INSTALL_FOLDER_PATH}/lib||" {} \;
 
           cp "config.log" "${LOGS_FOLDER_PATH}/${bison_folder_name}/config-log.txt"
         ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${bison_folder_name}/configure-output.txt"
@@ -4461,7 +4461,7 @@ function build_wget()
           run_app find . \
             \( -name Makefile -o -name version.c \) \
             -print \
-            -exec sed -i -e "s|-Wl,-rpath -Wl,${INSTALL_FOLDER_PATH}/lib||" {} \;
+            -exec sed -i.bak -e "s|-Wl,-rpath -Wl,${INSTALL_FOLDER_PATH}/lib||" {} \;
 
           cp "config.log" "${LOGS_FOLDER_PATH}/${wget_folder_name}/config-log.txt"
         ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${wget_folder_name}/configure-output.txt"
@@ -4734,7 +4734,7 @@ function build_cmake()
         run_app find . \
           -name link.txt \
           -print \
-          -exec sed -i -e "s|-Wl,-rpath,${XBB_PARENT_FOLDER_PATH}/lib||" {} \;
+          -exec sed -i.bak -e "s|-Wl,-rpath,${XBB_PARENT_FOLDER_PATH}/lib||" {} \;
       fi
 
       (
@@ -6240,12 +6240,12 @@ function build_p7zip()
       echo "Running p7zip make..."
 
       # Override the hard-coded gcc & g++.
-      sed -i -e "s|CXX=g++.*|CXX=${CXX}|" "makefile.machine"
-      sed -i -e "s|CC=gcc.*|CC=${CC}|" "makefile.machine"
+      sed -i.bak -e "s|CXX=g++.*|CXX=${CXX}|" "makefile.machine"
+      sed -i.bak -e "s|CC=gcc.*|CC=${CC}|" "makefile.machine"
 
       # Do not override the environment variables, append to them.
-      sed -i -e "s|CFLAGS=|CFLAGS+=|" "makefile.glb"
-      sed -i -e "s|CXXFLAGS=|CXXFLAGS+=|" "makefile.glb"
+      sed -i.bak -e "s|CFLAGS=|CFLAGS+=|" "makefile.glb"
+      sed -i.bak -e "s|CXXFLAGS=|CXXFLAGS+=|" "makefile.glb"
 
       # Build.
       make -j ${JOBS}
@@ -6253,7 +6253,7 @@ function build_p7zip()
       run_app ls -lL "bin"
 
       # Override the hard-coded '/usr/local'.
-      run_app sed -i -e "s|DEST_HOME=/usr/local|DEST_HOME=${INSTALL_FOLDER_PATH}|" "install.sh"
+      run_app sed -i.bak -e "s|DEST_HOME=/usr/local|DEST_HOME=${INSTALL_FOLDER_PATH}|" "install.sh"
 
       bash "install.sh"
 
@@ -6410,7 +6410,7 @@ function build_wine()
           echo "Running wine configure..."
 
           # Get rid of the RUNPATH in install.
-          run_app sed -i \
+          run_app sed -i.bak \
             -e 's|LDRPATH_INSTALL="-Wl,.*"|LDRPATH_INSTALL=""|' \
             -e 's|CFLAGS="$CFLAGS -Wl,--enable-new-dtags"|CFLAGS="$CFLAGS"|' \
             -e 's|LDRPATH_INSTALL="$LDRPATH_INSTALL -Wl,--enable-new-dtags"|LDRPATH_INSTALL="$LDRPATH_INSTALL"|' \
@@ -7148,7 +7148,7 @@ function build_tcl()
           run_app find . \
             \( -name Makefile -o -name tclConfig.sh \) \
             -print \
-            -exec sed -i -e 's|-Wl,-rpath,${LIB_RUNTIME_DIR}||' {} \;
+            -exec sed -i.bak -e 's|-Wl,-rpath,${LIB_RUNTIME_DIR}||' {} \;
 
           cp "config.log" "${LOGS_FOLDER_PATH}/${tcl_folder_name}/config-log.txt"
         ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${tcl_folder_name}/configure-output.txt"
@@ -7281,7 +7281,7 @@ function build_guile()
           # FAIL: test-out-of-memory
           # https://lists.gnu.org/archive/html/guile-user/2017-11/msg00062.html
           # Remove the failing test.
-          sed -i -e 's|test-out-of-memory||g' "test-suite/standalone/Makefile"
+          sed -i.bak -e 's|test-out-of-memory||g' "test-suite/standalone/Makefile"
 
           cp "config.log" "${LOGS_FOLDER_PATH}/${guile_folder_name}/config-log.txt"
         ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${guile_folder_name}/configure-output.txt"
@@ -7728,7 +7728,7 @@ function build_autogen()
             # FAIL: cond.test
             # FAILURE: warning diffs:  'undefining SECOND' not found
             cd autoopts/test
-            sed -i -e 's|cond.test||g' "Makefile"
+            sed -i.bak -e 's|cond.test||g' "Makefile"
           )
 
           patch_all_libtool_rpath
@@ -7736,7 +7736,7 @@ function build_autogen()
           run_app find . \
             -name Makefile \
             -print \
-            -exec sed -i -e "s|-Wl,-rpath -Wl,${INSTALL_FOLDER_PATH}/lib||" {} \;
+            -exec sed -i.bak -e "s|-Wl,-rpath -Wl,${INSTALL_FOLDER_PATH}/lib||" {} \;
 
           cp "config.log" "${LOGS_FOLDER_PATH}/${autogen_folder_name}/config-log.txt"
         ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${autogen_folder_name}/configure-output.txt"

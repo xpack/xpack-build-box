@@ -1442,9 +1442,7 @@ function patch_file_libtool_rpath()
 {
   local file_path="$1"
 
-  # -exec sed -i -e 's|finalize_rpath="$finalize_rpath $libdir"|finalize_rpath=""|' {} \;
-
-  sed -i \
+  sed -i.bak \
       -e 's|finalize_rpath=".*"|finalize_rpath=""|' \
       -e 's|finalize_rpath=$rpath|finalize_rpath=""|' \
       -e 's|finalize_rpath+=" $libdir"|finalize_rpath=""|' \
