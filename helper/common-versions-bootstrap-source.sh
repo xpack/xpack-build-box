@@ -70,11 +70,25 @@ function build_versioned_components()
     # PATCH! .xz!
     build_automake "1.16"
 
+    # depends=('glibc' 'glib2 (internal)')
+    # Required by wget.
+    build_pkg_config "0.29.2"
+
     # Required by libxcrypt
     # depends=('sh' 'tar' 'glibc')
     # Notice: will use the old compiler
     libtool_version="2.4.6"
     build_libtool "${libtool_version}"
+
+    # Libraries, required by gcc & other.
+    # depends=('gcc-libs' 'sh')
+    build_gmp "6.1.2"
+    # depends=('gmp>=5.0')
+    build_mpfr "3.1.6"
+    # depends=('mpfr')
+    build_mpc "1.1.0" # "1.0.3"
+    # depends=('gmp')
+    build_isl "0.21"
 
     # Replacement for the old libcrypt.so.1.
     # ! Requires new autotools.
@@ -84,9 +98,23 @@ function build_versioned_components()
     # depends=('perl')
     build_openssl "1.0.2u" # "1.0.2r"
 
+    # Requires openssl.
+    # depends=('glibc' 'gmp')
+    # PATCH!
+    build_nettle "3.5.1" # "3.4.1"
+
     # New curl, that better understands all protocols.
     # depends=('ca-certificates' 'krb5' 'libssh2' 'openssl' 'zlib' 'libpsl' 'libnghttp2')
     build_curl "7.64.1" # "7.57.0"
+
+    # Libraries, required by gnutls.
+    # depends=('glibc')
+    build_tasn1 "4.15.0" # "4.13"
+
+    # After autogen, requires libopts.so.25.
+    # depends=('glibc' 'libidn2' 'libtasn1' 'libunistring' 'nettle' 'p11-kit' 'readline' 'zlib')
+    # Retuired by wget.
+    build_gnutls "3.6.11.1" # "3.6.7"
 
     # -------------------------------------------------------------------------
     # From this moment on, new https sites can be accessed.
@@ -129,13 +157,14 @@ function build_versioned_components()
     # Not needed, possibly harmful for GCC 9.
     # build_libiconv "1.16" # "1.15"
 
+    # depends=('libutil-linux' 'gnutls' 'libidn' 'libpsl>=0.7.1-3' 'gpgme')
+    # Required by libmpdec tests
+    build_wget "1.20.3" # "1.20.1"
+
     # Required by Python3
     build_expat "2.2.9"
     build_libmpdec "2.4.2"
     build_libffi "3.3"
-
-    # depends=('glibc' 'glib2 (internal)')
-    build_pkg_config "0.29.2"
 
     if is_linux
     then
@@ -197,16 +226,6 @@ function build_versioned_components()
 
     # -------------------------------------------------------------------------
     # Native binutils and gcc.
-
-    # Libraries, required by gcc.
-    # depends=('gcc-libs' 'sh')
-    build_gmp "6.1.2"
-    # depends=('gmp>=5.0')
-    build_mpfr "3.1.6"
-    # depends=('mpfr')
-    build_mpc "1.1.0" # "1.0.3"
-    # depends=('gmp')
-    build_isl "0.21"
 
     # By all means DO NOT build binutils on macOS, since this will 
     # override Apple specific tools (ar, strip, etc) and break the
