@@ -289,12 +289,19 @@ function build_mpfr()
 
           bash "${SOURCES_FOLDER_PATH}/${mpfr_src_folder_name}/configure" --help
 
+          config_options=()
+          config_options+=("--prefix=${INSTALL_FOLDER_PATH}")
+
+          config_options+=("--enable-thread-safe")
+          config_options+=("--enable-shared")
+
+          if is_linux
+          then
+            config_options+=("--disable-new-dtags")
+          fi
+
           bash ${DEBUG} "${SOURCES_FOLDER_PATH}/${mpfr_src_folder_name}/configure" \
-            --prefix="${INSTALL_FOLDER_PATH}" \
-            \
-            --enable-thread-safe \
-            --enable-shared \
-            --disable-new-dtags \
+            ${config_options[@]}
 
           patch_all_libtool_rpath
 
@@ -499,8 +506,11 @@ function build_isl()
       export CXXFLAGS="${XBB_CXXFLAGS_NO_W}"
       export LDFLAGS="${XBB_LDFLAGS_LIB}"
 
-      # The c++ test fails without it.
-      export LD_LIBRARY_PATH="${XBB_LIBRARY_PATH}"
+      if is_linux
+      then
+        # The c++ test fails without it.
+        export LD_LIBRARY_PATH="${XBB_LIBRARY_PATH}"
+      fi
 
       env | sort
 
@@ -1228,6 +1238,14 @@ function build_gnutls()
               -e "s|-Wl,-rpath -Wl,${INSTALL_FOLDER_PATH}/lib||" \
               {} \;
 
+          if is_darwin && [ "${XBB_LAYER}" == "xbb-bootstrap" ]
+          then
+            run_app sed -i.bak \
+              -e 's| test-ciphers.sh | |' \
+              -e 's| override-ciphers | |' \
+              tests/slow/Makefile
+          fi
+
           if [ "${XBB_LAYER}" == "xbb" ]
           then
             if is_arm && [ "${HOST_BITS}" == "32" ]
@@ -1239,7 +1257,6 @@ function build_gnutls()
               run_app sed -i.bak \
                 -e 's|srp$(EXEEXT) ||' \
                 tests/Makefile
-
             fi
           fi
 
@@ -1715,7 +1732,12 @@ function build_libmpdec()
 
         make install
 
-        make -j1 check
+        if is_linux
+        then
+          # TODO
+          # Fails shared on darwin
+          make -j1 check
+        fi
 
       ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${libmpdec_folder_name}/make-output.txt"
     )

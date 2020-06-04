@@ -39,7 +39,10 @@ function do_prerequisites()
 
   detect_host
 
-  docker_prepare_env
+  if [ -f "/.dockerenv" ]
+  then
+    docker_prepare_env
+  fi
 
   prepare_xbb_env
 
@@ -323,18 +326,26 @@ function prepare_xbb_env()
   XBB_CFLAGS_NO_W="${XBB_CFLAGS} -w"
   XBB_CXXFLAGS_NO_W="${XBB_CXXFLAGS} -w"
 
-  XBB_LDFLAGS="-Wl,--disable-new-dtags"
+  XBB_LDFLAGS=""
+
+  if [ "${HOST_UNAME}" == "Linux" ]
+  then
+    XBB_LDFLAGS+=" -Wl,--disable-new-dtags"
+  fi
 
   # -Wl,--gc-sections may make some symbols dissapear, do not use it here.
   XBB_LDFLAGS_LIB="${XBB_LDFLAGS}"
   XBB_LDFLAGS_LIB_STATIC_GCC="${XBB_LDFLAGS_LIB}"
 
-  XBB_LDFLAGS_APP="${XBB_LDFLAGS} -Wl,--gc-sections"
-  XBB_LDFLAGS_APP_STATIC="${XBB_LDFLAGS_APP} -static"
+  XBB_LDFLAGS_APP="${XBB_LDFLAGS}"
+  XBB_LDFLAGS_APP_STATIC="${XBB_LDFLAGS_APP}"
   XBB_LDFLAGS_APP_STATIC_GCC="${XBB_LDFLAGS_APP}"
 
   if [ "${HOST_UNAME}" == "Linux" ]
   then
+    XBB_LDFLAGS_APP+=" -Wl,--gc-sections"
+    XBB_LDFLAGS_APP_STATIC=" -static"
+
     # Minimise the risk of picking the wrong shared libraries.
     XBB_LDFLAGS_LIB_STATIC_GCC+=" -static-libgcc -static-libstdc++"
     XBB_LDFLAGS_APP_STATIC_GCC+=" -static-libgcc -static-libstdc++"

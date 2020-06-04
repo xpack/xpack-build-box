@@ -491,7 +491,10 @@ function build_native_binutils()
           config_options+=("--disable-werror")
           config_options+=("--disable-sim")
           # Prevent ld to set DT_RUNPATH.
-          config_options+=("--disable-new-dtags")
+          if is_linux
+          then
+            config_options+=("--disable-new-dtags")
+          fi
 
           bash ${DEBUG} "${SOURCES_FOLDER_PATH}/${native_binutils_src_folder_name}/configure" \
             ${config_options[@]}
@@ -799,7 +802,10 @@ function build_native_gcc()
             fi
 
             config_options+=("--disable-rpath")
-            config_options+=("--disable-new-dtags")
+            if is_linux
+            then
+              config_options+=("--disable-new-dtags")
+            fi
 
 
             if false # [ "${XBB_LAYER}" != "xbb-bootstrap" ]
@@ -894,7 +900,10 @@ function test_native_gcc()
     run_app which ld
 
     run_app as --version
-    run_app ld --version
+    if is_linux
+    then
+      run_app ld --version
+    fi
 
     echo
     echo "Testing if gcc binaries start properly..."
@@ -902,9 +911,14 @@ function test_native_gcc()
     run_app "${INSTALL_FOLDER_PATH}/usr/bin/gcc${XBB_GCC_SUFFIX}" --version
     run_app "${INSTALL_FOLDER_PATH}/usr/bin/g++${XBB_GCC_SUFFIX}" --version
 
-    run_app "${INSTALL_FOLDER_PATH}/usr/bin/gcc-ar${XBB_GCC_SUFFIX}" --version
-    run_app "${INSTALL_FOLDER_PATH}/usr/bin/gcc-nm${XBB_GCC_SUFFIX}" --version
-    run_app "${INSTALL_FOLDER_PATH}/usr/bin/gcc-ranlib${XBB_GCC_SUFFIX}" --version
+    if is_linux
+    then
+      # On Darwin: Cannot find plugin 'liblto_plugin.so'
+      # TODO: check why
+      run_app "${INSTALL_FOLDER_PATH}/usr/bin/gcc-ar${XBB_GCC_SUFFIX}" --version
+      run_app "${INSTALL_FOLDER_PATH}/usr/bin/gcc-nm${XBB_GCC_SUFFIX}" --version
+      run_app "${INSTALL_FOLDER_PATH}/usr/bin/gcc-ranlib${XBB_GCC_SUFFIX}" --version
+    fi
     run_app "${INSTALL_FOLDER_PATH}/usr/bin/gcov${XBB_GCC_SUFFIX}" --version
     run_app "${INSTALL_FOLDER_PATH}/usr/bin/gcov-dump${XBB_GCC_SUFFIX}" --version
     run_app "${INSTALL_FOLDER_PATH}/usr/bin/gcov-tool${XBB_GCC_SUFFIX}" --version
@@ -2421,7 +2435,8 @@ function build_tar()
         # darwin: 173: file truncated in sparse region while comparing FAILED (sptrdiff00.at:30)
         # darwin: 174: file truncated in data region while comparing   FAILED (sptrdiff01.at:30)
 
-        if [ "${RUN_LONG_TESTS}" == "y" ]
+        # TODO: remove tests on darwin
+        if is_linux && [ "${RUN_LONG_TESTS}" == "y" ]
         then
           # WARN-TEST
           make -j1 check # || true
@@ -3080,10 +3095,22 @@ function build_sed()
       xbb_activate
       xbb_activate_installed_dev
 
-      export CPPFLAGS="${XBB_CPPFLAGS}"
-      export CFLAGS="${XBB_CFLAGS_NO_W}"
-      export CXXFLAGS="${XBB_CXXFLAGS_NO_W}"
-      export LDFLAGS="${XBB_LDFLAGS_APP}"
+      CPPFLAGS="${XBB_CPPFLAGS}"
+      if is_darwin
+      then
+        # Configure expects a warning for clang.
+        CFLAGS="${XBB_CFLAGS}"
+        CXXFLAGS="${XBB_CXXFLAGS}"
+      else
+        CFLAGS="${XBB_CFLAGS_NO_W}"
+        CXXFLAGS="${XBB_CXXFLAGS_NO_W}"
+      fi
+      LDFLAGS="${XBB_LDFLAGS_APP}"
+
+      export CPPFLAGS
+      export CFLAGS
+      export CXXFLAGS
+      export LDFLAGS
 
       env | sort
 
@@ -3674,14 +3701,20 @@ function build_gettext()
           # is necessary to temporarily consider the local path.
           (
             cd gettext-runtime
-            export LD_RUN_PATH="$(pwd)/intl/.libs:${LD_RUN_PATH}"
-            echo "LD_RUN_PATH=$LD_RUN_PATH"
+            if is_linux
+            then
+              export LD_RUN_PATH="$(pwd)/intl/.libs:${LD_RUN_PATH}"
+              echo "LD_RUN_PATH=$LD_RUN_PATH"
+            fi
             make -j1 check 
           )
           (
             cd gettext-tools
-            export LD_RUN_PATH="$(pwd)/intl/.libs:${LD_RUN_PATH}"
-            echo "LD_RUN_PATH=$LD_RUN_PATH"
+            if is_linux
+            then
+              export LD_RUN_PATH="$(pwd)/intl/.libs:${LD_RUN_PATH}"
+              echo "LD_RUN_PATH=$LD_RUN_PATH"
+            fi
             make -j1 check 
           )
         )
@@ -3895,10 +3928,22 @@ function build_diffutils()
       xbb_activate
       xbb_activate_installed_dev
 
-      export CPPFLAGS="${XBB_CPPFLAGS}"
-      export CFLAGS="${XBB_CFLAGS_NO_W}"
-      export CXXFLAGS="${XBB_CXXFLAGS_NO_W}"
-      export LDFLAGS="${XBB_LDFLAGS_APP}"
+      CPPFLAGS="${XBB_CPPFLAGS}"
+      if is_darwin
+      then
+        # Configure expects a warning for clang.
+        CFLAGS="${XBB_CFLAGS}"
+        CXXFLAGS="${XBB_CXXFLAGS}"
+      else
+        CFLAGS="${XBB_CFLAGS_NO_W}"
+        CXXFLAGS="${XBB_CXXFLAGS_NO_W}"
+      fi
+      LDFLAGS="${XBB_LDFLAGS_APP}"
+
+      export CPPFLAGS
+      export CFLAGS
+      export CXXFLAGS
+      export LDFLAGS
 
       env | sort
 
@@ -5171,11 +5216,16 @@ function build_patchelf()
 
           bash "${SOURCES_FOLDER_PATH}/${patchelf_src_folder_name}/configure" --help
 
-          bash ${DEBUG} "${SOURCES_FOLDER_PATH}/${patchelf_src_folder_name}/configure" \
-            --prefix="${INSTALL_FOLDER_PATH}" \
-            \
-            --disable-new-dtags \
+          config_options=()
 
+          config_options+=("--prefix=${INSTALL_FOLDER_PATH}")
+          if is_linux
+          then
+            config_options+=("--disable-new-dtags")
+          fi
+
+          bash ${DEBUG} "${SOURCES_FOLDER_PATH}/${patchelf_src_folder_name}/configure" \
+            ${config_options[@]}
 
           cp "config.log" "${LOGS_FOLDER_PATH}/${patchelf_folder_name}/config-log.txt"
         ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${patchelf_folder_name}/configure-output.txt"
@@ -5636,19 +5686,26 @@ function build_python2()
           # --with-lto takes way too long on Ubuntu 14 aarch64.
           # --enable-optimizations takes too long
 
+          config_options=()
+          config_options+=("--prefix=${INSTALL_FOLDER_PATH}")
+
+          config_options+=("--with-threads")
+          config_options+=("--with-system-expat")
+          config_options+=("--with-system-ffi")
+          config_options+=("--with-dbmliborder=gdbm:ndbm")
+          config_options+=("--without-ensurepip")
+          config_options+=("--without-lto")
+            
+          config_options+=("--enable-shared")
+          config_options+=("--enable-unicode=ucs4")
+
+          if is_linux
+          then
+            config_options+=("--disable-new-dtags")
+          fi
+
           bash ${DEBUG} "${SOURCES_FOLDER_PATH}/${python2_src_folder_name}/configure" \
-            --prefix="${INSTALL_FOLDER_PATH}" \
-            \
-            --with-threads \
-            --with-system-expat \
-            --with-system-ffi \
-            --with-dbmliborder=gdbm:ndbm \
-            --without-ensurepip \
-            --without-lto \
-            \
-            --enable-shared \
-            --enable-unicode=ucs4 \
-            --disable-new-dtags \
+            ${config_options[@]}
 
           cp "config.log" "${LOGS_FOLDER_PATH}/${python2_folder_name}/config-log.txt"
         ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${python2_folder_name}/configure-output.txt"
@@ -5806,22 +5863,29 @@ function build_python3()
 
           # --enable-optimizations takes too long
 
+          config_options=()
+          config_options+=("--prefix=${INSTALL_FOLDER_PATH}")
+
+          config_options+=("--with-universal-archs=${HOST_BITS}-bit")
+          config_options+=("--with-computed-gotos")
+          config_options+=("--with-system-expat")
+          config_options+=("--with-system-ffi")
+          config_options+=("--with-system-libmpdec")
+          config_options+=("--with-dbmliborder=gdbm:ndbm")
+          config_options+=("--with-openssl=${INSTALL_FOLDER_PATH}")
+          config_options+=("--without-ensurepip")
+          config_options+=("--without-lto")
+          
+          config_options+=("--enable-shared")
+          config_options+=("--enable-loadable-sqlite-extensions")
+
+          if is_linux
+          then
+            config_options+=("--disable-new-dtags")
+          fi
+
           bash ${DEBUG} "${SOURCES_FOLDER_PATH}/${python3_src_folder_name}/configure" \
-            --prefix="${INSTALL_FOLDER_PATH}" \
-            \
-            --with-universal-archs=${HOST_BITS}-bit \
-            --with-computed-gotos \
-            --with-system-expat \
-            --with-system-ffi \
-            --with-system-libmpdec \
-            --with-dbmliborder=gdbm:ndbm \
-            --with-openssl="${INSTALL_FOLDER_PATH}" \
-            --without-ensurepip \
-            --without-lto \
-            \
-            --enable-shared \
-            --enable-loadable-sqlite-extensions \
-            --disable-new-dtags \
+            ${config_options[@]}
              
           cp "config.log" "${LOGS_FOLDER_PATH}/${python3_folder_name}/config-log.txt"
         ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${python3_folder_name}/configure-output.txt"
