@@ -110,7 +110,7 @@ function test_zlib()
     echo
     echo "Checking the zlib shared libraries..."
 
-    show_libs "$(realpath ${INSTALL_FOLDER_PATH}/lib/libz.so)"
+    show_libs "$(realpath ${INSTALL_FOLDER_PATH}/lib/libz.${SHLIB_EXT})"
   )
 }
 
@@ -227,8 +227,8 @@ function test_gmp()
     echo
     echo "Checking the gmp shared libraries..."
 
-    show_libs "$(realpath ${INSTALL_FOLDER_PATH}/lib/libgmp.so)"
-    show_libs "$(realpath ${INSTALL_FOLDER_PATH}/lib/libgmpxx.so)"
+    show_libs "$(realpath ${INSTALL_FOLDER_PATH}/lib/libgmp.${SHLIB_EXT})"
+    show_libs "$(realpath ${INSTALL_FOLDER_PATH}/lib/libgmpxx.${SHLIB_EXT})"
   )
 }
 
@@ -344,7 +344,7 @@ function test_mpfr()
     echo
     echo "Checking the mpfr shared libraries..."
 
-    show_libs "$(realpath ${INSTALL_FOLDER_PATH}/lib/libmpfr.so)"
+    show_libs "$(realpath ${INSTALL_FOLDER_PATH}/lib/libmpfr.${SHLIB_EXT})"
   )
 }
 
@@ -449,7 +449,7 @@ function test_mpc()
     echo
     echo "Checking the mpc shared libraries..."
 
-    show_libs "$(realpath ${INSTALL_FOLDER_PATH}/lib/libmpc.so)"
+    show_libs "$(realpath ${INSTALL_FOLDER_PATH}/lib/libmpc.${SHLIB_EXT})"
   )
 }
 
@@ -559,7 +559,7 @@ function test_isl()
     echo
     echo "Checking the isl shared libraries..."
 
-    show_libs "$(realpath ${INSTALL_FOLDER_PATH}/lib/libisl.so)"
+    show_libs "$(realpath ${INSTALL_FOLDER_PATH}/lib/libisl.${SHLIB_EXT})"
   )
 }
 
@@ -683,7 +683,7 @@ function test_nettle()
     echo
     echo "Checking the nettle shared libraries..."
 
-    show_libs "$(realpath ${INSTALL_FOLDER_PATH}/lib/libnettle.so)"
+    show_libs "$(realpath ${INSTALL_FOLDER_PATH}/lib/libnettle.${SHLIB_EXT})"
   )
 }
 
@@ -790,7 +790,7 @@ function test_tasn1()
     echo
     echo "Checking the tasn1 shared libraries..."
 
-    show_libs "$(realpath ${INSTALL_FOLDER_PATH}/lib/libtasn1.so)"
+    show_libs "$(realpath ${INSTALL_FOLDER_PATH}/lib/libtasn1.${SHLIB_EXT})"
   )
 }
 
@@ -897,7 +897,7 @@ function test_expat()
     echo
     echo "Checking the expat shared libraries..."
 
-    show_libs "$(realpath ${INSTALL_FOLDER_PATH}/lib/libexpat.so)"
+    show_libs "$(realpath ${INSTALL_FOLDER_PATH}/lib/libexpat.${SHLIB_EXT})"
   )
 }
 
@@ -1025,7 +1025,7 @@ function test_libffi()
     echo
     echo "Checking the libffi shared libraries..."
 
-    local libffi="$(find ${INSTALL_FOLDER_PATH}/lib* -name libffi.so)"
+    local libffi="$(find ${INSTALL_FOLDER_PATH}/lib* -name libffi.${SHLIB_EXT})"
     show_libs "$(realpath ${libffi})"
   )
 }
@@ -1629,7 +1629,7 @@ function test_libpng()
     echo
     echo "Checking the libpng shared libraries..."
 
-    show_libs "$(realpath ${INSTALL_FOLDER_PATH}/lib/libpng16.so)"
+    show_libs "$(realpath ${INSTALL_FOLDER_PATH}/lib/libpng16.${SHLIB_EXT})"
     show_libs "${INSTALL_FOLDER_PATH}/bin/pngfix"
   )
 }
@@ -1741,7 +1741,7 @@ function test_libmpdec()
     echo
     echo "Checking the libmpdec shared libraries..."
 
-    show_libs "$(realpath ${INSTALL_FOLDER_PATH}/lib/libmpdec.so)"
+    show_libs "$(realpath ${INSTALL_FOLDER_PATH}/lib/libmpdec.${SHLIB_EXT})"
   )
 }
 
@@ -1849,7 +1849,7 @@ function test_libgpg_error()
     echo
     echo "Checking the libpng_error shared libraries..."
 
-    show_libs "$(realpath ${INSTALL_FOLDER_PATH}/lib/libgpg-error.so)"
+    show_libs "$(realpath ${INSTALL_FOLDER_PATH}/lib/libgpg-error.${SHLIB_EXT})"
   )
 }
 
@@ -1985,7 +1985,7 @@ function test_libgcrypt()
     show_libs "${INSTALL_FOLDER_PATH}/bin/hmac256"
     show_libs "${INSTALL_FOLDER_PATH}/bin/mpicalc"
 
-    show_libs "$(realpath ${INSTALL_FOLDER_PATH}/lib/libgcrypt.so)"
+    show_libs "$(realpath ${INSTALL_FOLDER_PATH}/lib/libgcrypt.${SHLIB_EXT})"
   )
 }
 
@@ -2095,7 +2095,7 @@ function test_libassuan()
     echo "Checking the libassuan shared libraries..."
 
     # show_libs "${INSTALL_FOLDER_PATH}/bin/libassuan-config"
-    show_libs "$(realpath ${INSTALL_FOLDER_PATH}/lib/libassuan.so)"
+    show_libs "$(realpath ${INSTALL_FOLDER_PATH}/lib/libassuan.${SHLIB_EXT})"
   )
 }
 
@@ -2205,7 +2205,7 @@ function test_libksba()
     echo "Checking the libksba shared libraries..."
 
     # show_libs "${INSTALL_FOLDER_PATH}/bin/ksba-config"
-    show_libs "$(realpath ${INSTALL_FOLDER_PATH}/lib/libksba.so)"
+    show_libs "$(realpath ${INSTALL_FOLDER_PATH}/lib/libksba.${SHLIB_EXT})"
   )
 }
 
@@ -2314,7 +2314,7 @@ function test_npth()
     echo
     echo "Checking the npth shared libraries..."
 
-    show_libs "$(realpath ${INSTALL_FOLDER_PATH}/lib/libnpth.so)"
+    show_libs "$(realpath ${INSTALL_FOLDER_PATH}/lib/libnpth.${SHLIB_EXT})"
   )
 }
 
@@ -2463,7 +2463,7 @@ function test_libxcrypt()
     echo
     echo "Checking the libxcrypt shared libraries..."
 
-    show_libs "$(realpath ${INSTALL_FOLDER_PATH}/lib/libcrypt.so)"
+    show_libs "$(realpath ${INSTALL_FOLDER_PATH}/lib/libcrypt.${SHLIB_EXT})"
   )
 }
 
@@ -2568,7 +2568,7 @@ function test_libunistring()
     echo
     echo "Checking the libunistring shared libraries..."
 
-    show_libs "$(realpath ${INSTALL_FOLDER_PATH}/lib/libunistring.so)"
+    show_libs "$(realpath ${INSTALL_FOLDER_PATH}/lib/libunistring.${SHLIB_EXT})"
   )
 }
 
@@ -2683,9 +2683,9 @@ function test_gc()
     echo
     echo "Checking the gc shared libraries..."
 
-    show_libs "$(realpath ${INSTALL_FOLDER_PATH}/lib/libgc.so)"
-    show_libs "$(realpath ${INSTALL_FOLDER_PATH}/lib/libgccpp.so)"
-    show_libs "$(realpath ${INSTALL_FOLDER_PATH}/lib/libcord.so)"
+    show_libs "$(realpath ${INSTALL_FOLDER_PATH}/lib/libgc.${SHLIB_EXT})"
+    show_libs "$(realpath ${INSTALL_FOLDER_PATH}/lib/libgccpp.${SHLIB_EXT})"
+    show_libs "$(realpath ${INSTALL_FOLDER_PATH}/lib/libcord.${SHLIB_EXT})"
   )
 }
 
@@ -2855,10 +2855,10 @@ function test_ncurses()
     echo
     echo "Checking the ncurses shared libraries..."
 
-    show_libs "$(realpath ${INSTALL_FOLDER_PATH}/lib/libncurses.so)"
-    show_libs "$(realpath ${INSTALL_FOLDER_PATH}/lib/libpanel.so)"
-    show_libs "$(realpath ${INSTALL_FOLDER_PATH}/lib/libmenu.so)"
-    show_libs "$(realpath ${INSTALL_FOLDER_PATH}/lib/libform.so)"
+    show_libs "$(realpath ${INSTALL_FOLDER_PATH}/lib/libncurses.${SHLIB_EXT})"
+    show_libs "$(realpath ${INSTALL_FOLDER_PATH}/lib/libpanel.${SHLIB_EXT})"
+    show_libs "$(realpath ${INSTALL_FOLDER_PATH}/lib/libmenu.${SHLIB_EXT})"
+    show_libs "$(realpath ${INSTALL_FOLDER_PATH}/lib/libform.${SHLIB_EXT})"
   )
 }
 
@@ -2976,8 +2976,8 @@ function test_readline()
     echo
     echo "Checking the readline shared libraries..."
 
-    show_libs "$(realpath ${INSTALL_FOLDER_PATH}/lib/libreadline.so)"
-    show_libs "$(realpath ${INSTALL_FOLDER_PATH}/lib/libhistory.so)"
+    show_libs "$(realpath ${INSTALL_FOLDER_PATH}/lib/libreadline.${SHLIB_EXT})"
+    show_libs "$(realpath ${INSTALL_FOLDER_PATH}/lib/libhistory.${SHLIB_EXT})"
   )
 }
 

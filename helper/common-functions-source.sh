@@ -370,8 +370,10 @@ function prepare_xbb_env()
   if [ "${HOST_UNAME}" == "Darwin" ]
   then
     JOBS=${JOBS:-"$(sysctl -n hw.ncpu)"}
+    SHLIB_EXT="dylib"
   else
     JOBS=${JOBS:-"$(nproc)"}
+    SHLIB_EXT="so"
   fi
 
   # Default PATH.
@@ -418,6 +420,8 @@ function prepare_xbb_env()
   export PKG_CONFIG_PATH
   export PKG_CONFIG_LIBDIR
   export PKG_CONFIG
+
+  export SHLIB_EXT
 
   set +e
   local java_home=$(java -XshowSettings:properties -version 2>&1 > /dev/null | grep 'java.home' | sed -e 's/.*= //' | sed -e 's|/jre||' )

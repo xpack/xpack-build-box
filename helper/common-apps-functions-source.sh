@@ -941,7 +941,7 @@ function test_native_gcc()
     run_app "${INSTALL_FOLDER_PATH}/usr/bin/gcc${XBB_GCC_SUFFIX}" -print-multi-os-directory
     run_app "${INSTALL_FOLDER_PATH}/usr/bin/gcc${XBB_GCC_SUFFIX}" -print-sysroot
     # run_app "${INSTALL_FOLDER_PATH}/usr/bin/gcc${XBB_GCC_SUFFIX}" -print-sysroot-headers-suffix
-    run_app "${INSTALL_FOLDER_PATH}/usr/bin/gcc${XBB_GCC_SUFFIX}" -print-file-name=libgcc_s.so
+    run_app "${INSTALL_FOLDER_PATH}/usr/bin/gcc${XBB_GCC_SUFFIX}" -print-file-name=libgcc_s.${SHLIB_EXT}
     run_app "${INSTALL_FOLDER_PATH}/usr/bin/gcc${XBB_GCC_SUFFIX}" -print-prog-name=cc1
 
     run_app "${INSTALL_FOLDER_PATH}/usr/bin/g++${XBB_GCC_SUFFIX}" --help
@@ -956,7 +956,7 @@ function test_native_gcc()
     run_app "${INSTALL_FOLDER_PATH}/usr/bin/g++${XBB_GCC_SUFFIX}" -print-multi-os-directory
     run_app "${INSTALL_FOLDER_PATH}/usr/bin/g++${XBB_GCC_SUFFIX}" -print-sysroot
     # run_app "${INSTALL_FOLDER_PATH}/usr/bin/g++${XBB_GCC_SUFFIX}" -print-sysroot-headers-suffix
-    run_app "${INSTALL_FOLDER_PATH}/usr/bin/g++${XBB_GCC_SUFFIX}" -print-file-name=libstdc++.so
+    run_app "${INSTALL_FOLDER_PATH}/usr/bin/g++${XBB_GCC_SUFFIX}" -print-file-name=libstdc++.${SHLIB_EXT}
     run_app "${INSTALL_FOLDER_PATH}/usr/bin/g++${XBB_GCC_SUFFIX}" -print-prog-name=cc1plus
 
     echo
@@ -2015,8 +2015,8 @@ function test_openssl()
     echo "Checking the openssl shared libraries..."
 
     show_libs "${INSTALL_FOLDER_PATH}/bin/openssl"
-    show_libs "$(realpath ${INSTALL_FOLDER_PATH}/lib/libcrypto.so)"
-    show_libs "$(realpath ${INSTALL_FOLDER_PATH}/lib/libssl.so)"
+    show_libs "$(realpath ${INSTALL_FOLDER_PATH}/lib/libcrypto.${SHLIB_EXT})"
+    show_libs "$(realpath ${INSTALL_FOLDER_PATH}/lib/libssl.${SHLIB_EXT})"
   )
 }
 
@@ -2273,7 +2273,7 @@ function test_xz()
     show_libs "${INSTALL_FOLDER_PATH}/bin/xzdec"
     show_libs "${INSTALL_FOLDER_PATH}/bin/lzmainfo"
 
-    show_libs "$(realpath ${INSTALL_FOLDER_PATH}/lib/liblzma.so)"
+    show_libs "$(realpath ${INSTALL_FOLDER_PATH}/lib/liblzma.${SHLIB_EXT})"
   )
 }
 
@@ -3550,7 +3550,7 @@ function test_libtool()
     echo
     echo "Checking the libtool shared libraries..."
         
-    show_libs "$(realpath ${INSTALL_FOLDER_PATH}/lib/libltdl.so)"
+    show_libs "$(realpath ${INSTALL_FOLDER_PATH}/lib/libltdl.${SHLIB_EXT})"
   )
 }
 
@@ -3740,9 +3740,9 @@ function test_gettext()
     show_libs "${INSTALL_FOLDER_PATH}/bin/gettext"
     show_libs "${INSTALL_FOLDER_PATH}/bin/msgcmp"
 
-    show_libs "$(realpath ${INSTALL_FOLDER_PATH}/lib/libgettextlib.so)"
-    show_libs "$(realpath ${INSTALL_FOLDER_PATH}/lib/libgettextpo.so)"
-    show_libs "$(realpath ${INSTALL_FOLDER_PATH}/lib/libgettextsrc.so)"
+    show_libs "$(realpath ${INSTALL_FOLDER_PATH}/lib/libgettextlib.${SHLIB_EXT})"
+    show_libs "$(realpath ${INSTALL_FOLDER_PATH}/lib/libgettextpo.${SHLIB_EXT})"
+    show_libs "$(realpath ${INSTALL_FOLDER_PATH}/lib/libgettextsrc.${SHLIB_EXT})"
   )
 }
 
@@ -4250,7 +4250,7 @@ function test_flex()
     echo "Checking the flex shared libraries..."
 
     show_libs "${INSTALL_FOLDER_PATH}/bin/flex"
-    show_libs "$(realpath ${INSTALL_FOLDER_PATH}/lib/libfl.so)"
+    show_libs "$(realpath ${INSTALL_FOLDER_PATH}/lib/libfl.${SHLIB_EXT})"
   )
 }
 
@@ -6324,9 +6324,9 @@ function test_p7zip()
       show_libs "${INSTALL_FOLDER_PATH}/lib/p7zip/7zr"
     fi
 
-    if [ -f "${INSTALL_FOLDER_PATH}/lib/p7zip/7z.so" ]
+    if [ -f "${INSTALL_FOLDER_PATH}/lib/p7zip/7z.${SHLIB_EXT}" ]
     then
-      show_libs "${INSTALL_FOLDER_PATH}/lib/p7zip/7z.so"
+      show_libs "${INSTALL_FOLDER_PATH}/lib/p7zip/7z.${SHLIB_EXT}"
     fi
   )  
 }
@@ -7201,13 +7201,13 @@ function test_tcl()
     echo "Checking the tcl binaries shared libraries..."
 
     show_libs "${INSTALL_FOLDER_PATH}/bin/tclsh${TCL_VERSION_MAJOR}.${TCL_VERSION_MINOR}"
-    show_libs "$(find ${INSTALL_FOLDER_PATH}/lib/thread* -name 'libthread*.so')"
-    for lib in $(find ${INSTALL_FOLDER_PATH}/lib/tdb* -name 'libtdb*.so')
+    show_libs "$(find ${INSTALL_FOLDER_PATH}/lib/thread* -name 'libthread*.${SHLIB_EXT}')"
+    for lib in $(find ${INSTALL_FOLDER_PATH}/lib/tdb* -name 'libtdb*.${SHLIB_EXT}')
     do
       show_libs "${lib}"
     done
-    show_libs "$(find ${INSTALL_FOLDER_PATH}/lib/itcl* -name 'libitcl*.so')"
-    show_libs "$(find ${INSTALL_FOLDER_PATH}/lib/sqlite* -name 'libsqlite*.so')"
+    show_libs "$(find ${INSTALL_FOLDER_PATH}/lib/itcl* -name 'libitcl*.${SHLIB_EXT}')"
+    show_libs "$(find ${INSTALL_FOLDER_PATH}/lib/sqlite* -name 'libsqlite*.${SHLIB_EXT}')"
   )  
 }
 
@@ -7334,8 +7334,8 @@ function test_guile()
     echo "Checking the guile shared libraries..."
 
     show_libs "${INSTALL_FOLDER_PATH}/bin/guile"
-    show_libs "$(realpath ${INSTALL_FOLDER_PATH}/lib/libguile-2.2.so)"
-    show_libs "$(realpath ${INSTALL_FOLDER_PATH}/lib/guile/2.2/extensions/guile-readline.so)"
+    show_libs "$(realpath ${INSTALL_FOLDER_PATH}/lib/libguile-2.2.${SHLIB_EXT})"
+    show_libs "$(realpath ${INSTALL_FOLDER_PATH}/lib/guile/2.2/extensions/guile-readline.${SHLIB_EXT})"
   )  
 }
 
@@ -7457,7 +7457,7 @@ function test_rhash()
     echo "Checking the flex shared libraries..."
 
     show_libs "${INSTALL_FOLDER_PATH}/bin/rhash"
-    show_libs "$(realpath ${INSTALL_FOLDER_PATH}/lib/librhash.so.0)"
+    show_libs "$(realpath ${INSTALL_FOLDER_PATH}/lib/librhash.${SHLIB_EXT}.0)"
   )
 }
 
@@ -7798,7 +7798,7 @@ function test_autogen()
     show_libs "${INSTALL_FOLDER_PATH}/bin/columns"
     show_libs "${INSTALL_FOLDER_PATH}/bin/getdefs"
 
-    show_libs "$(realpath ${INSTALL_FOLDER_PATH}/lib/libopts.so)"
+    show_libs "$(realpath ${INSTALL_FOLDER_PATH}/lib/libopts.${SHLIB_EXT})"
   )  
 }
 
