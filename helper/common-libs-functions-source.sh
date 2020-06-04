@@ -106,6 +106,11 @@ function test_zlib()
 {
   (
     xbb_activate
+    if [ "${XBB_LAYER}" == "xbb-bootstrap" ]
+    then    
+      # To get xz.  
+      xbb_activate_installed_bin
+    fi
 
     echo
     echo "Checking the zlib shared libraries..."
@@ -223,6 +228,11 @@ function test_gmp()
 {
   (
     xbb_activate
+    if [ "${XBB_LAYER}" == "xbb-bootstrap" ]
+    then    
+      # To get xz.  
+      xbb_activate_installed_bin
+    fi
 
     echo
     echo "Checking the gmp shared libraries..."
@@ -347,6 +357,11 @@ function test_mpfr()
 {
   (
     xbb_activate
+    if [ "${XBB_LAYER}" == "xbb-bootstrap" ]
+    then    
+      # To get xz.  
+      xbb_activate_installed_bin
+    fi
 
     echo
     echo "Checking the mpfr shared libraries..."
@@ -452,6 +467,11 @@ function test_mpc()
 {
   (
     xbb_activate
+    if [ "${XBB_LAYER}" == "xbb-bootstrap" ]
+    then    
+      # To get xz.  
+      xbb_activate_installed_bin
+    fi
 
     echo
     echo "Checking the mpc shared libraries..."
@@ -565,6 +585,11 @@ function test_isl()
 {
   (
     xbb_activate
+    if [ "${XBB_LAYER}" == "xbb-bootstrap" ]
+    then    
+      # To get xz.  
+      xbb_activate_installed_bin
+    fi
 
     echo
     echo "Checking the isl shared libraries..."
@@ -689,6 +714,11 @@ function test_nettle()
 {
   (
     xbb_activate
+    if [ "${XBB_LAYER}" == "xbb-bootstrap" ]
+    then    
+      # To get xz.  
+      xbb_activate_installed_bin
+    fi
 
     echo
     echo "Checking the nettle shared libraries..."
@@ -796,6 +826,11 @@ function test_tasn1()
 {
   (
     xbb_activate
+    if [ "${XBB_LAYER}" == "xbb-bootstrap" ]
+    then    
+      # To get xz.  
+      xbb_activate_installed_bin
+    fi
 
     echo
     echo "Checking the tasn1 shared libraries..."
@@ -903,6 +938,11 @@ function test_expat()
 {
   (
     xbb_activate
+    if [ "${XBB_LAYER}" == "xbb-bootstrap" ]
+    then    
+      # To get xz.  
+      xbb_activate_installed_bin
+    fi
 
     echo
     echo "Checking the expat shared libraries..."
@@ -957,6 +997,11 @@ function build_libffi()
         cd "${SOURCES_FOLDER_PATH}/${libffi_src_folder_name}"
         
         xbb_activate
+        if [ "${XBB_LAYER}" == "xbb-bootstrap" ]
+        then    
+          # To get autoreconf.  
+          xbb_activate_installed_bin
+        fi
         xbb_activate_installed_dev
 
         run_app bash ${DEBUG} "autogen.sh"
@@ -1031,6 +1076,11 @@ function test_libffi()
 {
   (
     xbb_activate
+    if [ "${XBB_LAYER}" == "xbb-bootstrap" ]
+    then    
+      # To get xz.  
+      xbb_activate_installed_bin
+    fi
 
     echo
     echo "Checking the libffi shared libraries..."
@@ -1187,6 +1237,11 @@ function build_gnutls()
       cd "${LIBS_BUILD_FOLDER_PATH}/${gnutls_folder_name}"
 
       xbb_activate
+      if [ "${XBB_LAYER}" == "xbb-bootstrap" ]
+      then    
+        # To get pkg_config.  
+        xbb_activate_installed_bin
+      fi
       xbb_activate_installed_dev
 
       export CPPFLAGS="${XBB_CPPFLAGS}"
@@ -1759,6 +1814,11 @@ function test_libmpdec()
 {
   (
     xbb_activate
+    if [ "${XBB_LAYER}" == "xbb-bootstrap" ]
+    then
+      # To get realpath.
+      xbb_activate_installed_bin
+    fi
 
     echo
     echo "Checking the libmpdec shared libraries..."
@@ -2481,6 +2541,11 @@ function test_libxcrypt()
 {
   (
     xbb_activate
+    if [ "${XBB_LAYER}" == "xbb-bootstrap" ]
+    then    
+      # To get xz.  
+      xbb_activate_installed_bin
+    fi
 
     echo
     echo "Checking the libxcrypt shared libraries..."
