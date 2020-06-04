@@ -60,11 +60,16 @@ compiler, but with a GCC 7. This first set of tools is called _the XBB
 bootstrap_.
 
 ```console
-$ JOBS=7 caffeinate bash "${HOME}/Downloads/xpack-build-box.git/macos/build-xbb-bootstrap-v3.1.sh"
+$ RUN_LONG_TESTS=y caffeinate bash "${HOME}/Downloads/xpack-build-box.git/macos/build-xbb-bootstrap-v3.1.sh"
+$ RUN_LONG_TESTS=y caffeinate bash "${HOME}/Downloads/xpack-build-box.git/macos/build-xbb-bootstrap-v3.2.sh"
 ```
 
-The Finder command `build-xbb-bootstrap-v3.1.mac.command` can be used
-as a shortcut.
+There are several environment variables that can be passed to the script:
+
+```console
+# JOBS=1 caffeinate bash "${HOME}/Downloads/xpack-build-box.git/macos/build-xbb-bootstrap-v3.2.sh"
+# DEBUG=-x caffeinate bash "${HOME}/Downloads/xpack-build-box.git/macos/build-xbb-bootstrap-v3.2.sh"
+```
 
 The build process takes quite a while.
 
