@@ -3350,10 +3350,6 @@ function build_automake()
       cd "${BUILD_FOLDER_PATH}/${automake_folder_name}"
 
       xbb_activate
-      if [ "${XBB_LAYER}" == "xbb-bootstrap" ]
-      then      
-        xbb_activate_installed_bin
-      fi
       xbb_activate_installed_dev
 
       export CPPFLAGS="${XBB_CPPFLAGS}"
@@ -3623,11 +3619,6 @@ function build_gettext()
       cd "${BUILD_FOLDER_PATH}/${gettext_folder_name}"
 
       xbb_activate
-      if [ "${XBB_LAYER}" == "xbb-bootstrap" ]
-      then    
-        # To get xz.  
-        xbb_activate_installed_bin
-      fi
       xbb_activate_installed_dev
 
       CPPFLAGS="${XBB_CPPFLAGS}"
@@ -4479,11 +4470,6 @@ function build_wget()
       cd "${BUILD_FOLDER_PATH}/${wget_folder_name}"
 
       xbb_activate
-      if [ "${XBB_LAYER}" == "xbb-bootstrap" ]
-      then  
-        # To get pkg_config.    
-        xbb_activate_installed_bin
-      fi
       xbb_activate_installed_dev
 
       export CPPFLAGS="${XBB_CPPFLAGS}"
@@ -5099,11 +5085,6 @@ function build_makedepend()
       cd "${BUILD_FOLDER_PATH}/${makedepend_folder_name}"
 
       xbb_activate
-      if [ "${XBB_LAYER}" == "xbb-bootstrap" ]
-      then    
-        # To get pkg_config.  
-        xbb_activate_installed_bin
-      fi
       xbb_activate_installed_dev
 
       CPPFLAGS="${XBB_CPPFLAGS}"
