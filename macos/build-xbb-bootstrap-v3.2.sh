@@ -113,9 +113,4 @@ fi
 echo
 echo "You may want to ' chmod -R -w \"${INSTALL_FOLDER_PATH}\" '"
 
-if [ "${HOST_UNAME}" == "Darwin" ]
-then
-  : # say done
-fi
-
 # -----------------------------------------------------------------------------
