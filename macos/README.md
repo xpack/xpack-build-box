@@ -87,11 +87,9 @@ since they may refer to bootstrap libraries.
 The final XBB tools are compiled with the bootstrapped compiler.
 
 ```console
-$ JOBS=7 caffeinate bash "${HOME}/Downloads/xpack-build-box.git/macos/build-xbb-v3.1.sh"
+$ RUN_LONG_TESTS=y  caffeinate bash "${HOME}/Downloads/xpack-build-box.git/macos/build-xbb-v3.1.sh"
+$ RUN_LONG_TESTS=y  caffeinate bash "${HOME}/Downloads/xpack-build-box.git/macos/build-xbb-v3.2.sh"
 ```
-
-The Finder command `build-xbb-v3.1.mac.command` can be used
-as a shortcut.
 
 The build process takes quite a while. 
 
