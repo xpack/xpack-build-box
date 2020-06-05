@@ -1938,6 +1938,13 @@ function build_libgcrypt()
           config_options+=("--prefix=${INSTALL_FOLDER_PATH}")
           config_options+=("--with-libgpg-error-prefix=${INSTALL_FOLDER_PATH}")
 
+          config_options+=("--disable-doc")
+          config_options+=("--disable-large-data-tests")
+
+          # For Darwin, there are problems with the assembly code.
+          config_options+=("--disable-asm")
+          config_options+=("--disable-amd64-as-feature-detection")
+
           bash ${DEBUG} "${SOURCES_FOLDER_PATH}/${libgcrypt_src_folder_name}/configure" \
             ${config_options[@]}
 
