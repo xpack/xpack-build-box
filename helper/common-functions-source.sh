@@ -248,7 +248,7 @@ function prepare_xbb_env()
       CXX=${CXX:-"clang++"}
     else
       # TODO
-      prepare_gcc_env "" "-8bs"
+      prepare_gcc_env "" "-xbs"
     fi
   else
     if [ "${XBB_LAYER}" == "xbb-bootstrap" ]
@@ -469,7 +469,8 @@ function prepare_gcc_env()
   export CXX="${prefix}g++${suffix}"
   export CPP="${prefix}cpp${suffix}"
 
-  if [ "${XBB_LAYER}" == "xbb-bootstrap" ]
+  # On Darwin, -gcc-ar/nm/ranlib fail.
+  if [ "${XBB_LAYER}" == "xbb-bootstrap" -o "${HOST_UNAME}" == "Darwin" ]
   then
     export AR="${prefix}ar"
     export NM="${prefix}nm"

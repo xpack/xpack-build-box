@@ -1611,7 +1611,10 @@ function build_libpng()
         make install
 
         (
-          export LD_LIBRARY_PATH="${LD_RUN_PATH}"
+          if is_linux
+          then
+            export LD_LIBRARY_PATH="${LD_RUN_PATH}"
+          fi
           # Takes very long on armhf.
           make -j1 check
         )
