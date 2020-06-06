@@ -7277,13 +7277,28 @@ function test_tcl()
     echo "Checking the tcl binaries shared libraries..."
 
     show_libs "${INSTALL_FOLDER_PATH}/bin/tclsh${TCL_VERSION_MAJOR}.${TCL_VERSION_MINOR}"
-    show_libs "$(find ${INSTALL_FOLDER_PATH}/lib/thread* -name 'libthread*.${SHLIB_EXT}')"
-    for lib in $(find ${INSTALL_FOLDER_PATH}/lib/tdb* -name 'libtdb*.${SHLIB_EXT}')
-    do
-      show_libs "${lib}"
-    done
-    show_libs "$(find ${INSTALL_FOLDER_PATH}/lib/itcl* -name 'libitcl*.${SHLIB_EXT}')"
-    show_libs "$(find ${INSTALL_FOLDER_PATH}/lib/sqlite* -name 'libsqlite*.${SHLIB_EXT}')"
+    if is_linux
+    then
+      show_libs "$(find ${INSTALL_FOLDER_PATH}/lib/thread* -name 'libthread*.so')"
+      for lib in $(find ${INSTALL_FOLDER_PATH}/lib/tdb* -name 'libtdb*.so')
+      do
+        show_libs "${lib}"
+      done
+      show_libs "$(find ${INSTALL_FOLDER_PATH}/lib/itcl* -name 'libitcl*.so')"
+      show_libs "$(find ${INSTALL_FOLDER_PATH}/lib/sqlite* -name 'libsqlite*.so')"
+    elif is_darwin
+    then
+      show_libs "$(find ${INSTALL_FOLDER_PATH}/lib/thread* -name 'libthread*.dylib')"
+      for lib in $(find ${INSTALL_FOLDER_PATH}/lib/tdb* -name 'libtdb*.dylib')
+      do
+        show_libs "${lib}"
+      done
+      show_libs "$(find ${INSTALL_FOLDER_PATH}/lib/itcl* -name 'libitcl*.dylib')"
+      show_libs "$(find ${INSTALL_FOLDER_PATH}/lib/sqlite* -name 'libsqlite*.dylib')"
+    else
+      echo "Unknown platform."
+      exit 1
+    fi
   )  
 }
 
