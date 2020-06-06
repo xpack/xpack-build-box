@@ -83,7 +83,7 @@ function host_run_docker_it_with_volume()
   echo 
   echo "Running parent Docker image ${from}..."
 
-  if [[ "${layer}" == *-bootstrap ]]
+  if [[ "${layer}" == "xbb-bootstrap" ]]
   then
     docker run \
       --interactive \
@@ -99,7 +99,8 @@ function host_run_docker_it_with_volume()
       --volume="${script_folder_path}/${input_folder_name}:/input" \
       --volume="${output_folder_name}:/opt/${layer}" \
       ${from}
-  else
+  elif [[ "${layer}" == "xbb" ]]
+  then
     bootstrap_path="${HOME}/opt/${layer}-bootstrap-${distro}-${release}-${arch}"
     if [ ! -d "${bootstrap_path}" ]
     then
