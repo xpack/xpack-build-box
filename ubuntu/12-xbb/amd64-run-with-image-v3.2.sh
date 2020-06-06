@@ -47,7 +47,7 @@ version="3.2"
 arch="amd64"
 distro="ubuntu"
 release="12.04"
-from="ilegeul/${distro}:${arch}-${release}-bootstrap-v${version}"
+from="ilegeul/${distro}:${arch}-${release}-xbb-bootstrap-v${version}"
 layer="xbb"
 
 # -----------------------------------------------------------------------------
