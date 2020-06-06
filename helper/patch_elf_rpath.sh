@@ -316,7 +316,7 @@ function main()
     exit 0
   fi
 
-  echo "${file_path} passed"
+  # echo "${file_path} passed"
   # exit 0
 
   # ---------------------------------------------------------------------------
