@@ -67,7 +67,7 @@ function do_cleanup()
 do_prerequisites
 
 echo
-echo "$(uname) ${HOST_MACHINE} XBB test build script started..."
+echo "$(uname) ${HOST_MACHINE} XBB test v${XBB_VERSION} build script started..."
 
 # -----------------------------------------------------------------------------
 
@@ -76,7 +76,7 @@ build_versioned_components
 # -----------------------------------------------------------------------------
 
 echo
-echo "$(uname) ${HOST_MACHINE} XBB test created in \"${INSTALL_FOLDER_PATH}\""
+echo "$(uname) ${HOST_MACHINE} XBB test v${XBB_VERSION} created in \"${INSTALL_FOLDER_PATH}\""
 
 do_cleanup
 
