@@ -37,10 +37,13 @@ Generally, xPack binaries are available for the following platforms:
 For a repetitive and controllable build process, the Windows and GNU/Linux
 binaries are built using several Docker images (Intel/Arm, 32/64-bit).
 
-- `ilegeul/ubuntu:amd64-12.04-xbb-v3.1`
-- `ilegeul/ubuntu:i386-12.04-xbb-v3.1`
-- `ilegeul/ubuntu:arm64v8-16.04-xbb-v3.1`
-- `ilegeul/ubuntu:arm32v7-16.04-xbb-v3.1`
+The current version 3.2; older images are deprecated and should not be used
+for newer projcts.
+
+- `ilegeul/ubuntu:amd64-12.04-xbb-v3.2`
+- `ilegeul/ubuntu:i386-12.04-xbb-v3.2`
+- `ilegeul/ubuntu:arm64v8-16.04-xbb-v3.2`
+- `ilegeul/ubuntu:arm32v7-16.04-xbb-v3.2`
 
 The Intel images are based on Ubuntu 12.04 (ldd 2.15), and the Arm images are
 based on Ubuntu 16.04 (ldd 2.23); the resulting GNU/Linux binaries
@@ -68,7 +71,7 @@ To pass the folder with the build scripts in and the results out,
 it is usual to use a `Work` folder, for example:
 
 ```console
-$ docker run -it --volume "${HOME}/Work:/Host/Work" ilegeul/ubuntu:amd64-12.04-xbb-v3.1
+$ docker run -it --volume "${HOME}/Work:/Host/Work" ilegeul/ubuntu:amd64-12.04-xbb-v3.2
 root@831bc35faf9f:/# ls -l /Host/Work
 total 175320
 drwxr-xr-x  14 root root       448 Mar  7 19:47 arm-none-eabi-gcc-9.2.1-1.2
@@ -98,7 +101,7 @@ of the script, or, for a better isolation, in inner shells when the new
 tools are really needed.
 
 ```bash
-source "/opt/xbb/xbb.sh"
+source "/opt/xbb/xbb-source.sh"
 ...
 (
   xbb_activate
@@ -222,7 +225,7 @@ $ docker run -it <image> ldd --version
 - `ubuntu:14.04` - trusty - 2014-2022, 2.19, kernel 3.16
 - `ubuntu:16.04` - xenial - 2016-2024, 2.23, kernel 4.4 <--- Arm Linux choice
 - `ubuntu:18.04` - bionic - 2018-2028, 2.27, kernel 4.15
-- `ubuntu:20.04` - focal - 2020-2-30, ?, kernel 5.4
+- `ubuntu:20.04` - focal - 2020-2-30, 2.31, kernel 5.4
 
 ### [RHEL](https://access.redhat.com/support/policy/updates/errata/#Life_Cycle_Dates)
 

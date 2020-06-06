@@ -4,7 +4,7 @@
 
 The workaround to the Linux shared libraries hell is to hardcode the
 library search path in each ELF, as `rpath` which has the greatest
-propirity for the loader. (not `runpath`!)
+priority for the loader. (not `runpath`!)
 
 The easy way is to use `LD_RUN_PATH` an let the linker set it to
 this path.

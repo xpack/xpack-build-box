@@ -3,13 +3,10 @@
 
 There are several scripts:
 
-- `amd64-build-v3.1.sh` -> `ilegeul/ubuntu:amd64-12.04-xbb-v3.1`
-- `i386-build-v3.1.sh` -> `ilegeul/ubuntu:i386-12.04-xbb-v3.1`
+- `amd64-build-v3.2.sh` -> `ilegeul/ubuntu:amd64-12.04-xbb-v3.2`
+- `i386-build-v3.2.sh` -> `ilegeul/ubuntu:i386-12.04-xbb-v3.2`
 
 ```console
-$ bash ~/Downloads/xpack-build-box.git/ubuntu/12-xbb/amd64-build-v3.1.sh
-$ bash ~/Downloads/xpack-build-box.git/ubuntu/12-xbb/i386-build-v3.1.sh
-
 $ bash ~/Downloads/xpack-build-box.git/ubuntu/12-xbb/amd64-build-v3.2.sh
 $ bash ~/Downloads/xpack-build-box.git/ubuntu/12-xbb/i386-build-v3.2.sh
 
@@ -26,9 +23,6 @@ The following commands can be used to create the docker container
 based on the bootstrap image:
 
 ```console
-$ bash ~/Downloads/xpack-build-box.git/ubuntu/12-xbb/amd64-run-with-image-v3.1.sh
-$ bash ~/Downloads/xpack-build-box.git/ubuntu/12-xbb/i386-run-with-image-v3.1.sh
-
 $ bash ~/Downloads/xpack-build-box.git/ubuntu/12-xbb/amd64-run-with-image-v3.2.sh
 $ bash ~/Downloads/xpack-build-box.git/ubuntu/12-xbb/i386-run-with-image-v3.2.sh
 ```
@@ -37,9 +31,6 @@ The following commands can be used to create the docker container
 with the bootstrap also mounted from the host:
 
 ```console
-$ bash ~/Downloads/xpack-build-box.git/ubuntu/12-xbb/amd64-run-with-volume-v3.1.sh
-$ bash ~/Downloads/xpack-build-box.git/ubuntu/12-xbb/i386-run-with-volume-v3.1.sh
-
 $ bash ~/Downloads/xpack-build-box.git/ubuntu/12-xbb/amd64-run-with-volume-v3.2.sh
 $ bash ~/Downloads/xpack-build-box.git/ubuntu/12-xbb/i386-run-with-volume-v3.2.sh
 ```
@@ -63,9 +54,6 @@ The following tests were performed on an Ubuntu Server
 18.04 running on an Intel NUC.
 
 ```console
-$ docker run --interactive --tty ilegeul/ubuntu:amd64-12.04-xbb-v3.1
-$ docker run --interactive --tty ilegeul/ubuntu:i386-12.04-xbb-v3.1
-
 $ docker run --interactive --tty ilegeul/ubuntu:amd64-12.04-xbb-v3.2
 $ docker run --interactive --tty ilegeul/ubuntu:i386-12.04-xbb-v3.2
 ```
@@ -75,9 +63,6 @@ $ docker run --interactive --tty ilegeul/ubuntu:i386-12.04-xbb-v3.2
 To publish, use:
 
 ```console
-$ docker push "ilegeul/ubuntu:amd64-12.04-xbb-v3.1"
-$ docker push "ilegeul/ubuntu:i386-12.04-xbb-v3.1"
-
 $ docker push "ilegeul/ubuntu:amd64-12.04-xbb-v3.2"
 $ docker push "ilegeul/ubuntu:i386-12.04-xbb-v3.2"
 ```
