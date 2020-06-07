@@ -25,20 +25,23 @@ function do_one()
     docker push "ilegeul/ubuntu:${arch}-${version}.04-tex-v3.1"
   fi
 
-  bash ~/Downloads/xpack-build-box.git/ubuntu/${version}-bootstrap/${arch}-build-v3.1.sh
-  docker push "ilegeul/ubuntu:${arch}-${version}.04-bootstrap-v3.1"
-  bash ~/Downloads/xpack-build-box.git/ubuntu/${version}-xbb/${arch}-build-v3.1.sh
-  docker push "ilegeul/ubuntu:${arch}-${version}.04-xbb-v3.1"
+  bash ~/Downloads/xpack-build-box.git/ubuntu/${version}-xbb-bootstrap/${arch}-build-v3.2.sh
+  docker push "ilegeul/ubuntu:${arch}-${version}.04-xbb-bootstrap-v3.2"
+  bash ~/Downloads/xpack-build-box.git/ubuntu/${version}-xbb/${arch}-build-v3.2.sh
+  docker push "ilegeul/ubuntu:${arch}-${version}.04-xbb-v3.2"
 }
 
 time do_one 12 amd64
 time do_one 12 i386
 
-time do_one 14 amd64
-time do_one 14 i386
+if false
+then
+  time do_one 14 amd64
+  time do_one 14 i386
 
-time do_one 16 amd64
-time do_one 16 i386
+  time do_one 16 amd64
+  time do_one 16 i386
 
-time do_one 18 amd64
-time do_one 18 i386
+  time do_one 18 amd64
+  time do_one 18 i386
+fi
