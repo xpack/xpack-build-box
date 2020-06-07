@@ -1246,7 +1246,7 @@ function build_gnutls()
               tests/slow/Makefile
           fi
 
-          if [ "${XBB_LAYER}" == "xbb" ]
+          if [ "${XBB_LAYER}" == "xbb" -o "${XBB_LAYER}" == "xbb-test" ]
           then
             if is_arm && [ "${HOST_BITS}" == "32" ]
             then
