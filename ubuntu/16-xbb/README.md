@@ -67,7 +67,7 @@ $ docker run --interactive --tty ilegeul/ubuntu:i386-16.04-xbb-v3.2
 ```
 
 The following tests were performed on an Debian 9
-running on a ROCK Pi.
+running on a ROCK Pi 4 SBC.
 
 ```console
 $ docker run --interactive --tty ilegeul/ubuntu:arm64v8-16.04-xbb-v3.2
