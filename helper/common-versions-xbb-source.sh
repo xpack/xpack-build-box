@@ -102,7 +102,7 @@ function build_versioned_components()
       build_native_binutils "${XBB_BINUTILS_VERSION}"
     fi
 
-    if false # is_darwin
+    if is_darwin
     then
       build_native_gdb "9.2"
     fi
