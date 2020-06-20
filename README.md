@@ -285,7 +285,7 @@ $ git submodule update --init
 
 Things to be considered for future versions:
 
-- add gdb
+- add gdb (for macOS)
 - add doxygen
 - cleanup `man` folder
 - investigate why isl_test_cpp fails

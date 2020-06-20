@@ -50,6 +50,7 @@ function build_versioned_components()
     XBB_MINGW_BINUTILS_VERSION="${XBB_BINUTILS_VERSION}" # "2.34" # "2.33.1"
 
     XBB_BINUTILS_BRANDING="xPack Build Box binutils\x2C ${HOST_BITS}-bit"
+    XBB_GDB_BRANDING="xPack Build Box GDB\x2C ${HOST_BITS}-bit"
     XBB_GCC_BRANDING="xPack Build Box GCC\x2C ${HOST_BITS}-bit"
     XBB_GLIBC_BRANDING="xPack Build Box GNU libc\x2C ${HOST_BITS}-bit"
 
@@ -99,6 +100,11 @@ function build_versioned_components()
       # Requires gmp, mpfr, mpc, isl.
       # PATCH!
       build_native_binutils "${XBB_BINUTILS_VERSION}"
+    fi
+
+    if false # is_darwin
+    then
+      build_native_gdb "9.2"
     fi
 
     # makedepends=('binutils>=2.26' 'libmpc' 'gcc-ada' 'doxygen' 'git')

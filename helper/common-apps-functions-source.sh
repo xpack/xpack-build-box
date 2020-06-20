@@ -604,6 +604,156 @@ function test_native_binutils()
 
 # -----------------------------------------------------------------------------
 
+function build_native_gdb() 
+{
+  # https://www.gnu.org/software/gdb/
+  # https://ftp.gnu.org/gnu/gdb/
+
+  # https://archlinuxarm.org/packages/aarch64/gdb/files/PKGBUILD
+  # https://aur.archlinux.org/cgit/aur.git/tree/PKGBUILD?h=gdb-git
+
+  # 2020-05-23, "9.2"
+
+  local native_gdb_version="$1"
+
+  local step
+  if [ $# -ge 2 ]
+  then
+    step="$2"
+  else
+    step=""
+  fi
+
+  local native_gdb_src_folder_name="gdb-${native_gdb_version}"
+  
+  local native_gdb_archive="${native_gdb_src_folder_name}.tar.xz"
+  local native_gdb_url="https://ftp.gnu.org/gnu/gdb/${native_gdb_archive}"
+
+  local native_gdb_folder_name="native-gdb${step}-${native_gdb_version}"
+
+  local native_gdb_patch_file_path="${helper_folder_path}/patches/gdb-${native_gdb_version}.patch"
+  local native_gdb_stamp_file_path="${STAMPS_FOLDER_PATH}/stamp-${native_gdb_folder_name}-installed"
+  if [ ! -f "${native_gdb_stamp_file_path}" -o ! -d "${BUILD_FOLDER_PATH}/${native_gdb_folder_name}" ]
+  then
+
+    cd "${SOURCES_FOLDER_PATH}"
+
+    download_and_extract "${native_gdb_url}" "${native_gdb_archive}" \
+      "${native_gdb_src_folder_name}" \
+      "${native_gdb_patch_file_path}"
+
+    mkdir -pv "${LOGS_FOLDER_PATH}/${native_gdb_folder_name}"
+
+    (
+      mkdir -pv "${BUILD_FOLDER_PATH}/${native_gdb_folder_name}"
+      cd "${BUILD_FOLDER_PATH}/${native_gdb_folder_name}"
+
+      xbb_activate
+      xbb_activate_installed_dev
+
+      CPPFLAGS="${XBB_CPPFLAGS}" 
+      CFLAGS="${XBB_CFLAGS_NO_W}"
+      CXXFLAGS="${XBB_CXXFLAGS_NO_W}"
+      LDFLAGS="${XBB_LDFLAGS_APP} -v"
+
+      export CPPFLAGS
+      export CFLAGS
+      export CXXFLAGS
+      export LDFLAGS
+
+      env | sort
+
+      if [ ! -f "config.status" ]
+      then
+        (
+          echo
+          echo "Running native gdb configure..."
+
+          bash "${SOURCES_FOLDER_PATH}/${native_gdb_src_folder_name}/configure" --help
+
+          config_options=()
+
+          # ! Do not use the same folder as glibc, since this leads to
+          # shared libs confusions.
+          config_options+=("--prefix=${INSTALL_FOLDER_PATH}")
+          
+          config_options+=("--build=${BUILD}")
+          config_options+=("--target=${BUILD}")
+          
+          config_options+=("--with-pkgversion=${XBB_BINUTILS_BRANDING}")
+
+          config_options+=("--disable-nls")
+
+
+          bash ${DEBUG} "${SOURCES_FOLDER_PATH}/${native_gdb_src_folder_name}/configure" \
+            ${config_options[@]}
+
+          make configure-host
+
+          patch_all_libtool_rpath
+
+          cp "config.log" "${LOGS_FOLDER_PATH}/${native_gdb_folder_name}/config-log.txt"
+        ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${native_gdb_folder_name}/configure-output.txt"
+      fi
+
+      (
+        echo
+        echo "Running native gdb make..."
+
+        # Build.
+        make -j ${JOBS}
+
+        # make install-strip
+        make install
+
+      ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${native_gdb_folder_name}/make-output.txt"
+    )
+
+    (
+      test_native_gdb
+    ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${native_gdb_folder_name}/test-output.txt"
+
+    hash -r
+
+    touch "${native_gdb_stamp_file_path}" 
+
+  else
+    echo "Component native gdb ${step} already installed."
+  fi
+
+  if [ -z "${step}" ]
+  then
+    test_functions+=("test_native_gdb")
+  fi
+}
+
+function test_native_gdb()
+{
+  (
+    if [ -f "${BUILD_FOLDER_PATH}/.activate_installed_bin" ]
+    then
+      xbb_activate_installed_bin
+    fi
+
+    echo
+    echo "Testing if gdb binaries start properly..."
+
+    run_app "${INSTALL_FOLDER_PATH}/bin/gdb" --version
+
+    echo
+    echo "Testing if gdb binaries display help..."
+
+    run_app "${INSTALL_FOLDER_PATH}/bin/gdb" --help
+
+    echo
+    echo "Checking the gdb shared libraries..."
+
+    show_libs "${INSTALL_FOLDER_PATH}/bin/gdb" 
+  ) 
+}
+
+# -----------------------------------------------------------------------------
+
 function build_native_gcc() 
 {
   # https://gcc.gnu.org
