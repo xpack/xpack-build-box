@@ -3474,7 +3474,8 @@ function build_automake()
   # https://aur.archlinux.org/cgit/aur.git/tree/PKGBUILD?h=automake-git
 
   # 2015-01-05, "1.15"
-  # 2018-02-25, "1.16" (latest)
+  # 2018-02-25, "1.16"
+  # 2020-03-21, "1.16.2"
 
   local automake_version="$1"
 

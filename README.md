@@ -285,6 +285,7 @@ $ git submodule update --init
 
 Things to be considered for future versions:
 
+- use automake 1.16.2
 - add gdb (for macOS)
 - add doxygen
 - cleanup `man` folder
