@@ -248,6 +248,22 @@ function docker_build_from_archive()
   docker build --tag "${tag}" -f "${arch}-Dockerfile" .
 }
 
+function docker_build_from_hub()
+{
+  if [ $# -lt 2 ]
+  then
+    echo "docker_build_from_hub needs 2 params"
+    exit 1
+  fi
+
+  arch="$1"
+  tag="$2"
+
+  echo 
+  echo "Building Docker image ${tag}..."
+  docker build --tag "${tag}" -f "${arch}-Dockerfile" .
+}
+
 # =============================================================================
 
 function docker_replace_source_list()
