@@ -1493,4 +1493,17 @@ function do_cleaunup()
   rm -rf "${XBB_WORK_FOLDER_PATH}"
 }
 
+# -----------------------------------------------------------------------------
+
+function run_verbose()
+{
+  # Does not include the .exe extension.
+  local app_path=$1
+  shift
+
+  echo
+  echo "[${app_path} $@]"
+  "${app_path}" "$@" 2>&1
+}
+
 # =============================================================================
