@@ -546,3 +546,127 @@ function ubuntu_clean()
 }
 
 # =============================================================================
+
+# yum search packpattern
+# yum provides file
+# repoquery -l <packname>
+
+function centos_install_develop()
+{
+  run_verbose yum -y install \
+  \
+  autoconf \
+  automake \
+  bison \
+  bzip2 \
+  ca-certificates \
+  cmake \
+  coreutils \
+  cpio \
+  curl \
+  diffutils \
+  dos2unix \
+  file \
+  flex \
+  gawk \
+  gcc \
+  gcc-c++ \
+  gcc-gfortran \
+  gdb \
+  gettext \
+  git \
+  libtool \
+  redhat-lsb-core \
+  m4 \
+  make \
+  patch \
+  perl \
+  pkg-config \
+  python \
+  python3 \
+  rsync \
+  tcl \
+  time \
+  unzip \
+  which \
+  wget \
+  xz \
+  zip \
+  zlib-devel \
+
+  # For QEMU
+  run_verbose yum -y install \
+  libX11-devel \
+  libXext-devel \
+  mesa-libGL-devel \
+
+  # For QEMU & OpenOCD (libudev-dev)
+  run_verbose yum -y install systemd-devel
+
+  run_verbose yum -y install \
+  texinfo \
+  help2man \
+
+  # Java
+  run_verbose yum -y install \
+  java-1.8.0-openjdk \
+  java-11-openjdk-devel \
+  ant \
+  maven \
+
+  # Configure Java 11 as default.
+  echo 2 | update-alternatives --config java
+  echo 2 | update-alternatives --config javac
+
+  # Without it, building GCC on Arm 32-bit fails.
+  # https://askubuntu.com/questions/1202249/c-compilng-failed
+  if [ "${machine}" == "armv8l" -o "${machine}" == "armv7l" ]
+  then
+    : # yum -y install glibc-devel.aarch64 libstdc++-devel.aarch64
+  fi
+
+  # Ubuntu packages not available on CentOS.
+  # libc6-dev re2c rhash g++-multilib
+  # locales
+  # gcc-6
+
+  # Not usable.
+  # /opt/rh/devtoolset-8/root/bin/
+  # run_verbose yum -y install centos-release-scl
+  # run_verbose yum -y install devtoolset-8
+
+  # ---------------------------------------------------------------------------
+
+  echo
+  run_verbose uname -a
+  run_verbose lsb_release -a
+
+  run_verbose ant -version
+  run_verbose autoconf --version
+  run_verbose bison --version
+  run_verbose cmake --version
+  run_verbose curl --version
+  run_verbose flex --version
+  run_verbose g++ --version
+  run_verbose gawk --version
+  run_verbose gdb --version
+  run_verbose git --version
+  run_verbose java -version
+  run_verbose javac -version
+  run_verbose m4 --version
+  run_verbose mvn -version
+  run_verbose make --version
+  run_verbose patch --version
+  run_verbose perl --version
+  run_verbose pkg-config --version
+  run_verbose python --version
+  run_verbose python3 --version
+
+}
+
+function centos_clean()
+{
+  run_verbose yum clean all
+}
+
+# =============================================================================
