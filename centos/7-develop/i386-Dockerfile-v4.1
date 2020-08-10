@@ -1,0 +1,23 @@
+FROM ilegeul/centos:i386-7.8
+
+LABEL description="CentOS 7.8.2003 i386 image, with development tools."
+LABEL maintainer="Liviu Ionescu <ilg@livius.net>"
+LABEL repository="https://github.com/xpack/xpack-build-box.git"
+LABEL docs="https://github.com/xpack/xpack-build-box/tree/master/centos/7-develop/README.md"
+
+ENTRYPOINT ["linux32"]
+
+ARG DEBUG
+ARG JOBS
+
+ARG XBB_VERSION
+ARG XBB_LAYER
+
+ADD input-centos-7.8-i386 /input
+RUN linux32 bash /input/build-v4.sh
+
+ENV LANG en_US.UTF-8
+ENV LANGUAGE en_US:en
+ENV LC_ALL en_US.UTF-8
+
+CMD ["/bin/bash"]

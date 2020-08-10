@@ -1,0 +1,11 @@
+FROM centos:7@sha256:0ee8ae140021ee8e3bddfa981b6c67f04eda413fc6b09765a6802feae1997e51
+
+LABEL description="DockerHub Centos 7.8.2003 i386 image."
+LABEL maintainer="Liviu Ionescu <ilg@livius.net>"
+LABEL repository="https://github.com/xpack/xpack-build-box.git"
+LABEL docs="https://github.com/xpack/xpack-build-box/tree/master/centos/7/README.md"
+ENTRYPOINT ["linux32"]
+
+RUN linux32 yum -y update
+
+CMD ["/bin/bash"]

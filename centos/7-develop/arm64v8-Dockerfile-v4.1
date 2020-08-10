@@ -1,0 +1,21 @@
+FROM ilegeul/centos:arm64v8-7.8
+
+LABEL description="CentOS 7.8.2003 arm64v8 image, with development tools."
+LABEL maintainer="Liviu Ionescu <ilg@livius.net>"
+LABEL repository="https://github.com/xpack/xpack-build-box.git"
+LABEL docs="https://github.com/xpack/xpack-build-box/tree/master/centos/7-develop/README.md"
+
+ARG DEBUG
+ARG JOBS
+
+ARG XBB_VERSION
+ARG XBB_LAYER
+
+ADD input-centos-7.8-arm64v8 /input
+RUN bash /input/build-v4.sh
+
+ENV LANG en_US.UTF-8
+ENV LANGUAGE en_US:en
+ENV LC_ALL en_US.UTF-8
+
+CMD ["/bin/bash"]

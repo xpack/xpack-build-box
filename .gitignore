@@ -5,3 +5,7 @@
 
 ubuntu/*/input
 ubuntu/*/input-*
+
+centos/*/input
+centos/*/input-*
+
