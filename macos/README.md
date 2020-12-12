@@ -160,3 +160,10 @@ incompatible, and support for older macOS versions, like 10.10, was
 discontinued, thus making Homebrew not a choice for XBB.
 
 For more details, see the [README-DEPRECATED](README-DEPRECATED.md) file.
+
+## Apple tricks
+
+From https://stackoverflow.com/questions/52977581/why-isnt-mmacosx-version-min-10-10-preventing-use-of-a-function-tagged-as-star
+
+- `-mmacosx-version-min=10.10`
+- `-Wunguarded-availability`
