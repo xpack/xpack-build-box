@@ -2246,6 +2246,8 @@ function build_libksba()
       export CXXFLAGS="${XBB_CXXFLAGS_NO_W}"
       export LDFLAGS="${XBB_LDFLAGS_LIB}"
 
+      export CC_FOR_BUILD="${CC}"
+
       env | sort
 
       if [ ! -f "config.status" ]
