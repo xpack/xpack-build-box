@@ -2041,14 +2041,14 @@ function build_libgcrypt()
         # Build.
         make -j ${JOBS}
 
+        # make install-strip
+        make install
+
         # Check after install, otherwise mac test fails:
         # dyld: Library not loaded: /Users/ilg/opt/xbb/lib/libgcrypt.20.dylib
         # Referenced from: /Users/ilg/Work/xbb-3.1-macosx-10.15.3-x86_64/build/libs/libgcrypt-1.8.5/tests/.libs/random
 
         make -j1 check
-
-        # make install-strip
-        make install
 
       ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${libgcrypt_folder_name}/make-output.txt"
     )
