@@ -8003,7 +8003,7 @@ function build_autogen()
       xbb_activate_installed_bin
       xbb_activate_installed_dev
 
-      export CPPFLAGS="${XBB_CPPFLAGS}"
+      export CPPFLAGS="${XBB_CPPFLAGS} -D_POSIX_C_SOURCE"
       export CFLAGS="${XBB_CFLAGS_NO_W}"
       export CXXFLAGS="${XBB_CXXFLAGS_NO_W}"
       export LDFLAGS="${XBB_LDFLAGS_APP}"
@@ -8030,11 +8030,14 @@ function build_autogen()
           #   '--disable-dependency-tracking' option to at least be able to build
           #   the package (albeit without support for automatic dependency tracking).
 
+          # Without ac_cv_func_utimensat=no it fails on macOS.
+
           bash ${DEBUG} "${SOURCES_FOLDER_PATH}/${autogen_src_folder_name}/configure" \
             --prefix="${INSTALL_FOLDER_PATH}" \
             \
             --disable-dependency-tracking \
             --disable-rpath \
+            ac_cv_func_utimensat=no
 
           # FAIL: cond.test
           # FAILURE: warning diffs:  'undefining SECOND' not found
