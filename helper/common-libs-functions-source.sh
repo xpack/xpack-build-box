@@ -2150,6 +2150,8 @@ function build_libksba()
 
   local libksba_folder_name="${libksba_src_folder_name}"
 
+  local libksba_patch_file_path="${helper_folder_path}/patches/${libksba_folder_name}.patch"
+ 
   local libksba_stamp_file_path="${STAMPS_FOLDER_PATH}/stamp-${libksba_folder_name}-installed"
   if [ ! -f "${libksba_stamp_file_path}" -o ! -d "${LIBS_BUILD_FOLDER_PATH}/${libksba_folder_name}" ]
   then
@@ -2157,7 +2159,7 @@ function build_libksba()
     cd "${SOURCES_FOLDER_PATH}"
 
     download_and_extract "${libksba_url}" "${libksba_archive}" \
-      "${libksba_src_folder_name}"
+      "${libksba_src_folder_name}" "${libksba_patch_file_path}"
 
     mkdir -pv "${LOGS_FOLDER_PATH}/${libksba_folder_name}"
 
