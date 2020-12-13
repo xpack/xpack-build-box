@@ -2676,8 +2676,7 @@ function build_coreutils()
       then
         # Undefined symbols for architecture x86_64:
         # "_rpl_fchownat", referenced from:
-        export CC=clang
-        export CXX=clang++
+        prepare_clang_env ""
       fi
 
       env | sort
@@ -2850,8 +2849,7 @@ function build_pkg_config()
       if is_darwin
       then
         # error: variably modified 'bytes' at file scope
-        export CC=clang
-        export CXX=clang++
+        prepare_clang_env ""
       fi
 
       CPPFLAGS="${XBB_CPPFLAGS}"
@@ -4896,8 +4894,7 @@ function build_cmake()
       if is_darwin
       then
         # error: variably modified 'bytes' at file scope
-        export CC=clang
-        export CXX=clang++
+        prepare_clang_env ""
       fi
 
       env | sort
@@ -5824,8 +5821,7 @@ function build_python2()
       if is_darwin
       then
         # error: variably modified 'bytes' at file scope
-        export CC=clang
-        export CXX=clang++
+        prepare_clang_env ""
       fi
 
       CPPFLAGS="${XBB_CPPFLAGS} -I${INSTALL_FOLDER_PATH}/include/ncurses"
@@ -5997,8 +5993,7 @@ function build_python3()
       then
         # GCC fails with:
         # error: variably modified 'bytes' at file scope
-        export CC=clang
-        export CXX=clang++
+        prepare_clang_env ""
       fi
 
       CPPFLAGS="${XBB_CPPFLAGS}"
@@ -8125,8 +8120,7 @@ function build_bash()
       then
         # Undefined symbols for architecture x86_64:
         # "_rpl_fchownat", referenced from:
-        export CC=clang
-        export CXX=clang++
+        prepare_clang_env ""
       fi
 
       export CPPFLAGS

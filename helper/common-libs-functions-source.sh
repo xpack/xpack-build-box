@@ -1197,8 +1197,7 @@ function build_gnutls()
       if is_darwin
       then
         # lib/system/certs.c:49 error: variably modified 'bytes' at file scope
-        export CC=clang
-        export CXX=clang++
+        prepare_clang_env ""
       fi
       
       env | sort

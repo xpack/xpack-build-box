@@ -244,8 +244,7 @@ function prepare_xbb_env()
     if [ "${XBB_LAYER}" == "xbb-bootstrap" ]
     then
       # TODO
-      CC=${CC:-"clang"}
-      CXX=${CXX:-"clang++"}
+      prepare_clang_env ""
     else
       # TODO
       prepare_gcc_env "" "-xbs"
@@ -513,6 +512,22 @@ function unset_gcc_env()
   unset WINDRES
   unset WINDMC
   unset RC
+}
+
+function prepare_clang_env()
+{
+  local prefix="$1"
+
+  local suffix
+  if [ $# -ge 2 ]
+  then
+    suffix="$2"
+  else
+    suffix=""
+  fi
+
+  export CC="${prefix}clang${suffix}"
+  export CXX="${prefix}clang++${suffix}"
 }
 
 function prepare_library_path()
