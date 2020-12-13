@@ -7636,7 +7636,7 @@ function test_guile()
 
     show_libs "${INSTALL_FOLDER_PATH}/bin/guile"
     show_libs "$(realpath ${INSTALL_FOLDER_PATH}/lib/libguile-2.2.${SHLIB_EXT})"
-    show_libs "$(realpath ${INSTALL_FOLDER_PATH}/lib/guile/2.2/extensions/guile-readline.${SHLIB_EXT})"
+    show_libs "$(realpath ${INSTALL_FOLDER_PATH}/lib/guile/2.2/extensions/guile-readline.so)"
   )  
 }
 
@@ -7758,7 +7758,12 @@ function test_rhash()
     echo "Checking the flex shared libraries..."
 
     show_libs "${INSTALL_FOLDER_PATH}/bin/rhash"
-    show_libs "$(realpath ${INSTALL_FOLDER_PATH}/lib/librhash.${SHLIB_EXT}.0)"
+    if is_darwin
+    then
+      show_libs "$(realpath ${INSTALL_FOLDER_PATH}/lib/librhash.0.dylib)"
+    else
+      show_libs "$(realpath ${INSTALL_FOLDER_PATH}/lib/librhash.so.0)"
+    fi
   )
 }
 

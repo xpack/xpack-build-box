@@ -1833,7 +1833,8 @@ function test_libmpdec()
     echo
     echo "Checking the libmpdec shared libraries..."
 
-    show_libs "$(realpath ${INSTALL_FOLDER_PATH}/lib/libmpdec.${SHLIB_EXT})"
+    # macOS also creates a .so.
+    show_libs "$(realpath ${INSTALL_FOLDER_PATH}/lib/libmpdec.so)"
   )
 }
 
