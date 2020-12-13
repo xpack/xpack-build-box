@@ -8215,3 +8215,97 @@ function test_bash()
 }
 
 # -----------------------------------------------------------------------------
+
+# Minimalistic realpath to be used on macOS
+function build_realpath() 
+{
+  # https://github.com/harto/realpath-osx
+  # https://github.com/harto/realpath-osx/archive/1.0.0.tar.gz
+
+  # 18 Oct 2012 "1.0.0"
+
+  local realpath_version="$1"
+
+  local realpath_src_folder_name="realpath-osx-${realpath_version}"
+
+  local realpath_archive="${realpath_src_folder_name}.tar.gz"
+  # GitHub release archive.
+  local realpath_url="https://github.com/harto/realpath-osx/archive/${realpath_version}.tar.gz"
+
+  local realpath_folder_name="${realpath_src_folder_name}"
+
+  local realpath_stamp_file_path="${STAMPS_FOLDER_PATH}/stamp-${realpath_folder_name}-installed"
+  if [ ! -f "${realpath_stamp_file_path}" -o ! -d "${BUILD_FOLDER_PATH}/${realpath_folder_name}" ]
+  then
+
+    # In-source build
+
+    if [ ! -d "${BUILD_FOLDER_PATH}/${realpath_folder_name}" ]
+    then
+      cd "${BUILD_FOLDER_PATH}"
+
+      download_and_extract "${realpath_url}" "${realpath_archive}" \
+        "${realpath_src_folder_name}"
+
+      if [ "${realpath_src_folder_name}" != "${realpath_folder_name}" ]
+      then
+        mv -v "${realpath_src_folder_name}" "${realpath_folder_name}"
+      fi
+    fi
+
+    mkdir -pv "${LOGS_FOLDER_PATH}/${realpath_folder_name}"
+
+    (
+      cd "${BUILD_FOLDER_PATH}/${realpath_folder_name}"
+
+      xbb_activate
+      xbb_activate_installed_dev
+
+      export CPPFLAGS="${XBB_CPPFLAGS}"
+      export CFLAGS="${XBB_CFLAGS_NO_W}"
+      export CXXFLAGS="${XBB_CXXFLAGS_NO_W}"
+      export LDFLAGS="${XBB_LDFLAGS_APP}"
+
+      env | sort
+
+      (
+        echo
+        echo "Running realpath make..."
+
+        make
+
+        /usr/bin/install -m755 -c realpath "${INSTALL_FOLDER_PATH}/bin"
+
+        # TODO: No tests?
+
+      ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${realpath_folder_name}/configure-output.txt"
+    )
+
+    (
+      test_realpath
+    ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${realpath_folder_name}/test-output.txt"
+
+    hash -r
+
+    touch "${realpath_stamp_file_path}"
+
+  else
+    echo "Component realpath already installed."
+  fi
+
+  test_functions+=("test_realpath")
+}
+
+function test_realpath()
+{
+  (
+    xbb_activate_installed_bin
+
+    echo
+    echo "Checking the realpath binaries shared libraries..."
+
+    show_libs "${INSTALL_FOLDER_PATH}/bin/realpath"
+  )  
+}
+
+# -----------------------------------------------------------------------------
