@@ -986,7 +986,7 @@ function build_libffi()
         xbb_activate
         xbb_activate_installed_dev
 
-        run_app bash ${DEBUG} "autogen.sh"
+        run_verbose bash ${DEBUG} "autogen.sh"
 
       fi
     ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${libffi_folder_name}/autogen-output.txt"
@@ -1257,12 +1257,25 @@ function build_gnutls()
           #    -e 's|-rpath $(pkglibdir)||' \
           #    -e 's|-rpath $(libdir)||' \
 
-          run_app find . \
-            -name Makefile \
-            -print \
-            -exec sed -i.bak \
-              -e "s|-Wl,-rpath -Wl,${INSTALL_FOLDER_PATH}/lib||" \
-              {} \;
+          if is_darwin # && [ "${XBB_LAYER}" == "xbb-bootstrap" ]
+          then
+            run_verbose find . \
+              -name Makefile \
+              -print \
+              -exec sed -i.bak \
+                -e "s|-Wl,-no_weak_imports||" \
+                {} \;
+          fi
+
+          if is_linux
+          then
+            run_verbose find . \
+              -name Makefile \
+              -print \
+              -exec sed -i.bak \
+                -e "s|-Wl,-rpath -Wl,${INSTALL_FOLDER_PATH}/lib||" \
+                {} \;
+          fi
 
           if is_darwin && [ "${XBB_LAYER}" == "xbb-bootstrap" ]
           then
@@ -1302,9 +1315,9 @@ function build_gnutls()
               # server:242: server: Handshake has failed (The operation timed out)
               # FAIL: srp
               # WARN-TEST
-              run_app sed -i.bak \
+              run_verbose sed -i.bak \
                 -e 's|srp$(EXEEXT) ||' \
-                tests/Makefile
+                "tests/Makefile"
             fi
           fi
 
@@ -2724,7 +2737,7 @@ function build_gc()
 
           # Skip the tests folder from patching, since the tests use 
           # internal shared libraries.
-          run_app find . \
+          run_verbose find . \
             -name "libtool" \
             ! -path 'tests' \
             -print \
@@ -3021,7 +3034,7 @@ function build_readline()
           bash ${DEBUG} "${SOURCES_FOLDER_PATH}/${readline_src_folder_name}/configure" \
             ${config_options[@]}
 
-          run_app find . \
+          run_verbose find . \
             -name Makefile \
             -print \
             -exec sed -i.bak -e 's|-Wl,-rpath,$(libdir)||' {} \;
