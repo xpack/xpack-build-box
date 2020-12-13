@@ -5223,7 +5223,10 @@ function test_perl()
     (
       # To find libssp.so.0.
       # /opt/xbb/bin/perl: error while loading shared libraries: libssp.so.0: cannot open shared object file: No such file or directory
-      export LD_LIBRARY_PATH="${XBB_LIBRARY_PATH}"
+      if is_linux
+      then
+        export LD_LIBRARY_PATH="${XBB_LIBRARY_PATH}"
+      fi
 
       run_app "${INSTALL_FOLDER_PATH}/bin/perl" --version
     )
