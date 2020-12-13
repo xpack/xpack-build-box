@@ -5,7 +5,7 @@
 When running on macOS, the build scripts cannot use Docker, since there
 are no macOS Docker images; instead,
 a custom set of tools is expected in a specific folder
-(`${HOME}/opt/xbb`), which includes the same tools as
+(`${HOME}/.local/xbb`), which includes the same tools as
 packed in the Docker images.
 
 The reason for a separate folder is that, in order to achieve consistent and
@@ -60,23 +60,23 @@ compiler, but with a GCC 7. This first set of tools is called _the XBB
 bootstrap_.
 
 ```console
-$ RUN_LONG_TESTS=y caffeinate bash "${HOME}/Downloads/xpack-build-box.git/macos/build-xbb-bootstrap-v3.1.sh"
+$ RUN_LONG_TESTS=y caffeinate bash "${HOME}/Downloads/xpack-build-box.git/macos/build-xbb-bootstrap-v3.3.sh"
 $ RUN_LONG_TESTS=y caffeinate bash "${HOME}/Downloads/xpack-build-box.git/macos/build-xbb-bootstrap-v3.2.sh"
 ```
 
 There are several environment variables that can be passed to the script:
 
 ```console
-# JOBS=1 caffeinate bash "${HOME}/Downloads/xpack-build-box.git/macos/build-xbb-bootstrap-v3.2.sh"
-# DEBUG=-x caffeinate bash "${HOME}/Downloads/xpack-build-box.git/macos/build-xbb-bootstrap-v3.2.sh"
+# JOBS=1 caffeinate bash "${HOME}/Downloads/xpack-build-box.git/macos/build-xbb-bootstrap-v3.3.sh"
+# DEBUG=-x caffeinate bash "${HOME}/Downloads/xpack-build-box.git/macos/build-xbb-bootstrap-v3.3.sh"
 ```
 
 The build process takes quite a while.
 
-The build is performed in a folder like `${HOME}/Work/xbb-bootstrap-3.1-darwin-x86_64`
+The build is performed in a folder like `${HOME}/Work/xbb-bootstrap-3.3-darwin-x86_64`
 which can be removed after the build is completed.
 
-The result of this step is a folder in user home (`${HOME}/opt/xbb-bootstrap`).
+The result of this step is a folder in user home (`${HOME}/.local/xbb-bootstrap`).
 No files are stored in system locations.
 
 This folder **should not** be removed after the final XBB tools are built,
@@ -87,7 +87,7 @@ since they may refer to bootstrap libraries.
 The final XBB tools are compiled with the bootstrapped compiler.
 
 ```console
-$ RUN_LONG_TESTS=y  caffeinate bash "${HOME}/Downloads/xpack-build-box.git/macos/build-xbb-v3.1.sh"
+$ RUN_LONG_TESTS=y  caffeinate bash "${HOME}/Downloads/xpack-build-box.git/macos/build-xbb-v3.3.sh"
 $ RUN_LONG_TESTS=y  caffeinate bash "${HOME}/Downloads/xpack-build-box.git/macos/build-xbb-v3.2.sh"
 ```
 
@@ -167,3 +167,9 @@ From https://stackoverflow.com/questions/52977581/why-isnt-mmacosx-version-min-1
 
 - `-mmacosx-version-min=10.10`
 - `-Wunguarded-availability`
+
+Apple clang
+
+- https://en.wikipedia.org/wiki/Xcode#Xcode_7.0_-_12.x_(since_Free_On-Device_Development)
+
+Apple clang 12.0.0 -> LLVM 10.0.0
