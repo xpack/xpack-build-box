@@ -503,7 +503,10 @@ function build_native_binutils()
 
           # Workaround to avoid libtool issuing -rpath to the linker, since
           # this prevents it using the global LD_RUN_PATH.
-          patch_all_libtool_rpath
+          if is_linux
+          then
+            patch_all_libtool_rpath
+          fi
 
           cp "config.log" "${LOGS_FOLDER_PATH}/${native_binutils_folder_name}/config-log.txt"
         ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${native_binutils_folder_name}/configure-output.txt"
@@ -521,7 +524,10 @@ function build_native_binutils()
           cd ld
           make clean
 
-          patch_all_libtool_rpath
+          if is_linux
+          then
+            patch_all_libtool_rpath
+          fi
 
           make -j ${JOBS}
         )
@@ -690,7 +696,10 @@ function build_native_gdb()
 
           make configure-host
 
-          patch_all_libtool_rpath
+          if is_linux
+          then
+            patch_all_libtool_rpath
+          fi
 
           cp "config.log" "${LOGS_FOLDER_PATH}/${native_gdb_folder_name}/config-log.txt"
         ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${native_gdb_folder_name}/configure-output.txt"
@@ -1301,7 +1310,10 @@ function build_mingw_binutils()
             --disable-nls \
             --disable-werror
 
-          patch_all_libtool_rpath
+          if is_linux
+          then
+            patch_all_libtool_rpath
+          fi
 
           cp "config.log" "${LOGS_FOLDER_PATH}/${mingw_binutils_folder_name}/config-log.txt"
         ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${mingw_binutils_folder_name}/configure-output.txt"
@@ -2265,7 +2277,10 @@ function build_curl()
             --disable-warnings \
             --disable-debug \
 
-          patch_all_libtool_rpath
+          if is_linux
+          then
+            patch_all_libtool_rpath
+          fi
 
           cp "config.log" "${LOGS_FOLDER_PATH}/${curl_folder_name}/config-log.txt"
         ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${curl_folder_name}/configure-output.txt"
@@ -2391,7 +2406,10 @@ function build_xz()
             --disable-werror \
             --disable-rpath \
 
-          patch_all_libtool_rpath
+          if is_linux
+          then
+            patch_all_libtool_rpath
+          fi
 
           cp "config.log" "${LOGS_FOLDER_PATH}/${xz_folder_name}/config-log.txt"
         ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${xz_folder_name}/configure-output.txt"
@@ -3818,15 +3836,18 @@ function build_gettext()
             --disable-rpath \
           
           # TODO: cleanups
-          if true
+          if is_linux
           then
-            patch_all_libtool_rpath
-          else
-            for file in $(find . -name libtool ! -path '*/tests/*')
-            do
-              echo ${file}
-              patch_file_libtool_rpath ${file}
-            done
+            if true
+            then
+              patch_all_libtool_rpath
+            else
+              for file in $(find . -name libtool ! -path '*/tests/*')
+              do
+                echo ${file}
+                patch_file_libtool_rpath ${file}
+              done
+            fi
           fi
 
           # Tests fail on Ubuntu 14 bootstrap 
@@ -7563,7 +7584,10 @@ function build_guile()
             --disable-error-on-warning \
             --disable-rpath \
 
-          patch_all_libtool_rpath
+          if is_linux
+          then
+            patch_all_libtool_rpath
+          fi
 
           # FAIL: test-out-of-memory
           # https://lists.gnu.org/archive/html/guile-user/2017-11/msg00062.html
@@ -8045,10 +8069,10 @@ function build_autogen()
             -e 's|cond.test||g' \
             "autoopts/test/Makefile"
 
-          patch_all_libtool_rpath
-
           if is_linux
           then
+            patch_all_libtool_rpath
+
             run_verbose find . \
               -name Makefile \
               -print \

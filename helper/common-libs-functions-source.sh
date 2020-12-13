@@ -185,7 +185,10 @@ function build_gmp()
             --enable-cxx \
             --enable-fat
 
-          patch_all_libtool_rpath
+          if is_linux
+          then
+            patch_all_libtool_rpath
+          fi
 
           if is_darwin && [ "${XBB_LAYER}" == "xbb-bootstrap" ]
           then
@@ -311,7 +314,10 @@ function build_mpfr()
           bash ${DEBUG} "${SOURCES_FOLDER_PATH}/${mpfr_src_folder_name}/configure" \
             ${config_options[@]}
 
-          patch_all_libtool_rpath
+          if is_linux
+          then
+            patch_all_libtool_rpath
+          fi
 
           cp "config.log" "${LOGS_FOLDER_PATH}/${mpfr_folder_name}/config-log.txt"
         ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${mpfr_folder_name}/configure-output.txt"
@@ -422,7 +428,10 @@ function build_mpc()
           bash ${DEBUG} "${SOURCES_FOLDER_PATH}/${mpc_src_folder_name}/configure" \
             --prefix="${INSTALL_FOLDER_PATH}" 
 
-          patch_all_libtool_rpath
+          if is_linux
+          then
+            patch_all_libtool_rpath
+          fi
 
           cp "config.log" "${LOGS_FOLDER_PATH}/${mpc_folder_name}/config-log.txt"
         ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${mpc_folder_name}/configure-output.txt"
@@ -535,7 +544,10 @@ function build_isl()
             \
             --with-gmp-prefix="${INSTALL_FOLDER_PATH}" \
 
-          patch_all_libtool_rpath
+          if is_linux
+          then
+            patch_all_libtool_rpath
+          fi
 
           cp "config.log" "${LOGS_FOLDER_PATH}/${isl_folder_name}/config-log.txt"
         ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${isl_folder_name}/configure-output.txt"
@@ -775,7 +787,10 @@ function build_tasn1()
           bash ${DEBUG} "${SOURCES_FOLDER_PATH}/${tasn1_src_folder_name}/configure" \
             --prefix="${INSTALL_FOLDER_PATH}" 
 
-          patch_all_libtool_rpath
+          if is_linux
+          then
+            patch_all_libtool_rpath
+          fi
 
           if is_darwin # && [ "${XBB_LAYER}" == "xbb-bootstrap" ]
           then
@@ -892,7 +907,10 @@ function build_expat()
           bash ${DEBUG} "${SOURCES_FOLDER_PATH}/${expat_src_folder_name}/configure" \
             --prefix="${INSTALL_FOLDER_PATH}" 
 
-          patch_all_libtool_rpath
+          if is_linux
+          then
+            patch_all_libtool_rpath
+          fi
 
           cp "config.log" "${LOGS_FOLDER_PATH}/${expat_folder_name}/config-log.txt"
         ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${expat_folder_name}/configure-output.txt"
@@ -1020,7 +1038,10 @@ function build_libffi()
             \
             --enable-pax_emutramp \
 
-          patch_all_libtool_rpath
+          if is_linux
+          then
+            patch_all_libtool_rpath
+          fi
 
           cp "config.log" "${LOGS_FOLDER_PATH}/${libffi_folder_name}/config-log.txt"
         ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${libffi_folder_name}/configure-output.txt"
@@ -1251,7 +1272,10 @@ function build_gnutls()
             --disable-guile \
             --disable-rpath \
 
-          patch_all_libtool_rpath
+          if is_linux
+          then
+            patch_all_libtool_rpath
+          fi
 
           #    -e 's|-rpath $(guileextensiondir)||' \
           #    -e 's|-rpath $(pkglibdir)||' \
@@ -1661,7 +1685,10 @@ function build_libpng()
             --enable-arm-neon=no \
             --disable-rpath \
 
-          patch_all_libtool_rpath
+          if is_linux
+          then
+            patch_all_libtool_rpath
+          fi
 
           cp "config.log" "${LOGS_FOLDER_PATH}/${libpng_folder_name}/config-log.txt"
         ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${libpng_folder_name}/configure-output.txt"
@@ -1787,7 +1814,10 @@ function build_libmpdec()
           bash ${DEBUG} "configure" \
             --prefix="${INSTALL_FOLDER_PATH}" 
 
-          patch_all_libtool_rpath
+          if is_linux
+          then
+            patch_all_libtool_rpath
+          fi
 
           cp "config.log" "${LOGS_FOLDER_PATH}/${libmpdec_folder_name}/config-log.txt"
         ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${libmpdec_folder_name}/configure-output.txt"
@@ -1893,7 +1923,10 @@ function build_libgpg_error()
           bash ${DEBUG} "${SOURCES_FOLDER_PATH}/${libgpg_error_src_folder_name}/configure" \
             --prefix="${INSTALL_FOLDER_PATH}" 
 
-          patch_all_libtool_rpath
+          if is_linux
+          then
+            patch_all_libtool_rpath
+          fi
 
           # WARN-TEST
           # FAIL: t-syserror (disabled) 
@@ -2021,7 +2054,10 @@ function build_libgcrypt()
           bash ${DEBUG} "${SOURCES_FOLDER_PATH}/${libgcrypt_src_folder_name}/configure" \
             ${config_options[@]}
 
-          patch_all_libtool_rpath
+          if is_linux
+          then
+            patch_all_libtool_rpath
+          fi
 
           if [ "${HOST_MACHINE}" != "aarch64" ]
           then
@@ -2149,7 +2185,10 @@ function build_libassuan()
             \
             --with-libgpg-error-prefix="${INSTALL_FOLDER_PATH}" \
 
-          patch_all_libtool_rpath
+          if is_linux
+          then
+            patch_all_libtool_rpath
+          fi
 
           cp "config.log" "${LOGS_FOLDER_PATH}/${libassuan_folder_name}/config-log.txt"
         ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${libassuan_folder_name}/configure-output.txt"
@@ -2263,7 +2302,10 @@ function build_libksba()
             \
             --with-libgpg-error-prefix="${INSTALL_FOLDER_PATH}" \
 
-          patch_all_libtool_rpath
+          if is_linux
+          then
+            patch_all_libtool_rpath
+          fi
 
           cp "config.log" "${LOGS_FOLDER_PATH}/${libksba_folder_name}/config-log.txt"
         ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${libksba_folder_name}/configure-output.txt"
@@ -2515,7 +2557,10 @@ function build_libxcrypt()
           bash ${DEBUG} "${SOURCES_FOLDER_PATH}/${libxcrypt_src_folder_name}/configure" \
             --prefix="${INSTALL_FOLDER_PATH}" \
 
-          patch_all_libtool_rpath
+          if is_linux
+          then
+            patch_all_libtool_rpath
+          fi
 
           cp "config.log" "${LOGS_FOLDER_PATH}/${libxcrypt_folder_name}/config-log.txt"
         ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${libxcrypt_folder_name}/configure-output.txt"
@@ -2632,7 +2677,10 @@ function build_libunistring()
             \
             --disable-rpath \
 
-          patch_all_libtool_rpath
+          if is_linux
+          then
+            patch_all_libtool_rpath
+          fi
 
           cp "config.log" "${LOGS_FOLDER_PATH}/${libunistring_folder_name}/config-log.txt"
         ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${libunistring_folder_name}/configure-output.txt"
@@ -2738,13 +2786,16 @@ function build_gc()
             --enable-cplusplus \
             --disable-docs \
 
-          # Skip the tests folder from patching, since the tests use 
-          # internal shared libraries.
-          run_verbose find . \
-            -name "libtool" \
-            ! -path 'tests' \
-            -print \
-            -exec bash patch_file_libtool_rpath {} \;
+          if is_linux
+          then
+            # Skip the tests folder from patching, since the tests use 
+            # internal shared libraries.
+            run_verbose find . \
+              -name "libtool" \
+              ! -path 'tests' \
+              -print \
+              -exec bash patch_file_libtool_rpath {} \;
+          fi
 
           cp "config.log" "${LOGS_FOLDER_PATH}/${gc_folder_name}/config-log.txt"
         ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${gc_folder_name}/configure-output.txt"
