@@ -8450,6 +8450,9 @@ function build_native_llvm()
           config_options+=("-GNinja")
           config_options+=("-DCMAKE_INSTALL_PREFIX=${LLVM_INSTALL_FOLDER_PATH}")
           
+          # Please note the trailing space.
+          config_options+=("-DCLANG_VENDOR=${XBB_LLVM_BRANDING} ")
+
           config_options+=("-DCMAKE_C_COMPILER=${CC}")
           config_options+=("-DCMAKE_CXX_COMPILER=${CXX}")
           config_options+=("-DCMAKE_C_FLAGS=${CPPFLAGS} ${CFLAGS}")

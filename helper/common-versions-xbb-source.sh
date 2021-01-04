@@ -57,6 +57,7 @@ function build_versioned_components()
 
     XBB_MINGW_BINUTILS_BRANDING="xPack Build Box Mingw-w64 binutils\x2C ${HOST_BITS}-bit"
     XBB_MINGW_GCC_BRANDING="xPack Build Box Mingw-w64 GCC\x2C ${HOST_BITS}-bit"
+    XBB_LLVM_BRANDING="xPack Build Box ${HOST_BITS}-bit"
 
     # -------------------------------------------------------------------------
 
