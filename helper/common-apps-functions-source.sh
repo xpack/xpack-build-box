@@ -1275,11 +1275,16 @@ function build_mingw_binutils()
       xbb_activate
       xbb_activate_installed_dev
 
-      export CPPFLAGS="${XBB_CPPFLAGS}" 
-      export CFLAGS="${XBB_CFLAGS_NO_W}"
-      export CXXFLAGS="${XBB_CXXFLAGS_NO_W}"
-      # export LDFLAGS="-static-libstdc++ ${LDFLAGS}"
-      export LDFLAGS="${XBB_LDFLAGS_APP}"
+      CPPFLAGS="${XBB_CPPFLAGS}" 
+      CFLAGS="${XBB_CFLAGS_NO_W}"
+      CXXFLAGS="${XBB_CXXFLAGS_NO_W}"
+      # LDFLAGS="-static-libstdc++ ${LDFLAGS}"
+      LDFLAGS="${XBB_LDFLAGS_APP}"
+
+      export CPPFLAGS
+      export CFLAGS
+      export CXXFLAGS
+      export LDFLAGS
 
       env | sort
 
@@ -1555,10 +1560,15 @@ function build_mingw_all()
       xbb_activate
       xbb_activate_installed_dev
 
-      export CPPFLAGS="${XBB_CPPFLAGS}" 
-      export CFLAGS="${XBB_CFLAGS_NO_W}"
-      export CXXFLAGS="${XBB_CXXFLAGS_NO_W}"
-      export LDFLAGS="${XBB_LDFLAGS_APP}"
+      CPPFLAGS="${XBB_CPPFLAGS}" 
+      CFLAGS="${XBB_CFLAGS_NO_W}"
+      CXXFLAGS="${XBB_CXXFLAGS_NO_W}"
+      LDFLAGS="${XBB_LDFLAGS_APP}"
+
+      export CPPFLAGS
+      export CFLAGS
+      export CXXFLAGS
+      export LDFLAGS
 
       env | sort
 
@@ -1662,10 +1672,14 @@ function build_mingw_all()
       # {standard input}:7150: Error: can't resolve `.text' {.text section} - `.LFB5156' {.text$WinMainCRTStartup section}
       # {standard input}:8937: Error: can't resolve `.text' {.text section} - `.LFB5156' {.text$WinMainCRTStartup section}
 
-      export CFLAGS="-O2 -pipe -w"
-      export CXXFLAGS="-O2 -pipe -w"
-      export LDFLAGS=""
+      CFLAGS="-O2 -pipe -w"
+      CXXFLAGS="-O2 -pipe -w"
+      LDFLAGS=""
       
+      export CFLAGS
+      export CXXFLAGS
+      export LDFLAGS
+
       # Without it, apparently a bug in autoconf/c.m4, function AC_PROG_CC, results in:
       # checking for _mingw_mac.h... no
       # configure: error: Please check if the mingw-w64 header set and the build/host option are set properly.
@@ -1756,11 +1770,16 @@ function build_mingw_all()
       xbb_activate_installed_bin
       xbb_activate_installed_dev
 
-      export CPPFLAGS="" 
-      export CFLAGS="-O2 -pipe -w"
-      export CXXFLAGS="-O2 -pipe -w"
-      export LDFLAGS=""
+      CPPFLAGS="" 
+      CFLAGS="-O2 -pipe -w"
+      CXXFLAGS="-O2 -pipe -w"
+      LDFLAGS=""
       
+      export CPPFLAGS
+      export CFLAGS
+      export CXXFLAGS
+      export LDFLAGS
+
       # export CC=""
       prepare_gcc_env "${MINGW_TARGET}-"
 
@@ -1828,10 +1847,15 @@ function build_mingw_all()
       xbb_activate
       xbb_activate_installed_dev
 
-      export CPPFLAGS="${XBB_CPPFLAGS}" 
-      export CFLAGS="${XBB_CFLAGS_NO_W}"
-      export CXXFLAGS="${XBB_CXXFLAGS_NO_W}"
-      export LDFLAGS="${XBB_LDFLAGS_APP}"
+      CPPFLAGS="${XBB_CPPFLAGS}" 
+      CFLAGS="${XBB_CFLAGS_NO_W}"
+      CXXFLAGS="${XBB_CXXFLAGS_NO_W}"
+      LDFLAGS="${XBB_LDFLAGS_APP}"
+
+      export CPPFLAGS
+      export CFLAGS
+      export CXXFLAGS
+      export LDFLAGS
 
       env | sort
 
@@ -2028,11 +2052,16 @@ function build_openssl()
 
       #  -Wno-unused-command-line-argument
 
-      # export CPPFLAGS="${XBB_CPPFLAGS} -I${BUILD_FOLDER_PATH}/${openssl_folder_name}/include"
-      export CPPFLAGS="${XBB_CPPFLAGS}"
-      export CFLAGS="${XBB_CFLAGS_NO_W}"
-      export CXXFLAGS="${XBB_CXXFLAGS_NO_W}"
-      export LDFLAGS="${XBB_LDFLAGS_APP}"
+      # CPPFLAGS="${XBB_CPPFLAGS} -I${BUILD_FOLDER_PATH}/${openssl_folder_name}/include"
+      CPPFLAGS="${XBB_CPPFLAGS}"
+      CFLAGS="${XBB_CFLAGS_NO_W}"
+      CXXFLAGS="${XBB_CXXFLAGS_NO_W}"
+      LDFLAGS="${XBB_LDFLAGS_APP}"
+
+      export CPPFLAGS
+      export CFLAGS
+      export CXXFLAGS
+      export LDFLAGS
 
       env | sort
 
@@ -2245,10 +2274,15 @@ function build_curl()
       xbb_activate
       xbb_activate_installed_dev
 
-      export CPPFLAGS="${XBB_CPPFLAGS}"
-      export CFLAGS="${XBB_CFLAGS_NO_W}"
-      export CXXFLAGS="${XBB_CXXFLAGS_NO_W}"
-      export LDFLAGS="${XBB_LDFLAGS_APP}"
+      CPPFLAGS="${XBB_CPPFLAGS}"
+      CFLAGS="${XBB_CFLAGS_NO_W}"
+      CXXFLAGS="${XBB_CXXFLAGS_NO_W}"
+      LDFLAGS="${XBB_LDFLAGS_APP}"
+
+      export CPPFLAGS
+      export CFLAGS
+      export CXXFLAGS
+      export LDFLAGS
 
       env | sort
 
@@ -2385,10 +2419,15 @@ function build_xz()
       xbb_activate
       xbb_activate_installed_dev
 
-      export CPPFLAGS="${XBB_CPPFLAGS}"
-      export CFLAGS="${XBB_CFLAGS_NO_W}"
-      export CXXFLAGS="${XBB_CXXFLAGS_NO_W}"
-      export LDFLAGS="${XBB_LDFLAGS_APP}"
+      CPPFLAGS="${XBB_CPPFLAGS}"
+      CFLAGS="${XBB_CFLAGS_NO_W}"
+      CXXFLAGS="${XBB_CXXFLAGS_NO_W}"
+      LDFLAGS="${XBB_LDFLAGS_APP}"
+
+      export CPPFLAGS
+      export CFLAGS
+      export CXXFLAGS
+      export LDFLAGS
 
       env | sort
 
@@ -2556,10 +2595,15 @@ function build_tar()
       xbb_activate
       xbb_activate_installed_dev
 
-      export CPPFLAGS="${XBB_CPPFLAGS}"
-      export CFLAGS="${XBB_CFLAGS_NO_W}"
-      export CXXFLAGS="${XBB_CXXFLAGS_NO_W}"
-      export LDFLAGS="${XBB_LDFLAGS_APP}"
+      CPPFLAGS="${XBB_CPPFLAGS}"
+      CFLAGS="${XBB_CFLAGS_NO_W}"
+      CXXFLAGS="${XBB_CXXFLAGS_NO_W}"
+      LDFLAGS="${XBB_LDFLAGS_APP}"
+
+      export CPPFLAGS
+      export CFLAGS
+      export CXXFLAGS
+      export LDFLAGS
 
       # Avoid 'configure: error: you should not run configure as root'.
       export FORCE_UNSAFE_CONFIGURE=1
@@ -2694,10 +2738,15 @@ function build_coreutils()
       xbb_activate
       xbb_activate_installed_dev
 
-      export CPPFLAGS="${XBB_CPPFLAGS}"
-      export CFLAGS="${XBB_CFLAGS_NO_W}"
-      export CXXFLAGS="${XBB_CXXFLAGS_NO_W}"
-      export LDFLAGS="${XBB_LDFLAGS_APP}"
+      CPPFLAGS="${XBB_CPPFLAGS}"
+      CFLAGS="${XBB_CFLAGS_NO_W}"
+      CXXFLAGS="${XBB_CXXFLAGS_NO_W}"
+      LDFLAGS="${XBB_LDFLAGS_APP}"
+
+      export CPPFLAGS
+      export CFLAGS
+      export CXXFLAGS
+      export LDFLAGS
 
       # Use Apple GCC, since with GNU GCC it fails with some undefined symbols.
       if is_darwin_not_clang
@@ -3004,10 +3053,15 @@ function build_m4()
       xbb_activate
       xbb_activate_installed_dev
 
-      export CPPFLAGS="${XBB_CPPFLAGS}"
-      export CFLAGS="${XBB_CFLAGS_NO_W}"
-      export CXXFLAGS="${XBB_CXXFLAGS_NO_W}"
-      export LDFLAGS="${XBB_LDFLAGS_APP}"
+      CPPFLAGS="${XBB_CPPFLAGS}"
+      CFLAGS="${XBB_CFLAGS_NO_W}"
+      CXXFLAGS="${XBB_CXXFLAGS_NO_W}"
+      LDFLAGS="${XBB_LDFLAGS_APP}"
+
+      export CPPFLAGS
+      export CFLAGS
+      export CXXFLAGS
+      export LDFLAGS
 
       env | sort
 
@@ -3134,10 +3188,15 @@ function build_gawk()
       xbb_activate
       xbb_activate_installed_dev
 
-      export CPPFLAGS="${XBB_CPPFLAGS}"
-      export CFLAGS="${XBB_CFLAGS_NO_W}"
-      export CXXFLAGS="${XBB_CXXFLAGS_NO_W}"
-      export LDFLAGS="${XBB_LDFLAGS_APP}"
+      CPPFLAGS="${XBB_CPPFLAGS}"
+      CFLAGS="${XBB_CFLAGS_NO_W}"
+      CXXFLAGS="${XBB_CXXFLAGS_NO_W}"
+      LDFLAGS="${XBB_LDFLAGS_APP}"
+
+      export CPPFLAGS
+      export CFLAGS
+      export CXXFLAGS
+      export LDFLAGS
 
       env | sort
 
@@ -3416,10 +3475,15 @@ function build_autoconf()
       xbb_activate
       xbb_activate_installed_dev
 
-      export CPPFLAGS="${XBB_CPPFLAGS}"
-      export CFLAGS="${XBB_CFLAGS_NO_W}"
-      export CXXFLAGS="${XBB_CXXFLAGS_NO_W}"
-      export LDFLAGS="${XBB_LDFLAGS_APP}"
+      CPPFLAGS="${XBB_CPPFLAGS}"
+      CFLAGS="${XBB_CFLAGS_NO_W}"
+      CXXFLAGS="${XBB_CXXFLAGS_NO_W}"
+      LDFLAGS="${XBB_LDFLAGS_APP}"
+
+      export CPPFLAGS
+      export CFLAGS
+      export CXXFLAGS
+      export LDFLAGS
 
       env | sort
 
@@ -3535,10 +3599,15 @@ function build_automake()
       xbb_activate
       xbb_activate_installed_dev
 
-      export CPPFLAGS="${XBB_CPPFLAGS}"
-      export CFLAGS="${XBB_CFLAGS_NO_W}"
-      export CXXFLAGS="${XBB_CXXFLAGS_NO_W}"
-      export LDFLAGS="${XBB_LDFLAGS_APP}"
+      CPPFLAGS="${XBB_CPPFLAGS}"
+      CFLAGS="${XBB_CFLAGS_NO_W}"
+      CXXFLAGS="${XBB_CXXFLAGS_NO_W}"
+      LDFLAGS="${XBB_LDFLAGS_APP}"
+
+      export CPPFLAGS
+      export CFLAGS
+      export CXXFLAGS
+      export LDFLAGS
 
       env | sort
 
@@ -3658,10 +3727,15 @@ function build_libtool()
       # The new CC was set before the call.
       xbb_activate_installed_dev
 
-      export CPPFLAGS="${XBB_CPPFLAGS}"
-      export CFLAGS="${XBB_CFLAGS_NO_W}"
-      export CXXFLAGS="${XBB_CXXFLAGS_NO_W}"
-      export LDFLAGS="${XBB_LDFLAGS_APP}"
+      CPPFLAGS="${XBB_CPPFLAGS}"
+      CFLAGS="${XBB_CFLAGS_NO_W}"
+      CXXFLAGS="${XBB_CXXFLAGS_NO_W}"
+      LDFLAGS="${XBB_LDFLAGS_APP}"
+
+      export CPPFLAGS
+      export CFLAGS
+      export CXXFLAGS
+      export LDFLAGS
 
       env | sort
 
@@ -4009,10 +4083,15 @@ function build_patch()
       xbb_activate
       xbb_activate_installed_dev
 
-      export CPPFLAGS="${XBB_CPPFLAGS}"
-      export CFLAGS="${XBB_CFLAGS_NO_W}"
-      export CXXFLAGS="${XBB_CXXFLAGS_NO_W}"
-      export LDFLAGS="${XBB_LDFLAGS_APP}"
+      CPPFLAGS="${XBB_CPPFLAGS}"
+      CFLAGS="${XBB_CFLAGS_NO_W}"
+      CXXFLAGS="${XBB_CXXFLAGS_NO_W}"
+      LDFLAGS="${XBB_LDFLAGS_APP}"
+
+      export CPPFLAGS
+      export CFLAGS
+      export CXXFLAGS
+      export LDFLAGS
 
       env | sort
 
@@ -4250,16 +4329,21 @@ function build_bison()
       xbb_activate
       xbb_activate_installed_dev
 
-      export CPPFLAGS="${XBB_CPPFLAGS}"
-      export CFLAGS="${XBB_CFLAGS_NO_W}"
-      export CXXFLAGS="${XBB_CXXFLAGS_NO_W}"
-      export LDFLAGS="${XBB_LDFLAGS_APP}"
+      CPPFLAGS="${XBB_CPPFLAGS}"
+      CFLAGS="${XBB_CFLAGS_NO_W}"
+      CXXFLAGS="${XBB_CXXFLAGS_NO_W}"
+      LDFLAGS="${XBB_LDFLAGS_APP}"
 
       if is_linux
       then
         # undefined reference to `clock_gettime' on docker
         export LIBS="-lrt"
       fi
+
+      export CPPFLAGS
+      export CFLAGS
+      export CXXFLAGS
+      export LDFLAGS
 
       env | sort
 
@@ -4415,10 +4499,15 @@ function build_flex()
       xbb_activate
       xbb_activate_installed_dev
 
-      export CPPFLAGS="${XBB_CPPFLAGS}"
-      export CFLAGS="${XBB_CFLAGS_NO_W}"
-      export CXXFLAGS="${XBB_CXXFLAGS_NO_W}"
-      export LDFLAGS="${XBB_LDFLAGS_APP}"
+      CPPFLAGS="${XBB_CPPFLAGS}"
+      CFLAGS="${XBB_CFLAGS_NO_W}"
+      CXXFLAGS="${XBB_CXXFLAGS_NO_W}"
+      LDFLAGS="${XBB_LDFLAGS_APP}"
+
+      export CPPFLAGS
+      export CFLAGS
+      export CXXFLAGS
+      export LDFLAGS
 
       env | sort
 
@@ -4535,10 +4624,15 @@ function build_make()
       xbb_activate
       xbb_activate_installed_dev
 
-      export CPPFLAGS="${XBB_CPPFLAGS}"
-      export CFLAGS="${XBB_CFLAGS_NO_W}"
-      export CXXFLAGS="${XBB_CXXFLAGS_NO_W}"
-      export LDFLAGS="${XBB_LDFLAGS_APP}"
+      CPPFLAGS="${XBB_CPPFLAGS}"
+      CFLAGS="${XBB_CFLAGS_NO_W}"
+      CXXFLAGS="${XBB_CXXFLAGS_NO_W}"
+      LDFLAGS="${XBB_LDFLAGS_APP}"
+
+      export CPPFLAGS
+      export CFLAGS
+      export CXXFLAGS
+      export LDFLAGS
 
       env | sort
 
@@ -4662,12 +4756,17 @@ function build_wget()
       xbb_activate
       xbb_activate_installed_dev
 
-      export CPPFLAGS="${XBB_CPPFLAGS}"
-      export CFLAGS="${XBB_CFLAGS_NO_W}"
-      export CXXFLAGS="${XBB_CXXFLAGS_NO_W}"
-      export LDFLAGS="${XBB_LDFLAGS_APP}"
+      CPPFLAGS="${XBB_CPPFLAGS}"
+      CFLAGS="${XBB_CFLAGS_NO_W}"
+      CXXFLAGS="${XBB_CXXFLAGS_NO_W}"
+      LDFLAGS="${XBB_LDFLAGS_APP}"
       # Might be needed on Mac
       # export LIBS="-liconv"
+
+      export CPPFLAGS
+      export CFLAGS
+      export CXXFLAGS
+      export LDFLAGS
 
       env | sort
 
@@ -4796,10 +4895,15 @@ function build_texinfo()
       xbb_activate
       xbb_activate_installed_dev
 
-      export CPPFLAGS="${XBB_CPPFLAGS}"
-      export CFLAGS="${XBB_CFLAGS_NO_W}"
-      export CXXFLAGS="${XBB_CXXFLAGS_NO_W}"
-      export LDFLAGS="${XBB_LDFLAGS_APP}"
+      CPPFLAGS="${XBB_CPPFLAGS}"
+      CFLAGS="${XBB_CFLAGS_NO_W}"
+      CXXFLAGS="${XBB_CXXFLAGS_NO_W}"
+      LDFLAGS="${XBB_LDFLAGS_APP}"
+
+      export CPPFLAGS
+      export CFLAGS
+      export CXXFLAGS
+      export LDFLAGS
 
       env | sort
 
@@ -4918,10 +5022,15 @@ function build_cmake()
       xbb_activate
       xbb_activate_installed_dev
 
-      export CPPFLAGS="${XBB_CPPFLAGS}"
-      export CFLAGS="${XBB_CFLAGS_NO_W}"
-      export CXXFLAGS="${XBB_CXXFLAGS_NO_W}"
-      export LDFLAGS="${XBB_LDFLAGS_APP}"
+      CPPFLAGS="${XBB_CPPFLAGS}"
+      CFLAGS="${XBB_CFLAGS_NO_W}"
+      CXXFLAGS="${XBB_CXXFLAGS_NO_W}"
+      LDFLAGS="${XBB_LDFLAGS_APP}"
+
+      export CPPFLAGS
+      export CFLAGS
+      export CXXFLAGS
+      export LDFLAGS
 
       if is_darwin_not_clang
       then
@@ -5398,12 +5507,17 @@ function build_patchelf()
       xbb_activate
       xbb_activate_installed_dev
 
-      export CPPFLAGS="${XBB_CPPFLAGS}"
-      export CFLAGS="${XBB_CFLAGS_NO_W}"
-      export CXXFLAGS="${XBB_CXXFLAGS_NO_W}"
+      CPPFLAGS="${XBB_CPPFLAGS}"
+      CFLAGS="${XBB_CFLAGS_NO_W}"
+      CXXFLAGS="${XBB_CXXFLAGS_NO_W}"
       # Wihtout -static-libstdc++, the bootstrap lib folder is needed to 
       # find libstdc++.
-      export LDFLAGS="${XBB_LDFLAGS_APP}"
+      LDFLAGS="${XBB_LDFLAGS_APP}"
+
+      export CPPFLAGS
+      export CFLAGS
+      export CXXFLAGS
+      export LDFLAGS
 
       env | sort
 
@@ -5517,10 +5631,15 @@ function build_chrpath()
       xbb_activate
       xbb_activate_installed_dev
 
-      export CPPFLAGS="${XBB_CPPFLAGS}"
-      export CFLAGS="${XBB_CFLAGS_NO_W}"
-      export CXXFLAGS="${XBB_CXXFLAGS_NO_W}"
-      export LDFLAGS="${XBB_LDFLAGS_APP}"
+      CPPFLAGS="${XBB_CPPFLAGS}"
+      CFLAGS="${XBB_CFLAGS_NO_W}"
+      CXXFLAGS="${XBB_CXXFLAGS_NO_W}"
+      LDFLAGS="${XBB_LDFLAGS_APP}"
+
+      export CPPFLAGS
+      export CFLAGS
+      export CXXFLAGS
+      export LDFLAGS
 
       env | sort
 
@@ -5626,10 +5745,15 @@ function build_dos2unix()
       xbb_activate
       xbb_activate_installed_dev
 
-      export CPPFLAGS="${XBB_CPPFLAGS}"
-      export CFLAGS="${XBB_CFLAGS_NO_W}"
-      export CXXFLAGS="${XBB_CXXFLAGS_NO_W}"
-      export LDFLAGS="${XBB_LDFLAGS_APP}"
+      CPPFLAGS="${XBB_CPPFLAGS}"
+      CFLAGS="${XBB_CFLAGS_NO_W}"
+      CXXFLAGS="${XBB_CXXFLAGS_NO_W}"
+      LDFLAGS="${XBB_LDFLAGS_APP}"
+
+      export CPPFLAGS
+      export CFLAGS
+      export CXXFLAGS
+      export LDFLAGS
 
       env | sort
 
@@ -5741,11 +5865,16 @@ function build_git()
       xbb_activate
       xbb_activate_installed_dev
 
-      export CPPFLAGS="${XBB_CPPFLAGS}"
-      export CFLAGS="${XBB_CFLAGS_NO_W}"
-      export CXXFLAGS="${XBB_CXXFLAGS_NO_W}"
-      export LDFLAGS="${XBB_LDFLAGS_APP}"
+      CPPFLAGS="${XBB_CPPFLAGS}"
+      CFLAGS="${XBB_CFLAGS_NO_W}"
+      CXXFLAGS="${XBB_CXXFLAGS_NO_W}"
+      LDFLAGS="${XBB_LDFLAGS_APP}"
       # export LIBS="-ldl"
+
+      export CPPFLAGS
+      export CFLAGS
+      export CXXFLAGS
+      export LDFLAGS
 
       env | sort
 
@@ -6226,10 +6355,15 @@ function build_scons()
       xbb_activate_installed_dev
       xbb_activate_installed_bin
 
-      export CPPFLAGS="${XBB_CPPFLAGS}"
-      export CFLAGS="${XBB_CFLAGS_NO_W}"
-      export CXXFLAGS="${XBB_CXXFLAGS_NO_W}"
-      export LDFLAGS="${XBB_LDFLAGS_APP}"
+      CPPFLAGS="${XBB_CPPFLAGS}"
+      CFLAGS="${XBB_CFLAGS_NO_W}"
+      CXXFLAGS="${XBB_CXXFLAGS_NO_W}"
+      LDFLAGS="${XBB_LDFLAGS_APP}"
+
+      export CPPFLAGS
+      export CFLAGS
+      export CXXFLAGS
+      export LDFLAGS
 
       env | sort
 
@@ -6404,10 +6538,15 @@ function build_ninja()
       xbb_activate
       xbb_activate_installed_dev
 
-      export CPPFLAGS="${XBB_CPPFLAGS}"
-      export CFLAGS="${XBB_CFLAGS_NO_W}"
-      export CXXFLAGS="${XBB_CXXFLAGS_NO_W}"
-      export LDFLAGS="${XBB_LDFLAGS_APP}"
+      CPPFLAGS="${XBB_CPPFLAGS}"
+      CFLAGS="${XBB_CFLAGS_NO_W}"
+      CXXFLAGS="${XBB_CXXFLAGS_NO_W}"
+      LDFLAGS="${XBB_LDFLAGS_APP}"
+
+      export CPPFLAGS
+      export CFLAGS
+      export CXXFLAGS
+      export LDFLAGS
 
       env | sort
 
@@ -6693,10 +6832,15 @@ function build_wine()
       # macro.lex.yy.c:1031: undefined reference to `yywrap'.
       xbb_activate_installed_bin
 
-      export CPPFLAGS="${XBB_CPPFLAGS}" 
-      export CFLAGS="${XBB_CFLAGS_NO_W}"
-      export CXXFLAGS="${XBB_CXXFLAGS_NO_W}"
-      export LDFLAGS="${XBB_LDFLAGS_APP}"
+      CPPFLAGS="${XBB_CPPFLAGS}" 
+      CFLAGS="${XBB_CFLAGS_NO_W}"
+      CXXFLAGS="${XBB_CXXFLAGS_NO_W}"
+      LDFLAGS="${XBB_LDFLAGS_APP}"
+
+      export CPPFLAGS
+      export CFLAGS
+      export CXXFLAGS
+      export LDFLAGS
 
       env | sort
 
@@ -6856,11 +7000,17 @@ function build_nvm()
       xbb_activate
       xbb_activate_installed_dev
 
-      export CPPFLAGS="${XBB_CPPFLAGS}"
-      export CFLAGS="${XBB_CFLAGS_NO_W}"
-      export CXXFLAGS="${XBB_CXXFLAGS_NO_W}"
-      export LDFLAGS="${XBB_LDFLAGS_APP}"
-      export LIBS="-lrt"
+      CPPFLAGS="${XBB_CPPFLAGS}"
+      CFLAGS="${XBB_CFLAGS_NO_W}"
+      CXXFLAGS="${XBB_CXXFLAGS_NO_W}"
+      LDFLAGS="${XBB_LDFLAGS_APP}"
+      LIBS="-lrt"
+
+      export CPPFLAGS
+      export CFLAGS
+      export CXXFLAGS
+      export LDFLAGS
+      export LIBS
 
       env | sort
 
@@ -6955,14 +7105,19 @@ function build_gnupg()
       xbb_activate
       xbb_activate_installed_dev
 
-      export CPPFLAGS="${XBB_CPPFLAGS} -g"
-      export CFLAGS="${XBB_CFLAGS_NO_W}"
-      export CXXFLAGS="${XBB_CXXFLAGS_NO_W}"
-      export LDFLAGS="${XBB_LDFLAGS_APP} -g"
+      CPPFLAGS="${XBB_CPPFLAGS} -g"
+      CFLAGS="${XBB_CFLAGS_NO_W}"
+      CXXFLAGS="${XBB_CXXFLAGS_NO_W}"
+      LDFLAGS="${XBB_LDFLAGS_APP} -g"
       if is_linux
       then
         export LIBS="-lrt"
       fi
+
+      export CPPFLAGS
+      export CFLAGS
+      export CXXFLAGS
+      export LDFLAGS
 
       env | sort
 
@@ -7305,10 +7460,15 @@ function build_nodejs()
       xbb_activate
       xbb_activate_installed_dev
 
-      export CPPFLAGS="${XBB_CPPFLAGS}"
-      export CFLAGS="${XBB_CFLAGS_NO_W}"
-      export CXXFLAGS="${XBB_CXXFLAGS_NO_W}"
-      export LDFLAGS="${XBB_LDFLAGS_APP}"
+      CPPFLAGS="${XBB_CPPFLAGS}"
+      CFLAGS="${XBB_CFLAGS_NO_W}"
+      CXXFLAGS="${XBB_CXXFLAGS_NO_W}"
+      LDFLAGS="${XBB_LDFLAGS_APP}"
+
+      export CPPFLAGS
+      export CFLAGS
+      export CXXFLAGS
+      export LDFLAGS
 
       env | sort
 
@@ -7422,10 +7582,15 @@ function build_tcl()
       xbb_activate
       xbb_activate_installed_dev
 
-      export CPPFLAGS="${XBB_CPPFLAGS}"
-      export CFLAGS="${XBB_CFLAGS_NO_W}"
-      export CXXFLAGS="${XBB_CXXFLAGS_NO_W}"
-      export LDFLAGS="${XBB_LDFLAGS_APP}"
+      CPPFLAGS="${XBB_CPPFLAGS}"
+      CFLAGS="${XBB_CFLAGS_NO_W}"
+      CXXFLAGS="${XBB_CXXFLAGS_NO_W}"
+      LDFLAGS="${XBB_LDFLAGS_APP}"
+
+      export CPPFLAGS
+      export CFLAGS
+      export CXXFLAGS
+      export LDFLAGS
 
       env | sort
 
@@ -7567,10 +7732,10 @@ function build_guile()
       xbb_activate
       xbb_activate_installed_dev
 
-      export CPPFLAGS="${XBB_CPPFLAGS}"
-      export CFLAGS="${XBB_CFLAGS_NO_W}"
-      export CXXFLAGS="${XBB_CXXFLAGS_NO_W}"
-      export LDFLAGS="${XBB_LDFLAGS_APP}"
+      CPPFLAGS="${XBB_CPPFLAGS}"
+      CFLAGS="${XBB_CFLAGS_NO_W}"
+      CXXFLAGS="${XBB_CXXFLAGS_NO_W}"
+      LDFLAGS="${XBB_LDFLAGS_APP}"
 
       # Otherwise guile-config displays the verbosity.
       unset PKG_CONFIG
@@ -7579,6 +7744,11 @@ function build_guile()
       then
         export LD_LIBRARY_PATH="${XBB_LIBRARY_PATH}:${BUILD_FOLDER_PATH}/${guile_folder_name}/libguile/.libs"
       fi
+
+      export CPPFLAGS
+      export CFLAGS
+      export CXXFLAGS
+      export LDFLAGS
 
       env | sort
 
@@ -7727,10 +7897,15 @@ function build_rhash()
       xbb_activate
       xbb_activate_installed_dev
 
-      export CPPFLAGS="${XBB_CPPFLAGS}"
-      export CFLAGS="${XBB_CFLAGS_NO_W}"
-      export CXXFLAGS="${XBB_CXXFLAGS_NO_W}"
-      export LDFLAGS="${XBB_LDFLAGS_APP}"
+      CPPFLAGS="${XBB_CPPFLAGS}"
+      CFLAGS="${XBB_CFLAGS_NO_W}"
+      CXXFLAGS="${XBB_CXXFLAGS_NO_W}"
+      LDFLAGS="${XBB_LDFLAGS_APP}"
+
+      export CPPFLAGS
+      export CFLAGS
+      export CXXFLAGS
+      export LDFLAGS
 
       env | sort
 
@@ -7869,11 +8044,16 @@ function build_re2c()
       xbb_activate
       xbb_activate_installed_dev
 
-      export CPPFLAGS="${XBB_CPPFLAGS}"
-      export CFLAGS="${XBB_CFLAGS_NO_W}"
-      export CXXFLAGS="${XBB_CXXFLAGS_NO_W}"
-      export LDFLAGS="${XBB_LDFLAGS_APP}"
+      CPPFLAGS="${XBB_CPPFLAGS}"
+      CFLAGS="${XBB_CFLAGS_NO_W}"
+      CXXFLAGS="${XBB_CXXFLAGS_NO_W}"
+      LDFLAGS="${XBB_LDFLAGS_APP}"
     
+      export CPPFLAGS
+      export CFLAGS
+      export CXXFLAGS
+      export LDFLAGS
+
       env | sort
 
       if [ ! -f "config.status" ]
@@ -8039,16 +8219,21 @@ function build_autogen()
       xbb_activate_installed_bin
       xbb_activate_installed_dev
 
-      export CPPFLAGS="${XBB_CPPFLAGS} -D_POSIX_C_SOURCE"
-      export CFLAGS="${XBB_CFLAGS_NO_W}"
-      export CXXFLAGS="${XBB_CXXFLAGS_NO_W}"
-      export LDFLAGS="${XBB_LDFLAGS_APP}"
+      CPPFLAGS="${XBB_CPPFLAGS} -D_POSIX_C_SOURCE"
+      CFLAGS="${XBB_CFLAGS_NO_W}"
+      CXXFLAGS="${XBB_CXXFLAGS_NO_W}"
+      LDFLAGS="${XBB_LDFLAGS_APP}"
 
       if is_linux
       then
         # To find libopts.so during build.
         export LD_LIBRARY_PATH="${XBB_LIBRARY_PATH}:${BUILD_FOLDER_PATH}/${autogen_folder_name}/autoopts/.libs"
       fi
+
+      export CPPFLAGS
+      export CFLAGS
+      export CXXFLAGS
+      export LDFLAGS
 
       env | sort
 
@@ -8340,10 +8525,15 @@ function build_realpath()
       xbb_activate
       xbb_activate_installed_dev
 
-      export CPPFLAGS="${XBB_CPPFLAGS}"
-      export CFLAGS="${XBB_CFLAGS_NO_W}"
-      export CXXFLAGS="${XBB_CXXFLAGS_NO_W}"
-      export LDFLAGS="${XBB_LDFLAGS_APP}"
+      CPPFLAGS="${XBB_CPPFLAGS}"
+      CFLAGS="${XBB_CFLAGS_NO_W}"
+      CXXFLAGS="${XBB_CXXFLAGS_NO_W}"
+      LDFLAGS="${XBB_LDFLAGS_APP}"
+
+      export CPPFLAGS
+      export CFLAGS
+      export CXXFLAGS
+      export LDFLAGS
 
       env | sort
 
@@ -8432,10 +8622,15 @@ function build_native_llvm()
       xbb_activate
       xbb_activate_installed_dev
 
-      export CPPFLAGS="${XBB_CPPFLAGS}"
-      export CFLAGS="${XBB_CFLAGS_NO_W}"
-      export CXXFLAGS="${XBB_CXXFLAGS_NO_W}"
-      export LDFLAGS="${XBB_LDFLAGS_APP}"
+      CPPFLAGS="${XBB_CPPFLAGS}"
+      CFLAGS="${XBB_CFLAGS_NO_W}"
+      CXXFLAGS="${XBB_CXXFLAGS_NO_W}"
+      LDFLAGS="${XBB_LDFLAGS_APP}"
+
+      export CPPFLAGS
+      export CFLAGS
+      export CXXFLAGS
+      export LDFLAGS
 
       env | sort
 
