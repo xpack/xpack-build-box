@@ -102,8 +102,8 @@ function build_kernel_headers()
       run_verbose make INSTALL_HDR_PATH="${KERNEL_HEADERS_INSTALL_FOLDER_PATH}/usr" headers_install
 
       # Weird files not needed.
-      rm -f "${KERNEL_HEADERS_INSTALL_FOLDER_PATH}/usr/include/..install.cmd"
-      rm -f "${KERNEL_HEADERS_INSTALL_FOLDER_PATH}/usr/include/.install"
+      rm -fv "${KERNEL_HEADERS_INSTALL_FOLDER_PATH}/usr/include/..install.cmd"
+      rm -fv "${KERNEL_HEADERS_INSTALL_FOLDER_PATH}/usr/include/.install"
     ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${kernel_headers_folder_name}/make-output.txt"
 
     touch "${kernel_headers_stamp_file_path}"
@@ -1498,8 +1498,8 @@ function build_mingw_all()
           # GCC requires the `x86_64-w64-mingw32` folder be mirrored as 
           # `mingw` in the root. 
           cd "${INSTALL_FOLDER_PATH}"
-          rm -f "mingw"
-          ln -s "usr/${MINGW_TARGET}" "mingw"
+          rm -fv "mingw"
+          ln -sv "usr/${MINGW_TARGET}" "mingw"
         )
 
       ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${mingw_headers_folder_name}/make-output.txt"
@@ -2597,8 +2597,8 @@ function build_tar()
           echo
           echo "Linking gnutar..."
           cd "${INSTALL_FOLDER_PATH}/bin"
-          rm -f gnutar
-          ln -s -v tar gnutar
+          rm -fv gnutar
+          ln -sv tar gnutar
         )
 
         # It takes very long (220 tests).
@@ -3042,8 +3042,8 @@ function build_m4()
           echo
           echo "Linking gm4..."
           cd "${INSTALL_FOLDER_PATH}/bin"
-          rm -f gm4
-          ln -s -v m4 gm4
+          rm -fv gm4
+          ln -sv m4 gm4
         )
 
         if is_darwin
@@ -3329,8 +3329,8 @@ function build_sed()
           echo
           echo "Linking gsed..."
           cd "${INSTALL_FOLDER_PATH}/bin"
-          rm -f gsed
-          ln -s -v sed gsed
+          rm -fv gsed
+          ln -sv sed gsed
         )
 
         # WARN-TEST
@@ -3694,9 +3694,9 @@ function build_libtool()
           echo
           echo "Linking glibtool..."
           cd "${INSTALL_FOLDER_PATH}/bin"
-          rm -f glibtool glibtoolize
-          ln -s -v libtool glibtool
-          ln -s -v libtoolize glibtoolize
+          rm -fv glibtool glibtoolize
+          ln -sv libtool glibtool
+          ln -sv libtoolize glibtoolize
         )
 
         # amd64: ERROR: 139 tests were run,
@@ -4573,8 +4573,8 @@ function build_make()
           echo
           echo "Linking gmake..."
           cd "${INSTALL_FOLDER_PATH}/bin"
-          rm -f gmake
-          ln -s -v make gmake
+          rm -fv gmake
+          ln -sv make gmake
         )
 
         # Takes too long.
@@ -5192,8 +5192,8 @@ function build_perl()
           rm -rf t/re/regexp_nonull.t
           rm -rf t/op/sub.t
 
-          make -j1 test_harness
-          make -j1 test
+          run_verbose make -j1 test_harness
+          run_verbose make -j1 test
         fi
 
         # https://www.cpan.org/modules/INSTALL.html
@@ -6665,7 +6665,8 @@ function build_wine()
   if [ ! -f "${wine_stamp_file_path}" -o ! -d "${BUILD_FOLDER_PATH}/${wine_folder_name}" ]
   then
 
-    # In-source build.
+    echo
+    echo "wine in-source build."
 
     if [ ! -d "${BUILD_FOLDER_PATH}/${wine_folder_name}" ]
     then
@@ -6749,8 +6750,8 @@ function build_wine()
         then
           (
             cd "${INSTALL_FOLDER_PATH}/bin"
-            rm -f wine
-            ln -s wine64 wine
+            rm -fv wine
+            ln -sv wine64 wine
           )
         fi
 
@@ -7120,8 +7121,8 @@ function build_ant()
 
         cp -R -v * "${INSTALL_FOLDER_PATH}/share/ant"
 
-        rm -f "${INSTALL_FOLDER_PATH}/bin/ant"
-        ln -s -v "${INSTALL_FOLDER_PATH}/share/ant/bin/ant" "${INSTALL_FOLDER_PATH}/bin/ant"
+        rm -fv "${INSTALL_FOLDER_PATH}/bin/ant"
+        ln -sv "${INSTALL_FOLDER_PATH}/share/ant/bin/ant" "${INSTALL_FOLDER_PATH}/bin/ant"
 
       ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${ant_folder_name}/build-output.txt"
     )
@@ -7218,8 +7219,8 @@ function build_maven()
 
         cp -R -v * "${INSTALL_FOLDER_PATH}/share/maven"
 
-        rm -f "${INSTALL_FOLDER_PATH}/bin/mvn"
-        ln -s -v "${INSTALL_FOLDER_PATH}/share/maven/bin/mvn" "${INSTALL_FOLDER_PATH}/bin/mvn"
+        rm -fv "${INSTALL_FOLDER_PATH}/bin/mvn"
+        ln -sv "${INSTALL_FOLDER_PATH}/share/maven/bin/mvn" "${INSTALL_FOLDER_PATH}/bin/mvn"
 
       ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${maven_folder_name}/build-output.txt"
     )
