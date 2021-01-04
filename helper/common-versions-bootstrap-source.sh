@@ -20,10 +20,10 @@ function build_versioned_components()
     XBB_GCC_VERSION="8.4.0" # "8.3.0" "7.5.0" "7.4.0"    
     XBB_BINUTILS_VERSION="2.32" # "2.31"
 
-    XBB_BINUTILS_BRANDING="xPack Build Box Bootstrap binutils\x2C ${HOST_BITS}-bit"
-    XBB_GCC_BRANDING="xPack Build Box Bootstrap GCC\x2C ${HOST_BITS}-bit"
-    XBB_GLIBC_BRANDING="xPack Build Box Bootstrap GNU libc\x2C ${HOST_BITS}-bit"
     XBB_LLVM_BRANDING="xPack Build Box Bootstrap ${HOST_BITS}-bit"
+    XBB_BINUTILS_BRANDING="xPack Build Box Bootstrap ${HOST_BITS}-bit binutils"
+    XBB_GCC_BRANDING="xPack Build Box Bootstrap ${HOST_BITS}-bit GCC"
+    XBB_GLIBC_BRANDING="xPack Build Box Bootstrap ${HOST_BITS}-bit GNU libc"
 
     # -------------------------------------------------------------------------
 

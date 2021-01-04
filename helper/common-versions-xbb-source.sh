@@ -50,14 +50,14 @@ function build_versioned_components()
     XBB_MINGW_GCC_VERSION="${XBB_GCC_VERSION}" # "9.2.0" # "8.3.0" # "7.4.0"
     XBB_MINGW_BINUTILS_VERSION="${XBB_BINUTILS_VERSION}" # "2.34" # "2.33.1"
 
-    XBB_BINUTILS_BRANDING="xPack Build Box binutils\x2C ${HOST_BITS}-bit"
-    XBB_GDB_BRANDING="xPack Build Box GDB\x2C ${HOST_BITS}-bit"
-    XBB_GCC_BRANDING="xPack Build Box GCC\x2C ${HOST_BITS}-bit"
-    XBB_GLIBC_BRANDING="xPack Build Box GNU libc\x2C ${HOST_BITS}-bit"
-
-    XBB_MINGW_BINUTILS_BRANDING="xPack Build Box Mingw-w64 binutils\x2C ${HOST_BITS}-bit"
-    XBB_MINGW_GCC_BRANDING="xPack Build Box Mingw-w64 GCC\x2C ${HOST_BITS}-bit"
     XBB_LLVM_BRANDING="xPack Build Box ${HOST_BITS}-bit"
+    XBB_BINUTILS_BRANDING="xPack Build Box ${HOST_BITS}-bit binutils"
+    XBB_GDB_BRANDING="xPack Build Box ${HOST_BITS}-bit GDB"
+    XBB_GCC_BRANDING="xPack Build Box ${HOST_BITS}-bit GCC"
+    XBB_GLIBC_BRANDING="xPack Build Box ${HOST_BITS}-bit GNU libc"
+
+    XBB_MINGW_BINUTILS_BRANDING="xPack Build Box ${HOST_BITS}-bit Mingw-w64 binutils"
+    XBB_MINGW_GCC_BRANDING="xPack Build Box ${HOST_BITS}-bit Mingw-w64 GCC"
 
     # -------------------------------------------------------------------------
 
