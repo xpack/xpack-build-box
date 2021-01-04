@@ -96,10 +96,10 @@ function build_kernel_headers()
 
       env | sort
 
-      make mrproper
-      make headers_check
+      run_verbose make mrproper
+      run_verbose make headers_check
 
-      make INSTALL_HDR_PATH="${KERNEL_HEADERS_INSTALL_FOLDER_PATH}/usr" headers_install
+      run_verbose make INSTALL_HDR_PATH="${KERNEL_HEADERS_INSTALL_FOLDER_PATH}/usr" headers_install
 
       # Weird files not needed.
       rm -f "${KERNEL_HEADERS_INSTALL_FOLDER_PATH}/usr/include/..install.cmd"
@@ -216,7 +216,7 @@ function build_glibc()
           echo
           echo "Running glibc configure..."
 
-          bash "${SOURCES_FOLDER_PATH}/${glibc_src_folder_name}/configure" --help
+          run_verbose bash "${SOURCES_FOLDER_PATH}/${glibc_src_folder_name}/configure" --help
 
           config_options=()
 
@@ -261,7 +261,7 @@ function build_glibc()
           # Adding the library did not help. 
           config_options+=("--enable-stack-protector=no")
 
-          bash ${DEBUG} "${SOURCES_FOLDER_PATH}/${glibc_src_folder_name}/configure" \
+          run_verbose bash ${DEBUG} "${SOURCES_FOLDER_PATH}/${glibc_src_folder_name}/configure" \
             ${config_options[@]}
             
           cp "config.log" "${LOGS_FOLDER_PATH}/${glibc_folder_name}/config-log.txt"
@@ -273,17 +273,17 @@ function build_glibc()
         echo "Running glibc make..."
 
         # Build.
-        make -j ${JOBS}
+        run_verbose make -j ${JOBS}
 
         # ../sysdeps/unix/sysv/linux/tst-ttyname.c:367:18: error: ‘PR_SET_CHILD_SUBREAPER’ undeclared (first use in this function)
         # VERIFY (prctl (PR_SET_CHILD_SUBREAPER, 1) == 0);
         # make -j1 check
 
-        make install
+        run_verbose make install
 
         # The loader is not allowed to have a rpath, it fails if it does.
         # Inconsistency detected by ld.so: get-dynamic-info.h: 147: elf_get_dynamic_info: Assertion `info[DT_RPATH] == NULL' failed!
-        patchelf --remove-rpath "${GLIBC_INSTALL_FOLDER_PATH}/usr/lib/ld-${glibc_version}.so"
+        run_verbose patchelf --remove-rpath "${GLIBC_INSTALL_FOLDER_PATH}/usr/lib/ld-${glibc_version}.so"
 
         # The loader is expected in other folders too; add sym links.
         (
@@ -448,7 +448,7 @@ function build_native_binutils()
           echo
           echo "Running native binutils configure..."
 
-          bash "${SOURCES_FOLDER_PATH}/${native_binutils_src_folder_name}/configure" --help
+          run_verbose bash "${SOURCES_FOLDER_PATH}/${native_binutils_src_folder_name}/configure" --help
 
           config_options=()
 
@@ -496,10 +496,10 @@ function build_native_binutils()
             config_options+=("--disable-new-dtags")
           fi
 
-          bash ${DEBUG} "${SOURCES_FOLDER_PATH}/${native_binutils_src_folder_name}/configure" \
+          run_verbose bash ${DEBUG} "${SOURCES_FOLDER_PATH}/${native_binutils_src_folder_name}/configure" \
             ${config_options[@]}
 
-          make configure-host
+          run_verbose make configure-host
 
           # Workaround to avoid libtool issuing -rpath to the linker, since
           # this prevents it using the global LD_RUN_PATH.
@@ -517,23 +517,23 @@ function build_native_binutils()
         echo "Running native binutils make..."
 
         # Build.
-        make -j ${JOBS}
+        run_verbose make -j ${JOBS}
 
         # For unknown reasons, ld regenerates libtool, so we have to do it again.
         (
           cd ld
-          make clean
+          run_verbose make clean
 
           if is_linux
           then
             patch_all_libtool_rpath
           fi
 
-          make -j ${JOBS}
+          run_verbose make -j ${JOBS}
         )
 
         # make install-strip
-        make install
+        run_verbose make install
 
       ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${native_binutils_folder_name}/make-output.txt"
     )
@@ -675,7 +675,7 @@ function build_native_gdb()
           echo
           echo "Running native gdb configure..."
 
-          bash "${SOURCES_FOLDER_PATH}/${native_gdb_src_folder_name}/configure" --help
+          run_verbose bash "${SOURCES_FOLDER_PATH}/${native_gdb_src_folder_name}/configure" --help
 
           config_options=()
 
@@ -690,11 +690,10 @@ function build_native_gdb()
 
           config_options+=("--disable-nls")
 
-
-          bash ${DEBUG} "${SOURCES_FOLDER_PATH}/${native_gdb_src_folder_name}/configure" \
+          run_verbose bash ${DEBUG} "${SOURCES_FOLDER_PATH}/${native_gdb_src_folder_name}/configure" \
             ${config_options[@]}
 
-          make configure-host
+          run_verbose make configure-host
 
           if is_linux
           then
@@ -710,10 +709,10 @@ function build_native_gdb()
         echo "Running native gdb make..."
 
         # Build.
-        make -j ${JOBS}
+        run_verbose make -j ${JOBS}
 
         # make install-strip
-        make install
+        run_verbose make install
 
       ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${native_gdb_folder_name}/make-output.txt"
     )
@@ -843,8 +842,8 @@ function build_native_gcc()
           echo
           echo "Running native gcc configure..."
 
-          bash "${SOURCES_FOLDER_PATH}/${native_gcc_src_folder_name}/configure" --help
-          bash "${SOURCES_FOLDER_PATH}/${native_gcc_src_folder_name}/gcc/configure" --help
+          run_verbose bash "${SOURCES_FOLDER_PATH}/${native_gcc_src_folder_name}/configure" --help
+          run_verbose bash "${SOURCES_FOLDER_PATH}/${native_gcc_src_folder_name}/gcc/configure" --help
 
           config_options=()
 
@@ -968,7 +967,6 @@ function build_native_gcc()
               config_options+=("--disable-new-dtags")
             fi
 
-
             if false # [ "${XBB_LAYER}" != "xbb-bootstrap" ]
             then
               config_options+=("--with-sysroot=${INSTALL_FOLDER_PATH}")
@@ -976,7 +974,7 @@ function build_native_gcc()
 
           fi
 
-          "${SOURCES_FOLDER_PATH}/${native_gcc_src_folder_name}/configure" \
+          run_verbose bash "${SOURCES_FOLDER_PATH}/${native_gcc_src_folder_name}/configure" \
             ${config_options[@]}
 
           cp "config.log" "${LOGS_FOLDER_PATH}/${native_gcc_folder_name}/config-log.txt"
@@ -988,10 +986,10 @@ function build_native_gcc()
         echo "Running native gcc make..."
 
         # Build.
-        make -j ${JOBS}
+        run_verbose make -j ${JOBS}
 
          # make install-strip
-        make install
+        run_verbose make install
 
         (
           cd "${INSTALL_FOLDER_PATH}/usr/bin"
@@ -1292,9 +1290,9 @@ function build_mingw_binutils()
           echo "Running mingw-w64 binutils configure..."
 
           # --build used conservatively
-          bash "${SOURCES_FOLDER_PATH}/${mingw_binutils_src_folder_name}/configure" --help
+          run_verbose bash "${SOURCES_FOLDER_PATH}/${mingw_binutils_src_folder_name}/configure" --help
 
-          bash "${SOURCES_FOLDER_PATH}/${mingw_binutils_src_folder_name}/configure" \
+          run_verbose bash "${SOURCES_FOLDER_PATH}/${mingw_binutils_src_folder_name}/configure" \
             --prefix="${INSTALL_FOLDER_PATH}/usr" \
             \
             --build="${BUILD}" \
@@ -1326,10 +1324,10 @@ function build_mingw_binutils()
         echo "Running mingw-w64 binutils make..."
 
         # Build.
-        make -j ${JOBS}
+        run_verbose make -j ${JOBS}
 
         # make install-strip
-        make install
+        run_verbose make install
 
         # For just in case, it has nasty consequences when picked 
         # in other builds.
@@ -1474,9 +1472,9 @@ function build_mingw_all()
           echo
           echo "Running mingw-w64 headers configure..."
 
-          bash "${SOURCES_FOLDER_PATH}/${mingw_src_folder_name}/mingw-w64-headers/configure" --help
+          run_verbose bash "${SOURCES_FOLDER_PATH}/${mingw_src_folder_name}/mingw-w64-headers/configure" --help
           
-          bash ${DEBUG} "${SOURCES_FOLDER_PATH}/${mingw_src_folder_name}/mingw-w64-headers/configure" \
+          run_verbose bash ${DEBUG} "${SOURCES_FOLDER_PATH}/${mingw_src_folder_name}/mingw-w64-headers/configure" \
             --prefix="${INSTALL_FOLDER_PATH}/usr/${MINGW_TARGET}" \
             \
             --build="${BUILD}" \
@@ -1491,10 +1489,10 @@ function build_mingw_all()
         echo "Running mingw-w64 headers make..."
 
         # Build.
-        make -j ${JOBS}
+        run_verbose make -j ${JOBS}
 
         # make install-strip
-        make install
+        run_verbose make install
 
         (
           # GCC requires the `x86_64-w64-mingw32` folder be mirrored as 
@@ -1571,8 +1569,8 @@ function build_mingw_all()
           echo "Running mingw gcc step 1 configure..."
 
           # For the native build, --disable-shared failed with errors in libstdc++-v3
-          bash "${SOURCES_FOLDER_PATH}/${mingw_gcc_src_folder_name}/configure" --help
-          bash "${SOURCES_FOLDER_PATH}/${mingw_gcc_src_folder_name}/gcc/configure" --help
+          run_verbose bash "${SOURCES_FOLDER_PATH}/${mingw_gcc_src_folder_name}/configure" --help
+          run_verbose bash "${SOURCES_FOLDER_PATH}/${mingw_gcc_src_folder_name}/gcc/configure" --help
 
           config_options=()
           if [ ${mingw_version_major} -ge 7 -a ${mingw_gcc_version} -ge 9 ]
@@ -1584,7 +1582,7 @@ function build_mingw_all()
 
           set +u
 
-          bash ${DEBUG} "${SOURCES_FOLDER_PATH}/${mingw_gcc_src_folder_name}/configure" \
+          run_verbose bash ${DEBUG} "${SOURCES_FOLDER_PATH}/${mingw_gcc_src_folder_name}/configure" \
             --prefix="${INSTALL_FOLDER_PATH}/usr" \
             \
             --build="${BUILD}" \
@@ -1619,9 +1617,9 @@ function build_mingw_all()
         echo "Running mingw gcc step 1 make..."
 
         # Build.
-        make -j ${JOBS} all-gcc 
+        run_verbose make -j ${JOBS} all-gcc 
 
-        make install-gcc
+        run_verbose make install-gcc
 
       ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${mingw_gcc_folder_name}/make-step1-output.txt"
     )
@@ -1684,7 +1682,7 @@ function build_mingw_all()
           echo
           echo "Running mingw-w64 crt configure..."
 
-          bash "${SOURCES_FOLDER_PATH}/${mingw_src_folder_name}/mingw-w64-crt/configure" --help
+          run_verbose bash "${SOURCES_FOLDER_PATH}/${mingw_src_folder_name}/mingw-w64-crt/configure" --help
 
           if [ "${HOST_BITS}" == "64" ]
           then
@@ -1698,7 +1696,7 @@ function build_mingw_all()
             exit 1
           fi
 
-          bash ${DEBUG} "${SOURCES_FOLDER_PATH}/${mingw_src_folder_name}/mingw-w64-crt/configure" \
+          run_verbose bash ${DEBUG} "${SOURCES_FOLDER_PATH}/${mingw_src_folder_name}/mingw-w64-crt/configure" \
             --prefix="${INSTALL_FOLDER_PATH}/usr/${MINGW_TARGET}" \
             \
             --build="${BUILD}" \
@@ -1719,10 +1717,10 @@ function build_mingw_all()
         echo "Running mingw-w64 crt make..."
 
         # Build.
-        make -j ${JOBS}
+        run_verbose make -j ${JOBS}
 
         # make install-strip
-        make install
+        run_verbose make install
 
         ls -l "${INSTALL_FOLDER_PATH}/usr/${MINGW_TARGET}"
 
@@ -1774,9 +1772,9 @@ function build_mingw_all()
           echo
           echo "Running mingw-w64 winpthreads configure..."
 
-          bash "${SOURCES_FOLDER_PATH}/${mingw_src_folder_name}/mingw-w64-crt/configure" --help
+          run_verbose bash "${SOURCES_FOLDER_PATH}/${mingw_src_folder_name}/mingw-w64-crt/configure" --help
 
-          bash ${DEBUG} "${SOURCES_FOLDER_PATH}/${mingw_src_folder_name}/mingw-w64-libraries/winpthreads/configure" \
+          run_verbose bash ${DEBUG} "${SOURCES_FOLDER_PATH}/${mingw_src_folder_name}/mingw-w64-libraries/winpthreads/configure" \
             --prefix="${INSTALL_FOLDER_PATH}/usr/${MINGW_TARGET}" \
             \
             --build="${BUILD}" \
@@ -1794,10 +1792,10 @@ function build_mingw_all()
         echo "Running mingw-w64 winpthreads make..."
 
         # Build.
-        make -j ${JOBS}
+        run_verbose make -j ${JOBS}
 
         # make install-strip
-        make install
+        run_verbose make install
 
         run_verbose ls -l "${INSTALL_FOLDER_PATH}/usr/${MINGW_TARGET}"
 
@@ -1838,10 +1836,10 @@ function build_mingw_all()
       env | sort
 
       # Build.
-      make -j ${JOBS}
+      run_verbose make -j ${JOBS}
 
       # make install-strip
-      make install
+      run_verbose make install
 
     ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${mingw_gcc_folder_name}/make-step2-output.txt"
 
@@ -2058,7 +2056,7 @@ function build_openssl()
               # `Configure` is a Perl script.
               "./Configure" --help || true
 
-              "./Configure" "darwin64-x86_64-cc" \
+              run_verbose "./Configure" "darwin64-x86_64-cc" \
                 --prefix="${INSTALL_FOLDER_PATH}" \
                 \
                 --openssldir="${INSTALL_FOLDER_PATH}/openssl" \
@@ -2066,14 +2064,14 @@ function build_openssl()
                 enable-md2 enable-rc5 enable-tls enable-tls1_3 enable-tls1_2 enable-tls1_1 \
                 "${CPPFLAGS} ${CFLAGS} ${LDFLAGS}"
 
-              make depend 
+              run_verbose make depend 
 
             else
 
               "./config" --help
 
               export KERNEL_BITS=64
-              "./config" \
+              run_verbose "./config" \
                 --prefix="${INSTALL_FOLDER_PATH}" \
                 \
                 --openssldir="${INSTALL_FOLDER_PATH}/openssl" \
@@ -2110,7 +2108,7 @@ function build_openssl()
             fi
 
             # perl, do not start with bash.
-            "./config" \
+            run_verbose "./config" \
               --prefix="${INSTALL_FOLDER_PATH}" \
               \
               --openssldir="${INSTALL_FOLDER_PATH}/openssl" \
@@ -2128,7 +2126,7 @@ function build_openssl()
 
             if [ ${openssl_version_minor} -eq 0 ]
             then
-              make depend 
+              run_verbose make depend 
             fi
 
           fi
@@ -2144,9 +2142,9 @@ function build_openssl()
         echo "Running openssl make..."
 
         # Build.
-        make -j ${JOBS}
+        run_verbose make -j ${JOBS}
 
-        make install_sw
+        run_verbose make install_sw
 
         mkdir -pv "${INSTALL_FOLDER_PATH}/openssl"
 
@@ -2166,7 +2164,7 @@ function build_openssl()
           /usr/bin/install -v -c -m 644 "$(dirname "${script_folder_path}")/ca-bundle/ca-bundle.crt" "${INSTALL_FOLDER_PATH}/openssl"
         fi
 
-        make -j1 test
+        run_verbose make -j1 test
 
       ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${openssl_folder_name}/make-output.txt"
 
@@ -2260,9 +2258,9 @@ function build_curl()
           echo
           echo "Running curl configure..."
 
-          bash "${SOURCES_FOLDER_PATH}/${curl_src_folder_name}/configure" --help
+          run_verbose bash "${SOURCES_FOLDER_PATH}/${curl_src_folder_name}/configure" --help
 
-          bash ${DEBUG} "${SOURCES_FOLDER_PATH}/${curl_src_folder_name}/configure" \
+          run_verbose bash ${DEBUG} "${SOURCES_FOLDER_PATH}/${curl_src_folder_name}/configure" \
             --prefix="${INSTALL_FOLDER_PATH}" \
             \
             --with-gssapi \
@@ -2293,18 +2291,18 @@ function build_curl()
         echo "Running curl make..."
 
         # Build.
-        make -j ${JOBS}
+        run_verbose make -j ${JOBS}
 
-        make install
+        run_verbose make install
 
         if [ "${RUN_LONG_TESTS}" == "y" ]
         then
           # It takes very long (1200+ tests).
           if is_darwin
           then
-            make -j1 check || true
+            run_verbose make -j1 check || true
           else
-            make -j1 check
+            run_verbose make -j1 check
           fi
         fi
 
@@ -2400,9 +2398,9 @@ function build_xz()
           echo
           echo "Running xz configure..."
 
-          bash "${SOURCES_FOLDER_PATH}/${xz_src_folder_name}/configure" --help
+          run_verbose bash "${SOURCES_FOLDER_PATH}/${xz_src_folder_name}/configure" --help
 
-          bash ${DEBUG} "${SOURCES_FOLDER_PATH}/${xz_src_folder_name}/configure" \
+          run_verbose bash ${DEBUG} "${SOURCES_FOLDER_PATH}/${xz_src_folder_name}/configure" \
             --prefix="${INSTALL_FOLDER_PATH}" \
             \
             --disable-werror \
@@ -2422,13 +2420,13 @@ function build_xz()
         echo "Running xz make..."
 
         # Build.
-        make -j ${JOBS}
+        run_verbose make -j ${JOBS}
 
         # make install-strip
-        make install
+        run_verbose make install
 
         # After install, to find its libaries.
-        make -j1 check
+        run_verbose make -j1 check
 
       ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${xz_folder_name}/make-output.txt"
     )
@@ -2574,9 +2572,9 @@ function build_tar()
           echo
           echo "Running tar configure..."
 
-          bash "configure" --help
+          run_verbose bash "configure" --help
 
-          bash ${DEBUG} "configure" \
+          run_verbose bash ${DEBUG} "configure" \
             --prefix="${INSTALL_FOLDER_PATH}" \
             \
             --disable-rpath \
@@ -2590,10 +2588,10 @@ function build_tar()
         echo "Running tar make..."
 
         # Build.
-        make -j ${JOBS}
+        run_verbose make -j ${JOBS}
 
         # make install-strip
-        make install
+        run_verbose make install
 
         (
           echo
@@ -2619,7 +2617,7 @@ function build_tar()
         if is_linux && [ "${RUN_LONG_TESTS}" == "y" ]
         then
           # WARN-TEST
-          make -j1 check # || true
+          run_verbose make -j1 check # || true
         fi
 
       ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${tar_folder_name}/make-output.txt"
@@ -2717,7 +2715,7 @@ function build_coreutils()
           echo
           echo "Running coreutils configure..."
 
-          bash "${SOURCES_FOLDER_PATH}/${coreutils_src_folder_name}/configure" --help
+          run_verbose bash "${SOURCES_FOLDER_PATH}/${coreutils_src_folder_name}/configure" --help
 
           if [ -f "/.dockerenv" ]
           then
@@ -2735,7 +2733,7 @@ function build_coreutils()
           set +u
 
           # `ar` must be excluded, it interferes with Apple similar program.
-          bash ${DEBUG} "${SOURCES_FOLDER_PATH}/${coreutils_src_folder_name}/configure" \
+          run_verbose bash ${DEBUG} "${SOURCES_FOLDER_PATH}/${coreutils_src_folder_name}/configure" \
             --prefix="${INSTALL_FOLDER_PATH}" \
             \
             --with-openssl \
@@ -2753,10 +2751,10 @@ function build_coreutils()
         echo "Running coreutils make..."
 
         # Build.
-        make -j ${JOBS}
+        run_verbose make -j ${JOBS}
 
         # make install-strip
-        make install
+        run_verbose make install
 
         # Takes very long and fails.
         # x86_64: FAIL: tests/misc/chroot-credentials.sh
@@ -2900,12 +2898,12 @@ function build_pkg_config()
           echo
           echo "Running pkg_config configure..."
 
-          bash "${SOURCES_FOLDER_PATH}/${pkg_config_src_folder_name}/configure" --help
-          bash "${SOURCES_FOLDER_PATH}/${pkg_config_src_folder_name}/glib/configure" --help
+          run_verbose bash "${SOURCES_FOLDER_PATH}/${pkg_config_src_folder_name}/configure" --help
+          run_verbose bash "${SOURCES_FOLDER_PATH}/${pkg_config_src_folder_name}/glib/configure" --help
 
           # --with-internal-glib fails with
           # gconvert.c:61:2: error: #error GNU libiconv not in use but included iconv.h is from libiconv          
-          bash ${DEBUG} "${SOURCES_FOLDER_PATH}/${pkg_config_src_folder_name}/configure" \
+          run_verbose bash ${DEBUG} "${SOURCES_FOLDER_PATH}/${pkg_config_src_folder_name}/configure" \
             --prefix="${INSTALL_FOLDER_PATH}" \
             \
             --with-internal-glib \
@@ -2923,12 +2921,12 @@ function build_pkg_config()
         echo "Running pkg_config make..."
 
         # Build.
-        make -j ${JOBS}
+        run_verbose make -j ${JOBS}
 
         # make install-strip
-        make install
+        run_verbose make install
 
-        make -j1 check
+        run_verbose make -j1 check
 
       ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${pkg_config_folder_name}/make-output.txt"
     )
@@ -3019,9 +3017,9 @@ function build_m4()
           echo
           echo "Running m4 configure..."
 
-          bash "${SOURCES_FOLDER_PATH}/${m4_src_folder_name}/configure" --help
+          run_verbose bash "${SOURCES_FOLDER_PATH}/${m4_src_folder_name}/configure" --help
 
-          bash ${DEBUG} "${SOURCES_FOLDER_PATH}/${m4_src_folder_name}/configure" \
+          run_verbose bash ${DEBUG} "${SOURCES_FOLDER_PATH}/${m4_src_folder_name}/configure" \
             --prefix="${INSTALL_FOLDER_PATH}" \
             \
             --disable-rpath \
@@ -3035,10 +3033,10 @@ function build_m4()
         echo "Running m4 make..."
 
         # Build.
-        make -j ${JOBS}
+        run_verbose make -j ${JOBS}
 
         # make install-strip
-        make install
+        run_verbose make install
 
         (
           echo
@@ -3055,9 +3053,9 @@ function build_m4()
           # FAIL: test-fpurge
           # FAIL: test-ftell.sh
           # FAIL: test-ftello2.sh
-          make -j1 check || true
+          run_verbose make -j1 check || true
         else
-          make -j1 check
+          run_verbose make -j1 check
         fi
 
       ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${m4_folder_name}/make-output.txt"
@@ -3149,7 +3147,7 @@ function build_gawk()
           echo
           echo "Running gawk configure..."
 
-          bash "${SOURCES_FOLDER_PATH}/${gawk_src_folder_name}/configure" --help
+          run_verbose bash "${SOURCES_FOLDER_PATH}/${gawk_src_folder_name}/configure" --help
 
           # --disable-extensions
           # Extension tests fail:
@@ -3170,7 +3168,7 @@ function build_gawk()
           # ! gawk: mpfrsqrt.awk:13: error: can't open shared library `intdiv' for reading (No such file or directory)
           # ! EXIT CODE: 1
 
-          bash ${DEBUG} "${SOURCES_FOLDER_PATH}/${gawk_src_folder_name}/configure" \
+          run_verbose bash ${DEBUG} "${SOURCES_FOLDER_PATH}/${gawk_src_folder_name}/configure" \
             --prefix="${INSTALL_FOLDER_PATH}" \
             \
             --without-libsigsegv \
@@ -3187,10 +3185,10 @@ function build_gawk()
         echo "Running gawk make..."
 
         # Build.
-        make -j ${JOBS}
+        run_verbose make -j ${JOBS}
 
         # make install-strip
-        make install
+        run_verbose make install
 
         # Multiple failures, no time to investigate.
         # WARN-TEST
@@ -3298,9 +3296,9 @@ function build_sed()
           echo
           echo "Running sed configure..."
 
-          bash "${SOURCES_FOLDER_PATH}/${sed_src_folder_name}/configure" --help
+          run_verbose bash "${SOURCES_FOLDER_PATH}/${sed_src_folder_name}/configure" --help
 
-          bash ${DEBUG} "${SOURCES_FOLDER_PATH}/${sed_src_folder_name}/configure" \
+          run_verbose bash ${DEBUG} "${SOURCES_FOLDER_PATH}/${sed_src_folder_name}/configure" \
             --prefix="${INSTALL_FOLDER_PATH}" \
             \
             --disable-rpath \
@@ -3322,10 +3320,10 @@ function build_sed()
         echo "Running sed make..."
 
         # Build.
-        make -j ${JOBS}
+        run_verbose make -j ${JOBS}
 
         # make install-strip
-        make install
+        run_verbose make install
 
         (
           echo
@@ -3339,9 +3337,9 @@ function build_sed()
         if is_darwin # && [ "${XBB_LAYER}" == "xbb-bootstrap" ]
         then
           # Fails on macOS 10.15.
-          make -j1 check || true
+          run_verbose make -j1 check || true
         else
-          make -j1 check
+          run_verbose make -j1 check
         fi
 
       ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${sed_folder_name}/make-output.txt"
@@ -3431,9 +3429,9 @@ function build_autoconf()
           echo
           echo "Running autoconf configure..."
 
-          bash "${SOURCES_FOLDER_PATH}/${autoconf_src_folder_name}/configure" --help
+          run_verbose bash "${SOURCES_FOLDER_PATH}/${autoconf_src_folder_name}/configure" --help
 
-          bash ${DEBUG} "${SOURCES_FOLDER_PATH}/${autoconf_src_folder_name}/configure" \
+          run_verbose bash ${DEBUG} "${SOURCES_FOLDER_PATH}/${autoconf_src_folder_name}/configure" \
             --prefix="${INSTALL_FOLDER_PATH}" 
 
           cp "config.log" "${LOGS_FOLDER_PATH}/${autoconf_folder_name}/config-log.txt"
@@ -3445,10 +3443,10 @@ function build_autoconf()
         echo "Running autoconf make..."
 
         # Build.
-        make -j ${JOBS}
+        run_verbose make -j ${JOBS}
 
         # make install-strip
-        make install
+        run_verbose make install
 
         if [ "${RUN_LONG_TESTS}" == "y" ]
         then
@@ -3550,9 +3548,9 @@ function build_automake()
           echo
           echo "Running automake configure..."
 
-          bash "${SOURCES_FOLDER_PATH}/${automake_src_folder_name}/configure" --help
+          run_verbose bash "${SOURCES_FOLDER_PATH}/${automake_src_folder_name}/configure" --help
 
-          bash ${DEBUG} "${SOURCES_FOLDER_PATH}/${automake_src_folder_name}/configure" \
+          run_verbose bash ${DEBUG} "${SOURCES_FOLDER_PATH}/${automake_src_folder_name}/configure" \
             --prefix="${INSTALL_FOLDER_PATH}" \
             \
             --build="${BUILD}" \
@@ -3566,10 +3564,10 @@ function build_automake()
         echo "Running automake make..."
 
         # Build.
-        make -j ${JOBS}
+        run_verbose make -j ${JOBS}
 
         # make install-strip
-        make install
+        run_verbose make install
 
         # Takes too long and some tests fail.
         # XFAIL: t/pm/Cond2.pl
@@ -3673,9 +3671,9 @@ function build_libtool()
           echo
           echo "Running libtool configure..."
 
-          bash "${SOURCES_FOLDER_PATH}/${libtool_src_folder_name}/configure" --help
+          run_verbose bash "${SOURCES_FOLDER_PATH}/${libtool_src_folder_name}/configure" --help
 
-          bash ${DEBUG} "${SOURCES_FOLDER_PATH}/${libtool_src_folder_name}/configure" \
+          run_verbose bash ${DEBUG} "${SOURCES_FOLDER_PATH}/${libtool_src_folder_name}/configure" \
             --prefix="${INSTALL_FOLDER_PATH}" 
 
           cp "config.log" "${LOGS_FOLDER_PATH}/${libtool_folder_name}/config-log.txt"
@@ -3687,10 +3685,10 @@ function build_libtool()
         echo "Running libtool make..."
 
         # Build.
-        make -j ${JOBS}
+        run_verbose make -j ${JOBS}
 
         # make install-strip
-        make install
+        run_verbose make install
 
         (
           echo
@@ -3811,9 +3809,9 @@ function build_gettext()
           echo
           echo "Running gettext configure..."
 
-          bash "${SOURCES_FOLDER_PATH}/${gettext_src_folder_name}/configure" --help
+          run_verbose bash "${SOURCES_FOLDER_PATH}/${gettext_src_folder_name}/configure" --help
 
-          bash ${DEBUG} "${SOURCES_FOLDER_PATH}/${gettext_src_folder_name}/configure" \
+          run_verbose bash ${DEBUG} "${SOURCES_FOLDER_PATH}/${gettext_src_folder_name}/configure" \
             --prefix="${INSTALL_FOLDER_PATH}" \
             \
             --with-xz \
@@ -3877,10 +3875,10 @@ function build_gettext()
         echo "Running gettext make..."
 
         # Build.
-        make -j ${JOBS}
+        run_verbose make -j ${JOBS}
 
         # make install-strip
-        make install
+        run_verbose make install
 
         (
           # The tests use an internal library (libgnuintl.so), so it
@@ -3892,7 +3890,7 @@ function build_gettext()
               export LD_RUN_PATH="$(pwd)/intl/.libs:${LD_RUN_PATH}"
               echo "LD_RUN_PATH=$LD_RUN_PATH"
             fi
-            make -j1 check 
+            run_verbose make -j1 check 
           )
           (
             cd gettext-tools
@@ -3904,9 +3902,9 @@ function build_gettext()
             if is_darwin && [ "${XBB_LAYER}" == "xbb-bootstrap" ]
             then
               # Fails on macOS 10.15.
-              make -j1 check || true
+              run_verbose make -j1 check || true
             else
-              make -j1 check 
+              run_verbose make -j1 check 
             fi
           )
         )
@@ -4024,9 +4022,9 @@ function build_patch()
           echo
           echo "Running patch configure..."
 
-          bash "${SOURCES_FOLDER_PATH}/${patch_src_folder_name}/configure" --help
+          run_verbose bash "${SOURCES_FOLDER_PATH}/${patch_src_folder_name}/configure" --help
 
-          bash ${DEBUG} "${SOURCES_FOLDER_PATH}/${patch_src_folder_name}/configure" \
+          run_verbose bash ${DEBUG} "${SOURCES_FOLDER_PATH}/${patch_src_folder_name}/configure" \
             --prefix="${INSTALL_FOLDER_PATH}" 
 
           cp "config.log" "${LOGS_FOLDER_PATH}/${patch_folder_name}/config-log.txt"
@@ -4038,12 +4036,12 @@ function build_patch()
         echo "Running patch make..."
 
         # Build.
-        make -j ${JOBS}
+        run_verbose make -j ${JOBS}
 
         # make install-strip
-        make install
+        run_verbose make install
 
-        make -j1 check
+        run_verbose make -j1 check
 
       ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${patch_folder_name}/make-output.txt"
     )
@@ -4145,9 +4143,9 @@ function build_diffutils()
           echo
           echo "Running diffutils configure..."
 
-          bash "${SOURCES_FOLDER_PATH}/${diffutils_src_folder_name}/configure" --help
+          run_verbose bash "${SOURCES_FOLDER_PATH}/${diffutils_src_folder_name}/configure" --help
 
-          bash ${DEBUG} "${SOURCES_FOLDER_PATH}/${diffutils_src_folder_name}/configure" \
+          run_verbose bash ${DEBUG} "${SOURCES_FOLDER_PATH}/${diffutils_src_folder_name}/configure" \
             --prefix="${INSTALL_FOLDER_PATH}" \
             \
             --disable-rpath \
@@ -4161,13 +4159,13 @@ function build_diffutils()
         echo "Running diffutils make..."
 
         # Build.
-        make -j ${JOBS}
+        run_verbose make -j ${JOBS}
 
         # make install-strip
-        make install
+        run_verbose make install
 
         # WARN-TEST
-        make -j1 check
+        run_verbose make -j1 check
 
       ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${diffutils_folder_name}/make-output.txt"
     )
@@ -4271,9 +4269,9 @@ function build_bison()
           echo
           echo "Running bison configure..."
 
-          bash "${SOURCES_FOLDER_PATH}/${bison_src_folder_name}/configure" --help
+          run_verbose bash "${SOURCES_FOLDER_PATH}/${bison_src_folder_name}/configure" --help
 
-          bash ${DEBUG} "${SOURCES_FOLDER_PATH}/${bison_src_folder_name}/configure" \
+          run_verbose bash ${DEBUG} "${SOURCES_FOLDER_PATH}/${bison_src_folder_name}/configure" \
             --prefix="${INSTALL_FOLDER_PATH}" \
             \
             --disable-rpath \
@@ -4292,10 +4290,10 @@ function build_bison()
         echo "Running bison make..."
 
         # Build.
-        make -j ${JOBS}
+        run_verbose make -j ${JOBS}
 
         # make install-strip
-        make install
+        run_verbose make install
 
         # Takes too long.
         if [ "${RUN_LONG_TESTS}" == "y" ]
@@ -4430,9 +4428,9 @@ function build_flex()
           echo
           echo "Running flex configure..."
 
-          bash "${SOURCES_FOLDER_PATH}/${flex_src_folder_name}/configure" --help
+          run_verbose bash "${SOURCES_FOLDER_PATH}/${flex_src_folder_name}/configure" --help
 
-          bash ${DEBUG} "${SOURCES_FOLDER_PATH}/${flex_src_folder_name}/configure" \
+          run_verbose bash ${DEBUG} "${SOURCES_FOLDER_PATH}/${flex_src_folder_name}/configure" \
             --prefix="${INSTALL_FOLDER_PATH}" \
             \
             --disable-rpath \
@@ -4446,14 +4444,14 @@ function build_flex()
         echo "Running flex make..."
 
         # Build.
-        make -j ${JOBS}
+        run_verbose make -j ${JOBS}
 
         # make install-strip
-        make install
+        run_verbose make install
 
         # cxx_restart fails - https://github.com/westes/flex/issues/98
         # make -k check || true
-        make -k check
+        run_verbose make -k check
 
       ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${flex_folder_name}/make-output.txt"
     )
@@ -4550,9 +4548,9 @@ function build_make()
           echo
           echo "Running make configure..."
 
-          bash "${SOURCES_FOLDER_PATH}/${make_src_folder_name}/configure" --help
+          run_verbose bash "${SOURCES_FOLDER_PATH}/${make_src_folder_name}/configure" --help
 
-          bash ${DEBUG} "${SOURCES_FOLDER_PATH}/${make_src_folder_name}/configure" \
+          run_verbose bash ${DEBUG} "${SOURCES_FOLDER_PATH}/${make_src_folder_name}/configure" \
             --prefix="${INSTALL_FOLDER_PATH}" \
             \
             --disable-rpath \
@@ -4566,10 +4564,10 @@ function build_make()
         echo "Running make make..."
 
         # Build.
-        make -j ${JOBS}
+        run_verbose make -j ${JOBS}
 
         # make install-strip
-        make install
+        run_verbose make install
 
         (
           echo
@@ -4679,10 +4677,10 @@ function build_wget()
           echo
           echo "Running wget configure..."
 
-          bash "${SOURCES_FOLDER_PATH}/${wget_src_folder_name}/configure" --help
+          run_verbose bash "${SOURCES_FOLDER_PATH}/${wget_src_folder_name}/configure" --help
 
           # libpsl is not available anyway.
-          bash ${DEBUG} "${SOURCES_FOLDER_PATH}/${wget_src_folder_name}/configure" \
+          run_verbose bash ${DEBUG} "${SOURCES_FOLDER_PATH}/${wget_src_folder_name}/configure" \
             --prefix="${INSTALL_FOLDER_PATH}" \
             \
             --with-ssl=gnutls \
@@ -4712,10 +4710,10 @@ function build_wget()
         echo "Running wget make..."
 
         # Build.
-        make -j ${JOBS}
+        run_verbose make -j ${JOBS}
 
         # make install-strip
-        make install
+        run_verbose make install
 
         # Fails
         # x86_64: FAIL:  65
@@ -4811,9 +4809,9 @@ function build_texinfo()
           echo
           echo "Running texinfo configure..."
 
-          bash "${SOURCES_FOLDER_PATH}/${texinfo_src_folder_name}/configure" --help
+          run_verbose bash "${SOURCES_FOLDER_PATH}/${texinfo_src_folder_name}/configure" --help
 
-          bash ${DEBUG} "${SOURCES_FOLDER_PATH}/${texinfo_src_folder_name}/configure" \
+          run_verbose bash ${DEBUG} "${SOURCES_FOLDER_PATH}/${texinfo_src_folder_name}/configure" \
             --prefix="${INSTALL_FOLDER_PATH}" \
             \
             --disable-rpath \
@@ -4827,19 +4825,19 @@ function build_texinfo()
         echo "Running texinfo make..."
 
         # Build.
-        make -j ${JOBS}
+        run_verbose make -j ${JOBS}
 
         # make install-strip
-        make install
+        run_verbose make install
 
         # Darwin: FAIL: t/94htmlxref.t 11 - htmlxref errors file_html
         # Darwin: ERROR: t/94htmlxref.t - exited with status 2
 
         if is_darwin
         then
-          make -j1 check || true
+          run_verbose make -j1 check || true
         else
-          make -j1 check
+          run_verbose make -j1 check
         fi
 
       ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${texinfo_folder_name}/make-output.txt"
@@ -4942,9 +4940,9 @@ function build_cmake()
             echo
             echo "Running cmake bootstrap..."
 
-            bash "${SOURCES_FOLDER_PATH}/${cmake_src_folder_name}/bootstrap" --help || true
+            run_verbose bash "${SOURCES_FOLDER_PATH}/${cmake_src_folder_name}/bootstrap" --help || true
 
-            bash ${DEBUG} "${SOURCES_FOLDER_PATH}/${cmake_src_folder_name}/bootstrap" \
+            run_verbose bash ${DEBUG} "${SOURCES_FOLDER_PATH}/${cmake_src_folder_name}/bootstrap" \
               --prefix="${INSTALL_FOLDER_PATH}" \
               \
               --parallel="${JOBS}"
@@ -4961,7 +4959,7 @@ function build_cmake()
           #  -DCMAKE_VERBOSE_MAKEFILE:BOOL=ON 
 
           # Use the existing cmake to configure this one.
-          cmake \
+          run_verbose cmake \
             -DCMAKE_INSTALL_PREFIX="${INSTALL_FOLDER_PATH}" \
             "${SOURCES_FOLDER_PATH}/${cmake_src_folder_name}"
 
@@ -4984,10 +4982,10 @@ function build_cmake()
         echo "Running cmake make..."
 
         # Build.
-        make -j ${JOBS}
+        run_verbose make -j ${JOBS}
 
         # make install-strip
-        make install
+        run_verbose make install
 
         mkdir -pv "${INSTALL_FOLDER_PATH}/share/doc"
         rm -rfv "${INSTALL_FOLDER_PATH}/share/doc/cmake-${cmake_version_major}.${cmake_version_minor}"
@@ -5145,12 +5143,12 @@ function build_perl()
           echo
           echo "Running perl configure..."
 
-          bash "./Configure" --help || true
+          run_verbose bash "./Configure" --help || true
 
           # -Uusedl prevents building libperl.so and so there is no need
           # worry about the weird rpath.
 
-          bash ${DEBUG} "./Configure" -d -e -s \
+          run_verbose bash ${DEBUG} "./Configure" -d -e -s \
             -Dprefix="${INSTALL_FOLDER_PATH}" \
             \
             -Dcc="${CC}" \
@@ -5171,10 +5169,10 @@ function build_perl()
         echo "Running perl make..."
 
         # Build.
-        make -j ${JOBS}
+        run_verbose make -j ${JOBS}
 
         # make install-strip
-        make install
+        run_verbose make install
 
         # Takes very, very long, and some fail.
         if false # [ "${RUN_LONG_TESTS}" == "y" ]
@@ -5308,9 +5306,9 @@ function build_makedepend()
           echo
           echo "Running makedepend configure..."
 
-          bash "${SOURCES_FOLDER_PATH}/${makedepend_src_folder_name}/configure" --help
+          run_verbose bash "${SOURCES_FOLDER_PATH}/${makedepend_src_folder_name}/configure" --help
 
-          bash ${DEBUG} "${SOURCES_FOLDER_PATH}/${makedepend_src_folder_name}/configure" \
+          run_verbose bash ${DEBUG} "${SOURCES_FOLDER_PATH}/${makedepend_src_folder_name}/configure" \
             --prefix="${INSTALL_FOLDER_PATH}" 
 
           cp "config.log" "${LOGS_FOLDER_PATH}/${makedepend_folder_name}/config-log.txt"
@@ -5322,12 +5320,12 @@ function build_makedepend()
         echo "Running makedepend make..."
 
         # Build.
-        make -j ${JOBS}
+        run_verbose make -j ${JOBS}
 
         # make install-strip
-        make install
+        run_verbose make install
 
-        make -j1 check
+        run_verbose make -j1 check
 
       ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${makedepend_folder_name}/make-output.txt"
     )
@@ -5415,7 +5413,7 @@ function build_patchelf()
           echo
           echo "Running patchelf configure..."
 
-          bash "${SOURCES_FOLDER_PATH}/${patchelf_src_folder_name}/configure" --help
+          run_verbose bash "${SOURCES_FOLDER_PATH}/${patchelf_src_folder_name}/configure" --help
 
           config_options=()
 
@@ -5425,7 +5423,7 @@ function build_patchelf()
             config_options+=("--disable-new-dtags")
           fi
 
-          bash ${DEBUG} "${SOURCES_FOLDER_PATH}/${patchelf_src_folder_name}/configure" \
+          run_verbose bash ${DEBUG} "${SOURCES_FOLDER_PATH}/${patchelf_src_folder_name}/configure" \
             ${config_options[@]}
 
           cp "config.log" "${LOGS_FOLDER_PATH}/${patchelf_folder_name}/config-log.txt"
@@ -5437,10 +5435,10 @@ function build_patchelf()
         echo "Running patchelf make..."
 
         # Build.
-        make -j ${JOBS}
+        run_verbose make -j ${JOBS}
 
         # make install-strip
-        make install
+        run_verbose make install
 
         # Fails.
         # x86_64: FAIL: set-rpath-library.sh (Segmentation fault (core dumped))
@@ -5532,9 +5530,9 @@ function build_chrpath()
           echo
           echo "Running chrpath configure..."
 
-          bash "${SOURCES_FOLDER_PATH}/${chrpath_src_folder_name}/configure" --help
+          run_verbose bash "${SOURCES_FOLDER_PATH}/${chrpath_src_folder_name}/configure" --help
 
-          bash ${DEBUG} "${SOURCES_FOLDER_PATH}/${chrpath_src_folder_name}/configure" \
+          run_verbose bash ${DEBUG} "${SOURCES_FOLDER_PATH}/${chrpath_src_folder_name}/configure" \
             --prefix="${INSTALL_FOLDER_PATH}" 
 
           cp "config.log" "${LOGS_FOLDER_PATH}/${chrpath_folder_name}/config-log.txt"
@@ -5546,12 +5544,12 @@ function build_chrpath()
         echo "Running chrpath make..."
 
         # Build.
-        make -j ${JOBS}
+        run_verbose make -j ${JOBS}
         
         # make install-strip
-        make install
+        run_verbose make install
 
-        make -j1 check
+        run_verbose make -j1 check
 
       ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${chrpath_folder_name}/make-output.txt"
     )
@@ -5640,9 +5638,9 @@ function build_dos2unix()
         echo "Running dos2unix make..."
 
         # Build.
-        make -j ${JOBS} prefix="${INSTALL_FOLDER_PATH}" ENABLE_NLS=
+        run_verbose make -j ${JOBS} prefix="${INSTALL_FOLDER_PATH}" ENABLE_NLS=
 
-        make prefix="${INSTALL_FOLDER_PATH}" install
+        run_verbose make prefix="${INSTALL_FOLDER_PATH}" install
 
         if is_darwin
         then
@@ -5652,9 +5650,9 @@ function build_dos2unix()
           #   at utf16_gb.t line 30.
           #   Failed test 'unix2dos convert DOS UTF-16BE to DOS GB18030, keep BOM'
           #   at utf16_gb.t line 33.
-          make -j1 check || true
+          run_verbose make -j1 check || true
         else
-          make -j1 check
+          run_verbose make -j1 check
         fi
 
       ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${dos2unix_folder_name}/make-output.txt"
@@ -5757,9 +5755,9 @@ function build_git()
           echo
           echo "Running git configure..."
 
-          bash "./configure" --help
+          run_verbose bash "./configure" --help
 
-          bash ${DEBUG} "./configure" \
+          run_verbose bash ${DEBUG} "./configure" \
             --prefix="${INSTALL_FOLDER_PATH}" 
 
           cp "config.log" "${LOGS_FOLDER_PATH}/${git_folder_name}/config-log.txt"
@@ -5771,10 +5769,10 @@ function build_git()
         echo "Running git make..."
 
         # Build.
-        make -j ${JOBS}
+        run_verbose make -j ${JOBS}
 
         # make install-strip
-        make install
+        run_verbose make install
 
         # Tests are quite complicated
 
@@ -5885,7 +5883,7 @@ function build_python2()
           echo
           echo "Running python2 configure..."
 
-          bash "${SOURCES_FOLDER_PATH}/${python2_src_folder_name}/configure" --help
+          run_verbose bash "${SOURCES_FOLDER_PATH}/${python2_src_folder_name}/configure" --help
 
           # Fail on macOS:
           # --enable-universalsdk 
@@ -5915,7 +5913,7 @@ function build_python2()
             config_options+=("--disable-new-dtags")
           fi
 
-          bash ${DEBUG} "${SOURCES_FOLDER_PATH}/${python2_src_folder_name}/configure" \
+          run_verbose bash ${DEBUG} "${SOURCES_FOLDER_PATH}/${python2_src_folder_name}/configure" \
             ${config_options[@]}
 
           cp "config.log" "${LOGS_FOLDER_PATH}/${python2_folder_name}/config-log.txt"
@@ -5927,10 +5925,10 @@ function build_python2()
         echo "Running python2 make..."
 
         # Build.
-        make -j ${JOBS}
+        run_verbose make -j ${JOBS}
 
         # make install-strip
-        make install
+        run_verbose make install
 
         # Tests are quite complicated
 
@@ -6062,7 +6060,7 @@ function build_python3()
           echo
           echo "Running python3 configure..."
 
-          bash "${SOURCES_FOLDER_PATH}/${python3_src_folder_name}/configure" --help
+          run_verbose bash "${SOURCES_FOLDER_PATH}/${python3_src_folder_name}/configure" --help
 
           # Fail on macOS:
           # --enable-universalsdk
@@ -6094,7 +6092,7 @@ function build_python3()
             config_options+=("--disable-new-dtags")
           fi
 
-          bash ${DEBUG} "${SOURCES_FOLDER_PATH}/${python3_src_folder_name}/configure" \
+          run_verbose bash ${DEBUG} "${SOURCES_FOLDER_PATH}/${python3_src_folder_name}/configure" \
             ${config_options[@]}
              
           cp "config.log" "${LOGS_FOLDER_PATH}/${python3_folder_name}/config-log.txt"
@@ -6106,10 +6104,10 @@ function build_python3()
         echo "Running python3 make..."
 
         # Build.
-        make -j ${JOBS} # build_all
+        run_verbose make -j ${JOBS} # build_all
 
         # make install-strip
-        make install
+        run_verbose make install
 
         # Tests are quite complicated
  
@@ -6242,7 +6240,7 @@ function build_scons()
       which python
 
       echo
-      python setup.py install \
+      run_verbose python setup.py install \
         --prefix="${INSTALL_FOLDER_PATH}" \
         \
         --optimize=1 \
@@ -6279,6 +6277,7 @@ function test_scons()
 
     echo
     which python
+
     if is_darwin
     then
       PYTHONPATH="${INSTALL_FOLDER_PATH}/lib/python2.7/site-packages"
@@ -6319,7 +6318,7 @@ function build_meson
 
       env | sort
 
-      pip3 install meson==${meson_version}
+      run_verbose pip3 install meson==${meson_version}
 
       # export LC_CTYPE=en_US.UTF-8 CPPFLAGS= CFLAGS= CXXFLAGS= LDFLAGS=
       # ./run_tests.py
@@ -6422,7 +6421,7 @@ function build_ninja()
         
         # --platform=linux ?
 
-        ./configure.py \
+        run_verbose ./configure.py \
           --bootstrap \
           --verbose \
           --with-python=$(which python2) 
@@ -6552,7 +6551,7 @@ function build_p7zip()
         -e "s|DEST_HOME=/usr/local|DEST_HOME=${INSTALL_FOLDER_PATH}|" \
         "install.sh"
 
-      bash "install.sh"
+      run_verbose bash "install.sh"
 
       if is_darwin
       then
@@ -6720,9 +6719,9 @@ function build_wine()
             ENABLE_64=""
           fi
 
-          bash "configure" --help
+          run_verbose bash "configure" --help
 
-          bash ${DEBUG} "configure" \
+          run_verbose bash ${DEBUG} "configure" \
             --prefix="${INSTALL_FOLDER_PATH}" \
             \
             --with-png \
@@ -6742,9 +6741,9 @@ function build_wine()
         echo "Running wine make..."
 
         # Build.
-        make -j ${JOBS} STRIP=true
+        run_verbose make -j ${JOBS} STRIP=true
 
-        make install
+        run_verbose make install
 
         if [ "${HOST_BITS}" == "64" ]
         then
@@ -6801,7 +6800,6 @@ function test_wine()
     # will no longer have to do it.
     local netstat=$(find "${INSTALL_FOLDER_PATH}"/lib* -name netstat.exe)
     run_app "${INSTALL_FOLDER_PATH}/bin/wine" ${netstat}
-
 
     echo
     echo "Checking the wine shared libraries..."
@@ -6973,9 +6971,9 @@ function build_gnupg()
           echo
           echo "Running gnupg configure..."
 
-          bash "${SOURCES_FOLDER_PATH}/${gnupg_src_folder_name}/configure" --help
+          run_verbose bash "${SOURCES_FOLDER_PATH}/${gnupg_src_folder_name}/configure" --help
 
-          bash ${DEBUG} "${SOURCES_FOLDER_PATH}/${gnupg_src_folder_name}/configure" \
+          run_verbose bash ${DEBUG} "${SOURCES_FOLDER_PATH}/${gnupg_src_folder_name}/configure" \
             --prefix="${INSTALL_FOLDER_PATH}" \
             \
             --with-libgpg-error-prefix="${INSTALL_FOLDER_PATH}" \
@@ -6997,12 +6995,12 @@ function build_gnupg()
         echo "Running gnupg make..."
 
         # Build.
-        make -j ${JOBS}
+        run_verbose make -j ${JOBS}
 
         # make install-strip
-        make install
+        run_verbose make install
 
-        make -j1 check
+        run_verbose make -j1 check
 
       ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${gnupg_folder_name}/make-output.txt"
     )
@@ -7319,9 +7317,9 @@ function build_nodejs()
           echo
           echo "Running nodejs configure..."
 
-          bash "./configure" --help
+          run_verbose bash "./configure" --help
           
-          bash ${DEBUG} "./configure" \
+          run_verbose bash ${DEBUG} "./configure" \
             --prefix="${INSTALL_FOLDER_PATH}/xxx" \
             \
             --with-intl=system-icu \
@@ -7333,7 +7331,6 @@ function build_nodejs()
             --shared-cares \
             --shared-nghttp2 \
 
-
           # cp "config.log" "${LOGS_FOLDER_PATH}/config-nodejs-log.txt"
         ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${nodejs_folder_name}/configure-output.txt"
       fi
@@ -7343,7 +7340,7 @@ function build_nodejs()
         echo "Running nodejs make..."
 
         # Build.
-        make -j ${JOBS}
+        run_verbose make -j ${JOBS}
 
         # make install-strip
         # make install
@@ -7437,9 +7434,9 @@ function build_tcl()
           echo
           echo "Running tcl configure..."
 
-          bash "${SOURCES_FOLDER_PATH}/${tcl_src_folder_name}/unix/configure" --help
+          run_verbose bash "${SOURCES_FOLDER_PATH}/${tcl_src_folder_name}/unix/configure" --help
 
-          bash ${DEBUG} "${SOURCES_FOLDER_PATH}/${tcl_src_folder_name}/unix/configure" \
+          run_verbose bash ${DEBUG} "${SOURCES_FOLDER_PATH}/${tcl_src_folder_name}/unix/configure" \
             --prefix="${INSTALL_FOLDER_PATH}" \
             \
             --enable-threads \
@@ -7463,14 +7460,14 @@ function build_tcl()
         echo "Running tcl make..."
 
         # Build.
-        make -j ${JOBS}
+        run_verbose make -j ${JOBS}
 
         # make install-strip
-        make install
+        run_verbose make install
 
         if [ "${RUN_LONG_TESTS}" == "y" ]
         then
-          make -j1 test
+          run_verbose make -j1 test
         fi
 
       ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${tcl_folder_name}/make-output.txt"
@@ -7590,9 +7587,9 @@ function build_guile()
           echo
           echo "Running guile configure..."
 
-          bash "${SOURCES_FOLDER_PATH}/${guile_src_folder_name}/configure" --help
+          run_verbose bash "${SOURCES_FOLDER_PATH}/${guile_src_folder_name}/configure" --help
 
-          bash ${DEBUG} "${SOURCES_FOLDER_PATH}/${guile_src_folder_name}/configure" \
+          run_verbose bash ${DEBUG} "${SOURCES_FOLDER_PATH}/${guile_src_folder_name}/configure" \
             --prefix="${INSTALL_FOLDER_PATH}" \
             \
             --disable-error-on-warning \
@@ -7629,18 +7626,18 @@ function build_guile()
 
         # Build.
         # Requires GC with dynamic load support.
-        make -j ${JOBS}
+        run_verbose make -j ${JOBS}
 
         # make install-strip
-        make install
+        run_verbose make install
 
         if is_darwin
         then
           # WARN-TEST
-          make -j1 check || true
+          run_verbose make -j1 check || true
         else
           # WARN-TEST
-          make -j1 check
+          run_verbose make -j1 check
         fi
 
       ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${guile_folder_name}/make-output.txt"
@@ -7742,9 +7739,9 @@ function build_rhash()
           echo
           echo "Running rhash configure..."
 
-          bash configure --help
+          run_verbose bash configure --help
 
-          bash ${DEBUG} configure \
+          run_verbose bash ${DEBUG} configure \
             --prefix="${INSTALL_FOLDER_PATH}" \
             \
             --extra-cflags="${CFLAGS} ${CPPFLAGS}" \
@@ -7761,11 +7758,11 @@ function build_rhash()
         echo "Running rhash make..."
 
         # Build.
-        make -j ${JOBS}
+        run_verbose make -j ${JOBS}
 
-        make install
+        run_verbose make install
 
-        make -j1 test test-lib
+        run_verbose make -j1 test test-lib
 
       ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${rhash_folder_name}/make-output.txt"
     )
@@ -7884,9 +7881,9 @@ function build_re2c()
           echo
           echo "Running re2c configure..."
 
-          bash configure --help
+          run_verbose bash configure --help
 
-          bash ${DEBUG} configure \
+          run_verbose bash ${DEBUG} configure \
             --prefix="${INSTALL_FOLDER_PATH}" \
 
           cp "config.log" "${LOGS_FOLDER_PATH}/${re2c_folder_name}/config-log.txt"
@@ -7898,15 +7895,15 @@ function build_re2c()
         echo "Running re2c make..."
 
         # Build.
-        make -j ${JOBS}
+        run_verbose make -j ${JOBS}
 
         # make install-strip
-        make install
+        run_verbose make install
 
         if [ "${HOST_UNAME}" == "Linux" ]
         then
           # darwin: Error: 5 out 2010 tests failed.
-          make -j1 tests
+          run_verbose make -j1 tests
         fi
 
       ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${re2c_folder_name}/make-output.txt"
@@ -7970,7 +7967,7 @@ function build_sphinx()
 
       env | sort
 
-      pip3 install sphinx==${sphinx_version}
+      run_verbose pip3 install sphinx==${sphinx_version}
 
     ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${sphinx_folder_name}/install-output.txt"
 
@@ -8060,7 +8057,7 @@ function build_autogen()
           echo
           echo "Running autogen configure..."
 
-          bash "${SOURCES_FOLDER_PATH}/${autogen_src_folder_name}/configure" --help
+          run_verbose bash "${SOURCES_FOLDER_PATH}/${autogen_src_folder_name}/configure" --help
 
           # config.status: error: in `/root/Work/xbb-3.2-ubuntu-12.04-x86_64/build/autogen-5.18.16':
           # config.status: error: Something went wrong bootstrapping makefile fragments
@@ -8070,7 +8067,7 @@ function build_autogen()
 
           # Without ac_cv_func_utimensat=no it fails on macOS.
 
-          bash ${DEBUG} "${SOURCES_FOLDER_PATH}/${autogen_src_folder_name}/configure" \
+          run_verbose bash ${DEBUG} "${SOURCES_FOLDER_PATH}/${autogen_src_folder_name}/configure" \
             --prefix="${INSTALL_FOLDER_PATH}" \
             \
             --disable-dependency-tracking \
@@ -8102,12 +8099,12 @@ function build_autogen()
         echo "Running autogen make..."
 
         # Build.
-        make -j ${JOBS}
+        run_verbose make -j ${JOBS}
 
-        make install
+        run_verbose make install
 
         # WARN-TEST
-        make -j1 check
+        run_verbose make -j1 check
 
       ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${autogen_folder_name}/make-output.txt"
     )
@@ -8223,7 +8220,7 @@ function build_bash()
           echo
           echo "Running bash configure..."
 
-          bash "${SOURCES_FOLDER_PATH}/${bash_src_folder_name}/configure" --help
+          run_verbose bash "${SOURCES_FOLDER_PATH}/${bash_src_folder_name}/configure" --help
 
           config_options=()
           config_options+=("--prefix=${INSTALL_FOLDER_PATH}")
@@ -8233,7 +8230,7 @@ function build_bash()
           config_options+=("--enable-readline")
           config_options+=("--disable-rpath")
 
-          bash ${DEBUG} "${SOURCES_FOLDER_PATH}/${bash_src_folder_name}/configure" \
+          run_verbose bash ${DEBUG} "${SOURCES_FOLDER_PATH}/${bash_src_folder_name}/configure" \
             ${config_options[@]}
 
           cp "config.log" "${LOGS_FOLDER_PATH}/${bash_folder_name}/config-log.txt"
@@ -8245,14 +8242,14 @@ function build_bash()
         echo "Running bash make..."
 
         # Build.
-        make -j ${JOBS}
+        run_verbose make -j ${JOBS}
 
         # make install-strip
-        make install
+        run_verbose make install
 
         if [ "${RUN_LONG_TESTS}" == "y" ]
         then
-          make -j1 check
+          run_verbose make -j1 check
         fi
 
       ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${bash_folder_name}/make-output.txt"
