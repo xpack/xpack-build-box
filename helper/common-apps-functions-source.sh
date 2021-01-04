@@ -7050,7 +7050,11 @@ function test_gpg()
 
     run_app "${INSTALL_FOLDER_PATH}/bin/gpgconf" --version
     run_app "${INSTALL_FOLDER_PATH}/bin/gpg-connect-agent" --version
-    run_app "${INSTALL_FOLDER_PATH}/bin/symcryptrun" --version
+    if [ -f "${INSTALL_FOLDER_PATH}/bin/symcryptrun" ]
+    then
+      # clang did not create it.
+      run_app "${INSTALL_FOLDER_PATH}/bin/symcryptrun" --version
+    fi
     run_app "${INSTALL_FOLDER_PATH}/bin/watchgnupg" --version
     # run_app "${INSTALL_FOLDER_PATH}/bin/gpgparsemail" --version
     run_app "${INSTALL_FOLDER_PATH}/bin/gpg-wks-server" --version
