@@ -254,13 +254,14 @@ function prepare_xbb_env()
 
     if [ "${XBB_LAYER}" == "xbb-bootstrap" ]
     then
-      # TODO
+      # Use the system clang.
       prepare_clang_env ""
     else
-      # TODO
-      prepare_gcc_env "" "-xbs"
+      # Use the bootstrap clang.
+      prepare_clang_env "" "-xbs"
     fi
-  else
+  elif [ "${HOST_UNAME}" == "Linux" ]
+  then
     if [ "${XBB_LAYER}" == "xbb-bootstrap" ]
     then
       prepare_gcc_env ""
@@ -274,14 +275,26 @@ function prepare_xbb_env()
       echo "XBB_LAYER ${XBB_LAYER} not supported."
       exit 1
     fi
+  else
+    echo "${HOST_UNAME} not supported."
+    exit 1
   fi
 
   if [ "${XBB_LAYER}" == "xbb" ]
   then
-    if [ ! -d "${XBB_PARENT_FOLDER_PATH}" -o ! -x "${XBB_PARENT_FOLDER_PATH}/usr/bin/${CXX}" ]
+    if [ "${HOST_UNAME}" == "Darwin" ]
     then
-      echo "XBB Bootstrap compiler not found in \"${XBB_PARENT_FOLDER_PATH}\""
-      exit 1
+      if [ ! -d "${XBB_PARENT_FOLDER_PATH}" -o ! -x "${XBB_PARENT_FOLDER_PATH}/bin/${CXX}" ]
+      then
+        echo "XBB Bootstrap compiler not found in \"${XBB_PARENT_FOLDER_PATH}\""
+        exit 1
+      fi
+    else
+      if [ ! -d "${XBB_PARENT_FOLDER_PATH}" -o ! -x "${XBB_PARENT_FOLDER_PATH}/usr/bin/${CXX}" ]
+      then
+        echo "XBB Bootstrap compiler not found in \"${XBB_PARENT_FOLDER_PATH}\""
+        exit 1
+      fi
     fi
   elif [ "${XBB_LAYER}" == "xbb-test" ]
   then

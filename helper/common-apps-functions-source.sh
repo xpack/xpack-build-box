@@ -1161,7 +1161,7 @@ __EOF__
     export LD_RUN_PATH="$(get-gcc-rpath)"
     echo "LD_RUN_PATH=${LD_RUN_PATH}"
 
-    "${INSTALL_FOLDER_PATH}/usr/bin/g++${XBB_GCC_SUFFIX}" hello.cpp -o hello1 -v 
+    run_app "${INSTALL_FOLDER_PATH}/usr/bin/g++${XBB_GCC_SUFFIX}" hello.cpp -o hello1 -v 
 
     show_libs hello1
 
@@ -1175,7 +1175,7 @@ __EOF__
       exit 1
     fi
 
-    "${INSTALL_FOLDER_PATH}/usr/bin/g++${XBB_GCC_SUFFIX}" hello.cpp -o hello2 -v -static-libgcc -static-libstdc++
+    run_app "${INSTALL_FOLDER_PATH}/usr/bin/g++${XBB_GCC_SUFFIX}" hello.cpp -o hello2 -v -static-libgcc -static-libstdc++
 
     show_libs hello2
 
@@ -1221,7 +1221,7 @@ main(int argc, char* argv[])
 }
 __EOF__
 
-    "${INSTALL_FOLDER_PATH}/usr/bin/g++${XBB_GCC_SUFFIX}" except.cpp -o except -v 
+    run_app "${INSTALL_FOLDER_PATH}/usr/bin/g++${XBB_GCC_SUFFIX}" except.cpp -o except -v 
 
     show_libs except
 
@@ -3656,21 +3656,8 @@ function build_libtool()
       cd "${BUILD_FOLDER_PATH}/${libtool_folder_name}"
 
       xbb_activate
-      if [ "${XBB_LAYER}" == "xbb-bootstrap" ]
-      then
-        if [ "${step}" == "-2" ]
-        then
-          # To pick the new GCC.
-          xbb_activate_installed_bin
-
-          prepare_gcc_env "" "-xbs"
-        fi
-      else
-        # To pick the new GCC.
-        xbb_activate_installed_bin
-
-        prepare_gcc_env "" "-xbb"
-      fi
+      xbb_activate_installed_bin
+      # The new CC was set before the call.
       xbb_activate_installed_dev
 
       export CPPFLAGS="${XBB_CPPFLAGS}"

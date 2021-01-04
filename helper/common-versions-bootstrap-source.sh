@@ -15,10 +15,10 @@ function build_versioned_components()
     # -------------------------------------------------------------------------
 
     # The main characteristic of XBB Bootstrap is the compiler version.
-    XBB_GCC_VERSION="8.4.0" # "8.3.0" "7.5.0" "7.4.0"
-    
+    XBB_LLVM_VERSION="11.0.0"
+
+    XBB_GCC_VERSION="8.4.0" # "8.3.0" "7.5.0" "7.4.0"    
     XBB_BINUTILS_VERSION="2.32" # "2.31"
-    XBB_GLIBC_VERSION="2.30"
 
     XBB_BINUTILS_BRANDING="xPack Build Box Bootstrap binutils\x2C ${HOST_BITS}-bit"
     XBB_GCC_BRANDING="xPack Build Box Bootstrap GCC\x2C ${HOST_BITS}-bit"
@@ -252,12 +252,29 @@ function build_versioned_components()
       # Requires gmp, mpfr, mpc, isl.
       build_native_gcc "${XBB_GCC_VERSION}"
 
-      # depends=('sh' 'tar' 'glibc')
-      # Do it again with the new compiler
-      build_libtool "${libtool_version}" "-2"
+      (
+        # depends=('sh' 'tar' 'glibc')
+        # Do it again with the new compiler
+        prepare_gcc_env "" "-xbs"
+
+        build_libtool "${libtool_version}" "-2"
+      )
+    elif is_darwin
+    then
+      build_native_llvm "${XBB_LLVM_VERSION}"
+
+      (
+        prepare_clang_env "" "-xbs"
+
+        # Requires new gcc.
+        # depends=('sh' 'tar' 'glibc')
+        build_libtool "2.4.6"
+      )
     fi
 
     # From here on, a reasonable C++11 is available.
+
+    # -------------------------------------------------------------------------
 
     strip_static_objects
 

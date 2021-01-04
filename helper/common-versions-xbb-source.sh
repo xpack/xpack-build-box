@@ -39,8 +39,9 @@ function build_versioned_components()
     # -------------------------------------------------------------------------
 
     # The main characteristic of XBB is the compiler version.
+    XBB_LLVM_VERSION="11.0.0"
+
     XBB_GCC_VERSION="9.3.0" # "9.2.0" # "8.3.0" # "7.4.0"
-    
     XBB_BINUTILS_VERSION="2.34" # "2.33.1"
 
     # 8.x fails to compile the libstdc++ new file system classes.
@@ -105,21 +106,37 @@ function build_versioned_components()
       # Requires gmp, mpfr, mpc, isl.
       # PATCH!
       build_native_binutils "${XBB_BINUTILS_VERSION}"
-    fi
 
-if false
-then
-    if is_darwin
-    then
+      # makedepends=('binutils>=2.26' 'libmpc' 'gcc-ada' 'doxygen' 'git')
+      build_native_gcc "${XBB_GCC_VERSION}" 
+
+      (
+        prepare_gcc_env "" "-xbb"
+
+        # Requires new gcc.
+        # depends=('sh' 'tar' 'glibc')
+        build_libtool "2.4.6"
+      )
+
       build_native_gdb "9.2"
-    fi
 
-    # makedepends=('binutils>=2.26' 'libmpc' 'gcc-ada' 'doxygen' 'git')
-    build_native_gcc "${XBB_GCC_VERSION}" 
-fi
-    # Requires new gcc.
-    # depends=('sh' 'tar' 'glibc')
-    build_libtool "2.4.6"
+    elif is_darwin
+    then
+      build_native_llvm "${XBB_LLVM_VERSION}"
+
+      (
+        prepare_clang_env "" "-xbb"
+
+        # Requires new gcc.
+        # depends=('sh' 'tar' 'glibc')
+        build_libtool "2.4.6"
+      )
+
+      # build_native_gdb "9.2"
+    else
+      echo "Unsupported platform."
+      exit 1
+    fi
 
     # -------------------------------------------------------------------------
     # mingw compiler
