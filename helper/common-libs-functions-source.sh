@@ -518,9 +518,10 @@ function build_isl()
       xbb_activate
       xbb_activate_installed_dev
 
+      # llvm poly checks if PIC.
       export CPPFLAGS="${XBB_CPPFLAGS}"
-      export CFLAGS="${XBB_CFLAGS_NO_W}"
-      export CXXFLAGS="${XBB_CXXFLAGS_NO_W}"
+      export CFLAGS="${XBB_CFLAGS_NO_W} -fPIC"
+      export CXXFLAGS="${XBB_CXXFLAGS_NO_W} -fPIC"
       export LDFLAGS="${XBB_LDFLAGS_LIB}"
 
       if is_linux
