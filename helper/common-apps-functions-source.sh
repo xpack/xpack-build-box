@@ -8376,3 +8376,310 @@ function test_realpath()
 }
 
 # -----------------------------------------------------------------------------
+
+function build_native_llvm() 
+{
+  # https://llvm.org
+  # https://llvm.org/docs/GettingStarted.html
+  # https://github.com/llvm/llvm-project/
+  # https://github.com/llvm/llvm-project/releases/download/llvmorg-10.0.1/llvm-project-10.0.1.src.tar.xz
+  # https://github.com/llvm/llvm-project/releases/download/llvmorg-11.0.0/llvm-1project-1.0.0.src.tar.xz
+
+  # https://archlinuxarm.org/packages/aarch64/llvm/files/PKGBUILD
+
+  # 22 Jul 2020, "10.0.1" - Target clang_rt.builtins_arm64_osx does not exist
+  # 12 Oct 2012 "11.0.0"
+
+  local llvm_version="$1"
+
+  export LLVM_INSTALL_FOLDER_PATH="${INSTALL_FOLDER_PATH}"
+
+  local llvm_src_folder_name="llvm-project-${llvm_version}"
+
+  local llvm_archive="llvm-project-${llvm_version}.tar.xz"
+  # GitHub release archive.
+  local llvm_url="https://github.com/llvm/llvm-project/releases/download/llvmorg-${llvm_version}/${llvm_archive}"
+
+  local llvm_folder_name="llvm-${llvm_version}"
+
+  local llvm_stamp_file_path="${STAMPS_FOLDER_PATH}/stamp-${llvm_folder_name}-installed"
+  if [ ! -f "${llvm_stamp_file_path}" -o ! -d "${BUILD_FOLDER_PATH}/${llvm_folder_name}" ]
+  then
+
+    cd "${SOURCES_FOLDER_PATH}"
+
+    download_and_extract "${llvm_url}" "${llvm_archive}" \
+        "${llvm_src_folder_name}"
+
+    mkdir -pv "${LOGS_FOLDER_PATH}/${llvm_folder_name}"
+
+    (
+      mkdir -pv "${BUILD_FOLDER_PATH}/${llvm_folder_name}"
+      cd "${BUILD_FOLDER_PATH}/${llvm_folder_name}"
+
+      xbb_activate
+      xbb_activate_installed_dev
+
+      export CPPFLAGS="${XBB_CPPFLAGS}"
+      export CFLAGS="${XBB_CFLAGS_NO_W}"
+      export CXXFLAGS="${XBB_CXXFLAGS_NO_W}"
+      export LDFLAGS="${XBB_LDFLAGS_APP}"
+
+      env | sort
+
+      if true # [ ! -f "ninja.build" ]
+      then
+        (
+          echo
+          echo "Running llvm cmake..."
+
+          config_options=()
+
+          config_options+=("-GNinja")
+          config_options+=("-DCMAKE_INSTALL_PREFIX=${LLVM_INSTALL_FOLDER_PATH}")
+          
+          config_options+=("-DCMAKE_C_COMPILER=${CC}")
+          config_options+=("-DCMAKE_CXX_COMPILER=${CXX}")
+          config_options+=("-DCMAKE_C_FLAGS=${CPPFLAGS} ${CFLAGS}")
+          config_options+=("-DCMAKE_CXX_FLAGS=${CPPFLAGS} ${CXXFLAGS}")
+          config_options+=("-DCMAKE_EXE_LINKER_FLAGS=${LDFLAGS}")
+          # config_options+=("-DPython3_EXECUTABLE=${INSTALL_FOLDER_PATH}/bin/python3")
+          
+          config_options+=("-DCMAKE_BUILD_TYPE=Release")
+
+          echo "SDK=${MACOS_SDK_PATH}"
+          config_options+=("-DDEFAULT_SYSROOT=${MACOS_SDK_PATH}")
+
+          # Options copied from HomeBrew.
+          # Only x86 targets, 'all' fails.
+          config_options+=("-DLLVM_TARGETS_TO_BUILD=X86")
+
+          # No openmp
+          config_options+=("-DLLVM_ENABLE_PROJECTS=clang;clang-tools-extra;lld;lldb;mlir;polly")
+          config_options+=("-DLLVM_ENABLE_RUNTIMES=compiler-rt;libcxx;libcxxabi;libunwind")
+
+          config_options+=("-DLLDB_ENABLE_LUA=OFF")
+          config_options+=("-DLLDB_ENABLE_LZMA=OFF")
+          config_options+=("-DLLDB_ENABLE_PYTHON=OFF")
+          config_options+=("-DLLDB_USE_SYSTEM_DEBUGSERVER=ON")
+
+          config_options+=("-DLLVM_BUILD_DOCS=OFF")
+          config_options+=("-DLLVM_BUILD_EXTERNAL_COMPILER_RT=ON")
+          config_options+=("-DLLVM_BUILD_LLVM_C_DYLIB=ON")
+          config_options+=("-DLLVM_BUILD_LLVM_DYLIB=ON")
+
+          if true # [ "${XBB_LAYER}" == "xbb-bootstrap" ]
+          then
+            # Fails to find the test library.
+            # ld: library not found for -lgtest_main
+            config_options+=("-DLLVM_BUILD_TESTS=OFF")
+          else
+            config_options+=("-DLLVM_BUILD_TESTS=ON")
+          fi
+
+          config_options+=("-DLLVM_ENABLE_DOXYGEN=OFF")
+          config_options+=("-DLLVM_ENABLE_EH=ON")
+          config_options+=("-DLLVM_ENABLE_FFI=ON")
+          config_options+=("-DLLVM_ENABLE_LIBCXX=ON")
+          config_options+=("-DLLVM_ENABLE_RTTI=ON")
+          config_options+=("-DLLVM_ENABLE_SPHINX=OFF")
+          config_options+=("-DLLVM_ENABLE_WARNINGS=OFF")
+          config_options+=("-DLLVM_ENABLE_Z3_SOLVER=OFF")
+
+          config_options+=("-DLLVM_INCLUDE_DOCS=OFF") # No docs
+          config_options+=("-DLLVM_INCLUDE_TESTS=OFF") # No tests
+
+          config_options+=("-DLLVM_INSTALL_UTILS=ON")
+          config_options+=("-DLLVM_LINK_LLVM_DYLIB=ON")
+          config_options+=("-DLLVM_OPTIMIZED_TABLEGEN=ON")
+          # config_options+=("-DLLVM_POLLY_LINK_INTO_TOOLS=ON")
+
+          run_timed_verbose cmake \
+            ${config_options[@]} \
+            "${SOURCES_FOLDER_PATH}/${llvm_src_folder_name}/llvm"
+
+        ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${llvm_folder_name}/cmake-output.txt"
+      fi
+
+      (
+        echo
+        echo "Running llvm build..."
+
+        # Build.
+        run_timed_verbose cmake --build . \
+          --verbose \
+
+        run_timed_verbose cmake --build . \
+          --verbose \
+          --target install \
+
+        (
+          cd "${LLVM_INSTALL_FOLDER_PATH}/bin"
+
+          local dest="$(readlink "clang")"
+
+          rm -fv "clang" "clang${XBB_GCC_SUFFIX}"
+          rm -fv "clang++" "clang++${XBB_GCC_SUFFIX}"
+
+          ln -sv "${dest}" "clang${XBB_GCC_SUFFIX}"
+          ln -sv "${dest}" "clang++${XBB_GCC_SUFFIX}"
+        )
+
+        # make -j1 check
+
+      ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${llvm_folder_name}/build-output.txt"
+    )
+
+    (
+      test_llvm
+    ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${llvm_folder_name}/test-output.txt"
+
+    hash -r
+
+    touch "${llvm_stamp_file_path}"
+
+  else
+    echo "Component llvm already installed."
+  fi
+
+  test_functions+=("test_llvm")
+}
+
+function test_llvm()
+{
+  (
+    xbb_activate_installed_bin
+
+    echo
+    echo "Checking the llvm binaries shared libraries..."
+
+    local clang="$(readlink "${LLVM_INSTALL_FOLDER_PATH}/bin/clang${XBB_GCC_SUFFIX}")"
+
+    show_libs "${LLVM_INSTALL_FOLDER_PATH}/bin/clang${XBB_GCC_SUFFIX}"
+
+    echo
+    echo "Showing configurations..."
+
+    run_app "${LLVM_INSTALL_FOLDER_PATH}/bin/clang${XBB_GCC_SUFFIX}" --version
+    run_app "${LLVM_INSTALL_FOLDER_PATH}/bin/clang${XBB_GCC_SUFFIX}" -print-search-dirs
+    run_app "${LLVM_INSTALL_FOLDER_PATH}/bin/clang${XBB_GCC_SUFFIX}" -print-libgcc-file-name
+
+    run_app "${LLVM_INSTALL_FOLDER_PATH}/bin/clang++${XBB_GCC_SUFFIX}" --version
+    run_app "${LLVM_INSTALL_FOLDER_PATH}/bin/clang++${XBB_GCC_SUFFIX}" -print-search-dirs
+    run_app "${LLVM_INSTALL_FOLDER_PATH}/bin/clang++${XBB_GCC_SUFFIX}" -print-libgcc-file-name
+
+    echo
+    echo "Testing if clang compiles simple Hello programs..."
+
+    # To access the new binutils.
+    # /usr/bin/ld: BFD (GNU Binutils for Ubuntu) 2.22 internal error, aborting at ../../bfd/reloc.c line 443 in bfd_get_reloc_size
+    xbb_activate_installed_bin
+
+    mkdir -pv "${HOME}/tmp/native-clang"
+    cd "${HOME}/tmp/native-clang"
+
+    # Use the newly created script.
+    # export LD_RUN_PATH="$(get-gcc-rpath)"
+    # echo "LD_RUN_PATH=${LD_RUN_PATH}"
+
+    # Note: __EOF__ is quoted to prevent substitutions here.
+    cat <<'__EOF__' > hello.c
+#include <stdio.h>
+
+int
+main(int argc, char* argv[])
+{
+  printf("Hello\n");
+
+  return 0;
+}
+__EOF__
+
+
+    run_app "${LLVM_INSTALL_FOLDER_PATH}/bin/clang${XBB_GCC_SUFFIX}" hello.c -o hello-c -v 
+
+    show_libs hello-c
+
+    # run_verbose /usr/bin/ldd -v hello
+
+    output=$(./hello-c)
+    echo ${output}
+
+    if [ "x${output}x" != "xHellox" ]
+    then
+      exit 1
+    fi
+
+    # Note: __EOF__ is quoted to prevent substitutions here.
+    cat <<'__EOF__' > hello.cpp
+#include <iostream>
+
+int
+main(int argc, char* argv[])
+{
+  std::cout << "Hello++" << std::endl;
+
+  return 0;
+}
+__EOF__
+
+    run_app "${LLVM_INSTALL_FOLDER_PATH}/bin/clang++${XBB_GCC_SUFFIX}" hello.cpp -o hello-cpp -v 
+
+    show_libs hello-cpp
+
+    output=$(./hello-cpp)
+    echo ${output}
+
+    if [ "x${output}x" != "xHello++x" ]
+    then
+      exit 1
+    fi
+
+  # Note: __EOF__ is quoted to prevent substitutions here.
+  cat <<'__EOF__' > except.cpp
+#include <iostream>
+#include <exception>
+
+struct MyException : public std::exception {
+   const char* what() const throw () {
+      return "MyException";
+   }
+};
+ 
+void
+func(void)
+{
+  throw MyException();
+}
+
+int
+main(int argc, char* argv[])
+{
+  try {
+    func();
+  } catch(MyException& e) {
+    std::cout << e.what() << std::endl;
+  } catch(std::exception& e) {
+    std::cout << "Other" << std::endl;
+  }  
+
+  return 0;
+}
+__EOF__
+
+    run_app "${LLVM_INSTALL_FOLDER_PATH}/bin/clang++${XBB_GCC_SUFFIX}" except.cpp -o except -v 
+
+    show_libs except
+
+    output=$(./except)
+    echo ${output}
+
+    if [ "x${output}x" != "xMyExceptionx" ]
+    then
+      exit 1
+    fi
+
+  )  
+}
+
+# -----------------------------------------------------------------------------
