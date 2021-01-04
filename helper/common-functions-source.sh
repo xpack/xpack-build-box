@@ -321,6 +321,12 @@ function prepare_xbb_env()
  
   # ---------------------------------------------------------------------------
 
+  if [ "${HOST_UNAME}" == "Darwin" ]
+  then
+    # TODO: update to 11.0 for Arm.
+    export MACOSX_DEPLOYMENT_TARGET="10.10"
+  fi
+
   XBB_CPPFLAGS=""
 
   if [ "${HOST_BITS}" == "32" ]
@@ -333,6 +339,13 @@ function prepare_xbb_env()
   XBB_CFLAGS="-pipe -O2 -ffunction-sections -fdata-sections"
   XBB_CXXFLAGS="-pipe -O2 -ffunction-sections -fdata-sections"
 
+  if [ "${HOST_UNAME}" == "Darwin" ]
+  then
+    # TODO: Update it to 11.0 for Arm.
+    XBB_CFLAGS+=" -mmacosx-version-min=${MACOSX_DEPLOYMENT_TARGET}"
+    XBB_CXXFLAGS+=" -mmacosx-version-min=${MACOSX_DEPLOYMENT_TARGET}"
+  fi
+
   XBB_CFLAGS_NO_W="${XBB_CFLAGS} -w"
   XBB_CXXFLAGS_NO_W="${XBB_CXXFLAGS} -w"
 
@@ -341,6 +354,10 @@ function prepare_xbb_env()
   if [ "${HOST_UNAME}" == "Linux" ]
   then
     XBB_LDFLAGS+=" -Wl,--disable-new-dtags"
+  elif [ "${HOST_UNAME}" == "Darwin" ]
+  then
+    # TODO: Update it to 11.0 for Arm.
+    XBB_LDFLAGS+=" -Wl,-macosx_version_min,${MACOSX_DEPLOYMENT_TARGET}"
   fi
 
   # -Wl,--gc-sections may make some symbols dissapear, do not use it here.
@@ -348,13 +365,20 @@ function prepare_xbb_env()
   XBB_LDFLAGS_LIB_STATIC_GCC="${XBB_LDFLAGS_LIB}"
 
   XBB_LDFLAGS_APP="${XBB_LDFLAGS}"
+  if [ "${HOST_UNAME}" == "Linux" ]
+  then
+    XBB_LDFLAGS_APP+=" -Wl,--gc-sections"
+  elif [ "${HOST_UNAME}" == "Darwin" ]
+  then
+    XBB_LDFLAGS_APP+=" -Wl,-dead_strip"
+  fi
+
   XBB_LDFLAGS_APP_STATIC="${XBB_LDFLAGS_APP}"
   XBB_LDFLAGS_APP_STATIC_GCC="${XBB_LDFLAGS_APP}"
 
   if [ "${HOST_UNAME}" == "Linux" ]
   then
-    XBB_LDFLAGS_APP+=" -Wl,--gc-sections"
-    XBB_LDFLAGS_APP_STATIC=" -static"
+    XBB_LDFLAGS_APP_STATIC+=" -static"
 
     # Minimise the risk of picking the wrong shared libraries.
     XBB_LDFLAGS_LIB_STATIC_GCC+=" -static-libgcc -static-libstdc++"
