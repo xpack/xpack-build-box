@@ -200,6 +200,17 @@ function is_darwin()
   fi
 }
 
+function is_darwin_not_clang()
+{
+  local uname="$(uname)"
+  if [ "${uname}" == "Darwin" ] && [[ ! "${CC}" =~ *clang* ]]
+  then
+    return 0
+  else
+    return 1
+  fi
+}
+
 function is_intel()
 {
   local machine="$(uname -m)"

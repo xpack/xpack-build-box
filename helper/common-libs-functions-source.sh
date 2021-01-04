@@ -1242,7 +1242,7 @@ function build_gnutls()
       export CXXFLAGS="${XBB_CXXFLAGS_NO_W}"
       export LDFLAGS="${XBB_LDFLAGS_LIB} -v"
 
-      if is_darwin
+      if is_darwin_not_clang
       then
         # lib/system/certs.c:49 error: variably modified 'bytes' at file scope
         prepare_clang_env ""
@@ -2400,13 +2400,11 @@ function build_npth()
       export CXXFLAGS="${XBB_CXXFLAGS_NO_W}"
       export LDFLAGS="${XBB_LDFLAGS_LIB}"
 
-      if is_darwin
+      if is_darwin_not_clang
       then
         # /usr/include/os/base.h:113:20: error: missing binary operator before token "("
         # #if __has_extension(attribute_overloadable)
-
-        export CC=clang
-        export CXX=clang++
+        prepare_clang_env ""
       fi
 
       env | sort

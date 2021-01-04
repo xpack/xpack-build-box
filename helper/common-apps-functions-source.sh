@@ -2700,7 +2700,7 @@ function build_coreutils()
       export LDFLAGS="${XBB_LDFLAGS_APP}"
 
       # Use Apple GCC, since with GNU GCC it fails with some undefined symbols.
-      if is_darwin
+      if is_darwin_not_clang
       then
         # Undefined symbols for architecture x86_64:
         # "_rpl_fchownat", referenced from:
@@ -2874,7 +2874,7 @@ function build_pkg_config()
       xbb_activate
       xbb_activate_installed_dev
 
-      if is_darwin
+      if is_darwin_not_clang
       then
         # error: variably modified 'bytes' at file scope
         prepare_clang_env ""
@@ -4936,7 +4936,7 @@ function build_cmake()
       export CXXFLAGS="${XBB_CXXFLAGS_NO_W}"
       export LDFLAGS="${XBB_LDFLAGS_APP}"
 
-      if is_darwin
+      if is_darwin_not_clang
       then
         # error: variably modified 'bytes' at file scope
         prepare_clang_env ""
@@ -5869,7 +5869,7 @@ function build_python2()
       xbb_activate
       xbb_activate_installed_dev
 
-      if is_darwin
+      if is_darwin_not_clang
       then
         # error: variably modified 'bytes' at file scope
         prepare_clang_env ""
@@ -6040,7 +6040,7 @@ function build_python3()
       xbb_activate
       xbb_activate_installed_dev
 
-      if is_darwin
+      if is_darwin_not_clang
       then
         # GCC fails with:
         # error: variably modified 'bytes' at file scope
