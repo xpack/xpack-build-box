@@ -87,8 +87,8 @@ since they may refer to bootstrap libraries.
 The final XBB tools are compiled with the bootstrapped compiler.
 
 ```console
-$ RUN_LONG_TESTS=y  caffeinate bash "${HOME}/Downloads/xpack-build-box.git/macos/build-xbb-v3.3.sh"
-$ RUN_LONG_TESTS=y  caffeinate bash "${HOME}/Downloads/xpack-build-box.git/macos/build-xbb-v3.2.sh"
+$ RUN_LONG_TESTS=y caffeinate bash "${HOME}/Downloads/xpack-build-box.git/macos/build-xbb-v3.3.sh"
+$ RUN_LONG_TESTS=y caffeinate bash "${HOME}/Downloads/xpack-build-box.git/macos/build-xbb-v3.2.sh"
 ```
 
 The build process takes quite a while. 
@@ -165,7 +165,8 @@ For more details, see the [README-DEPRECATED](README-DEPRECATED.md) file.
 
 From https://stackoverflow.com/questions/52977581/why-isnt-mmacosx-version-min-10-10-preventing-use-of-a-function-tagged-as-star
 
-- `-mmacosx-version-min=10.10`
+- `-mmacosx-version-min=10.10` for the compilers
+- `-Wl,-mmacosx-version-min=10.10`, for the linker
 - `-Wunguarded-availability`
 
 Apple clang
