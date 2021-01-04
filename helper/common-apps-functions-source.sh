@@ -6495,16 +6495,28 @@ function build_p7zip()
   local p7zip_archive="${p7zip_src_folder_name}_src_all.tar.bz2"
   local p7zip_url="https://sourceforge.net/projects/p7zip/files/p7zip/${p7zip_version}/${p7zip_archive}"
 
-  local p7zip_folder_name="${p7zip_src_folder_name}"
+  local p7zip_folder_name="p7zip-${p7zip_version}"
 
+  local p7zip_patch_file_name="${helper_folder_path}/patches/p7zip-${p7zip_version}.patch"
   local p7zip_stamp_file_path="${STAMPS_FOLDER_PATH}/stamp-${p7zip_folder_name}-installed"
   if [ ! -f "${p7zip_stamp_file_path}" -o ! -d "${BUILD_FOLDER_PATH}/${p7zip_folder_name}" ]
   then
 
-    cd "${BUILD_FOLDER_PATH}"
+    echo
+    echo "p7zip in-source building"
 
-    download_and_extract "${p7zip_url}" "${p7zip_archive}" \
-      "${p7zip_src_folder_name}"
+    if [ ! -d "${BUILD_FOLDER_PATH}/${p7zip_folder_name}" ]
+    then
+      cd "${BUILD_FOLDER_PATH}"
+
+      download_and_extract "${p7zip_url}" "${p7zip_archive}" \
+        "${p7zip_src_folder_name}" "${p7zip_patch_file_name}"
+
+      if [ "${p7zip_src_folder_name}" != "${p7zip_folder_name}" ]
+      then
+        mv -v "${p7zip_src_folder_name}" "${p7zip_folder_name}"
+      fi
+    fi
 
     mkdir -pv "${LOGS_FOLDER_PATH}/${p7zip_folder_name}"
 
@@ -6514,10 +6526,19 @@ function build_p7zip()
       xbb_activate
       xbb_activate_installed_dev
 
-      export CPPFLAGS="${XBB_CPPFLAGS}"
-      export CFLAGS="${XBB_CFLAGS_NO_W}"
-      export CXXFLAGS="${XBB_CXXFLAGS_NO_W}"
-      export LDFLAGS="${XBB_LDFLAGS_APP}"
+      CPPFLAGS="${XBB_CPPFLAGS}"
+      if is_darwin
+      then
+        CPPFLAGS+=" -DENV_MACOSX"
+      fi
+      CFLAGS="${XBB_CFLAGS_NO_W}"
+      CXXFLAGS="${XBB_CXXFLAGS_NO_W}"
+      LDFLAGS="${XBB_LDFLAGS_APP}"
+
+      export CPPFLAGS
+      export CFLAGS
+      export CXXFLAGS
+      export LDFLAGS
 
       env | sort
 
@@ -6533,7 +6554,7 @@ function build_p7zip()
       sed -i.bak -e "s|CXXFLAGS=|CXXFLAGS+=|" "makefile.glb"
 
       # Build.
-      make -j ${JOBS}
+      run_verbose make -j ${JOBS} 7za 7zr
 
       run_verbose ls -lL "bin"
 
@@ -6547,10 +6568,10 @@ function build_p7zip()
       if is_darwin
       then
         # 7z cannot load library on macOS.
-        make -j1 test
+        run_verbose make -j1 test
       else
         # make -j1 test test_7z
-        make -j1 all_test
+        run_verbose make -j1 all_test
       fi
 
     ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${p7zip_folder_name}/install-output.txt"
