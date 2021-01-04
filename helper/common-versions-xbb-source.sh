@@ -272,7 +272,7 @@ fi
       # depends=('gdbm' 'db' 'glibc')
       # For Linux, go back to the same version supported by macOS 10.10.
       # old PATCH!
-      build_perl "5.30.1" # "5.18.2" # "5.30.1" # "5.28.1"
+      build_perl "5.32.0" # "5.30.1" # "5.18.2" # "5.30.1" # "5.28.1"
     fi
 
     # Give other a chance to use it.

@@ -186,7 +186,7 @@ function build_versioned_components()
       # On macOS 10.10 newer versions fail with clang, due to a missing clock_gettime()
       # Warning: macOS divergence!
       # old PATCH!
-      build_perl "5.30.1" # "5.18.2" # "5.24.4" # "5.26.3" # "5.28.2"
+      build_perl "5.32.0" # "5.30.1" # "5.18.2" # "5.24.4" # "5.26.3" # "5.28.2"
     fi
 
     # -------------------------------------------------------------------------
