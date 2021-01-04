@@ -355,15 +355,15 @@ fi
     # $3=npm_version
     # build_nvm "0.35.2" "12.16.0" "6.13.7"
 
-    build_libgpg_error "1.37"
-    build_libgcrypt "1.8.5"
-    build_libassuan "2.5.3"
+    build_libgpg_error "1.41" # "1.37"
+    build_libgcrypt "1.8.7" # "1.8.5"
+    build_libassuan "2.5.4" # "2.5.3"
     # patched
-    build_libksba "1.3.5"
+    build_libksba "1.5.0" # "1.3.5"
 
     build_npth "1.6"
 
-    build_gnupg "2.2.19"
+    build_gnupg "2.2.26" # "2.2.19"
 
     # -------------------------------------------------------------------------
 
