@@ -285,7 +285,9 @@ function build_versioned_components()
         build_libtool "2.4.6"
       )
 
-      # Apparently there is no need for GCC, clang is enough.
+      # GCC is needed to compile GDB.
+      # Requires gmp, mpfr, mpc, isl.
+      build_native_gcc "${XBB_GCC_VERSION}"
     fi
 
     # From here on, a reasonable C++11 is available.
