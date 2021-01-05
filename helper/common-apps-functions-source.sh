@@ -655,6 +655,7 @@ function build_native_gdb()
       cd "${BUILD_FOLDER_PATH}/${native_gdb_folder_name}"
 
       xbb_activate
+      # xbb_activate_installed_bin
       xbb_activate_installed_dev
 
       CPPFLAGS="${XBB_CPPFLAGS}" 
@@ -689,6 +690,13 @@ function build_native_gdb()
           config_options+=("--with-pkgversion=${XBB_BINUTILS_BRANDING}")
 
           config_options+=("--disable-nls")
+          config_options+=("--disable-sim")
+          config_options+=("--disable-gas")
+          config_options+=("--disable-binutils")
+          config_options+=("--disable-ld")
+          config_options+=("--disable-gprof")
+
+          config_options+=("--with-python=no")
 
           run_verbose bash ${DEBUG} "${SOURCES_FOLDER_PATH}/${native_gdb_src_folder_name}/configure" \
             ${config_options[@]}
