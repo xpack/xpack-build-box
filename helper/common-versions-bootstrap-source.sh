@@ -271,6 +271,8 @@ function build_versioned_components()
         # depends=('sh' 'tar' 'glibc')
         build_libtool "2.4.6"
       )
+
+      # Apparently there is no need for GCC, clang is enough.
     fi
 
     # From here on, a reasonable C++11 is available.
