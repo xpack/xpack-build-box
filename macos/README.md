@@ -71,7 +71,7 @@ There are several environment variables that can be passed to the script:
 # DEBUG=-x caffeinate bash "${HOME}/Downloads/xpack-build-box.git/macos/build-xbb-bootstrap-v3.3.sh"
 ```
 
-The build process takes quite a while.
+The build process takes about 80 minutes.
 
 The build is performed in a folder like `${HOME}/Work/xbb-bootstrap-3.3-darwin-x86_64`
 which can be removed after the build is completed.
@@ -91,7 +91,7 @@ $ RUN_LONG_TESTS=y caffeinate bash "${HOME}/Downloads/xpack-build-box.git/macos/
 $ RUN_LONG_TESTS=y caffeinate bash "${HOME}/Downloads/xpack-build-box.git/macos/build-xbb-v3.2.sh"
 ```
 
-The build process takes quite a while. 
+The build process takes about 120 minutes.
 
 The build is performed in a folder like `${HOME}/Work/xbb-3.1-darwin-x86_64`
 which can be removed after the build is completed.
