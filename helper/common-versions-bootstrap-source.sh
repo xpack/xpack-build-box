@@ -15,6 +15,10 @@ function build_versioned_components()
     # -------------------------------------------------------------------------
 
     # The main characteristic of XBB Bootstrap is the compiler version.
+    # "11.0.0" fails on macOS 10.10
+    # /llvm/utils/TableGen/OptParserEmitter.cpp:113:12: error: no viable conversion from 'unique_ptr<MarshallingFlagInfo>' to 'unique_ptr<MarshallingKindInfo>'
+    # "10.0.1" fails on macOS 10.10
+    # clang: error: unknown argument: '-wd654'
     XBB_LLVM_VERSION="11.0.0"
 
     XBB_GCC_VERSION="8.4.0" # "8.3.0" "7.5.0" "7.4.0"    
