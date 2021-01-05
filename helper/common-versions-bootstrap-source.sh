@@ -176,18 +176,27 @@ function build_versioned_components()
     build_libmpdec "2.4.2"
     build_libffi "3.3"
 
-    if true # is_linux
+    if is_linux
     then
       # macOS 10.10 uses 5.18.2, an update is not mandatory.
       # Ubuntu 12 uses 5.14.2.
       # 5.18.2 fails to build automake 1.16 on Linux (fixed by a patch)
+
+      # macOS 10.10
+      # HiRes.c:2061:17: error: use of undeclared identifier 'CLOCK_REALTIME'
 
       # ! Requires patchelf.
       # depends=('gdbm' 'db' 'glibc')
       # On macOS 10.10 newer versions fail with clang, due to a missing clock_gettime()
       # Warning: macOS divergence!
       # old PATCH!
-      build_perl "5.32.0" # "5.30.1" # "5.18.2" # "5.24.4" # "5.26.3" # "5.28.2"
+
+      # 5.18.2 fails on macOS 10.10
+      # ./reentr.h:643:22: error: field has incomplete type 'struct drand48_data'
+
+      # 5.32.0 ok on macOS 11.1
+
+      build_perl "5.18.2" # "5.24.4" # "5.26.3" # "5.28.2"
     fi
 
     # -------------------------------------------------------------------------
