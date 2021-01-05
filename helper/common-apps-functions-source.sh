@@ -8602,6 +8602,9 @@ function build_native_llvm()
 
   local llvm_version="$1"
 
+  local llvm_version_major=$(echo ${llvm_version} | sed -e 's|\([0-9][0-9]*\)\.\([0-9][0-9]*\)\..*|\1|')
+  local llvm_version_minor=$(echo ${llvm_version} | sed -e 's|\([0-9][0-9]*\)\.\([0-9][0-9]*\)\..*|\2|')
+
   export LLVM_INSTALL_FOLDER_PATH="${INSTALL_FOLDER_PATH}"
 
   local llvm_src_folder_name="llvm-project-${llvm_version}"
@@ -8651,30 +8654,38 @@ function build_native_llvm()
           config_options=()
 
           config_options+=("-GNinja")
-          config_options+=("-DCMAKE_INSTALL_PREFIX=${LLVM_INSTALL_FOLDER_PATH}")
-          
+
+          # Many options copied from HomeBrew.
+
+          # Colon separated list of directories clang will search for headers.
+          # config_options+=("-DC_INCLUDE_DIRS=:")
+
+          config_options+=("-DCLANG_EXECUTABLE_VERSION=${llvm_version_major}${XBB_GCC_SUFFIX}")
+
           # Please note the trailing space.
           config_options+=("-DCLANG_VENDOR=${XBB_LLVM_BRANDING} ")
 
+          config_options+=("-DCMAKE_BUILD_TYPE=Release")
           config_options+=("-DCMAKE_C_COMPILER=${CC}")
           config_options+=("-DCMAKE_CXX_COMPILER=${CXX}")
           config_options+=("-DCMAKE_C_FLAGS=${CPPFLAGS} ${CFLAGS}")
           config_options+=("-DCMAKE_CXX_FLAGS=${CPPFLAGS} ${CXXFLAGS}")
           config_options+=("-DCMAKE_EXE_LINKER_FLAGS=${LDFLAGS}")
-          # config_options+=("-DPython3_EXECUTABLE=${INSTALL_FOLDER_PATH}/bin/python3")
-          
-          config_options+=("-DCMAKE_BUILD_TYPE=Release")
+
+          # In case it does not pick the XBB ones on Linux
+          # config_options+=("-DCMAKE_LIBTOOL=$(which libtool)")
+          # config_options+=("-DCMAKE_NM=$(which nm)")
+          # config_options+=("-DCMAKE_AR=$(which ar)")
+          # config_options+=("-DCMAKE_OBJCOPY=$(which objcopy)")
+          # config_options+=("-DCMAKE_OBJDUMP=$(which objdump)")
+          # config_options+=("-DCMAKE_RANLIB=$(which ranlib)")
+          # config_options+=("-DCMAKE_STRIP=$(which strip)")
+          # config_options+=("-DGIT_EXECUTABLE=$(which git)")
+
+          config_options+=("-DCMAKE_INSTALL_PREFIX=${LLVM_INSTALL_FOLDER_PATH}")
 
           echo "SDK=${MACOS_SDK_PATH}"
           config_options+=("-DDEFAULT_SYSROOT=${MACOS_SDK_PATH}")
-
-          # Options copied from HomeBrew.
-          # Only x86 targets, 'all' fails.
-          config_options+=("-DLLVM_TARGETS_TO_BUILD=X86")
-
-          # No openmp
-          config_options+=("-DLLVM_ENABLE_PROJECTS=clang;clang-tools-extra;lld;lldb;mlir;polly")
-          config_options+=("-DLLVM_ENABLE_RUNTIMES=compiler-rt;libcxx;libcxxabi;libunwind")
 
           config_options+=("-DLLDB_ENABLE_LUA=OFF")
           config_options+=("-DLLDB_ENABLE_LZMA=OFF")
@@ -8699,6 +8710,12 @@ function build_native_llvm()
           config_options+=("-DLLVM_ENABLE_EH=ON")
           config_options+=("-DLLVM_ENABLE_FFI=ON")
           config_options+=("-DLLVM_ENABLE_LIBCXX=ON")
+          config_options+=("-DLLVM_ENABLE_LTO=OFF")
+
+          # No openmp
+          config_options+=("-DLLVM_ENABLE_PROJECTS=clang;clang-tools-extra;lld;lldb;mlir;polly")
+          config_options+=("-DLLVM_ENABLE_RUNTIMES=compiler-rt;libcxx;libcxxabi;libunwind")
+
           config_options+=("-DLLVM_ENABLE_RTTI=ON")
           config_options+=("-DLLVM_ENABLE_SPHINX=OFF")
           config_options+=("-DLLVM_ENABLE_WARNINGS=OFF")
@@ -8711,6 +8728,12 @@ function build_native_llvm()
           config_options+=("-DLLVM_LINK_LLVM_DYLIB=ON")
           config_options+=("-DLLVM_OPTIMIZED_TABLEGEN=ON")
           # config_options+=("-DLLVM_POLLY_LINK_INTO_TOOLS=ON")
+
+          # Only x86 targets, 'all' fails.
+          config_options+=("-DLLVM_TARGETS_TO_BUILD=X86")
+
+          config_options+=("-DPYTHON_EXECUTABLE=${INSTALL_FOLDER_PATH}/bin/python3")
+          # config_options+=("-DPython3_EXECUTABLE=python3")
 
           run_timed_verbose cmake \
             ${config_options[@]} \
