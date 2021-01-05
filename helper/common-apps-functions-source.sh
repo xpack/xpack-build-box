@@ -8592,11 +8592,14 @@ function build_native_llvm()
   # https://llvm.org
   # https://llvm.org/docs/GettingStarted.html
   # https://github.com/llvm/llvm-project/
+  # https://github.com/llvm/llvm-project/releases/download/llvmorg-8.0.1/llvm-8.0.1.src.tar.xz
   # https://github.com/llvm/llvm-project/releases/download/llvmorg-10.0.1/llvm-project-10.0.1.src.tar.xz
   # https://github.com/llvm/llvm-project/releases/download/llvmorg-11.0.0/llvm-1project-1.0.0.src.tar.xz
 
   # https://archlinuxarm.org/packages/aarch64/llvm/files/PKGBUILD
 
+  # Jul 19, 2019, "8.0.1" - completely different structure
+  # Dec 20, 2019, "9.0.1" - fails on macOS 10.10
   # 22 Jul 2020, "10.0.1" - Target clang_rt.builtins_arm64_osx does not exist
   # 12 Oct 2012 "11.0.0"
 
@@ -8748,6 +8751,7 @@ function build_native_llvm()
 
         # Build.
         run_timed_verbose cmake --build . \
+          --parallel ${JOBS} \
           --verbose \
 
         run_timed_verbose cmake --build . \
