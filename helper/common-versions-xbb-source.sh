@@ -97,59 +97,7 @@ function build_versioned_components()
     # depends=('gmp')
     build_isl "0.22" # "0.21"
 
-    if is_linux
-    then
-      # By all means DO NOT build binutils on macOS, since this will 
-      # override Apple specific tools (ar, strip, etc) and break the
-      # build in multiple ways.
-
-      # It ignores the LD_RUN_PATH, it sets /opt/xbb/lib
-      # Requires gmp, mpfr, mpc, isl.
-      # PATCH!
-      build_native_binutils "${XBB_BINUTILS_VERSION}"
-
-      # makedepends=('binutils>=2.26' 'libmpc' 'gcc-ada' 'doxygen' 'git')
-      build_native_gcc "${XBB_GCC_VERSION}" 
-
-      (
-        prepare_gcc_env "" "-xbb"
-
-        # Requires new gcc.
-        # depends=('sh' 'tar' 'glibc')
-        build_libtool "2.4.6"
-      )
-
-      build_native_gdb "9.2"
-
-    elif is_darwin
-    then
-      build_native_llvm "${XBB_LLVM_VERSION}"
-
-      (
-        prepare_clang_env "" "-xbb"
-
-        # Requires new gcc.
-        # depends=('sh' 'tar' 'glibc')
-        build_libtool "2.4.6"
-      )
-
-      # build_native_gdb "9.2"
-    else
-      echo "Unsupported platform."
-      exit 1
-    fi
-
     # -------------------------------------------------------------------------
-    # mingw compiler
-
-    # Build mingw-w64 binutils and gcc only on Intel Linux.
-    if is_linux && is_intel
-    then
-      # depends=('zlib')
-      build_mingw_binutils "${XBB_MINGW_BINUTILS_VERSION}"
-      # depends=('zlib' 'libmpc' 'mingw-w64-crt' 'mingw-w64-binutils' 'mingw-w64-winpthreads' 'mingw-w64-headers')
-      build_mingw_all "${XBB_MINGW_VERSION}" "${XBB_MINGW_GCC_VERSION}" # "5.0.4" "7.4.0"
-    fi
 
     # Replacement for the old libcrypt.so.1.
     build_libxcrypt "4.4.15"
@@ -433,6 +381,73 @@ function build_versioned_components()
       # configure: WARNING: libjpeg 64-bit development files not found, JPEG won't be supported.
       # configure: WARNING: No sound system was found. Windows applications will be silent.
     fi
+
+    # -------------------------------------------------------------------------
+
+    # When all libraries are available, build the compiler(s).
+
+    if is_linux
+    then
+
+      # It ignores the LD_RUN_PATH, it sets /opt/xbb/lib
+      # Requires gmp, mpfr, mpc, isl.
+      # PATCH!
+      build_native_binutils "${XBB_BINUTILS_VERSION}"
+
+      # makedepends=('binutils>=2.26' 'libmpc' 'gcc-ada' 'doxygen' 'git')
+      build_native_gcc "${XBB_GCC_VERSION}" 
+
+      (
+        prepare_gcc_env "" "-xbb"
+
+        # Requires new gcc.
+        # depends=('sh' 'tar' 'glibc')
+        build_libtool "2.4.6"
+      )
+
+      build_native_gdb "9.2"
+
+      # mingw compiler
+
+      # Build mingw-w64 binutils and gcc only on Intel Linux.
+      if is_intel
+      then
+        # depends=('zlib')
+        build_mingw_binutils "${XBB_MINGW_BINUTILS_VERSION}"
+        # depends=('zlib' 'libmpc' 'mingw-w64-crt' 'mingw-w64-binutils' 'mingw-w64-winpthreads' 'mingw-w64-headers')
+        build_mingw_all "${XBB_MINGW_VERSION}" "${XBB_MINGW_GCC_VERSION}" # "5.0.4" "7.4.0"
+      fi
+
+    elif is_darwin
+    then
+
+      build_native_llvm "${XBB_LLVM_VERSION}"
+
+      (
+        prepare_clang_env "" "-xbb"
+
+        # Requires new gcc.
+        # depends=('sh' 'tar' 'glibc')
+        build_libtool "2.4.6"
+      )
+
+      # By all means DO NOT build binutils on macOS, since this will 
+      # override Apple specific tools (ar, strip, etc) and break the
+      # build in multiple ways.
+
+      # makedepends=('binutils>=2.26' 'libmpc' 'gcc-ada' 'doxygen' 'git')
+      build_native_gcc "${XBB_GCC_VERSION}" 
+
+      (
+        prepare_gcc_env "" "-xbb"
+
+        build_native_gdb "9.2"
+      )
+    else
+      echo "Unsupported platform."
+      exit 1
+    fi
+
 
     # -------------------------------------------------------------------------
 
