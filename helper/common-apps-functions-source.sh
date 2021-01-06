@@ -929,7 +929,8 @@ function build_native_gcc()
             
             config_options+=("--enable-languages=c,c++,fortran,objc,obj-c++")
 
-          else is_linux
+          elif is_linux
+          then
 
             # The Linux build also uses:
             # --with-linker-hash-style=gnu
@@ -980,6 +981,9 @@ function build_native_gcc()
               config_options+=("--with-sysroot=${INSTALL_FOLDER_PATH}")
             fi
 
+          else
+            echo "Unsupported gcc configuration."
+            exit 1
           fi
 
           run_verbose bash "${SOURCES_FOLDER_PATH}/${native_gcc_src_folder_name}/configure" \
