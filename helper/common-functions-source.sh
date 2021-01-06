@@ -267,8 +267,15 @@ function prepare_xbb_env()
       # Use the system clang.
       prepare_clang_env ""
     else
-      # Use the bootstrap clang.
-      prepare_clang_env "" "-xbs"
+     local clang_path="$(xbb_activate; which clang-xbs)"
+      if [ ! -z "${clang_path}" ]
+      then
+        # Use the bootstrap clang, if available.
+        prepare_clang_env "" "-xbs"
+      else
+        # Use the bootstrap gcc.
+        prepare_gcc_env "" "-xbs"
+      fi
     fi
   elif [ "${HOST_UNAME}" == "Linux" ]
   then
@@ -294,12 +301,14 @@ function prepare_xbb_env()
   then
     if [ "${HOST_UNAME}" == "Darwin" ]
     then
-      if [ ! -d "${XBB_PARENT_FOLDER_PATH}" -o ! -x "${XBB_PARENT_FOLDER_PATH}/bin/${CXX}" ]
+      if [ ! -d "${XBB_PARENT_FOLDER_PATH}" -o 
+        \( ! -x "${XBB_PARENT_FOLDER_PATH}/usr/bin/${CXX}" -a ! -x "${XBB_PARENT_FOLDER_PATH}/bin/${CXX}" \) ]
       then
         echo "XBB Bootstrap compiler not found in \"${XBB_PARENT_FOLDER_PATH}\""
         exit 1
       fi
-    else
+    elif [ "${HOST_UNAME}" == "Linux" ]
+    then
       if [ ! -d "${XBB_PARENT_FOLDER_PATH}" -o ! -x "${XBB_PARENT_FOLDER_PATH}/usr/bin/${CXX}" ]
       then
         echo "XBB Bootstrap compiler not found in \"${XBB_PARENT_FOLDER_PATH}\""
