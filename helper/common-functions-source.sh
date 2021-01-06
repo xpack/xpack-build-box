@@ -143,6 +143,12 @@ function detect_host()
     exit 1
   fi
 
+  if [ "${HOST_UNAME}" == "Darwin" ]
+  then
+    # TODO: update to 11.0 for Arm.
+    export MACOSX_DEPLOYMENT_TARGET="10.10"
+  fi
+
   MACOS_SDK_PATH=""
   if [ "${HOST_UNAME}" == "Darwin" ]
   then
@@ -155,9 +161,13 @@ function detect_host()
     then
       # With Xcode, chose the SDK from the macOS platform.
       MACOS_SDK_PATH="${print_path}/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk"
+    elif [ -d "${print_path}/Platforms/MacOSX.platform/Developer/SDKs/MacOSX${MACOSX_DEPLOYMENT_TARGET}.sdk" ]
+    then
+      # On macOS 10.10, with Xcode, chose the versioned SDK from the macOS platform.
+      MACOS_SDK_PATH="${print_path}/Platforms/MacOSX.platform/Developer/SDKs/MacOSX${MACOSX_DEPLOYMENT_TARGET}.sdk"
     elif [ -d "/usr/include" ]
     then
-      # Without Xcode, on 10.10 there is no SDK, use the root.
+      # Without Xcode, on 10.10 there is no SDK, use the /.
       MACOS_SDK_PATH="/"
     else
       echo "Cannot find SDK in ${print_path}."
@@ -333,12 +343,6 @@ function prepare_xbb_env()
   mkdir -pv "${INSTALL_FOLDER_PATH}/lib"
  
   # ---------------------------------------------------------------------------
-
-  if [ "${HOST_UNAME}" == "Darwin" ]
-  then
-    # TODO: update to 11.0 for Arm.
-    export MACOSX_DEPLOYMENT_TARGET="10.10"
-  fi
 
   XBB_CPPFLAGS=""
 
