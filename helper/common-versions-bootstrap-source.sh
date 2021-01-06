@@ -275,8 +275,23 @@ function build_versioned_components()
       )
     elif is_darwin
     then
-      build_native_llvm "${XBB_LLVM_VERSION}"
+      # GCC is needed to compile GDB.
+      # Requires gmp, mpfr, mpc, isl.
+      build_native_gcc "${XBB_GCC_VERSION}"
 
+      (
+        # Fails with MacOSX10.10.sdk
+        # Native clang:
+        # OptParserEmitter.cpp:113:12: error: no viable conversion from 'unique_ptr<MarshallingFlagInfo>' to 'unique_ptr<MarshallingKindInfo>'
+        # prepare_clang_env "" ""
+
+        # needs 
+        # `typedef void (*dispatch_block_t)(void);`
+        prepare_gcc_env "" "-xbs"
+
+        build_native_llvm "${XBB_LLVM_VERSION}"
+      )
+exit 1
       (
         prepare_clang_env "" "-xbs"
 
@@ -284,10 +299,6 @@ function build_versioned_components()
         # depends=('sh' 'tar' 'glibc')
         build_libtool "2.4.6"
       )
-
-      # GCC is needed to compile GDB.
-      # Requires gmp, mpfr, mpc, isl.
-      build_native_gcc "${XBB_GCC_VERSION}"
     fi
 
     # From here on, a reasonable C++11 is available.
