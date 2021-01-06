@@ -1289,6 +1289,10 @@ function build_gnutls()
       xbb_activate_installed_dev
 
       CPPFLAGS="${XBB_CPPFLAGS}"
+      if is_darwin
+      then
+        CPPFLAGS+=" -D_Noreturn="
+      fi
       CFLAGS="${XBB_CFLAGS_NO_W}"
       CXXFLAGS="${XBB_CXXFLAGS_NO_W}"
       LDFLAGS="${XBB_LDFLAGS_LIB} -v"
