@@ -1066,10 +1066,10 @@ function test_native_gcc()
     run_app which as
     run_app which ld
 
-    run_app as --version
+    run_app as --version || true
     if is_linux
     then
-      run_app ld --version
+      run_app ld --version || true
     fi
 
     echo
