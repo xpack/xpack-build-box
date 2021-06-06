@@ -223,14 +223,15 @@ $ docker run -it <image> ldd --version
 - `ubuntu:10.04` - lucy - 2010-2015, 2.11.1
 - `ubuntu:12.04` - precise - 2012-2019, 2.15, kernel **3.2** <--- Intel Linux choice
 - `ubuntu:14.04` - trusty - 2014-2022, 2.19, kernel 3.16
-- `ubuntu:16.04` - xenial - 2016-2024, 2.23, kernel 4.4 <--- Arm Linux choice
+- `ubuntu:16.04` - xenial - 2016-2024, **2.23**, kernel 4.4 <--- Arm Linux choice, future Intel choice too
 - `ubuntu:18.04` - bionic - 2018-2028, 2.27, kernel 4.15
 - `ubuntu:20.04` - focal - 2020-2-30, 2.31, kernel 5.4
 
 ### [RHEL](https://access.redhat.com/support/policy/updates/errata/#Life_Cycle_Dates)
 
 - `registry.access.redhat.com/rhel6` - 2.12 <--- no longer supported
-- `registry.access.redhat.com/rhel7` - 2.17, kernel 3.10 <--- supported
+- `registry.access.redhat.com/rhel7` - 2.17, kernel 3.10 <--- still supported, but not for long
+- `registry.access.redhat.com/ubi8` - 2.28, kernel 5.10
 
 ### [CentOS](https://en.wikipedia.org/wiki/CentOS)
 
@@ -252,7 +253,7 @@ $ docker run -it <image> ldd --version
 - `fedora:29` - 2018-10, 2.28, kernel 4.18
 - `fedora:30` - 2019-05,
 - `fedora:31` - 2019-10, 2.30, kernel 5.3
-- `fedora:32` - 2020-04, 2.20, kernel 5.6
+- `fedora:32` - 2020-04, 2.30, kernel 5.6
 
 ## Credits
 
@@ -263,22 +264,22 @@ The xPack Build Box is inspired by the
 
 A shortcut to clone the repo is:
 
-```console
-$ curl -L --fail https://raw.githubusercontent.com/xpack/xpack-build-box/master/git-clone.sh | bash -
+```sh
+curl -L --fail https://raw.githubusercontent.com/xpack/xpack-build-box/master/git-clone.sh | bash -
 ```
 
 which is the equivalent of:
 
-```console
-$ rm -rf ~/Downloads/xpack-build-box.git
-$ git clone --recurse-submodules https://github.com/xpack/xpack-build-box.git \
+```sh
+rm -rf ~/Downloads/xpack-build-box.git \
+git clone --recurse-submodules https://github.com/xpack/xpack-build-box.git \
   ~/Downloads/xpack-build-box.git
 ```
 
 If you missed the submodules:
 
-```console
-$ git submodule update --init
+```sh
+git submodule update --init
 ```
 
 ## TODO
@@ -317,3 +318,6 @@ support for RHEL 6 was discontinued.
 For Arm binaries, the base distribution is **Ubuntu 16.04 LTS (xenial)**,
 (2.23); the resulting binaries should run on all Raspberry Pi class
 machines, or larger.
+
+However, support for RHEL 7 is a hard requirement, and will probably be
+dropped soon, also moving to Ubuntu 16.04 LTS.
