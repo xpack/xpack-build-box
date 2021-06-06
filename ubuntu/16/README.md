@@ -1,4 +1,6 @@
 
+# 16
+
 ## The root file systems
 
 The Intel root file systems were created with `debootstrap` on an Ubuntu Server
@@ -7,8 +9,8 @@ The Intel root file systems were created with `debootstrap` on an Ubuntu Server
 The Arm root file systems were created with `debootstrap` on an Ubuntu Server
 18.04 running on a Raspberry Pi 4B.
 
-```console
-$ sudo apt install debootstrap
+```sh
+sudo apt install debootstrap
 ```
 
 The Intel Ubuntu 16 (xenial) distribution binaries are available
@@ -17,35 +19,35 @@ when the support period ends, they are moved to
 http://old-releases.ubuntu.com/ubuntu/, see the Ubuntu 12 folder
 on how to use them.
 
-```console
-$ rm -rf "${HOME}/tmp/amd64-ubu16-rootfs"
-$ mkdir -pv "${HOME}/tmp/amd64-ubu16-rootfs"
-$ sudo debootstrap --verbose --arch=amd64 --variant=minbase xenial "${HOME}/tmp/amd64-ubu16-rootfs" http://archive.ubuntu.com/ubuntu/
-$ sudo tar cJvf "${HOME}/tmp/amd64-ubu16-rootfs.xz" -C "${HOME}/tmp/amd64-ubu16-rootfs" .
+```sh
+rm -rf "${HOME}/tmp/amd64-ubu16-rootfs"
+mkdir -pv "${HOME}/tmp/amd64-ubu16-rootfs"
+sudo debootstrap --verbose --arch=amd64 --variant=minbase xenial "${HOME}/tmp/amd64-ubu16-rootfs" http://archive.ubuntu.com/ubuntu/
+sudo tar cJvf "${HOME}/tmp/amd64-ubu16-rootfs.xz" -C "${HOME}/tmp/amd64-ubu16-rootfs" .
 ```
 
-```console
-$ rm -rf "${HOME}/tmp/i386-ubu16-rootfs"
-$ mkdir -pv "${HOME}/tmp/i386-ubu16-rootfs"
-$ sudo debootstrap --verbose --arch=i386 --variant=minbase xenial "${HOME}/tmp/i386-ubu16-rootfs" http://archive.ubuntu.com/ubuntu/
-$ sudo tar cJvf "${HOME}/tmp/i386-ubu16-rootfs.xz" -C "${HOME}/tmp/i386-ubu16-rootfs" .
+```sh
+rm -rf "${HOME}/tmp/i386-ubu16-rootfs"
+mkdir -pv "${HOME}/tmp/i386-ubu16-rootfs"
+sudo debootstrap --verbose --arch=i386 --variant=minbase xenial "${HOME}/tmp/i386-ubu16-rootfs" http://archive.ubuntu.com/ubuntu/
+sudo tar cJvf "${HOME}/tmp/i386-ubu16-rootfs.xz" -C "${HOME}/tmp/i386-ubu16-rootfs" .
 ```
 
 The Arm Ubuntu 16 (xenial) distribution binaries are available
 from the ports server http://ports.ubuntu.com/.
 
-```console
-$ sudo rm -rf "${HOME}/tmp/arm64v8-ubu16-rootfs"
-$ mkdir -pv "${HOME}/tmp/arm64v8-ubu16-rootfs"
-$ sudo debootstrap --verbose --arch=arm64 --variant=minbase xenial "${HOME}/tmp/arm64v8-ubu16-rootfs" http://ports.ubuntu.com/
-$ sudo tar cJvf "${HOME}/tmp/arm64v8-ubu16-rootfs.xz" -C "${HOME}/tmp/arm64v8-ubu16-rootfs" .
+```sh
+sudo rm -rf "${HOME}/tmp/arm64v8-ubu16-rootfs"
+mkdir -pv "${HOME}/tmp/arm64v8-ubu16-rootfs"
+sudo debootstrap --verbose --arch=arm64 --variant=minbase xenial "${HOME}/tmp/arm64v8-ubu16-rootfs" http://ports.ubuntu.com/
+sudo tar cJvf "${HOME}/tmp/arm64v8-ubu16-rootfs.xz" -C "${HOME}/tmp/arm64v8-ubu16-rootfs" .
 ```
 
-```console
-$ sudo rm -rf "${HOME}/tmp/arm32v7-ubu16-rootfs"
-$ mkdir -pv "${HOME}/tmp/arm32v7-ubu16-rootfs"
-$ sudo debootstrap --verbose --arch=armhf --variant=minbase xenial "${HOME}/tmp/arm32v7-ubu16-rootfs" http://ports.ubuntu.com/
-$ sudo tar cJvf "${HOME}/tmp/arm32v7-ubu16-rootfs.xz" -C "${HOME}/tmp/arm32v7-ubu16-rootfs" .
+```sh
+sudo rm -rf "${HOME}/tmp/arm32v7-ubu16-rootfs"
+mkdir -pv "${HOME}/tmp/arm32v7-ubu16-rootfs"
+sudo debootstrap --verbose --arch=armhf --variant=minbase xenial "${HOME}/tmp/arm32v7-ubu16-rootfs" http://ports.ubuntu.com/
+sudo tar cJvf "${HOME}/tmp/arm32v7-ubu16-rootfs.xz" -C "${HOME}/tmp/arm32v7-ubu16-rootfs" .
 ```
 
 The result are several archives that were published at
@@ -65,13 +67,14 @@ There are several scripts:
 - `arm64v8-build.sh` -> `ilegeul/ubuntu:arm64v8-16.04`
 - `arm32v7-build.sh` -> `ilegeul/ubuntu:arm32v7-16.04`
 
-```console
-$ bash ~/Downloads/xpack-build-box.git/ubuntu/16/amd64-build.sh
-$ bash ~/Downloads/xpack-build-box.git/ubuntu/16/i386-build.sh
-$ bash ~/Downloads/xpack-build-box.git/ubuntu/16/arm64v8-build.sh
-$ bash ~/Downloads/xpack-build-box.git/ubuntu/16/arm32v7-build.sh
+```sh
+bash ~/Downloads/xpack-build-box.git/ubuntu/16/amd64-build.sh
+bash ~/Downloads/xpack-build-box.git/ubuntu/16/i386-build.sh
 
-$ docker images
+bash ~/Downloads/xpack-build-box.git/ubuntu/16/arm64v8-build.sh
+bash ~/Downloads/xpack-build-box.git/ubuntu/16/arm32v7-build.sh
+
+docker images
 ```
 
 ## Test
@@ -146,9 +149,10 @@ exit
 
 To publish, use:
 
-```console
-$ docker push "ilegeul/ubuntu:amd64-16.04"
-$ docker push "ilegeul/ubuntu:i386-16.04"
-$ docker push "ilegeul/ubuntu:arm64v8-16.04"
-$ docker push "ilegeul/ubuntu:arm32v7-16.04"
+```sh
+docker push "ilegeul/ubuntu:amd64-16.04"
+docker push "ilegeul/ubuntu:i386-16.04"
+
+docker push "ilegeul/ubuntu:arm64v8-16.04"
+docker push "ilegeul/ubuntu:arm32v7-16.04"
 ```

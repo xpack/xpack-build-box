@@ -40,7 +40,7 @@ docker system prune -f
 The following sequences of commands were used on a Debian 9 Intel
 Linux (x86_64):
 
-### Ubuntu 12 (precise)
+### Ubuntu 12 Intel (precise)
 
 ```bash
 set -o errexit
@@ -78,15 +78,15 @@ docker push "ilegeul/ubuntu:i386-12.04-xbb-bootstrap-v3.2"
 docker push "ilegeul/ubuntu:i386-12.04-xbb-v3.2"
 ```
 
-### Ubuntu 14 (trusty)
+### Ubuntu 14 Intel (trusty)
 
 No longer maintained.
 
-### Ubuntu 16 (xenial)
+### Ubuntu 16 Intel (xenial)
 
 No longer maintained.
 
-### Ubuntu 18 (bionic)
+### Ubuntu 18 Intel (bionic)
 
 No longer maintained.
 
@@ -95,7 +95,7 @@ No longer maintained.
 The following sequences of commands were used on a Debian 9 Arm
 Linux (Aarch64):
 
-### Ubuntu 16 (xenial)
+### Ubuntu 16 Arm (xenial)
 
 ```bash
 set -o errexit
@@ -133,7 +133,7 @@ docker push "ilegeul/ubuntu:arm32v7-16.04-xbb-bootstrap-v3.2"
 docker push "ilegeul/ubuntu:arm32v7-16.04-xbb-v3.2"
 ```
 
-### Ubuntu 18 (bionic)
+### Ubuntu 18 Arm (bionic)
 
 No longer maintained.
 

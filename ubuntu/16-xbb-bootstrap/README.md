@@ -1,4 +1,6 @@
 
+# 16-xbb-bootstrap
+
 ## Build Docker images
 
 There are several scripts:
@@ -8,13 +10,14 @@ There are several scripts:
 - `arm64v8-build-v3.2.sh` -> `ilegeul/ubuntu:arm64v8-16.04-xbb-bootstrap-v3.2`
 - `arm32v7-build-v3.2.sh` -> `ilegeul/ubuntu:arm32v7-16.04-xbb-bootstrap-v3.2`
 
-```console
-$ bash ~/Downloads/xpack-build-box.git/ubuntu/16-xbb-bootstrap/amd64-build-v3.2.sh
-$ bash ~/Downloads/xpack-build-box.git/ubuntu/16-xbb-bootstrap/i386-build-v3.2.sh
-$ bash ~/Downloads/xpack-build-box.git/ubuntu/16-xbb-bootstrap/arm64v8-build-v3.2.sh
-$ bash ~/Downloads/xpack-build-box.git/ubuntu/16-xbb-bootstrap/arm32v7-build-v3.2.sh
+```sh
+bash ~/Downloads/xpack-build-box.git/ubuntu/16-xbb-bootstrap/amd64-build-v3.2.sh
+bash ~/Downloads/xpack-build-box.git/ubuntu/16-xbb-bootstrap/i386-build-v3.2.sh
 
-$ docker images
+bash ~/Downloads/xpack-build-box.git/ubuntu/16-xbb-bootstrap/arm64v8-build-v3.2.sh
+bash ~/Downloads/xpack-build-box.git/ubuntu/16-xbb-bootstrap/arm32v7-build-v3.2.sh
+
+docker images
 ```
 
 ## Development
@@ -25,11 +28,12 @@ build.
 
 The following commands can be used to create the docker container:
 
-```console
-$ bash ~/Downloads/xpack-build-box.git/ubuntu/16-xbb-bootstrap/amd64-run-v3.2.sh
-$ bash ~/Downloads/xpack-build-box.git/ubuntu/16-xbb-bootstrap/i386-run-v3.2.sh
-$ bash ~/Downloads/xpack-build-box.git/ubuntu/16-xbb-bootstrap/arm64v8-run-v3.2.sh
-$ bash ~/Downloads/xpack-build-box.git/ubuntu/16-xbb-bootstrap/arm32v7-run-v3.2.sh
+```sh
+bash ~/Downloads/xpack-build-box.git/ubuntu/16-xbb-bootstrap/amd64-run-v3.2.sh
+bash ~/Downloads/xpack-build-box.git/ubuntu/16-xbb-bootstrap/i386-run-v3.2.sh
+
+bash ~/Downloads/xpack-build-box.git/ubuntu/16-xbb-bootstrap/arm64v8-run-v3.2.sh
+bash ~/Downloads/xpack-build-box.git/ubuntu/16-xbb-bootstrap/arm32v7-run-v3.2.sh
 ```
 
 Inside the container, run the build script:
@@ -49,26 +53,27 @@ There are several environment variables that can be passed to the script:
 The following tests were performed on an Ubuntu Server
 18.04 running on an Intel NUC.
 
-```console
-$ docker run --interactive --tty ilegeul/ubuntu:amd64-16.04-xbb-bootstrap-v3.2
-$ docker run --interactive --tty ilegeul/ubuntu:i386-16.04-xbb-bootstrap-v3.2
+```sh
+docker run --interactive --tty ilegeul/ubuntu:amd64-16.04-xbb-bootstrap-v3.2
+docker run --interactive --tty ilegeul/ubuntu:i386-16.04-xbb-bootstrap-v3.2
 ```
 
 The following tests were performed on a Debian 9
 running on a Rock Pi 4 SBC.
 
-```console
-$ docker run --interactive --tty ilegeul/ubuntu:arm64v8-16.04-xbb-bootstrap-v3.2
-$ docker run --interactive --tty ilegeul/ubuntu:arm32v7-16.04-xbb-bootstrap-v3.2
+```sh
+docker run --interactive --tty ilegeul/ubuntu:arm64v8-16.04-xbb-bootstrap-v3.2
+docker run --interactive --tty ilegeul/ubuntu:arm32v7-16.04-xbb-bootstrap-v3.2
 ```
 
 ## Publish
 
 To publish, use:
 
-```console
-$ docker push "ilegeul/ubuntu:amd64-16.04-xbb-bootstrap-v3.2"
-$ docker push "ilegeul/ubuntu:i386-16.04-xbb-bootstrap-v3.2"
-$ docker push "ilegeul/ubuntu:arm64v8-16.04-xbb-bootstrap-v3.2"
-$ docker push "ilegeul/ubuntu:arm32v7-16.04-xbb-bootstrap-v3.2"
+```sh
+docker push "ilegeul/ubuntu:amd64-16.04-xbb-bootstrap-v3.2"
+docker push "ilegeul/ubuntu:i386-16.04-xbb-bootstrap-v3.2"
+
+docker push "ilegeul/ubuntu:arm64v8-16.04-xbb-bootstrap-v3.2"
+docker push "ilegeul/ubuntu:arm32v7-16.04-xbb-bootstrap-v3.2"
 ```
