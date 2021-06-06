@@ -42,7 +42,7 @@ source "${helper_folder_path}/common-docker-functions-source.sh"
 
 # -----------------------------------------------------------------------------
 
-version="3.1"
+version="3.2"
 
 arch="amd64"
 distro="ubuntu"
