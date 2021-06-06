@@ -878,8 +878,6 @@ function build_native_gcc()
 
           config_options+=("--enable-checking=release")
           config_options+=("--enable-static")
-          config_options+=("--enable-shared")
-          config_options+=("--enable-shared-libgcc")
 
           config_options+=("--enable-threads=posix")
           config_options+=("--enable-__cxa_atexit")
@@ -904,6 +902,7 @@ function build_native_gcc()
 
           if false
           then
+            # Fails in some circumstances.
             config_options+=("--enable-bootstrap")
           else
             config_options+=("--disable-bootstrap")
@@ -929,8 +928,10 @@ function build_native_gcc()
             
             config_options+=("--enable-languages=c,c++,fortran,objc,obj-c++")
 
-          elif is_linux
-          then
+            config_options+=("--enable-shared")
+            config_options+=("--enable-shared-libgcc")
+
+          else # Linux
 
             # The Linux build also uses:
             # --with-linker-hash-style=gnu
@@ -942,8 +943,6 @@ function build_native_gcc()
             # --enable-libstdcxx-debug 
             # --enable-libstdcxx-time=yes (liks librt)
             # --with-default-libstdcxx-abi=new (default)
-
-            #  --enable-shared \
 
             config_options+=("--with-linker-hash-style=gnu")
             config_options+=("--with-gnu-as")
@@ -971,15 +970,15 @@ function build_native_gcc()
             fi
 
             config_options+=("--disable-rpath")
-            if is_linux
-            then
-              config_options+=("--disable-new-dtags")
-            fi
+            config_options+=("--disable-new-dtags")
 
             if false # [ "${XBB_LAYER}" != "xbb-bootstrap" ]
             then
               config_options+=("--with-sysroot=${INSTALL_FOLDER_PATH}")
             fi
+
+            config_options+=("--disable-shared")
+            config_options+=("--disable-shared-libgcc")
 
           else
             echo "Unsupported gcc configuration."
