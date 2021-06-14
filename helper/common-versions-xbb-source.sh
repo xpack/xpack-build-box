@@ -39,16 +39,19 @@ function build_versioned_components()
     # -------------------------------------------------------------------------
 
     # The main characteristic of XBB is the compiler version.
-    XBB_LLVM_VERSION="11.0.0"
 
-    XBB_GCC_VERSION="9.3.0" # "9.2.0" # "8.3.0" # "7.4.0"
-    XBB_BINUTILS_VERSION="2.34" # "2.33.1"
+    # XBB_LLVM_VERSION="11.1.0"
+
+    XBB_GCC_VERSION="11.1.0" # "9.3.0" # "9.2.0" # "8.3.0" # "7.4.0"
+    XBB_BINUTILS_VERSION="2.36.1" # "2.34" # "2.33.1"
 
     # 8.x fails to compile the libstdc++ new file system classes.
     # must be the same as native, otherwise shared libraries will mess versions.
-    XBB_MINGW_VERSION="7.0.0"
+    XBB_MINGW_VERSION="8.0.2"
     XBB_MINGW_GCC_VERSION="${XBB_GCC_VERSION}" # "9.2.0" # "8.3.0" # "7.4.0"
     XBB_MINGW_BINUTILS_VERSION="${XBB_BINUTILS_VERSION}" # "2.34" # "2.33.1"
+    XBB_GDB_VERSION="10.2"
+    libtool_version="2.4.6"
 
     XBB_LLVM_BRANDING="xPack Build Box ${HOST_BITS}-bit"
     XBB_BINUTILS_BRANDING="xPack Build Box ${HOST_BITS}-bit binutils"
@@ -89,28 +92,28 @@ function build_versioned_components()
 
     # Libraries, required by gcc.
     # depends=('gcc-libs' 'sh')
-    build_gmp "6.2.0" # "6.1.2"
+    build_gmp "6.2.1" # "6.2.0" # "6.1.2"
     # depends=('gmp>=5.0')
-    build_mpfr "4.0.2" # "3.1.6"
+    build_mpfr "4.1.0" # "4.0.2" # "3.1.6"
     # depends=('mpfr')
-    build_mpc "1.1.0" # "1.0.3"
+    build_mpc "1.2.1" # "1.1.0" # "1.0.3"
     # depends=('gmp')
-    build_isl "0.22" # "0.21"
+    build_isl "0.24" # "0.22" # "0.21"
 
     # -------------------------------------------------------------------------
 
     # Replacement for the old libcrypt.so.1.
-    build_libxcrypt "4.4.15"
+    build_libxcrypt "4.4.22" # "4.4.15"
 
     # depends=('perl')
-    build_openssl "1.1.1d" # "1.0.2u" # "1.1.1d" # "1.0.2r" # "1.1.1b"
+    build_openssl "1.1.1k" # "1.1.1d" # "1.0.2u" # "1.1.1d" # "1.0.2r" # "1.1.1b"
 
     # Libraries, required by gnutls.
     # depends=('glibc')
-    build_tasn1 "4.15.0" # "4.13"
+    build_tasn1 "4.17.0" # "4.15.0" # "4.13"
     # Library, required by Python.
     # depends=('glibc')
-    build_expat "2.2.9" # "2.2.6"
+    build_expat "2.4.1" # "2.2.9" # "2.2.6"
     # depends=('glibc')
     build_libffi "3.2.1"
 
@@ -124,12 +127,12 @@ function build_versioned_components()
 
     # Libary, required by tar. 
     # depends=('sh')
-    build_xz "5.2.4"
+    build_xz "5.2.5" # "5.2.4"
 
     # Requires openssl.
     # depends=('glibc' 'gmp')
     # PATCH!
-    build_nettle "3.5.1" # "3.4.1"
+    build_nettle "3.7.3" # "3.5.1" # "3.4.1"
 
     # Required by wine.
     build_libpng "1.6.37"
@@ -143,7 +146,7 @@ function build_versioned_components()
     build_ncurses "6.2"
 
     # depends=('glibc' 'ncurses' 'libncursesw.so')
-    build_readline "8.0"
+    build_readline "8.1" # "8.0"
 
     # -------------------------------------------------------------------------
 
@@ -151,45 +154,48 @@ function build_versioned_components()
     build_pkg_config "0.29.2"
 
     # depends=('ca-certificates' 'krb5' 'libssh2' 'openssl' 'zlib' 'libpsl' 'libnghttp2')
-    build_curl "7.68.0" # "7.64.1"
+    build_curl "7.77.0" # "7.68.0" # "7.64.1"
 
     # tar with xz support.
     # depends=('glibc')
-    build_tar "1.32"
+    build_tar "1.34" # "1.32"
+
+    build_libtool "${libtool_version}"
 
     # depends=(gmp libltdl ncurses texinfo libunistring gc libffi)
+    # 3.x is too new, autogen requires 2.x
     build_guile "2.2.7"
 
-    # Requires guile.
+    # Requires guile 2.x.
     build_autogen "5.18.16"
 
     # After autogen, requires libopts.so.25.
     # depends=('glibc' 'libidn2' 'libtasn1' 'libunistring' 'nettle' 'p11-kit' 'readline' 'zlib')
-    build_gnutls "3.6.11.1" # "3.6.7"
+    build_gnutls "3.7.2" # "3.6.11.1" # "3.6.7"
 
-    build_coreutils "8.31"
+    build_coreutils "8.32" # "8.31"
 
     # -------------------------------------------------------------------------
     # GNU tools
 
     # depends=('glibc')
     # PATCH!
-    build_m4 "1.4.18"
+    build_m4 "1.4.19" # "1.4.18"
 
     # depends=('glibc' 'mpfr')
-    build_gawk "5.0.1" # "4.2.1"
+    build_gawk "5.1.0" # "5.0.1" # "4.2.1"
 
     # depends ?
     build_sed "4.8" # "4.7"
 
     # depends=('sh' 'perl' 'awk' 'm4' 'texinfo')
-    build_autoconf "2.69"
+    build_autoconf "2.71" # "2.69"
     # depends=('sh' 'perl')
     # PATCH!
-    build_automake "1.16"
+    build_automake "1.16.3" # "1.16"
 
     # depends=('glibc' 'glib2' 'libunistring' 'ncurses')
-    build_gettext "0.20.1" # "0.19.8"
+    build_gettext "0.21" # "0.20.1" # "0.19.8"
 
     # depends=('glibc' 'attr')
     build_patch "2.7.6"
@@ -198,19 +204,22 @@ function build_versioned_components()
     build_diffutils "3.7"
 
     # depends=('glibc')
-    build_bison "3.5" # "3.3.2"
+    build_bison "3.7" # "3.5" # "3.3.2"
 
     # depends=('glibc' 'guile')
     # PATCH!
     build_make "4.3" # "4.2.1"
 
     # depends=('readline>=7.0' glibc ncurses)
-    build_bash "5.0"
+    build_bash "5.1" # "5.0"
 
     # -------------------------------------------------------------------------
     # Third party tools
 
     # depends=('libutil-linux' 'gnutls' 'libidn' 'libpsl>=0.7.1-3' 'gpgme')
+    # "1.21.1" fails on macOS with
+    # lib/malloc/dynarray-skeleton.c:195:13: error: expected identifier or '(' before numeric constant
+    # 195 | __nonnull ((1))
     build_wget "1.20.3" # "1.20.1"
 
     # Required to build PDF manuals.
@@ -219,10 +228,11 @@ function build_versioned_components()
 
     # depends ?
     # Warning: buggy!
+    # "0.12" weird tag
     build_patchelf "0.10"
 
     # depends=('glibc')
-    build_dos2unix "7.4.1" # "7.4.0"
+    build_dos2unix "7.4.2" # "7.4.1" # "7.4.0"
 
     # macOS 10.10 uses 2.5.3, an update is not mandatory.
     # depends=('glibc' 'm4' 'sh')
@@ -243,10 +253,10 @@ function build_versioned_components()
 
     # Give other a chance to use it.
     # However some (like Python) test for Tk too.
-    build_tcl "8.6.10"
+    build_tcl  "8.6.11" # "8.6.10"
 
     # depends=('curl' 'libarchive' 'shared-mime-info' 'jsoncpp' 'rhash')
-    build_cmake "3.16.2" # "3.13.4"
+    build_cmake "3.19.8" # "3.16.2" # "3.13.4"
 
     # On macOS use the official binaries, which install in:
     # 2.7.17 -> /Library/Frameworks/Python.framework/Versions/2.7
@@ -284,35 +294,36 @@ function build_versioned_components()
     fi
 
     # depends=('python2')
+    # "4.1.0" fails on macOS 10.13
     build_scons "3.1.2" # "3.0.5"
 
     if true # is_linux
     then
       # require xz, openssl
-      build_python3 "3.7.6" # "3.8.1" # "3.7.3"
+      build_python3 "3.8.10" # "3.7.6" # "3.8.1" # "3.7.3"
       # The necessary bits to build these optional modules were not found:
       # _bz2                  _curses               _curses_panel      
       # _dbm                  _gdbm                 _sqlite3           
       # _tkinter              _uuid                 readline 
                 
       # depends=('python3')
-      build_meson "0.53.1" # "0.50.0"
+      build_meson "0.58.1" # "0.53.1" # "0.50.0"
     fi
 
     # Requires scons
     # depends=('python2')
-    build_ninja "1.10.0" # "1.9.0"
+    build_ninja "1.10.2" # "1.10.0" # "1.9.0"
 
     # depends=('curl' 'expat>=2.0' 'perl-error' 'perl>=5.14.0' 'openssl' 'pcre2' 'grep' 'shadow')
-    build_git "2.25.0" # "2.21.0"
+    build_git "2.32.0" # "2.25.0" # "2.21.0"
 
     build_p7zip "16.02"
 
-    build_rhash "1.3.9"
+    build_rhash "1.4.1" # "1.3.9"
 
-    build_re2c "1.3"
+    build_re2c "2.1.1" # "1.3"
 
-    build_sphinx "2.4.4"
+    build_sphinx "4.0.2" # "2.4.4"
 
     # -------------------------------------------------------------------------
 
@@ -321,21 +332,31 @@ function build_versioned_components()
     # $3=npm_version
     # build_nvm "0.35.2" "12.16.0" "6.13.7"
 
-    build_libgpg_error "1.41" # "1.37"
-    build_libgcrypt "1.8.7" # "1.8.5"
-    build_libassuan "2.5.4" # "2.5.3"
+    build_libgpg_error "1.42" # "1.41" # "1.37"
+    # "1.9.3" Fails many tests on macOS
+    build_libgcrypt "1.8.8" # "1.8.7" # "1.8.5"
+    build_libassuan "2.5.5" # "2.5.4" # "2.5.3"
     # patched
-    build_libksba "1.5.0" # "1.3.5"
+    build_libksba "1.6.0" # "1.5.0" # "1.3.5"
 
     build_npth "1.6"
 
-    build_gnupg "2.2.26" # "2.2.19"
+    # "2.3.1" fails on macOS 10.13, requires libgcrypt 1.9
+    build_gnupg  "2.2.28" # "2.2.26" # "2.2.19"
 
     # -------------------------------------------------------------------------
 
-    build_ant "1.10.7"
+    # makedepend is needed by openssl
+    build_util_macros "1.19.3" # "1.19.2" # "1.17.1"
+    # PATCH!
+    build_xorg_xproto "7.0.31" # Needs a patch for aarch64.
+    build_makedepend "1.0.6" # "1.0.5"
 
-    build_maven "3.6.3"
+    # -------------------------------------------------------------------------
+
+    build_ant "1.10.10" # "1.10.7"
+
+    build_maven "3.8.1" # "3.6.3"
     
     # Not ready, dependency libs not yet in.
     # build_nodejs "12.16.0"
@@ -347,7 +368,7 @@ function build_versioned_components()
     if is_linux && is_intel
     then
       # depends=('libpng')
-      build_wine "5.1" # "5.0" # "4.3"
+      build_wine "6.10" # "5.1" # "5.0" # "4.3"
 
       # configure: OpenCL 64-bit development files not found, OpenCL won't be supported.
       # configure: pcap 64-bit development files not found, wpcap won't be supported.
@@ -402,10 +423,10 @@ function build_versioned_components()
 
         # Requires new gcc.
         # depends=('sh' 'tar' 'glibc')
-        build_libtool "2.4.6"
+        build_libtool "${libtool_version}" "-2"
       )
 
-      build_native_gdb "9.2"
+      build_native_gdb "${XBB_GDB_VERSION}"
 
       # mingw compiler
 
@@ -421,16 +442,6 @@ function build_versioned_components()
     elif is_darwin
     then
 
-      build_native_llvm "${XBB_LLVM_VERSION}"
-
-      (
-        prepare_clang_env "" "-xbb"
-
-        # Requires new gcc.
-        # depends=('sh' 'tar' 'glibc')
-        build_libtool "2.4.6"
-      )
-
       # By all means DO NOT build binutils on macOS, since this will 
       # override Apple specific tools (ar, strip, etc) and break the
       # build in multiple ways.
@@ -441,8 +452,12 @@ function build_versioned_components()
       (
         prepare_gcc_env "" "-xbb"
 
-        build_native_gdb "9.2"
+        # Requires new gcc.
+        # depends=('sh' 'tar' 'glibc')
+        build_libtool "${libtool_version}" "-2"
       )
+
+      build_native_gdb "${XBB_GDB_VERSION}"
     else
       echo "Unsupported platform."
       exit 1
