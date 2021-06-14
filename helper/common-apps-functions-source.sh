@@ -3949,6 +3949,7 @@ function build_gettext()
               -e 's|test-ftell2.sh ||' \
               -e 's| test-ftello.sh | |' \
               -e 's|test-ftello2.sh ||' \
+              -e 's|test-fopen-gnu$(EXEEXT) ||' \
               "gettext-tools/gnulib-tests/Makefile"
           fi
 
