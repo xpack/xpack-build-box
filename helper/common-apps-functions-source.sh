@@ -931,7 +931,8 @@ function build_native_gcc()
             config_options+=("--enable-shared")
             config_options+=("--enable-shared-libgcc")
 
-          else # Linux
+          elif is_linux
+          then
 
             # The Linux build also uses:
             # --with-linker-hash-style=gnu
