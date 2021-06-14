@@ -1371,6 +1371,8 @@ function build_gnutls()
 
           if is_darwin # && [ "${XBB_LAYER}" == "xbb-bootstrap" ]
           then
+            if [ -f "gl/tests/Makefile" ]
+            then
             # Disable failing tests.
             run_verbose sed -i.bak \
               -e 's| test-ftell.sh | |' \
@@ -1378,6 +1380,18 @@ function build_gnutls()
               -e 's| test-ftello.sh | |' \
               -e 's|test-ftello2.sh ||' \
               "gl/tests/Makefile"
+            fi
+
+            if [ -f "src/gl/tests/Makefile" ]
+            then
+              # Disable failing tests.
+              run_verbose sed -i.bak \
+                -e 's| test-ftell.sh | |' \
+                -e 's|test-ftell2.sh ||' \
+                -e 's| test-ftello.sh | |' \
+                -e 's|test-ftello2.sh ||' \
+                "src/gl/tests/Makefile"
+            fi
 
             run_verbose sed -i.bak \
               -e 's| long-crl.sh | |' \
