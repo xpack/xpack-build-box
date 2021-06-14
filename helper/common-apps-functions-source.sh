@@ -8719,8 +8719,8 @@ function build_native_llvm()
           config_options+=("-DLLVM_ENABLE_LIBCXX=ON")
           config_options+=("-DLLVM_ENABLE_LTO=OFF")
 
-          # No openmp
-          config_options+=("-DLLVM_ENABLE_PROJECTS=clang;clang-tools-extra;lld;lldb;mlir;polly")
+          # No openmp,mlir
+          config_options+=("-DLLVM_ENABLE_PROJECTS=clang;clang-tools-extra;lld;lldb;polly")
           config_options+=("-DLLVM_ENABLE_RUNTIMES=compiler-rt;libcxx;libcxxabi;libunwind")
 
           config_options+=("-DLLVM_ENABLE_RTTI=ON")
