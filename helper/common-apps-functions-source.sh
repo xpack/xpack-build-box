@@ -8614,10 +8614,9 @@ function build_native_llvm()
 
   export LLVM_INSTALL_FOLDER_PATH="${INSTALL_FOLDER_PATH}"
 
-  local llvm_src_folder_name="llvm-project-${llvm_version}"
+  local llvm_src_folder_name="llvm-project-${llvm_version}.src"
 
-  local llvm_archive="llvm-project-${llvm_version}.tar.xz"
-  # GitHub release archive.
+  local llvm_archive="${llvm_src_folder_name}.tar.xz"
   local llvm_url="https://github.com/llvm/llvm-project/releases/download/llvmorg-${llvm_version}/${llvm_archive}"
 
   local llvm_folder_name="llvm-${llvm_version}"
