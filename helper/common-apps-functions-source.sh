@@ -8672,6 +8672,9 @@ function build_native_llvm()
           # Please note the trailing space.
           config_options+=("-DCLANG_VENDOR=${XBB_LLVM_BRANDING} ")
 
+          # macOS 10.1[03] lack the XPC library.
+          config_options+=("-DCLANGD_BUILD_XPC=OFF")
+
           config_options+=("-DCMAKE_BUILD_TYPE=Release")
           config_options+=("-DCMAKE_C_COMPILER=${CC}")
           config_options+=("-DCMAKE_CXX_COMPILER=${CXX}")
