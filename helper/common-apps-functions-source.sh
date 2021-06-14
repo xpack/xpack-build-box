@@ -5344,11 +5344,15 @@ function build_perl()
           run_verbose make -j1 test
         fi
 
-        # https://www.cpan.org/modules/INSTALL.html
-        # Convince cpan not to ask confirmations.
-        export PERL_MM_USE_DEFAULT=true
-        # cpanminus is a quiet version of cpan.
-        cpan App::cpanminus
+        (
+          xbb_activate_installed_bin
+
+          # https://www.cpan.org/modules/INSTALL.html
+          # Convince cpan not to ask confirmations.
+          export PERL_MM_USE_DEFAULT=true
+          # cpanminus is a quiet version of cpan.
+          run_verbose cpan App::cpanminus
+        )
 
       ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${perl_folder_name}/make-output.txt"
     )
