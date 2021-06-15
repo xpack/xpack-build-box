@@ -45,7 +45,7 @@ WORK_FOLDER_PATH="${HOME}/Work"
 # The place where files are downloaded.
 CACHE_FOLDER_PATH="${WORK_FOLDER_PATH}/cache"
 # The install destination folder.
-INSTALL_FOLDER_PATH="${HOME}/opt/texlive"
+INSTALL_FOLDER_PATH="${HOME}/.local/texlive"
 
 # Make all tools choose gcc, not the old cc.
 export CC=gcc
