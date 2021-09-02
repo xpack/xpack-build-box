@@ -7277,6 +7277,7 @@ function build_ant()
   # https://downloads.apache.org/ant/binaries/apache-ant-1.10.7-bin.tar.xz
   # https://www-eu.apache.org/dist/ant/source/
   # https://www-eu.apache.org/dist/ant/source/apache-ant-1.10.7-src.tar.xz
+  # https://archive.apache.org/dist/ant/binaries/apache-ant-1.10.10-bin.tar.xz
 
   # https://archlinuxarm.org/packages/any/ant/files/PKGBUILD
 
@@ -7288,7 +7289,7 @@ function build_ant()
   local ant_src_folder_name="apache-ant-${ant_version}"
 
   local ant_archive="${ant_src_folder_name}-bin.tar.xz"
-  local ant_url="https://downloads.apache.org/ant/binaries/${ant_archive}"
+  local ant_url="https://archive.apache.org/dist/ant/binaries/${ant_archive}"
 
   local ant_folder_name="${ant_src_folder_name}"
 
