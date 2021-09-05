@@ -15,14 +15,17 @@ function build_versioned_components()
     # -------------------------------------------------------------------------
 
     # The main characteristic of XBB Bootstrap is the compiler version.
+
     # "11.0.0" fails on macOS 10.10
     # /llvm/utils/TableGen/OptParserEmitter.cpp:113:12: error: no viable conversion from 'unique_ptr<MarshallingFlagInfo>' to 'unique_ptr<MarshallingKindInfo>'
     # "10.0.1" fails on macOS 10.10
     # clang: error: unknown argument: '-wd654'
-    XBB_LLVM_VERSION="11.0.0"
+    # LLVM build still fails even with macOS 10.13. 
+    # XBB_LLVM_VERSION="11.1.0"
 
-    XBB_GCC_VERSION="8.4.0" # "8.3.0" "7.5.0" "7.4.0"    
-    XBB_BINUTILS_VERSION="2.32" # "2.31"
+    # Fortunatelly GCC 11.x was updated and works on Apple hardware.
+    XBB_GCC_VERSION="11.1.0" # "8.4.0" # "8.3.0" "7.5.0" "7.4.0"    
+    XBB_BINUTILS_VERSION="2.36.1" # "2.32" # "2.31"
 
     XBB_LLVM_BRANDING="xPack Build Box Bootstrap ${HOST_BITS}-bit"
     XBB_BINUTILS_BRANDING="xPack Build Box Bootstrap ${HOST_BITS}-bit binutils"
@@ -81,7 +84,7 @@ function build_versioned_components()
     # depends=('sh' 'perl')
     # Requires autoconf, the order is important on macOS.
     # PATCH! .xz!
-    build_automake "1.16"
+    build_automake "1.16.2"
 
     # depends=('glibc' 'glib2 (internal)')
     # Required by wget.
@@ -182,7 +185,7 @@ function build_versioned_components()
 
     if is_linux
     then
-      # macOS 10.10 uses 5.18.2, an update is not mandatory.
+      # macOS 10.1[04] uses 5.18.2, an update is not mandatory.
       # Ubuntu 12 uses 5.14.2.
       # 5.18.2 fails to build automake 1.16 on Linux (fixed by a patch)
 
@@ -207,7 +210,7 @@ function build_versioned_components()
 
     # Recent versions require C++11.
     # depends=('curl' 'libarchive' 'shared-mime-info' 'jsoncpp' 'rhash')
-    build_cmake "3.15.6" # "3.13.4"
+    build_cmake "3.19.8" # "3.15.6" # "3.13.4"
 
     # -------------------------------------------------------------------------
 
@@ -215,8 +218,8 @@ function build_versioned_components()
     if true # is_linux
     then
       # depends=('bzip2' 'gdbm' 'openssl' 'zlib' 'expat' 'sqlite' 'libffi')
-      # macOS 10.10 uses 2.7.10, bring it in sync.
-      build_python2 "2.7.10" # "2.7.12" # "2.7.14" # "2.7.16" # "2.7.14"
+      # macOS 10.13 uses 2.7.16, bring it in sync.
+      build_python2 "2.7.16" # "2.7.10" # "2.7.12" # "2.7.14" #  # "2.7.14"
     fi
 
     if true # is_linux
@@ -224,14 +227,14 @@ function build_versioned_components()
       # required by Glibc
 
       # require xz, openssl
-      build_python3 "3.7.6" # "3.8.1" # "3.7.3"
+      build_python3 "3.8.10" # "3.7.6" # "3.8.1" # "3.7.3"
       # The necessary bits to build these optional modules were not found:
       # _bz2                  _curses               _curses_panel      
       # _dbm                  _gdbm                 _sqlite3           
       # _tkinter              _uuid                 readline 
                 
       # depends=('python3')
-      build_meson "0.53.1" # "0.50.0"
+      build_meson "0.57.2" # "0.53.1" # "0.50.0"
     fi
 
     # depends=('python2')
@@ -239,7 +242,7 @@ function build_versioned_components()
 
     # Requires scons
     # depends=('python2')
-    build_ninja "1.10.0" # "1.9.0"
+    build_ninja "1.10.2" # "1.10.0" # "1.9.0"
 
     # makedepend is needed by openssl
     build_util_macros "1.19.2" # "1.17.1"
@@ -260,46 +263,16 @@ function build_versioned_components()
       build_native_binutils "${XBB_BINUTILS_VERSION}" 
     fi
 
-    # Let's hope that clang will do the job.
-    if is_linux
-    then
-      # Requires gmp, mpfr, mpc, isl.
-      build_native_gcc "${XBB_GCC_VERSION}"
+    # Requires gmp, mpfr, mpc, isl.
+    build_native_gcc "${XBB_GCC_VERSION}"
 
-      (
-        # depends=('sh' 'tar' 'glibc')
-        # Do it again with the new compiler
-        prepare_gcc_env "" "-xbs"
+    (
+      # depends=('sh' 'tar' 'glibc')
+      # Do it again with the new compiler
+      prepare_gcc_env "" "-xbs"
 
-        build_libtool "${libtool_version}" "-2"
-      )
-    elif is_darwin
-    then
-      # GCC is needed to compile GDB.
-      # Requires gmp, mpfr, mpc, isl.
-      build_native_gcc "${XBB_GCC_VERSION}"
-
-      (
-        # Fails with MacOSX10.10.sdk
-        # Native clang:
-        # OptParserEmitter.cpp:113:12: error: no viable conversion from 'unique_ptr<MarshallingFlagInfo>' to 'unique_ptr<MarshallingKindInfo>'
-        # prepare_clang_env "" ""
-
-        # needs 
-        # `typedef void (*dispatch_block_t)(void);`
-        prepare_gcc_env "" "-xbs"
-
-        build_native_llvm "${XBB_LLVM_VERSION}"
-      )
-exit 1
-      (
-        prepare_clang_env "" "-xbs"
-
-        # Requires new gcc.
-        # depends=('sh' 'tar' 'glibc')
-        build_libtool "2.4.6"
-      )
-    fi
+      build_libtool "${libtool_version}" "-2"
+    )
 
     # From here on, a reasonable C++11 is available.
 

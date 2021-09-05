@@ -389,6 +389,7 @@ function build_native_binutils()
   # 2019-02-02, "2.32"
   # 2019-10-12, "2.33.1"
   # 2020-02-01, "2.34"
+  # 2021-02-06, "2.36.1"
 
   local native_binutils_version="$1"
 
@@ -619,6 +620,7 @@ function build_native_gdb()
   # https://aur.archlinux.org/cgit/aur.git/tree/PKGBUILD?h=gdb-git
 
   # 2020-05-23, "9.2"
+  # 2021-04-25, "10.2"
 
   local native_gdb_version="$1"
 
@@ -780,18 +782,22 @@ function build_native_gcc()
   # https://archlinuxarm.org/packages/aarch64/gcc/files/PKGBUILD
   # https://aur.archlinux.org/cgit/aur.git/tree/PKGBUILD?h=gcc-git
 
-  # 2018-10-30, "6.5.0"
-  # 2018-12-06, "7.4.0"
-  # 2019-11-14, "7.5.0"
   # 2018-05-02, "8.1.0"
   # 2018-07-26, "8.2.0"
+  # 2018-10-30, "6.5.0"
+  # 2018-12-06, "7.4.0"
   # 2019-02-22, "8.3.0"
-  # 2020-03-04, "8.4.0"
   # 2019-05-03, "9.1.0"
   # 2019-08-12, "9.2.0"
+  # 2019-11-14, "7.5.0"
+  # 2020-03-04, "8.4.0"
   # 2020-03-12, "9.3.0"
   # 2020-05-07, "10.1.0"
   # 2020-07-23, "10.2.0"
+  # 2021-04-08, "10.3.0"
+  # 2021-04-27, "11.1.0"
+  # 2021-05-14, "8.5.0"
+  # 2021-06-01, "9.4.0"
 
   local native_gcc_version="$1"
 
@@ -931,7 +937,8 @@ function build_native_gcc()
             config_options+=("--enable-shared")
             config_options+=("--enable-shared-libgcc")
 
-          else # Linux
+          elif is_linux
+          then
 
             # The Linux build also uses:
             # --with-linker-hash-style=gnu
@@ -1436,6 +1443,7 @@ function build_mingw_all()
   # 2018-06-03, "5.0.4"
   # 2018-09-16, "6.0.0"
   # 2019-11-11, "7.0.0"
+  # 2021-05-09, "8.0.2"
 
   local mingw_version="$1"
   local mingw_gcc_version="$2"
@@ -2021,6 +2029,7 @@ function build_openssl()
   # 2019-Feb-26, "1.1.1b"
   # 2019-Sep-10, "1.1.1d"
   # 20 Dec 2019, "1.0.2u"
+  # 2021-Mar-25, "1.1.1k"
 
   local openssl_version="$1"
   # Numbers
@@ -2257,6 +2266,7 @@ function build_curl()
   # 2019-03-27, "7.64.1"
   # 2019-11-06, "7.67.0"
   # 2020-01-08, "7.68.0"
+  # May 26 2021, "7.77.0"
 
   local curl_version="$1"
 
@@ -2396,7 +2406,8 @@ function build_xz()
   # https://aur.archlinux.org/cgit/aur.git/tree/PKGBUILD?h=xz-git
 
   # 2016-12-30 "5.2.3"
-  # 2018-04-29 "5.2.4" (latest)
+  # 2018-04-29 "5.2.4"
+  # 2020-03-17, "5.2.5"
 
   local xz_version="$1"
 
@@ -2532,6 +2543,7 @@ function build_tar()
   # 2016-05-16 "1.29"
   # 2017-12-17 "1.30"
   # 2019-02-23 "1.32"
+  # 2021-02-13, "1.34"
 
   local tar_version="$1"
 
@@ -2721,6 +2733,7 @@ function build_coreutils()
 
   # 2018-07-01, "8.30"
   # 2019-03-10 "8.31"
+  # 2020-03-05, "8.32"
 
   local coreutils_version="$1"
 
@@ -3033,7 +3046,8 @@ function build_m4()
   # https://archlinuxarm.org/packages/aarch64/m4/files/PKGBUILD
   # https://aur.archlinux.org/cgit/aur.git/tree/PKGBUILD?h=m4-git
 
-  # 2016-12-31, "1.4.18", latest
+  # 2016-12-31, "1.4.18"
+  # 2021-05-28, "1.4.19"
 
   local m4_version="$1"
 
@@ -3171,6 +3185,7 @@ function build_gawk()
   # 2017-10-19, "4.2.0"
   # 2018-02-25, "4.2.1"
   # 2019-06-18, "5.0.1"
+  # 2020-04-14, "5.1.0"
 
   local gawk_version="$1"
 
@@ -3457,7 +3472,8 @@ function build_autoconf()
   # https://archlinuxarm.org/packages/any/autoconf2.13/files/PKGBUILD
   # https://aur.archlinux.org/cgit/aur.git/tree/PKGBUILD?h=autoconf-git
 
-  # 2012-04-24, "2.69", latest
+  # 2012-04-24, "2.69"
+  # 2021-01-28, "2.71"
 
   local autoconf_version="$1"
 
@@ -3577,6 +3593,7 @@ function build_automake()
   # 2015-01-05, "1.15"
   # 2018-02-25, "1.16"
   # 2020-03-21, "1.16.2"
+  # 2020-11-18, "1.16.3"
 
   local automake_version="$1"
 
@@ -3848,6 +3865,7 @@ function build_gettext()
 
   # 2016-06-09, "0.19.8"
   # 2019-05-12, "0.20.1"
+  # 2020-07-26, "0.21"
 
   local gettext_version="$1"
 
@@ -3948,6 +3966,7 @@ function build_gettext()
               -e 's|test-ftell2.sh ||' \
               -e 's| test-ftello.sh | |' \
               -e 's|test-ftello2.sh ||' \
+              -e 's|test-fopen-gnu$(EXEEXT) ||' \
               "gettext-tools/gnulib-tests/Makefile"
           fi
 
@@ -4312,6 +4331,7 @@ function build_bison()
   # 2019-02-03, "3.3.2", Crashes with Abort trap 6.
   # 2019-09-12, "3.4.2"
   # 2019-12-11, "3.5"
+  # 2020-07-23, "3.7"
 
   local bison_version="$1"
 
@@ -4599,7 +4619,8 @@ function build_make()
   # https://archlinuxarm.org/packages/aarch64/make/files/PKGBUILD
   # https://aur.archlinux.org/cgit/aur.git/tree/PKGBUILD?h=make-git
 
-  # 2016-06-10, "4.2.1" (latest)
+  # 2016-06-10, "4.2.1"
+  # 2020-01-19, "4.3"
 
   local make_version="$1"
 
@@ -4739,6 +4760,11 @@ function build_wget()
   # 2016-06-10, "1.19"
   # 2018-12-26, "1.20.1"
   # 2019-04-05, "1.20.3"
+
+  # fails on macOS with
+  # lib/malloc/dynarray-skeleton.c:195:13: error: expected identifier or '(' before numeric constant
+  # 195 | __nonnull ((1))
+  # 2021-01-09, "1.21.1"
 
   local wget_version="$1"
 
@@ -5003,6 +5029,7 @@ function build_cmake()
   # November 2017, "3.10.1"
   # Dec 19, 2019, "3.15.6" - requires cmake 3.x -> bootstrap.
   # Dec 16, 2019, "3.16.2"
+  # Apr 6, 2021, "3.19.8"
 
   local cmake_version="$1"
   local cmake_version_major="$(echo ${cmake_version} | sed -e 's|\([0-9][0-9]*\)\..*|\1|')"
@@ -5191,6 +5218,7 @@ function build_perl()
   # 2018-11-29, "5.26.3" # Fails in bootstrap on mac.
   # 2019-04-19, "5.28.2" # Fails in bootstrap on mac.
   # 2019-11-10, "5.30.1"
+  # 2021-05-20, "5.34.0"
 
   PERL_VERSION="$1"
   local perl_version_major="$(echo "${PERL_VERSION}" | sed -e 's/\([0-9]*\)\..*/\1.0/')"
@@ -5316,11 +5344,15 @@ function build_perl()
           run_verbose make -j1 test
         fi
 
-        # https://www.cpan.org/modules/INSTALL.html
-        # Convince cpan not to ask confirmations.
-        export PERL_MM_USE_DEFAULT=true
-        # cpanminus is a quiet version of cpan.
-        cpan App::cpanminus
+        (
+          xbb_activate_installed_bin
+
+          # https://www.cpan.org/modules/INSTALL.html
+          # Convince cpan not to ask confirmations.
+          export PERL_MM_USE_DEFAULT=true
+          # cpanminus is a quiet version of cpan.
+          run_verbose cpan App::cpanminus
+        )
 
       ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${perl_folder_name}/make-output.txt"
     )
@@ -5490,6 +5522,7 @@ function build_patchelf()
 
   # 2016-02-29, "0.9"
   # 2019-03-28, "0.10"
+  # Aug 27, 2020, "0.12" (weird tag)
 
   local patchelf_version="$1"
 
@@ -5728,6 +5761,7 @@ function build_dos2unix()
 
   # 30-Oct-2017, "7.4.0"
   # 2019-09-24, "7.4.1"
+  # 2020-10-12, "7.4.2"
 
   local dos2unix_version="$1"
 
@@ -5839,6 +5873,7 @@ function build_git()
   # 30-Oct-2017, "2.15.0"
   # 24-Feb-2019, "2.21.0"
   # 13-Jan-2020, "2.25.0"
+  # 06-Jun-2021, "2.32.0"
 
   local git_version="$1"
 
@@ -6139,6 +6174,7 @@ function build_python3()
   # 2018-12-24, "3.7.2"
   # March 25, 2019, "3.7.3"
   # Dec. 18, 2019, "3.8.1"
+  # May 3, 2021, "3.8.10"
 
   local python3_version="$1"
 
@@ -6326,6 +6362,7 @@ function build_scons()
   # 2019-03-27, "3.0.5" (sourceforge)
   # 2019-08-08, "3.1.1"
   # 2019-12-17, "3.1.2"
+  # 2021-01-19, "4.1.0"
 
   local scons_version="$1"
 
@@ -6445,6 +6482,8 @@ function build_meson
   # https://archlinuxarm.org/packages/any/meson/files/PKGBUILD
 
   # Jan 7, 2020, "0.53.0"
+  # Apr 10, 2021, "0.57.2"
+  # Jun 7, 2021, "0.58.1"
 
   local meson_version="$1"
 
@@ -6511,6 +6550,7 @@ function build_ninja()
 
   # Jan 30, 2019 "1.9.0"
   # Jan 27, 2020, "1.10.0"
+  # Nov 28, 2020, "1.10.2"
 
   local ninja_version="$1"
 
@@ -6793,6 +6833,7 @@ function build_wine()
   # Fails with a missing yywrap
   # 2020-01-21, "5.0"
   # 2020-02-02, "5.1"
+  # 2021-06-04, "6.10"
 
   local wine_version="$1"
 
@@ -7089,6 +7130,9 @@ function build_gnupg()
 
   # https://archlinuxarm.org/packages/aarch64/gnupg/files/PKGBUILD
 
+  # 2021-06-10, "2.2.28"
+  # 2021-04-20, "2.3.1" fails on macOS
+
   local gnupg_version="$1"
 
   local gnupg_src_folder_name="gnupg-${gnupg_version}"
@@ -7233,17 +7277,19 @@ function build_ant()
   # https://downloads.apache.org/ant/binaries/apache-ant-1.10.7-bin.tar.xz
   # https://www-eu.apache.org/dist/ant/source/
   # https://www-eu.apache.org/dist/ant/source/apache-ant-1.10.7-src.tar.xz
+  # https://archive.apache.org/dist/ant/binaries/apache-ant-1.10.10-bin.tar.xz
 
   # https://archlinuxarm.org/packages/any/ant/files/PKGBUILD
 
-  # 2019-09-05, 1.10.7
+  # 2019-09-05, "1.10.7"
+  # 2021-04-17, "1.10.10"
 
   local ant_version="$1"
 
   local ant_src_folder_name="apache-ant-${ant_version}"
 
   local ant_archive="${ant_src_folder_name}-bin.tar.xz"
-  local ant_url="https://downloads.apache.org/ant/binaries/${ant_archive}"
+  local ant_url="https://archive.apache.org/dist/ant/binaries/${ant_archive}"
 
   local ant_folder_name="${ant_src_folder_name}"
 
@@ -7333,7 +7379,8 @@ function build_maven()
 
   # https://archlinuxarm.org/packages/any/maven/files/PKGBUILD
 
-  # 2019-11-25, 3.6.3
+  # 2019-11-25, "3.6.3"
+  # 2021-04-04, "3.8.1"
 
   local maven_version="$1"
   local maven_version_major="$(echo "${maven_version}" | sed -e 's/\([0-9]*\)\..*/\1/')"
@@ -7562,6 +7609,7 @@ function build_tcl()
   # https://archlinuxarm.org/packages/aarch64/tcl/files/PKGBUILD
 
   # 2019-11-21, "8.6.10"
+  # ? "8.6.11"
 
   local tcl_version="$1"
 
@@ -7714,7 +7762,9 @@ function build_guile()
   # https://archlinuxarm.org/packages/aarch64/guile/files/PKGBUILD
 
   # 2020-03-07, "2.2.7"
+  # Note: for non 2.2, update the tests!
   # 2020-03-08, "3.0.1"
+  # 2021-05-10, "3.0.7"
 
   local guile_version="$1"
 
@@ -7871,6 +7921,7 @@ function build_rhash()
   # https://archlinuxarm.org/packages/aarch64/rhash/files/PKGBUILD
 
   # 14 Dec 2019, "1.3.9"
+  # Jan 7, 2021, "1.4.1"
 
   local rhash_version="$1"
 
@@ -8003,6 +8054,7 @@ function build_re2c()
   # https://archlinuxarm.org/packages/aarch64/re2c/files/PKGBUILD
 
   # 14 Dec 2019, "1.3"
+  # Mar 27, 2021, "2.1.1"
 
   local re2c_version="$1"
 
@@ -8143,6 +8195,7 @@ function build_sphinx()
 
   # Apr 10, 2020, "3.0.1"
   # Mar 5, 2020, "2.4.4"
+  # ? "4.0.2"
 
   local sphinx_version="$1"
 
@@ -8363,6 +8416,7 @@ function build_bash()
 
   # 2018-01-30, "4.4.18"
   # 2019-01-07, "5.0"
+  # 2020-12-06, "5.1"
 
   local bash_version="$1"
 
@@ -8604,7 +8658,8 @@ function build_native_llvm()
   # Jul 19, 2019, "8.0.1" - completely different structure
   # Dec 20, 2019, "9.0.1" - fails on macOS 10.10
   # 22 Jul 2020, "10.0.1" - Target clang_rt.builtins_arm64_osx does not exist
-  # 12 Oct 2012 "11.0.0"
+  # 12 Oct 2020 "11.0.0"
+  # 07 Feb 2021 "11.1.0"
 
   local llvm_version="$1"
 
@@ -8613,10 +8668,9 @@ function build_native_llvm()
 
   export LLVM_INSTALL_FOLDER_PATH="${INSTALL_FOLDER_PATH}"
 
-  local llvm_src_folder_name="llvm-project-${llvm_version}"
+  local llvm_src_folder_name="llvm-project-${llvm_version}.src"
 
-  local llvm_archive="llvm-project-${llvm_version}.tar.xz"
-  # GitHub release archive.
+  local llvm_archive="${llvm_src_folder_name}.tar.xz"
   local llvm_url="https://github.com/llvm/llvm-project/releases/download/llvmorg-${llvm_version}/${llvm_archive}"
 
   local llvm_folder_name="llvm-${llvm_version}"
@@ -8671,6 +8725,9 @@ function build_native_llvm()
           # Please note the trailing space.
           config_options+=("-DCLANG_VENDOR=${XBB_LLVM_BRANDING} ")
 
+          # macOS 10.1[03] lack the XPC library.
+          config_options+=("-DCLANGD_BUILD_XPC=OFF")
+
           config_options+=("-DCMAKE_BUILD_TYPE=Release")
           config_options+=("-DCMAKE_C_COMPILER=${CC}")
           config_options+=("-DCMAKE_CXX_COMPILER=${CXX}")
@@ -8718,8 +8775,8 @@ function build_native_llvm()
           config_options+=("-DLLVM_ENABLE_LIBCXX=ON")
           config_options+=("-DLLVM_ENABLE_LTO=OFF")
 
-          # No openmp
-          config_options+=("-DLLVM_ENABLE_PROJECTS=clang;clang-tools-extra;lld;lldb;mlir;polly")
+          # No openmp,mlir
+          config_options+=("-DLLVM_ENABLE_PROJECTS=clang;clang-tools-extra;lld;lldb;polly")
           config_options+=("-DLLVM_ENABLE_RUNTIMES=compiler-rt;libcxx;libcxxabi;libunwind")
 
           config_options+=("-DLLVM_ENABLE_RTTI=ON")

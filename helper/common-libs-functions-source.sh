@@ -132,6 +132,7 @@ function build_gmp()
 
   # 16-Dec-2016 "6.1.2"
   # 17-Jan-2020 "6.2.0"
+  # 14-Nov-2020, "6.2.1"
 
   local gmp_version="$1"
 
@@ -267,6 +268,7 @@ function build_mpfr()
 
   # 7 September 2017 "3.1.6"
   # 31 January 2019 "4.0.2" Fails mpc
+  # 2020-07-10, "4.1.0"
 
   local mpfr_version="$1"
 
@@ -397,6 +399,7 @@ function build_mpc()
 
   # 2015-02-20 "1.0.3"
   # 2018-01-11 "1.1.0"
+  # 2020-10-23, "1.2.1"
 
   local mpc_version="$1"
 
@@ -509,6 +512,7 @@ function build_isl()
   # 2016-12-20 "0.18"
   # 2019-03-26 "0.21"
   # 2020-01-16 "0.22"
+  # 2021-05-01, "0.24"
 
   local isl_version="$1"
 
@@ -632,6 +636,7 @@ function build_nettle()
   # 2017-11-19, "3.4"
   # 2018-12-04, "3.4.1"
   # 2019-06-27, "3.5.1"
+  # 2021-06-07, "3.7.3"
 
   local nettle_version="$1"
 
@@ -772,6 +777,7 @@ function build_tasn1()
   # 2017-11-19, "4.12"
   # 2018-01-16, "4.13"
   # 2019-11-21, "4.15.0"
+  # 2021-05-13, "4.17.0"
 
   local tasn1_version="$1"
 
@@ -895,6 +901,7 @@ function build_expat()
   # Nov 1, 2017, "2.2.5"
   # Aug 15, 2018, "2.2.6"
   # 26 Sep 2019, "2.2.9"
+  # May 23, 2021, "2.4.1"
 
   local expat_version="$1"
 
@@ -1258,6 +1265,7 @@ function build_gnutls()
   # 2017-10-21, "3.6.1"
   # 2019-03-27, "3.6.7"
   # 2019-12-02, "3.6.11.1"
+  # 2021-05-29, "3.7.2"
 
   local gnutls_version="$1"
   # The first two digits.
@@ -1371,13 +1379,27 @@ function build_gnutls()
 
           if is_darwin # && [ "${XBB_LAYER}" == "xbb-bootstrap" ]
           then
-            # Disable failing tests.
-            run_verbose sed -i.bak \
-              -e 's| test-ftell.sh | |' \
-              -e 's|test-ftell2.sh ||' \
-              -e 's| test-ftello.sh | |' \
-              -e 's|test-ftello2.sh ||' \
-              "gl/tests/Makefile"
+            if [ -f "gl/tests/Makefile" ]
+            then
+              # Disable failing tests.
+              run_verbose sed -i.bak \
+                -e 's| test-ftell.sh | |' \
+                -e 's|test-ftell2.sh ||' \
+                -e 's| test-ftello.sh | |' \
+                -e 's|test-ftello2.sh ||' \
+                "gl/tests/Makefile"
+            fi
+
+            if [ -f "src/gl/tests/Makefile" ]
+            then
+              # Disable failing tests.
+              run_verbose sed -i.bak \
+                -e 's| test-ftell.sh | |' \
+                -e 's|test-ftell2.sh ||' \
+                -e 's| test-ftello.sh | |' \
+                -e 's|test-ftello2.sh ||' \
+                "src/gl/tests/Makefile"
+            fi
 
             run_verbose sed -i.bak \
               -e 's| long-crl.sh | |' \
@@ -1486,6 +1508,7 @@ function build_util_macros()
 
   # 2013-09-07, "1.17.1"
   # 2018-03-05, "1.19.2"
+  # 2021-01-24, "1.19.3"
 
   local util_macros_version="$1"
 
@@ -1703,7 +1726,7 @@ function build_libpng()
 
   # 2017-09-16
   # 2018-12-01, "1.6.36"
-  # 2019-04-14, "1.6.3"
+  # 2019-04-15, "1.6.37"
 
   local libpng_version="$1"
 
@@ -1834,6 +1857,7 @@ function build_libmpdec()
   # https://archlinuxarm.org/packages/aarch64/mpdecimal/files/PKGBUILD
 
   # 2016-02-28, "2.4.2"
+  # 2021-01-28, "2.5.1"
 
   local libmpdec_version="$1"
 
@@ -1957,6 +1981,7 @@ function build_libgpg_error()
   # https://archlinuxarm.org/packages/aarch64/libgpg-error/files/PKGBUILD
 
   # 2020-02-07, "1.37"
+  # 2021-03-22, "1.42"
 
   local libgpg_error_version="$1"
 
@@ -2076,6 +2101,8 @@ function build_libgcrypt()
   # https://archlinuxarm.org/packages/aarch64/libgcrypt/files/PKGBUILD
 
   # 2019-08-29, "1.8.5"
+  # 2021-06-02, "1.8.8"
+  # 2021-04-19, "1.9.3" Fails many tests on macOS 10.13
 
   local libgcrypt_version="$1"
 
@@ -2227,6 +2254,7 @@ function build_libassuan()
   # https://archlinuxarm.org/packages/aarch64/libassuan/files/PKGBUILD
 
   # 2019-02-11, "2.5.3"
+  # 2021-03-22, "2.5.5"
 
   local libassuan_version="$1"
 
@@ -2345,6 +2373,7 @@ function build_libksba()
   # https://archlinuxarm.org/packages/aarch64/libksba/files/PKGBUILD
 
   # 2016-08-22, "1.3.5"
+  # 2021-06-10, "1.6.0"
 
   local libksba_version="$1"
 
@@ -2584,6 +2613,7 @@ function build_libxcrypt()
   # Requires new autotools.
   # m4/ax_valgrind_check.m4:80: warning: macro `AM_EXTRA_RECURSIVE_TARGETS' not found in library
   # Feb 25 2020, "4.4.15"
+  # May 27, 2021, "4.4.22"
 
   local libxcrypt_version="$1"
 
@@ -3149,6 +3179,7 @@ function build_readline()
   # https://archlinuxarm.org/packages/aarch64/readline/files/PKGBUILD
 
   # 2019-01-07, "8.0"
+  # 2020-12-06, "8.1"
 
   local readline_version="$1"
   local readline_version_major="$(echo ${readline_version} | sed -e 's|\([0-9][0-9]*\)\.\([0-9][0-9]*\)|\1|')"
