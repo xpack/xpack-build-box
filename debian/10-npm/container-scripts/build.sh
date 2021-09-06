@@ -52,14 +52,17 @@ env
 # grep TMPDIR /root/.nvm/nvm.sh
 
 nvm install -s --lts node
+rm -rf .nvm/.cache/src
+
 nvm use node
-node --version
 nvm install-latest-npm
-npm --version
 
 nvm cache clear
 
 apt-get remove -y python build-essential
 apt-get purge
+
+node --version
+npm --version
 
 # -----------------------------------------------------------------------------
