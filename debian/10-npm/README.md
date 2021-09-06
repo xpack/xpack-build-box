@@ -1,8 +1,15 @@
 # 10-npm
 
-Debian 10 buster.
+Debian 10 buster with npm.
 
-## Create
+- `ilegeul/debian:i386-10-npm-v1`
+- `ilegeul/debian:arm32v7-10-npm-v1`
+
+Built from `debian:buster`, with node compiled from sources via nvm.
+
+Currently node 14.17.6.
+
+## Build
 
 ```sh
 cd ~/Downloads/xpack-build-box.git/debian/10-npm
@@ -12,16 +19,15 @@ docker build \
   --file "i386-Dockerfile" \
   .
 
-docker push "ilegeul/debian:i386-10-npm-v1"
-
-```
-
-Currently node 14.17.6.
-
-```sh
 docker build \
   --tag "ilegeul/debian:arm32v7-10-npm-v1" \
   --file "arm32v7-Dockerfile" \
   .
+```
 
+## Publish
+
+```sh
+docker push "ilegeul/debian:i386-10-npm-v1"
 docker push "ilegeul/debian:arm32v7-10-npm-v1"
+```
