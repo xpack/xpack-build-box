@@ -663,7 +663,7 @@ function build_native_gdb()
       CPPFLAGS="${XBB_CPPFLAGS}" 
       CFLAGS="${XBB_CFLAGS_NO_W}"
       CXXFLAGS="${XBB_CXXFLAGS_NO_W}"
-      LDFLAGS="${XBB_LDFLAGS_APP} -v"
+      LDFLAGS="${XBB_LDFLAGS_APP_STATIC_GCC} -v"
 
       export CPPFLAGS
       export CFLAGS
@@ -697,6 +697,8 @@ function build_native_gdb()
           config_options+=("--disable-binutils")
           config_options+=("--disable-ld")
           config_options+=("--disable-gprof")
+          # configure: error: source highlight is incompatible with -static-libstdc++; either use --disable-source-highlight or --without-static-standard-libraries
+          config_options+=("--disable-source-highlight")
 
           config_options+=("--with-python=no")
 
