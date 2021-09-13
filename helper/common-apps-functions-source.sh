@@ -6312,7 +6312,7 @@ function build_python3()
       xbb_activate_installed_bin
 
       # export PYTHONHOME="${INSTALL_FOLDER_PATH}"
-      export PYTHONPATH="${INSTALL_FOLDER_PATH}/lib/python3.7"
+      export PYTHONPATH="${INSTALL_FOLDER_PATH}/lib/${PYTHON3X}"
 
       # Install setuptools and pip. Be sure the new version is used.
       # https://packaging.python.org/tutorials/installing-packages/
@@ -6351,15 +6351,15 @@ function test_python3()
     echo "Testing if python3 binaries start properly..."
 
     # export PYTHONHOME="${INSTALL_FOLDER_PATH}"
-    export PYTHONPATH="${INSTALL_FOLDER_PATH}/lib/python3.7"
+    export PYTHONPATH="${INSTALL_FOLDER_PATH}/lib/${PYTHON3X}"
 
     run_app "${INSTALL_FOLDER_PATH}/bin/python3" --version
     run_app "${INSTALL_FOLDER_PATH}/bin/pip3" --version
 
     echo
-    echo "Checking the python3 bynaries shared libraries..."
+    echo "Checking the python3 binaries shared libraries..."
 
-    show_libs "${INSTALL_FOLDER_PATH}/bin/python3.7"
+    show_libs "${INSTALL_FOLDER_PATH}/bin/${PYTHON3X}"
   )
 }
 
@@ -6516,7 +6516,7 @@ function build_meson
     (
       xbb_activate_installed_bin
 
-      export PYTHONPATH="${INSTALL_FOLDER_PATH}/lib/python3.7"
+      export PYTHONPATH="${INSTALL_FOLDER_PATH}/lib/${PYTHON3X}"
 
       env | sort
 
@@ -6549,7 +6549,7 @@ function test_meson()
     echo
     echo "Testing if python3 binaries start properly..."
 
-    export PYTHONPATH="${INSTALL_FOLDER_PATH}/lib/python3.7"
+    export PYTHONPATH="${INSTALL_FOLDER_PATH}/lib/${PYTHON3X}"
 
     run_app "${INSTALL_FOLDER_PATH}/bin/meson" --version
   )  

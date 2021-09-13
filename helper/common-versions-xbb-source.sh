@@ -322,6 +322,7 @@ function build_versioned_components()
     if true # is_linux
     then
       # require xz, openssl
+      PYTHON3X="python3.8"
       build_python3 "3.8.10" # "3.7.6" # "3.8.1" # "3.7.3"
       # The necessary bits to build these optional modules were not found:
       # _bz2                  _curses               _curses_panel      
