@@ -192,7 +192,9 @@ function build_versioned_components()
     # depends=('glibc' 'libidn2' 'libtasn1' 'libunistring' 'nettle' 'p11-kit' 'readline' 'zlib')
     build_gnutls "3.7.2" # "3.6.11.1" # "3.6.7"
 
-    build_coreutils "8.32" # "8.31"
+    # 8.32 fails on aarch64 with
+    # coreutils-8.32/src/ls.c:3026:24: error: 'SYS_getdents' undeclared (first use in this function); did you mean 'SYS_getdents64'?
+    build_coreutils "8.31" # "8.32" # "8.31"
 
     # -------------------------------------------------------------------------
     # GNU tools
