@@ -342,7 +342,9 @@ function build_versioned_components()
 
     build_p7zip "16.02"
 
-    build_rhash "1.4.1" # "1.3.9"
+    # "1.4.[12]" fail on amd64 with
+    # librhash/librhash.so.0: undefined reference to `aligned_alloc'
+    build_rhash "1.3.9" # !"1.4.2" # !"1.4.1" # "1.3.9"
 
     build_re2c "2.1.1" # "1.3"
 
