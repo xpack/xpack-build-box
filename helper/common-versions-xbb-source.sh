@@ -12,7 +12,7 @@ function build_versioned_components()
   if [[ "${XBB_VERSION}" =~ 3\.[3] ]]
   then
 
-    if is_linux
+    if false # is_linux
     then
       # Uses CC to compute the library path.
       prepare_library_path
