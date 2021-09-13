@@ -365,7 +365,8 @@ function build_versioned_components()
     build_npth "1.6"
 
     # "2.3.1" fails on macOS 10.13, requires libgcrypt 1.9
-    build_gnupg  "2.2.28" # "2.2.26" # "2.2.19"
+    # "2.2.28" fails on amd64
+    build_gnupg  "2.2.26" # !"2.2.28" # "2.2.26" # "2.2.19"
 
     # -------------------------------------------------------------------------
 
