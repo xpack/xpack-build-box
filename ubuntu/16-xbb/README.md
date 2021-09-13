@@ -17,9 +17,6 @@ bash ~/Downloads/xpack-build-box.git/ubuntu/16-xbb/i386-build-v3.2.sh
 bash ~/Downloads/xpack-build-box.git/ubuntu/16-xbb/arm64v8-build-v3.3.sh
 bash ~/Downloads/xpack-build-box.git/ubuntu/16-xbb/arm32v7-build-v3.3.sh
 
-bash ~/Downloads/xpack-build-box.git/ubuntu/16-xbb/arm64v8-build-v3.2.sh
-bash ~/Downloads/xpack-build-box.git/ubuntu/16-xbb/arm32v7-build-v3.2.sh
-
 docker images
 ```
 
@@ -80,9 +77,6 @@ running on a ROCK Pi 4 SBC.
 ```sh
 docker run --interactive --tty ilegeul/ubuntu:arm64v8-16.04-xbb-v3.3
 docker run --interactive --tty ilegeul/ubuntu:arm32v7-16.04-xbb-v3.2
-
-docker run --interactive --tty ilegeul/ubuntu:arm64v8-16.04-xbb-v3.3
-docker run --interactive --tty ilegeul/ubuntu:arm32v7-16.04-xbb-v3.2
 ```
 
 ## Publish
@@ -95,7 +89,4 @@ docker push "ilegeul/ubuntu:i386-16.04-xbb-v3.2"
 
 docker push "ilegeul/ubuntu:arm64v8-16.04-xbb-v3.3"
 docker push "ilegeul/ubuntu:arm32v7-16.04-xbb-v3.3"
-
-docker push "ilegeul/ubuntu:arm64v8-16.04-xbb-v3.2"
-docker push "ilegeul/ubuntu:arm32v7-16.04-xbb-v3.2"
 ```

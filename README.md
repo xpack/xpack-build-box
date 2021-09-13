@@ -188,7 +188,8 @@ Existing support for 32-bit builds will be preserved for the moment,
 but might be dropped in one of the future version; for consistency
 reasons, it is expected to continue to generate 32-bit binares
 as long as Node.js still supports them via the
-[unofficial builds](https://unofficial-builds.nodejs.org/download/).
+[unofficial builds](https://unofficial-builds.nodejs.org/download/)
+(watch for the presence of `-linux-x86.tar.*` files).
 
 ## Arm binaries
 
@@ -215,7 +216,7 @@ $ docker run -it <image> ldd --version
 - `debian:6` - squeeze - 2011-2016, 2.11.3, kernel 2.6.32
 - `debian:7` - wheezy - 2013-2016, 2.13, kernel 3.2
 - `debian:8` - jessie - 2015-2018, 2.19, kernel 3.16
-- `debian:9` - stretch - 2017-2020, 2.24, kernel 4.9.0-6 (first with arm64)
+- `debian:9` - stretch - 2017-2020, 2.24, kernel 4.9.0-6 (first with arm64) (next)
 - `debian:10` - buster - 2019-2022, 2.28, kernel 4.19.0-6
 
 ### [Ubuntu](https://en.wikipedia.org/wiki/Ubuntu_version_history)
@@ -231,13 +232,13 @@ $ docker run -it <image> ldd --version
 
 - `registry.access.redhat.com/rhel6` - 2.12 <--- no longer supported
 - `registry.access.redhat.com/rhel7` - 2.17, kernel 3.10 <--- still supported, but not for long
-- `registry.access.redhat.com/ubi8` - 2.28, kernel 5.10
+- `registry.access.redhat.com/ubi8` - 2.28, kernel 5.10 (next)
 
 ### [CentOS](https://en.wikipedia.org/wiki/CentOS)
 
 - `centos:6` - 2011-2020, 2.12 <--- no longer supported
 - `centos:7` - 2014-2024, 2.17, kernel 3.10 <--- must be supported
-- `centos:8` - 2019-2029, 2.28, kernel 4.18
+- `centos:8` - 2019-2029, 2.28, kernel 4.18 (next)
 
 ### [Fedora](https://en.wikipedia.org/wiki/Fedora_version_history)
 
@@ -245,7 +246,7 @@ $ docker run -it <image> ldd --version
 - `fedora:21` - 2014-12, 2.20, kernel 3.17
 - `fedora:22` - 2015-05, 2.21, kernel 4.0
 - `fedora:23` - 2015-11, 2.22, kernel 4.2
-- `fedora:24` - 2016-06, 2.23, kernel 4.5 <-- Arm
+- `fedora:24` - 2016-06, 2.23, kernel 4.5 <-- Arm (next Intel)
 - `fedora:25` - 2016-11, 2.24, kernel 4.8
 - `fedora:26` - 2017-07,
 - `fedora:27` - 2017-11, 2.26, kernel 4.13
