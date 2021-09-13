@@ -1,5 +1,23 @@
 The major changes and releases, in reverse chronological order:
 
+[2021-09-13]
+
+- update patchelf to 0.12
+- update automake 1.64.4
+- publish:
+-  ilegeul/ubuntu:amd64-12.04-xbb-v3.3
+-  ilegeul/ubuntu:i386-12.04-xbb-v3.3
+-  ilegeul/ubuntu:arm64v8-16.04-xbb-v3.3
+-  ilegeul/ubuntu:arm32v7-16.04-xbb-v3.3
+
+[2020-12-12]
+
+- v3.2 released (ubuntu based)
+
+[2020-03-15]
+
+- v3.1 released (ubuntu based)
+
 [2019-04-05]
 
 - update centos & macos to v2.1
