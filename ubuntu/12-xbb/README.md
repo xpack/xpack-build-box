@@ -72,6 +72,9 @@ docker run --interactive --tty ilegeul/ubuntu:i386-12.04-xbb-v3.2
 To publish, use:
 
 ```sh
+docker push "ilegeul/ubuntu:amd64-12.04-xbb-v3.3"
+docker push "ilegeul/ubuntu:i386-12.04-xbb-v3.3"
+
 docker push "ilegeul/ubuntu:amd64-12.04-xbb-v3.2"
 docker push "ilegeul/ubuntu:i386-12.04-xbb-v3.2"
 ```

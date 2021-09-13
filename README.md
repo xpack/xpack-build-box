@@ -37,13 +37,13 @@ Generally, xPack binaries are available for the following platforms:
 For a repetitive and controllable build process, the Windows and GNU/Linux
 binaries are built using several Docker images (Intel/Arm, 32/64-bit).
 
-The current version 3.2; older images are deprecated and should not be used
+The current version 3.3; older images are deprecated and should not be used
 for newer projects.
 
-- `ilegeul/ubuntu:amd64-12.04-xbb-v3.2`
-- `ilegeul/ubuntu:i386-12.04-xbb-v3.2`
-- `ilegeul/ubuntu:arm64v8-16.04-xbb-v3.2`
-- `ilegeul/ubuntu:arm32v7-16.04-xbb-v3.2`
+- `ilegeul/ubuntu:amd64-12.04-xbb-v3.3`
+- `ilegeul/ubuntu:i386-12.04-xbb-v3.3`
+- `ilegeul/ubuntu:arm64v8-16.04-xbb-v3.3`
+- `ilegeul/ubuntu:arm32v7-16.04-xbb-v3.3`
 
 The Intel images are based on Ubuntu 12.04 (ldd 2.15), and the Arm images are
 based on Ubuntu 16.04 (ldd 2.23); the resulting GNU/Linux binaries
