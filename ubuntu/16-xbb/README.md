@@ -33,8 +33,8 @@ based on the bootstrap image:
 bash ~/Downloads/xpack-build-box.git/ubuntu/16-xbb/amd64-run-with-image-v3.2.sh
 bash ~/Downloads/xpack-build-box.git/ubuntu/16-xbb/i386-run-with-image-v3.2.sh
 
-bash ~/Downloads/xpack-build-box.git/ubuntu/16-xbb/arm64v8-run-with-image-v3.2.sh
-bash ~/Downloads/xpack-build-box.git/ubuntu/16-xbb/arm32v7-run-with-image-v3.2.sh
+bash ~/Downloads/xpack-build-box.git/ubuntu/16-xbb/arm64v8-run-with-image-v3.3.sh
+bash ~/Downloads/xpack-build-box.git/ubuntu/16-xbb/arm32v7-run-with-image-v3.3.sh
 ```
 
 The following commands can be used to create the docker container
@@ -44,8 +44,8 @@ with the bootstrap also mounted from the host:
 bash ~/Downloads/xpack-build-box.git/ubuntu/16-xbb/amd64-run-with-volume-v3.2.sh
 bash ~/Downloads/xpack-build-box.git/ubuntu/16-xbb/i386-run-with-volume-v3.2.sh
 
-bash ~/Downloads/xpack-build-box.git/ubuntu/16-xbb/arm64v8-run-with-volume-v3.2.sh
-bash ~/Downloads/xpack-build-box.git/ubuntu/16-xbb/arm32v7-run-with-volume-v3.2.sh
+bash ~/Downloads/xpack-build-box.git/ubuntu/16-xbb/arm64v8-run-with-volume-v3.3.sh
+bash ~/Downloads/xpack-build-box.git/ubuntu/16-xbb/arm32v7-run-with-volume-v3.3.sh
 ```
 
 Inside the container, run the build script:
@@ -76,7 +76,7 @@ running on a ROCK Pi 4 SBC.
 
 ```sh
 docker run --interactive --tty ilegeul/ubuntu:arm64v8-16.04-xbb-v3.3
-docker run --interactive --tty ilegeul/ubuntu:arm32v7-16.04-xbb-v3.2
+docker run --interactive --tty ilegeul/ubuntu:arm32v7-16.04-xbb-v3.3
 ```
 
 ## Publish
