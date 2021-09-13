@@ -38,7 +38,7 @@ For a repetitive and controllable build process, the Windows and GNU/Linux
 binaries are built using several Docker images (Intel/Arm, 32/64-bit).
 
 The current version 3.2; older images are deprecated and should not be used
-for newer projcts.
+for newer projects.
 
 - `ilegeul/ubuntu:amd64-12.04-xbb-v3.2`
 - `ilegeul/ubuntu:i386-12.04-xbb-v3.2`
@@ -156,9 +156,9 @@ This script is not specific to XBB, and can be used with any build.
 For this, copy the file into `.../xbb/bin` or any other folder present
 in the PATH and pass the script name via the environment.
 
-```console
-$ chmod +x /opt/xbb/bin/pkg-config-verbose
-$ export PKG_CONFIG=pkg-config-verbose
+```sh
+chmod +x /opt/xbb/bin/pkg-config-verbose
+export PKG_CONFIG=pkg-config-verbose
 ```
 
 ## C++ Standards Support in GCC
@@ -286,7 +286,6 @@ git submodule update --init
 
 Things to be considered for future versions:
 
-- use automake 1.16.2
 - add gdb (for macOS)
 - add doxygen
 - cleanup `man` folder
@@ -298,6 +297,8 @@ Things to be considered for future versions:
 
 Fixed
 
+- use patchelf 0.12 (in v3.3)
+- use automake 1.16.2 (in v3.3)
 - -D_FILE_OFFSET_BITS=64 for 32-bit machine
 - libtool to use xbb gcc, not bootstrap
 - rename gcc-xbb, gcc-xbs
