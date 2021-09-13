@@ -391,7 +391,8 @@ function build_versioned_components()
     if is_linux && is_intel
     then
       # depends=('libpng')
-      build_wine "6.10" # "5.1" # "5.0" # "4.3"
+      # "6.17" fails on amd64
+      build_wine "5.22" # !"6.17" # "5.1" # "5.0" # "4.3"
 
       # configure: OpenCL 64-bit development files not found, OpenCL won't be supported.
       # configure: pcap 64-bit development files not found, wpcap won't be supported.
