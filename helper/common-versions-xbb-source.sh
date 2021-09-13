@@ -201,7 +201,8 @@ function build_versioned_components()
 
     # depends=('glibc')
     # PATCH!
-    build_m4 "1.4.19" # "1.4.18"
+    # "1.4.19" tests fail on amd64.
+    build_m4 "1.4.18" # "1.4.19" # "1.4.18"
 
     # depends=('glibc' 'mpfr')
     build_gawk "5.1.0" # "5.0.1" # "4.2.1"
