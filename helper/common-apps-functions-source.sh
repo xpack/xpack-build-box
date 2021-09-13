@@ -5515,22 +5515,24 @@ function test_makedepend()
 function build_patchelf() 
 {
   # https://nixos.org/patchelf.html
-  # https://nixos.org/releases/patchelf/
-  # https://nixos.org/releases/patchelf/patchelf-0.9/patchelf-0.9.tar.bz2
-  # https://nixos.org/releases/patchelf/patchelf-0.10/patchelf-0.10.tar.bz2
-
-  # https://archlinuxarm.org/packages/aarch64/patchelf/files/PKGBUILD
+  # https://github.com/NixOS/patchelf
+  # https://github.com/NixOS/patchelf/releases/
+  # https://github.com/NixOS/patchelf/releases/download/0.12/patchelf-0.12.tar.bz2
+  # https://github.com/NixOS/patchelf/archive/0.12.tar.gz
 
   # 2016-02-29, "0.9"
   # 2019-03-28, "0.10"
-  # Aug 27, 2020, "0.12" (weird tag)
+  # 2020-06-09, "0.11"
+  # 2020-08-27, "0.12"
 
   local patchelf_version="$1"
 
   local patchelf_src_folder_name="patchelf-${patchelf_version}"
 
   local patchelf_archive="${patchelf_src_folder_name}.tar.bz2"
-  local patchelf_url="https://nixos.org/releases/patchelf/${patchelf_src_folder_name}/${patchelf_archive}"
+  # GitHub release archive.
+  local patchelf_github_archive="${patchelf_version}.tar.gz"
+  local patchelf_url="https://github.com/NixOS/patchelf/archive/${patchelf_github_archive}"
 
   local patchelf_folder_name="${patchelf_src_folder_name}"
 
@@ -5544,6 +5546,19 @@ function build_patchelf()
       "${patchelf_src_folder_name}"
 
     mkdir -pv "${LOGS_FOLDER_PATH}/${patchelf_folder_name}"
+
+    (
+      if [ ! -x "${SOURCES_FOLDER_PATH}/${patchelf_src_folder_name}/configure" ]
+      then
+
+        cd "${SOURCES_FOLDER_PATH}/${patchelf_src_folder_name}"
+        
+        xbb_activate_installed_dev
+
+        run_verbose bash ${DEBUG} "bootstrap.sh"
+
+      fi
+    ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${patchelf_folder_name}/autogen-output.txt"
 
     (
       mkdir -pv "${BUILD_FOLDER_PATH}/${patchelf_folder_name}"
