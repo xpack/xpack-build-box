@@ -12,6 +12,25 @@ function build_versioned_components()
   if [[ "${XBB_VERSION}" =~ 3\.[3] ]]
   then
 
+    if is_linux
+    then
+      # Uses CC to compute the library path.
+      prepare_library_path
+
+      LD_RUN_PATH="${XBB_LIBRARY_PATH}"
+
+      echo "LD_RUN_PATH=${LD_RUN_PATH}"
+      export LD_RUN_PATH
+
+      build_patchelf "0.12"
+
+      build_automake "1.16.4"
+
+      patch_elf_rpath
+
+      run_tests
+
+    else
     # =========================================================================
 
     # Problematic tests (WARN-TEST)
@@ -229,7 +248,7 @@ function build_versioned_components()
     # depends ?
     # Warning: buggy!
     # "0.12" weird tag
-    build_patchelf "0.10"
+    build_patchelf "0.12" # "0.10"
 
     # depends=('glibc')
     build_dos2unix "7.4.2" # "7.4.1" # "7.4.0"
@@ -463,6 +482,7 @@ function build_versioned_components()
       exit 1
     fi
 
+    fi
 
     # -------------------------------------------------------------------------
 
