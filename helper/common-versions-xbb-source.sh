@@ -233,7 +233,9 @@ function build_versioned_components()
     build_make "4.3" # "4.2.1"
 
     # depends=('readline>=7.0' glibc ncurses)
-    build_bash "5.1" # "5.0"
+    # "5.1" fails on amd64 with:
+    # bash-5.1/bashline.c:65:10: fatal error: builtins/builtext.h: No such file or directory
+    build_bash "5.0" # !"5.1" # "5.0"
 
     # -------------------------------------------------------------------------
     # Third party tools
