@@ -61,14 +61,25 @@ function build_versioned_components()
 
     # XBB_LLVM_VERSION="11.1.0"
 
-    XBB_GCC_VERSION="11.1.0" # "9.3.0" # "9.2.0" # "8.3.0" # "7.4.0"
-    XBB_BINUTILS_VERSION="2.36.1" # "2.34" # "2.33.1"
+    if is_darwin
+    then
+      # Old GCC not supported on M1 Macs.
+      XBB_GCC_VERSION="11.1.0"
+    else
+      # "11.1.0" fails with:
+      # libgcov.h:49:10: fatal error: sys/mman.h: No such file or directory
+      # "10.3.0" fails with:
+      # error: unknown conversion type character ‘l’ in format [-Werror=format=]
+      XBB_GCC_VERSION="9.4.0" # !"10.3.0" # !"11.1.0" # "9.3.0" # "9.2.0" # "8.3.0" # "7.4.0"
+      XBB_BINUTILS_VERSION="2.36.1" # "2.34" # "2.33.1"
 
-    # 8.x fails to compile the libstdc++ new file system classes.
-    # must be the same as native, otherwise shared libraries will mess versions.
+      # 8.x fails to compile the libstdc++ new file system classes.
+      # must be the same as native, otherwise shared libraries will mess versions.
       XBB_MINGW_VERSION="7.0.0" # !"9.0.0" # !"8.0.2"
-    XBB_MINGW_GCC_VERSION="${XBB_GCC_VERSION}" # "9.2.0" # "8.3.0" # "7.4.0"
-    XBB_MINGW_BINUTILS_VERSION="${XBB_BINUTILS_VERSION}" # "2.34" # "2.33.1"
+      XBB_MINGW_GCC_VERSION="${XBB_GCC_VERSION}" # "9.2.0" # "8.3.0" # "7.4.0"
+      XBB_MINGW_BINUTILS_VERSION="${XBB_BINUTILS_VERSION}" # "2.34" # "2.33.1"
+    fi
+
     XBB_GDB_VERSION="10.2"
     libtool_version="2.4.6"
 
