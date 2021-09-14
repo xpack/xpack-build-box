@@ -72,14 +72,14 @@ function build_versioned_components()
     XBB_GDB_VERSION="10.2"
     libtool_version="2.4.6"
 
-    XBB_LLVM_BRANDING="xPack Build Box ${HOST_BITS}-bit"
-    XBB_BINUTILS_BRANDING="xPack Build Box ${HOST_BITS}-bit binutils"
-    XBB_GDB_BRANDING="xPack Build Box ${HOST_BITS}-bit GDB"
-    XBB_GCC_BRANDING="xPack Build Box ${HOST_BITS}-bit GCC"
-    XBB_GLIBC_BRANDING="xPack Build Box ${HOST_BITS}-bit GNU libc"
+    XBB_LLVM_BRANDING="xPack Build Box ${HOST_MACHINE}"
+    XBB_BINUTILS_BRANDING="xPack Build Box ${HOST_MACHINE} binutils"
+    XBB_GDB_BRANDING="xPack Build Box ${HOST_MACHINE} GDB"
+    XBB_GCC_BRANDING="xPack Build Box ${HOST_MACHINE} GCC"
+    XBB_GLIBC_BRANDING="xPack Build Box ${HOST_MACHINE} GNU libc"
 
-    XBB_MINGW_BINUTILS_BRANDING="xPack Build Box ${HOST_BITS}-bit Mingw-w64 binutils"
-    XBB_MINGW_GCC_BRANDING="xPack Build Box ${HOST_BITS}-bit Mingw-w64 GCC"
+    XBB_MINGW_BINUTILS_BRANDING="xPack Build Box ${HOST_MACHINE} Mingw-w64 binutils"
+    XBB_MINGW_GCC_BRANDING="xPack Build Box ${HOST_MACHINE} Mingw-w64 GCC"
 
     # -------------------------------------------------------------------------
 
