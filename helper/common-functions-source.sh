@@ -1540,6 +1540,7 @@ function patch_file_libtool_rpath()
       -e 's|compile_rpath=$rpath|compile_rpath=""|' \
       -e 's|func_append compile_rpath " $absdir"||' \
       ${file_path}
+  run_verbose diff ${file_path}.bak ${file_path} || true
 }
 
 export -f patch_file_libtool_rpath
@@ -1548,6 +1549,10 @@ export -f patch_file_libtool_rpath
 # this prevents it using the global LD_RUN_PATH.
 function patch_all_libtool_rpath()
 {
+  echo
+  echo "patch_all_libtool_rpath in $(pwd)"
+  run_verbose ls -lL
+
   for file in $(find . -name libtool)
   do
     echo ${file}
