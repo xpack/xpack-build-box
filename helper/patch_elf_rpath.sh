@@ -223,6 +223,8 @@ else
         libpthread.so.0 \
         libm.so.6 \
         libc.so.6 \
+        ld-linux.so.2 \
+        ld-linux.so.3 \
         ld-linux-x86-64.so.2 \
         ld-linux-armhf.so.3 \
         ld-linux-arm64.so.1 \
