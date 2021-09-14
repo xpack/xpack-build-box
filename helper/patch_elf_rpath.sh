@@ -215,27 +215,39 @@ else
   then
     # For the moment they are the same, but a separate glibc may
     # have a different list.
-    local sys_lib_names=(\
-      "-"
-    )
-    local sys_lib_names_=(\
-      libdl.so.2 \
-      libc.so.6 \
-      libm.so.6 \
-      libpthread.so.0 \
-      librt.so.1 \
-      libgcc_s.so.1 \
-      libstdc++.so.6 \
-      libnsl.so.1 \
-      libgomp.so.1 \
-      libutil.so.1 \
-      ld-linux.so.2 \
-      ld-linux.so.3 \
-      ld-linux-x86-64.so.2 \
-      ld-linux-armhf.so.3 \
-      ld-linux-arm64.so.1 \
-      ld-linux-aarch64.so.1 \
-    )
+    if true
+    then
+      local sys_lib_names=(\
+        libdl.so.2 \
+        librt.so.1 \
+        libpthread.so.0 \
+        libm.so.6 \
+        libc.so.6 \
+        ld-linux-x86-64.so.2 \
+        ld-linux-armhf.so.3 \
+        ld-linux-arm64.so.1 \
+        ld-linux-aarch64.so.1 \
+      )
+    else
+      local sys_lib_names=(\
+        libdl.so.2 \
+        libc.so.6 \
+        libm.so.6 \
+        libpthread.so.0 \
+        librt.so.1 \
+        libgcc_s.so.1 \
+        libstdc++.so.6 \
+        libnsl.so.1 \
+        libgomp.so.1 \
+        libutil.so.1 \
+        ld-linux.so.2 \
+        ld-linux.so.3 \
+        ld-linux-x86-64.so.2 \
+        ld-linux-armhf.so.3 \
+        ld-linux-arm64.so.1 \
+        ld-linux-aarch64.so.1 \
+      )
+    fi
   else
     local sys_lib_names=(\
       "-"
@@ -468,8 +480,13 @@ function main()
 
     if [ "${found}" != "y" ]
     then
-      errors+=("    ${lib_name} not found")
-      show_details="y"
+      if is_linux_sys_so ${lib_name}
+      then
+        echo "system library ${lib_name} reluctantly accepted :-("
+      else
+        errors+=("    ${lib_name} not found")
+        show_details="y"
+      fi
     fi
 
   done
