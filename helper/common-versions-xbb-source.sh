@@ -71,6 +71,7 @@ function build_versioned_components()
       # "10.3.0" fails with:
       # error: unknown conversion type character ‘l’ in format [-Werror=format=]
       XBB_GCC_VERSION="9.4.0" # !"10.3.0" # !"11.1.0" # "9.3.0" # "9.2.0" # "8.3.0" # "7.4.0"
+
       XBB_BINUTILS_VERSION="2.36.1" # "2.34" # "2.33.1"
 
       # 8.x fails to compile the libstdc++ new file system classes.
@@ -402,49 +403,6 @@ function build_versioned_components()
 
     # -------------------------------------------------------------------------
 
-    # Build wine only on Intel Linux.
-    # Benefits from having mingw in PATH.
-    if is_linux && is_intel
-    then
-      # depends=('libpng')
-      # "6.17" fails on amd64
-      build_wine "5.22" # !"6.17" # "5.1" # "5.0" # "4.3"
-
-      # configure: OpenCL 64-bit development files not found, OpenCL won't be supported.
-      # configure: pcap 64-bit development files not found, wpcap won't be supported.
-      # configure: libdbus 64-bit development files not found, no dynamic device support.
-      # configure: lib(n)curses 64-bit development files not found, curses won't be supported.
-      # configure: libsane 64-bit development files not found, scanners won't be supported.
-      # configure: libv4l2 64-bit development files not found.
-      # configure: libgphoto2 64-bit development files not found, digital cameras won't be supported.
-      # configure: libgphoto2_port 64-bit development files not found, digital cameras won't be auto-detected.
-      # configure: liblcms2 64-bit development files not found, Color Management won't be supported.
-      # configure: libpulse 64-bit development files not found or too old, Pulse won't be supported.
-      # configure: gstreamer-1.0 base plugins 64-bit development files not found, GStreamer won't be supported.
-      # configure: OSS sound system found but too old (OSSv4 needed), OSS won't be supported.
-      # configure: libudev 64-bit development files not found, plug and play won't be supported.
-      # configure: libSDL2 64-bit development files not found, SDL2 won't be supported.
-      # configure: libFAudio 64-bit development files not found, XAudio2 won't be supported.
-      # configure: libcapi20 64-bit development files not found, ISDN won't be supported.
-      # configure: libcups 64-bit development files not found, CUPS won't be supported.
-      # configure: fontconfig 64-bit development files not found, fontconfig won't be supported.
-      # configure: libgsm 64-bit development files not found, gsm 06.10 codec won't be supported.
-      # configure: libkrb5 64-bit development files not found (or too old), Kerberos won't be supported.
-      # configure: libtiff 64-bit development files not found, TIFF won't be supported.
-      # configure: libmpg123 64-bit development files not found (or too old), mp3 codec won't be supported.
-      # configure: libopenal 64-bit development files not found (or too old), OpenAL won't be supported.
-      # configure: libvulkan and libMoltenVK 64-bit development files not found, Vulkan won't be supported.
-      # configure: vkd3d 64-bit development files not found (or too old), Direct3D 12 won't be supported.
-      # configure: libldap (OpenLDAP) 64-bit development files not found, LDAP won't be supported.
-
-      # configure: WARNING: libxml2 64-bit development files not found (or too old), XML won't be supported.
-      # configure: WARNING: libxslt 64-bit development files not found, xslt won't be supported.
-      # configure: WARNING: libjpeg 64-bit development files not found, JPEG won't be supported.
-      # configure: WARNING: No sound system was found. Windows applications will be silent.
-    fi
-
-    # -------------------------------------------------------------------------
-
     # When all libraries are available, build the compiler(s).
 
     if is_linux
@@ -502,6 +460,51 @@ function build_versioned_components()
       echo "Unsupported platform."
       exit 1
     fi
+
+    # -------------------------------------------------------------------------
+    # Requires mingw-w64 GCC.
+
+    # Build wine only on Intel Linux.
+    if is_linux && is_intel
+    then
+      # depends=('libpng')
+      # "6.17" fails on amd64
+      build_wine "5.22" # !"6.17" # "5.1" # "5.0" # "4.3"
+
+      # configure: OpenCL 64-bit development files not found, OpenCL won't be supported.
+      # configure: pcap 64-bit development files not found, wpcap won't be supported.
+      # configure: libdbus 64-bit development files not found, no dynamic device support.
+      # configure: lib(n)curses 64-bit development files not found, curses won't be supported.
+      # configure: libsane 64-bit development files not found, scanners won't be supported.
+      # configure: libv4l2 64-bit development files not found.
+      # configure: libgphoto2 64-bit development files not found, digital cameras won't be supported.
+      # configure: libgphoto2_port 64-bit development files not found, digital cameras won't be auto-detected.
+      # configure: liblcms2 64-bit development files not found, Color Management won't be supported.
+      # configure: libpulse 64-bit development files not found or too old, Pulse won't be supported.
+      # configure: gstreamer-1.0 base plugins 64-bit development files not found, GStreamer won't be supported.
+      # configure: OSS sound system found but too old (OSSv4 needed), OSS won't be supported.
+      # configure: libudev 64-bit development files not found, plug and play won't be supported.
+      # configure: libSDL2 64-bit development files not found, SDL2 won't be supported.
+      # configure: libFAudio 64-bit development files not found, XAudio2 won't be supported.
+      # configure: libcapi20 64-bit development files not found, ISDN won't be supported.
+      # configure: libcups 64-bit development files not found, CUPS won't be supported.
+      # configure: fontconfig 64-bit development files not found, fontconfig won't be supported.
+      # configure: libgsm 64-bit development files not found, gsm 06.10 codec won't be supported.
+      # configure: libkrb5 64-bit development files not found (or too old), Kerberos won't be supported.
+      # configure: libtiff 64-bit development files not found, TIFF won't be supported.
+      # configure: libmpg123 64-bit development files not found (or too old), mp3 codec won't be supported.
+      # configure: libopenal 64-bit development files not found (or too old), OpenAL won't be supported.
+      # configure: libvulkan and libMoltenVK 64-bit development files not found, Vulkan won't be supported.
+      # configure: vkd3d 64-bit development files not found (or too old), Direct3D 12 won't be supported.
+      # configure: libldap (OpenLDAP) 64-bit development files not found, LDAP won't be supported.
+
+      # configure: WARNING: libxml2 64-bit development files not found (or too old), XML won't be supported.
+      # configure: WARNING: libxslt 64-bit development files not found, xslt won't be supported.
+      # configure: WARNING: libjpeg 64-bit development files not found, JPEG won't be supported.
+      # configure: WARNING: No sound system was found. Windows applications will be silent.
+    fi
+
+    # -------------------------------------------------------------------------
 
     fi
 
