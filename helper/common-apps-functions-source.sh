@@ -1277,6 +1277,7 @@ function build_mingw_binutils()
 
   local mingw_binutils_folder_name="mingw-binutils-${mingw_binutils_version}"
 
+   local mingw_binutils_patch_file_path="${helper_folder_path}/patches/binutils-${mingw_binutils_version}.patch"
   local mingw_binutils_stamp_file_path="${STAMPS_FOLDER_PATH}/stamp-${mingw_binutils_folder_name}-installed"
   if [ ! -f "${mingw_binutils_stamp_file_path}" -o ! -d "${BUILD_FOLDER_PATH}/${mingw_binutils_folder_name}" ]
   then
@@ -1284,7 +1285,8 @@ function build_mingw_binutils()
     cd "${SOURCES_FOLDER_PATH}"
 
     download_and_extract "${mingw_binutils_url}" "${mingw_binutils_archive}" \
-      "${mingw_binutils_src_folder_name}"
+      "${mingw_binutils_src_folder_name}" \
+      "${mingw_binutils_patch_file_path}"
 
     mkdir -pv "${LOGS_FOLDER_PATH}/${mingw_binutils_folder_name}"
 
