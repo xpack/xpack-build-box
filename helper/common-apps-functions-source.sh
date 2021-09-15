@@ -6450,7 +6450,6 @@ function build_scons()
         --prefix="${INSTALL_FOLDER_PATH}" \
         \
         --optimize=1 \
-        --standard-lib \
 
       mkdir -pv "${INSTALL_FOLDER_PATH}/share/man/man1"
       mv -v "${INSTALL_FOLDER_PATH}/man/man1"/* "${INSTALL_FOLDER_PATH}/share/man/man1"
