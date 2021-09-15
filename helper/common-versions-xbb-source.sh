@@ -63,7 +63,7 @@ function build_versioned_components()
 
     if is_darwin
     then
-      # Old GCC not supported on M1 Macs.
+      # Old GCC not supported on MacOS 11 or M1 machines.
       XBB_GCC_VERSION="11.1.0"
     else
       # "11.1.0" fails with:
