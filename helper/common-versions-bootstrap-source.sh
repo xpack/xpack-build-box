@@ -11,7 +11,8 @@ function build_versioned_components()
 {
   if [[ "${XBB_VERSION}" =~ 3\.[3] ]]
   then
-
+    # WARNING: experimental, not used.
+    
     # -------------------------------------------------------------------------
 
     # The main characteristic of XBB Bootstrap is the compiler version.
