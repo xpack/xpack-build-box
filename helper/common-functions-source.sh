@@ -145,8 +145,11 @@ function detect_host()
 
   if [ "${HOST_UNAME}" == "Darwin" ]
   then
+    if [ "${XBB_LAYER}" == "xbb" ]
+    then
     # TODO: update to 11.0 for Arm.
     export MACOSX_DEPLOYMENT_TARGET="10.10"
+  fi
   fi
 
   MACOS_SDK_PATH=""
@@ -367,9 +370,11 @@ function prepare_xbb_env()
 
   if [ "${HOST_UNAME}" == "Darwin" ]
   then
-    # TODO: Update it to 11.0 for Arm.
+    if [ "${XBB_LAYER}" == "xbb" ]
+    then
     XBB_CFLAGS+=" -mmacosx-version-min=${MACOSX_DEPLOYMENT_TARGET}"
     XBB_CXXFLAGS+=" -mmacosx-version-min=${MACOSX_DEPLOYMENT_TARGET}"
+    fi
   fi
 
   XBB_CFLAGS_NO_W="${XBB_CFLAGS} -w"
@@ -382,8 +387,10 @@ function prepare_xbb_env()
     XBB_LDFLAGS+=" -Wl,--disable-new-dtags"
   elif [ "${HOST_UNAME}" == "Darwin" ]
   then
-    # TODO: Update it to 11.0 for Arm.
+    if [ "${XBB_LAYER}" == "xbb" ]
+    then
     XBB_LDFLAGS+=" -Wl,-macosx_version_min,${MACOSX_DEPLOYMENT_TARGET}"
+    fi
   fi
 
   # -Wl,--gc-sections may make some symbols dissapear, do not use it here.
