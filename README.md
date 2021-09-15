@@ -263,24 +263,13 @@ The xPack Build Box is inspired by the
 
 ## Maintainer info
 
-A shortcut to clone the repo is:
+To clone the repo with its submodule:
 
 ```sh
-curl -L --fail https://raw.githubusercontent.com/xpack/xpack-build-box/master/git-clone.sh | bash -
-```
-
-which is the equivalent of:
-
-```sh
-rm -rf ~/Downloads/xpack-build-box.git \
-git clone --recurse-submodules https://github.com/xpack/xpack-build-box.git \
-  ~/Downloads/xpack-build-box.git
-```
-
-If you missed the submodules:
-
-```sh
-git submodule update --init
+rm -rf ~/Downloads/xpack-build-box.git; \
+git clone https://github.com/xpack/xpack-build-box.git \
+  ~/Downloads/xpack-build-box.git; \
+git -C ~/Downloads/xpack-build-box.git submodule update --init --recursive 
 ```
 
 ## TODO
@@ -319,7 +308,7 @@ support for RHEL 6 was discontinued.
 
 For Arm binaries, the base distribution is **Ubuntu 16.04 LTS (xenial)**,
 (2.23); the resulting binaries should run on all Raspberry Pi class
-machines, or larger.
+machines, or larger/newer.
 
-However, support for RHEL 7 is a hard requirement, and will probably be
-dropped soon, also moving to Ubuntu 16.04 LTS.
+However, support for RHEL 7 is a tough requirement, and will probably be
+dropped soon, by also moving to Ubuntu 16.04 LTS.
