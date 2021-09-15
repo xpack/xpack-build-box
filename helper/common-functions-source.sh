@@ -740,18 +740,18 @@ then
   else
     if [ "${XBB_LAYER}" == "xbb-bootstrap" ]
     then
-      echo "export XBB_BOOTSTRAP_FOLDER_PATH=\"\${HOME}/opt/$(basename "${XBB_FOLDER_PATH}")\"" >> "${INSTALL_FOLDER_PATH}/xbb-source.sh"
+      echo "export XBB_BOOTSTRAP_FOLDER_PATH=\"\${HOME}/.local/$(basename "${XBB_FOLDER_PATH}")\"" >> "${INSTALL_FOLDER_PATH}/xbb-source.sh"
     elif [ "${XBB_LAYER}" == "xbb" ]
     then
-      echo "export XBB_FOLDER_PATH=\"\${HOME}/opt/$(basename "${XBB_FOLDER_PATH}")\"" >> "${INSTALL_FOLDER_PATH}/xbb-source.sh"
+      echo "export XBB_FOLDER_PATH=\"\${HOME}/.local/$(basename "${XBB_FOLDER_PATH}")\"" >> "${INSTALL_FOLDER_PATH}/xbb-source.sh"
     elif [ "${XBB_LAYER}" == "xbb-test" ]
     then
-      echo "export XBB_TEST_FOLDER_PATH=\"\${HOME}/opt/$(basename "${XBB_TEST_FOLDER_PATH}")\"" >> "${INSTALL_FOLDER_PATH}/xbb-source.sh"
+      echo "export XBB_TEST_FOLDER_PATH=\"\${HOME}/.local/$(basename "${XBB_TEST_FOLDER_PATH}")\"" >> "${INSTALL_FOLDER_PATH}/xbb-source.sh"
     fi
   fi
 fi
 
-  echo "export TEXLIVE_FOLDER_PATH=\"/opt/texlive\"" >> "${INSTALL_FOLDER_PATH}/xbb-source.sh"
+  echo "export TEXLIVE_FOLDER_PATH=\"/.local/texlive\"" >> "${INSTALL_FOLDER_PATH}/xbb-source.sh"
 
   if [ "${XBB_LAYER}" == "xbb-bootstrap" ]
   then
