@@ -5561,6 +5561,7 @@ function build_patchelf()
 
         cd "${SOURCES_FOLDER_PATH}/${patchelf_src_folder_name}"
         
+        xbb_activate_installed_bin
         xbb_activate_installed_dev
 
         run_verbose bash ${DEBUG} "bootstrap.sh"
