@@ -295,14 +295,20 @@ function build_versioned_components()
     # -------------------------------------------------------------------------
 
     # The main characteristic of XBB Bootstrap is the compiler version.
-    XBB_GCC_VERSION="8.4.0" # "8.3.0" "7.5.0" "7.4.0"
-    
+    if is_darwin
+    then
+      # Old GCC not supported on MacOS 11 or M1 machines.
+      XBB_GCC_VERSION="11.1.0"
+    else
+      XBB_GCC_VERSION="8.4.0" # "8.3.0" "7.5.0" "7.4.0"
+    fi
+
     XBB_BINUTILS_VERSION="2.32" # "2.31"
     XBB_GLIBC_VERSION="2.30"
 
-    XBB_BINUTILS_BRANDING="xPack Build Box Bootstrap binutils\x2C ${HOST_BITS}-bit"
-    XBB_GCC_BRANDING="xPack Build Box Bootstrap GCC\x2C ${HOST_BITS}-bit"
-    XBB_GLIBC_BRANDING="xPack Build Box Bootstrap GNU libc\x2C ${HOST_BITS}-bit"
+    XBB_BINUTILS_BRANDING="xPack Build Box Bootstrap ${HOST_MACHINE} binutils"
+    XBB_GCC_BRANDING="xPack Build Box Bootstrap ${HOST_MACHINE} GCC"
+    XBB_GLIBC_BRANDING="xPack Build Box Bootstrap ${HOST_MACHINE} GNU libc"
 
     # -------------------------------------------------------------------------
 
