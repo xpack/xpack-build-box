@@ -277,13 +277,12 @@ function build_versioned_components()
 
     if true # is_linux
     then
-      # macOS 10.10 uses 5.18.2, an update is not mandatory.
+      # macOS 10.1[03] uses 5.18.2.
       # HiRes.c:2037:17: error: use of undeclared identifier 'CLOCK_REALTIME'   
       #     clock_id = CLOCK_REALTIME;
       # 
       # depends=('gdbm' 'db' 'glibc')
-      # For Linux, go back to the same version supported by macOS 10.10.
-      # old PATCH!
+       # old PATCH!
       build_perl "5.32.0" # "5.30.1" # "5.18.2" # "5.30.1" # "5.28.1"
     fi
 
