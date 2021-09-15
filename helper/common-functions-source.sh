@@ -147,9 +147,9 @@ function detect_host()
   then
     if [ "${XBB_LAYER}" == "xbb" ]
     then
-    # TODO: update to 11.0 for Arm.
-    export MACOSX_DEPLOYMENT_TARGET="10.10"
-  fi
+      # TODO: update to 11.0 for Arm.
+      export MACOSX_DEPLOYMENT_TARGET="10.10"
+    fi
   fi
 
   MACOS_SDK_PATH=""
@@ -372,8 +372,8 @@ function prepare_xbb_env()
   then
     if [ "${XBB_LAYER}" == "xbb" ]
     then
-    XBB_CFLAGS+=" -mmacosx-version-min=${MACOSX_DEPLOYMENT_TARGET}"
-    XBB_CXXFLAGS+=" -mmacosx-version-min=${MACOSX_DEPLOYMENT_TARGET}"
+      XBB_CFLAGS+=" -mmacosx-version-min=${MACOSX_DEPLOYMENT_TARGET}"
+      XBB_CXXFLAGS+=" -mmacosx-version-min=${MACOSX_DEPLOYMENT_TARGET}"
     fi
   fi
 
@@ -389,7 +389,7 @@ function prepare_xbb_env()
   then
     if [ "${XBB_LAYER}" == "xbb" ]
     then
-    XBB_LDFLAGS+=" -Wl,-macosx_version_min,${MACOSX_DEPLOYMENT_TARGET}"
+      XBB_LDFLAGS+=" -Wl,-macosx_version_min,${MACOSX_DEPLOYMENT_TARGET}"
     fi
   fi
 
