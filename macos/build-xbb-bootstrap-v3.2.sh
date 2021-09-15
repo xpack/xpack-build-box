@@ -53,7 +53,8 @@ XBB_LAYER="xbb-bootstrap"
 
 WORK_FOLDER_PATH="${HOME}/Work"
 
-XBB_INSTALL_FOLDER_PATH="${HOME}/opt/xbb-bootstrap"
+# XBB_INSTALL_FOLDER_PATH="${HOME}/opt/xbb-bootstrap"
+XBB_INSTALL_FOLDER_PATH="${HOME}/.local/xbb-bootstrap"
 
 # -----------------------------------------------------------------------------
 
