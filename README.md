@@ -60,7 +60,7 @@ GNU tools, installed in a separate folder.
 
 All images include the TeX tools (from 2018); on GNU/Linux, they are
 installed in the system folders; on macOS, similarly to
-XBB, they are installed in a custom folder (`${HOME}/opt/texlive`).
+XBB, they are installed in a custom folder (`${HOME}/.local/texlive`).
 
 ## Docker specifics
 
@@ -118,7 +118,7 @@ For macOS the recommended use case is similar, except the XBB tools
 are installed in the user HOME folder:
 
 ```bash
-source "${HOME}/opt/xbb/xbb-source.sh"
+source "${HOME}/.local/xbb/xbb-source.sh"
 ...
 (
   xbb_activate
