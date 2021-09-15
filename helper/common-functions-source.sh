@@ -145,7 +145,7 @@ function detect_host()
 
   if [ "${HOST_UNAME}" == "Darwin" ]
   then
-    if [ "${XBB_LAYER}" == "xbb" ]
+    if [ "${XBB_LAYER:-""}" == "xbb" ]
     then
       # TODO: update to 11.0 for Arm.
       export MACOSX_DEPLOYMENT_TARGET="10.10"
