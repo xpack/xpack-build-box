@@ -71,17 +71,6 @@ Note: strict control of the path is a hard requirement and should not
 be treated lightly; failing to do so will probably result in broken
 builds.
 
-## Clone the repository
-
-```bash
-rm -rf "${HOME}/Downloads/xpack-build-box.git"; \
-git clone --recurse-submodules https://github.com/xpack/xpack-build-box.git \
-  "${HOME}/Downloads/xpack-build-box.git"
-```
-
-Note: the repository uses submodules, and if updated manually, the
-submodules must also be updated.
-
 ## Build the XBB bootstrap
 
 For consistent results, the XBB tools are not compiled with the native Apple
@@ -98,7 +87,7 @@ There are several environment variables that can be passed to the script:
 DEBUG=-x caffeinate bash "${HOME}/Downloads/xpack-build-box.git/macos/build-xbb-bootstrap-v3.2.sh"
 ```
 
-The build process takes about 80 minutes.
+The build process takes about 150 minutes on a MacBook Pro 2011.
 
 The build is performed in a folder like `${HOME}/Work/xbb-bootstrap-3.2-darwin-x86_64`
 which can be removed after the build is completed.
@@ -117,7 +106,7 @@ The final XBB tools are compiled with the bootstrapped compiler.
 RUN_LONG_TESTS=y caffeinate bash "${HOME}/Downloads/xpack-build-box.git/macos/build-xbb-v3.3.sh"
 ```
 
-The build process takes about 120 minutes.
+The build process takes about 120 minutes on a MacBook Pro 2011.
 
 The build is performed in a folder like `${HOME}/Work/xbb-3.3-darwin-x86_64`
 which can be removed after the build is completed.
