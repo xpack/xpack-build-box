@@ -35,9 +35,28 @@ script_folder_name="$(basename "${script_folder_path}")"
 # =============================================================================
 # This script installs a local instance of TeX Live (https://tug.org/texlive/).
 
-TL_EDITION_YEAR="2018"
-TL_EDITION_FOLDER_NAME="install-tl-20180414"
-# Schemes: basic (~80 packs), medium (~1000 packs), full (~3400)
+# https://ftp.tu-chemnitz.de/pub/tug/historic/systems/texlive/2020/install-tl-unx.tar.gz
+
+TL_EDITION_YEAR=${1:-"2018"}
+if [ "${TL_EDITION_YEAR}" == "2018" ]
+then
+  TL_EDITION_FOLDER_NAME="install-tl-20180414"
+elif [ "${TL_EDITION_YEAR}" == "2019" ]
+then
+  TL_EDITION_FOLDER_NAME="install-tl-20190410"
+elif [ "${TL_EDITION_YEAR}" == "2020" ]
+then
+  TL_EDITION_FOLDER_NAME="install-tl-20200406"
+elif [ "${TL_EDITION_YEAR}" == "2021" ]
+then
+  TL_EDITION_FOLDER_NAME="install-tl-20210324"
+else
+  echo "Unsupported year ${TL_EDITION_YEAR}"
+  exit 1
+fi
+
+# Schemes: basic (~120 packs), medium (~1000 packs), full (~3400)
+# TL_SCHEME="basic"
 TL_SCHEME="medium"
 
 WORK_FOLDER_PATH="${HOME}/Work"

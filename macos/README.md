@@ -155,12 +155,11 @@ TeX is used to generate the documentation. For development builds, to
 speed up things, creating the manuals can be skipped, so this step is
 not mandatory.
 
-```bash
-caffeinate bash "${HOME}/Downloads/xpack-build-box.git/macos/install-texlive.sh"
-```
+TeX is available in the [TeX Live](https://tug.org/texlive/) distribution.
 
-The Finder command `install-texlive.mac.command` can be used
-as a shortcut.
+```bash
+caffeinate bash "${HOME}/Downloads/xpack-build-box.git/macos/install-texlive.sh" 2021
+```
 
 The TeX install script is locked to a certain version, but depends on the
 presence of that version on a certain server, which is also not guaranteed
