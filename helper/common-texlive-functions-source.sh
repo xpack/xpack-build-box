@@ -25,7 +25,8 @@ function do_texlive()
   # tl_archive_url="${tl_url}"/systems/texlive/tlnet/${tl_archive_name}
 
   # tl_url="ftp://tug.org/historic"
-  local tl_url="ftp://ftp.math.utah.edu/pub/tex/historic"
+  # local tl_url="ftp://ftp.math.utah.edu/pub/tex/historic"
+  local tl_url="https://ftp.tu-chemnitz.de/pub/tug/historic"
   local tl_repo_url="${tl_url}/systems/texlive/${tl_edition_year}/tlnet-final"
   local tl_archive_url="${tl_url}/systems/texlive/${tl_edition_year}/${tl_archive_name}"
 
@@ -70,14 +71,15 @@ function do_texlive()
 # texlive.profile
 TEXDIR ${INSTALL_FOLDER_PATH}
 TEXMFCONFIG ~/.texlive/texmf-config
-TEXMFHOME ~/texmf
+TEXMFHOME  ~/texmf
 TEXMFLOCAL ${INSTALL_FOLDER_PATH}/texmf-local
 TEXMFSYSCONFIG ${INSTALL_FOLDER_PATH}/texmf-config
 TEXMFSYSVAR ${INSTALL_FOLDER_PATH}/texmf-var
-TEXMFVAR ~/.texlive/texmf-var
+TEXMFVAR  ~/.texlive/texmf-var
 
 option_doc 0
 option_src 0
+
 __EOF__
 
   # ---------------------------------------------------------------------------
@@ -86,6 +88,7 @@ __EOF__
 
   (    
     # Adjust to TexLive conventions.
+    # Recent versions for macOS use `universal-darwin`.
     tl_machine="${HOST_MACHINE}"
     if [ "${HOST_MACHINE}" == "i686" ]
     then
@@ -96,25 +99,48 @@ __EOF__
     fi
     tl_uname="${HOST_LC_UNAME}"
 
-    export PATH="${INSTALL_FOLDER_PATH}/bin/${tl_machine}-${tl_uname}:${PATH}"
+    # Schemes: basic (~100 packs), medium (~1000 packs), full (~3400)
 
-    # Schemes: basic (~80 packs), medium (~1000 packs), full (~3400)
+    # The distribution for current year does not have `texlive.tlpdb`,
+    # and using `-repository` fails, thus it must be checked before.
+    local tl_pdb_url="${tl_repo_url}/tlpkg/texlive.tlpdb"
+    set +e
+    curl --silent --fail -L -o "/tmp/texlive.tlpdb" "${tl_pdb_url}"
+    exit_code=$?
+    set -e
 
     echo
     echo "Running install-tl..."
-    time "${TL_FOLDER_PATH}/install-tl" \
-      -repository "${tl_repo_url}" \
-      -no-gui \
-      -lang en \
-      -profile "${tmp_profile}" \
-      -scheme "${tl_scheme}"
+    if [ ${exit_code} -eq 0 ]
+    then
+      time "${TL_FOLDER_PATH}/install-tl" \
+        -repository "${tl_repo_url}" \
+        -no-gui \
+        -lang en \
+        -profile "${tmp_profile}" \
+        -scheme "${tl_scheme}"
+    else
+      time "${TL_FOLDER_PATH}/install-tl" \
+        -no-gui \
+        -lang en \
+        -profile "${tmp_profile}" \
+        -scheme "${tl_scheme}"
+    fi
 
     ls -l "${INSTALL_FOLDER_PATH}/bin/"
-    if [ ! -d "${INSTALL_FOLDER_PATH}/bin/${tl_machine}-${tl_uname}" ]
+    if [ -d "${INSTALL_FOLDER_PATH}/bin/universal-darwin" ]
+    then
+      PATH="${INSTALL_FOLDER_PATH}/bin/universal-darwin:${PATH}" 
+    elif [ -d "${INSTALL_FOLDER_PATH}/bin/${tl_machine}-${tl_uname}" ]
     then 
+      PATH="${INSTALL_FOLDER_PATH}/bin/${tl_machine}-${tl_uname}:${PATH}"
+    else
       echo "Cannot configure PATH"
       exit 1
     fi
+
+    echo "PATH=${PATH}"
+    export PATH
 
     tlmgr install collection-fontsrecommended
 
