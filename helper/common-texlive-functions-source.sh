@@ -131,6 +131,9 @@ __EOF__
     if [ -d "${INSTALL_FOLDER_PATH}/bin/universal-darwin" ]
     then
       PATH="${INSTALL_FOLDER_PATH}/bin/universal-darwin:${PATH}" 
+    elif [ -d "${INSTALL_FOLDER_PATH}/bin/x86_64-darwinlegacy" ]
+    then
+      PATH="${INSTALL_FOLDER_PATH}/bin/x86_64-darwinlegacy:${PATH}" 
     elif [ -d "${INSTALL_FOLDER_PATH}/bin/${tl_machine}-${tl_uname}" ]
     then 
       PATH="${INSTALL_FOLDER_PATH}/bin/${tl_machine}-${tl_uname}:${PATH}"
