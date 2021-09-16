@@ -5356,6 +5356,12 @@ function build_perl()
         (
           xbb_activate_installed_bin
 
+          if is_darwin
+          then
+            # Remove any existing .cpan
+            rm -rf ${HOME}/.cpan
+          fi
+
           # https://www.cpan.org/modules/INSTALL.html
           # Convince cpan not to ask confirmations.
           export PERL_MM_USE_DEFAULT=true
