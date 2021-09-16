@@ -53,7 +53,7 @@ The Windows executables are created with **mingw-w64 v7.0.0** and
 **mingw-w64 GCC 9.3**, available from the same Docker images; and should
 run on Windows 10 and most modern Windows versions.
 
-The macOS binaries are generated on a macOS 10.10.5, plus a set of new
+The macOS binaries are generated on a macOS 10.13, plus a set of new
 GNU tools, installed in a separate folder.
 
 ### TeX
@@ -161,10 +161,6 @@ chmod +x /opt/xbb/bin/pkg-config-verbose
 export PKG_CONFIG=pkg-config-verbose
 ```
 
-## C++ Standards Support in GCC
-
-https://gcc.gnu.org/projects/cxx-status.html
-
 ## End-of-support schedule
 
 According to the
@@ -207,8 +203,8 @@ To better decide whch versions to support, below is a list of existing versions.
 The names are in fact docker image names, and can be used directly to query
 the `ldd --version`:
 
-```console
-$ docker run -it <image> ldd --version
+```sh
+docker run -it <image> ldd --version
 ```
 
 ### [Debian](https://en.wikipedia.org/wiki/Debian_version_history)
