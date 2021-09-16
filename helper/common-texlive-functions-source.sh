@@ -138,7 +138,7 @@ __EOF__
     then 
       PATH="${INSTALL_FOLDER_PATH}/bin/${tl_machine}-${tl_uname}:${PATH}"
     else
-      echo "Cannot configure PATH"
+      echo "Cannot configure PATH. Quit."
       exit 1
     fi
 
