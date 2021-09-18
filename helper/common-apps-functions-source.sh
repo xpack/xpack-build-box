@@ -6974,6 +6974,23 @@ function build_wine()
       xbb_activate_installed_bin
 
       CPPFLAGS="${XBB_CPPFLAGS}" 
+
+      # TODO: remove when switching to Ubuntu 16.
+      # getauxval was defined in glibc 2.16
+      # https://man7.org/linux/man-pages/man3/getauxval.3.html
+      if is_linux && is_intel && [ "${HOST_BITS}" == "64" ]
+      then
+        ldd_version="$(ldd --version | sed -n 1p | sed -e 's|^.* ||')"
+        if [ "${ldd_version}" ] == "2.15" ] # Ubuntu 12
+        then
+          run_verbose sed -i.bak \
+            -e 's|getauxval( AT_HWCAP2 ) \& 2|/* getauxval( AT_HWCAP2 ) \& 2 */ 0|' \
+            dlls/ntdll/unix/signal_x86_64.c
+
+          run_verbose diff dlls/ntdll/unix/signal_x86_64.c.bak dlls/ntdll/unix/signal_x86_64.c || true
+        fi
+      fi
+      
       CFLAGS="${XBB_CFLAGS_NO_W}"
       CXXFLAGS="${XBB_CXXFLAGS_NO_W}"
       LDFLAGS="${XBB_LDFLAGS_APP}"
