@@ -844,11 +844,25 @@ function build_native_gcc()
       CXXFLAGS="${XBB_CXXFLAGS_NO_W}"
       LDFLAGS="${XBB_LDFLAGS_APP} -v" 
 
+      LDFLAGS_FOR_TARGET="${LDFLAGS}"
+      LDFLAGS_FOR_BUILD="${LDFLAGS}"
+      BOOT_LDFLAGS="${LDFLAGS}"
+
+      if is_darwin
+      then
+        # From HomeBrew
+        BOOT_LDFLAGS+=" -Wl,-headerpad_max_install_names"
+      fi
+
       export CPPFLAGS
       export CPPFLAGS_FOR_TARGET
       export CFLAGS
       export CXXFLAGS
       export LDFLAGS
+
+      export LDFLAGS_FOR_TARGET
+      export LDFLAGS_FOR_BUILD
+      export BOOT_LDFLAGS
 
       env | sort
 
@@ -874,41 +888,56 @@ function build_native_gcc()
 
           config_options+=("--with-pkgversion=${XBB_GCC_BRANDING}")
 
-          config_options+=("--with-default-libstdcxx-abi=new")
           config_options+=("--with-dwarf2")
+          config_options+=("--with-stabs")
           config_options+=("--with-libiconv")
-
-          config_options+=("--with-isl")
           # config_options+=("--with-isl=${INSTALL_FOLDER_PATH}")
+          config_options+=("--with-isl")
+          config_options+=("--with-gnu-as")
+          config_options+=("--with-gnu-ld")
+          config_options+=("--with-diagnostics-color=auto")
 
-          config_options+=("--with-system-zlib")
+          # config_options+=("--with-system-zlib")
+          config_options+=("--without-system-zlib")
           config_options+=("--without-cuda-driver")
 
+          config_options+=("--enable-languages=c,c++,fortran,objc,obj-c++,lto")
+          config_options+=("--enable-objc-gc=auto")
+
           config_options+=("--enable-checking=release")
-          config_options+=("--enable-static")
 
-          config_options+=("--enable-threads=posix")
-          config_options+=("--enable-__cxa_atexit")
-
-          config_options+=("--enable-gnu-unique-object")
-          config_options+=("--enable-linker-build-id")
           config_options+=("--enable-lto")
           config_options+=("--enable-plugin")
-          config_options+=("--enable-gnu-indirect-function")
 
+          config_options+=("--enable-static")
+
+          config_options+=("--enable-__cxa_atexit")
+
+          config_options+=("--enable-threads=posix")
+
+          config_options+=("--enable-gnu-unique-object")
+          config_options+=("--enable-gnu-indirect-function")
+          config_options+=("--enable-linker-build-id")
+
+          config_options+=("--enable-fully-dynamic-string")
+          config_options+=("--enable-cloog-backend=isl")
+          config_options+=("--enable-libgomp")
+
+          config_options+=("--enable-libssp")
           config_options+=("--enable-default-pie")
           config_options+=("--enable-default-ssp")
-          config_options+=("--enable-libssp")
-          config_options+=("--enable-libquadmath-support")
-          config_options+=("--enable-libquadmath")
-          config_options+=("--enable-graphite")
           config_options+=("--enable-libatomic")
-          config_options+=("--enable-libgomp")
-          config_options+=("--enable-cloog-backend=isl")
-          config_options+=("--enable-fully-dynamic-string")
-          config_options+=("--enable-libstdcxx-time=yes")
+          config_options+=("--enable-graphite")
+          config_options+=("--enable-libquadmath")
+          config_options+=("--enable-libquadmath-support")
 
-          if false
+          config_options+=("--enable-libstdcxx")
+          config_options+=("--enable-libstdcxx-time=yes")
+          config_options+=("--enable-libstdcxx-visibility")
+          config_options+=("--enable-libstdcxx-threads")
+          config_options+=("--with-default-libstdcxx-abi=new")
+
+          if true
           then
             # Fails in some circumstances.
             config_options+=("--enable-bootstrap")
@@ -916,10 +945,14 @@ function build_native_gcc()
             config_options+=("--disable-bootstrap")
           fi
 
-          config_options+=("--disable-libunwind-exceptions")
-          config_options+=("--disable-libstdcxx-pch")
-          config_options+=("--disable-libstdcxx-debug")
+          config_options+=("--disable-nls")
           config_options+=("--disable-multilib")
+          config_options+=("--disable-libstdcxx-debug")
+          config_options+=("--disable-libstdcxx-pch")
+
+          config_options+=("--disable-install-libiberty")
+
+#         config_options+=("--disable-libunwind-exceptions")
           config_options+=("--disable-werror")
 
           if is_darwin
@@ -929,15 +962,15 @@ function build_native_gcc()
             # --with-linker-hash-style=gnu 
             # --enable-libmpx 
             # --enable-clocale=gnu
-            echo "${MACOS_SDK_PATH}"
-        
-            config_options+=("--with-native-system-header-dir=/usr/include")
-            config_options+=("--with-sysroot=${MACOS_SDK_PATH}")
-            
-            config_options+=("--enable-languages=c,c++,fortran,objc,obj-c++")
 
             config_options+=("--enable-shared")
             config_options+=("--enable-shared-libgcc")
+
+            # From HomeBrew, but not present on 11.x
+            # config_options+=("--with-native-system-header-dir=/usr/include")
+
+            echo "${MACOS_SDK_PATH}"
+            config_options+=("--with-sysroot=${MACOS_SDK_PATH}")
 
           elif is_linux
           then
@@ -953,15 +986,30 @@ function build_native_gcc()
             # --enable-libstdcxx-time=yes (liks librt)
             # --with-default-libstdcxx-abi=new (default)
 
-            config_options+=("--with-linker-hash-style=gnu")
-            config_options+=("--with-gnu-as")
-            config_options+=("--with-gnu-ld")
-            
-            config_options+=("--enable-languages=c,c++,fortran,objc,obj-c++")
+            if true
+            then
+              # Shared libraries remain problematic when refered from generated
+              # programs, and require setting the executable rpath to work.
+              config_options+=("--enable-shared")
+              config_options+=("--enable-shared-libgcc")
+            else
+              config_options+=("--disable-shared")
+              config_options+=("--disable-shared-libgcc")
+            fi
 
-            config_options+=("--enable-clocale=gnu")
-
-            if [ "${HOST_MACHINE}" == "aarch64" ]
+            if [ "${HOST_MACHINE}" == "x86_64" ]
+            then
+              config_options+=("--with-arch=x86-64")
+              config_options+=("--with-tune=generic")
+              # Support for Intel Memory Protection Extensions (MPX).
+              config_options+=("--enable-libmpx")
+            elif [ "${HOST_MACHINE}" == "i386" -o "${HOST_MACHINE}" == "i686" ]
+            then
+              config_options+=("--with-arch=i686")
+              config_options+=("--with-arch-32=i686")
+              config_options+=("--with-tune=generic")
+              config_options+=("--enable-libmpx")
+            elif [ "${HOST_MACHINE}" == "aarch64" ]
             then
               config_options+=("--with-arch=armv8-a")
               config_options+=("--enable-fix-cortex-a53-835769")
@@ -976,18 +1024,25 @@ function build_native_gcc()
               config_options+=("--with-arch=armv7-a")
               config_options+=("--with-float=hard")
               config_options+=("--with-fpu=vfpv3-d16")
+            else
+              echo "Oops! Unsupported HOST_MACHINE ${HOST_MACHINE}."
+              exit 1
             fi
 
-            config_options+=("--disable-rpath")
-            config_options+=("--disable-new-dtags")
+            # Otherwise linking to libstdc++ sometimes fail.
+            config_options+=("--with-pic")
+
+            config_options+=("--with-linker-hash-style=gnu")
+            config_options+=("--enable-clocale=gnu")
 
             if false # [ "${XBB_LAYER}" != "xbb-bootstrap" ]
             then
               config_options+=("--with-sysroot=${INSTALL_FOLDER_PATH}")
             fi
 
-            config_options+=("--disable-shared")
-            config_options+=("--disable-shared-libgcc")
+            # Specific to XBB, not used in xPack.
+            config_options+=("--disable-rpath")
+            config_options+=("--disable-new-dtags")
 
           else
             echo "Unsupported gcc configuration."
