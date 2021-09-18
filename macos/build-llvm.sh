@@ -137,7 +137,7 @@ then
 fi
 
   run_verbose cmake \
-    ${config_options[@]} \
+    "${config_options[@]}" \
     "${source_folder_path}/llvm"
 
 fi

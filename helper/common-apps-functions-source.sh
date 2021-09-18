@@ -262,7 +262,7 @@ function build_glibc()
           config_options+=("--enable-stack-protector=no")
 
           run_verbose bash ${DEBUG} "${SOURCES_FOLDER_PATH}/${glibc_src_folder_name}/configure" \
-            ${config_options[@]}
+            "${config_options[@]}"
             
           cp "config.log" "${LOGS_FOLDER_PATH}/${glibc_folder_name}/config-log.txt"
         ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${glibc_folder_name}/configure-output.txt"
@@ -498,7 +498,7 @@ function build_native_binutils()
           fi
 
           run_verbose bash ${DEBUG} "${SOURCES_FOLDER_PATH}/${native_binutils_src_folder_name}/configure" \
-            ${config_options[@]}
+            "${config_options[@]}"
 
           run_verbose make configure-host
 
@@ -703,7 +703,7 @@ function build_native_gdb()
           config_options+=("--with-python=no")
 
           run_verbose bash ${DEBUG} "${SOURCES_FOLDER_PATH}/${native_gdb_src_folder_name}/configure" \
-            ${config_options[@]}
+            "${config_options[@]}"
 
           run_verbose make configure-host
 
@@ -1052,7 +1052,7 @@ function build_native_gcc()
           fi
 
           run_verbose bash "${SOURCES_FOLDER_PATH}/${native_gcc_src_folder_name}/configure" \
-            ${config_options[@]}
+            "${config_options[@]}"
 
           cp "config.log" "${LOGS_FOLDER_PATH}/${native_gcc_folder_name}/config-log.txt"
         ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${native_gcc_folder_name}/configure-output.txt"
@@ -2233,7 +2233,7 @@ function build_openssl()
               enable-tls1_3 \
               enable-tls1_2 \
               enable-tls1_1 \
-              ${config_options[@]} \
+              "${config_options[@]}" \
               "-Wa,--noexecstack ${CPPFLAGS} ${CFLAGS} ${LDFLAGS}"
 
             set -u
@@ -2876,7 +2876,7 @@ function build_coreutils()
             \
             --with-openssl \
             --disable-rpath \
-            ${config_options[@]}
+            "${config_options[@]}"
 
           set -u
 
@@ -5670,7 +5670,7 @@ function build_patchelf()
           fi
 
           run_verbose bash ${DEBUG} "${SOURCES_FOLDER_PATH}/${patchelf_src_folder_name}/configure" \
-            ${config_options[@]}
+            "${config_options[@]}"
 
           cp "config.log" "${LOGS_FOLDER_PATH}/${patchelf_folder_name}/config-log.txt"
         ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${patchelf_folder_name}/configure-output.txt"
@@ -6177,7 +6177,7 @@ function build_python2()
           fi
 
           run_verbose bash ${DEBUG} "${SOURCES_FOLDER_PATH}/${python2_src_folder_name}/configure" \
-            ${config_options[@]}
+            "${config_options[@]}"
 
           cp "config.log" "${LOGS_FOLDER_PATH}/${python2_folder_name}/config-log.txt"
         ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${python2_folder_name}/configure-output.txt"
@@ -6357,7 +6357,7 @@ function build_python3()
           fi
 
           run_verbose bash ${DEBUG} "${SOURCES_FOLDER_PATH}/${python3_src_folder_name}/configure" \
-            ${config_options[@]}
+            "${config_options[@]}"
              
           cp "config.log" "${LOGS_FOLDER_PATH}/${python3_folder_name}/config-log.txt"
         ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${python3_folder_name}/configure-output.txt"
@@ -8589,7 +8589,7 @@ function build_bash()
           config_options+=("--disable-rpath")
 
           run_verbose bash ${DEBUG} "${SOURCES_FOLDER_PATH}/${bash_src_folder_name}/configure" \
-            ${config_options[@]}
+            "${config_options[@]}"
 
           cp "config.log" "${LOGS_FOLDER_PATH}/${bash_folder_name}/config-log.txt"
         ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${bash_folder_name}/configure-output.txt"
@@ -8906,7 +8906,7 @@ function build_native_llvm()
           # config_options+=("-DPython3_EXECUTABLE=python3")
 
           run_timed_verbose cmake \
-            ${config_options[@]} \
+            "${config_options[@]}" \
             "${SOURCES_FOLDER_PATH}/${llvm_src_folder_name}/llvm"
 
         ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${llvm_folder_name}/cmake-output.txt"

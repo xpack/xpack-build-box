@@ -329,7 +329,7 @@ function build_mpfr()
           fi
 
           run_verbose bash ${DEBUG} "${SOURCES_FOLDER_PATH}/${mpfr_src_folder_name}/configure" \
-            ${config_options[@]}
+            "${config_options[@]}"
 
           if is_linux
           then
@@ -2169,7 +2169,7 @@ function build_libgcrypt()
           config_options+=("--disable-amd64-as-feature-detection")
 
           run_verbose bash ${DEBUG} "${SOURCES_FOLDER_PATH}/${libgcrypt_src_folder_name}/configure" \
-            ${config_options[@]}
+            "${config_options[@]}"
 
           if is_linux
           then
@@ -3118,7 +3118,7 @@ function build_ncurses()
           fi
 
           run_verbose bash ${DEBUG} "${SOURCES_FOLDER_PATH}/${ncurses_src_folder_name}/configure" \
-            ${config_options[@]}
+            "${config_options[@]}"
 
           cp "config.log" "${LOGS_FOLDER_PATH}/${ncurses_folder_name}/config-log.txt"
         ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${ncurses_folder_name}/configure-output.txt"
@@ -3235,7 +3235,7 @@ function build_readline()
           config_options+=("--prefix=${INSTALL_FOLDER_PATH}")
             
           run_verbose bash ${DEBUG} "${SOURCES_FOLDER_PATH}/${readline_src_folder_name}/configure" \
-            ${config_options[@]}
+            "${config_options[@]}"
 
           run_verbose find . \
             -name Makefile \
