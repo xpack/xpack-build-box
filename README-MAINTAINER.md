@@ -37,3 +37,63 @@ Fixed
 - guille (1 test disabled)
 - autogen (1 test disabled)
 - add bash
+
+## Future work
+
+XBB v4.x should be more modular, using binary xPacks.
+
+### GNU/Linux
+
+There will be 3 Docker images (no i386) with Ubuntu 16.04 LTS,
+basic development tools and node/npm.
+
+The toolchains will be installed as binary xPacks.
+
+Planned xPacks:
+
+- patchelf
+- coreutils
+- autoconf
+- automake
+- pkg_config
+- python3
+- mingw-gcc
+- wine
+
+Some may not be available for all platforms.
+
+Possible future xPacks:
+
+- curl
+- wget
+- tar
+- m4
+- gawk
+- sed
+- patch
+- diffutils
+- bison
+- make
+- bash
+- texinfo
+- dos2unix
+- p7zip
+- rhash
+- re2c
+- sphinx
+- gnupg
+- makedepend
+- git
+
+The strategy will be to try use the Ubuntu 16 versions first, and,
+when not possible, add the xPacks for them.
+
+### macOS
+
+For macOS all needed toos not yet available as xPacks should be
+compiled in a static XBB folder, as of now. For consistency,
+the versions will replicate those available in Ubuntu 16.
+
+macOS specific tools:
+
+- realpath
