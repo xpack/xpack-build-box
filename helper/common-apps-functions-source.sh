@@ -105,31 +105,57 @@ function build_native_binutils()
           # Arch also uses
           # --with-lib-path=/usr/lib:/usr/local/lib
 
+          config_options+=("--without-system-zlib")
+          # config_options+=("--with-system-zlib")
+
           config_options+=("--with-pic")
-          config_options+=("--with-system-zlib")
-          
-          config_options+=("--enable-threads")
-          config_options+=("--enable-deterministic-archives")
-          config_options+=("--enable-ld=default")
+
+          # error: debuginfod is missing or unusable
+          config_options+=("--without-debuginfod")
+
+          if is_linux
+          then
+            config_options+=("--enable-ld")
+            config_options+=("--enable-ld=default")
+
+            if true
+            then
+              config_options+=("--enable-shared")
+              config_options+=("--enable-shared-libgcc")
+            else
+              config_options+=("--disable-shared")
+              config_options+=("--disable-shared-libgcc")
+            fi
+
+            # Prevent ld to set DT_RUNPATH.
+            config_options+=("--disable-new-dtags")
+          elif is_darwin
+          then
+            echo
+            echo "binutils not supported on macOS"
+            exit 1
+          else
+            echo "Oops! Unsupported ${TARGET_PLATFORM}."
+            exit 1
+          fi
+
+          config_options+=("--enable-static")
           config_options+=("--enable-gold")
           config_options+=("--enable-lto")
           config_options+=("--enable-libssp")
-          config_options+=("--enable-plugins")
           config_options+=("--enable-relro")
-          config_options+=("--enable-static")
-          config_options+=("--enable-shared")
-          config_options+=("--enable-shared-libgcc")
+          config_options+=("--enable-threads")
           config_options+=("--enable-interwork")
+          config_options+=("--enable-plugins")
           config_options+=("--enable-build-warnings=no")
-          
-          config_options+=("--disable-gdb")
+          config_options+=("--enable-deterministic-archives")
+
+          config_options+=("--disable-nls")
+
+          config_options+=("--disable-multilib")
           config_options+=("--disable-werror")
           config_options+=("--disable-sim")
-          # Prevent ld to set DT_RUNPATH.
-          if is_linux
-          then
-            config_options+=("--disable-new-dtags")
-          fi
+          config_options+=("--disable-gdb")
 
           run_verbose bash ${DEBUG} "${SOURCES_FOLDER_PATH}/${native_binutils_src_folder_name}/configure" \
             "${config_options[@]}"
@@ -513,9 +539,9 @@ function build_native_gcc()
 
           config_options=()
 
-          config_options+=("--prefix=${INSTALL_FOLDER_PATH}/usr")
+          config_options+=("--prefix=${INSTALL_FOLDER_PATH}")
           # Do not use the same folder as glibc.
-          config_options+=("--libdir=${INSTALL_FOLDER_PATH}/usr/${BUILD}/lib")
+          config_options+=("--libdir=${INSTALL_FOLDER_PATH}/${BUILD}/lib")
 
           config_options+=("--program-suffix=${XBB_GCC_SUFFIX}")
 
@@ -533,8 +559,9 @@ function build_native_gcc()
           config_options+=("--with-gnu-ld")
           config_options+=("--with-diagnostics-color=auto")
 
-          # config_options+=("--with-system-zlib")
           config_options+=("--without-system-zlib")
+          # config_options+=("--with-system-zlib")
+          
           config_options+=("--without-cuda-driver")
 
           config_options+=("--enable-languages=c,c++,fortran,objc,obj-c++,lto")
@@ -703,7 +730,7 @@ function build_native_gcc()
         run_verbose make install
 
         (
-          cd "${INSTALL_FOLDER_PATH}/usr/bin"
+          cd "${INSTALL_FOLDER_PATH}/bin"
 
           # Add links with the non-suffixed names, to
           # prevent using the system old versions.
@@ -778,70 +805,70 @@ function test_native_gcc()
     echo
     echo "Testing if gcc binaries start properly..."
 
-    run_app "${INSTALL_FOLDER_PATH}/usr/bin/gcc${XBB_GCC_SUFFIX}" --version
-    run_app "${INSTALL_FOLDER_PATH}/usr/bin/g++${XBB_GCC_SUFFIX}" --version
+    run_app "${INSTALL_FOLDER_PATH}/bin/gcc${XBB_GCC_SUFFIX}" --version
+    run_app "${INSTALL_FOLDER_PATH}/bin/g++${XBB_GCC_SUFFIX}" --version
 
     if is_linux
     then
       # On Darwin: Cannot find plugin 'liblto_plugin.so'
       # TODO: check why
-      run_app "${INSTALL_FOLDER_PATH}/usr/bin/gcc-ar${XBB_GCC_SUFFIX}" --version
-      run_app "${INSTALL_FOLDER_PATH}/usr/bin/gcc-nm${XBB_GCC_SUFFIX}" --version
-      run_app "${INSTALL_FOLDER_PATH}/usr/bin/gcc-ranlib${XBB_GCC_SUFFIX}" --version
+      run_app "${INSTALL_FOLDER_PATH}/bin/gcc-ar${XBB_GCC_SUFFIX}" --version
+      run_app "${INSTALL_FOLDER_PATH}/bin/gcc-nm${XBB_GCC_SUFFIX}" --version
+      run_app "${INSTALL_FOLDER_PATH}/bin/gcc-ranlib${XBB_GCC_SUFFIX}" --version
     fi
-    run_app "${INSTALL_FOLDER_PATH}/usr/bin/gcov${XBB_GCC_SUFFIX}" --version
-    run_app "${INSTALL_FOLDER_PATH}/usr/bin/gcov-dump${XBB_GCC_SUFFIX}" --version
-    run_app "${INSTALL_FOLDER_PATH}/usr/bin/gcov-tool${XBB_GCC_SUFFIX}" --version
+    run_app "${INSTALL_FOLDER_PATH}/bin/gcov${XBB_GCC_SUFFIX}" --version
+    run_app "${INSTALL_FOLDER_PATH}/bin/gcov-dump${XBB_GCC_SUFFIX}" --version
+    run_app "${INSTALL_FOLDER_PATH}/bin/gcov-tool${XBB_GCC_SUFFIX}" --version
 
-    if [ -f "${INSTALL_FOLDER_PATH}/usr/bin/gfortran${XBB_GCC_SUFFIX}" ]
+    if [ -f "${INSTALL_FOLDER_PATH}/bin/gfortran${XBB_GCC_SUFFIX}" ]
     then
-      run_app "${INSTALL_FOLDER_PATH}/usr/bin/gfortran${XBB_GCC_SUFFIX}" --version
+      run_app "${INSTALL_FOLDER_PATH}/bin/gfortran${XBB_GCC_SUFFIX}" --version
     fi
 
     echo
     echo "Checking the gcc binaries shared libraries..."
 
-    show_libs "${INSTALL_FOLDER_PATH}/usr/bin/gcc${XBB_GCC_SUFFIX}"
-    show_libs "${INSTALL_FOLDER_PATH}/usr/bin/g++${XBB_GCC_SUFFIX}"
+    show_libs "${INSTALL_FOLDER_PATH}/bin/gcc${XBB_GCC_SUFFIX}"
+    show_libs "${INSTALL_FOLDER_PATH}/bin/g++${XBB_GCC_SUFFIX}"
 
-    show_libs "$(${INSTALL_FOLDER_PATH}/usr/bin/gcc${XBB_GCC_SUFFIX} --print-prog-name=cc1)"
-    show_libs "$(${INSTALL_FOLDER_PATH}/usr/bin/gcc${XBB_GCC_SUFFIX} --print-prog-name=cc1plus)"
-    show_libs "$(${INSTALL_FOLDER_PATH}/usr/bin/gcc${XBB_GCC_SUFFIX} --print-prog-name=collect2)"
-    show_libs "$(${INSTALL_FOLDER_PATH}/usr/bin/gcc${XBB_GCC_SUFFIX} --print-prog-name=lto1)"
-    show_libs "$(${INSTALL_FOLDER_PATH}/usr/bin/gcc${XBB_GCC_SUFFIX} --print-prog-name=lto-wrapper)"
+    show_libs "$(${INSTALL_FOLDER_PATH}/bin/gcc${XBB_GCC_SUFFIX} --print-prog-name=cc1)"
+    show_libs "$(${INSTALL_FOLDER_PATH}/bin/gcc${XBB_GCC_SUFFIX} --print-prog-name=cc1plus)"
+    show_libs "$(${INSTALL_FOLDER_PATH}/bin/gcc${XBB_GCC_SUFFIX} --print-prog-name=collect2)"
+    show_libs "$(${INSTALL_FOLDER_PATH}/bin/gcc${XBB_GCC_SUFFIX} --print-prog-name=lto1)"
+    show_libs "$(${INSTALL_FOLDER_PATH}/bin/gcc${XBB_GCC_SUFFIX} --print-prog-name=lto-wrapper)"
 
     echo
     echo "Showing configurations..."
 
-    run_app "${INSTALL_FOLDER_PATH}/usr/bin/gcc${XBB_GCC_SUFFIX}" --help
-    run_app "${INSTALL_FOLDER_PATH}/usr/bin/gcc${XBB_GCC_SUFFIX}" -v
-    run_app "${INSTALL_FOLDER_PATH}/usr/bin/gcc${XBB_GCC_SUFFIX}" -dumpversion
-    run_app "${INSTALL_FOLDER_PATH}/usr/bin/gcc${XBB_GCC_SUFFIX}" -dumpmachine
+    run_app "${INSTALL_FOLDER_PATH}/bin/gcc${XBB_GCC_SUFFIX}" --help
+    run_app "${INSTALL_FOLDER_PATH}/bin/gcc${XBB_GCC_SUFFIX}" -v
+    run_app "${INSTALL_FOLDER_PATH}/bin/gcc${XBB_GCC_SUFFIX}" -dumpversion
+    run_app "${INSTALL_FOLDER_PATH}/bin/gcc${XBB_GCC_SUFFIX}" -dumpmachine
 
-    run_app "${INSTALL_FOLDER_PATH}/usr/bin/gcc${XBB_GCC_SUFFIX}" -print-search-dirs
-    run_app "${INSTALL_FOLDER_PATH}/usr/bin/gcc${XBB_GCC_SUFFIX}" -print-libgcc-file-name
-    run_app "${INSTALL_FOLDER_PATH}/usr/bin/gcc${XBB_GCC_SUFFIX}" -print-multi-directory
-    run_app "${INSTALL_FOLDER_PATH}/usr/bin/gcc${XBB_GCC_SUFFIX}" -print-multi-lib
-    run_app "${INSTALL_FOLDER_PATH}/usr/bin/gcc${XBB_GCC_SUFFIX}" -print-multi-os-directory
-    run_app "${INSTALL_FOLDER_PATH}/usr/bin/gcc${XBB_GCC_SUFFIX}" -print-sysroot
-    # run_app "${INSTALL_FOLDER_PATH}/usr/bin/gcc${XBB_GCC_SUFFIX}" -print-sysroot-headers-suffix
-    run_app "${INSTALL_FOLDER_PATH}/usr/bin/gcc${XBB_GCC_SUFFIX}" -print-file-name=libgcc_s.${SHLIB_EXT}
-    run_app "${INSTALL_FOLDER_PATH}/usr/bin/gcc${XBB_GCC_SUFFIX}" -print-prog-name=cc1
+    run_app "${INSTALL_FOLDER_PATH}/bin/gcc${XBB_GCC_SUFFIX}" -print-search-dirs
+    run_app "${INSTALL_FOLDER_PATH}/bin/gcc${XBB_GCC_SUFFIX}" -print-libgcc-file-name
+    run_app "${INSTALL_FOLDER_PATH}/bin/gcc${XBB_GCC_SUFFIX}" -print-multi-directory
+    run_app "${INSTALL_FOLDER_PATH}/bin/gcc${XBB_GCC_SUFFIX}" -print-multi-lib
+    run_app "${INSTALL_FOLDER_PATH}/bin/gcc${XBB_GCC_SUFFIX}" -print-multi-os-directory
+    run_app "${INSTALL_FOLDER_PATH}/bin/gcc${XBB_GCC_SUFFIX}" -print-sysroot
+    # run_app "${INSTALL_FOLDER_PATH}/bin/gcc${XBB_GCC_SUFFIX}" -print-sysroot-headers-suffix
+    run_app "${INSTALL_FOLDER_PATH}/bin/gcc${XBB_GCC_SUFFIX}" -print-file-name=libgcc_s.${SHLIB_EXT}
+    run_app "${INSTALL_FOLDER_PATH}/bin/gcc${XBB_GCC_SUFFIX}" -print-prog-name=cc1
 
-    run_app "${INSTALL_FOLDER_PATH}/usr/bin/g++${XBB_GCC_SUFFIX}" --help
-    run_app "${INSTALL_FOLDER_PATH}/usr/bin/g++${XBB_GCC_SUFFIX}" -v
-    run_app "${INSTALL_FOLDER_PATH}/usr/bin/g++${XBB_GCC_SUFFIX}" -dumpversion
-    run_app "${INSTALL_FOLDER_PATH}/usr/bin/g++${XBB_GCC_SUFFIX}" -dumpmachine
+    run_app "${INSTALL_FOLDER_PATH}/bin/g++${XBB_GCC_SUFFIX}" --help
+    run_app "${INSTALL_FOLDER_PATH}/bin/g++${XBB_GCC_SUFFIX}" -v
+    run_app "${INSTALL_FOLDER_PATH}/bin/g++${XBB_GCC_SUFFIX}" -dumpversion
+    run_app "${INSTALL_FOLDER_PATH}/bin/g++${XBB_GCC_SUFFIX}" -dumpmachine
 
-    run_app "${INSTALL_FOLDER_PATH}/usr/bin/g++${XBB_GCC_SUFFIX}" -print-search-dirs
-    run_app "${INSTALL_FOLDER_PATH}/usr/bin/g++${XBB_GCC_SUFFIX}" -print-libgcc-file-name
-    run_app "${INSTALL_FOLDER_PATH}/usr/bin/g++${XBB_GCC_SUFFIX}" -print-multi-directory
-    run_app "${INSTALL_FOLDER_PATH}/usr/bin/g++${XBB_GCC_SUFFIX}" -print-multi-lib
-    run_app "${INSTALL_FOLDER_PATH}/usr/bin/g++${XBB_GCC_SUFFIX}" -print-multi-os-directory
-    run_app "${INSTALL_FOLDER_PATH}/usr/bin/g++${XBB_GCC_SUFFIX}" -print-sysroot
-    # run_app "${INSTALL_FOLDER_PATH}/usr/bin/g++${XBB_GCC_SUFFIX}" -print-sysroot-headers-suffix
-    run_app "${INSTALL_FOLDER_PATH}/usr/bin/g++${XBB_GCC_SUFFIX}" -print-file-name=libstdc++.${SHLIB_EXT}
-    run_app "${INSTALL_FOLDER_PATH}/usr/bin/g++${XBB_GCC_SUFFIX}" -print-prog-name=cc1plus
+    run_app "${INSTALL_FOLDER_PATH}/bin/g++${XBB_GCC_SUFFIX}" -print-search-dirs
+    run_app "${INSTALL_FOLDER_PATH}/bin/g++${XBB_GCC_SUFFIX}" -print-libgcc-file-name
+    run_app "${INSTALL_FOLDER_PATH}/bin/g++${XBB_GCC_SUFFIX}" -print-multi-directory
+    run_app "${INSTALL_FOLDER_PATH}/bin/g++${XBB_GCC_SUFFIX}" -print-multi-lib
+    run_app "${INSTALL_FOLDER_PATH}/bin/g++${XBB_GCC_SUFFIX}" -print-multi-os-directory
+    run_app "${INSTALL_FOLDER_PATH}/bin/g++${XBB_GCC_SUFFIX}" -print-sysroot
+    # run_app "${INSTALL_FOLDER_PATH}/bin/g++${XBB_GCC_SUFFIX}" -print-sysroot-headers-suffix
+    run_app "${INSTALL_FOLDER_PATH}/bin/g++${XBB_GCC_SUFFIX}" -print-file-name=libstdc++.${SHLIB_EXT}
+    run_app "${INSTALL_FOLDER_PATH}/bin/g++${XBB_GCC_SUFFIX}" -print-prog-name=cc1plus
 
     echo
     echo "Testing if gcc compiles simple Hello programs..."
@@ -870,7 +897,7 @@ __EOF__
     export LD_RUN_PATH="$(get-gcc-rpath)"
     echo "LD_RUN_PATH=${LD_RUN_PATH}"
 
-    run_app "${INSTALL_FOLDER_PATH}/usr/bin/g++${XBB_GCC_SUFFIX}" hello.cpp -o hello1 -v 
+    run_app "${INSTALL_FOLDER_PATH}/bin/g++${XBB_GCC_SUFFIX}" hello.cpp -o hello1 -v 
 
     show_libs hello1
 
@@ -884,7 +911,7 @@ __EOF__
       exit 1
     fi
 
-    run_app "${INSTALL_FOLDER_PATH}/usr/bin/g++${XBB_GCC_SUFFIX}" hello.cpp -o hello2 -v -static-libgcc -static-libstdc++
+    run_app "${INSTALL_FOLDER_PATH}/bin/g++${XBB_GCC_SUFFIX}" hello.cpp -o hello2 -v -static-libgcc -static-libstdc++
 
     show_libs hello2
 
@@ -930,7 +957,7 @@ main(int argc, char* argv[])
 }
 __EOF__
 
-    run_app "${INSTALL_FOLDER_PATH}/usr/bin/g++${XBB_GCC_SUFFIX}" except.cpp -o except -v 
+    run_app "${INSTALL_FOLDER_PATH}/bin/g++${XBB_GCC_SUFFIX}" except.cpp -o except -v 
 
     show_libs except
 
