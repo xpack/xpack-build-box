@@ -155,27 +155,7 @@ function detect_host()
   MACOS_SDK_PATH=""
   if [ "${HOST_UNAME}" == "Darwin" ]
   then
-    local print_path="$(xcode-select -print-path)"
-    if [ -d "${print_path}/SDKs/MacOSX.sdk" ]
-    then
-      # Without Xcode, use the SDK that comes with the CLT.
-      MACOS_SDK_PATH="${print_path}/SDKs/MacOSX.sdk"
-    elif [ -d "${print_path}/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk" ]
-    then
-      # With Xcode, chose the SDK from the macOS platform.
-      MACOS_SDK_PATH="${print_path}/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk"
-    elif [ -d "${print_path}/Platforms/MacOSX.platform/Developer/SDKs/MacOSX${MACOSX_DEPLOYMENT_TARGET}.sdk" ]
-    then
-      # On macOS 10.10, with Xcode, chose the versioned SDK from the macOS platform.
-      MACOS_SDK_PATH="${print_path}/Platforms/MacOSX.platform/Developer/SDKs/MacOSX${MACOSX_DEPLOYMENT_TARGET}.sdk"
-    elif [ -d "/usr/include" ]
-    then
-      # Without Xcode, on 10.10 there is no SDK, use the /.
-      MACOS_SDK_PATH="/"
-    else
-      echo "Cannot find SDK in ${print_path}."
-      exit 1
-    fi
+    MACOS_SDK_PATH="/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk"
   fi
   export MACOS_SDK_PATH
 
