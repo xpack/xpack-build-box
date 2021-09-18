@@ -818,6 +818,7 @@ function build_native_gcc()
 
   local native_gcc_folder_name="native-gcc${step}-${native_gcc_version}"
 
+  local native_gcc_patch_file_path="${helper_folder_path}/patches/gcc-${native_gcc_version}.patch.diff"
   local native_gcc_stamp_file_path="${STAMPS_FOLDER_PATH}/stamp-${native_gcc_folder_name}-installed"
   if [ ! -f "${native_gcc_stamp_file_path}" -o ! -d "${BUILD_FOLDER_PATH}/${native_gcc_folder_name}" ]
   then
@@ -825,7 +826,8 @@ function build_native_gcc()
     cd "${SOURCES_FOLDER_PATH}"
 
     download_and_extract "${native_gcc_url}" "${native_gcc_archive}" \
-      "${native_gcc_src_folder_name}" 
+      "${native_gcc_src_folder_name}" \
+      "${native_gcc_patch_file_path}"
 
     mkdir -pv "${LOGS_FOLDER_PATH}/${native_gcc_folder_name}"
 
