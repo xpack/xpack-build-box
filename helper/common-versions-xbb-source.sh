@@ -467,8 +467,9 @@ function build_versioned_components()
     if is_linux && is_intel
     then
       # depends=('libpng')
-      # "6.17" fails on amd64
-      build_wine "5.22" # !"6.17" # "5.1" # "5.0" # "4.3"
+      # "6.17" requires a patch on Ubuntu 12 to disable getauxval()
+      # "5.22" fails meson tests in 32-bit.
+      build_wine "6.17" # "5.22" # "5.1" # "5.0" # "4.3"
 
       # configure: OpenCL 64-bit development files not found, OpenCL won't be supported.
       # configure: pcap 64-bit development files not found, wpcap won't be supported.
