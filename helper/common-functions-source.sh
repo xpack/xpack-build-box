@@ -1013,22 +1013,34 @@ function extract()
         chmod -R +w "${folder_name}"
       fi
 
-      if [ $# -gt 2 ]
+      if [ $# -ge 3 ]
       then
-        if [ ! -z "$3" ]
-        then
-          local patch_path="$3"
-          if [ -f "${patch_path}" ]
-          then
-            echo "Patching..."
-            cd "${folder_name}"
-            patch -p0 < "${patch_path}"
-          fi
-        fi
+        cd "${folder_name}"
+        do_patch "$3"
       fi
     )
   else
     echo "Folder \"${pwd}/${folder_name}\" already present."
+  fi
+}
+
+function do_patch()
+{
+  if [ ! -z "$1" ]
+  then
+    local patch_path="$1"
+    if [ -f "${patch_path}" ]
+    then
+      echo "Applying \"${patch_path}\"..."
+      if [[ ${patch_path} == *.patch.diff ]]
+      then
+        # Sourcetree creates patch.diff files, which require -p1.
+        patch -p1 < "${patch_path}"
+      else
+        # Manually created patches.
+        patch -p0 < "${patch_path}"
+      fi
+    fi
   fi
 }
 
