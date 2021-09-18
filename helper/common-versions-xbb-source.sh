@@ -433,8 +433,40 @@ function build_versioned_components()
       then
         # depends=('zlib')
         build_mingw_binutils "${XBB_MINGW_BINUTILS_VERSION}"
+
         # depends=('zlib' 'libmpc' 'mingw-w64-crt' 'mingw-w64-binutils' 'mingw-w64-winpthreads' 'mingw-w64-headers')
-        build_mingw_all "${XBB_MINGW_VERSION}" "${XBB_MINGW_GCC_VERSION}" # "5.0.4" "7.4.0"
+        # build_mingw_all "${XBB_MINGW_VERSION}" "${XBB_MINGW_GCC_VERSION}" # "5.0.4" "7.4.0"
+
+        prepare_mingw_env "${XBB_MINGW_VERSION}"
+
+        download_mingw
+
+        # Deploy the headers, they are needed by the compiler.
+        build_mingw_headers
+
+        # Build only the compiler, without libraries.
+        build_mingw_gcc_first "${XBB_MINGW_GCC_VERSION}"
+
+        # Build some native tools.
+        # build_mingw_libmangle
+        # build_mingw_gendef
+        build_mingw_widl # Refers to mingw headers.
+
+        (
+          # xbb_activate_gcc_bootstrap_bins
+
+          (
+            # Fails if CC is defined to a native compiler.
+            prepare_gcc_env "${MINGW_TARGET}-"
+
+            build_mingw_crt
+            build_mingw_winpthreads
+          )
+
+          # With the run-time available, build the C/C++ libraries and the rest.
+          build_mingw_gcc_final
+        )
+
       fi
 
     elif is_darwin
