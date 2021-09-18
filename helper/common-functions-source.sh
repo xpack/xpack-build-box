@@ -57,6 +57,7 @@ function detect_host()
   HOST_UNAME="$(uname)"
   HOST_LC_UNAME=$(echo ${HOST_UNAME} | tr "[:upper:]" "[:lower:]")
 
+  # x86_64, i686, i386, aarch64, armv7l, armv8l
   HOST_MACHINE="$(uname -m)"
 
   HOST_DISTRO_NAME="?" # Linux distribution name (Ubuntu|CentOS|...)
