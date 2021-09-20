@@ -1471,6 +1471,7 @@ then
             --disable-dw2-exceptions \
             --disable-multilib \
             --disable-rpath \
+            ac_cv_header_sys_mman_h=no
 
 
 else
@@ -1899,6 +1900,12 @@ function build_mingw_gcc_final()
       export LDFLAGS
 
       env | sort
+
+      if [ -f "${MINGW_TARGET}/libgcc/auto-target.h" ]
+      then
+        run_verbose sed -i.bak -e 's|#define HAVE_SYS_MMAN_H 1|#define HAVE_SYS_MMAN_H 0|' \
+          "${MINGW_TARGET}/libgcc/auto-target.h"
+      fi
 
       # Build.
       run_verbose make -j ${JOBS}
