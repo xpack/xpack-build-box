@@ -6924,10 +6924,10 @@ function build_wine()
       if is_linux && is_intel && [ "${HOST_BITS}" == "64" ]
       then
         ldd_version="$(ldd --version | sed -n 1p | sed -e 's|^.* ||')"
-        if [ "${ldd_version}" ] == "2.15" ] # Ubuntu 12
+        if [ "${ldd_version}" == "2.15" ] # Ubuntu 12
         then
           run_verbose sed -i.bak \
-            -e 's|getauxval( AT_HWCAP2 ) \& 2|/* getauxval( AT_HWCAP2 ) \& 2 */ 0|' \
+            -e 's|if (getauxval( AT_HWCAP2 ) \& 2)|if (/* getauxval( AT_HWCAP2 ) \& 2 */ 0)|' \
             dlls/ntdll/unix/signal_x86_64.c
 
           run_verbose diff dlls/ntdll/unix/signal_x86_64.c.bak dlls/ntdll/unix/signal_x86_64.c || true
