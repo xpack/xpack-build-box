@@ -7626,7 +7626,7 @@ function build_nodejs()
     )
 
     (
-      test_nodefs
+      test_nodejs
     ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${nodejs_folder_name}/test-output.txt"
 
     hash -r
@@ -7637,10 +7637,10 @@ function build_nodejs()
     echo "Component nodejs already installed."
   fi
 
-  test_functions+=("test_nodefs")
+  test_functions+=("test_nodejs")
 }
 
-function test_nodefs()
+function test_nodejs()
 {
   (
     xbb_activate_installed_bin
