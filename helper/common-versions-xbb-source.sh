@@ -74,11 +74,12 @@ function build_versioned_components()
 
       # 8.x fails to compile the libstdc++ new file system classes.
       # must be the same as native, otherwise shared libraries will mess versions.
-      XBB_MINGW_VERSION="7.0.0" # !"9.0.0" # !"8.0.2"
+      XBB_MINGW_VERSION="9.0.0" # !"8.0.2"
 
       # 11.1.0 fails on Linux with
       # /libgcc/libgcov.h:49:10: fatal error: sys/mman.h: No such file or directory
-      XBB_MINGW_GCC_VERSION="9.4.0" # "${XBB_GCC_VERSION}" # "9.2.0" # "8.3.0" # "7.4.0"
+      # This can be fixed with a sed patch.
+      XBB_MINGW_GCC_VERSION="${XBB_GCC_VERSION}" # "9.2.0" # "8.3.0" # "7.4.0"
       XBB_MINGW_BINUTILS_VERSION="${XBB_BINUTILS_VERSION}" # "2.34" # "2.33.1"
     fi
 
