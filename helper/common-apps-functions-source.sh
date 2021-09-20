@@ -1037,9 +1037,34 @@ function build_mingw_binutils()
           # --build used conservatively
           run_verbose bash "${SOURCES_FOLDER_PATH}/${mingw_binutils_src_folder_name}/configure" --help
 
+if false
+then
+
+          run_verbose bash "${SOURCES_FOLDER_PATH}/${mingw_binutils_src_folder_name}/configure" \
+            --prefix="${INSTALL_FOLDER_PATH}/usr" \
+            \
+            --build="${BUILD}" \
+            --target="${MINGW_TARGET}" \
+            \
+            --with-sysroot="${INSTALL_FOLDER_PATH}" \
+            --with-pkgversion="${XBB_MINGW_BINUTILS_BRANDING}" \
+            \
+            --enable-static \
+            --enable-lto \
+            --enable-plugins \
+            --enable-deterministic-archives \
+            \
+            --disable-shared \
+            --disable-multilib \
+            --disable-nls \
+            --disable-werror \
+            --disable-new-dtags
+
+else
+
           config_options=()
 
-          config_options+=("--prefix=${INSTALL_FOLDER_PATH}")
+          config_options+=("--prefix=${INSTALL_FOLDER_PATH}/usr")
           config_options+=("--with-sysroot=${INSTALL_FOLDER_PATH}")
             
           config_options+=("--build=${BUILD}")
@@ -1092,8 +1117,12 @@ function build_mingw_binutils()
           config_options+=("--disable-sim")
           config_options+=("--disable-gdb")
 
+          config_options+=("--disable-new-dtags")
+
           run_verbose bash "${SOURCES_FOLDER_PATH}/${mingw_binutils_src_folder_name}/configure" \
             "${config_options[@]}"
+
+fi
 
           run_verbose make configure-host
 
@@ -1119,7 +1148,7 @@ function build_mingw_binutils()
         # For just in case, it has nasty consequences when picked 
         # in other builds.
         # TODO: check if needed
-        # rm -fv "${INSTALL_FOLDER_PATH}/lib/libiberty.a" "${INSTALL_FOLDER_PATH}/lib64/libiberty.a"
+        # rm -fv "${INSTALL_FOLDER_PATH}/usr/lib/libiberty.a" "${INSTALL_FOLDER_PATH}/usr/lib64/libiberty.a"
 
       ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${mingw_binutils_folder_name}/make-output.txt"
     )
@@ -1147,44 +1176,44 @@ function test_mingw_binutils()
     echo
     echo "Testing if mingw binutils binaries start properly..."
 
-    run_app "${INSTALL_FOLDER_PATH}/bin/${MINGW_TARGET}-ar" --version
-    run_app "${INSTALL_FOLDER_PATH}/bin/${MINGW_TARGET}-as" --version
-    run_app "${INSTALL_FOLDER_PATH}/bin/${MINGW_TARGET}-ld" --version
-    run_app "${INSTALL_FOLDER_PATH}/bin/${MINGW_TARGET}-nm" --version
-    run_app "${INSTALL_FOLDER_PATH}/bin/${MINGW_TARGET}-objcopy" --version
-    run_app "${INSTALL_FOLDER_PATH}/bin/${MINGW_TARGET}-objdump" --version
-    run_app "${INSTALL_FOLDER_PATH}/bin/${MINGW_TARGET}-ranlib" --version
-    run_app "${INSTALL_FOLDER_PATH}/bin/${MINGW_TARGET}-size" --version
-    run_app "${INSTALL_FOLDER_PATH}/bin/${MINGW_TARGET}-strings" --version
-    run_app "${INSTALL_FOLDER_PATH}/bin/${MINGW_TARGET}-strip" --version
+    run_app "${INSTALL_FOLDER_PATH}/usr/bin/${MINGW_TARGET}-ar" --version
+    run_app "${INSTALL_FOLDER_PATH}/usr/bin/${MINGW_TARGET}-as" --version
+    run_app "${INSTALL_FOLDER_PATH}/usr/bin/${MINGW_TARGET}-ld" --version
+    run_app "${INSTALL_FOLDER_PATH}/usr/bin/${MINGW_TARGET}-nm" --version
+    run_app "${INSTALL_FOLDER_PATH}/usr/bin/${MINGW_TARGET}-objcopy" --version
+    run_app "${INSTALL_FOLDER_PATH}/usr/bin/${MINGW_TARGET}-objdump" --version
+    run_app "${INSTALL_FOLDER_PATH}/usr/bin/${MINGW_TARGET}-ranlib" --version
+    run_app "${INSTALL_FOLDER_PATH}/usr/bin/${MINGW_TARGET}-size" --version
+    run_app "${INSTALL_FOLDER_PATH}/usr/bin/${MINGW_TARGET}-strings" --version
+    run_app "${INSTALL_FOLDER_PATH}/usr/bin/${MINGW_TARGET}-strip" --version
 
     echo
     echo "Testing if binutils binaries display help..."
 
-    run_app "${INSTALL_FOLDER_PATH}/bin/${MINGW_TARGET}-ar" --help
-    run_app "${INSTALL_FOLDER_PATH}/bin/${MINGW_TARGET}-as" --help
-    run_app "${INSTALL_FOLDER_PATH}/bin/${MINGW_TARGET}-ld" --help
-    run_app "${INSTALL_FOLDER_PATH}/bin/${MINGW_TARGET}-nm" --help
-    run_app "${INSTALL_FOLDER_PATH}/bin/${MINGW_TARGET}-objcopy" --help
-    run_app "${INSTALL_FOLDER_PATH}/bin/${MINGW_TARGET}-objdump" --help
-    run_app "${INSTALL_FOLDER_PATH}/bin/${MINGW_TARGET}-ranlib" --help
-    run_app "${INSTALL_FOLDER_PATH}/bin/${MINGW_TARGET}-size" --help
-    run_app "${INSTALL_FOLDER_PATH}/bin/${MINGW_TARGET}-strings" --help
-    run_app "${INSTALL_FOLDER_PATH}/bin/${MINGW_TARGET}-strip" --help
+    run_app "${INSTALL_FOLDER_PATH}/usr/bin/${MINGW_TARGET}-ar" --help
+    run_app "${INSTALL_FOLDER_PATH}/usr/bin/${MINGW_TARGET}-as" --help
+    run_app "${INSTALL_FOLDER_PATH}/usr/bin/${MINGW_TARGET}-ld" --help
+    run_app "${INSTALL_FOLDER_PATH}/usr/bin/${MINGW_TARGET}-nm" --help
+    run_app "${INSTALL_FOLDER_PATH}/usr/bin/${MINGW_TARGET}-objcopy" --help
+    run_app "${INSTALL_FOLDER_PATH}/usr/bin/${MINGW_TARGET}-objdump" --help
+    run_app "${INSTALL_FOLDER_PATH}/usr/bin/${MINGW_TARGET}-ranlib" --help
+    run_app "${INSTALL_FOLDER_PATH}/usr/bin/${MINGW_TARGET}-size" --help
+    run_app "${INSTALL_FOLDER_PATH}/usr/bin/${MINGW_TARGET}-strings" --help
+    run_app "${INSTALL_FOLDER_PATH}/usr/bin/${MINGW_TARGET}-strip" --help
 
     echo
     echo "Checking the mingw binutils shared libraries..."
 
-    show_libs "${INSTALL_FOLDER_PATH}/bin/${MINGW_TARGET}-ar" 
-    show_libs "${INSTALL_FOLDER_PATH}/bin/${MINGW_TARGET}-as" 
-    show_libs "${INSTALL_FOLDER_PATH}/bin/${MINGW_TARGET}-ld" 
-    show_libs "${INSTALL_FOLDER_PATH}/bin/${MINGW_TARGET}-nm" 
-    show_libs "${INSTALL_FOLDER_PATH}/bin/${MINGW_TARGET}-objcopy" 
-    show_libs "${INSTALL_FOLDER_PATH}/bin/${MINGW_TARGET}-objdump" 
-    show_libs "${INSTALL_FOLDER_PATH}/bin/${MINGW_TARGET}-ranlib" 
-    show_libs "${INSTALL_FOLDER_PATH}/bin/${MINGW_TARGET}-size" 
-    show_libs "${INSTALL_FOLDER_PATH}/bin/${MINGW_TARGET}-strings" 
-    show_libs "${INSTALL_FOLDER_PATH}/bin/${MINGW_TARGET}-strip" 
+    show_libs "${INSTALL_FOLDER_PATH}/usr/bin/${MINGW_TARGET}-ar" 
+    show_libs "${INSTALL_FOLDER_PATH}/usr/bin/${MINGW_TARGET}-as" 
+    show_libs "${INSTALL_FOLDER_PATH}/usr/bin/${MINGW_TARGET}-ld" 
+    show_libs "${INSTALL_FOLDER_PATH}/usr/bin/${MINGW_TARGET}-nm" 
+    show_libs "${INSTALL_FOLDER_PATH}/usr/bin/${MINGW_TARGET}-objcopy" 
+    show_libs "${INSTALL_FOLDER_PATH}/usr/bin/${MINGW_TARGET}-objdump" 
+    show_libs "${INSTALL_FOLDER_PATH}/usr/bin/${MINGW_TARGET}-ranlib" 
+    show_libs "${INSTALL_FOLDER_PATH}/usr/bin/${MINGW_TARGET}-size" 
+    show_libs "${INSTALL_FOLDER_PATH}/usr/bin/${MINGW_TARGET}-strings" 
+    show_libs "${INSTALL_FOLDER_PATH}/usr/bin/${MINGW_TARGET}-strip" 
   )
 }
 
@@ -1269,7 +1298,6 @@ function download_mingw()
 
   download_and_extract "${mingw_url}" "${mingw_folder_archive}" \
     "${mingw_src_folder_name}"
-
 }
 
 function build_mingw_headers()
@@ -1299,7 +1327,7 @@ function build_mingw_headers()
 
           run_verbose bash "${SOURCES_FOLDER_PATH}/${mingw_src_folder_name}/mingw-w64-headers/configure" --help
           
-          prepare_mingw_config_options_common "${INSTALL_FOLDER_PATH}/${MINGW_TARGET}"
+          prepare_mingw_config_options_common "${INSTALL_FOLDER_PATH}/usr/${MINGW_TARGET}"
           config_options=("${config_options_common[@]}")
           
           config_options+=("--build=${BUILD}")
@@ -1333,8 +1361,8 @@ function build_mingw_headers()
           # GCC requires the `x86_64-w64-mingw32` folder be mirrored as 
           # `mingw` in the root. 
           cd "${INSTALL_FOLDER_PATH}"
-          rm -fv "mingw"
-          ln -sv "usr/${MINGW_TARGET}" "mingw"
+          run_verbose rm -fv "mingw"
+          run_verbose ln -sv "${MINGW_TARGET}" "mingw"
         )
 
       ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${mingw_headers_folder_name}/make-output.txt"
@@ -1418,9 +1446,38 @@ function build_mingw_gcc_first()
           run_verbose bash "${SOURCES_FOLDER_PATH}/${mingw_gcc_src_folder_name}/configure" --help
           run_verbose bash "${SOURCES_FOLDER_PATH}/${mingw_gcc_src_folder_name}/gcc/configure" --help
 
+if true
+then
+
+          run_verbose bash ${DEBUG} "${SOURCES_FOLDER_PATH}/${mingw_gcc_src_folder_name}/configure" \
+            --prefix="${INSTALL_FOLDER_PATH}/usr" \
+            \
+            --build="${BUILD}" \
+            --target="${MINGW_TARGET}" \
+            \
+            --with-sysroot="${INSTALL_FOLDER_PATH}" \
+            --with-pkgversion="${XBB_MINGW_GCC_BRANDING}" \
+            \
+            --enable-languages=c,c++,fortran,objc,obj-c++ \
+            --enable-shared \
+            --enable-static \
+            --enable-threads=posix \
+            --enable-fully-dynamic-string \
+            --enable-libstdcxx-time=yes \
+            --enable-cloog-backend=isl \
+            --enable-lto \
+            --enable-libgomp \
+            --enable-checking=release \
+            --disable-dw2-exceptions \
+            --disable-multilib \
+            --disable-rpath \
+
+
+else
+
           config_options=()
 
-          config_options+=("--prefix=${INSTALL_FOLDER_PATH}")
+          config_options+=("--prefix=${INSTALL_FOLDER_PATH}/usr")
           config_options+=("--with-sysroot=${INSTALL_FOLDER_PATH}")
           
           config_options+=("--build=${BUILD}")
@@ -1439,7 +1496,7 @@ function build_mingw_gcc_first()
           if true
           then
             config_options+=("--enable-shared")
-            config_options+=("--enable-shared-libgcc")
+            # config_options+=("--enable-shared-libgcc")
           else
             config_options+=("--disable-shared")
             config_options+=("--disable-shared-libgcc")
@@ -1494,6 +1551,8 @@ function build_mingw_gcc_first()
 
           run_verbose bash ${DEBUG} "${SOURCES_FOLDER_PATH}/${mingw_gcc_src_folder_name}/configure" \
             "${config_options[@]}"
+
+fi
 
           cp "config.log" "${LOGS_FOLDER_PATH}/${mingw_gcc_folder_name}/config-step1-log.txt"
         ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${mingw_gcc_folder_name}/configure-step1-output.txt"
@@ -1561,7 +1620,7 @@ function build_mingw_widl()
           bash "${SOURCES_FOLDER_PATH}/${mingw_src_folder_name}/mingw-w64-tools/widl/configure" --help
 
           config_options=()
-          config_options+=("--prefix=${INSTALL_FOLDER_PATH}")
+          config_options+=("--prefix=${INSTALL_FOLDER_PATH}/usr")
 
           config_options+=("--build=${BUILD}")
           config_options+=("--host=${BUILD}") # Native!
@@ -1656,7 +1715,7 @@ function build_mingw_crt()
 
           config_options=()
 
-          prepare_mingw_config_options_common "${INSTALL_FOLDER_PATH}/${MINGW_TARGET}"
+          prepare_mingw_config_options_common "${INSTALL_FOLDER_PATH}/usr/${MINGW_TARGET}"
           config_options=("${config_options_common[@]}")
           config_options+=("--with-sysroot=${INSTALL_FOLDER_PATH}")
 
@@ -1696,7 +1755,7 @@ function build_mingw_crt()
         # make install-strip
         run_verbose make install-strip
 
-        ls -l "${INSTALL_FOLDER_PATH}/${MINGW_TARGET}"
+        ls -l "${INSTALL_FOLDER_PATH}/usr/${MINGW_TARGET}"
 
       ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${mingw_crt_folder_name}/make-output.txt"
     )
@@ -1759,7 +1818,7 @@ function build_mingw_winpthreads()
 
           config_options=()
 
-          config_options+=("--prefix=${INSTALL_FOLDER_PATH}/${MINGW_TARGET}")
+          config_options+=("--prefix=${INSTALL_FOLDER_PATH}/usr/${MINGW_TARGET}")
           config_options+=("--with-sysroot=${INSTALL_FOLDER_PATH}")
 
           config_options+=("--libdir=${INSTALL_FOLDER_PATH}/${MINGW_TARGET}/lib")
@@ -1794,7 +1853,7 @@ function build_mingw_winpthreads()
         # make install-strip
         run_verbose make install
 
-        run_verbose ls -l "${INSTALL_FOLDER_PATH}/${MINGW_TARGET}"
+        run_verbose ls -l "${INSTALL_FOLDER_PATH}/usr/${MINGW_TARGET}"
 
       ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${mingw_build_winpthreads_folder_name}/make-output.txt"
     )
@@ -1861,19 +1920,19 @@ function build_mingw_gcc_final()
         find ${MINGW_TARGET} \
           -name '*.so' -type f \
           -print \
-          -exec "${INSTALL_FOLDER_PATH}/bin/${MINGW_TARGET}-strip" --strip-debug {} \;
+          -exec "${INSTALL_FOLDER_PATH}/usr/bin/${MINGW_TARGET}-strip" --strip-debug {} \;
         find ${MINGW_TARGET} \
           -name '*.so.*'  \
           -type f \
           -print \
-          -exec "${INSTALL_FOLDER_PATH}/bin/${MINGW_TARGET}-strip" --strip-debug {} \;
+          -exec "${INSTALL_FOLDER_PATH}/usr/bin/${MINGW_TARGET}-strip" --strip-debug {} \;
         # Note: without ranlib, windows builds failed.
         find ${MINGW_TARGET} lib/gcc/${MINGW_TARGET} \
           -name '*.a'  \
           -type f  \
           -print \
-          -exec "${INSTALL_FOLDER_PATH}/bin/${MINGW_TARGET}-strip" --strip-debug {} \; \
-          -exec "${INSTALL_FOLDER_PATH}/bin/${MINGW_TARGET}-ranlib" {} \;
+          -exec "${INSTALL_FOLDER_PATH}/usr/bin/${MINGW_TARGET}-strip" --strip-debug {} \; \
+          -exec "${INSTALL_FOLDER_PATH}/usr/bin/${MINGW_TARGET}-ranlib" {} \;
         set -e
       
       fi
@@ -1902,51 +1961,51 @@ function test_mingw_gcc()
     echo
     echo "Testing if mingw gcc binaries start properly..."
 
-    run_app "${INSTALL_FOLDER_PATH}/bin/${MINGW_TARGET}-gcc" --version
-    run_app "${INSTALL_FOLDER_PATH}/bin/${MINGW_TARGET}-g++" --version
+    run_app "${INSTALL_FOLDER_PATH}/usr/bin/${MINGW_TARGET}-gcc" --version
+    run_app "${INSTALL_FOLDER_PATH}/usr/bin/${MINGW_TARGET}-g++" --version
 
-    run_app "${INSTALL_FOLDER_PATH}/bin/${MINGW_TARGET}-gcc-ar" --version
-    run_app "${INSTALL_FOLDER_PATH}/bin/${MINGW_TARGET}-gcc-nm" --version
-    run_app "${INSTALL_FOLDER_PATH}/bin/${MINGW_TARGET}-gcc-ranlib" --version
-    run_app "${INSTALL_FOLDER_PATH}/bin/${MINGW_TARGET}-gcov" --version
-    run_app "${INSTALL_FOLDER_PATH}/bin/${MINGW_TARGET}-gcov-dump" --version
-    run_app "${INSTALL_FOLDER_PATH}/bin/${MINGW_TARGET}-gcov-tool" --version
+    run_app "${INSTALL_FOLDER_PATH}/usr/bin/${MINGW_TARGET}-gcc-ar" --version
+    run_app "${INSTALL_FOLDER_PATH}/usr/bin/${MINGW_TARGET}-gcc-nm" --version
+    run_app "${INSTALL_FOLDER_PATH}/usr/bin/${MINGW_TARGET}-gcc-ranlib" --version
+    run_app "${INSTALL_FOLDER_PATH}/usr/bin/${MINGW_TARGET}-gcov" --version
+    run_app "${INSTALL_FOLDER_PATH}/usr/bin/${MINGW_TARGET}-gcov-dump" --version
+    run_app "${INSTALL_FOLDER_PATH}/usr/bin/${MINGW_TARGET}-gcov-tool" --version
 
-    if [ -f "${INSTALL_FOLDER_PATH}/bin/${MINGW_TARGET}-gfortran" ]
+    if [ -f "${INSTALL_FOLDER_PATH}/usr/bin/${MINGW_TARGET}-gfortran" ]
     then
-      run_app "${INSTALL_FOLDER_PATH}/bin/${MINGW_TARGET}-gfortran" --version
+      run_app "${INSTALL_FOLDER_PATH}/usr/bin/${MINGW_TARGET}-gfortran" --version
     fi
 
     echo
     echo "Showing configurations..."
 
-    run_app "${INSTALL_FOLDER_PATH}/bin/${MINGW_TARGET}-gcc" --help
-    run_app "${INSTALL_FOLDER_PATH}/bin/${MINGW_TARGET}-gcc" -v
-    run_app "${INSTALL_FOLDER_PATH}/bin/${MINGW_TARGET}-gcc" -dumpversion
-    run_app "${INSTALL_FOLDER_PATH}/bin/${MINGW_TARGET}-gcc" -dumpmachine
+    run_app "${INSTALL_FOLDER_PATH}/usr/bin/${MINGW_TARGET}-gcc" --help
+    run_app "${INSTALL_FOLDER_PATH}/usr/bin/${MINGW_TARGET}-gcc" -v
+    run_app "${INSTALL_FOLDER_PATH}/usr/bin/${MINGW_TARGET}-gcc" -dumpversion
+    run_app "${INSTALL_FOLDER_PATH}/usr/bin/${MINGW_TARGET}-gcc" -dumpmachine
 
-    run_app "${INSTALL_FOLDER_PATH}/bin/${MINGW_TARGET}-gcc" -print-search-dirs
-    run_app "${INSTALL_FOLDER_PATH}/bin/${MINGW_TARGET}-gcc" -print-libgcc-file-name
-    run_app "${INSTALL_FOLDER_PATH}/bin/${MINGW_TARGET}-gcc" -print-multi-directory
-    run_app "${INSTALL_FOLDER_PATH}/bin/${MINGW_TARGET}-gcc" -print-multi-lib
-    run_app "${INSTALL_FOLDER_PATH}/bin/${MINGW_TARGET}-gcc" -print-multi-os-directory
-    run_app "${INSTALL_FOLDER_PATH}/bin/${MINGW_TARGET}-gcc" -print-sysroot
-    run_app "${INSTALL_FOLDER_PATH}/bin/${MINGW_TARGET}-gcc" -print-file-name=libgcc_s.so
-    run_app "${INSTALL_FOLDER_PATH}/bin/${MINGW_TARGET}-gcc" -print-prog-name=cc1
+    run_app "${INSTALL_FOLDER_PATH}/usr/bin/${MINGW_TARGET}-gcc" -print-search-dirs
+    run_app "${INSTALL_FOLDER_PATH}/usr/bin/${MINGW_TARGET}-gcc" -print-libgcc-file-name
+    run_app "${INSTALL_FOLDER_PATH}/usr/bin/${MINGW_TARGET}-gcc" -print-multi-directory
+    run_app "${INSTALL_FOLDER_PATH}/usr/bin/${MINGW_TARGET}-gcc" -print-multi-lib
+    run_app "${INSTALL_FOLDER_PATH}/usr/bin/${MINGW_TARGET}-gcc" -print-multi-os-directory
+    run_app "${INSTALL_FOLDER_PATH}/usr/bin/${MINGW_TARGET}-gcc" -print-sysroot
+    run_app "${INSTALL_FOLDER_PATH}/usr/bin/${MINGW_TARGET}-gcc" -print-file-name=libgcc_s.so
+    run_app "${INSTALL_FOLDER_PATH}/usr/bin/${MINGW_TARGET}-gcc" -print-prog-name=cc1
 
-    run_app "${INSTALL_FOLDER_PATH}/bin/${MINGW_TARGET}-g++" --help
-    run_app "${INSTALL_FOLDER_PATH}/bin/${MINGW_TARGET}-g++" -v
-    run_app "${INSTALL_FOLDER_PATH}/bin/${MINGW_TARGET}-g++" -dumpversion
-    run_app "${INSTALL_FOLDER_PATH}/bin/${MINGW_TARGET}-g++" -dumpmachine
+    run_app "${INSTALL_FOLDER_PATH}/usr/bin/${MINGW_TARGET}-g++" --help
+    run_app "${INSTALL_FOLDER_PATH}/usr/bin/${MINGW_TARGET}-g++" -v
+    run_app "${INSTALL_FOLDER_PATH}/usr/bin/${MINGW_TARGET}-g++" -dumpversion
+    run_app "${INSTALL_FOLDER_PATH}/usr/bin/${MINGW_TARGET}-g++" -dumpmachine
 
-    run_app "${INSTALL_FOLDER_PATH}/bin/${MINGW_TARGET}-g++" -print-search-dirs
-    run_app "${INSTALL_FOLDER_PATH}/bin/${MINGW_TARGET}-g++" -print-libgcc-file-name
-    run_app "${INSTALL_FOLDER_PATH}/bin/${MINGW_TARGET}-g++" -print-multi-directory
-    run_app "${INSTALL_FOLDER_PATH}/bin/${MINGW_TARGET}-g++" -print-multi-lib
-    run_app "${INSTALL_FOLDER_PATH}/bin/${MINGW_TARGET}-g++" -print-multi-os-directory
-    run_app "${INSTALL_FOLDER_PATH}/bin/${MINGW_TARGET}-g++" -print-sysroot
-    run_app "${INSTALL_FOLDER_PATH}/bin/${MINGW_TARGET}-g++" -print-file-name=libstdc++.so
-    run_app "${INSTALL_FOLDER_PATH}/bin/${MINGW_TARGET}-g++" -print-prog-name=cc1plus
+    run_app "${INSTALL_FOLDER_PATH}/usr/bin/${MINGW_TARGET}-g++" -print-search-dirs
+    run_app "${INSTALL_FOLDER_PATH}/usr/bin/${MINGW_TARGET}-g++" -print-libgcc-file-name
+    run_app "${INSTALL_FOLDER_PATH}/usr/bin/${MINGW_TARGET}-g++" -print-multi-directory
+    run_app "${INSTALL_FOLDER_PATH}/usr/bin/${MINGW_TARGET}-g++" -print-multi-lib
+    run_app "${INSTALL_FOLDER_PATH}/usr/bin/${MINGW_TARGET}-g++" -print-multi-os-directory
+    run_app "${INSTALL_FOLDER_PATH}/usr/bin/${MINGW_TARGET}-g++" -print-sysroot
+    run_app "${INSTALL_FOLDER_PATH}/usr/bin/${MINGW_TARGET}-g++" -print-file-name=libstdc++.so
+    run_app "${INSTALL_FOLDER_PATH}/usr/bin/${MINGW_TARGET}-g++" -print-prog-name=cc1plus
 
     echo
     echo "Testing if mingw gcc compiles simple Hello programs..."
@@ -1965,7 +2024,7 @@ std::cout << "Hello" << std::endl;
 }
 __EOF__
 
-    "${INSTALL_FOLDER_PATH}/bin/${MINGW_TARGET}-g++" hello.cpp -o hello
+    run_verbose "${INSTALL_FOLDER_PATH}/usr/bin/${MINGW_TARGET}-g++" hello.cpp -o hello -v
 
     # rm -rf hello.cpp hello
   )
