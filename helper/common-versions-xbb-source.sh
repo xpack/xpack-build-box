@@ -439,7 +439,11 @@ function build_versioned_components()
 
         prepare_mingw_env "${XBB_MINGW_VERSION}"
 
-        download_mingw
+        (
+          cd "${SOURCES_FOLDER_PATH}"
+
+          download_mingw
+        )
 
         # Deploy the headers, they are needed by the compiler.
         build_mingw_headers
