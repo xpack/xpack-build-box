@@ -2176,7 +2176,10 @@ function build_openssl()
           /usr/bin/install -v -c -m 644 "$(dirname "${script_folder_path}")/ca-bundle/ca-bundle.crt" "${INSTALL_FOLDER_PATH}/openssl"
         fi
 
-        run_verbose make -j1 test
+        if [ "${RUN_TESTS}" == "y" ]
+        then
+          run_verbose make -j1 test
+        fi
 
       ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${openssl_folder_name}/make-output.txt"
 
@@ -2449,8 +2452,11 @@ function build_xz()
         # make install-strip
         run_verbose make install
 
-        # After install, to find its libaries.
-        run_verbose make -j1 check
+        if [ "${RUN_TESTS}" == "y" ]
+        then
+          # After install, to find its libaries.
+          run_verbose make -j1 check
+        fi
 
       ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${xz_folder_name}/make-output.txt"
     )
@@ -2644,10 +2650,13 @@ function build_tar()
         # darwin: 174: file truncated in data region while comparing   FAILED (sptrdiff01.at:30)
 
         # TODO: remove tests on darwin
-        if is_linux && [ "${RUN_LONG_TESTS}" == "y" ]
+        if [ "${RUN_TESTS}" == "y" ]
         then
-          # WARN-TEST
-          run_verbose make -j1 check # || true
+          if is_linux && [ "${RUN_LONG_TESTS}" == "y" ]
+          then
+            # WARN-TEST
+            run_verbose make -j1 check # || true
+          fi
         fi
 
       ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${tar_folder_name}/make-output.txt"
@@ -2962,7 +2971,10 @@ function build_pkg_config()
         # make install-strip
         run_verbose make install
 
-        run_verbose make -j1 check
+        if [ "${RUN_TESTS}" == "y" ]
+        then
+          run_verbose make -j1 check
+        fi
 
       ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${pkg_config_folder_name}/make-output.txt"
     )
@@ -3088,16 +3100,19 @@ function build_m4()
           ln -sv m4 gm4
         )
 
-        if is_darwin
+        if [ "${RUN_TESTS}" == "y" ]
         then
-          # On macOS 10.15
-          # FAIL: test-fflush2.sh
-          # FAIL: test-fpurge
-          # FAIL: test-ftell.sh
-          # FAIL: test-ftello2.sh
-          run_verbose make -j1 check || true
-        else
-          run_verbose make -j1 check
+          if is_darwin
+          then
+            # On macOS 10.15
+            # FAIL: test-fflush2.sh
+            # FAIL: test-fpurge
+            # FAIL: test-ftell.sh
+            # FAIL: test-ftello2.sh
+            run_verbose make -j1 check || true
+          else
+            run_verbose make -j1 check
+          fi
         fi
 
       ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${m4_folder_name}/make-output.txt"
@@ -3381,13 +3396,16 @@ function build_sed()
           ln -sv sed gsed
         )
 
-        # WARN-TEST
-        if is_darwin # && [ "${XBB_LAYER}" == "xbb-bootstrap" ]
+        if [ "${RUN_TESTS}" == "y" ]
         then
-          # Fails on macOS 10.15.
-          run_verbose make -j1 check || true
-        else
-          run_verbose make -j1 check
+          # WARN-TEST
+          if is_darwin # && [ "${XBB_LAYER}" == "xbb-bootstrap" ]
+          then
+            # Fails on macOS 10.15.
+            run_verbose make -j1 check || true
+          else
+            run_verbose make -j1 check
+          fi
         fi
 
       ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${sed_folder_name}/make-output.txt"
@@ -3948,34 +3966,37 @@ function build_gettext()
         # make install-strip
         run_verbose make install
 
-        (
-          # The tests use an internal library (libgnuintl.so), so it
-          # is necessary to temporarily consider the local path.
+        if [ "${RUN_TESTS}" == "y" ]
+        then
           (
-            cd gettext-runtime
-            if is_linux
-            then
-              export LD_RUN_PATH="$(pwd)/intl/.libs:${LD_RUN_PATH}"
-              echo "LD_RUN_PATH=$LD_RUN_PATH"
-            fi
-            run_verbose make -j1 check 
-          )
-          (
-            cd gettext-tools
-            if is_linux
-            then
-              export LD_RUN_PATH="$(pwd)/intl/.libs:${LD_RUN_PATH}"
-              echo "LD_RUN_PATH=$LD_RUN_PATH"
-            fi
-            if is_darwin && [ "${XBB_LAYER}" == "xbb-bootstrap" ]
-            then
-              # Fails on macOS 10.15.
-              run_verbose make -j1 check || true
-            else
+            # The tests use an internal library (libgnuintl.so), so it
+            # is necessary to temporarily consider the local path.
+            (
+              cd gettext-runtime
+              if is_linux
+              then
+                export LD_RUN_PATH="$(pwd)/intl/.libs:${LD_RUN_PATH}"
+                echo "LD_RUN_PATH=$LD_RUN_PATH"
+              fi
               run_verbose make -j1 check 
-            fi
+            )
+            (
+              cd gettext-tools
+              if is_linux
+              then
+                export LD_RUN_PATH="$(pwd)/intl/.libs:${LD_RUN_PATH}"
+                echo "LD_RUN_PATH=$LD_RUN_PATH"
+              fi
+              if is_darwin && [ "${XBB_LAYER}" == "xbb-bootstrap" ]
+              then
+                # Fails on macOS 10.15.
+                run_verbose make -j1 check || true
+              else
+                run_verbose make -j1 check 
+              fi
+            )
           )
-        )
+        fi
 
       ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${gettext_folder_name}/make-output.txt"
     )
@@ -4114,7 +4135,10 @@ function build_patch()
         # make install-strip
         run_verbose make install
 
-        run_verbose make -j1 check
+        if [ "${RUN_TESTS}" == "y" ]
+        then
+          run_verbose make -j1 check
+        fi
 
       ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${patch_folder_name}/make-output.txt"
     )
@@ -4237,8 +4261,11 @@ function build_diffutils()
         # make install-strip
         run_verbose make install
 
-        # WARN-TEST
-        run_verbose make -j1 check
+        if [ "${RUN_TESTS}" == "y" ]
+        then
+          # WARN-TEST
+          run_verbose make -j1 check
+        fi
 
       ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${diffutils_folder_name}/make-output.txt"
     )
@@ -4533,9 +4560,12 @@ function build_flex()
         # make install-strip
         run_verbose make install
 
-        # cxx_restart fails - https://github.com/westes/flex/issues/98
-        # make -k check || true
-        run_verbose make -k check
+        if [ "${RUN_TESTS}" == "y" ]
+        then
+          # cxx_restart fails - https://github.com/westes/flex/issues/98
+          # make -k check || true
+          run_verbose make -k check
+        fi
 
       ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${flex_folder_name}/make-output.txt"
     )
@@ -4938,11 +4968,14 @@ function build_texinfo()
         # Darwin: FAIL: t/94htmlxref.t 11 - htmlxref errors file_html
         # Darwin: ERROR: t/94htmlxref.t - exited with status 2
 
-        if is_darwin
+        if [ "${RUN_TESTS}" == "y" ]
         then
-          run_verbose make -j1 check || true
-        else
-          run_verbose make -j1 check
+          if is_darwin
+          then
+            run_verbose make -j1 check || true
+          else
+            run_verbose make -j1 check
+          fi
         fi
 
       ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${texinfo_folder_name}/make-output.txt"
@@ -5447,7 +5480,10 @@ function build_makedepend()
         # make install-strip
         run_verbose make install
 
-        run_verbose make -j1 check
+        if [ "${RUN_TESTS}" == "y" ]
+        then
+          run_verbose make -j1 check
+        fi
 
       ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${makedepend_folder_name}/make-output.txt"
     )
@@ -5698,7 +5734,10 @@ function build_chrpath()
         # make install-strip
         run_verbose make install
 
-        run_verbose make -j1 check
+        if [ "${RUN_TESTS}" == "y" ]
+        then
+          run_verbose make -j1 check
+        fi
 
       ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${chrpath_folder_name}/make-output.txt"
     )
@@ -5797,17 +5836,20 @@ function build_dos2unix()
 
         run_verbose make prefix="${INSTALL_FOLDER_PATH}" install
 
-        if is_darwin
+        if [ "${RUN_TESTS}" == "y" ]
         then
-          #   Failed test 'dos2unix convert DOS UTF-16LE to Unix GB18030'
-          #   at utf16_gb.t line 27.
-          #   Failed test 'dos2unix convert DOS UTF-16LE to Unix GB18030, keep BOM'
-          #   at utf16_gb.t line 30.
-          #   Failed test 'unix2dos convert DOS UTF-16BE to DOS GB18030, keep BOM'
-          #   at utf16_gb.t line 33.
-          run_verbose make -j1 check || true
-        else
-          run_verbose make -j1 check
+          if is_darwin
+          then
+            #   Failed test 'dos2unix convert DOS UTF-16LE to Unix GB18030'
+            #   at utf16_gb.t line 27.
+            #   Failed test 'dos2unix convert DOS UTF-16LE to Unix GB18030, keep BOM'
+            #   at utf16_gb.t line 30.
+            #   Failed test 'unix2dos convert DOS UTF-16BE to DOS GB18030, keep BOM'
+            #   at utf16_gb.t line 33.
+            run_verbose make -j1 check || true
+          else
+            run_verbose make -j1 check
+          fi
         fi
 
       ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${dos2unix_folder_name}/make-output.txt"
@@ -6728,13 +6770,16 @@ function build_p7zip()
 
       run_verbose bash "install.sh"
 
-      if is_darwin
+      if [ "${RUN_TESTS}" == "y" ]
       then
-        # 7z cannot load library on macOS.
-        run_verbose make -j1 test
-      else
-        # make -j1 test test_7z
-        run_verbose make -j1 all_test
+        if is_darwin
+        then
+          # 7z cannot load library on macOS.
+          run_verbose make -j1 test
+        else
+          # make -j1 test test_7z
+          run_verbose make -j1 all_test
+        fi
       fi
 
     ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${p7zip_folder_name}/install-output.txt"
@@ -7009,11 +7054,15 @@ function test_wine()
     show_libs "$(realpath ${INSTALL_FOLDER_PATH}/bin/winebuild)"
     # show_libs "$(realpath ${INSTALL_FOLDER_PATH}/bin/winecfg)"
     # show_libs "$(realpath ${INSTALL_FOLDER_PATH}/bin/wineconsole)"
+
     show_libs "$(realpath ${INSTALL_FOLDER_PATH}/bin/winegcc)"
     show_libs "$(realpath ${INSTALL_FOLDER_PATH}/bin/wineg++)"
 
     libwine=$(find ${INSTALL_FOLDER_PATH}/lib* -name 'libwine.so')
-    show_libs "$(realpath ${libwine})"
+    if [ ! -z "${libwine}" ]
+    then
+      show_libs "$(realpath ${libwine})"
+    fi
   ) 
 }
 
@@ -7215,7 +7264,10 @@ function build_gnupg()
         # make install-strip
         run_verbose make install
 
-        run_verbose make -j1 check
+        if [ "${RUN_TESTS}" == "y" ]
+        then
+          run_verbose make -j1 check
+        fi
 
       ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${gnupg_folder_name}/make-output.txt"
     )
@@ -7867,13 +7919,16 @@ function build_guile()
         # make install-strip
         run_verbose make install
 
-        if is_darwin
+        if [ "${RUN_TESTS}" == "y" ]
         then
-          # WARN-TEST
-          run_verbose make -j1 check || true
-        else
-          # WARN-TEST
-          run_verbose make -j1 check
+          if is_darwin
+          then
+            # WARN-TEST
+            run_verbose make -j1 check || true
+          else
+            # WARN-TEST
+            run_verbose make -j1 check
+          fi
         fi
 
       ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${guile_folder_name}/make-output.txt"
@@ -8005,7 +8060,10 @@ function build_rhash()
 
         run_verbose make install
 
-        run_verbose make -j1 test test-lib
+        if [ "${RUN_TESTS}" == "y" ]
+        then
+          run_verbose make -j1 test test-lib
+        fi
 
       ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${rhash_folder_name}/make-output.txt"
     )
@@ -8149,10 +8207,13 @@ function build_re2c()
         # make install-strip
         run_verbose make install
 
-        if [ "${HOST_UNAME}" == "Linux" ]
+        if [ "${RUN_TESTS}" == "y" ]
         then
-          # darwin: Error: 5 out 2010 tests failed.
-          run_verbose make -j1 tests
+          if is_linux
+          then
+            # darwin: Error: 5 out 2010 tests failed.
+            run_verbose make -j1 tests
+          fi
         fi
 
       ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${re2c_folder_name}/make-output.txt"
@@ -8358,8 +8419,11 @@ function build_autogen()
 
         run_verbose make install
 
-        # WARN-TEST
-        run_verbose make -j1 check
+        if [ "${RUN_TESTS}" == "y" ]
+        then
+          # WARN-TEST
+          run_verbose make -j1 check
+        fi
 
       ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${autogen_folder_name}/make-output.txt"
     )

@@ -89,7 +89,10 @@ function build_zlib()
 
         run_verbose make install
 
-        run_verbose make -j1 test
+        if [ "${RUN_TESTS}" == "y" ]
+        then
+          run_verbose make -j1 test
+        fi
 
       ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${zlib_folder_name}/make-output.txt"
     )
@@ -223,7 +226,10 @@ function build_gmp()
         # make install-strip
         run_verbose make install
 
-        run_verbose make -j1 check
+        if [ "${RUN_TESTS}" == "y" ]
+        then
+          run_verbose make -j1 check
+        fi
 
       ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${gmp_folder_name}/make-output.txt"
     )
@@ -350,12 +356,15 @@ function build_mpfr()
         # make install-strip
         run_verbose make install
 
-        run_verbose make -j1 check
-
-        if [[ "${mpfr_version}" =~ 4\.* ]]
+        if [ "${RUN_TESTS}" == "y" ]
         then
-          # Not available in 3.x
-          run_verbose make -j1 check-exported-symbols
+          run_verbose make -j1 check
+
+          if [[ "${mpfr_version}" =~ 4\.* ]]
+          then
+            # Not available in 3.x
+            run_verbose make -j1 check-exported-symbols
+          fi
         fi
 
       ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${mpfr_folder_name}/make-output.txt"
@@ -470,7 +479,10 @@ function build_mpc()
         # make install-strip
         run_verbose make install
 
-        run_verbose make -j1 check
+        if [ "${RUN_TESTS}" == "y" ]
+        then
+          run_verbose make -j1 check
+        fi
 
       ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${mpc_folder_name}/make-output.txt"
     )
@@ -593,7 +605,10 @@ function build_isl()
         # make install-strip
         run_verbose make install
 
-        run_verbose make -j1 check
+        if [ "${RUN_TESTS}" == "y" ]
+        then
+          run_verbose make -j1 check
+        fi
 
       ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${isl_folder_name}/make-output.txt"
     )
@@ -723,16 +738,19 @@ function build_nettle()
         # Make the other install targets.
         run_verbose make install-headers install-static install-pkgconfig install-shared-nettle install-shared-hogweed
 
-        if is_darwin
+        if [ "${RUN_TESTS}" == "y" ]
         then
-          # dlopen failed: dlopen(../libnettle.so, 2): image not found
-          # /Users/ilg/Work/xbb-3.1-macosx-x86_64/sources/nettle-3.5.1/run-tests: line 57: 46731 Abort trap: 6           "$1" $testflags
-          # darwin: FAIL: dlopen
-          # WARN-TEST
-          run_verbose make -j1 -k check
-        else
-          # Takes very long on armhf.
-          run_verbose make -j1 -k check
+          if is_darwin
+          then
+            # dlopen failed: dlopen(../libnettle.so, 2): image not found
+            # /Users/ilg/Work/xbb-3.1-macosx-x86_64/sources/nettle-3.5.1/run-tests: line 57: 46731 Abort trap: 6           "$1" $testflags
+            # darwin: FAIL: dlopen
+            # WARN-TEST
+            run_verbose make -j1 -k check
+          else
+            # Takes very long on armhf.
+            run_verbose make -j1 -k check
+          fi
         fi
 
       ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${nettle_folder_name}/make-output.txt"
@@ -857,7 +875,10 @@ function build_tasn1()
         # make install-strip
         run_verbose make install
 
-        run_verbose make -j1 check
+        if [ "${RUN_TESTS}" == "y" ]
+        then
+          run_verbose make -j1 check
+        fi
 
       ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${tasn1_folder_name}/make-output.txt"
     )
@@ -974,7 +995,10 @@ function build_expat()
         # make install-strip
         run_verbose make install
 
-        run_verbose make -j1 check
+        if [ "${RUN_TESTS}" == "y" ]
+        then
+          run_verbose make -j1 check
+        fi
 
       ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${expat_folder_name}/make-output.txt"
     )
@@ -1110,7 +1134,10 @@ function build_libffi()
         # make install-strip
         run_verbose make install
 
-        run_verbose make -j1 check
+        if [ "${RUN_TESTS}" == "y" ]
+        then
+          run_verbose make -j1 check
+        fi
 
       ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${libffi_folder_name}/make-output.txt"
     )
@@ -1221,7 +1248,10 @@ function build_libiconv()
         # make install-strip
         run_verbose make install
 
-        run_verbose make -j1 check
+        if [ "${RUN_TESTS}" == "y" ]
+        then
+          run_verbose make -j1 check
+        fi
 
       ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${libiconv_folder_name}/make-output.txt"
     )
@@ -1574,7 +1604,10 @@ function build_util_macros()
         # make install-strip
         run_verbose make install
 
-        run_verbose make -j1 check
+        if [ "${RUN_TESTS}" == "y" ]
+        then
+          run_verbose make -j1 check
+        fi
 
       ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${util_macros_folder_name}/make-output.txt"
     )
@@ -1685,7 +1718,10 @@ function build_xorg_xproto()
         # make install-strip
         run_verbose make install
 
-        run_verbose make -j1 check
+        if [ "${RUN_TESTS}" == "y" ]
+        then
+          run_verbose make -j1 check
+        fi
 
       ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${xorg_xproto_folder_name}/make-output.txt"
     )
@@ -1802,14 +1838,17 @@ function build_libpng()
         # make install-strip
         run_verbose make install
 
-        (
-          if is_linux
-          then
-            export LD_LIBRARY_PATH="${LD_RUN_PATH}"
-          fi
-          # Takes very long on armhf.
-          run_verbose make -j1 check
-        )
+        if [ "${RUN_TESTS}" == "y" ]
+        then
+          (
+            if is_linux
+            then
+              export LD_LIBRARY_PATH="${LD_RUN_PATH}"
+            fi
+            # Takes very long on armhf.
+            run_verbose make -j1 check
+          )
+        fi
 
       ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${libpng_folder_name}/make-output.txt"
     )
@@ -1936,11 +1975,14 @@ function build_libmpdec()
 
         run_verbose make install
 
-        if is_linux
+        if [ "${RUN_TESTS}" == "y" ]
         then
-          # TODO
-          # Fails shared on darwin
-          run_verbose make -j1 check
+          if is_linux
+          then
+            # TODO
+            # Fails shared on darwin
+            run_verbose make -j1 check
+          fi
         fi
 
       ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${libmpdec_folder_name}/make-output.txt"
@@ -2060,8 +2102,11 @@ function build_libgpg_error()
         # make install-strip
         run_verbose make install
  
-        # WARN-TEST
-        run_verbose make -j1 check
+        if [ "${RUN_TESTS}" == "y" ]
+        then
+          # WARN-TEST
+          run_verbose make -j1 check
+        fi
 
       ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${libgpg_error_folder_name}/make-output.txt"
     )
@@ -2327,7 +2372,10 @@ function build_libassuan()
         # make install-strip
         run_verbose make install
 
-        run_verbose make -j1 check
+        if [ "${RUN_TESTS}" == "y" ]
+        then
+          run_verbose make -j1 check
+        fi
 
       ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${libassuan_folder_name}/make-output.txt"
     )
@@ -2450,7 +2498,10 @@ function build_libksba()
         # make install-strip
         run_verbose make install
 
-        run_verbose make -j1 check
+        if [ "${RUN_TESTS}" == "y" ]
+        then
+          run_verbose make -j1 check
+        fi
 
       ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${libksba_folder_name}/make-output.txt"
     )
@@ -2568,7 +2619,10 @@ function build_npth()
         # make install-strip
         run_verbose make install
 
-        run_verbose make -j1 check
+        if [ "${RUN_TESTS}" == "y" ]
+        then
+          run_verbose make -j1 check
+        fi
 
       ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${npth_folder_name}/make-output.txt"
     )
@@ -2719,13 +2773,16 @@ function build_libxcrypt()
         # make install-strip
         run_verbose make install
 
-        if is_darwin
+        if [ "${RUN_TESTS}" == "y" ]
         then
-          # macOS FAIL: test/symbols-static.sh
-          # macOS FAIL: test/symbols-renames.sh
-          run_verbose make -j1 check || true
-        else
-          run_verbose make -j1 check
+          if is_darwin
+          then
+            # macOS FAIL: test/symbols-static.sh
+            # macOS FAIL: test/symbols-renames.sh
+            run_verbose make -j1 check || true
+          else
+            run_verbose make -j1 check
+          fi
         fi
 
       ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${libxcrypt_folder_name}/make-output.txt"
@@ -2839,7 +2896,10 @@ function build_libunistring()
         # make install-strip
         run_verbose make install
 
-        run_verbose make -j1 check
+        if [ "${RUN_TESTS}" == "y" ]
+        then
+          run_verbose make -j1 check
+        fi
 
       ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${libunistring_folder_name}/make-output.txt"
     )
@@ -2962,7 +3022,10 @@ function build_gc()
         # make install-strip
         run_verbose make install
 
-        run_verbose make -j1 check
+        if [ "${RUN_TESTS}" == "y" ]
+        then
+          run_verbose make -j1 check
+        fi
 
       ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${gc_folder_name}/make-output.txt"
     )
@@ -3256,7 +3319,10 @@ function build_readline()
         # make install-strip
         run_verbose make install
 
-        run_verbose make -j1 check
+        if [ "${RUN_TESTS}" == "y" ]
+        then
+          run_verbose make -j1 check
+        fi
 
       ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${readline_folder_name}/make-output.txt"
     )
