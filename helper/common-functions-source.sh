@@ -239,6 +239,7 @@ function is_arm()
 function prepare_xbb_env()
 {  
   XBB_PARENT_FOLDER_PATH=${XBB_PARENT_FOLDER_PATH:=""}
+  RUN_TESTS=${RUN_TESTS:="y"}
   RUN_LONG_TESTS=${RUN_LONG_TESTS:=""}
 
   if [ "${HOST_UNAME}" == "Darwin" ]
