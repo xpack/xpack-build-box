@@ -40,6 +40,7 @@ bash ~/Downloads/xpack-build-box.git/ubuntu/12-xbb/i386-run-with-volume-v3.3.sh
 Inside the container, run the build script:
 
 ```console
+# RUN_TESTS=n bash /input/build-v3.sh
 # RUN_LONG_TESTS=y bash /input/build-v3.sh
 ```
 
