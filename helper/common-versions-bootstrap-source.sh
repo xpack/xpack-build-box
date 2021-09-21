@@ -235,7 +235,7 @@ function build_versioned_components()
       # _tkinter              _uuid                 readline 
                 
       # depends=('python3')
-      build_meson "0.57.2" # "0.53.1" # "0.50.0"
+      build_meson "0.58.1" # "0.57.2" # "0.53.1" # "0.50.0"
     fi
 
     # depends=('python2')
