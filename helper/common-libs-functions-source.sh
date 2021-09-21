@@ -1506,12 +1506,6 @@ function test_gnutls()
     xbb_activate
 
     echo
-    echo "Testing if gnutls binaries start properly..."
-
-    run_app "${INSTALL_FOLDER_PATH}/bin/psktool" --version
-    run_app "${INSTALL_FOLDER_PATH}/bin/certtool" --version
-
-    echo
     echo "Checking the gnutls shared libraries..."
 
     show_libs "${INSTALL_FOLDER_PATH}/bin/psktool"
@@ -1521,6 +1515,12 @@ function test_gnutls()
     show_libs "${INSTALL_FOLDER_PATH}/bin/ocsptool"
     show_libs "${INSTALL_FOLDER_PATH}/bin/gnutls-serv"
     show_libs "${INSTALL_FOLDER_PATH}/bin/gnutls-cli"
+
+    echo
+    echo "Testing if gnutls binaries start properly..."
+
+    run_app "${INSTALL_FOLDER_PATH}/bin/psktool" --version
+    run_app "${INSTALL_FOLDER_PATH}/bin/certtool" --version
   )
 }
 
@@ -2268,14 +2268,6 @@ function test_libgcrypt()
 {
   (
     xbb_activate
-
-    echo
-    echo "Testing if libgcrypt binaries start properly..."
-
-    run_app "${INSTALL_FOLDER_PATH}/bin/libgcrypt-config" --version
-    run_app "${INSTALL_FOLDER_PATH}/bin/dumpsexp" --version
-    run_app "${INSTALL_FOLDER_PATH}/bin/hmac256" --version
-    run_app "${INSTALL_FOLDER_PATH}/bin/mpicalc" --version
     
     echo
     echo "Checking the libgcrypt shared libraries..."
@@ -2286,6 +2278,14 @@ function test_libgcrypt()
     show_libs "${INSTALL_FOLDER_PATH}/bin/mpicalc"
 
     show_libs "$(realpath ${INSTALL_FOLDER_PATH}/lib/libgcrypt.${SHLIB_EXT})"
+
+    echo
+    echo "Testing if libgcrypt binaries start properly..."
+
+    run_app "${INSTALL_FOLDER_PATH}/bin/libgcrypt-config" --version
+    run_app "${INSTALL_FOLDER_PATH}/bin/dumpsexp" --version
+    run_app "${INSTALL_FOLDER_PATH}/bin/hmac256" --version
+    run_app "${INSTALL_FOLDER_PATH}/bin/mpicalc" --version
   )
 }
 
@@ -2399,15 +2399,15 @@ function test_libassuan()
     xbb_activate
 
     echo
-    echo "Testing if libassuan binaries start properly..."
-
-    run_app "${INSTALL_FOLDER_PATH}/bin/libassuan-config" --version
-
-    echo
     echo "Checking the libassuan shared libraries..."
 
     # show_libs "${INSTALL_FOLDER_PATH}/bin/libassuan-config"
     show_libs "$(realpath ${INSTALL_FOLDER_PATH}/lib/libassuan.${SHLIB_EXT})"
+
+    echo
+    echo "Testing if libassuan binaries start properly..."
+
+    run_app "${INSTALL_FOLDER_PATH}/bin/libassuan-config" --version
   )
 }
 
@@ -2525,15 +2525,15 @@ function test_libksba()
     xbb_activate
 
     echo
-    echo "Testing if libksba binaries start properly..."
-
-    run_app "${INSTALL_FOLDER_PATH}/bin/ksba-config" --version
-
-    echo
     echo "Checking the libksba shared libraries..."
 
     # show_libs "${INSTALL_FOLDER_PATH}/bin/ksba-config"
     show_libs "$(realpath ${INSTALL_FOLDER_PATH}/lib/libksba.${SHLIB_EXT})"
+
+    echo
+    echo "Testing if libksba binaries start properly..."
+
+    run_app "${INSTALL_FOLDER_PATH}/bin/ksba-config" --version
   )
 }
 

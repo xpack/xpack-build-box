@@ -226,6 +226,20 @@ function test_native_binutils()
     fi
 
     echo
+    echo "Checking the binutils shared libraries..."
+
+    show_libs "${NATIVE_BINUTILS_INSTALL_FOLDER_PATH}/bin/ar" 
+    show_libs "${NATIVE_BINUTILS_INSTALL_FOLDER_PATH}/bin/as" 
+    show_libs "${NATIVE_BINUTILS_INSTALL_FOLDER_PATH}/bin/ld" 
+    show_libs "${NATIVE_BINUTILS_INSTALL_FOLDER_PATH}/bin/nm" 
+    show_libs "${NATIVE_BINUTILS_INSTALL_FOLDER_PATH}/bin/objcopy" 
+    show_libs "${NATIVE_BINUTILS_INSTALL_FOLDER_PATH}/bin/objdump" 
+    show_libs "${NATIVE_BINUTILS_INSTALL_FOLDER_PATH}/bin/ranlib" 
+    show_libs "${NATIVE_BINUTILS_INSTALL_FOLDER_PATH}/bin/size" 
+    show_libs "${NATIVE_BINUTILS_INSTALL_FOLDER_PATH}/bin/strings" 
+    show_libs "${NATIVE_BINUTILS_INSTALL_FOLDER_PATH}/bin/strip" 
+
+    echo
     echo "Testing if binutils binaries start properly..."
 
     run_app "${NATIVE_BINUTILS_INSTALL_FOLDER_PATH}/bin/ar" --version
@@ -252,20 +266,6 @@ function test_native_binutils()
     run_app "${NATIVE_BINUTILS_INSTALL_FOLDER_PATH}/bin/size" --help
     run_app "${NATIVE_BINUTILS_INSTALL_FOLDER_PATH}/bin/strings" --help
     run_app "${NATIVE_BINUTILS_INSTALL_FOLDER_PATH}/bin/strip" --help
-
-    echo
-    echo "Checking the binutils shared libraries..."
-
-    show_libs "${NATIVE_BINUTILS_INSTALL_FOLDER_PATH}/bin/ar" 
-    show_libs "${NATIVE_BINUTILS_INSTALL_FOLDER_PATH}/bin/as" 
-    show_libs "${NATIVE_BINUTILS_INSTALL_FOLDER_PATH}/bin/ld" 
-    show_libs "${NATIVE_BINUTILS_INSTALL_FOLDER_PATH}/bin/nm" 
-    show_libs "${NATIVE_BINUTILS_INSTALL_FOLDER_PATH}/bin/objcopy" 
-    show_libs "${NATIVE_BINUTILS_INSTALL_FOLDER_PATH}/bin/objdump" 
-    show_libs "${NATIVE_BINUTILS_INSTALL_FOLDER_PATH}/bin/ranlib" 
-    show_libs "${NATIVE_BINUTILS_INSTALL_FOLDER_PATH}/bin/size" 
-    show_libs "${NATIVE_BINUTILS_INSTALL_FOLDER_PATH}/bin/strings" 
-    show_libs "${NATIVE_BINUTILS_INSTALL_FOLDER_PATH}/bin/strip" 
   ) 
 }
 
@@ -416,6 +416,11 @@ function test_native_gdb()
     fi
 
     echo
+    echo "Checking the gdb shared libraries..."
+
+    show_libs "${INSTALL_FOLDER_PATH}/bin/gdb" 
+
+    echo
     echo "Testing if gdb binaries start properly..."
 
     run_app "${INSTALL_FOLDER_PATH}/bin/gdb" --version
@@ -424,11 +429,6 @@ function test_native_gdb()
     echo "Testing if gdb binaries display help..."
 
     run_app "${INSTALL_FOLDER_PATH}/bin/gdb" --help
-
-    echo
-    echo "Checking the gdb shared libraries..."
-
-    show_libs "${INSTALL_FOLDER_PATH}/bin/gdb" 
   ) 
 }
 
@@ -803,6 +803,18 @@ function test_native_gcc()
     fi
 
     echo
+    echo "Checking the gcc binaries shared libraries..."
+
+    show_libs "${INSTALL_FOLDER_PATH}/bin/gcc${XBB_GCC_SUFFIX}"
+    show_libs "${INSTALL_FOLDER_PATH}/bin/g++${XBB_GCC_SUFFIX}"
+
+    show_libs "$(${INSTALL_FOLDER_PATH}/bin/gcc${XBB_GCC_SUFFIX} --print-prog-name=cc1)"
+    show_libs "$(${INSTALL_FOLDER_PATH}/bin/gcc${XBB_GCC_SUFFIX} --print-prog-name=cc1plus)"
+    show_libs "$(${INSTALL_FOLDER_PATH}/bin/gcc${XBB_GCC_SUFFIX} --print-prog-name=collect2)"
+    show_libs "$(${INSTALL_FOLDER_PATH}/bin/gcc${XBB_GCC_SUFFIX} --print-prog-name=lto1)"
+    show_libs "$(${INSTALL_FOLDER_PATH}/bin/gcc${XBB_GCC_SUFFIX} --print-prog-name=lto-wrapper)"
+
+    echo
     echo "Testing if gcc binaries start properly..."
 
     run_app "${INSTALL_FOLDER_PATH}/bin/gcc${XBB_GCC_SUFFIX}" --version
@@ -824,18 +836,6 @@ function test_native_gcc()
     then
       run_app "${INSTALL_FOLDER_PATH}/bin/gfortran${XBB_GCC_SUFFIX}" --version
     fi
-
-    echo
-    echo "Checking the gcc binaries shared libraries..."
-
-    show_libs "${INSTALL_FOLDER_PATH}/bin/gcc${XBB_GCC_SUFFIX}"
-    show_libs "${INSTALL_FOLDER_PATH}/bin/g++${XBB_GCC_SUFFIX}"
-
-    show_libs "$(${INSTALL_FOLDER_PATH}/bin/gcc${XBB_GCC_SUFFIX} --print-prog-name=cc1)"
-    show_libs "$(${INSTALL_FOLDER_PATH}/bin/gcc${XBB_GCC_SUFFIX} --print-prog-name=cc1plus)"
-    show_libs "$(${INSTALL_FOLDER_PATH}/bin/gcc${XBB_GCC_SUFFIX} --print-prog-name=collect2)"
-    show_libs "$(${INSTALL_FOLDER_PATH}/bin/gcc${XBB_GCC_SUFFIX} --print-prog-name=lto1)"
-    show_libs "$(${INSTALL_FOLDER_PATH}/bin/gcc${XBB_GCC_SUFFIX} --print-prog-name=lto-wrapper)"
 
     echo
     echo "Showing configurations..."
@@ -1171,7 +1171,21 @@ fi
 function test_mingw_binutils()
 {
   (
-    xbb_activate_installed_bin
+    # xbb_activate_installed_bin
+
+    echo
+    echo "Checking the mingw binutils shared libraries..."
+
+    show_libs "${INSTALL_FOLDER_PATH}/usr/bin/${MINGW_TARGET}-ar" 
+    show_libs "${INSTALL_FOLDER_PATH}/usr/bin/${MINGW_TARGET}-as" 
+    show_libs "${INSTALL_FOLDER_PATH}/usr/bin/${MINGW_TARGET}-ld" 
+    show_libs "${INSTALL_FOLDER_PATH}/usr/bin/${MINGW_TARGET}-nm" 
+    show_libs "${INSTALL_FOLDER_PATH}/usr/bin/${MINGW_TARGET}-objcopy" 
+    show_libs "${INSTALL_FOLDER_PATH}/usr/bin/${MINGW_TARGET}-objdump" 
+    show_libs "${INSTALL_FOLDER_PATH}/usr/bin/${MINGW_TARGET}-ranlib" 
+    show_libs "${INSTALL_FOLDER_PATH}/usr/bin/${MINGW_TARGET}-size" 
+    show_libs "${INSTALL_FOLDER_PATH}/usr/bin/${MINGW_TARGET}-strings" 
+    show_libs "${INSTALL_FOLDER_PATH}/usr/bin/${MINGW_TARGET}-strip" 
 
     echo
     echo "Testing if mingw binutils binaries start properly..."
@@ -1200,20 +1214,6 @@ function test_mingw_binutils()
     run_app "${INSTALL_FOLDER_PATH}/usr/bin/${MINGW_TARGET}-size" --help
     run_app "${INSTALL_FOLDER_PATH}/usr/bin/${MINGW_TARGET}-strings" --help
     run_app "${INSTALL_FOLDER_PATH}/usr/bin/${MINGW_TARGET}-strip" --help
-
-    echo
-    echo "Checking the mingw binutils shared libraries..."
-
-    show_libs "${INSTALL_FOLDER_PATH}/usr/bin/${MINGW_TARGET}-ar" 
-    show_libs "${INSTALL_FOLDER_PATH}/usr/bin/${MINGW_TARGET}-as" 
-    show_libs "${INSTALL_FOLDER_PATH}/usr/bin/${MINGW_TARGET}-ld" 
-    show_libs "${INSTALL_FOLDER_PATH}/usr/bin/${MINGW_TARGET}-nm" 
-    show_libs "${INSTALL_FOLDER_PATH}/usr/bin/${MINGW_TARGET}-objcopy" 
-    show_libs "${INSTALL_FOLDER_PATH}/usr/bin/${MINGW_TARGET}-objdump" 
-    show_libs "${INSTALL_FOLDER_PATH}/usr/bin/${MINGW_TARGET}-ranlib" 
-    show_libs "${INSTALL_FOLDER_PATH}/usr/bin/${MINGW_TARGET}-size" 
-    show_libs "${INSTALL_FOLDER_PATH}/usr/bin/${MINGW_TARGET}-strings" 
-    show_libs "${INSTALL_FOLDER_PATH}/usr/bin/${MINGW_TARGET}-strip" 
   )
 }
 
@@ -1967,7 +1967,7 @@ function build_mingw_gcc_final()
 function test_mingw_gcc()
 {
   (
-    xbb_activate_installed_bin
+    # xbb_activate_installed_bin
 
     echo
     echo "Testing if mingw gcc binaries start properly..."
@@ -2270,12 +2270,7 @@ function build_openssl()
 function test_openssl()
 {
   (
-    xbb_activate_installed_bin
-
-    echo
-    echo "Testing if openssl binaries start properly..."
-
-    run_app "${INSTALL_FOLDER_PATH}/bin/openssl" version
+    # xbb_activate_installed_bin
 
     echo
     echo "Checking the openssl shared libraries..."
@@ -2283,6 +2278,11 @@ function test_openssl()
     show_libs "${INSTALL_FOLDER_PATH}/bin/openssl"
     show_libs "$(realpath ${INSTALL_FOLDER_PATH}/lib/libcrypto.${SHLIB_EXT})"
     show_libs "$(realpath ${INSTALL_FOLDER_PATH}/lib/libssl.${SHLIB_EXT})"
+
+    echo
+    echo "Testing if openssl binaries start properly..."
+
+    run_app "${INSTALL_FOLDER_PATH}/bin/openssl" version
   )
 }
 
@@ -2416,17 +2416,17 @@ function build_curl()
 function test_curl()
 {
   (
-    xbb_activate_installed_bin
-
-    echo
-    echo "Testing if curl binaries start properly..."
-
-    run_app "${INSTALL_FOLDER_PATH}/bin/curl" --version
+    # xbb_activate_installed_bin
 
     echo
     echo "Checking the curl shared libraries..."
 
     show_libs "${INSTALL_FOLDER_PATH}/bin/curl"
+
+    echo
+    echo "Testing if curl binaries start properly..."
+
+    run_app "${INSTALL_FOLDER_PATH}/bin/curl" --version
   )
 }
 
@@ -2549,14 +2549,7 @@ function build_xz()
 function test_xz()
 {
   (
-    xbb_activate_installed_bin
-
-    echo
-    echo "Testing if xz binaries start properly..."
-
-    run_app "${INSTALL_FOLDER_PATH}/bin/xz" --version
-    run_app "${INSTALL_FOLDER_PATH}/bin/xzdec" --version
-    run_app "${INSTALL_FOLDER_PATH}/bin/lzmainfo" --version
+    # xbb_activate_installed_bin
 
     echo
     echo "Checking the xz shared libraries..."
@@ -2566,6 +2559,13 @@ function test_xz()
     show_libs "${INSTALL_FOLDER_PATH}/bin/lzmainfo"
 
     show_libs "$(realpath ${INSTALL_FOLDER_PATH}/lib/liblzma.${SHLIB_EXT})"
+
+    echo
+    echo "Testing if xz binaries start properly..."
+
+    run_app "${INSTALL_FOLDER_PATH}/bin/xz" --version
+    run_app "${INSTALL_FOLDER_PATH}/bin/xzdec" --version
+    run_app "${INSTALL_FOLDER_PATH}/bin/lzmainfo" --version
   )
 }
 
@@ -2750,17 +2750,17 @@ function build_tar()
 function test_tar()
 {
   (
-    xbb_activate_installed_bin
-
-    echo
-    echo "Testing if tar binaries start properly..."
-
-    run_app "${INSTALL_FOLDER_PATH}/bin/tar" --version
+    # xbb_activate_installed_bin
 
     echo
     echo "Checking the xz shared libraries..."
 
     show_libs "${INSTALL_FOLDER_PATH}/bin/tar"
+
+    echo
+    echo "Testing if tar binaries start properly..."
+
+    run_app "${INSTALL_FOLDER_PATH}/bin/tar" --version
   )
 }
 
@@ -2898,7 +2898,30 @@ function build_coreutils()
 function test_coreutils()
 {
   (
-    xbb_activate_installed_bin
+    # xbb_activate_installed_bin
+
+    echo
+    echo "Checking the coreutils binaries shared libraries..."
+
+    show_libs "${INSTALL_FOLDER_PATH}/bin/basename"
+    show_libs "${INSTALL_FOLDER_PATH}/bin/cat"
+    show_libs "${INSTALL_FOLDER_PATH}/bin/chmod"
+    show_libs "${INSTALL_FOLDER_PATH}/bin/chown"
+    show_libs "${INSTALL_FOLDER_PATH}/bin/cp"
+    show_libs "${INSTALL_FOLDER_PATH}/bin/dirname"
+    show_libs "${INSTALL_FOLDER_PATH}/bin/ln"
+    show_libs "${INSTALL_FOLDER_PATH}/bin/ls"
+    show_libs "${INSTALL_FOLDER_PATH}/bin/mkdir"
+    show_libs "${INSTALL_FOLDER_PATH}/bin/mv"
+    show_libs "${INSTALL_FOLDER_PATH}/bin/printf"
+    show_libs "${INSTALL_FOLDER_PATH}/bin/realpath"
+    show_libs "${INSTALL_FOLDER_PATH}/bin/rm"
+    show_libs "${INSTALL_FOLDER_PATH}/bin/rmdir"
+    show_libs "${INSTALL_FOLDER_PATH}/bin/sha256sum"
+    show_libs "${INSTALL_FOLDER_PATH}/bin/sort"
+    show_libs "${INSTALL_FOLDER_PATH}/bin/touch"
+    show_libs "${INSTALL_FOLDER_PATH}/bin/tr"
+    show_libs "${INSTALL_FOLDER_PATH}/bin/wc"
 
     echo
     echo "Testing if coreutils binaries start properly..."
@@ -2923,29 +2946,6 @@ function test_coreutils()
     run_app "${INSTALL_FOLDER_PATH}/bin/touch" --version
     run_app "${INSTALL_FOLDER_PATH}/bin/tr" --version
     run_app "${INSTALL_FOLDER_PATH}/bin/wc" --version
-
-    echo
-    echo "Checking the coreutils binaries shared libraries..."
-
-    show_libs "${INSTALL_FOLDER_PATH}/bin/basename"
-    show_libs "${INSTALL_FOLDER_PATH}/bin/cat"
-    show_libs "${INSTALL_FOLDER_PATH}/bin/chmod"
-    show_libs "${INSTALL_FOLDER_PATH}/bin/chown"
-    show_libs "${INSTALL_FOLDER_PATH}/bin/cp"
-    show_libs "${INSTALL_FOLDER_PATH}/bin/dirname"
-    show_libs "${INSTALL_FOLDER_PATH}/bin/ln"
-    show_libs "${INSTALL_FOLDER_PATH}/bin/ls"
-    show_libs "${INSTALL_FOLDER_PATH}/bin/mkdir"
-    show_libs "${INSTALL_FOLDER_PATH}/bin/mv"
-    show_libs "${INSTALL_FOLDER_PATH}/bin/printf"
-    show_libs "${INSTALL_FOLDER_PATH}/bin/realpath"
-    show_libs "${INSTALL_FOLDER_PATH}/bin/rm"
-    show_libs "${INSTALL_FOLDER_PATH}/bin/rmdir"
-    show_libs "${INSTALL_FOLDER_PATH}/bin/sha256sum"
-    show_libs "${INSTALL_FOLDER_PATH}/bin/sort"
-    show_libs "${INSTALL_FOLDER_PATH}/bin/touch"
-    show_libs "${INSTALL_FOLDER_PATH}/bin/tr"
-    show_libs "${INSTALL_FOLDER_PATH}/bin/wc"
   )
 }
 
@@ -3067,17 +3067,17 @@ function build_pkg_config()
 function test_pkg_config()
 {
   (
-    xbb_activate_installed_bin
-
-    echo
-    echo "Testing if pkg_config binaries start properly..."
-
-    run_app "${INSTALL_FOLDER_PATH}/bin/pkg-config" --version
+    # xbb_activate_installed_bin
 
     echo
     echo "Checking the pkg_config binaries shared libraries..."
 
     show_libs "${INSTALL_FOLDER_PATH}/bin/pkg-config"
+
+    echo
+    echo "Testing if pkg_config binaries start properly..."
+
+    run_app "${INSTALL_FOLDER_PATH}/bin/pkg-config" --version
   )
 }
 
@@ -3206,7 +3206,7 @@ function build_m4()
 function test_m4()
 {
   (
-    xbb_activate_installed_bin
+    # xbb_activate_installed_bin
 
     echo
     echo "Testing if m4 binaries start properly..."
@@ -3351,17 +3351,17 @@ function build_gawk()
 function test_gawk()
 {
   (
-    xbb_activate_installed_bin
-
-    echo
-    echo "Testing if gawk binaries start properly..."
-
-    run_app "${INSTALL_FOLDER_PATH}/bin/gawk" --version
+    # xbb_activate_installed_bin
 
     echo
     echo "Checking the gawk binaries shared libraries..."
 
     show_libs "${INSTALL_FOLDER_PATH}/bin/gawk"
+
+    echo
+    echo "Testing if gawk binaries start properly..."
+
+    run_app "${INSTALL_FOLDER_PATH}/bin/gawk" --version
   )
 }
 
@@ -3499,17 +3499,17 @@ function build_sed()
 function test_sed()
 {
   (
-    xbb_activate_installed_bin
-
-    echo
-    echo "Testing if sed binaries start properly..."
-
-    run_app "${INSTALL_FOLDER_PATH}/bin/sed" --version
+    # xbb_activate_installed_bin
 
     echo
     echo "Checking the sed binaries shared libraries..."
 
     show_libs "${INSTALL_FOLDER_PATH}/bin/sed"
+
+    echo
+    echo "Testing if sed binaries start properly..."
+
+    run_app "${INSTALL_FOLDER_PATH}/bin/sed" --version
   )
 }
 
@@ -3617,7 +3617,7 @@ function build_autoconf()
 function test_autoconf()
 {
   (
-    xbb_activate_installed_bin
+    # xbb_activate_installed_bin
 
     echo
     echo "Testing if autoconf binaries start properly..."
@@ -3748,7 +3748,7 @@ function build_automake()
 function test_automake()
 {
   (
-    xbb_activate_installed_bin
+    # xbb_activate_installed_bin
 
     echo
     echo "Testing if automake binaries start properly..."
@@ -3886,7 +3886,12 @@ function build_libtool()
 function test_libtool()
 {
   (
-    xbb_activate_installed_bin
+    # xbb_activate_installed_bin
+
+    echo
+    echo "Checking the libtool shared libraries..."
+        
+    show_libs "$(realpath ${INSTALL_FOLDER_PATH}/lib/libltdl.${SHLIB_EXT})"
 
     echo
     echo "Testing if libtool binaries start properly..."
@@ -3897,11 +3902,6 @@ function test_libtool()
     echo "Testing if libtool binaries display help..."
     
     run_app "${INSTALL_FOLDER_PATH}/bin/libtool" --help
-
-    echo
-    echo "Checking the libtool shared libraries..."
-        
-    show_libs "$(realpath ${INSTALL_FOLDER_PATH}/lib/libltdl.${SHLIB_EXT})"
   )
 }
 
@@ -4089,7 +4089,17 @@ function build_gettext()
 function test_gettext()
 {
   (
-    xbb_activate_installed_bin
+    # xbb_activate_installed_bin
+
+    echo
+    echo "Checking the gettext shared libraries..."
+
+    show_libs "${INSTALL_FOLDER_PATH}/bin/gettext"
+    show_libs "${INSTALL_FOLDER_PATH}/bin/msgcmp"
+
+    show_libs "$(realpath ${INSTALL_FOLDER_PATH}/lib/libgettextlib.${SHLIB_EXT})"
+    show_libs "$(realpath ${INSTALL_FOLDER_PATH}/lib/libgettextpo.${SHLIB_EXT})"
+    show_libs "$(realpath ${INSTALL_FOLDER_PATH}/lib/libgettextsrc.${SHLIB_EXT})"
 
     echo
     echo "Testing if gettext binaries start properly..."
@@ -4115,16 +4125,6 @@ function test_gettext()
     run_app "${INSTALL_FOLDER_PATH}/bin/recode-sr-latin" --version
 
     run_app "${INSTALL_FOLDER_PATH}/bin/msguniq" --version
-
-    echo
-    echo "Checking the gettext shared libraries..."
-
-    show_libs "${INSTALL_FOLDER_PATH}/bin/gettext"
-    show_libs "${INSTALL_FOLDER_PATH}/bin/msgcmp"
-
-    show_libs "$(realpath ${INSTALL_FOLDER_PATH}/lib/libgettextlib.${SHLIB_EXT})"
-    show_libs "$(realpath ${INSTALL_FOLDER_PATH}/lib/libgettextpo.${SHLIB_EXT})"
-    show_libs "$(realpath ${INSTALL_FOLDER_PATH}/lib/libgettextsrc.${SHLIB_EXT})"
   )
 }
 
@@ -4231,17 +4231,17 @@ function build_patch()
 function test_patch()
 {
   (
-    xbb_activate_installed_bin
-
-    echo
-    echo "Testing if patch binaries start properly..."
-
-    run_app "${INSTALL_FOLDER_PATH}/bin/patch" --version
+    # xbb_activate_installed_bin
 
     echo
     echo "Checking the patch binaries shared libraries..."
 
     show_libs "${INSTALL_FOLDER_PATH}/bin/patch"
+
+    echo
+    echo "Testing if patch binaries start properly..."
+
+    run_app "${INSTALL_FOLDER_PATH}/bin/patch" --version
   )
 }
 
@@ -4358,15 +4358,7 @@ function build_diffutils()
 function test_diffutils()
 {
   (
-    xbb_activate_installed_bin
-
-    echo
-    echo "Testing if diffutils binaries start properly..."
-
-    run_app "${INSTALL_FOLDER_PATH}/bin/diff" --version
-    run_app "${INSTALL_FOLDER_PATH}/bin/cmp" --version
-    run_app "${INSTALL_FOLDER_PATH}/bin/diff3" --version
-    run_app "${INSTALL_FOLDER_PATH}/bin/sdiff" --version
+    # xbb_activate_installed_bin
 
     echo
     echo "Checking the diffutils binaries shared libraries..."
@@ -4375,6 +4367,14 @@ function test_diffutils()
     show_libs "${INSTALL_FOLDER_PATH}/bin/cmp"
     show_libs "${INSTALL_FOLDER_PATH}/bin/diff3"
     show_libs "${INSTALL_FOLDER_PATH}/bin/sdiff"
+
+    echo
+    echo "Testing if diffutils binaries start properly..."
+
+    run_app "${INSTALL_FOLDER_PATH}/bin/diff" --version
+    run_app "${INSTALL_FOLDER_PATH}/bin/cmp" --version
+    run_app "${INSTALL_FOLDER_PATH}/bin/diff3" --version
+    run_app "${INSTALL_FOLDER_PATH}/bin/sdiff" --version
   )
 }
 
@@ -4499,19 +4499,19 @@ function build_bison()
 function test_bison()
 {
   (
-    xbb_activate_installed_bin
-
-    echo
-    echo "Testing if bison binaries start properly..."
-
-    run_app "${INSTALL_FOLDER_PATH}/bin/bison" --version
-    run_app "${INSTALL_FOLDER_PATH}/bin/yacc" --version
+    # xbb_activate_installed_bin
 
     echo
     echo "Checking the bison binaries shared libraries..."
 
     show_libs "${INSTALL_FOLDER_PATH}/bin/bison"
     # yacc is a script.
+
+    echo
+    echo "Testing if bison binaries start properly..."
+
+    run_app "${INSTALL_FOLDER_PATH}/bin/bison" --version
+    run_app "${INSTALL_FOLDER_PATH}/bin/yacc" --version
   )
 }
 
@@ -4658,18 +4658,18 @@ function build_flex()
 function test_flex()
 {
   (
-    xbb_activate_installed_bin
-
-    echo
-    echo "Testing if flex binaries start properly..."
-
-    run_app "${INSTALL_FOLDER_PATH}/bin/flex" --version
+    # xbb_activate_installed_bin
 
     echo
     echo "Checking the flex shared libraries..."
 
     show_libs "${INSTALL_FOLDER_PATH}/bin/flex"
     show_libs "$(realpath ${INSTALL_FOLDER_PATH}/lib/libfl.${SHLIB_EXT})"
+
+    echo
+    echo "Testing if flex binaries start properly..."
+
+    run_app "${INSTALL_FOLDER_PATH}/bin/flex" --version
   )
 }
 
@@ -4796,17 +4796,17 @@ function build_make()
 function test_make()
 {
   (
-    xbb_activate_installed_bin
-
-    echo
-    echo "Testing if make binaries start properly..."
-
-    run_app "${INSTALL_FOLDER_PATH}/bin/make" --version
+    # xbb_activate_installed_bin
 
     echo
     echo "Checking the make binaries shared libraries..."
 
     show_libs "${INSTALL_FOLDER_PATH}/bin/make"
+
+    echo
+    echo "Testing if make binaries start properly..."
+
+    run_app "${INSTALL_FOLDER_PATH}/bin/make" --version
   ) 
 }
 
@@ -4941,17 +4941,17 @@ function build_wget()
 function test_wget()
 {
   (
-    xbb_activate_installed_bin
-
-    echo
-    echo "Testing if wget binaries start properly..."
-
-    run_app "${INSTALL_FOLDER_PATH}/bin/wget" --version
+    # xbb_activate_installed_bin
 
     echo
     echo "Checking the wget binaries shared libraries..."
 
     show_libs "${INSTALL_FOLDER_PATH}/bin/wget"
+
+    echo
+    echo "Testing if wget binaries start properly..."
+
+    run_app "${INSTALL_FOLDER_PATH}/bin/wget" --version
   ) 
 }
 
@@ -5069,7 +5069,7 @@ function build_texinfo()
 function test_texinfo()
 {
   (
-    xbb_activate_installed_bin
+    # xbb_activate_installed_bin
 
     echo
     echo "Testing if texinfo binaries start properly..."
@@ -5241,18 +5241,7 @@ function build_cmake()
 function test_cmake()
 {
   (
-    xbb_activate_installed_bin
-
-    echo
-    echo "Testing if cmake binaries start properly..."
-
-    run_app "${INSTALL_FOLDER_PATH}/bin/cmake" --version
-    run_app "${INSTALL_FOLDER_PATH}/bin/ctest" --version
-    run_app "${INSTALL_FOLDER_PATH}/bin/cpack" --version
-    if [ -f "${INSTALL_FOLDER_PATH}/bin/ccmake" ]
-    then
-      run_app "${INSTALL_FOLDER_PATH}/bin/ccmake" --version
-    fi
+    # xbb_activate_installed_bin
 
     echo
     echo "Checking the cmake binaries shared libraries..."
@@ -5263,6 +5252,17 @@ function test_cmake()
     if [ -f "${INSTALL_FOLDER_PATH}/bin/ccmake" ]
     then
       show_libs "${INSTALL_FOLDER_PATH}/bin/ccmake"
+    fi
+
+    echo
+    echo "Testing if cmake binaries start properly..."
+
+    run_app "${INSTALL_FOLDER_PATH}/bin/cmake" --version
+    run_app "${INSTALL_FOLDER_PATH}/bin/ctest" --version
+    run_app "${INSTALL_FOLDER_PATH}/bin/cpack" --version
+    if [ -f "${INSTALL_FOLDER_PATH}/bin/ccmake" ]
+    then
+      run_app "${INSTALL_FOLDER_PATH}/bin/ccmake" --version
     fi
   )
 }
@@ -5449,7 +5449,12 @@ function build_perl()
 function test_perl()
 {
   (
-    xbb_activate_installed_bin
+    # xbb_activate_installed_bin
+
+    echo
+    echo "Checking the perl binaries shared libraries..."
+
+    show_libs "${INSTALL_FOLDER_PATH}/bin/perl"
 
     echo
     echo "Testing if perl binaries start properly..."
@@ -5464,11 +5469,6 @@ function test_perl()
 
       run_app "${INSTALL_FOLDER_PATH}/bin/perl" --version
     )
-
-    echo
-    echo "Checking the perl binaries shared libraries..."
-
-    show_libs "${INSTALL_FOLDER_PATH}/bin/perl"
   )
 }
 
@@ -5577,7 +5577,7 @@ function build_makedepend()
 function test_makedepend()
 {
   (
-    xbb_activate_installed_bin
+    # xbb_activate_installed_bin
 
     echo
     echo "Testing if makedepend binaries start properly..."
@@ -5717,17 +5717,17 @@ function build_patchelf()
 function test_patchelf()
 {
   (
-    xbb_activate_installed_bin
-
-    echo
-    echo "Testing if patchelf binaries start properly..."
-
-    run_app "${INSTALL_FOLDER_PATH}/bin/patchelf" --version
+    # xbb_activate_installed_bin
 
     echo
     echo "Checking the patchelf binaries shared libraries..."
 
     show_libs "${INSTALL_FOLDER_PATH}/bin/patchelf"
+
+    echo
+    echo "Testing if patchelf binaries start properly..."
+
+    run_app "${INSTALL_FOLDER_PATH}/bin/patchelf" --version
   )
 }
 
@@ -5831,17 +5831,17 @@ function build_chrpath()
 function test_chrpath()
 {
   (
-    xbb_activate_installed_bin
-
-    echo
-    echo "Testing if chrpath binaries start properly..."
-
-    run_app "${INSTALL_FOLDER_PATH}/bin/chrpath" --version
+    # xbb_activate_installed_bin
 
     echo
     echo "Checking the chrpath binutils shared libraries..."
 
     show_libs "${INSTALL_FOLDER_PATH}/bin/chrpath"
+
+    echo
+    echo "Testing if chrpath binaries start properly..."
+
+    run_app "${INSTALL_FOLDER_PATH}/bin/chrpath" --version
   )
 }
 
@@ -5944,19 +5944,19 @@ function build_dos2unix()
 function test_dos2unix()
 {
   (
-    xbb_activate_installed_bin
-
-    echo
-    echo "Testing if dos2unix binaries start properly..."
-
-    run_app "${INSTALL_FOLDER_PATH}/bin/unix2dos" --version
-    run_app "${INSTALL_FOLDER_PATH}/bin/dos2unix" --version
+    # xbb_activate_installed_bin
 
     echo
     echo "Checking the dos2unix binaries shared libraries..."
 
     show_libs "${INSTALL_FOLDER_PATH}/bin/unix2dos"
     show_libs "${INSTALL_FOLDER_PATH}/bin/dos2unix"
+
+    echo
+    echo "Testing if dos2unix binaries start properly..."
+
+    run_app "${INSTALL_FOLDER_PATH}/bin/unix2dos" --version
+    run_app "${INSTALL_FOLDER_PATH}/bin/dos2unix" --version
   )
 }
 
@@ -6071,18 +6071,17 @@ function build_git()
 function test_git()
 {
   (
-    xbb_activate_installed_bin
-
-    echo
-    echo "Testing if git binaries start properly..."
-
-    run_app "${INSTALL_FOLDER_PATH}/bin/git" --version
+    # xbb_activate_installed_bin
 
     echo
     echo "Checking the git binaries shared libraries..."
 
     show_libs "${INSTALL_FOLDER_PATH}/bin/git"
 
+    echo
+    echo "Testing if git binaries start properly..."
+
+    run_app "${INSTALL_FOLDER_PATH}/bin/git" --version
   ) 
 }
 
@@ -6244,18 +6243,18 @@ function build_python2()
 function test_python2()
 {
   (
-    xbb_activate_installed_bin
+    # xbb_activate_installed_bin
+
+    echo
+    echo "Checking the python2 binaries shared libraries..."
+
+    show_libs "${INSTALL_FOLDER_PATH}/bin/python2.7"
 
     echo
     echo "Testing if python2 binaries start properly..."
 
     run_app "${INSTALL_FOLDER_PATH}/bin/python2" --version
     run_app "${INSTALL_FOLDER_PATH}/bin/pip2" --version
-
-    echo
-    echo "Checking the python2 binaries shared libraries..."
-
-    show_libs "${INSTALL_FOLDER_PATH}/bin/python2.7"
   )
 }
 
@@ -6432,7 +6431,12 @@ function build_python3()
 function test_python3()
 {
   (
-    xbb_activate_installed_bin
+    # xbb_activate_installed_bin
+
+    echo
+    echo "Checking the python3 binaries shared libraries..."
+
+    show_libs "${INSTALL_FOLDER_PATH}/bin/${PYTHON3X}"
 
     echo
     echo "Testing if python3 binaries start properly..."
@@ -6442,11 +6446,6 @@ function test_python3()
 
     run_app "${INSTALL_FOLDER_PATH}/bin/python3" --version
     run_app "${INSTALL_FOLDER_PATH}/bin/pip3" --version
-
-    echo
-    echo "Checking the python3 binaries shared libraries..."
-
-    show_libs "${INSTALL_FOLDER_PATH}/bin/${PYTHON3X}"
   )
 }
 
@@ -6556,7 +6555,7 @@ function build_scons()
 function test_scons()
 {
   (
-    xbb_activate_installed_bin
+    # xbb_activate_installed_bin
 
     echo
     echo "Testing if scons binaries start properly..."
@@ -6630,7 +6629,7 @@ function build_meson
 function test_meson()
 {
   (
-    xbb_activate_installed_bin
+    # xbb_activate_installed_bin
 
     echo
     echo "Testing if python3 binaries start properly..."
@@ -6745,17 +6744,17 @@ function build_ninja()
 function test_ninja()
 {
   (
-    xbb_activate_installed_bin
-
-    echo
-    echo "Testing if ninja binaries start properly..."
-
-    run_app "${INSTALL_FOLDER_PATH}/bin/ninja" --version
+    # xbb_activate_installed_bin
 
     echo
     echo "Checking the ninja binaries shared libraries..."
 
     show_libs "${INSTALL_FOLDER_PATH}/bin/ninja"
+
+    echo
+    echo "Testing if ninja binaries start properly..."
+
+    run_app "${INSTALL_FOLDER_PATH}/bin/ninja" --version
   )  
 }
 
@@ -6879,17 +6878,7 @@ function build_p7zip()
 function test_p7zip()
 {
   (
-    xbb_activate_installed_bin
-
-    echo
-    echo "Testing if 7za binaries start properly..."
-
-    run_app "${INSTALL_FOLDER_PATH}/bin/7za" --help
-
-    if [ -f "${INSTALL_FOLDER_PATH}/bin/7z" ]
-    then
-      run_app "${INSTALL_FOLDER_PATH}/bin/7z" --help
-    fi
+    # xbb_activate_installed_bin
 
     echo
     echo "Checking the 7za shared libraries..."
@@ -6920,6 +6909,16 @@ function test_p7zip()
     if [ -f "${INSTALL_FOLDER_PATH}/lib/p7zip/7z.${SHLIB_EXT}" ]
     then
       show_libs "${INSTALL_FOLDER_PATH}/lib/p7zip/7z.${SHLIB_EXT}"
+    fi
+
+    echo
+    echo "Testing if 7za binaries start properly..."
+
+    run_app "${INSTALL_FOLDER_PATH}/bin/7za" --help
+
+    if [ -f "${INSTALL_FOLDER_PATH}/bin/7z" ]
+    then
+      run_app "${INSTALL_FOLDER_PATH}/bin/7z" --help
     fi
   )  
 }
@@ -7100,7 +7099,24 @@ function build_wine()
 function test_wine()
 {
   (
-    xbb_activate_installed_bin
+    # xbb_activate_installed_bin
+
+    echo
+    echo "Checking the wine shared libraries..."
+
+    show_libs "$(realpath ${INSTALL_FOLDER_PATH}/bin/wine)"
+    show_libs "$(realpath ${INSTALL_FOLDER_PATH}/bin/winebuild)"
+    # show_libs "$(realpath ${INSTALL_FOLDER_PATH}/bin/winecfg)"
+    # show_libs "$(realpath ${INSTALL_FOLDER_PATH}/bin/wineconsole)"
+
+    show_libs "$(realpath ${INSTALL_FOLDER_PATH}/bin/winegcc)"
+    show_libs "$(realpath ${INSTALL_FOLDER_PATH}/bin/wineg++)"
+
+    libwine=$(find ${INSTALL_FOLDER_PATH}/lib* -name 'libwine.so')
+    if [ ! -z "${libwine}" ]
+    then
+      show_libs "$(realpath ${libwine})"
+    fi
 
     echo
     echo "Testing if wine binaries start properly..."
@@ -7123,23 +7139,6 @@ function test_wine()
     # will no longer have to do it.
     local netstat=$(find "${INSTALL_FOLDER_PATH}"/lib* -name netstat.exe)
     run_app "${INSTALL_FOLDER_PATH}/bin/wine" ${netstat}
-
-    echo
-    echo "Checking the wine shared libraries..."
-
-    show_libs "$(realpath ${INSTALL_FOLDER_PATH}/bin/wine)"
-    show_libs "$(realpath ${INSTALL_FOLDER_PATH}/bin/winebuild)"
-    # show_libs "$(realpath ${INSTALL_FOLDER_PATH}/bin/winecfg)"
-    # show_libs "$(realpath ${INSTALL_FOLDER_PATH}/bin/wineconsole)"
-
-    show_libs "$(realpath ${INSTALL_FOLDER_PATH}/bin/winegcc)"
-    show_libs "$(realpath ${INSTALL_FOLDER_PATH}/bin/wineg++)"
-
-    libwine=$(find ${INSTALL_FOLDER_PATH}/lib* -name 'libwine.so')
-    if [ ! -z "${libwine}" ]
-    then
-      show_libs "$(realpath ${libwine})"
-    fi
   ) 
 }
 
@@ -7367,7 +7366,12 @@ function build_gnupg()
 function test_gpg()
 {
   (
-    xbb_activate_installed_bin
+    # xbb_activate_installed_bin
+
+    echo
+    echo "Checking the gpg binaries shared libraries..."
+
+    show_libs "${INSTALL_FOLDER_PATH}/bin/gpg"
 
     echo
     echo "Testing if gpg binaries start properly..."
@@ -7393,11 +7397,6 @@ function test_gpg()
 
     # run_app "${INSTALL_FOLDER_PATH}/sbin/addgnupghome" --version
     # run_app "${INSTALL_FOLDER_PATH}/sbin/applygnupgdefaults" --version
-
-    echo
-    echo "Checking the gpg binaries shared libraries..."
-
-    show_libs "${INSTALL_FOLDER_PATH}/bin/gpg"
   )
 }
 
@@ -7490,7 +7489,7 @@ function build_ant()
 function test_ant()
 {
   (
-    xbb_activate_installed_bin
+    # xbb_activate_installed_bin
 
     echo
     echo "Testing if ant binaries start properly..."
@@ -7589,7 +7588,7 @@ function build_maven()
 function test_maven()
 {
   (
-    xbb_activate_installed_bin
+    # xbb_activate_installed_bin
 
     echo
     echo "Testing if maven binaries start properly..."
@@ -7720,7 +7719,7 @@ function build_nodejs()
 function test_nodejs()
 {
   (
-    xbb_activate_installed_bin
+    # xbb_activate_installed_bin
 
     echo
     echo "Testing if node binaries start properly..."
@@ -7849,12 +7848,7 @@ function build_tcl()
 function test_tcl()
 {
   (
-    xbb_activate_installed_bin
-
-    echo
-    echo "Testing if tcl binaries start properly..."
-
-    run_app "${INSTALL_FOLDER_PATH}/bin/tclsh${TCL_VERSION_MAJOR}.${TCL_VERSION_MINOR}" <<< 'puts [info patchlevel]'
+    # xbb_activate_installed_bin
 
     echo
     echo "Checking the tcl binaries shared libraries..."
@@ -7882,6 +7876,11 @@ function test_tcl()
       echo "Unknown platform."
       exit 1
     fi
+
+    echo
+    echo "Testing if tcl binaries start properly..."
+
+    run_app "${INSTALL_FOLDER_PATH}/bin/tclsh${TCL_VERSION_MAJOR}.${TCL_VERSION_MINOR}" <<< 'puts [info patchlevel]'
   )  
 }
 
@@ -8029,13 +8028,7 @@ function build_guile()
 function test_guile()
 {
   (
-    xbb_activate_installed_bin
-
-    echo
-    echo "Testing if guile binaries start properly..."
-
-    run_app "${INSTALL_FOLDER_PATH}/bin/guile" --version
-    run_app "${INSTALL_FOLDER_PATH}/bin/guile-config" --version
+    # xbb_activate_installed_bin
 
     echo
     echo "Checking the guile shared libraries..."
@@ -8043,6 +8036,12 @@ function test_guile()
     show_libs "${INSTALL_FOLDER_PATH}/bin/guile"
     show_libs "$(realpath ${INSTALL_FOLDER_PATH}/lib/libguile-2.2.${SHLIB_EXT})"
     show_libs "$(realpath ${INSTALL_FOLDER_PATH}/lib/guile/2.2/extensions/guile-readline.so)"
+
+    echo
+    echo "Testing if guile binaries start properly..."
+
+    run_app "${INSTALL_FOLDER_PATH}/bin/guile" --version
+    run_app "${INSTALL_FOLDER_PATH}/bin/guile-config" --version
   )  
 }
 
@@ -8163,12 +8162,7 @@ function build_rhash()
 function test_rhash()
 {
   (
-    xbb_activate_installed_bin
-
-    echo
-    echo "Testing if rhash binaries start properly..."
-
-    run_app "${INSTALL_FOLDER_PATH}/bin/rhash" --version
+    # xbb_activate_installed_bin
 
     echo
     echo "Checking the flex shared libraries..."
@@ -8180,6 +8174,11 @@ function test_rhash()
     else
       show_libs "$(realpath ${INSTALL_FOLDER_PATH}/lib/librhash.so.0)"
     fi
+
+    echo
+    echo "Testing if rhash binaries start properly..."
+
+    run_app "${INSTALL_FOLDER_PATH}/bin/rhash" --version
   )
 }
 
@@ -8314,17 +8313,17 @@ function build_re2c()
 function test_re2c()
 {
   (
-    xbb_activate_installed_bin
-
-    echo
-    echo "Testing if re2c binaries start properly..."
-
-    run_app "${INSTALL_FOLDER_PATH}/bin/re2c" --version
+    # xbb_activate_installed_bin
 
     echo
     echo "Checking the flex shared libraries..."
 
     show_libs "${INSTALL_FOLDER_PATH}/bin/re2c"
+
+    echo
+    echo "Testing if re2c binaries start properly..."
+
+    run_app "${INSTALL_FOLDER_PATH}/bin/re2c" --version
   )  
 }
 
@@ -8377,7 +8376,7 @@ function build_sphinx()
 function test_sphinx()
 {
   (
-    xbb_activate_installed_bin
+    # xbb_activate_installed_bin
 
     echo
     echo "Testing if sphinx binaries start properly..."
@@ -8521,7 +8520,16 @@ function build_autogen()
 function test_autogen()
 {
   (
-    xbb_activate_installed_bin
+    # xbb_activate_installed_bin
+
+    echo
+    echo "Checking the autogen shared libraries..."
+
+    show_libs "${INSTALL_FOLDER_PATH}/bin/autogen"
+    show_libs "${INSTALL_FOLDER_PATH}/bin/columns"
+    show_libs "${INSTALL_FOLDER_PATH}/bin/getdefs"
+
+    show_libs "$(realpath ${INSTALL_FOLDER_PATH}/lib/libopts.${SHLIB_EXT})"
 
     echo
     echo "Testing if autogen binaries start properly..."
@@ -8538,15 +8546,6 @@ function test_autogen()
 
     # getdefs error:  invalid option descriptor for version
     run_app "${INSTALL_FOLDER_PATH}/bin/getdefs" --help || true
-
-    echo
-    echo "Checking the autogen shared libraries..."
-
-    show_libs "${INSTALL_FOLDER_PATH}/bin/autogen"
-    show_libs "${INSTALL_FOLDER_PATH}/bin/columns"
-    show_libs "${INSTALL_FOLDER_PATH}/bin/getdefs"
-
-    show_libs "$(realpath ${INSTALL_FOLDER_PATH}/lib/libopts.${SHLIB_EXT})"
   )  
 }
 
@@ -8670,7 +8669,12 @@ function build_bash()
 function test_bash()
 {
   (
-    xbb_activate_installed_bin
+    # xbb_activate_installed_bin
+
+    echo
+    echo "Checking the bash binaries shared libraries..."
+
+    show_libs "${INSTALL_FOLDER_PATH}/bin/bash"
 
     echo
     echo "Testing if bash binaries start properly..."
@@ -8681,11 +8685,6 @@ function test_bash()
     echo "Testing if bash binaries display help..."
 
     run_app "${INSTALL_FOLDER_PATH}/bin/bash" --help
-
-    echo
-    echo "Checking the bash binaries shared libraries..."
-
-    show_libs "${INSTALL_FOLDER_PATH}/bin/bash"
   ) 
 }
 
@@ -8779,7 +8778,7 @@ function build_realpath()
 function test_realpath()
 {
   (
-    xbb_activate_installed_bin
+    # xbb_activate_installed_bin
 
     echo
     echo "Checking the realpath binaries shared libraries..."
@@ -8999,7 +8998,7 @@ function build_native_llvm()
 function test_llvm()
 {
   (
-    xbb_activate_installed_bin
+    # xbb_activate_installed_bin
 
     echo
     echo "Checking the llvm binaries shared libraries..."
