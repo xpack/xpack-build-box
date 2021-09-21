@@ -78,18 +78,18 @@ compiler, but with a GCC 7. This first set of tools is called _the XBB
 bootstrap_.
 
 ```bash
-RUN_LONG_TESTS=y caffeinate bash "${HOME}/Downloads/xpack-build-box.git/macos/build-xbb-bootstrap-v3.2.sh"
+RUN_LONG_TESTS=y caffeinate bash "${HOME}/Downloads/xpack-build-box.git/macos/build-xbb-bootstrap-v3.3.sh"
 ```
 
 There are several environment variables that can be passed to the script:
 
 ```bash
-DEBUG=-x caffeinate bash "${HOME}/Downloads/xpack-build-box.git/macos/build-xbb-bootstrap-v3.2.sh"
+DEBUG=-x caffeinate bash "${HOME}/Downloads/xpack-build-box.git/macos/build-xbb-bootstrap-v3.3.sh"
 ```
 
 The build process takes about 150 minutes on a MacBook Pro 2011.
 
-The build is performed in a folder like `${HOME}/Work/xbb-bootstrap-3.2-darwin-x86_64`
+The build is performed in a folder like `${HOME}/Work/xbb-bootstrap-3.3-darwin-x86_64`
 which can be removed after the build is completed.
 
 The result of this step is a folder in user home (`${HOME}/.local/xbb-bootstrap`).
