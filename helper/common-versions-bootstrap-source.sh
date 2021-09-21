@@ -228,7 +228,8 @@ function build_versioned_components()
       # required by Glibc
 
       # require xz, openssl
-      build_python3 "3.8.10" # "3.7.6" # "3.8.1" # "3.7.3"
+      PYTHON3X="python3.9"
+      build_python3 "3.9.7" # "3.8.10" # "3.7.6" # "3.8.1" # "3.7.3"
       # The necessary bits to build these optional modules were not found:
       # _bz2                  _curses               _curses_panel      
       # _dbm                  _gdbm                 _sqlite3           
