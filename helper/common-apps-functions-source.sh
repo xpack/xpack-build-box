@@ -6363,7 +6363,10 @@ function build_python3()
           config_options+=("--without-lto")
           
           config_options+=("--enable-shared")
-          config_options+=("--enable-loadable-sqlite-extensions")
+
+          # Fails with 3.9.7.
+          # config_options+=("--enable-loadable-sqlite-extensions")
+          config_options+=("--disable-loadable-sqlite-extensions")
 
           if is_linux
           then
