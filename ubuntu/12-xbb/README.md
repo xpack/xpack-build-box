@@ -8,12 +8,20 @@ There are several scripts:
 - `amd64-build-v3.2.sh` -> `ilegeul/ubuntu:amd64-12.04-xbb-v3.2`
 - `i386-build-v3.2.sh` -> `ilegeul/ubuntu:i386-12.04-xbb-v3.2`
 
+- `amd64-build-v3.3.sh` -> `ilegeul/ubuntu:amd64-12.04-xbb-v3.3`
+- `i386-build-v3.3.sh` -> `ilegeul/ubuntu:i386-12.04-xbb-v3.3`
+
 ```sh
+bash ~/Downloads/xpack-build-box.git/ubuntu/12-xbb/amd64-build-v3.2.sh
+bash ~/Downloads/xpack-build-box.git/ubuntu/12-xbb/i386-build-v3.2.sh
+
 bash ~/Downloads/xpack-build-box.git/ubuntu/12-xbb/amd64-build-v3.3.sh
 bash ~/Downloads/xpack-build-box.git/ubuntu/12-xbb/i386-build-v3.3.sh
 
 docker images
 ```
+
+The two builds can be started in parallel and take about 180 minutes.
 
 ## Development
 
@@ -53,8 +61,8 @@ There are several environment variables that can be passed to the script:
 
 ## Test
 
-The following tests were performed on an Ubuntu Server
-18.04 running on an Intel NUC.
+The following tests were performed on an Debian 10
+running on an Intel NUC.
 
 ```sh
 docker run --interactive --tty ilegeul/ubuntu:amd64-12.04-xbb-v3.3

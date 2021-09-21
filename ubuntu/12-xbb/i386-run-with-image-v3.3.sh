@@ -47,7 +47,7 @@ version="3.3"
 arch="i386"
 distro="ubuntu"
 release="12.04"
-from="ilegeul/${distro}:${arch}-${release}-xbb-bootstrap-v3.2"
+from="ilegeul/${distro}:${arch}-${release}-xbb-bootstrap-v3.3"
 layer="xbb"
 
 # -----------------------------------------------------------------------------
