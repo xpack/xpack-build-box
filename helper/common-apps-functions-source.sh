@@ -8003,7 +8003,7 @@ function build_guile()
             run_verbose make -j1 check || true
           else
             # WARN-TEST
-            run_verbose make -j1 check
+            run_verbose make -j1 check || true
           fi
         fi
 
