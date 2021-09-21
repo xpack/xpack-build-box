@@ -6100,7 +6100,8 @@ function build_python2()
   # "2.7.12" # Fails on macOS in bootstrap
   # 2017-09-16, "2.7.14" # Fails on macOS in bootstrap
   # March 4, 2019, "2.7.16" # Fails on macOS in bootstrap
-  # Oct. 19, 2019, "2.7.17" - final release.
+  # Oct. 19, 2019, "2.7.17" 
+  # April 20, 2020, "2.7.18" - final release.
 
   local python2_version="$1"
 
@@ -6273,6 +6274,8 @@ function build_python3()
   # March 25, 2019, "3.7.3"
   # Dec. 18, 2019, "3.8.1"
   # May 3, 2021, "3.8.10"
+  # Aug. 30, 2021, "3.8.12"
+  # Aug. 30, 2021, "3.9.7"
 
   local python3_version="$1"
 
@@ -6926,7 +6929,7 @@ function build_wine()
   # https://dl.winehq.org/wine/source/4.x/wine-4.3.tar.xz
   # https://dl.winehq.org/wine/source/5.x/wine-5.1.tar.xz
 
-  # https://git.archlinux.org/svntogit/community.git/tree/trunk/PKGBUILD?h=packages/wine
+  # https://github.com/archlinux/svntogit-community/blob/packages/wine/trunk/PKGBUILD
 
   # 2017-09-16, "4.3"
   # 2019-11-29, "4.21"
