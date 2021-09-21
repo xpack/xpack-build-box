@@ -27,6 +27,8 @@ bash ~/Downloads/xpack-build-box.git/ubuntu/12-xbb-bootstrap/i386-build-v3.3.sh
 docker images
 ```
 
+The two builds can be started in parallel and take about 120 minutes.
+
 ## Development
 
 During development, it is possible to run the build inside a container,
