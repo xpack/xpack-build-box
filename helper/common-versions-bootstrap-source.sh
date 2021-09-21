@@ -85,7 +85,7 @@ function build_versioned_components()
     # depends=('sh' 'perl')
     # Requires autoconf, the order is important on macOS.
     # PATCH! .xz!
-    build_automake "1.16.2"
+    build_automake "1.16.3" # "1.16.2"
 
     # depends=('glibc' 'glib2 (internal)')
     # Required by wget.
