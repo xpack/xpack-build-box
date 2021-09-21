@@ -1362,7 +1362,7 @@ function build_mingw_headers()
           # `mingw` in the root. 
           cd "${INSTALL_FOLDER_PATH}"
           run_verbose rm -fv "mingw"
-          run_verbose ln -sv "${MINGW_TARGET}" "mingw"
+          run_verbose ln -sv "usr/${MINGW_TARGET}" "mingw"
         )
 
       ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${mingw_headers_folder_name}/make-output.txt"
@@ -1822,7 +1822,7 @@ function build_mingw_winpthreads()
           config_options+=("--prefix=${INSTALL_FOLDER_PATH}/usr/${MINGW_TARGET}")
           config_options+=("--with-sysroot=${INSTALL_FOLDER_PATH}")
 
-          config_options+=("--libdir=${INSTALL_FOLDER_PATH}/${MINGW_TARGET}/lib")
+          config_options+=("--libdir=${INSTALL_FOLDER_PATH}/usr/${MINGW_TARGET}/lib")
 
           config_options+=("--build=${BUILD}")
           config_options+=("--host=${MINGW_TARGET}")
