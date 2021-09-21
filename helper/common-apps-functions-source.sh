@@ -6813,8 +6813,8 @@ function build_p7zip()
       then
         CPPFLAGS+=" -DENV_MACOSX"
       fi
-      CFLAGS="${XBB_CFLAGS_NO_W}"
-      CXXFLAGS="${XBB_CXXFLAGS_NO_W}"
+      CFLAGS="${XBB_CFLAGS_NO_W} -std=c99"
+      CXXFLAGS="${XBB_CXXFLAGS_NO_W} -std=c++11"
       LDFLAGS="${XBB_LDFLAGS_APP}"
 
       export CPPFLAGS
