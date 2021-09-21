@@ -220,7 +220,7 @@ function build_versioned_components()
     then
       # depends=('bzip2' 'gdbm' 'openssl' 'zlib' 'expat' 'sqlite' 'libffi')
       # macOS 10.13 uses 2.7.16, bring it in sync.
-      build_python2 "2.7.16" # "2.7.10" # "2.7.12" # "2.7.14" #  # "2.7.14"
+      build_python2 "2.7.18" # "2.7.16" # "2.7.10" # "2.7.12" # "2.7.14" #  # "2.7.14"
     fi
 
     if true # is_linux
