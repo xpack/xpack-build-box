@@ -294,7 +294,8 @@ function prepare_xbb_env()
       fi
     elif [ "${HOST_UNAME}" == "Linux" ]
     then
-      if [ ! -d "${XBB_PARENT_FOLDER_PATH}" -o ! -x "${XBB_PARENT_FOLDER_PATH}/usr/bin/${CXX}" ]
+      if [ ! -d "${XBB_PARENT_FOLDER_PATH}" -o \
+        \( ! -x "${XBB_PARENT_FOLDER_PATH}/usr/bin/${CXX}" -a ! -x "${XBB_PARENT_FOLDER_PATH}/bin/${CXX}" \) ]
       then
         echo "XBB Bootstrap compiler not found in \"${XBB_PARENT_FOLDER_PATH}\""
         exit 1
