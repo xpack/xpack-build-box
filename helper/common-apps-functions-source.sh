@@ -5097,6 +5097,7 @@ function build_cmake()
   # Dec 19, 2019, "3.15.6" - requires cmake 3.x -> bootstrap.
   # Dec 16, 2019, "3.16.2"
   # Apr 6, 2021, "3.19.8"
+  # Sep 20, 2021, "3.20.6"
 
   local cmake_version="$1"
   local cmake_version_major="$(echo ${cmake_version} | sed -e 's|\([0-9][0-9]*\)\..*|\1|')"
