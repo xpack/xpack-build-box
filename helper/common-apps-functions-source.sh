@@ -1908,7 +1908,7 @@ function build_mingw_gcc_final()
         run_verbose grep 'HAVE_SYS_MMAN_H' "${MINGW_TARGET}/libgcc/auto-target.h"
         run_verbose sed -i.bak -e 's|#define HAVE_SYS_MMAN_H 1|#define HAVE_SYS_MMAN_H 0|' \
           "${MINGW_TARGET}/libgcc/auto-target.h"
-        run_verbose diff "${MINGW_TARGET}/libgcc/auto-target.h.bak" "${MINGW_TARGET}/libgcc/auto-target.h"
+        run_verbose diff "${MINGW_TARGET}/libgcc/auto-target.h.bak" "${MINGW_TARGET}/libgcc/auto-target.h" || true
       fi
 
       # Build.
