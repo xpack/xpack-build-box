@@ -6,7 +6,20 @@ To clone the repo with its submodule:
 
 ```sh
 rm -rf ~/Downloads/xpack-build-box.git; \
-git clone https://github.com/xpack/xpack-build-box.git \
+git clone \
+  --branch master \
+  https://github.com/xpack/xpack-build-box.git \
+  ~/Downloads/xpack-build-box.git; \
+git -C ~/Downloads/xpack-build-box.git submodule update --init --recursive 
+```
+
+For the development version use the `develop` branch:
+
+```sh
+rm -rf ~/Downloads/xpack-build-box.git; \
+git clone \
+  --branch develop \
+  https://github.com/xpack/xpack-build-box.git \
   ~/Downloads/xpack-build-box.git; \
 git -C ~/Downloads/xpack-build-box.git submodule update --init --recursive 
 ```
