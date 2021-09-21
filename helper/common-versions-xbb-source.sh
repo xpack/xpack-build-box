@@ -293,7 +293,7 @@ function build_versioned_components()
     build_tcl  "8.6.11" # "8.6.10"
 
     # depends=('curl' 'libarchive' 'shared-mime-info' 'jsoncpp' 'rhash')
-    build_cmake "3.19.8" # "3.16.2" # "3.13.4"
+    build_cmake "3.20.6" # "3.19.8" # "3.16.2" # "3.13.4"
 
     # On macOS use the official binaries, which install in:
     # 2.7.17 -> /Library/Frameworks/Python.framework/Versions/2.7
@@ -321,7 +321,7 @@ function build_versioned_components()
     then
       # There are several errors on macOS 10.10 and some tests fail.                                           
       # depends=('bzip2' 'gdbm' 'openssl' 'zlib' 'expat' 'sqlite' 'libffi')
-      build_python2 "2.7.17" # "2.7.16" (2.7.17 is the final release)
+      build_python2 "2.7.18" # "2.7.17" # "2.7.16" (2.7.17 is the final release)
       # Python build finished, but the necessary bits to build these modules were not found:
       # _bsddb             _curses            _curses_panel   
       # _sqlite3           _tkinter           bsddb185        
@@ -337,8 +337,8 @@ function build_versioned_components()
     if true # is_linux
     then
       # require xz, openssl
-      PYTHON3X="python3.8"
-      build_python3 "3.8.10" # "3.7.6" # "3.8.1" # "3.7.3"
+      PYTHON3X="python3.9"
+      build_python3 "3.9.7" # "3.8.10" # "3.7.6" # "3.8.1" # "3.7.3"
       # The necessary bits to build these optional modules were not found:
       # _bz2                  _curses               _curses_panel      
       # _dbm                  _gdbm                 _sqlite3           
