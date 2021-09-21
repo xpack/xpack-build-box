@@ -239,7 +239,7 @@ function build_versioned_components()
     fi
 
     # depends=('python2')
-    build_scons "3.1.1" # "3.0.5" # "3.0.1"
+    build_scons "3.1.2" # "3.1.1" # "3.0.5" # "3.0.1"
 
     # Requires scons
     # depends=('python2')
