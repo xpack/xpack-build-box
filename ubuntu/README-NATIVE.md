@@ -1,6 +1,6 @@
-## The Ubuntu XBB - native development
+# The Ubuntu XBB - native development
 
-### Overview
+## Overview
 
 This solution is intended mainly for development purposes, to create
 applications that can be used in edit-compile-debug cycles, thus should
@@ -10,14 +10,14 @@ For this, the build environment should use the tools and libraries
 available in the host machine, even if the versions may be slightly
 different from those used in the Docker images.
 
-### Prerequisites
+## Prerequisites
 
 The current procedure was tested on an Ubuntu 18 LTS 64-bit.
 
 For virtual machines, to keep the space requirements low, preferably
 install a **minimal** system (select this during the install).
 
-### How to install
+## How to install
 
 ```console
 $ rm -rf "${HOME}/Downloads/xpack-build-box.git"
@@ -34,7 +34,7 @@ In addition to the minimal system, a modern graphical editor and a graphical
 Git client are recommended, although none is mandatory, and for the
 brave ones using the command line tools is perfectly possible.
 
-#### Visual Studio Code
+### Visual Studio Code
 
 The recommended editor is Visual Studio Code, which can be downloaded 
 for free from
@@ -55,7 +55,7 @@ build and debug configurations.
 This is an optional step. Any other editor is perfectly ok, but the
 build and debug configurations must be recreated.
 
-#### Visual Studio Code - Git
+### Visual Studio Code - Git
 
 Since SourceTree is not available for GNU/Linux, the second choice is
 to use the VS Code Git plug-ins, which are doing a fair job.
@@ -66,7 +66,7 @@ plug-ins, like;
 - GitLens
 - Git Graph
 
-#### Git Kraken
+### Git Kraken
 
 A separate alternative is
 Git Kraken, which can be downloaded for free from 
@@ -83,7 +83,7 @@ Preferably add it to the tool bar, for convenient access.
 This is an optional step. Any other Git client is perfectly ok,
 even the command line one.
 
-### How to use
+## How to use
 
 The recommended use is similar to all other XBBs:
 
@@ -100,11 +100,11 @@ source "/opt/xbb/xbb-source.sh"
 )
 ```
 
-## The `xbb-source.sh` script
+# The `xbb-source.sh` script
 
 See the parent [`README.md`](../README.md).
 
-## The `pkg-config-verbose` script
+# The `pkg-config-verbose` script
 
 See the parent [`README.md`](../README.md).
 

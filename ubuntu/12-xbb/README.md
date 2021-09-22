@@ -5,16 +5,10 @@
 
 There are several scripts:
 
-- `amd64-build-v3.2.sh` -> `ilegeul/ubuntu:amd64-12.04-xbb-v3.2`
-- `i386-build-v3.2.sh` -> `ilegeul/ubuntu:i386-12.04-xbb-v3.2`
-
 - `amd64-build-v3.3.sh` -> `ilegeul/ubuntu:amd64-12.04-xbb-v3.3`
 - `i386-build-v3.3.sh` -> `ilegeul/ubuntu:i386-12.04-xbb-v3.3`
 
 ```sh
-bash ~/Downloads/xpack-build-box.git/ubuntu/12-xbb/amd64-build-v3.2.sh
-bash ~/Downloads/xpack-build-box.git/ubuntu/12-xbb/i386-build-v3.2.sh
-
 bash ~/Downloads/xpack-build-box.git/ubuntu/12-xbb/amd64-build-v3.3.sh
 bash ~/Downloads/xpack-build-box.git/ubuntu/12-xbb/i386-build-v3.3.sh
 
