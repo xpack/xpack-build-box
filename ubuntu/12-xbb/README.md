@@ -59,6 +59,8 @@ There are several environment variables that can be passed to the script:
 # DEBUG=-x bash /input/build-v3.sh
 ```
 
+The two builds can be started in parallel and take about 200 minutes.
+
 ## Test
 
 The following tests were performed on an Debian 10
