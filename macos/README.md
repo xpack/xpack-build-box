@@ -158,7 +158,7 @@ not mandatory.
 TeX is available in the [TeX Live](https://tug.org/texlive/) distribution.
 
 ```bash
-caffeinate bash "${HOME}/Downloads/xpack-build-box.git/macos/install-texlive.sh" 2021
+caffeinate bash "${HOME}/Downloads/xpack-build-box.git/macos/install-texlive.sh" 2018
 ```
 
 The TeX install script is locked to a certain version, but depends on the
