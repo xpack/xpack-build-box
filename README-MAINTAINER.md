@@ -24,6 +24,44 @@ git clone \
 git -C ~/Downloads/xpack-build-box.git submodule update --init --recursive 
 ```
 
+## TeX
+
+TeX 2019 failed on Aarch64 with a CRC error.
+
+TeX 2020 and 2021 failed with:
+
+```console
+re-running mktexlsr /opt/texlive/texmf-var /opt/texlive/texmf-config ...
+setting up ConTeXt cache: running mtxrun --generate .../root/Work/install-tl-20210324/install-tl: mtxrun --generate failed (status 1): 
+failed
+pre-generating all format files, be patient...
+running fmtutil-sys --no-error-if-no-engine=luajithbtex,luajittex,mfluajit --no-strict --all ...done
+running package-specific postactions
+
+/root/Work/install-tl-20210324/install-tl: errors in installation reported above
+
+Summary of warnings:
+/root/Work/install-tl-20210324/install-tl: mtxrun --generate failed (status 1): 
+finished with package-specific postactions
+```
+
+TeX 2021 installer also complains if environment variables contain `tex`:
+
+```console
+Summary of warnings:
+/root/Work/install-tl-20210324/install-tl: mtxrun --generate failed (status 1): 
+
+ ----------------------------------------------------------------------
+ The following environment variables contain the string "tex"
+ (case-independent).  If you're doing anything but adding personal
+ directories to the system paths, they may well cause trouble somewhere
+ while running TeX.  If you encounter problems, try unsetting them.
+ Please ignore spurious matches unrelated to TeX.
+
+    XBB_LAYER=tex
+ ----------------------------------------------------------------------
+```
+
 ## TODO
 
 Things to be considered for future versions:
