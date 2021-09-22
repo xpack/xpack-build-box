@@ -85,7 +85,7 @@ function host_run_docker_it_with_volume()
 
   if [[ "${layer}" == "xbb-bootstrap" ]]
   then
-    docker run \
+    run_verbose docker run \
       --interactive \
       --tty \
       --hostname "${layer}-${arch}" \
@@ -108,7 +108,7 @@ function host_run_docker_it_with_volume()
       exit 1
     fi
 
-    docker run \
+    run_verbose docker run \
       --interactive \
       --tty \
       --hostname "${layer}-${arch}" \
@@ -137,20 +137,20 @@ function host_run_docker_it_with_image()
   echo 
   echo "Running parent Docker image ${from}..."
 
-    docker run \
-      --interactive \
-      --tty \
-      --hostname "${layer}-${arch}" \
-      --workdir="/root" \
-      --env DEBUG="${DEBUG}" \
-      --env JOBS="${JOBS:-${NPROC}}" \
-      --env XBB_VERSION="${version}" \
-      --env XBB_LAYER="${layer}" \
-      --env RUN_LONG_TESTS="${RUN_LONG_TESTS:-""}" \
-      --volume="${WORK_FOLDER_PATH}:/root/Work" \
-      --volume="${script_folder_path}/${input_folder_name}:/input" \
-      --volume="${output_folder_name}:/opt/${layer}" \
-      ${from}
+  run_verbose docker run \
+    --interactive \
+    --tty \
+    --hostname "${layer}-${arch}" \
+    --workdir="/root" \
+    --env DEBUG="${DEBUG}" \
+    --env JOBS="${JOBS:-${NPROC}}" \
+    --env XBB_VERSION="${version}" \
+    --env XBB_LAYER="${layer}" \
+    --env RUN_LONG_TESTS="${RUN_LONG_TESTS:-""}" \
+    --volume="${WORK_FOLDER_PATH}:/root/Work" \
+    --volume="${script_folder_path}/${input_folder_name}:/input" \
+    --volume="${output_folder_name}:/opt/${layer}" \
+    ${from}
 }
 
 function host_run_docker_build()
@@ -161,12 +161,12 @@ function host_run_docker_build()
   local layer="$4"
 
   set +e
-  docker rmi "${tag}"
+  run_verbose docker rmi "${tag}"
   set -e
 
   echo 
   echo "Building Docker image ${tag}..."
-  docker build \
+  run_verbose docker build \
     --build-arg DEBUG="${DEBUG}" \
     --build-arg JOBS="${JOBS:-${NPROC}}" \
     --build-arg XBB_VERSION="${version}" \
