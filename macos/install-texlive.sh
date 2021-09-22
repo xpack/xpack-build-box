@@ -38,22 +38,6 @@ script_folder_name="$(basename "${script_folder_path}")"
 # https://ftp.tu-chemnitz.de/pub/tug/historic/systems/texlive/2020/install-tl-unx.tar.gz
 
 TL_EDITION_YEAR=${1:-"2018"}
-if [ "${TL_EDITION_YEAR}" == "2018" ]
-then
-  TL_EDITION_FOLDER_NAME="install-tl-20180414"
-elif [ "${TL_EDITION_YEAR}" == "2019" ]
-then
-  TL_EDITION_FOLDER_NAME="install-tl-20190410"
-elif [ "${TL_EDITION_YEAR}" == "2020" ]
-then
-  TL_EDITION_FOLDER_NAME="install-tl-20200406"
-elif [ "${TL_EDITION_YEAR}" == "2021" ]
-then
-  TL_EDITION_FOLDER_NAME="install-tl-20210324"
-else
-  echo "Unsupported year ${TL_EDITION_YEAR}"
-  exit 1
-fi
 
 # Schemes: basic (~120 packs), medium (~1000 packs), full (~3400)
 # TL_SCHEME="basic"
@@ -94,6 +78,8 @@ function xbb_activate()
 }
 
 # -----------------------------------------------------------------------------
+
+set_tl_edition_folder
 
 do_texlive "${TL_EDITION_YEAR}" "${TL_EDITION_FOLDER_NAME}" "${TL_SCHEME}"
 

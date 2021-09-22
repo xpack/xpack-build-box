@@ -35,8 +35,8 @@ script_folder_name="$(basename "${script_folder_path}")"
 # =============================================================================
 # This script installs a local instance of TeX Live (https://tug.org/texlive/).
 
-TL_EDITION_YEAR="2018"
-TL_EDITION_FOLDER_NAME="install-tl-20180414"
+TL_EDITION_YEAR=${1:-"2018"}
+
 # Schemes: basic (~80 packs), medium (~1000 packs), full (~3400)
 TL_SCHEME="medium"
 
@@ -83,6 +83,8 @@ function do_cleanup()
 }
 
 # =============================================================================
+
+set_tl_edition_folder
 
 do_texlive "${TL_EDITION_YEAR}" "${TL_EDITION_FOLDER_NAME}" "${TL_SCHEME}"
 

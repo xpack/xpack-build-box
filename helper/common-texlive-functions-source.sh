@@ -9,6 +9,27 @@
 
 # Common functions used for building the XBB environments.
 
+function set_tl_edition_folder()
+{
+  TL_EDITION_YEAR=${TL_EDITION_YEAR:-"2018"}
+  if [ "${TL_EDITION_YEAR}" == "2018" ]
+  then
+    TL_EDITION_FOLDER_NAME="install-tl-20180414"
+  elif [ "${TL_EDITION_YEAR}" == "2019" ]
+  then
+    TL_EDITION_FOLDER_NAME="install-tl-20190410"
+  elif [ "${TL_EDITION_YEAR}" == "2020" ]
+  then
+    TL_EDITION_FOLDER_NAME="install-tl-20200406"
+  elif [ "${TL_EDITION_YEAR}" == "2021" ]
+  then
+    TL_EDITION_FOLDER_NAME="install-tl-20210324"
+  else
+    echo "Unsupported year ${TL_EDITION_YEAR}"
+    exit 1
+  fi
+}
+
 function do_texlive()
 {
   local tl_edition_year="$1"
