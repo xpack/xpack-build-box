@@ -5,14 +5,14 @@
 
 There are several scripts:
 
-- `amd64-build-v3.2.sh` -> `ilegeul/ubuntu:amd64-16.04-xbb-v3.2`
-- `i386-build-v3.2.sh` -> `ilegeul/ubuntu:i386-16.04-xbb-v3.2`
+- `amd64-build-v3.3.sh` -> `ilegeul/ubuntu:amd64-16.04-xbb-v3.3`
+- `i386-build-v3.3.sh` -> `ilegeul/ubuntu:i386-16.04-xbb-v3.3`
 - `arm64v8-build-v3.3.sh` -> `ilegeul/ubuntu:arm64v8-16.04-xbb-v3.3`
 - `arm32v7-build-v3.3.sh` -> `ilegeul/ubuntu:arm32v7-16.04-xbb-v3.3`
 
 ```sh
-bash ~/Downloads/xpack-build-box.git/ubuntu/16-xbb/amd64-build-v3.2.sh
-bash ~/Downloads/xpack-build-box.git/ubuntu/16-xbb/i386-build-v3.2.sh
+bash ~/Downloads/xpack-build-box.git/ubuntu/16-xbb/amd64-build-v3.3.sh
+bash ~/Downloads/xpack-build-box.git/ubuntu/16-xbb/i386-build-v3.3.sh
 
 bash ~/Downloads/xpack-build-box.git/ubuntu/16-xbb/arm64v8-build-v3.3.sh
 bash ~/Downloads/xpack-build-box.git/ubuntu/16-xbb/arm32v7-build-v3.3.sh
@@ -30,8 +30,8 @@ The following commands can be used to create the docker container
 based on the bootstrap image:
 
 ```sh
-bash ~/Downloads/xpack-build-box.git/ubuntu/16-xbb/amd64-run-with-image-v3.2.sh
-bash ~/Downloads/xpack-build-box.git/ubuntu/16-xbb/i386-run-with-image-v3.2.sh
+bash ~/Downloads/xpack-build-box.git/ubuntu/16-xbb/amd64-run-with-image-v3.3.sh
+bash ~/Downloads/xpack-build-box.git/ubuntu/16-xbb/i386-run-with-image-v3.3.sh
 
 bash ~/Downloads/xpack-build-box.git/ubuntu/16-xbb/arm64v8-run-with-image-v3.3.sh
 bash ~/Downloads/xpack-build-box.git/ubuntu/16-xbb/arm32v7-run-with-image-v3.3.sh
@@ -41,8 +41,8 @@ The following commands can be used to create the docker container
 with the bootstrap also mounted from the host:
 
 ```sh
-bash ~/Downloads/xpack-build-box.git/ubuntu/16-xbb/amd64-run-with-volume-v3.2.sh
-bash ~/Downloads/xpack-build-box.git/ubuntu/16-xbb/i386-run-with-volume-v3.2.sh
+bash ~/Downloads/xpack-build-box.git/ubuntu/16-xbb/amd64-run-with-volume-v3.3.sh
+bash ~/Downloads/xpack-build-box.git/ubuntu/16-xbb/i386-run-with-volume-v3.3.sh
 
 bash ~/Downloads/xpack-build-box.git/ubuntu/16-xbb/arm64v8-run-with-volume-v3.3.sh
 bash ~/Downloads/xpack-build-box.git/ubuntu/16-xbb/arm32v7-run-with-volume-v3.3.sh
@@ -67,12 +67,12 @@ The following tests were performed on an Ubuntu Server
 18.04 running on an Intel NUC.
 
 ```sh
-docker run --interactive --tty ilegeul/ubuntu:amd64-16.04-xbb-v3.2
-docker run --interactive --tty ilegeul/ubuntu:i386-16.04-xbb-v3.2
+docker run --interactive --tty ilegeul/ubuntu:amd64-16.04-xbb-v3.3
+docker run --interactive --tty ilegeul/ubuntu:i386-16.04-xbb-v3.3
 ```
 
-The following tests were performed on an Debian 9
-running on a ROCK Pi 4 SBC.
+The following tests were performed on a Raspberry Pi OS
+running on a Raspberry CM4 with 8 GB RAM.
 
 ```sh
 docker run --interactive --tty ilegeul/ubuntu:arm64v8-16.04-xbb-v3.3
@@ -84,8 +84,8 @@ docker run --interactive --tty ilegeul/ubuntu:arm32v7-16.04-xbb-v3.3
 To publish, use:
 
 ```sh
-docker push "ilegeul/ubuntu:amd64-16.04-xbb-v3.2"
-docker push "ilegeul/ubuntu:i386-16.04-xbb-v3.2"
+docker push "ilegeul/ubuntu:amd64-16.04-xbb-v3.3"
+docker push "ilegeul/ubuntu:i386-16.04-xbb-v3.3"
 
 docker push "ilegeul/ubuntu:arm64v8-16.04-xbb-v3.3"
 docker push "ilegeul/ubuntu:arm32v7-16.04-xbb-v3.3"

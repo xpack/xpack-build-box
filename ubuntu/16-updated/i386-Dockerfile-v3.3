@@ -1,0 +1,19 @@
+FROM ilegeul/ubuntu:i386-16.04
+
+LABEL description="Ubuntu 16.04 i386 image, updated to the latest available."
+LABEL maintainer="Liviu Ionescu <ilg@livius.net>"
+LABEL repository="https://github.com/xpack/xpack-build-box.git"
+LABEL docs="https://github.com/xpack/xpack-build-box/tree/master/ubuntu/16-updated/README.md"
+
+ENTRYPOINT ["linux32"]
+
+ARG DEBUG
+ARG JOBS
+
+ARG XBB_VERSION
+ARG XBB_LAYER
+
+ADD input /input
+RUN linux32 bash /input/build-v3.sh
+
+CMD ["/bin/bash"]
