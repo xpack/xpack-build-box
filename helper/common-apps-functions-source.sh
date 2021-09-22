@@ -553,8 +553,12 @@ function build_native_gcc()
           config_options+=("--with-dwarf2")
           config_options+=("--with-stabs")
           config_options+=("--with-libiconv")
-          # config_options+=("--with-isl=${INSTALL_FOLDER_PATH}")
-          config_options+=("--with-isl")
+
+          # On macOS it fails with:
+          # ld: library not found for -lisl
+          # config_options+=("--with-isl")
+          config_options+=("--with-isl=${INSTALL_FOLDER_PATH}")
+
           config_options+=("--with-gnu-as")
           config_options+=("--with-gnu-ld")
           config_options+=("--with-diagnostics-color=auto")
