@@ -134,14 +134,14 @@ __EOF__
     echo "Running install-tl..."
     if [ ${exit_code} -eq 0 ]
     then
-      time "${TL_FOLDER_PATH}/install-tl" \
+      time run_verbose "${TL_FOLDER_PATH}/install-tl" \
         -repository "${tl_repo_url}" \
         -no-gui \
         -lang en \
         -profile "${tmp_profile}" \
         -scheme "${tl_scheme}"
     else
-      time "${TL_FOLDER_PATH}/install-tl" \
+      time run_verbose "${TL_FOLDER_PATH}/install-tl" \
         -no-gui \
         -lang en \
         -profile "${tmp_profile}" \
@@ -166,14 +166,14 @@ __EOF__
     echo "PATH=${PATH}"
     export PATH
 
-    tlmgr install collection-fontsrecommended
+    run_verbose tlmgr install collection-fontsrecommended
 
     # Keep no backups (not required, simply makes cache bigger).
-    tlmgr option -- autobackup 0
+    run_verbose tlmgr option -- autobackup 0
 
     if [ -f "${INSTALL_FOLDER_PATH}/install-tl.log" ]
     then
-      cp "${INSTALL_FOLDER_PATH}/install-tl.log" "${tl_work_folder_path}"
+      run_verbose cp -v "${INSTALL_FOLDER_PATH}/install-tl.log" "${tl_work_folder_path}"
     fi
   )
 }
