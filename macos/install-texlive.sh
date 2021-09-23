@@ -41,7 +41,7 @@ TL_EDITION_YEAR=${1:-"2018"}
 
 # Schemes: basic (~120 packs), medium (~1000 packs), full (~3400)
 # TL_SCHEME="basic"
-TL_SCHEME="medium"
+TL_SCHEME="${2:-medium}"
 
 WORK_FOLDER_PATH="${HOME}/Work"
 
