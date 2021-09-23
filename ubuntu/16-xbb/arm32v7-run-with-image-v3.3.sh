@@ -47,7 +47,7 @@ version="3.3"
 arch="arm32v7"
 distro="ubuntu"
 release="16.04"
-from="ilegeul/${distro}:${arch}-${release}-xbb-bootstrap-v3.2"
+from="ilegeul/${distro}:${arch}-${release}-xbb-bootstrap-v${version}"
 layer="xbb"
 
 # -----------------------------------------------------------------------------

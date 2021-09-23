@@ -47,7 +47,7 @@ version="3.3"
 arch="amd64"
 distro="ubuntu"
 release="12.04"
-from="ilegeul/${distro}:${arch}-${release}-tex-v3.3"
+from="ilegeul/${distro}:${arch}-${release}-tex-v${version}"
 layer="xbb"
 
 # -----------------------------------------------------------------------------
