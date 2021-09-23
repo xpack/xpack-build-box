@@ -158,12 +158,15 @@ not mandatory.
 TeX is available in the [TeX Live](https://tug.org/texlive/) distribution.
 
 ```bash
-caffeinate bash "${HOME}/Downloads/xpack-build-box.git/macos/install-texlive.sh" 2018
+caffeinate bash "${HOME}/Downloads/xpack-build-box.git/macos/install-texlive.sh" 2021
 ```
 
 The TeX install script is locked to a certain version, but depends on the
 presence of that version on a certain server, which is also not guaranteed
 to last forever.
+
+Note: on newer macOS releases, installing 2018 fails and the only one that
+proved functional is 2021.
 
 ## Deprecated Homebrew solution
 
