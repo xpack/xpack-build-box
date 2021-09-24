@@ -43,22 +43,22 @@ source "${helper_folder_path}/common-docker-functions-source.sh"
 # -----------------------------------------------------------------------------
 
 version="3.3"
-
-arch="amd64"
-distro="ubuntu"
-release="16.04"
-from="ilegeul/${distro}:${arch}-${release}-xbb-bootstrap-v${version}"
 layer="xbb"
 
-# -----------------------------------------------------------------------------
+arch="i386"
+distro="ubuntu"
+release="16.04"
 
-detect_host
+# -----------------------------------------------------------------------------
 
 host_init_docker_env
 host_init_docker_input \
   "$(dirname $(dirname "${script_folder_path}"))/ca-bundle/ca-bundle.crt" \
 
-host_run_docker_it_with_image
+tag="ilegeul/${distro}:${arch}-${release}-${layer}-v${version}"
+dockerfile="${arch}-Dockerfile-v${version}"
+
+host_run_docker_build "${version}" "${tag}" "${dockerfile}" "${layer}"
 
 host_clean_docker_input
 

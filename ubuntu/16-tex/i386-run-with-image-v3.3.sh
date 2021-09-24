@@ -44,11 +44,11 @@ source "${helper_folder_path}/common-docker-functions-source.sh"
 
 version="3.3"
 
-arch="amd64"
+arch="i386"
 distro="ubuntu"
 release="16.04"
-from="ilegeul/${distro}:${arch}-${release}-xbb-bootstrap-v${version}"
-layer="xbb"
+from="ilegeul/${distro}:${arch}-${release}-develop-v${version}"
+layer="tex"
 
 # -----------------------------------------------------------------------------
 

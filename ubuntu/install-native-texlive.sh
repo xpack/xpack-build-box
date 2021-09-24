@@ -68,10 +68,6 @@ detect_host
 echo
 echo "$(uname) XBB TexLive ${TL_EDITION_YEAR} build script started..."
 
-echo
-echo "Checking if Xcode Command Line Tools are installed..."
-xcode-select -p
-
 function xbb_activate()
 {
   :
