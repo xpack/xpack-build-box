@@ -268,5 +268,14 @@ For Arm binaries, the base distribution is **Ubuntu 16.04 LTS (xenial)**,
 (2.23); the resulting binaries should run on all Raspberry Pi class
 machines, or larger/newer.
 
-However, support for RHEL 7 is a tough requirement, and will probably be
-dropped soon, by also moving to Ubuntu 16.04 LTS.
+## Future plans
+
+RedHat extended support for RHEL 7 ends in Aug. 2023. However XBB support
+for RHEL 7 is a tough requirement, and will probably be
+dropped in 2022.
+
+For future releases (2023-2024?), the plan is to move up to
+Ubuntu 18 (GLIBC 2.27). This will also provide compatibility with
+RedHat 8 / Debian 10, which both use GLIBC 2.28. The migration
+path will probably take two steps, with an intermediate step
+(in 2022?) at Ubuntu 16 (GlIBC 2.23) for both Intel and Arm Linux.
