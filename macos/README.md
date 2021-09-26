@@ -87,7 +87,7 @@ There are several environment variables that can be passed to the script:
 DEBUG=-x caffeinate bash "${HOME}/Downloads/xpack-build-box.git/macos/build-xbb-bootstrap-v3.3.sh"
 ```
 
-The build process takes about 150 minutes on a MacBook Pro 2011.
+The build process takes about 300 minutes on a MacBook Pro 2011.
 
 The build is performed in a folder like `${HOME}/Work/xbb-bootstrap-3.3-darwin-x86_64`
 which can be removed after the build is completed.
@@ -106,7 +106,7 @@ The final XBB tools are compiled with the bootstrapped compiler.
 RUN_LONG_TESTS=y caffeinate bash "${HOME}/Downloads/xpack-build-box.git/macos/build-xbb-v3.3.sh"
 ```
 
-The build process takes about 280 minutes on a MacBook Pro 2011.
+The build process takes about 450 minutes on a MacBook Pro 2011.
 
 The build is performed in a folder like `${HOME}/Work/xbb-3.3-darwin-x86_64`
 which can be removed after the build is completed.
