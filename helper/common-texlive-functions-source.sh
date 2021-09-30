@@ -126,7 +126,7 @@ __EOF__
     # and using `-repository` fails, thus it must be checked before.
     local tl_pdb_url="${tl_repo_url}/tlpkg/texlive.tlpdb"
     set +e
-    curl --silent --fail -L -o "/tmp/texlive.tlpdb" "${tl_pdb_url}"
+    curl --silent --fail --location --insecure -o "/tmp/texlive.tlpdb" "${tl_pdb_url}"
     exit_code=$?
     set -e
 

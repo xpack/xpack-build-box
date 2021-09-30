@@ -1055,7 +1055,7 @@ function _download_one()
   mkdir -pv "${CACHE_FOLDER_PATH}"
 
   set +e
-  curl --fail -L -o "${CACHE_FOLDER_PATH}/${archive_name}.download" "${url}"
+  curl --fail --location --insecure -o "${CACHE_FOLDER_PATH}/${archive_name}.download" "${url}"
   exit_code=$?
   set -e
   
