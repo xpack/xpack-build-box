@@ -2239,7 +2239,7 @@ function build_openssl()
           /usr/bin/install -v -c -m 644 "/private/etc/ssl/cert.pem" "${INSTALL_FOLDER_PATH}/openssl"
         fi
 
-        curl -L http://curl.haxx.se/ca/cacert.pem -o cacert.pem
+        run_verbose curl --insecure --location http://curl.haxx.se/ca/cacert.pem -o cacert.pem
         /usr/bin/install -v -c -m 644 cacert.pem "${INSTALL_FOLDER_PATH}/openssl"
 
         # ca-bundle.crt is used by curl.
