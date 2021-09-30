@@ -37,6 +37,9 @@ bash ~/Downloads/xpack-build-box.git/ubuntu/16-xbb/arm64v8-run-with-image-v3.3.s
 bash ~/Downloads/xpack-build-box.git/ubuntu/16-xbb/arm32v7-run-with-image-v3.3.sh
 ```
 
+The two Arm builds started in parallel take about 670 minutes
+on a Raspberry CM4 with 8 GB RAM.
+
 The following commands can be used to create the docker container
 with the bootstrap also mounted from the host:
 

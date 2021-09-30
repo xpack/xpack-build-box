@@ -15,7 +15,7 @@ bash ~/Downloads/xpack-build-box.git/ubuntu/12-xbb/i386-build-v3.3.sh
 docker images
 ```
 
-The two builds can be started in parallel and take about 190 minutes.
+The two builds started in parallel take about 190 minutes on an Intel NUC.
 
 ## Development
 
@@ -53,7 +53,7 @@ There are several environment variables that can be passed to the script:
 # DEBUG=-x bash /input/build-v3.sh
 ```
 
-The two builds can be started in parallel and take about 200 minutes.
+The two builds started in parallel take about 200 minutes on an Intel NUC.
 
 ## Test
 
