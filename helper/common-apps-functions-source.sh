@@ -7999,7 +7999,7 @@ function build_guile()
         # make install-strip
         run_verbose make install
 
-        if [ "${RUN_TESTS}" == "y" ]
+        if false # [ "${RUN_TESTS}" == "y" ]
         then
           if is_darwin
           then
