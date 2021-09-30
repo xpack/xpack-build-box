@@ -734,7 +734,13 @@ then
   fi
 fi
 
-  echo "export TEXLIVE_FOLDER_PATH=${TEXLIVE_FOLDER_PATH:-\"/opt/texlive\"}" >> "${INSTALL_FOLDER_PATH}/xbb-source.sh"
+  if [ -d "${TEXLIVE_FOLDER_PATH:-"/opt/texlive"}/bin" ]
+  then
+    echo "export TEXLIVE_FOLDER_PATH=${TEXLIVE_FOLDER_PATH:-\"/opt/texlive\"}" >> "${INSTALL_FOLDER_PATH}/xbb-source.sh"
+  else
+    echo "TeX Live bin folder not found. Quit."
+    exit 1
+  fi
 
   if [ "${XBB_LAYER}" == "xbb-bootstrap" ]
   then
