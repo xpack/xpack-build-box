@@ -169,10 +169,10 @@ version 6 will be supported up to Nov. 2020.
 
 However, RHEL releases have a longer
 [life cycle](https://access.redhat.com/support/policy/updates/errata/#Life_Cycle_Dates)
-and RHEL6 end of extended life-cycle support is 2024.
+and RHEL 7 end of extended life-cycle support is 2024.
 
 Due to maintenance issues, starting with XBB v3.1, support for CentOS/RHEL 6
-is discontinued.
+was discontinued.
 
 However support for RHEL 7 is very important, and will be preserved for
 as long as possible. In practical terms, the ldd version must be
