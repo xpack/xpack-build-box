@@ -25,7 +25,7 @@ function build_versioned_components()
     # XBB_LLVM_VERSION="11.1.0"
 
     # Fortunatelly GCC 11.x was updated and works on Apple hardware.
-    XBB_GCC_VERSION="11.1.0" # "8.4.0" # "8.3.0" "7.5.0" "7.4.0"    
+    XBB_GCC_VERSION="11.2.0" # "8.4.0" # "8.3.0" "7.5.0" "7.4.0"    
     XBB_BINUTILS_VERSION="2.36.1" # "2.32" # "2.31"
 
     XBB_LLVM_BRANDING="xPack Build Box Bootstrap ${HOST_BITS}-bit"

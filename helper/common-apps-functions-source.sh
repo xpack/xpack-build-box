@@ -460,7 +460,8 @@ function build_native_gcc()
   # 2021-04-27, "11.1.0"
   # 2021-05-14, "8.5.0"
   # 2021-06-01, "9.4.0"
-
+  # 2021-07-28, "11.2.0"
+  
   local native_gcc_version="$1"
 
   local step

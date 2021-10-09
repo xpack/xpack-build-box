@@ -64,11 +64,11 @@ function build_versioned_components()
     if is_darwin
     then
       # Old GCC not supported on MacOS 11 or M1 machines.
-      XBB_GCC_VERSION="11.1.0"
+      XBB_GCC_VERSION="11.2.0"
     else
       # "10.3.0" fails with:
       # error: unknown conversion type character ‘l’ in format [-Werror=format=]
-      XBB_GCC_VERSION="11.1.0" # "9.4.0" # !"10.3.0" # !"11.1.0" # "9.3.0" # "9.2.0" # "8.3.0" # "7.4.0"
+      XBB_GCC_VERSION="11.2.0" # "9.4.0" # !"10.3.0" # !"11.1.0" # "9.3.0" # "9.2.0" # "8.3.0" # "7.4.0"
 
       XBB_BINUTILS_VERSION="2.36.1" # "2.34" # "2.33.1"
 
