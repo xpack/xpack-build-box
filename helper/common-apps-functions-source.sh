@@ -697,15 +697,8 @@ function build_native_gcc()
               exit 1
             fi
 
-            if is_linux && [ "${HOST_MACHINE}" == "i386" -o "${HOST_MACHINE}" == "i686" ]
-            then
-              # Does not fail the build, but later GCC fails a test with
-              # double defined `__x86.get_pc_thunk.bx`.
-              config_options+=("--without-pic")
-            else
-              # Linking to libstdc++ sometimes fail.
-              config_options+=("--with-pic")
-            fi
+            # Linking to libstdc++ sometimes fail.
+            config_options+=("--with-pic")
 
             config_options+=("--with-linker-hash-style=gnu")
             config_options+=("--enable-clocale=gnu")
