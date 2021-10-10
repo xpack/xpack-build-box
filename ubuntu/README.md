@@ -68,7 +68,7 @@ bash ~/Downloads/xpack-build-box.git/ubuntu/12-updated/i386-build-v3.3.sh; \
 bash ~/Downloads/xpack-build-box.git/ubuntu/12-develop/i386-build-v3.3.sh; \
 bash ~/Downloads/xpack-build-box.git/ubuntu/12-tex/i386-build-v3.3.sh; \
 bash ~/Downloads/xpack-build-box.git/ubuntu/12-xbb-bootstrap/i386-build-v3.3.sh; \
-bash ~/Downloads/xpack-build-box.git/ubuntu/12-xbb/i386-build-v3.3.sh; \
+bash ~/Downloads/xpack-build-box.git/ubuntu/12-xbb/i386-build-v3.3.sh
 
 docker push "ilegeul/ubuntu:i386-12.04"; \
 docker push "ilegeul/ubuntu:i386-12.04-updated-v3.3"; \
