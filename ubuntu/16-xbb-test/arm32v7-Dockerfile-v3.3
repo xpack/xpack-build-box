@@ -1,0 +1,20 @@
+FROM ilegeul/ubuntu:arm32v7-16.04-xbb-v3.3
+
+LABEL description="Ubuntu 16.04 arm32v7 image, with the XBB test."
+LABEL maintainer="Liviu Ionescu <ilg@livius.net>"
+LABEL repository="https://github.com/xpack/xpack-build-box.git"
+LABEL docs="https://github.com/xpack/xpack-build-box/tree/master/ubuntu/16-xbb-test/README.md"
+
+ENTRYPOINT ["linux32"]
+
+ARG DEBUG
+ARG JOBS
+
+ARG XBB_VERSION
+ARG XBB_LAYER
+ARG RUN_LONG_TESTS
+
+ADD input-ubuntu-16.04-arm32v7 /input
+RUN linux32 bash /input/build-v3.sh
+
+CMD ["/bin/bash"]
