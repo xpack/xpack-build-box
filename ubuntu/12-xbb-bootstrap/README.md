@@ -45,8 +45,8 @@ There are several other environment variables that can be passed to the script:
 
 ## Test
 
-The following tests were performed on an Ubuntu Server
-18.04 running on an Intel NUC.
+The following tests were performed on a
+Debian running on an Intel NUC.
 
 ```sh
 docker run --interactive --tty ilegeul/ubuntu:amd64-12.04-xbb-bootstrap-v3.3

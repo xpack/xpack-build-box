@@ -66,8 +66,8 @@ There are several environment variables that can be passed to the script:
 
 ## Test
 
-The following tests were performed on an Ubuntu Server
-18.04 running on an Intel NUC.
+The following tests were performed on a Debian 10
+running on an Intel NUC.
 
 ```sh
 docker run --interactive --tty ilegeul/ubuntu:amd64-16.04-xbb-v3.3
