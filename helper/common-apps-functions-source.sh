@@ -4003,8 +4003,8 @@ function build_gettext()
           # Darwin: FAIL: lang-sh
           if [ "${XBB_LAYER}" == "xbb-bootstrap" ]
           then
-            # Both 32 & 64.
-            if is_arm
+            # Both Intel and Arm (32 & 64).
+            if is_linux
             then
               # Fails on 18.04 32-bit too.
               # aarch64, armv8l: FAIL: test-thread_create
