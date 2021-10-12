@@ -88,7 +88,47 @@ No longer maintained.
 
 ### Ubuntu 16 Intel (xenial)
 
-Temporarily not maintained, but planned for the next major release (v4.x).
+Currently not actively used.
+
+```bash
+set -o errexit
+docker system prune -f
+bash ~/Downloads/xpack-build-box.git/ubuntu/16/amd64-build.sh; \
+bash ~/Downloads/xpack-build-box.git/ubuntu/16-updated/amd64-build-v3.3.sh; \
+bash ~/Downloads/xpack-build-box.git/ubuntu/16-develop/amd64-build-v3.3.sh; \
+bash ~/Downloads/xpack-build-box.git/ubuntu/16-tex/amd64-build-v3.3.sh; \
+bash ~/Downloads/xpack-build-box.git/ubuntu/16-xbb-bootstrap/amd64-build-v3.3.sh; \
+bash ~/Downloads/xpack-build-box.git/ubuntu/16-xbb/amd64-build-v3.3.sh
+
+docker push "ilegeul/ubuntu:amd64-16.04"; \
+docker push "ilegeul/ubuntu:amd64-16.04-updated-v3.3"; \
+docker push "ilegeul/ubuntu:amd64-16.04-develop-v3.3"; \
+docker push "ilegeul/ubuntu:amd64-16.04-tex-v3.3"; \
+docker push "ilegeul/ubuntu:amd64-16.04-xbb-bootstrap-v3.3"; \
+docker push "ilegeul/ubuntu:amd64-16.04-xbb-v3.3"
+```
+
+The build takes about 4 hours on the intel NUC.
+
+```bash
+set -o errexit
+docker system prune -f
+bash ~/Downloads/xpack-build-box.git/ubuntu/16/i386-build.sh; \
+bash ~/Downloads/xpack-build-box.git/ubuntu/16-updated/i386-build-v3.3.sh; \
+bash ~/Downloads/xpack-build-box.git/ubuntu/16-develop/i386-build-v3.3.sh; \
+bash ~/Downloads/xpack-build-box.git/ubuntu/16-tex/i386-build-v3.3.sh; \
+bash ~/Downloads/xpack-build-box.git/ubuntu/16-xbb-bootstrap/i386-build-v3.3.sh; \
+bash ~/Downloads/xpack-build-box.git/ubuntu/16-xbb/i386-build-v3.3.sh
+
+docker push "ilegeul/ubuntu:i386-16.04"; \
+docker push "ilegeul/ubuntu:i386-16.04-updated-v3.3"; \
+docker push "ilegeul/ubuntu:i386-16.04-develop-v3.3"; \
+docker push "ilegeul/ubuntu:i386-16.04-tex-v3.3"; \
+docker push "ilegeul/ubuntu:i386-16.04-xbb-bootstrap-v3.3"; \
+docker push "ilegeul/ubuntu:i386-16.04-xbb-v3.3"
+```
+
+The build takes about 4 hours on the Intel NUC.
 
 ### Ubuntu 18 Intel (bionic)
 
