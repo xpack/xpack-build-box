@@ -278,4 +278,4 @@ For future releases (2023-2024?), the plan is to move up to
 Ubuntu 18 (GLIBC 2.27). This will also provide compatibility with
 RedHat 8 / Debian 10, which both use GLIBC 2.28. The migration
 path will probably take two steps, with an intermediate step
-(in 2022?) at Ubuntu 16 (GlIBC 2.23) for both Intel and Arm Linux.
+(in 2022?) at Ubuntu 16 (GLIBC 2.23) for both Intel and Arm Linux.
