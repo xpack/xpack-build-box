@@ -88,7 +88,13 @@ No longer maintained.
 
 ### Ubuntu 16 Intel (xenial)
 
-Currently not actively used.
+The bootstrap build fails with:
+
+```console
+/usr/bin/x86_64-linux-gnu-ld: _muldi3_s.o: unable to initialize decompress status for section .debug_info
+_muldi3_s.o: file not recognized: File format not recognized
+collect2: error: ld returned 1 exit status
+```
 
 ```bash
 set -o errexit
@@ -108,8 +114,6 @@ docker push "ilegeul/ubuntu:amd64-16.04-xbb-bootstrap-v3.3"; \
 docker push "ilegeul/ubuntu:amd64-16.04-xbb-v3.3"
 ```
 
-The build takes about 4 hours on the intel NUC.
-
 ```bash
 set -o errexit
 docker system prune -f
@@ -127,8 +131,6 @@ docker push "ilegeul/ubuntu:i386-16.04-tex-v3.3"; \
 docker push "ilegeul/ubuntu:i386-16.04-xbb-bootstrap-v3.3"; \
 docker push "ilegeul/ubuntu:i386-16.04-xbb-v3.3"
 ```
-
-The build takes about 4 hours on the Intel NUC.
 
 ### Ubuntu 18 Intel (bionic)
 
