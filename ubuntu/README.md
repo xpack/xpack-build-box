@@ -60,6 +60,8 @@ docker push "ilegeul/ubuntu:amd64-12.04-xbb-bootstrap-v3.3"; \
 docker push "ilegeul/ubuntu:amd64-12.04-xbb-v3.3"
 ```
 
+The build takes about 4 hours on the intel NUC.
+
 ```bash
 set -o errexit
 docker system prune -f
@@ -77,6 +79,8 @@ docker push "ilegeul/ubuntu:i386-12.04-tex-v3.3"; \
 docker push "ilegeul/ubuntu:i386-12.04-xbb-bootstrap-v3.3"; \
 docker push "ilegeul/ubuntu:i386-12.04-xbb-v3.3"
 ```
+
+The build takes about 4 hours on the Intel NUC.
 
 ### Ubuntu 14 Intel (trusty)
 
