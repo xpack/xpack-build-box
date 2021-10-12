@@ -734,7 +734,10 @@ then
   fi
 fi
 
-  if [ -d "${TEXLIVE_FOLDER_PATH:-"/opt/texlive"}/bin" ]
+  if [ -d "${TEXLIVE_FOLDER_PATH:-"${HOME}/.local/texlive"}/bin" ]
+  then
+    echo "export TEXLIVE_FOLDER_PATH=${TEXLIVE_FOLDER_PATH:-\"${HOME}/.local/texlive\"}" >> "${INSTALL_FOLDER_PATH}/xbb-source.sh"
+  elif [ -d "${TEXLIVE_FOLDER_PATH:-"/opt/texlive"}/bin" ]
   then
     echo "export TEXLIVE_FOLDER_PATH=${TEXLIVE_FOLDER_PATH:-\"/opt/texlive\"}" >> "${INSTALL_FOLDER_PATH}/xbb-source.sh"
   else
