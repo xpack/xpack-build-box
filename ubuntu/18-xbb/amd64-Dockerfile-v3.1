@@ -12,7 +12,7 @@ ARG XBB_VERSION
 ARG XBB_LAYER
 ARG RUN_LONG_TESTS
 
-ADD input /input
+ADD input-ubuntu-18.04-amd64 /input
 RUN bash /input/build-v3.sh
 
 CMD ["/bin/bash"]

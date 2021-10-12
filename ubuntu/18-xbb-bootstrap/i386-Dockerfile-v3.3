@@ -1,0 +1,20 @@
+FROM ilegeul/ubuntu:i386-18.04-tex-v3.3
+
+LABEL description="Ubuntu 18.04 i386 image, with the XBB bootstrap."
+LABEL maintainer="Liviu Ionescu <ilg@livius.net>"
+LABEL repository="https://github.com/xpack/xpack-build-box.git"
+LABEL docs="https://github.com/xpack/xpack-build-box/tree/master/ubuntu/18-bootstrap/README.md"
+
+ENTRYPOINT ["linux32"]
+
+ARG DEBUG
+ARG JOBS
+
+ARG XBB_VERSION
+ARG XBB_LAYER
+ARG RUN_LONG_TESTS
+
+ADD input-ubuntu-18.04-i386 /input
+RUN linux32 bash /input/build-v3.sh
+
+CMD ["/bin/bash"]

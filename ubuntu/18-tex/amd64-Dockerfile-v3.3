@@ -1,0 +1,17 @@
+FROM ilegeul/ubuntu:amd64-18.04-develop-v3.3
+
+LABEL description="Ubuntu 18.04 amd64 image, with TeX tools."
+LABEL maintainer="Liviu Ionescu <ilg@livius.net>"
+LABEL repository="https://github.com/xpack/xpack-build-box.git"
+LABEL docs="https://github.com/xpack/xpack-build-box/tree/master/ubuntu/18-tex/README.md"
+
+ARG DEBUG
+ARG JOBS
+
+ARG XBB_VERSION
+ARG XBB_LAYER
+
+ADD input-ubuntu-18.04-amd64 /input
+RUN bash /input/build-v3.sh 2018
+
+CMD ["/bin/bash"]

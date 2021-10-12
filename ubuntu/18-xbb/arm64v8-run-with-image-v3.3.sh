@@ -42,19 +42,21 @@ source "${helper_folder_path}/common-docker-functions-source.sh"
 
 # -----------------------------------------------------------------------------
 
+version="3.3"
+
+arch="arm64v8"
+distro="ubuntu"
+release="18.04"
+from="ilegeul/${distro}:${arch}-${release}-xbb-bootstrap-v${version}"
+layer="xbb"
+
+# -----------------------------------------------------------------------------
+
 detect_host
 
 host_init_docker_env
 host_init_docker_input \
   "$(dirname $(dirname "${script_folder_path}"))/ca-bundle/ca-bundle.crt" \
-
-version="3.1"
-
-arch="i386"
-distro="ubuntu"
-release="18.04"
-from="ilegeul/${distro}:${arch}-${release}-bootstrap-v3.1"
-layer="xbb"
 
 host_run_docker_it_with_image
 

@@ -11,7 +11,7 @@ ARG JOBS
 ARG XBB_VERSION
 ARG XBB_LAYER
 
-ADD input /input
+ADD input-ubuntu-18.04-arm64v8 /input
 RUN bash /input/build-v3.sh
 
 CMD ["/bin/bash"]

@@ -82,6 +82,9 @@ docker push "ilegeul/ubuntu:i386-12.04-xbb-v3.3"
 
 The build takes about 4 hours on the Intel NUC.
 
+Note: this is the final release supporting Ubuntu 12. The next major
+release will be based on Ubuntu 18.
+
 ### Ubuntu 14 Intel (trusty)
 
 No longer maintained.
@@ -96,45 +99,43 @@ _muldi3_s.o: file not recognized: File format not recognized
 collect2: error: ld returned 1 exit status
 ```
 
-```bash
-set -o errexit
-docker system prune -f
-bash ~/Downloads/xpack-build-box.git/ubuntu/16/amd64-build.sh; \
-bash ~/Downloads/xpack-build-box.git/ubuntu/16-updated/amd64-build-v3.3.sh; \
-bash ~/Downloads/xpack-build-box.git/ubuntu/16-develop/amd64-build-v3.3.sh; \
-bash ~/Downloads/xpack-build-box.git/ubuntu/16-tex/amd64-build-v3.3.sh; \
-bash ~/Downloads/xpack-build-box.git/ubuntu/16-xbb-bootstrap/amd64-build-v3.3.sh; \
-bash ~/Downloads/xpack-build-box.git/ubuntu/16-xbb/amd64-build-v3.3.sh
-
-docker push "ilegeul/ubuntu:amd64-16.04"; \
-docker push "ilegeul/ubuntu:amd64-16.04-updated-v3.3"; \
-docker push "ilegeul/ubuntu:amd64-16.04-develop-v3.3"; \
-docker push "ilegeul/ubuntu:amd64-16.04-tex-v3.3"; \
-docker push "ilegeul/ubuntu:amd64-16.04-xbb-bootstrap-v3.3"; \
-docker push "ilegeul/ubuntu:amd64-16.04-xbb-v3.3"
-```
-
-```bash
-set -o errexit
-docker system prune -f
-bash ~/Downloads/xpack-build-box.git/ubuntu/16/i386-build.sh; \
-bash ~/Downloads/xpack-build-box.git/ubuntu/16-updated/i386-build-v3.3.sh; \
-bash ~/Downloads/xpack-build-box.git/ubuntu/16-develop/i386-build-v3.3.sh; \
-bash ~/Downloads/xpack-build-box.git/ubuntu/16-tex/i386-build-v3.3.sh; \
-bash ~/Downloads/xpack-build-box.git/ubuntu/16-xbb-bootstrap/i386-build-v3.3.sh; \
-bash ~/Downloads/xpack-build-box.git/ubuntu/16-xbb/i386-build-v3.3.sh
-
-docker push "ilegeul/ubuntu:i386-16.04"; \
-docker push "ilegeul/ubuntu:i386-16.04-updated-v3.3"; \
-docker push "ilegeul/ubuntu:i386-16.04-develop-v3.3"; \
-docker push "ilegeul/ubuntu:i386-16.04-tex-v3.3"; \
-docker push "ilegeul/ubuntu:i386-16.04-xbb-bootstrap-v3.3"; \
-docker push "ilegeul/ubuntu:i386-16.04-xbb-v3.3"
-```
-
 ### Ubuntu 18 Intel (bionic)
 
-No longer maintained.
+```bash
+set -o errexit
+docker system prune -f
+bash ~/Downloads/xpack-build-box.git/ubuntu/18/amd64-build.sh; \
+bash ~/Downloads/xpack-build-box.git/ubuntu/18-updated/amd64-build-v3.3.sh; \
+bash ~/Downloads/xpack-build-box.git/ubuntu/18-develop/amd64-build-v3.3.sh; \
+bash ~/Downloads/xpack-build-box.git/ubuntu/18-tex/amd64-build-v3.3.sh; \
+bash ~/Downloads/xpack-build-box.git/ubuntu/18-xbb-bootstrap/amd64-build-v3.3.sh; \
+bash ~/Downloads/xpack-build-box.git/ubuntu/18-xbb/amd64-build-v3.3.sh
+
+docker push "ilegeul/ubuntu:amd64-18.04"; \
+docker push "ilegeul/ubuntu:amd64-18.04-updated-v3.3"; \
+docker push "ilegeul/ubuntu:amd64-18.04-develop-v3.3"; \
+docker push "ilegeul/ubuntu:amd64-18.04-tex-v3.3"; \
+docker push "ilegeul/ubuntu:amd64-18.04-xbb-bootstrap-v3.3"; \
+docker push "ilegeul/ubuntu:amd64-18.04-xbb-v3.3"
+```
+
+```bash
+set -o errexit
+docker system prune -f
+bash ~/Downloads/xpack-build-box.git/ubuntu/18/i386-build.sh; \
+bash ~/Downloads/xpack-build-box.git/ubuntu/18-updated/i386-build-v3.3.sh; \
+bash ~/Downloads/xpack-build-box.git/ubuntu/18-develop/i386-build-v3.3.sh; \
+bash ~/Downloads/xpack-build-box.git/ubuntu/18-tex/i386-build-v3.3.sh; \
+bash ~/Downloads/xpack-build-box.git/ubuntu/18-xbb-bootstrap/i386-build-v3.3.sh; \
+bash ~/Downloads/xpack-build-box.git/ubuntu/18-xbb/i386-build-v3.3.sh
+
+docker push "ilegeul/ubuntu:i386-18.04"; \
+docker push "ilegeul/ubuntu:i386-18.04-updated-v3.3"; \
+docker push "ilegeul/ubuntu:i386-18.04-develop-v3.3"; \
+docker push "ilegeul/ubuntu:i386-18.04-tex-v3.3"; \
+docker push "ilegeul/ubuntu:i386-18.04-xbb-bootstrap-v3.3"; \
+docker push "ilegeul/ubuntu:i386-18.04-xbb-v3.3"
+```
 
 ## Arm Linux
 
@@ -179,9 +180,46 @@ docker push "ilegeul/ubuntu:arm32v7-16.04-xbb-bootstrap-v3.3"; \
 docker push "ilegeul/ubuntu:arm32v7-16.04-xbb-v3.3"
 ```
 
+Note: this is the final release supporting Ubuntu 12. The next major
+release will be based on Ubuntu 18.
+
 ### Ubuntu 18 Arm (bionic)
 
-No longer maintained.
+```bash
+set -o errexit
+docker system prune -f
+bash ~/Downloads/xpack-build-box.git/ubuntu/18/arm64v8-build.sh; \
+bash ~/Downloads/xpack-build-box.git/ubuntu/18-updated/arm64v8-build-v3.3.sh; \
+bash ~/Downloads/xpack-build-box.git/ubuntu/18-develop/arm64v8-build-v3.3.sh; \
+bash ~/Downloads/xpack-build-box.git/ubuntu/18-tex/arm64v8-build-v3.3.sh; \
+bash ~/Downloads/xpack-build-box.git/ubuntu/18-xbb-bootstrap/arm64v8-build-v3.3.sh; \
+bash ~/Downloads/xpack-build-box.git/ubuntu/18-xbb/arm64v8-build-v3.3.sh
+
+docker push "ilegeul/ubuntu:arm64v8-18.04"; \
+docker push "ilegeul/ubuntu:arm64v8-18.04-updated-v3.3"; \
+docker push "ilegeul/ubuntu:arm64v8-18.04-develop-v3.3"; \
+docker push "ilegeul/ubuntu:arm64v8-18.04-tex-v3.3"; \
+docker push "ilegeul/ubuntu:arm64v8-18.04-xbb-bootstrap-v3.3"; \
+docker push "ilegeul/ubuntu:arm64v8-18.04-xbb-v3.3"
+```
+
+```bash
+set -o errexit
+docker system prune -f
+bash ~/Downloads/xpack-build-box.git/ubuntu/18/arm32v7-build.sh; \
+bash ~/Downloads/xpack-build-box.git/ubuntu/18-updated/arm32v7-build-v3.3.sh; \
+bash ~/Downloads/xpack-build-box.git/ubuntu/18-develop/arm32v7-build-v3.3.sh; \
+bash ~/Downloads/xpack-build-box.git/ubuntu/18-tex/arm32v7-build-v3.3.sh; \
+bash ~/Downloads/xpack-build-box.git/ubuntu/18-xbb-bootstrap/arm32v7-build-v3.3.sh; \
+bash ~/Downloads/xpack-build-box.git/ubuntu/18-xbb/arm32v7-build-v3.3.sh
+
+docker push "ilegeul/ubuntu:arm32v7-18.04"; \
+docker push "ilegeul/ubuntu:arm32v7-18.04-updated-v3.3"; \
+docker push "ilegeul/ubuntu:arm32v7-18.04-develop-v3.3"; \
+docker push "ilegeul/ubuntu:arm32v7-18.04-tex-v3.3"; \
+docker push "ilegeul/ubuntu:arm32v7-18.04-xbb-bootstrap-v3.3"; \
+docker push "ilegeul/ubuntu:arm32v7-18.04-xbb-v3.3"
+```
 
 ## Testing
 
