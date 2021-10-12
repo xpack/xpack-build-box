@@ -271,11 +271,9 @@ machines, or larger/newer.
 ## Future plans
 
 RedHat extended support for RHEL 7 ends in Aug. 2023. However XBB support
-for RHEL 7 is a tough requirement, and will probably be
-dropped in 2022.
+for RHEL 7 is a tough requirement, and will be dropped in the next major
+release (2022?).
 
-For future releases (2023-2024?), the plan is to move up to
+For the future release, the plan is to move up to
 Ubuntu 18 (GLIBC 2.27). This will also provide compatibility with
-RedHat 8 / Debian 10, which both use GLIBC 2.28. The migration
-path will probably take two steps, with an intermediate step
-(in 2022?) at Ubuntu 16 (GLIBC 2.23) for both Intel and Arm Linux.
+RedHat 8 / Debian 10, which both use GLIBC 2.28.
