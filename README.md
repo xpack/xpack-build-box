@@ -212,29 +212,31 @@ docker run -it <image> ldd --version
 - `debian:6` - squeeze - 2011-2016, 2.11.3, kernel 2.6.32
 - `debian:7` - wheezy - 2013-2016, 2.13, kernel 3.2
 - `debian:8` - jessie - 2015-2018, 2.19, kernel 3.16
-- `debian:9` - stretch - 2017-2020, 2.24, kernel 4.9.0-6 (first with arm64) (next)
-- `debian:10` - buster - 2019-2022, 2.28, kernel 4.19.0-6
+- `debian:9` - stretch - 2017-2020, 2.24, kernel 4.9.0-6 (first with arm64)
+- `debian:10` - buster - 2019-2022, 2.28, kernel 4.19.0-6 <-- next
 
 ### [Ubuntu](https://en.wikipedia.org/wiki/Ubuntu_version_history)
 
 - `ubuntu:10.04` - lucy - 2010-2015, 2.11.1
 - `ubuntu:12.04` - precise - 2012-2019, 2.15, kernel **3.2** <--- Intel Linux choice
 - `ubuntu:14.04` - trusty - 2014-2022, 2.19, kernel 3.16
-- `ubuntu:16.04` - xenial - 2016-2024, **2.23**, kernel 4.4 <--- Arm Linux choice, future Intel choice too
-- `ubuntu:18.04` - bionic - 2018-2028, 2.27, kernel 4.15
+- `ubuntu:16.04` - xenial - 2016-2024, **2.23**, kernel 4.4 <--- Arm Linux choice
+- `ubuntu:18.04` - bionic - 2018-2028, **2.27**, kernel 4.15 <-- **next** Intel & Arm Linux choice
 - `ubuntu:20.04` - focal - 2020-2-30, 2.31, kernel 5.4
 
 ### [RHEL](https://access.redhat.com/support/policy/updates/errata/#Life_Cycle_Dates)
 
-- `registry.access.redhat.com/rhel6` - 2.12 <--- no longer supported
-- `registry.access.redhat.com/rhel7` - 2.17, kernel 3.10 <--- still supported, but not for long
+- `registry.access.redhat.com/rhel6` - 2.12 (no longer supported)
+- `registry.access.redhat.com/rhel7` - 2.17, kernel 3.10 <-- still supported, but not for long
 - `registry.access.redhat.com/ubi8` - 2.28, kernel 5.10 (next)
 
 ### [CentOS](https://en.wikipedia.org/wiki/CentOS)
 
-- `centos:6` - 2011-2020, 2.12 <--- no longer supported
-- `centos:7` - 2014-2024, 2.17, kernel 3.10 <--- must be supported
-- `centos:8` - 2019-2029, 2.28, kernel 4.18 (next)
+- `centos:6` - 2011-2020, 2.12 (no longer supported)
+- `centos:7` - 2014-2024, 2.17, kernel 3.10 <--- still supported, but not for long
+- `centos:8` - 2019-2029, 2.28, kernel 4.18 <-- next
+
+Last version was 8.4; discontinued by the end of 2021; see Rocky Linux.
 
 ### [Fedora](https://en.wikipedia.org/wiki/Fedora_version_history)
 
@@ -242,19 +244,19 @@ docker run -it <image> ldd --version
 - `fedora:21` - 2014-12, 2.20, kernel 3.17
 - `fedora:22` - 2015-05, 2.21, kernel 4.0
 - `fedora:23` - 2015-11, 2.22, kernel 4.2
-- `fedora:24` - 2016-06, 2.23, kernel 4.5 <-- Arm (next Intel)
+- `fedora:24` - 2016-06, 2.23, kernel 4.5 <-- Arm
 - `fedora:25` - 2016-11, 2.24, kernel 4.8
 - `fedora:26` - 2017-07,
 - `fedora:27` - 2017-11, 2.26, kernel 4.13
 - `fedora:28` - 2018-05,
-- `fedora:29` - 2018-10, 2.28, kernel 4.18
+- `fedora:29` - 2018-10, 2.28, kernel 4.18 <-- (next)
 - `fedora:30` - 2019-05,
 - `fedora:31` - 2019-10, 2.30, kernel 5.3
 - `fedora:32` - 2020-04, 2.30, kernel 5.6
 
 ## Credits
 
-The xPack Build Box is inspired by the 
+The xPack Build Box is inspired by the
 [Holy Build Box](https://github.com/phusion/holy-build-box)
 
 ## Conclusions
@@ -270,7 +272,8 @@ machines, or larger/newer.
 
 ## Future plans
 
-RedHat extended support for RHEL 7 ends in Aug. 2023. However XBB support
+RedHat maintenance support 1 for RHEL 7 ended in Aug. 2020, with
+maintenance support 2 to last until June. 2024. However XBB support
 for RHEL 7 is a tough requirement, and will be dropped in the next major
 release (2022?).
 
