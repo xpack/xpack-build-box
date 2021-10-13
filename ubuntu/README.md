@@ -37,7 +37,7 @@ docker system prune -f
 
 ## Intel Linux
 
-The following sequences of commands were used on a Debian 9 Intel
+The following sequences of commands were used on a Debian 10 Intel
 Linux (x86_64):
 
 ### Ubuntu 12 Intel (precise)
