@@ -2,7 +2,7 @@
 
 The [xPack Build Box](https://xpack.github.io/xbb/)
 is an elaborated build environment focused on
-obtaining reproducible builds while building cross-platform standalone
+obtaining reproducible builds while creating cross-platform standalone
 binaries for GNU/Linux, macOS and Windows.
 
 ## Overview
