@@ -60,7 +60,7 @@ docker push "ilegeul/ubuntu:amd64-12.04-xbb-bootstrap-v3.3"; \
 docker push "ilegeul/ubuntu:amd64-12.04-xbb-v3.3"
 ```
 
-The build takes about 4 hours on the intel NUC.
+The build takes about 4 hours on an Intel NUC.
 
 ```bash
 set -o errexit
@@ -80,7 +80,7 @@ docker push "ilegeul/ubuntu:i386-12.04-xbb-bootstrap-v3.3"; \
 docker push "ilegeul/ubuntu:i386-12.04-xbb-v3.3"
 ```
 
-The build takes about 4 hours on the Intel NUC.
+The build takes about 4 hours on an Intel NUC.
 
 Note: this is the final release supporting Ubuntu 12. The next major
 release will be based on Ubuntu 18.
@@ -119,6 +119,8 @@ docker push "ilegeul/ubuntu:amd64-18.04-xbb-bootstrap-v3.3"; \
 docker push "ilegeul/ubuntu:amd64-18.04-xbb-v3.3"
 ```
 
+The build takes about 4 hours on an Intel NUC.
+
 ```bash
 set -o errexit
 docker system prune -f
@@ -136,6 +138,8 @@ docker push "ilegeul/ubuntu:i386-18.04-tex-v3.3"; \
 docker push "ilegeul/ubuntu:i386-18.04-xbb-bootstrap-v3.3"; \
 docker push "ilegeul/ubuntu:i386-18.04-xbb-v3.3"
 ```
+
+The build takes about 4 hours on an Intel NUC.
 
 ## Arm Linux
 
@@ -162,6 +166,8 @@ docker push "ilegeul/ubuntu:arm64v8-16.04-xbb-bootstrap-v3.3"; \
 docker push "ilegeul/ubuntu:arm64v8-16.04-xbb-v3.3"
 ```
 
+The build takes about 13-14 hours on a Raspberry Pi CM4 at 2 GHz.
+
 ```bash
 set -o errexit
 docker system prune -f
@@ -179,6 +185,8 @@ docker push "ilegeul/ubuntu:arm32v7-16.04-tex-v3.3"; \
 docker push "ilegeul/ubuntu:arm32v7-16.04-xbb-bootstrap-v3.3"; \
 docker push "ilegeul/ubuntu:arm32v7-16.04-xbb-v3.3"
 ```
+
+The build takes about 13-14 hours on a Raspberry Pi CM4 at 2 GHz.
 
 Note: this is the final release supporting Ubuntu 12. The next major
 release will be based on Ubuntu 18.
@@ -203,6 +211,8 @@ docker push "ilegeul/ubuntu:arm64v8-18.04-xbb-bootstrap-v3.3"; \
 docker push "ilegeul/ubuntu:arm64v8-18.04-xbb-v3.3"
 ```
 
+The build takes about 13-14 hours on a Raspberry Pi CM4 at 2 GHz.
+
 ```bash
 set -o errexit
 docker system prune -f
@@ -220,6 +230,8 @@ docker push "ilegeul/ubuntu:arm32v7-18.04-tex-v3.3"; \
 docker push "ilegeul/ubuntu:arm32v7-18.04-xbb-bootstrap-v3.3"; \
 docker push "ilegeul/ubuntu:arm32v7-18.04-xbb-v3.3"
 ```
+
+The build takes about 13-14 hours on a Raspberry Pi CM4 at 2 GHz.
 
 ## Testing
 
