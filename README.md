@@ -25,3 +25,9 @@ The current version is v3.3; see the release page for details.
 
 The xPack Build Box is inspired by the
 [Holy Build Box](https://github.com/phusion/holy-build-box)
+
+## License
+
+The original content is released under the
+[MIT License](https://opensource.org/licenses/MIT), with all rights
+reserved to [Liviu Ionescu](https://github.com/ilg-ul/).
