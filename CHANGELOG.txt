@@ -1,14 +1,33 @@
 The major changes and releases, in reverse chronological order:
 
-[2021-09-13]
+[2021-10-13]
 
-- update patchelf to 0.12
-- update automake 1.64.4
+- v3.3 released
 - publish:
+-  ilegeul/ubuntu:amd64-18.04-xbb-v3.3
+-  ilegeul/ubuntu:i386-18.04-xbb-v3.3
+-  ilegeul/ubuntu:arm64v8-18.04-xbb-v3.3
+-  ilegeul/ubuntu:arm32v7-18.04-xbb-v3.3
+- re-publish:
 -  ilegeul/ubuntu:amd64-12.04-xbb-v3.3
 -  ilegeul/ubuntu:i386-12.04-xbb-v3.3
 -  ilegeul/ubuntu:arm64v8-16.04-xbb-v3.3
 -  ilegeul/ubuntu:arm32v7-16.04-xbb-v3.3
+- update to gcc 11.2
+- update to mingw 9.0.0
+- update to wine 6.17
+- update other packages
+
+
+[2021-09-13]
+
+- pre-publish:
+-  ilegeul/ubuntu:amd64-12.04-xbb-v3.3
+-  ilegeul/ubuntu:i386-12.04-xbb-v3.3
+-  ilegeul/ubuntu:arm64v8-16.04-xbb-v3.3
+-  ilegeul/ubuntu:arm32v7-16.04-xbb-v3.3
+- update patchelf to 0.12
+- update automake 1.64.4
 
 [2020-12-12]
 
