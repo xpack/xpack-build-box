@@ -1,0 +1,14 @@
+FROM --platform=linux/arm64 debian:buster
+
+LABEL description="Debian 10 arm64v8 image, with npm."
+LABEL maintainer="Liviu Ionescu <ilg@livius.net>"
+LABEL repository="https://github.com/xpack/xpack-build-box.git"
+
+ADD container-scripts /input
+RUN bash /input/build.sh
+
+ENV LANG en_US.UTF-8
+ENV LANGUAGE en_US:en
+# ENV LC_ALL en_US.UTF-8
+
+CMD ["/bin/bash"]
