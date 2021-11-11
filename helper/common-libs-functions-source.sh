@@ -516,22 +516,31 @@ function test_mpc()
 
 function build_isl() 
 {
-  # http://isl.gforge.inria.fr
-  # http://isl.gforge.inria.fr/isl-0.21.tar.xz
+  # http://isl.gforge.inria.fr - deprecated
+  # https://sourceforge.net/projects/libisl/files/
 
   # https://aur.archlinux.org/cgit/aur.git/tree/PKGBUILD?h=isl
 
+  # 2015-06-12 "0.15"
+  # 2016-01-15 "0.16.1"
   # 2016-12-20 "0.18"
   # 2019-03-26 "0.21"
   # 2020-01-16 "0.22"
-  # 2021-05-01, "0.24"
+  # 2020-11-11 "0.23"
+  # 2021-05-01 "0.24"
 
   local isl_version="$1"
 
   local isl_src_folder_name="isl-${isl_version}"
 
   local isl_archive="${isl_src_folder_name}.tar.xz"
-  local isl_url="http://isl.gforge.inria.fr/${isl_archive}"
+  if [[ "${isl_version}" =~ 0\.1[24]\.* ]]
+  then
+    isl_archive="${isl_src_folder_name}.tar.gz"
+  fi
+
+  # local isl_url="http://isl.gforge.inria.fr/${isl_archive}"
+  local isl_url="https://sourceforge.net/projects/libisl/files/${isl_archive}"
   # local isl_url="https://github.com/gnu-mcu-eclipse/files/raw/master/libs/${isl_archive}"
 
   local isl_folder_name="${isl_src_folder_name}"
