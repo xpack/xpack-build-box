@@ -751,16 +751,22 @@ then
   fi
 fi
 
-  if [ -d "${TEXLIVE_FOLDER_PATH:-"${HOME}/.local/texlive"}/bin" ]
+  if [ ! -d "${TEXLIVE_FOLDER_PATH:-"/no-folder"}/bin" ]
   then
-    echo "export TEXLIVE_FOLDER_PATH=${TEXLIVE_FOLDER_PATH:-\"${HOME}/.local/texlive\"}" >> "${INSTALL_FOLDER_PATH}/xbb-source.sh"
-  elif [ -d "${TEXLIVE_FOLDER_PATH:-"/opt/texlive"}/bin" ]
-  then
-    echo "export TEXLIVE_FOLDER_PATH=${TEXLIVE_FOLDER_PATH:-\"/opt/texlive\"}" >> "${INSTALL_FOLDER_PATH}/xbb-source.sh"
-  else
-    echo "TeX Live bin folder not found. Quit."
-    exit 1
+    if [ -d "${HOME}/.local/texlive/bin" ]
+    then
+      TEXLIVE_FOLDER_PATH="${HOME}/.local/texlive"
+    elif [ -d "/opt/texlive/bin" ]
+    then
+      TEXLIVE_FOLDER_PATH="/opt/texlive"
+    else
+      echo "TeX Live bin folder not found. Quit."
+      exit 1
+    fi
   fi
+
+  export TEXLIVE_FOLDER_PATH
+  echo "export TEXLIVE_FOLDER_PATH=${TEXLIVE_FOLDER_PATH}" >> "${INSTALL_FOLDER_PATH}/xbb-source.sh"
 
   if [ "${XBB_LAYER}" == "xbb-bootstrap" ]
   then
