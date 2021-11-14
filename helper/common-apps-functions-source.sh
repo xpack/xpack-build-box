@@ -7314,10 +7314,10 @@ function build_gnupg()
       xbb_activate
       xbb_activate_installed_dev
 
-      CPPFLAGS="${XBB_CPPFLAGS} -g"
+      CPPFLAGS="${XBB_CPPFLAGS}"
       CFLAGS="${XBB_CFLAGS_NO_W}"
       CXXFLAGS="${XBB_CXXFLAGS_NO_W}"
-      LDFLAGS="${XBB_LDFLAGS_APP} -g"
+      LDFLAGS="${XBB_LDFLAGS_APP}"
       if is_linux
       then
         export LIBS="-lrt"
