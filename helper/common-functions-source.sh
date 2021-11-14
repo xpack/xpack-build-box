@@ -1138,6 +1138,11 @@ function download_and_extract()
     fi
 
     chmod -R +w "${folder_name}"
+
+    if is_darwin && is_arm
+    then
+      update_config_sub "${folder_name}"
+    fi
   fi
 }
 
@@ -1582,6 +1587,20 @@ function patch_all_libtool_rpath()
     echo ${file}
     patch_file_libtool_rpath ${file}
   done
+}
+
+# -----------------------------------------------------------------------------
+
+function update_config_sub()
+{
+  local folder_path="$1"
+
+  (
+    cd "${folder_path}"
+
+    find . -name 'config.sub' \
+      -exec cp -v "${helper_folder_path}/patches/config.sub" "{}" \;
+  )
 }
 
 # -----------------------------------------------------------------------------
