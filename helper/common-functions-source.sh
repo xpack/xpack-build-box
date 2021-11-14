@@ -1127,15 +1127,18 @@ function download_and_extract()
   # Must be exactly what results from expanding the archive.
   local folder_name="$3"
 
-  download "${url}" "${archive_name}"
-  if [ $# -gt 3 ]
+  if [ ! -d "${folder_name}" ]
   then
-    extract "${CACHE_FOLDER_PATH}/${archive_name}" "${folder_name}" "$4"
-  else
-    extract "${CACHE_FOLDER_PATH}/${archive_name}" "${folder_name}"
-  fi
+    download "${url}" "${archive_name}"
+    if [ $# -gt 3 ]
+    then
+      extract "${CACHE_FOLDER_PATH}/${archive_name}" "${folder_name}" "$4"
+    else
+      extract "${CACHE_FOLDER_PATH}/${archive_name}" "${folder_name}"
+    fi
 
-  chmod -R +w "${folder_name}"
+    chmod -R +w "${folder_name}"
+  fi
 }
 
 # -----------------------------------------------------------------------------
