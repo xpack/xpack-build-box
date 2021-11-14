@@ -11,25 +11,19 @@ function build_versioned_components()
 {
   if [[ "${XBB_VERSION}" =~ 3\.[4] ]]
   then
-    # WARNING: experimental, not used.
+    # WARNING: experimental, used only to test builds on Apple Silicon.
     
     # -------------------------------------------------------------------------
 
     # The main characteristic of XBB Bootstrap is the compiler version.
 
-    # "11.0.0" fails on macOS 10.10
-    # /llvm/utils/TableGen/OptParserEmitter.cpp:113:12: error: no viable conversion from 'unique_ptr<MarshallingFlagInfo>' to 'unique_ptr<MarshallingKindInfo>'
-    # "10.0.1" fails on macOS 10.10
-    # clang: error: unknown argument: '-wd654'
-    # LLVM build still fails even with macOS 10.13. 
-    # XBB_LLVM_VERSION="11.1.0"
-
-    # Fortunatelly GCC 11.x was updated and works on Apple hardware.
+    # Fortunatelly GCC 11.1 was updated and works on Apple hardware.
     if is_darwin && is_arm
     then
       # https://github.com/iains/gcc-darwin-arm64
       # https://github.com/fxcoudert/gcc
-      # For now there is no newer GCC for Apple Silicon.
+      # For now there is no newer GCC for Apple Silicon, perhaps 11.3 will
+      # include the goodies.
       XBB_GCC_VERSION="11.1.0"
     else
       XBB_GCC_VERSION="11.2.0" # "8.4.0" # "8.3.0" "7.5.0" "7.4.0"    
@@ -304,8 +298,6 @@ function build_versioned_components()
 
   elif [[ "${XBB_VERSION}" =~ 3\.[3] ]]
   then
-    # WARNING: experimental, not used.
-    
     # -------------------------------------------------------------------------
 
     # The main characteristic of XBB Bootstrap is the compiler version.
