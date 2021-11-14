@@ -1134,6 +1134,8 @@ function download_and_extract()
   else
     extract "${CACHE_FOLDER_PATH}/${archive_name}" "${folder_name}"
   fi
+
+  chmod -R +w "${folder_name}"
 }
 
 # -----------------------------------------------------------------------------
