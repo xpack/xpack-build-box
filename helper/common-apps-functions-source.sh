@@ -472,11 +472,20 @@ function build_native_gcc()
   else
     step=""
   fi
-
-  local native_gcc_src_folder_name="gcc-${native_gcc_version}"
-
-  local native_gcc_archive="${native_gcc_src_folder_name}.tar.xz"
-  local native_gcc_url="https://ftp.gnu.org/gnu/gcc/gcc-${native_gcc_version}/${native_gcc_archive}"
+  
+  if is_darwin && is_arm && [ "${native_gcc_version}" == "11.1.0" ]
+  then
+    # Branch from the Darwin maintainer of GCC with Apple Silicon support,
+    # located at https://github.com/iains/gcc-darwin-arm64 and
+    # backported with his help to gcc-11 branch. Too big for a patch.
+    local native_gcc_archive="gcc-11.1.0-arm-20210504.tar.gz"
+    local native_gcc_url="https://github.com/fxcoudert/gcc/archive/refs/tags/gcc-11.1.0-arm-20210504.tar.gz"
+    local native_gcc_src_folder_name="gcc-gcc-11.1.0-arm-20210504"
+  else
+    local native_gcc_src_folder_name="gcc-${native_gcc_version}"
+    local native_gcc_archive="${native_gcc_src_folder_name}.tar.xz"
+    local native_gcc_url="https://ftp.gnu.org/gnu/gcc/gcc-${native_gcc_version}/${native_gcc_archive}"
+  fi
 
   local native_gcc_folder_name="native-gcc${step}-${native_gcc_version}"
 
