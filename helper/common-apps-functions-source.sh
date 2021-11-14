@@ -6544,10 +6544,10 @@ function build_scons()
       echo "Running scons install..."
 
       echo
-      which python
+      which python3
 
       echo
-      run_verbose python setup.py install \
+      run_verbose python3 setup.py install \
         --prefix="${INSTALL_FOLDER_PATH}" \
         \
         --optimize=1 \
