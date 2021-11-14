@@ -25,7 +25,15 @@ function build_versioned_components()
     # XBB_LLVM_VERSION="11.1.0"
 
     # Fortunatelly GCC 11.x was updated and works on Apple hardware.
-    XBB_GCC_VERSION="11.2.0" # "8.4.0" # "8.3.0" "7.5.0" "7.4.0"    
+    if is_darwin && is_arm
+    then
+      # https://github.com/iains/gcc-darwin-arm64
+      # https://github.com/fxcoudert/gcc
+      # For now there is no newer GCC for Apple Silicon.
+      XBB_GCC_VERSION="11.1.0"
+    else
+      XBB_GCC_VERSION="11.2.0" # "8.4.0" # "8.3.0" "7.5.0" "7.4.0"    
+    fi
     XBB_BINUTILS_VERSION="2.36.1" # "2.32" # "2.31"
 
     XBB_LLVM_BRANDING="xPack Build Box Bootstrap ${HOST_BITS}-bit"
@@ -59,7 +67,7 @@ function build_versioned_components()
     then
       # depends ?
       # Warning: buggy!
-      build_patchelf "0.12" # "0.10"
+      build_patchelf "0.13" # "0.12" # "0.10"
     fi
 
     # build_chrpath "0.16"
@@ -70,22 +78,22 @@ function build_versioned_components()
 
     # Library, required by tar. 
     # depends=('sh')
-    build_xz "5.2.3"
+    build_xz "5.2.5" # "5.2.3"
 
     # New tar, with xz support.
     # depends=('glibc')
-    build_tar "1.30" # Requires xz.
+    build_tar "1.34" # "1.30" # Requires xz.
 
     # -------------------------------------------------------------------------
     # From this moment on, .xz archives can be processed.
 
     # depends=('sh' 'perl' 'awk' 'm4' 'texinfo')
-    build_autoconf "2.69"
+    build_autoconf "2.71" # "2.69"
 
     # depends=('sh' 'perl')
     # Requires autoconf, the order is important on macOS.
     # PATCH! .xz!
-    build_automake "1.16.3" # "1.16.2"
+    build_automake "1.16.5" # "1.16.3" # "1.16.2"
 
     # depends=('glibc' 'glib2 (internal)')
     # Required by wget.
@@ -99,70 +107,70 @@ function build_versioned_components()
 
     # Libraries, required by gcc & other.
     # depends=('gcc-libs' 'sh')
-    build_gmp "6.1.2"
+    build_gmp "6.2.1" # "6.1.2"
     # depends=('gmp>=5.0')
-    build_mpfr "3.1.6"
+    build_mpfr "4.1.0" # "3.1.6"
     # depends=('mpfr')
-    build_mpc "1.1.0" # "1.0.3"
+    build_mpc "1.2.1" #C"1.1.0" # "1.0.3"
     # depends=('gmp')
-    build_isl "0.21"
+    build_isl "0.24" # "0.21"
 
     # Replacement for the old libcrypt.so.1.
     # ! Requires new autotools.
-    build_libxcrypt "4.4.15"
+    build_libxcrypt "4.4.26" # "4.4.15"
 
     # New openssl, required by curl, cmake, python, etc.
     # depends=('perl')
-    build_openssl "1.0.2u" # "1.0.2r"
+    build_openssl "1.1.1l" # "1.0.2u" # "1.0.2r"
 
     # Requires openssl.
     # depends=('glibc' 'gmp')
     # PATCH!
-    build_nettle "3.5.1" # "3.4.1"
+    build_nettle "3.7.3" # "3.5.1" # "3.4.1"
 
     # New curl, that better understands all protocols.
     # depends=('ca-certificates' 'krb5' 'libssh2' 'openssl' 'zlib' 'libpsl' 'libnghttp2')
-    build_curl "7.64.1" # "7.57.0"
+    build_curl "7.80.0" # "7.64.1" # "7.57.0"
 
     # Libraries, required by gnutls.
     # depends=('glibc')
-    build_tasn1 "4.15.0" # "4.13"
+    build_tasn1 "4.18.0" # "4.15.0" # "4.13"
 
     # After autogen, requires libopts.so.25.
     # depends=('glibc' 'libidn2' 'libtasn1' 'libunistring' 'nettle' 'p11-kit' 'readline' 'zlib')
     # Retuired by wget.
-    build_gnutls "3.6.11.1" # "3.6.7"
+    build_gnutls "3.7.2" # "3.6.11.1" # "3.6.7"
 
     # -------------------------------------------------------------------------
     # From this moment on, new https sites can be accessed.
 
-    build_coreutils "8.31"
+    build_coreutils "9.0" # "8.31"
 
     # depends=('glibc')
     # PATCH!
-    build_m4 "1.4.18"
+    build_m4 "1.4.19" # "1.4.18"
 
     # depends=('glibc' 'mpfr')
-    build_gawk "4.2.1"
+    build_gawk "5.1.1" # "4.2.1"
 
     # depends ?
-    build_sed "4.7"
+    build_sed "4.8" # "4.7"
 
     # depends=('glibc' 'glib2' 'libunistring' 'ncurses')
-    build_gettext "0.19.8"
+    build_gettext "0.21" # "0.19.8"
 
     # depends=('libsigsegv')
-    build_diffutils "3.7"
+    build_diffutils "3.8" # "3.7"
 
     # depends=('glibc' 'attr')
     build_patch "2.7.6"
 
     # depends=('glibc')
-    build_bison "3.4.2" # "3.3.2"
+    build_bison "3.8.2" # "3.4.2" # "3.3.2"
 
     # depends=('glibc' 'guile')
     # PATCH!
-    build_make "4.2.1"
+    build_make "4.3" # "4.2.1"
 
     # macOS 10.10 uses 2.5.3, an update is not mandatory.
     # Ubuntu 12 uses 2.5.35, an update is not mandatory.
@@ -177,12 +185,12 @@ function build_versioned_components()
 
     # depends=('libutil-linux' 'gnutls' 'libidn' 'libpsl>=0.7.1-3' 'gpgme')
     # Required by libmpdec tests
-    build_wget "1.20.3" # "1.20.1"
+    build_wget "1.21.2" # "1.20.3" # "1.20.1"
 
     # Required by Python3
-    build_expat "2.2.9"
-    build_libmpdec "2.4.2"
-    build_libffi "3.3"
+    build_expat "2.4.1" # "2.2.9"
+    build_libmpdec "2.5.1" # "2.4.2"
+    build_libffi "3.4.2" # "3.3"
 
     if is_linux
     then
@@ -211,15 +219,18 @@ function build_versioned_components()
 
     # Recent versions require C++11.
     # depends=('curl' 'libarchive' 'shared-mime-info' 'jsoncpp' 'rhash')
-    build_cmake "3.19.8" # "3.15.6" # "3.13.4"
+    build_cmake "3.21.4" # "3.19.8" # "3.15.6" # "3.13.4"
 
     # -------------------------------------------------------------------------
 
     # macOS: Segmentation fault: 11
-    if true # is_linux
+    if is_darwin
+    then
+      # macOS 10.13/11.6 use 2.7.16, close enough.
+      : # On Apple Silicon it fails, it is not worth the effort.
+    elif is_linux
     then
       # depends=('bzip2' 'gdbm' 'openssl' 'zlib' 'expat' 'sqlite' 'libffi')
-      # macOS 10.13 uses 2.7.16, bring it in sync.
       build_python2 "2.7.18" # "2.7.16" # "2.7.10" # "2.7.12" # "2.7.14" #  # "2.7.14"
     fi
 
@@ -229,25 +240,25 @@ function build_versioned_components()
 
       # require xz, openssl
       PYTHON3X="python3.9"
-      build_python3 "3.9.7" # "3.8.10" # "3.7.6" # "3.8.1" # "3.7.3"
+      build_python3 "3.9.8" # "3.9.7" # "3.8.10" # "3.7.6" # "3.8.1" # "3.7.3"
       # The necessary bits to build these optional modules were not found:
       # _bz2                  _curses               _curses_panel      
       # _dbm                  _gdbm                 _sqlite3           
       # _tkinter              _uuid                 readline 
                 
       # depends=('python3')
-      build_meson "0.58.1" # "0.57.2" # "0.53.1" # "0.50.0"
+      build_meson "0.60.1" # "0.58.1" # "0.57.2" # "0.53.1" # "0.50.0"
     fi
 
     # depends=('python2')
-    build_scons "3.1.2" # "3.1.1" # "3.0.5" # "3.0.1"
+    build_scons "4.2.0" # "3.1.2" # "3.1.1" # "3.0.5" # "3.0.1"
 
     # Requires scons
     # depends=('python2')
     build_ninja "1.10.2" # "1.10.0" # "1.9.0"
 
     # makedepend is needed by openssl
-    build_util_macros "1.19.2" # "1.17.1"
+    build_util_macros "1.19.3" # "1.19.2" # "1.17.1"
     # PATCH!
     build_xorg_xproto "7.0.31" # Needs a patch for aarch64.
     build_makedepend "1.0.6" # "1.0.5"
