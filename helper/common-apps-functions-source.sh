@@ -24,6 +24,7 @@ function build_native_binutils()
   # 2019-10-12, "2.33.1"
   # 2020-02-01, "2.34"
   # 2021-02-06, "2.36.1"
+  # 2021-07-18, "2.37"
 
   local native_binutils_version="$1"
 
@@ -2070,6 +2071,7 @@ function build_openssl()
   # 2019-Sep-10, "1.1.1d"
   # 20 Dec 2019, "1.0.2u"
   # 2021-Mar-25, "1.1.1k"
+  # 2021-Aug-24, "1.1.1l"
 
   local openssl_version="$1"
   # Numbers
@@ -2310,6 +2312,7 @@ function build_curl()
   # 2019-11-06, "7.67.0"
   # 2020-01-08, "7.68.0"
   # May 26 2021, "7.77.0"
+  # Nov 10, 2021, "7.80.0"
 
   local curl_version="$1"
 
@@ -2783,6 +2786,7 @@ function build_coreutils()
   # 2018-07-01, "8.30"
   # 2019-03-10 "8.31"
   # 2020-03-05, "8.32"
+  # 2021-09-24, "9.0"
 
   local coreutils_version="$1"
 
@@ -3241,6 +3245,7 @@ function build_gawk()
   # 2018-02-25, "4.2.1"
   # 2019-06-18, "5.0.1"
   # 2020-04-14, "5.1.0"
+  # 2021-10-28, "5.1.1"
 
   local gawk_version="$1"
 
@@ -3653,6 +3658,7 @@ function build_automake()
   # 2020-03-21, "1.16.2"
   # 2020-11-18, "1.16.3"
   # 2021-07-26, "1.16.4"
+  # 2021-10-03, "1.16.5"
 
   local automake_version="$1"
 
@@ -4264,6 +4270,7 @@ function build_diffutils()
 
   # 2017-05-21, "3.6"
   # 2018-12-31, "3.7"
+  # 2021-08-01, "3.8"
 
   local diffutils_version="$1"
 
@@ -4400,6 +4407,7 @@ function build_bison()
   # 2019-09-12, "3.4.2"
   # 2019-12-11, "3.5"
   # 2020-07-23, "3.7"
+  # 2021-09-25, "3.8.2"
 
   local bison_version="$1"
 
@@ -4836,6 +4844,7 @@ function build_wget()
   # lib/malloc/dynarray-skeleton.c:195:13: error: expected identifier or '(' before numeric constant
   # 195 | __nonnull ((1))
   # 2021-01-09, "1.21.1"
+  # 2021-09-07, "1.21.2"
 
   local wget_version="$1"
 
@@ -5105,6 +5114,7 @@ function build_cmake()
   # Dec 16, 2019, "3.16.2"
   # Apr 6, 2021, "3.19.8"
   # Sep 20, 2021, "3.20.6"
+  # Oct 7, 2021, "3.21.4"
 
   local cmake_version="$1"
   local cmake_version_major="$(echo ${cmake_version} | sed -e 's|\([0-9][0-9]*\)\..*|\1|')"
@@ -5607,6 +5617,7 @@ function build_patchelf()
   # 2019-03-28, "0.10"
   # 2020-06-09, "0.11"
   # 2020-08-27, "0.12"
+  # 05 Aug 2021, "0.13"
 
   local patchelf_version="$1"
 
@@ -6283,6 +6294,8 @@ function build_python3()
   # May 3, 2021, "3.8.10"
   # Aug. 30, 2021, "3.8.12"
   # Aug. 30, 2021, "3.9.7"
+  # Nov. 5, 2021, "3.9.8"
+  # Oct. 4, 2021, "3.10.0"
 
   local python3_version="$1"
 
@@ -6474,6 +6487,7 @@ function build_scons()
   # 2019-08-08, "3.1.1"
   # 2019-12-17, "3.1.2"
   # 2021-01-19, "4.1.0"
+  # 2021-08-01, "4.2.0"
 
   local scons_version="$1"
 
@@ -6594,6 +6608,7 @@ function build_meson
   # Jan 7, 2020, "0.53.0"
   # Apr 10, 2021, "0.57.2"
   # Jun 7, 2021, "0.58.1"
+  # Nov 2, 2021, "0.60.1"
 
   local meson_version="$1"
 

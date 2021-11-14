@@ -805,6 +805,7 @@ function build_tasn1()
   # 2018-01-16, "4.13"
   # 2019-11-21, "4.15.0"
   # 2021-05-13, "4.17.0"
+  # 2021-11-09, "4.18.0"
 
   local tasn1_version="$1"
 
@@ -1050,7 +1051,8 @@ function build_libffi()
   # https://github.com/libffi/libffi/archive/v3.2.1.tar.gz
 
   # 12-Nov-2014, "3.2.1", latest on sourceware.org
-  # 23 Nov 2019, "3.3"
+  # 23 Nov 2019, "3.3" 
+  # 29 Jun 2021, "3.4.2"
 
   local libffi_version="$1"
 
@@ -2677,6 +2679,7 @@ function build_libxcrypt()
   # m4/ax_valgrind_check.m4:80: warning: macro `AM_EXTRA_RECURSIVE_TARGETS' not found in library
   # Feb 25 2020, "4.4.15"
   # May 27, 2021, "4.4.22"
+  # 18 Sep 2021, "4.4.26"
 
   local libxcrypt_version="$1"
 
