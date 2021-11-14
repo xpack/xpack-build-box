@@ -57,7 +57,7 @@ function detect_host()
   HOST_UNAME="$(uname)"
   HOST_LC_UNAME=$(echo ${HOST_UNAME} | tr "[:upper:]" "[:lower:]")
 
-  # x86_64, i686, i386, aarch64, armv7l, armv8l
+  # x86_64, i686, i386, aarch64, armv7l, armv8l, arm64
   HOST_MACHINE="$(uname -m)"
 
   HOST_DISTRO_NAME="?" # Linux distribution name (Ubuntu|CentOS|...)
@@ -72,8 +72,8 @@ function detect_host()
 
   if [ "${HOST_UNAME}" == "Darwin" ]
   then
-    # uname -p -> i386
-    # uname -m -> x86_64
+    # uname -p -> i386, arm
+    # uname -m -> x86_64, arm64
 
     HOST_BITS="64"
 
@@ -81,7 +81,21 @@ function detect_host()
     HOST_DISTRO_LC_NAME=$(echo ${HOST_DISTRO_NAME} | sed -e 's/ //g' | tr "[:upper:]" "[:lower:]")
     HOST_DISTRO_RELEASE="$(sw_vers -productVersion)"
 
-    HOST_NODE_ARCH="x64" # For now.
+    if [ "${HOST_MACHINE}" == "x86_64" ]
+    then
+      HOST_BITS="64"
+      HOST_NODE_ARCH="x64"
+      IS_HOST_INTEL="y"
+    elif [ "${HOST_MACHINE}" == "arm64" ]
+    then
+      HOST_BITS="64"
+      HOST_NODE_ARCH="arm64"
+      IS_HOST_ARM="y"
+    else
+      echo "Unknown uname -m ${HOST_MACHINE}"
+      exit 1
+    fi
+
     HOST_NODE_PLATFORM="darwin"
 
     BUILD="$(gcc --version 2>&1 | grep 'Target:' | sed -e 's/Target: //')"
@@ -229,6 +243,9 @@ function is_arm()
   then
     return 0
   elif [ "${machine}" == "armv7l" ]
+  then
+    return 0
+  elif [ "${machine}" == "arm64" ]
   then
     return 0
   else
