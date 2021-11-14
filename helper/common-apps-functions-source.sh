@@ -442,6 +442,8 @@ function build_native_gcc()
   # https://gcc.gnu.org/wiki/InstallingGCC
   # https://gcc.gnu.org/install/build.html
 
+  # https://github.com/Homebrew/homebrew-core/blob/master/Formula/gcc.rb
+
   # https://archlinuxarm.org/packages/aarch64/gcc/files/PKGBUILD
   # https://aur.archlinux.org/cgit/aur.git/tree/PKGBUILD?h=gcc-git
 
