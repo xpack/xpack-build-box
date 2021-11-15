@@ -86,11 +86,13 @@ function detect_host()
       HOST_BITS="64"
       HOST_NODE_ARCH="x64"
       IS_HOST_INTEL="y"
+      export MACOSX_DEPLOYMENT_TARGET="10.10"
     elif [ "${HOST_MACHINE}" == "arm64" ]
     then
       HOST_BITS="64"
       HOST_NODE_ARCH="arm64"
       IS_HOST_ARM="y"
+      export MACOSX_DEPLOYMENT_TARGET="11.0"
     else
       echo "Unknown uname -m ${HOST_MACHINE}"
       exit 1
@@ -156,15 +158,6 @@ function detect_host()
   else
     echo "Unsupported uname ${HOST_UNAME}"
     exit 1
-  fi
-
-  if [ "${HOST_UNAME}" == "Darwin" ]
-  then
-    if [ "${XBB_LAYER:-""}" == "xbb" ]
-    then
-      # TODO: update to 11.0 for Arm.
-      export MACOSX_DEPLOYMENT_TARGET="10.10"
-    fi
   fi
 
   MACOS_SDK_PATH=""
