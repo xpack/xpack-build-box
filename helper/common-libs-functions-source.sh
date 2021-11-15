@@ -3047,6 +3047,13 @@ function build_gc()
         # make install-strip
         run_verbose make install
 
+        if is_darwin && is_arm
+        then
+          # Otherwise guile fails.
+          cp -v "${SOURCES_FOLDER_PATH}/${gc_src_folder_name}/include/gc_pthread_redirects.h" \
+            "${INSTALL_FOLDER_PATH}/include"
+        fi
+
         if [ "${RUN_TESTS}" == "y" ]
         then
           if is_linux && is_arm && [ "${HOST_BITS}" == "32" ]
