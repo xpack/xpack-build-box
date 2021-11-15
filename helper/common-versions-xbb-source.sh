@@ -12,25 +12,6 @@ function build_versioned_components()
   if [[ "${XBB_VERSION}" =~ 3\.[4] ]]
   then
 
-    if false # is_linux
-    then
-      # Uses CC to compute the library path.
-      prepare_library_path
-
-      LD_RUN_PATH="${XBB_LIBRARY_PATH}"
-
-      echo "LD_RUN_PATH=${LD_RUN_PATH}"
-      export LD_RUN_PATH
-
-      build_patchelf "0.12"
-
-      build_automake "1.16.4"
-
-      patch_elf_rpath
-
-      run_tests
-
-    else
     # =========================================================================
 
     # Problematic tests (WARN-TEST)
@@ -61,10 +42,14 @@ function build_versioned_components()
 
     # XBB_LLVM_VERSION="11.1.0"
 
-    if is_darwin
+    # Fortunatelly GCC 11.1 was updated and works on Apple hardware.
+    if is_darwin && is_arm
     then
-      # Old GCC not supported on MacOS 11 or M1 machines.
-      XBB_GCC_VERSION="11.2.0"
+      # https://github.com/iains/gcc-darwin-arm64
+      # https://github.com/fxcoudert/gcc
+      # For now there is no newer GCC for Apple Silicon, perhaps 11.3 will
+      # include the goodies.
+      XBB_GCC_VERSION="11.1.0"
     else
       # "10.3.0" fails with:
       # error: unknown conversion type character ‘l’ in format [-Werror=format=]
@@ -83,7 +68,8 @@ function build_versioned_components()
       XBB_MINGW_BINUTILS_VERSION="${XBB_BINUTILS_VERSION}" # "2.34" # "2.33.1"
     fi
 
-    XBB_GDB_VERSION="10.2"
+    XBB_GDB_VERSION="11.1" # "10.2"
+
     libtool_version="2.4.6"
 
     XBB_LLVM_BRANDING="xPack Build Box ${HOST_MACHINE}"
@@ -136,27 +122,27 @@ function build_versioned_components()
     # -------------------------------------------------------------------------
 
     # Replacement for the old libcrypt.so.1.
-    build_libxcrypt "4.4.22" # "4.4.15"
+    build_libxcrypt "4.4.26" # "4.4.22" # "4.4.15"
 
     # depends=('perl')
-    build_openssl "1.1.1k" # "1.1.1d" # "1.0.2u" # "1.1.1d" # "1.0.2r" # "1.1.1b"
+    build_openssl "1.1.1l" # "1.1.1k" # "1.1.1d" # "1.0.2u" # "1.1.1d" # "1.0.2r" # "1.1.1b"
 
     # Libraries, required by gnutls.
     # depends=('glibc')
-    build_tasn1 "4.17.0" # "4.15.0" # "4.13"
+    build_tasn1 "4.18.0" # "4.17.0" # "4.15.0" # "4.13"
     # Library, required by Python.
     # depends=('glibc')
     build_expat "2.4.1" # "2.2.9" # "2.2.6"
     # depends=('glibc')
-    build_libffi "3.2.1"
+    build_libffi "3.4.2" # "3.2.1"
 
     build_libunistring "0.9.10"
 
     # Required by guile, not used now.
-    build_gc "8.0.4"
+    build_gc "8.2.0" # "8.0.4"
 
     # Required by Python
-    build_libmpdec "2.4.2"
+    build_libmpdec "2.5.1" # "2.4.2"
 
     # Libary, required by tar. 
     # depends=('sh')
@@ -187,7 +173,7 @@ function build_versioned_components()
     build_pkg_config "0.29.2"
 
     # depends=('ca-certificates' 'krb5' 'libssh2' 'openssl' 'zlib' 'libpsl' 'libnghttp2')
-    build_curl "7.77.0" # "7.68.0" # "7.64.1"
+    build_curl "7.80.0" # "7.77.0" # "7.68.0" # "7.64.1"
 
     # tar with xz support.
     # depends=('glibc')
@@ -208,7 +194,7 @@ function build_versioned_components()
 
     # "8.32" fails on aarch64 with:
     # coreutils-8.32/src/ls.c:3026:24: error: 'SYS_getdents' undeclared (first use in this function); did you mean 'SYS_getdents64'?
-    build_coreutils "8.31" # !"8.32" # "8.31"
+    build_coreutils "9.0" # "8.31" # !"8.32" # "8.31"
 
     # -------------------------------------------------------------------------
     # GNU tools
@@ -216,10 +202,10 @@ function build_versioned_components()
     # depends=('glibc')
     # PATCH!
     # "1.4.19" tests fail on amd64.
-    build_m4 "1.4.18" # !"1.4.19" # "1.4.18"
+    build_m4 "1.4.19" # "1.4.18" # !"1.4.19" # "1.4.18"
 
     # depends=('glibc' 'mpfr')
-    build_gawk "5.1.0" # "5.0.1" # "4.2.1"
+    build_gawk "5.1.1" # "5.1.0" # "5.0.1" # "4.2.1"
 
     # depends ?
     build_sed "4.8" # "4.7"
@@ -228,7 +214,7 @@ function build_versioned_components()
     build_autoconf "2.71" # "2.69"
     # depends=('sh' 'perl')
     # PATCH!
-    build_automake "1.16.3" # "1.16"
+    build_automake "1.16.5" # "1.16.3" # "1.16"
 
     # depends=('glibc' 'glib2' 'libunistring' 'ncurses')
     build_gettext "0.21" # "0.20.1" # "0.19.8"
@@ -237,10 +223,10 @@ function build_versioned_components()
     build_patch "2.7.6"
 
     # depends=('libsigsegv')
-    build_diffutils "3.7"
+    build_diffutils "3.8" # "3.7"
 
     # depends=('glibc')
-    build_bison "3.7" # "3.5" # "3.3.2"
+    build_bison "3.8.2" # "3.7" # "3.5" # "3.3.2"
 
     # depends=('glibc' 'guile')
     # PATCH!
@@ -249,25 +235,25 @@ function build_versioned_components()
     # depends=('readline>=7.0' glibc ncurses)
     # "5.1" fails on amd64 with:
     # bash-5.1/bashline.c:65:10: fatal error: builtins/builtext.h: No such file or directory
-    build_bash "5.0" # !"5.1" # "5.0"
+    build_bash "5.1.8" # "5.0" # !"5.1" # "5.0"
 
     # -------------------------------------------------------------------------
     # Third party tools
 
     # depends=('libutil-linux' 'gnutls' 'libidn' 'libpsl>=0.7.1-3' 'gpgme')
-    # "1.21.1" fails on macOS with
+    # "1.21.[12]" fails on macOS with
     # lib/malloc/dynarray-skeleton.c:195:13: error: expected identifier or '(' before numeric constant
     # 195 | __nonnull ((1))
     build_wget "1.20.3" # "1.20.1"
 
     # Required to build PDF manuals.
     # depends=('coreutils')
-    build_texinfo "6.7" # "6.6"
+    build_texinfo "6.8" # "6.7" # "6.6"
 
     # depends ?
     # Warning: buggy!
     # "0.12" weird tag
-    build_patchelf "0.12" # "0.10"
+    build_patchelf "0.13" # "0.12" # "0.10"
 
     # depends=('glibc')
     build_dos2unix "7.4.2" # "7.4.1" # "7.4.0"
@@ -275,25 +261,26 @@ function build_versioned_components()
     # macOS 10.10 uses 2.5.3, an update is not mandatory.
     # depends=('glibc' 'm4' 'sh')
     # PATCH!
-    build_flex "2.6.4" # "2.6.3" fails in wine
+#    build_flex "2.6.4" # "2.6.3" fails in wine
 
     if true # is_linux
     then
       # macOS 10.1[03] uses 5.18.2.
+      # macOS 11.6 uses 5.30.2
       # HiRes.c:2037:17: error: use of undeclared identifier 'CLOCK_REALTIME'   
       #     clock_id = CLOCK_REALTIME;
       # 
       # depends=('gdbm' 'db' 'glibc')
-       # old PATCH!
-      build_perl "5.32.0" # "5.30.1" # "5.18.2" # "5.30.1" # "5.28.1"
+      # old PATCH!
+#      build_perl "5.34.0" # "5.32.0" # "5.30.1" # "5.18.2" # "5.30.1" # "5.28.1"
     fi
 
     # Give other a chance to use it.
     # However some (like Python) test for Tk too.
-    build_tcl  "8.6.11" # "8.6.10"
+#    build_tcl "8.6.12" # "8.6.11" # "8.6.10"
 
     # depends=('curl' 'libarchive' 'shared-mime-info' 'jsoncpp' 'rhash')
-    build_cmake "3.20.6" # "3.19.8" # "3.16.2" # "3.13.4"
+    build_cmake "3.21.4" #  "3.20.6" # "3.19.8" # "3.16.2" # "3.13.4"
 
     # On macOS use the official binaries, which install in:
     # 2.7.17 -> /Library/Frameworks/Python.framework/Versions/2.7
@@ -317,7 +304,11 @@ function build_versioned_components()
     # error: [Errno 54] Connection reset by peer
     # 0:05:27 load avg: 1.64 [311/400] test_startfile -- test_ssl failed (env changed)
 
-    if true # is_linux
+    if is_darwin
+    then
+      # macOS 10.13/11.6 use 2.7.16, close enough.
+      : # On Apple Silicon it fails, it is not worth the effort.
+    elif is_linux
     then
       # There are several errors on macOS 10.10 and some tests fail.                                           
       # depends=('bzip2' 'gdbm' 'openssl' 'zlib' 'expat' 'sqlite' 'libffi')
@@ -332,20 +323,20 @@ function build_versioned_components()
 
     # depends=('python2')
     # "4.1.0" fails on macOS 10.13
-    build_scons "3.1.2" # "3.0.5"
+    build_scons "4.2.0" # "3.1.2" # "3.0.5"
 
     if true # is_linux
     then
       # require xz, openssl
       PYTHON3X="python3.9"
-      build_python3 "3.9.7" # "3.8.10" # "3.7.6" # "3.8.1" # "3.7.3"
+      build_python3 "3.9.8" # "3.9.7" # "3.8.10" # "3.7.6" # "3.8.1" # "3.7.3"
       # The necessary bits to build these optional modules were not found:
       # _bz2                  _curses               _curses_panel      
       # _dbm                  _gdbm                 _sqlite3           
       # _tkinter              _uuid                 readline 
                 
       # depends=('python3')
-      build_meson "0.58.1" # "0.53.1" # "0.50.0"
+      build_meson "0.60.1" # "0.58.1" # "0.53.1" # "0.50.0"
     fi
 
     # Requires scons
@@ -353,17 +344,17 @@ function build_versioned_components()
     build_ninja "1.10.2" # "1.10.0" # "1.9.0"
 
     # depends=('curl' 'expat>=2.0' 'perl-error' 'perl>=5.14.0' 'openssl' 'pcre2' 'grep' 'shadow')
-    build_git "2.32.0" # "2.25.0" # "2.21.0"
+    build_git "2.33.1" # "2.32.0" # "2.25.0" # "2.21.0"
 
     build_p7zip "16.02"
 
     # "1.4.[12]" fail on amd64 with
     # librhash/librhash.so.0: undefined reference to `aligned_alloc'
-    build_rhash "1.3.9" # !"1.4.2" # !"1.4.1" # "1.3.9"
+    build_rhash "1.4.2" # "1.3.9" # !"1.4.2" # !"1.4.1" # "1.3.9"
 
-    build_re2c "2.1.1" # "1.3"
+    build_re2c "2.2" # "2.1.1" # "1.3"
 
-    build_sphinx "4.0.2" # "2.4.4"
+    build_sphinx "4.3.0" # "4.0.2" # "2.4.4"
 
     # -------------------------------------------------------------------------
 
@@ -374,7 +365,7 @@ function build_versioned_components()
 
     build_libgpg_error "1.42" # "1.41" # "1.37"
     # "1.9.3" Fails many tests on macOS
-    build_libgcrypt "1.8.8" # "1.8.7" # "1.8.5"
+    build_libgcrypt "1.9.4" # "1.8.8" # "1.8.7" # "1.8.5"
     build_libassuan "2.5.5" # "2.5.4" # "2.5.3"
     # patched
     build_libksba "1.6.0" # "1.5.0" # "1.3.5"
@@ -383,7 +374,7 @@ function build_versioned_components()
 
     # "2.3.1" fails on macOS 10.13, requires libgcrypt 1.9
     # "2.2.28" fails on amd64
-    build_gnupg  "2.2.26" # !"2.2.28" # "2.2.26" # "2.2.19"
+    build_gnupg  "2.3.3" # "2.2.26" # !"2.2.28" # "2.2.26" # "2.2.19"
 
     # -------------------------------------------------------------------------
 
@@ -395,9 +386,13 @@ function build_versioned_components()
 
     # -------------------------------------------------------------------------
 
-    build_ant "1.10.10" # "1.10.7"
+    # Avoid Java for now, not longer available on Apple Silicon.
+    if false
+    then
+      build_ant "1.10.12" # "1.10.10" # "1.10.7"
 
-    build_maven "3.8.1" # "3.6.3"
+      build_maven "3.8.3" # "3.8.1" # "3.6.3"
+    fi
     
     # Not ready, dependency libs not yet in.
     # build_nodejs "12.16.0"
@@ -492,7 +487,8 @@ function build_versioned_components()
         build_libtool "${libtool_version}" "-2"
       )
 
-      build_native_gdb "${XBB_GDB_VERSION}"
+      # Fails to install on Apple Silicon
+#      build_native_gdb "${XBB_GDB_VERSION}"
     else
       echo "Unsupported platform."
       exit 1
@@ -540,10 +536,6 @@ function build_versioned_components()
       # configure: WARNING: libxslt 64-bit development files not found, xslt won't be supported.
       # configure: WARNING: libjpeg 64-bit development files not found, JPEG won't be supported.
       # configure: WARNING: No sound system was found. Windows applications will be silent.
-    fi
-
-    # -------------------------------------------------------------------------
-
     fi
 
     # -------------------------------------------------------------------------
