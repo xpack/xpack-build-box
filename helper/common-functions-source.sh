@@ -102,6 +102,13 @@ function detect_host()
 
     BUILD="$(gcc --version 2>&1 | grep 'Target:' | sed -e 's/Target: //')"
 
+    MACOS_SDK_PATH=""
+    if [ "${HOST_UNAME}" == "Darwin" ]
+    then
+      MACOS_SDK_PATH="/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk"
+    fi
+    export MACOS_SDK_PATH
+
   elif [ "${HOST_UNAME}" == "Linux" ]
   then
     # ----- Determine distribution name and word size -----
@@ -159,13 +166,6 @@ function detect_host()
     echo "Unsupported uname ${HOST_UNAME}"
     exit 1
   fi
-
-  MACOS_SDK_PATH=""
-  if [ "${HOST_UNAME}" == "Darwin" ]
-  then
-    MACOS_SDK_PATH="/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk"
-  fi
-  export MACOS_SDK_PATH
 
   # x86_64-w64-mingw32 or i686-w64-mingw32
   MINGW_TARGET="${HOST_MACHINE}-w64-mingw32"
