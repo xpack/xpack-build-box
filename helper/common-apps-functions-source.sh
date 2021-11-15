@@ -282,6 +282,7 @@ function build_native_gdb()
 
   # 2020-05-23, "9.2"
   # 2021-04-25, "10.2"
+  # 2021-09-12, "11.1"
 
   local native_gdb_version="$1"
 
@@ -4996,6 +4997,7 @@ function build_texinfo()
   # 2017-09-12, "6.5"
   # 2019-02-16, "6.6"
   # 2019-09-23, "6.7"
+  # 2021-07-03, "6.8"
 
   local texinfo_version="$1"
 
@@ -6003,6 +6005,7 @@ function build_git()
   # 24-Feb-2019, "2.21.0"
   # 13-Jan-2020, "2.25.0"
   # 06-Jun-2021, "2.32.0"
+  # 12-Oct-2021, "2.33.1"
 
   local git_version="$1"
 
@@ -6979,6 +6982,7 @@ function build_wine()
   # 2021-06-04, "6.10"
   # 2020-11-20, "5.22"
   # 2021-09-10, "6.17"
+  # 2021-11-05, "6.21"
 
   local wine_version="$1"
 
@@ -7298,6 +7302,7 @@ function build_gnupg()
 
   # 2021-06-10, "2.2.28"
   # 2021-04-20, "2.3.1" fails on macOS
+  # 2021-10-12, "2.3.3"
 
   local gnupg_version="$1"
 
@@ -7452,6 +7457,7 @@ function build_ant()
 
   # 2019-09-05, "1.10.7"
   # 2021-04-17, "1.10.10"
+  # 2021-10-19, "1.10.12"
 
   local ant_version="$1"
 
@@ -7550,6 +7556,7 @@ function build_maven()
 
   # 2019-11-25, "3.6.3"
   # 2021-04-04, "3.8.1"
+  # 2021-10-03, "3.8.3"
 
   local maven_version="$1"
   local maven_version_major="$(echo "${maven_version}" | sed -e 's/\([0-9]*\)\..*/\1/')"
@@ -7779,6 +7786,7 @@ function build_tcl()
 
   # 2019-11-21, "8.6.10"
   # ? "8.6.11"
+  # ? "8.6.12"
 
   local tcl_version="$1"
 
@@ -8231,6 +8239,7 @@ function build_re2c()
 
   # 14 Dec 2019, "1.3"
   # Mar 27, 2021, "2.1.1"
+  # 01 Aug 2021, "2.2"
 
   local re2c_version="$1"
 
@@ -8375,6 +8384,7 @@ function build_sphinx()
   # Apr 10, 2020, "3.0.1"
   # Mar 5, 2020, "2.4.4"
   # ? "4.0.2"
+  # Nov 10, 2021, "4.3.0"
 
   local sphinx_version="$1"
 
@@ -8432,7 +8442,7 @@ function build_autogen()
 
   # https://archlinuxarm.org/packages/aarch64/autogen/files/PKGBUILD
 
-  # 22018-08-26, "5.18.16"
+  # 2018-08-26, "5.18.16"
 
   local autogen_version="$1"
 
@@ -8599,6 +8609,7 @@ function build_bash()
   # 2018-01-30, "4.4.18"
   # 2019-01-07, "5.0"
   # 2020-12-06, "5.1"
+  # 2021-06-15, "5.1.8"
 
   local bash_version="$1"
 

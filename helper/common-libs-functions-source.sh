@@ -2159,6 +2159,7 @@ function build_libgcrypt()
   # 2019-08-29, "1.8.5"
   # 2021-06-02, "1.8.8"
   # 2021-04-19, "1.9.3" Fails many tests on macOS 10.13
+  # 2021-08-22, "1.9.4"
 
   local libgcrypt_version="$1"
 
@@ -2948,10 +2949,12 @@ function build_gc()
   # https://www.hboehm.info/gc
   # https://github.com/ivmai/bdwgc/releases/
   # https://github.com/ivmai/bdwgc/releases/download/v8.0.4/gc-8.0.4.tar.gz
+  # https://github.com/ivmai/bdwgc/releases/download/v8.2.0/gc-8.2.0.tar.gz
 
   # https://archlinuxarm.org/packages/aarch64/gc/files/PKGBUILD
 
   # 2 Mar 2019 "8.0.4"
+  # 29 Sep 2021, "8.2.0"
 
   local gc_version="$1"
 
