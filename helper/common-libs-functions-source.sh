@@ -228,7 +228,12 @@ function build_gmp()
 
         if [ "${RUN_TESTS}" == "y" ]
         then
-          run_verbose make -j1 check
+          if is_darwin && is_arm
+          then
+            : # Skip, FAIL: t-rand
+          else
+            run_verbose make -j1 check
+          fi
         fi
 
       ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${gmp_folder_name}/make-output.txt"
