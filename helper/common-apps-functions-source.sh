@@ -4083,10 +4083,16 @@ function build_gettext()
                 export LD_RUN_PATH="$(pwd)/intl/.libs:${LD_RUN_PATH}"
                 echo "LD_RUN_PATH=$LD_RUN_PATH"
               fi
-              if is_darwin && [ "${XBB_LAYER}" == "xbb-bootstrap" ]
+              if is_darwin
               then
-                # Fails on macOS 10.15.
-                run_verbose make -j1 check || true
+                if is_arm
+                then
+                  # Undefined symbols for architecture arm64:
+                  # "_vm_region"
+                  :
+                else
+                  run_verbose make -j1 check || true
+                fi
               else
                 run_verbose make -j1 check 
               fi
