@@ -157,12 +157,20 @@ function build_versioned_components()
     # PATCH!
     build_make "4.3" # "4.2.1"
 
-    # macOS 10.10 uses 2.5.3, an update is not mandatory.
+    # macOS 10.10 uses 2.5.3, 11.6 uses 2.6.4, an update is not mandatory.
+    # macOS 11.6 uses 2.6.4
     # Ubuntu 12 uses 2.5.35, an update is not mandatory.
     # ! Requires autopoint from autotools.
     # depends=('glibc' 'm4' 'sh')
     # PATCH!
-    build_flex "2.6.4" # "2.6.3" fails
+    if is_darwin && is_arm
+    then
+      # Fails, due to missing `-Wl,-undefined -Wl,dynamic_lookup`;
+      # HomeBrew uses a patch.
+      :
+    else
+      build_flex "2.6.4" # "2.6.3" fails
+    fi
 
     # depends=()
     # Not needed, possibly harmful for GCC 9.
