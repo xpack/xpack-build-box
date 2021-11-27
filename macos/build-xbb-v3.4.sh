@@ -103,9 +103,14 @@ do_cleanup
 
 stop_timer
 
+if is_darwin
+then
+  say "Wake up, the build completed successfully"
+fi
+
 # -----------------------------------------------------------------------------
 
-if [ "${HOST_UNAME}" == "Darwin" ]
+if is_darwin
 then
   echo
   echo "macOS version ${macos_version}"
