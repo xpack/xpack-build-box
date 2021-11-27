@@ -5409,6 +5409,12 @@ function build_perl()
       export CXXFLAGS
       export LDFLAGS
 
+      if is_darwin_not_clang && is_arm
+      then
+        # https://github.com/iains/gcc-darwin-arm64/issues/54
+        prepare_clang_env ""
+      fi
+
       env | sort
 
       if [ ! -f "config.h" ]
