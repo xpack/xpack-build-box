@@ -86,7 +86,7 @@ function detect_host()
       HOST_BITS="64"
       HOST_NODE_ARCH="x64"
       IS_HOST_INTEL="y"
-      export MACOSX_DEPLOYMENT_TARGET="10.10"
+      export MACOSX_DEPLOYMENT_TARGET="10.13"
     elif [ "${HOST_MACHINE}" == "arm64" ]
     then
       HOST_BITS="64"
