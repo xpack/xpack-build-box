@@ -42,15 +42,7 @@ function build_versioned_components()
 
     # XBB_LLVM_VERSION="11.1.0"
 
-    # Fortunatelly GCC 11.1 was updated and works on Apple hardware.
-    if is_darwin && is_arm
-    then
-      # https://github.com/iains/gcc-darwin-arm64
-      # https://github.com/fxcoudert/gcc
-      # For now there is no newer GCC for Apple Silicon, perhaps 11.3 will
-      # include the goodies.
-      XBB_GCC_VERSION="11.1.0"
-    else
+    # Fortunatelly GCC 11.[12] were updated and work on Apple hardware.
       # "10.3.0" fails with:
       # error: unknown conversion type character ‘l’ in format [-Werror=format=]
       XBB_GCC_VERSION="11.2.0" # "9.4.0" # !"10.3.0" # !"11.1.0" # "9.3.0" # "9.2.0" # "8.3.0" # "7.4.0"
