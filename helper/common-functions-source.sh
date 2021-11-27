@@ -1326,8 +1326,15 @@ function show_libs()
       "${ldd}" -v "${app_path}" || true
     elif [ "${HOST_UNAME}" == "Darwin" ]
     then
-      echo "otool -L ${app_path}"
-      otool -L "${app_path}"
+      run_verbose ls -l "${app_path}"
+      run_verbose file "${app_path}"
+      run_verbose otool -L "${app_path}"
+      local lc_rpaths=$(get_darwin_lc_rpaths "${app_path}")
+      local lc_rpaths_line=$(echo ${lc_rpaths} | tr '\n' ';' | sed -e 's|;$||')
+      if [ -n "${lc_rpaths_line}" ]
+      then
+        echo "LC_RPATH=$(get_darwin_lc_rpaths "${app_path}")"
+      fi
     fi
   )
 }
