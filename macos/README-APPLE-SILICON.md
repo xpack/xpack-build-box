@@ -2,6 +2,11 @@
 
 Notes on porting XBB to Apple Silicon, in reverse chronological order:
 
+## 2021-11-27
+
+- rebuild for macOS 11.6
+- update to GCC 11.2 also available from @iains/@fxcoudert
+
 ## 2021-11-14
 
 - update most pacakges to latest releases
