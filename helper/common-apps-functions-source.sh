@@ -7958,6 +7958,8 @@ function build_guile()
   # https://ftp.gnu.org/gnu/guile/
 
   # https://archlinuxarm.org/packages/aarch64/guile/files/PKGBUILD
+  # https://github.com/Homebrew/homebrew-core/blob/master/Formula/guile.rb
+  # https://github.com/Homebrew/homebrew-core/blob/master/Formula/guile@2.rb
 
   # 2020-03-07, "2.2.7"
   # Note: for non 2.2, update the tests!
@@ -8462,7 +8464,8 @@ function build_autogen()
   # https://ftp.gnu.org/gnu/autogen/rel5.18.16/autogen-5.18.16.tar.xz
 
   # https://archlinuxarm.org/packages/aarch64/autogen/files/PKGBUILD
-
+  # https://github.com/Homebrew/homebrew-core/blob/master/Formula/autogen.rb
+  
   # 2018-08-26, "5.18.16"
 
   local autogen_version="$1"
