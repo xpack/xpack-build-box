@@ -78,19 +78,20 @@ compiler, but with a GCC. This first set of tools is called _the XBB
 bootstrap_.
 
 ```bash
-RUN_LONG_TESTS=y caffeinate bash "${HOME}/Downloads/xpack-build-box.git/macos/build-xbb-bootstrap-v3.3.sh"
+RUN_LONG_TESTS=y caffeinate bash "${HOME}/Downloads/xpack-build-box.git/macos/build-xbb-bootstrap-v3.4.sh"
 ```
 
 There are several environment variables that can be passed to the script:
 
 ```bash
-DEBUG=-x caffeinate bash "${HOME}/Downloads/xpack-build-box.git/macos/build-xbb-bootstrap-v3.3.sh"
+DEBUG=-x caffeinate bash "${HOME}/Downloads/xpack-build-box.git/macos/build-xbb-bootstrap-v3.4.sh"
 ```
 
-The build process takes about 300 minutes on a MacBook Pro 2011; on a MacMini M1, the build took 60 minutes.
+The build process takes about 300 minutes on a MacBook Pro 2011,
+about 100 minutes on a Mac Mini 2018
+and about 60 minutes on a MacMini M1 2020.
 
-The build is performed in a folder like `${HOME}/Work/xbb-bootstrap-3.3-darwin-x86_64` or
-`xbb-bootstrap-3.4-macos-11.6.1-arm64`,
+The build is performed in a folder like `${HOME}/Work/xbb-bootstrap-3.4-macos-11.6.1-arm64`,
 which can be removed after the build is completed.
 
 The result of this step is a folder in user home (`${HOME}/.local/xbb-bootstrap`).
@@ -104,13 +105,14 @@ since they may refer to bootstrap libraries.
 The final XBB tools are compiled with the bootstrapped compiler.
 
 ```bash
-RUN_LONG_TESTS=y caffeinate bash "${HOME}/Downloads/xpack-build-box.git/macos/build-xbb-v3.3.sh"
+RUN_LONG_TESTS=y caffeinate bash "${HOME}/Downloads/xpack-build-box.git/macos/build-xbb-v3.4.sh"
 ```
 
-The build process takes about 450 minutes on a MacBook Pro 2011; on a MacMini M1, the build took about 75 minutes.
+The build process takes about 450 minutes on a MacBook Pro 2011,
+about 150 minutes on a Mac Mini 2018
+and about 75 minutes on a MacMini M1 2020.
 
-The build is performed in a folder like `${HOME}/Work/xbb-3.3-darwin-x86_64`
-or `xbb-3.4-macos-11.6.1-arm64`,
+The build is performed in a folder like `${HOME}/Work/xbb-3.4-macos-11.6.1-arm64`,
 which can be removed after the build is completed.
 
 The result of this step is a folder in user home (`${HOME}/.local/xbb`).
