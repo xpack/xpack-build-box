@@ -2185,13 +2185,24 @@ function build_openssl()
 
               "./config" --help
 
+              # SSLv2 died with 1.1.0, so no-ssl2 no longer required.
+              # SSLv3 & zlib are off by default with 1.1.0 but this may not
+              # be obvious to everyone, so explicitly state it for now to
+              # help debug inevitable breakage.
               export KERNEL_BITS=64
               run_verbose "./config" \
                 --prefix="${INSTALL_FOLDER_PATH}" \
                 \
                 --openssldir="${INSTALL_FOLDER_PATH}/openssl" \
                 shared \
-                enable-md2 enable-rc5 enable-tls enable-tls1_3 enable-tls1_2 enable-tls1_1 \
+                enable-md2 \
+                enable-rc5 \
+                enable-tls \
+                enable-tls1_3 \
+                enable-tls1_2 \
+                enable-tls1_1 \
+                no-ssl3 \
+                no-ssl3-method \
                 "${CPPFLAGS} ${CFLAGS} ${LDFLAGS}"
 
             fi
@@ -2234,6 +2245,8 @@ function build_openssl()
               enable-tls1_3 \
               enable-tls1_2 \
               enable-tls1_1 \
+              no-ssl3 \
+              no-ssl3-method \
               "${config_options[@]}" \
               "-Wa,--noexecstack ${CPPFLAGS} ${CFLAGS} ${LDFLAGS}"
 
