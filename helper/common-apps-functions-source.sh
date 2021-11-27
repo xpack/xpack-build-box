@@ -7876,12 +7876,6 @@ function build_tcl()
       export CXXFLAGS
       export LDFLAGS
 
-      if is_darwin_not_clang && is_arm
-      then
-        # https://github.com/iains/gcc-darwin-arm64/issues/55
-        prepare_clang_env ""
-      fi
-
       env | sort
 
       if [ ! -f "config.status" ]
@@ -7890,21 +7884,42 @@ function build_tcl()
           echo
           echo "Running tcl configure..."
 
-          run_verbose bash "${SOURCES_FOLDER_PATH}/${tcl_src_folder_name}/unix/configure" --help
-
-          run_verbose bash ${DEBUG} "${SOURCES_FOLDER_PATH}/${tcl_src_folder_name}/unix/configure" \
-            --prefix="${INSTALL_FOLDER_PATH}" \
-            \
-            --enable-threads \
-            --enable-64bit \
-            --disable-rpath \
-
           if is_linux
           then
+            run_verbose bash "${SOURCES_FOLDER_PATH}/${tcl_src_folder_name}/unix/configure" --help
+
+            run_verbose bash ${DEBUG} "${SOURCES_FOLDER_PATH}/${tcl_src_folder_name}/unix/configure" \
+              --prefix="${INSTALL_FOLDER_PATH}" \
+              \
+              --enable-threads \
+              --enable-64bit \
+              --disable-rpath \
+
             run_verbose find . \
               \( -name Makefile -o -name tclConfig.sh \) \
               -print \
               -exec sed -i.bak -e 's|-Wl,-rpath,${LIB_RUNTIME_DIR}||' {} \;
+
+          elif is_darwin
+          then
+
+            run_verbose bash "${SOURCES_FOLDER_PATH}/${tcl_src_folder_name}/macosx/configure" --help
+
+            run_verbose bash ${DEBUG} "${SOURCES_FOLDER_PATH}/${tcl_src_folder_name}/macosx/configure" \
+              --prefix="${INSTALL_FOLDER_PATH}" \
+              \
+              --enable-threads \
+              --enable-64bit \
+              --disable-rpath \
+
+            if is_arm
+            then
+              # The current GCC 11.2 generates wrong code for this illegal option.
+              run_verbose sed -i.bak \
+                -e 's|EXTRA_APP_CC_SWITCHES=.-mdynamic-no-pic.|EXTRA_APP_CC_SWITCHES=""|' \
+                "${SOURCES_FOLDER_PATH}/${tcl_src_folder_name}/macosx/configure"
+            fi
+
           fi
 
           cp "config.log" "${LOGS_FOLDER_PATH}/${tcl_folder_name}/config-log.txt"
@@ -7916,7 +7931,7 @@ function build_tcl()
         echo "Running tcl make..."
 
         # Build.
-        run_verbose make -j ${JOBS}
+        run_verbose make -j 1 # ${JOBS}
 
         # make install-strip
         run_verbose make install
