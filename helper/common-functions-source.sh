@@ -1334,6 +1334,7 @@ function show_libs()
       if [ -n "${lc_rpaths_line}" ]
       then
         echo "LC_RPATH=$(get_darwin_lc_rpaths "${app_path}")"
+        echo
       fi
     fi
   )
