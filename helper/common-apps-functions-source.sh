@@ -2082,6 +2082,8 @@ function build_openssl()
   # https://aur.archlinux.org/cgit/aur.git/tree/PKGBUILD?h=openssl-static
   # https://aur.archlinux.org/cgit/aur.git/tree/PKGBUILD?h=openssl-git
 
+  # https://github.com/Homebrew/homebrew-core/blob/master/Formula/openssl@1.1.rb
+
   # 2017-Nov-02
   # XBB_OPENSSL_VERSION="1.1.0g"
   # The new version deprecated CRYPTO_set_locking_callback, and yum fails with
@@ -4575,6 +4577,8 @@ function build_flex()
   # https://archlinuxarm.org/packages/aarch64/flex/files/PKGBUILD
   # https://aur.archlinux.org/cgit/aur.git/tree/PKGBUILD?h=flex-git
 
+  # https://github.com/Homebrew/homebrew-core/blob/master/Formula/flex.rb
+
   # Apple uses 2.5.3
   # Ubuntu 12 uses 2.5.35
 
@@ -5328,6 +5332,8 @@ function build_perl()
 
   # https://archlinuxarm.org/packages/aarch64/perl/files/PKGBUILD
   # https://git.archlinux.org/svntogit/packages.git/tree/trunk/PKGBUILD?h=packages/perl
+
+  # https://github.com/Homebrew/homebrew-core/blob/master/Formula/perl.rb
 
   # Fails to build on macOS
 
@@ -7805,6 +7811,8 @@ function build_tcl()
   # https://sourceforge.net/projects/tcl/files/Tcl/8.6.10/tcl8.6.10-src.tar.gz/download
   # https://archlinuxarm.org/packages/aarch64/tcl/files/PKGBUILD
 
+  # https://github.com/Homebrew/homebrew-core/blob/master/Formula/tcl-tk.rb
+
   # 2019-11-21, "8.6.10"
   # ? "8.6.11"
   # ? "8.6.12"
@@ -8465,7 +8473,7 @@ function build_autogen()
 
   # https://archlinuxarm.org/packages/aarch64/autogen/files/PKGBUILD
   # https://github.com/Homebrew/homebrew-core/blob/master/Formula/autogen.rb
-  
+
   # 2018-08-26, "5.18.16"
 
   local autogen_version="$1"
