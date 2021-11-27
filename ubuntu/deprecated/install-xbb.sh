@@ -36,7 +36,7 @@ script_folder_name="$(basename ${script_folder_path})"
 
 # -----------------------------------------------------------------------------
 
-# Packages that reflect the tools and libraries built from sources 
+# Packages that reflect the tools and libraries built from sources
 # in the Docker images.
 apt install --yes \
 git \

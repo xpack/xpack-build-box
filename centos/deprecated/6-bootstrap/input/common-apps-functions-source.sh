@@ -3,7 +3,7 @@
 #   (http://xpack.github.io)
 # Copyright (c) 2019 Liviu Ionescu.
 #
-# Permission to use, copy, modify, and/or distribute this software 
+# Permission to use, copy, modify, and/or distribute this software
 # for any purpose is hereby granted, under the terms of the MIT license.
 # -----------------------------------------------------------------------------
 
@@ -27,7 +27,7 @@
 
 # -----------------------------------------------------------------------------
 
-function build_native_binutils() 
+function build_native_binutils()
 {
   # https://www.gnu.org/software/binutils/
   # https://ftp.gnu.org/gnu/binutils/
@@ -58,7 +58,7 @@ function build_native_binutils()
     xbb_activate_installed_bin
     xbb_activate_installed_dev
 
-    export CPPFLAGS="${XBB_CPPFLAGS}" 
+    export CPPFLAGS="${XBB_CPPFLAGS}"
     export CFLAGS="${XBB_CFLAGS} -Wno-sign-compare"
     export CXXFLAGS="${XBB_CXXFLAGS} -Wno-sign-compare"
     export LDFLAGS="${XBB_LDFLAGS_APP}"
@@ -74,7 +74,7 @@ function build_native_binutils()
       --enable-threads \
       --enable-deterministic-archives \
       --disable-gdb
-  
+
     make -j ${JOBS}
     make install-strip
   )
@@ -90,7 +90,7 @@ function build_native_binutils()
 
 # -----------------------------------------------------------------------------
 
-function build_native_gcc() 
+function build_native_gcc()
 {
   # https://gcc.gnu.org
   # https://ftp.gnu.org/gnu/gcc/
@@ -124,7 +124,7 @@ function build_native_gcc()
     xbb_activate_installed_bin
     xbb_activate_installed_dev
 
-    export CPPFLAGS="${XBB_CPPFLAGS}" 
+    export CPPFLAGS="${XBB_CPPFLAGS}"
     export CFLAGS="${XBB_CFLAGS} -Wno-sign-compare"
     export CXXFLAGS="${XBB_CXXFLAGS} -Wno-sign-compare"
     export LDFLAGS="${XBB_LDFLAGS_APP}"
@@ -157,7 +157,7 @@ function build_native_gcc()
       --disable-multilib \
       --disable-werror \
       --disable-bootstrap
-    
+
     # Parallel builds fail while running build/genrecog.
     # make -j ${JOBS}
     make
@@ -208,7 +208,7 @@ __EOF__
 
 # -----------------------------------------------------------------------------
 
-function build_openssl() 
+function build_openssl()
 {
   # https://www.openssl.org
   # https://www.openssl.org/source/
@@ -246,7 +246,7 @@ function build_openssl()
     xbb_activate_installed_bin
     xbb_activate_installed_dev
 
-    export CPPFLAGS="${XBB_CPPFLAGS}" 
+    export CPPFLAGS="${XBB_CPPFLAGS}"
     export CFLAGS="${XBB_CFLAGS}"
     export CXXFLAGS="${XBB_CXXFLAGS}"
     export LDFLAGS="${XBB_LDFLAGS}"
@@ -266,10 +266,10 @@ function build_openssl()
       no-ssl3-method \
       ${optflags} \
       "-Wa,--noexecstack ${CPPFLAGS} ${CFLAGS} ${LDFLAGS}"
-    
+
     # Parallel builds fail.
-    make depend 
-    make 
+    make depend
+    make
     make install_sw
 
     strip --strip-all "${XBB_FOLDER}/bin/openssl"
@@ -291,7 +291,7 @@ function build_openssl()
 }
 
 
-function build_tar() 
+function build_tar()
 {
   # https://www.gnu.org/software/tar/
   # https://ftp.gnu.org/gnu/tar/
@@ -323,7 +323,7 @@ function build_tar()
     xbb_activate_installed_bin
     xbb_activate_installed_dev
 
-    export CPPFLAGS="${XBB_CPPFLAGS}" 
+    export CPPFLAGS="${XBB_CPPFLAGS}"
     export CFLAGS="${XBB_CFLAGS}"
     export CXXFLAGS="${XBB_CXXFLAGS}"
     export LDFLAGS="${XBB_LDFLAGS_APP}"
@@ -334,8 +334,8 @@ function build_tar()
     ./configure --help
 
     ./configure \
-      --prefix="${XBB_FOLDER}" 
-    
+      --prefix="${XBB_FOLDER}"
+
     make -j ${JOBS}
     make install-strip
   )
@@ -351,7 +351,7 @@ function build_tar()
 
 # -----------------------------------------------------------------------------
 
-function build_curl() 
+function build_curl()
 {
   # https://curl.haxx.se
   # https://curl.haxx.se/download/
@@ -383,7 +383,7 @@ function build_curl()
     xbb_activate_installed_bin
     xbb_activate_installed_dev
 
-    export CPPFLAGS="${XBB_CPPFLAGS}" 
+    export CPPFLAGS="${XBB_CPPFLAGS}"
     export CFLAGS="${XBB_CFLAGS}"
     export CXXFLAGS="${XBB_CXXFLAGS}"
     export LDFLAGS="${XBB_LDFLAGS_APP}"
@@ -404,7 +404,7 @@ function build_curl()
       --enable-threaded-resolver \
       --with-gssapi \
       --with-ca-bundle=/etc/pki/tls/certs/ca-bundle.crt
-    
+
     make -j ${JOBS}
     make install
 
@@ -422,7 +422,7 @@ function build_curl()
 
 # -----------------------------------------------------------------------------
 
-function build_m4() 
+function build_m4()
 {
   # https://www.gnu.org/software/m4/
   # https://ftp.gnu.org/gnu/m4/
@@ -450,7 +450,7 @@ function build_m4()
     xbb_activate_installed_bin
     xbb_activate_installed_dev
 
-    export CPPFLAGS="${XBB_CPPFLAGS}" 
+    export CPPFLAGS="${XBB_CPPFLAGS}"
     export CFLAGS="${XBB_CFLAGS}"
     export CXXFLAGS="${XBB_CXXFLAGS}"
     export LDFLAGS="${XBB_LDFLAGS_APP}"
@@ -459,7 +459,7 @@ function build_m4()
 
     ./configure \
       --prefix="${XBB_FOLDER}"
-    
+
     make -j ${JOBS}
     make install-strip
   )
@@ -473,7 +473,7 @@ function build_m4()
   hash -r
 }
 
-function build_gawk() 
+function build_gawk()
 {
   # https://www.gnu.org/software/gawk/
   # https://ftp.gnu.org/gnu/gawk/
@@ -501,7 +501,7 @@ function build_gawk()
     xbb_activate_installed_bin
     xbb_activate_installed_dev
 
-    export CPPFLAGS="${XBB_CPPFLAGS}" 
+    export CPPFLAGS="${XBB_CPPFLAGS}"
     export CFLAGS="${XBB_CFLAGS}"
     export CXXFLAGS="${XBB_CXXFLAGS}"
     export LDFLAGS="${XBB_LDFLAGS_APP}"
@@ -511,7 +511,7 @@ function build_gawk()
     ./configure \
       --prefix="${XBB_FOLDER}" \
       --without-libsigsegv
-    
+
     make -j ${JOBS}
     make install-strip
   )
@@ -525,7 +525,7 @@ function build_gawk()
   hash -r
 }
 
-function build_autoconf() 
+function build_autoconf()
 {
   # https://www.gnu.org/software/autoconf/
   # https://ftp.gnu.org/gnu/autoconf/
@@ -553,7 +553,7 @@ function build_autoconf()
     xbb_activate_installed_bin
     xbb_activate_installed_dev
 
-    export CPPFLAGS="${XBB_CPPFLAGS}" 
+    export CPPFLAGS="${XBB_CPPFLAGS}"
     export CFLAGS="${XBB_CFLAGS}"
     export CXXFLAGS="${XBB_CXXFLAGS}"
     export LDFLAGS="${XBB_LDFLAGS_APP}"
@@ -561,8 +561,8 @@ function build_autoconf()
     ./configure --help
 
     ./configure \
-      --prefix="${XBB_FOLDER}" 
-    
+      --prefix="${XBB_FOLDER}"
+
     make -j ${JOBS}
     make install-strip
   )
@@ -576,7 +576,7 @@ function build_autoconf()
   hash -r
 }
 
-function build_automake() 
+function build_automake()
 {
   # https://www.gnu.org/software/automake/
   # https://ftp.gnu.org/gnu/automake/
@@ -605,7 +605,7 @@ function build_automake()
     xbb_activate_installed_bin
     xbb_activate_installed_dev
 
-    export CPPFLAGS="${XBB_CPPFLAGS}" 
+    export CPPFLAGS="${XBB_CPPFLAGS}"
     export CFLAGS="${XBB_CFLAGS}"
     export CXXFLAGS="${XBB_CXXFLAGS}"
     export LDFLAGS="${XBB_LDFLAGS_APP}"
@@ -613,8 +613,8 @@ function build_automake()
     ./configure --help
 
     ./configure \
-      --prefix="${XBB_FOLDER}" 
-    
+      --prefix="${XBB_FOLDER}"
+
     make -j ${JOBS}
     make install-strip
   )
@@ -628,7 +628,7 @@ function build_automake()
   hash -r
 }
 
-function build_libtool() 
+function build_libtool()
 {
   # https://www.gnu.org/software/libtool/
   # http://gnu.mirrors.linux.ro/libtool/
@@ -657,7 +657,7 @@ function build_libtool()
     xbb_activate_installed_bin
     xbb_activate_installed_dev
 
-    export CPPFLAGS="${XBB_CPPFLAGS}" 
+    export CPPFLAGS="${XBB_CPPFLAGS}"
     export CFLAGS="${XBB_CFLAGS}"
     export CXXFLAGS="${XBB_CXXFLAGS}"
     export LDFLAGS="${XBB_LDFLAGS_APP}"
@@ -665,8 +665,8 @@ function build_libtool()
     ./configure --help
 
     ./configure \
-      --prefix="${XBB_FOLDER}" 
-    
+      --prefix="${XBB_FOLDER}"
+
     make -j ${JOBS}
     make install-strip
   )
@@ -680,7 +680,7 @@ function build_libtool()
   hash -r
 }
 
-function build_gettext() 
+function build_gettext()
 {
   # https://www.gnu.org/software/gettext/
   # https://ftp.gnu.org/gnu/gettext/
@@ -710,7 +710,7 @@ function build_gettext()
 
     export CFLAGS="${XBB_CFLAGS} -Wno-discarded-qualifiers"
 
-    export CPPFLAGS="${XBB_CPPFLAGS}" 
+    export CPPFLAGS="${XBB_CPPFLAGS}"
     export CFLAGS="${XBB_CFLAGS}"
     export CXXFLAGS="${XBB_CXXFLAGS}"
     export LDFLAGS="${XBB_LDFLAGS_APP}"
@@ -718,8 +718,8 @@ function build_gettext()
     ./configure --help
 
     ./configure \
-      --prefix="${XBB_FOLDER}" 
-    
+      --prefix="${XBB_FOLDER}"
+
     make -j ${JOBS}
     make install-strip
   )
@@ -733,7 +733,7 @@ function build_gettext()
   hash -r
 }
 
-function build_patch() 
+function build_patch()
 {
   # https://www.gnu.org/software/patch/
   # https://ftp.gnu.org/gnu/patch/
@@ -761,7 +761,7 @@ function build_patch()
     xbb_activate_installed_bin
     xbb_activate_installed_dev
 
-    export CPPFLAGS="${XBB_CPPFLAGS}" 
+    export CPPFLAGS="${XBB_CPPFLAGS}"
     export CFLAGS="${XBB_CFLAGS}"
     export CXXFLAGS="${XBB_CXXFLAGS}"
     export LDFLAGS="${XBB_LDFLAGS_APP}"
@@ -769,8 +769,8 @@ function build_patch()
     ./configure --help
 
     ./configure \
-      --prefix="${XBB_FOLDER}" 
-    
+      --prefix="${XBB_FOLDER}"
+
     make -j ${JOBS}
     make install-strip
   )
@@ -784,7 +784,7 @@ function build_patch()
   hash -r
 }
 
-function build_diffutils() 
+function build_diffutils()
 {
   # https://www.gnu.org/software/diffutils/
   # https://ftp.gnu.org/gnu/diffutils/
@@ -812,7 +812,7 @@ function build_diffutils()
     xbb_activate_installed_bin
     xbb_activate_installed_dev
 
-    export CPPFLAGS="${XBB_CPPFLAGS}" 
+    export CPPFLAGS="${XBB_CPPFLAGS}"
     export CFLAGS="${XBB_CFLAGS}"
     export CXXFLAGS="${XBB_CXXFLAGS}"
     export LDFLAGS="${XBB_LDFLAGS_APP}"
@@ -820,7 +820,7 @@ function build_diffutils()
     ./configure --help
 
     ./configure \
-      --prefix="${XBB_FOLDER}" 
+      --prefix="${XBB_FOLDER}"
 
     make -j ${JOBS}
     make install-strip
@@ -835,7 +835,7 @@ function build_diffutils()
   hash -r
 }
 
-function build_bison() 
+function build_bison()
 {
   # https://www.gnu.org/software/bison/
   # https://ftp.gnu.org/gnu/bison/
@@ -863,7 +863,7 @@ function build_bison()
     xbb_activate_installed_bin
     xbb_activate_installed_dev
 
-    export CPPFLAGS="${XBB_CPPFLAGS}" 
+    export CPPFLAGS="${XBB_CPPFLAGS}"
     export CFLAGS="${XBB_CFLAGS}"
     export CXXFLAGS="${XBB_CXXFLAGS}"
     export LDFLAGS="${XBB_LDFLAGS_APP}"
@@ -871,8 +871,8 @@ function build_bison()
     ./configure --help
 
     ./configure \
-      --prefix="${XBB_FOLDER}" 
-    
+      --prefix="${XBB_FOLDER}"
+
     make -j ${JOBS}
     make install-strip
   )
@@ -886,7 +886,7 @@ function build_bison()
   hash -r
 }
 
-function build_make() 
+function build_make()
 {
   # https://www.gnu.org/software/make/
   # https://ftp.gnu.org/gnu/make/
@@ -915,7 +915,7 @@ function build_make()
     xbb_activate_installed_bin
     xbb_activate_installed_dev
 
-    export CPPFLAGS="${XBB_CPPFLAGS}" 
+    export CPPFLAGS="${XBB_CPPFLAGS}"
     export CFLAGS="${XBB_CFLAGS}"
     export CXXFLAGS="${XBB_CXXFLAGS}"
     export LDFLAGS="${XBB_LDFLAGS_APP}"
@@ -924,7 +924,7 @@ function build_make()
 
     ./configure \
       --prefix="${XBB_FOLDER}"
-    
+
     make -j ${JOBS}
     make install-strip
   )
@@ -940,7 +940,7 @@ function build_make()
 
 # -----------------------------------------------------------------------------
 
-function build_pkg_config() 
+function build_pkg_config()
 {
   # https://www.freedesktop.org/wiki/Software/pkg-config/
   # https://pkgconfig.freedesktop.org/releases/
@@ -969,7 +969,7 @@ function build_pkg_config()
     xbb_activate_installed_bin
     xbb_activate_installed_dev
 
-    export CPPFLAGS="${XBB_CPPFLAGS}" 
+    export CPPFLAGS="${XBB_CPPFLAGS}"
     export CFLAGS="${XBB_CFLAGS}"
     export CXXFLAGS="${XBB_CXXFLAGS}"
     export LDFLAGS="${XBB_LDFLAGS_APP}"
@@ -979,9 +979,9 @@ function build_pkg_config()
     ./configure \
       --prefix="${XBB_FOLDER}" \
       --with-internal-glib
-    
+
     # rm -f "${XBB_FOLDER}"/bin/*pkg-config
-    make -j ${JOBS} 
+    make -j ${JOBS}
     make install-strip
   )
 
@@ -994,7 +994,7 @@ function build_pkg_config()
   hash -r
 }
 
-function build_flex() 
+function build_flex()
 {
   # https://github.com/westes/flex
   # https://github.com/westes/flex/releases
@@ -1023,7 +1023,7 @@ function build_flex()
     xbb_activate_installed_bin
     xbb_activate_installed_dev
 
-    export CPPFLAGS="${XBB_CPPFLAGS}" 
+    export CPPFLAGS="${XBB_CPPFLAGS}"
     export CFLAGS="${XBB_CFLAGS}"
     export CXXFLAGS="${XBB_CXXFLAGS}"
     export LDFLAGS="${XBB_LDFLAGS_APP}"
@@ -1033,8 +1033,8 @@ function build_flex()
     ./configure --help
 
     ./configure \
-      --prefix="${XBB_FOLDER}" 
-    
+      --prefix="${XBB_FOLDER}"
+
     make -j ${JOBS}
     make install-strip
   )
@@ -1048,7 +1048,7 @@ function build_flex()
   hash -r
 }
 
-function build_perl() 
+function build_perl()
 {
   # https://www.cpan.org
   # http://www.cpan.org/src/
@@ -1081,7 +1081,7 @@ function build_perl()
     xbb_activate_installed_bin
     xbb_activate_installed_dev
 
-    export CPPFLAGS="${XBB_CPPFLAGS}" 
+    export CPPFLAGS="${XBB_CPPFLAGS}"
     export CFLAGS="${XBB_CFLAGS}"
     export CXXFLAGS="${XBB_CXXFLAGS}"
     export LDFLAGS="${XBB_LDFLAGS_APP}"
@@ -1094,7 +1094,7 @@ function build_perl()
     ./Configure -d -e -s \
       -Dprefix="${XBB_FOLDER}" \
       -Dcc=gcc
- 
+
     make -j ${JOBS}
     make install-strip
 
@@ -1113,7 +1113,7 @@ function build_perl()
 
 # -----------------------------------------------------------------------------
 
-function build_cmake() 
+function build_cmake()
 {
   # https://cmake.org
   # https://cmake.org/download/
@@ -1127,7 +1127,7 @@ function build_cmake()
   # "3.13.4"
 
   local XBB_CMAKE_VERSION="$1"
- 
+
   local local XBB_CMAKE_MAJOR_VERSION="$(echo ${XBB_CMAKE_VERSION} | sed -e 's|\([0-9][0-9]*\)\.\([0-9][0-9]*\)\.\([0-9][0-9]*\)|\1.\2|')"
 
   local XBB_CMAKE_FOLDER="cmake-${XBB_CMAKE_VERSION}"
@@ -1148,7 +1148,7 @@ function build_cmake()
     xbb_activate_installed_bin
     xbb_activate_installed_dev
 
-    export CPPFLAGS="${XBB_CPPFLAGS}" 
+    export CPPFLAGS="${XBB_CPPFLAGS}"
     export CFLAGS="${XBB_CFLAGS}"
     export CXXFLAGS="${XBB_CXXFLAGS}"
     export LDFLAGS="${XBB_LDFLAGS_APP}"
@@ -1158,7 +1158,7 @@ function build_cmake()
     if false
     then
       # If more verbosity is needed:
-      #  -DCMAKE_VERBOSE_MAKEFILE:BOOL=ON 
+      #  -DCMAKE_VERBOSE_MAKEFILE:BOOL=ON
 
       # Use the existing cmake to configure this one.
       cmake \
@@ -1186,7 +1186,7 @@ function build_cmake()
   hash -r
 }
 
-function do_python() 
+function do_python()
 {
   # https://www.python.org
   # https://www.python.org/downloads/source/
@@ -1212,9 +1212,9 @@ function do_python()
 
     xbb_activate
     xbb_activate_installed_bin
-    xbb_activate_installed_dev 
+    xbb_activate_installed_dev
 
-    export CPPFLAGS="${XBB_CPPFLAGS}" 
+    export CPPFLAGS="${XBB_CPPFLAGS}"
     export CFLAGS="${XBB_CFLAGS} -Wno-int-in-bool-context -Wno-maybe-uninitialized -Wno-nonnull -Wno-stringop-overflow"
     export CXXFLAGS="${XBB_CXXFLAGS}"
     export LDFLAGS="${XBB_LDFLAGS_APP}"
@@ -1240,8 +1240,8 @@ function do_python()
       --with-system-ffi \
       --with-dbmliborder=gdbm:ndbm \
       --without-ensurepip
-    
-    make -j ${JOBS} 
+
+    make -j ${JOBS}
     make install
 
     strip --strip-all "${XBB_FOLDER}/bin/python"
@@ -1274,7 +1274,7 @@ function do_python()
   hash -r
 }
 
-function build_scons() 
+function build_scons()
 {
   # http://scons.org
   # https://sourceforge.net/projects/scons/files/scons/3.0.1/
@@ -1303,7 +1303,7 @@ function build_scons()
     xbb_activate_installed_bin
     xbb_activate_installed_dev
 
-    export CPPFLAGS="${XBB_CPPFLAGS}" 
+    export CPPFLAGS="${XBB_CPPFLAGS}"
     export CFLAGS="${XBB_CFLAGS}"
     export CXXFLAGS="${XBB_CXXFLAGS}"
     export LDFLAGS="${XBB_LDFLAGS_APP}"

@@ -3,7 +3,7 @@
 #   (http://xpack.github.io)
 # Copyright (c) 2019 Liviu Ionescu.
 #
-# Permission to use, copy, modify, and/or distribute this software 
+# Permission to use, copy, modify, and/or distribute this software
 # for any purpose is hereby granted, under the terms of the MIT license.
 # -----------------------------------------------------------------------------
 
@@ -12,7 +12,7 @@ function prepare_xbb_env()
   XBB_DOWNLOAD_FOLDER="/tmp/xbb-download"
   XBB_TMP_FOLDER="/tmp/xbb"
 
-  # The next folders are called XBB for consistency reasons, 
+  # The next folders are called XBB for consistency reasons,
   # in fact they are used by the the bootstrap.
   XBB_FOLDER="/opt/xbb-bootstrap"
   XBB_BUILD_FOLDER="${XBB_TMP_FOLDER}/bootstrap-build"
@@ -77,7 +77,7 @@ function prepare_xbb_env()
   JOBS=${JOBS:-""}
 
   # ---------------------------------------------------------------------------
-  
+
   export XBB_DOWNLOAD_FOLDER
   export XBB_TMP_FOLDER
   export XBB_FOLDER
@@ -140,7 +140,7 @@ function create_xbb_source()
 #   (http://xpack.github.io)
 # Copyright (c) 2019 Liviu Ionescu.
 #
-# Permission to use, copy, modify, and/or distribute this software 
+# Permission to use, copy, modify, and/or distribute this software
 # for any purpose is hereby granted, under the terms of the MIT license.
 # -----------------------------------------------------------------------------
 
@@ -296,7 +296,7 @@ function download_and_extract()
 
 # -----------------------------------------------------------------------------
 
-do_strip_libs() 
+do_strip_libs()
 {
   (
     cd "${XBB_FOLDER}"
@@ -317,7 +317,7 @@ do_strip_libs()
 
 # -----------------------------------------------------------------------------
 
-do_cleaunup() 
+do_cleaunup()
 {
   # Preserve download, will be used by xbb and removed later.
   # rm -rf "$XBB_DOWNLOAD_FOLDER"

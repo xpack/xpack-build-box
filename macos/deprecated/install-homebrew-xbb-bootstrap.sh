@@ -4,7 +4,7 @@
 #   (http://xpack.github.io)
 # Copyright (c) 2019 Liviu Ionescu.
 #
-# Permission to use, copy, modify, and/or distribute this software 
+# Permission to use, copy, modify, and/or distribute this software
 # for any purpose is hereby granted, under the terms of the MIT license.
 # -----------------------------------------------------------------------------
 
@@ -54,7 +54,7 @@ script_folder_name="$(basename "${script_folder_path}")"
 # There is still no guarantee that this works, but no better solution
 # was identified.
 # Another complication is caused by brew insisting on updating itself to the
-# latest version, which is not guaranteed to work with the old formulas. 
+# latest version, which is not guaranteed to work with the old formulas.
 # To prevent this it is mandatory to define HOMEBREW_NO_AUTO_UPDATE in the
 # environment before calling brew.
 
@@ -85,7 +85,7 @@ use_master_archive=""
 # No longer supported (since 2.0.0, 1 February 2019 at 16:22:17 EET)
 # - El Capitan (10.11)
 # - Yosemite (10.10) <- !
-# - Mavericks (10.9) 
+# - Mavericks (10.9)
 
 if [[ "${macos_version}" =~ 10\.13\.* ]]
 then
@@ -98,13 +98,13 @@ then
   # Error: undefined method `strip' for :provided_until_xcode43:Symbol
   # 24 January 2019 at 11:24:36 EET, 6a912c369125caca5e1e3929e942bbb946ce6367
   # brew_git_commit_id="1.9.3"
-  # 24 January 2018 at 10:09:12 EET 
+  # 24 January 2018 at 10:09:12 EET
   # homebrew_core_git_commit_id="dcb056fc8533ebf1edbc0b600712ebbd5bd476ac"
 
   # Error: Calling needs :cxx11 is disabled! There is no replacement.
   # 17 February 2019 at 14:59:18 EET, 117c24f4b6294e037431d3a850ced6955d53e26f
   # brew_git_commit_id="2.0.2"
-  # 24 January 2018 at 10:09:12 EET 
+  # 24 January 2018 at 10:09:12 EET
   # homebrew_core_git_commit_id="dcb056fc8533ebf1edbc0b600712ebbd5bd476ac"
 
   # Latest now.
@@ -120,7 +120,7 @@ then
 
   # 24 January 2019 at 11:24:36, 6a912c369125caca5e1e3929e942bbb946ce6367, 1.9.3
   brew_git_commit_id="1.9.3"
-  # 24 January 2018 at 10:09:12 EET 
+  # 24 January 2018 at 10:09:12 EET
   homebrew_core_git_commit_id="dcb056fc8533ebf1edbc0b600712ebbd5bd476ac"
 
 fi
@@ -215,7 +215,7 @@ echo "Installing..."
 
 # GCC is generally the most complicated package, if it does not pass it is
 # useless to install all other packages.
-# GCC may need to be updated after xcode updates, to match the new location 
+# GCC may need to be updated after xcode updates, to match the new location
 # of system headers, otherwise builds fail complaining about cpp problems.
 brew install gcc@7
 
@@ -224,15 +224,15 @@ brew install coreutils
 brew install m4
 brew link m4 --force
 
-brew install gawk 
+brew install gawk
 brew install gnu-sed
 
 brew install autoconf automake
 brew install libtool
-brew install make 
+brew install make
 brew install pkg-config
 
-brew install diffutils 
+brew install diffutils
 brew install gpatch
 
 if false
@@ -260,14 +260,14 @@ then
     brew install perl
   fi
 
-  brew install git 
+  brew install git
   brew install python python@3
 
   brew install flex
   brew link flex --force
 
-  brew install dos2unix 
-  brew install wget 
+  brew install dos2unix
+  brew install wget
 
   brew install bison
   brew link bison --force
@@ -278,7 +278,7 @@ then
   brew install openssl
   brew link openssl --force
 
-  brew install gnu-tar 
+  brew install gnu-tar
   brew install xz
 
   brew install gdb
@@ -311,7 +311,7 @@ say done
 
 # -----------------------------------------------------------------------------
 
-# Warning: to use some of the tools with the usual names (like make instead 
+# Warning: to use some of the tools with the usual names (like make instead
 # of gmake) it is necessary to add extra folders to the PATH, like
 # .../opt/coreutils/libexec/gnubin
 # .../opt/gawk/libexec/gnubin

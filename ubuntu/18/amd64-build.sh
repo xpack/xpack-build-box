@@ -51,7 +51,7 @@ docker_build_from_archive "${arch}" "${arch}-ubu18-rootfs.xz" "ilegeul/ubuntu:${
 
 host_clean_docker_input
 
-echo 
+echo
 echo "Done."
 
 # -----------------------------------------------------------------------------

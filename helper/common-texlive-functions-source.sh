@@ -3,7 +3,7 @@
 #   (http://xpack.github.io)
 # Copyright (c) 2020 Liviu Ionescu.
 #
-# Permission to use, copy, modify, and/or distribute this software 
+# Permission to use, copy, modify, and/or distribute this software
 # for any purpose is hereby granted, under the terms of the MIT license.
 # -----------------------------------------------------------------------------
 
@@ -107,7 +107,7 @@ __EOF__
 
   # https://www.tug.org/texlive/doc/install-tl.html
 
-  (    
+  (
     # Adjust to TexLive conventions.
     # Recent versions for macOS use `universal-darwin`.
     tl_machine="${HOST_MACHINE}"
@@ -151,12 +151,12 @@ __EOF__
     ls -l "${INSTALL_FOLDER_PATH}/bin/"
     if [ -d "${INSTALL_FOLDER_PATH}/bin/universal-darwin" ]
     then
-      PATH="${INSTALL_FOLDER_PATH}/bin/universal-darwin:${PATH}" 
+      PATH="${INSTALL_FOLDER_PATH}/bin/universal-darwin:${PATH}"
     elif [ -d "${INSTALL_FOLDER_PATH}/bin/x86_64-darwinlegacy" ]
     then
-      PATH="${INSTALL_FOLDER_PATH}/bin/x86_64-darwinlegacy:${PATH}" 
+      PATH="${INSTALL_FOLDER_PATH}/bin/x86_64-darwinlegacy:${PATH}"
     elif [ -d "${INSTALL_FOLDER_PATH}/bin/${tl_machine}-${tl_uname}" ]
-    then 
+    then
       PATH="${INSTALL_FOLDER_PATH}/bin/${tl_machine}-${tl_uname}:${PATH}"
     else
       echo "Cannot configure PATH. Quit."

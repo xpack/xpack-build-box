@@ -4,7 +4,7 @@
 #   (http://xpack.github.io)
 # Copyright (c) 2019 Liviu Ionescu.
 #
-# Permission to use, copy, modify, and/or distribute this software 
+# Permission to use, copy, modify, and/or distribute this software
 # for any purpose is hereby granted, under the terms of the MIT license.
 # -----------------------------------------------------------------------------
 
@@ -127,10 +127,10 @@ build_util_macros "1.17.1"
 build_xorg_xproto "7.0.31"
 build_makedepend "1.0.5"
 
-# By all means DO NOT build binutils, since this will override Apple 
+# By all means DO NOT build binutils, since this will override Apple
 # specific tools (ar, strip, etc) and break the build in multiple ways.
 
-# Preferably leave it to the end, to benefit from all the goodies 
+# Preferably leave it to the end, to benefit from all the goodies
 # compiled so far.
 do_gcc "7.4.0"
 

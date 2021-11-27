@@ -12,22 +12,22 @@ cd dmg
 mkdir -p bin usr/bin usr/lib usr/lib/system usr/lib/closure
 
 for f in  bash cat chmod cp date echo expr hostname kill ln ls mkdir mv ps pwd rm rmdir test unlink
-do 
+do
   cp -p /bin/$f bin
 done
 
-for f in ar as awk basename bison diff dirname egrep env false fgrep file find flex grep lex m4  make mktemp more otool patch readlink sed sort touch tr true umask wc whatis whereis which who whoami xargs  yacc 
-do 
+for f in ar as awk basename bison diff dirname egrep env false fgrep file find flex grep lex m4  make mktemp more otool patch readlink sed sort touch tr true umask wc whatis whereis which who whoami xargs  yacc
+do
   cp -p /usr/bin/$f usr/bin
 done
 
 for f in dyld libncurses.5.4.dylib libSystem.B.dylib
-do 
+do
   cp -p /usr/lib/$f usr/lib
 done
 
 for f in libcache.dylib libcommonCrypto.dylib libcompiler_rt.dylib libcopyfile.dylib libcorecrypto.dylib libdispatch.dylib libdyld.dylib
-do 
+do
   cp -p /usr/lib/system/$f usr/lib/system
 done
 
@@ -38,7 +38,7 @@ cp /usr/lib/closure/*.dylib usr/lib/closure
 ls -lLR .
 
 echo "Creating dmg..."
-rm -f /tmp/xbb-dev-root.dmg 
+rm -f /tmp/xbb-dev-root.dmg
 
 # -uid 0 -gid 0
 hdiutil create -fs HFS+ -srcfolder . -volname XBB-Dev /tmp/xbb-dev-root.dmg -verbose

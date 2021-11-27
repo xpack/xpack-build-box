@@ -3,7 +3,7 @@
 #   (http://xpack.github.io)
 # Copyright (c) 2020 Liviu Ionescu.
 #
-# Permission to use, copy, modify, and/or distribute this software 
+# Permission to use, copy, modify, and/or distribute this software
 # for any purpose is hereby granted, under the terms of the MIT license.
 # -----------------------------------------------------------------------------
 
@@ -42,7 +42,7 @@ function host_init_docker_input()
     ln -v "${script_folder_path}/container-scripts"/*.sh "${script_folder_path}/${input_folder_name}"
   fi
 
-  # Using hard links simplifies development, since edits will no longer 
+  # Using hard links simplifies development, since edits will no longer
   # need to be propagated back.
 
   # Hard link the entire content of the helper folder.
@@ -50,7 +50,7 @@ function host_init_docker_input()
   ln -v "${helper_folder_path}"/pkg-config-verbose "${script_folder_path}/${input_folder_name}/helper"
 
   ln -v "${helper_folder_path}/patches"/*.patch "${script_folder_path}/${input_folder_name}/helper/patches"
-  
+
   # Possibly hard link additional files.
   while [ $# -gt 0 ]
   do
@@ -80,7 +80,7 @@ function host_run_docker_it_with_volume()
   local output_folder_name="${HOME}/opt/${layer}-${distro}-${release}-${arch}"
   mkdir -pv "${output_folder_name}"
 
-  echo 
+  echo
   echo "Running parent Docker image ${from}..."
 
   if [[ "${layer}" == "xbb-bootstrap" ]]
@@ -134,7 +134,7 @@ function host_run_docker_it_with_image()
 
   local input_folder_name="input-${distro}-${release}-${arch}"
 
-  echo 
+  echo
   echo "Running parent Docker image ${from}..."
 
   run_verbose docker run \
@@ -164,7 +164,7 @@ function host_run_docker_build()
   run_verbose docker rmi "${tag}"
   set -e
 
-  echo 
+  echo
   echo "Building Docker image ${tag}..."
   run_verbose docker build \
     --build-arg DEBUG="${DEBUG}" \
@@ -194,7 +194,7 @@ function docker_prepare_env()
     mkdir -pv "${WORK_FOLDER_PATH}"
     touch "${WORK_FOLDER_PATH}/.dockerenv"
   fi
-  
+
   # The place where files are downloaded.
   CACHE_FOLDER_PATH="${WORK_FOLDER_PATH}/cache"
 
@@ -243,7 +243,7 @@ function docker_build_from_archive()
   # Assume "input" was created by init_input().
   cp -v "${CACHE_FOLDER_PATH}/${archive_name}" "${input_folder_name}"
 
-  echo 
+  echo
   echo "Building Docker image ${tag}..."
   docker build --tag "${tag}" -f "${arch}-Dockerfile" .
 }
@@ -259,7 +259,7 @@ function docker_build_from_hub()
   arch="$1"
   tag="$2"
 
-  echo 
+  echo
   echo "Building Docker image ${tag}..."
   docker build --tag "${tag}" -f "${arch}-Dockerfile" .
 }
@@ -296,8 +296,8 @@ deb ${url} ${name}-security main restricted
 deb ${url} ${name}-updates main restricted
 # deb-src ${url} ${name}-updates main restricted
 
-deb ${url} ${name}-backports main restricted 
-# deb-src ${url} ${name}-backports main restricted 
+deb ${url} ${name}-backports main restricted
+# deb-src ${url} ${name}-backports main restricted
 
 ## N.B. software from this repository is ENTIRELY UNSUPPORTED by the Ubuntu
 ## team. Also, please note that software in universe WILL NOT receive any
@@ -310,12 +310,12 @@ deb ${url} ${name}-security universe
 deb ${url} ${name}-updates universe
 # deb-src ${url} ${name}-updates universe
 
-deb ${url} ${name}-backports universe 
-# deb-src ${url} ${name}-backports universe 
+deb ${url} ${name}-backports universe
+# deb-src ${url} ${name}-backports universe
 
-## N.B. software from this repository is ENTIRELY UNSUPPORTED by the Ubuntu 
-## team, and may not be under a free licence. Please satisfy yourself as to 
-## your rights to use the software. Also, please note that software in 
+## N.B. software from this repository is ENTIRELY UNSUPPORTED by the Ubuntu
+## team, and may not be under a free licence. Please satisfy yourself as to
+## your rights to use the software. Also, please note that software in
 ## multiverse WILL NOT receive any review or updates from the Ubuntu
 ## security team.
 deb ${url} ${name} multiverse
@@ -335,8 +335,8 @@ __EOF__
   cat "/etc/apt/sources.list" | egrep '^deb '
   echo "---"
 
-  apt-get update 
-  apt-get upgrade --yes 
+  apt-get update
+  apt-get upgrade --yes
 
   apt-get install --yes lsb-release
 
@@ -372,7 +372,7 @@ function ubuntu_install_develop()
   # These tools should be enough to build the bootstrap tools.
 
   apt-get update
-   
+
   apt-get install --yes \
   \
   autoconf \
@@ -459,7 +459,7 @@ function ubuntu_install_develop()
     apt-get install --yes python-software-properties
   fi
 
-  add-apt-repository --yes ppa:ubuntu-toolchain-r/test 
+  add-apt-repository --yes ppa:ubuntu-toolchain-r/test
   add-apt-repository --yes ppa:openjdk-r/ppa
 
   apt-get update

@@ -4,7 +4,7 @@
 #   (https://xpack.github.io)
 # Copyright (c) 2019 Liviu Ionescu.
 #
-# Permission to use, copy, modify, and/or distribute this software 
+# Permission to use, copy, modify, and/or distribute this software
 # for any purpose is hereby granted, under the terms of the MIT license.
 # -----------------------------------------------------------------------------
 
@@ -42,10 +42,10 @@ script_folder_name="$(basename "${script_folder_path}")"
 
 # Script to add TeX to a CentOS Docker image.
 #
-# The TeX files are installed in 
+# The TeX files are installed in
 #
 # /opt/texlive
-# 
+#
 # To use the binaries, add one of the following to the PATH:
 #
 # /opt/texlive/x86_64-linux
@@ -90,7 +90,7 @@ export CXX=g++
 
 # =============================================================================
 
-function do_texlive() 
+function do_texlive()
 {
   local year=$1
 

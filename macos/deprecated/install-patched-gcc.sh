@@ -76,7 +76,7 @@ function download_and_extract()
   local archive_name="$2"
   local folder_name="$3"
 
-  download "${url}" "${archive_name}" 
+  download "${url}" "${archive_name}"
   extract "${DOWNLOAD_FOLDER_PATH}/${archive_name}" "${folder_name}"
 }
 
@@ -173,7 +173,7 @@ PROGRAM_SUFFIX="-${GCC_VERSION}-patched"
     exit 1
     ;;
   esac
-  
+
   threads=$(sysctl -n hw.ncpu)
   caffeinate make -j${threads}
 

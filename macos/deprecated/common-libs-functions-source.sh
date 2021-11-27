@@ -3,11 +3,11 @@
 #   (http://xpack.github.io)
 # Copyright (c) 2019 Liviu Ionescu.
 #
-# Permission to use, copy, modify, and/or distribute this software 
+# Permission to use, copy, modify, and/or distribute this software
 # for any purpose is hereby granted, under the terms of the MIT license.
 # -----------------------------------------------------------------------------
 
-function build_zlib() 
+function build_zlib()
 {
   # http://zlib.net
   # http://zlib.net/fossils/
@@ -54,7 +54,7 @@ function build_zlib()
         bash "./configure" --help
 
         bash ${DEBUG} "./configure" \
-          --prefix="${INSTALL_FOLDER_PATH}" 
+          --prefix="${INSTALL_FOLDER_PATH}"
 
         cp "configure.log" "${LOGS_FOLDER_PATH}/configure-zlib-log.txt"
       ) 2>&1 | tee "${LOGS_FOLDER_PATH}/configure-zlib-output.txt"
@@ -76,7 +76,7 @@ function build_zlib()
   fi
 }
 
-function build_gmp() 
+function build_gmp()
 {
   # https://gmplib.org
   # https://gmplib.org/download/gmp/
@@ -122,7 +122,7 @@ function build_gmp()
           bash "${SOURCES_FOLDER_PATH}/${gmp_folder_name}/configure" --help
 
           bash ${DEBUG} "${SOURCES_FOLDER_PATH}/${gmp_folder_name}/configure" \
-            --prefix="${INSTALL_FOLDER_PATH}" 
+            --prefix="${INSTALL_FOLDER_PATH}"
 
           cp "config.log" "${LOGS_FOLDER_PATH}/config-gmp-log.txt"
         ) 2>&1 | tee "${LOGS_FOLDER_PATH}/configure-gmp-output.txt"
@@ -147,7 +147,7 @@ function build_gmp()
   fi
 }
 
-function build_mpfr() 
+function build_mpfr()
 {
   # http://www.mpfr.org
   # http://www.mpfr.org/mpfr-3.1.6
@@ -194,7 +194,7 @@ function build_mpfr()
           bash "${SOURCES_FOLDER_PATH}/${mpfr_folder_name}/configure" --help
 
           bash ${DEBUG} "${SOURCES_FOLDER_PATH}/${mpfr_folder_name}/configure" \
-            --prefix="${INSTALL_FOLDER_PATH}" 
+            --prefix="${INSTALL_FOLDER_PATH}"
 
           cp "config.log" "${LOGS_FOLDER_PATH}/config-mpfr-log.txt"
         ) 2>&1 | tee "${LOGS_FOLDER_PATH}/configure-mpfr-output.txt"
@@ -218,7 +218,7 @@ function build_mpfr()
   fi
 }
 
-function build_mpc() 
+function build_mpc()
 {
   # http://www.multiprecision.org/
   # ftp://ftp.gnu.org/gnu/mpc
@@ -262,7 +262,7 @@ function build_mpc()
           bash "${SOURCES_FOLDER_PATH}/${mpc_folder_name}/configure" --help
 
           bash ${DEBUG} "${SOURCES_FOLDER_PATH}/${mpc_folder_name}/configure" \
-            --prefix="${INSTALL_FOLDER_PATH}" 
+            --prefix="${INSTALL_FOLDER_PATH}"
 
           cp "config.log" "${LOGS_FOLDER_PATH}/config-mpc-log.txt"
         ) 2>&1 | tee "${LOGS_FOLDER_PATH}/configure-mpc-output.txt"
@@ -285,7 +285,7 @@ function build_mpc()
   fi
 }
 
-function build_isl() 
+function build_isl()
 {
   # http://isl.gforge.inria.fr
   # http://isl.gforge.inria.fr/isl-0.21.tar.xz
@@ -330,7 +330,7 @@ function build_isl()
           bash "${SOURCES_FOLDER_PATH}/${isl_folder_name}/configure" --help
 
           bash ${DEBUG} "${SOURCES_FOLDER_PATH}/${isl_folder_name}/configure" \
-            --prefix="${INSTALL_FOLDER_PATH}" 
+            --prefix="${INSTALL_FOLDER_PATH}"
 
           cp "config.log" "${LOGS_FOLDER_PATH}/config-isl-log.txt"
         ) 2>&1 | tee "${LOGS_FOLDER_PATH}/configure-isl-output.txt"
@@ -355,7 +355,7 @@ function build_isl()
   fi
 }
 
-function build_nettle() 
+function build_nettle()
 {
   # https://www.lysator.liu.se/~nisse/nettle/
   # https://ftp.gnu.org/gnu/nettle/
@@ -414,7 +414,7 @@ function build_nettle()
         # make -j ${JOBS}
         make
         # make install-strip
-        # For unknown reasons, on 32-bits make install-info fails 
+        # For unknown reasons, on 32-bits make install-info fails
         # (`install-info --info-dir="/opt/xbb/share/info" nettle.info` returns 1)
         # Make the other install targets.
         make install-headers install-static install-pkgconfig install-shared-nettle  install-shared-hogweed
@@ -428,7 +428,7 @@ function build_nettle()
   fi
 }
 
-function build_tasn1() 
+function build_tasn1()
 {
   # https://www.gnu.org/software/libtasn1/
   # http://ftp.gnu.org/gnu/libtasn1/
@@ -473,7 +473,7 @@ function build_tasn1()
           bash "${SOURCES_FOLDER_PATH}/${tasn1_folder_name}/configure" --help
 
           bash ${DEBUG} "${SOURCES_FOLDER_PATH}/${tasn1_folder_name}/configure" \
-            --prefix="${INSTALL_FOLDER_PATH}" 
+            --prefix="${INSTALL_FOLDER_PATH}"
 
           cp "config.log" "${LOGS_FOLDER_PATH}/config-tasn1-log.txt"
         ) 2>&1 | tee "${LOGS_FOLDER_PATH}/configure-tasn1-output.txt"
@@ -496,7 +496,7 @@ function build_tasn1()
   fi
 }
 
-function build_expat() 
+function build_expat()
 {
   # https://libexpat.github.io
   # https://github.com/libexpat/libexpat/releases
@@ -542,7 +542,7 @@ function build_expat()
           bash "${SOURCES_FOLDER_PATH}/${expat_folder_name}/configure" --help
 
           bash ${DEBUG} "${SOURCES_FOLDER_PATH}/${expat_folder_name}/configure" \
-            --prefix="${INSTALL_FOLDER_PATH}" 
+            --prefix="${INSTALL_FOLDER_PATH}"
 
           cp "config.log" "${LOGS_FOLDER_PATH}/config-expat-log.txt"
         ) 2>&1 | tee "${LOGS_FOLDER_PATH}/configure-expat-output.txt"
@@ -565,7 +565,7 @@ function build_expat()
   fi
 }
 
-function build_libffi() 
+function build_libffi()
 {
   # https://sourceware.org/libffi/
   # https://sourceware.org/pub/libffi/
@@ -634,7 +634,7 @@ function build_libffi()
   fi
 }
 
-function build_libiconv() 
+function build_libiconv()
 {
   # https://www.gnu.org/software/libiconv/
   # https://ftp.gnu.org/pub/gnu/libiconv/
@@ -677,7 +677,7 @@ function build_libiconv()
           bash "${SOURCES_FOLDER_PATH}/${libiconv_folder_name}/configure" --help
 
           bash ${DEBUG} "${SOURCES_FOLDER_PATH}/${libiconv_folder_name}/configure" \
-            --prefix="${INSTALL_FOLDER_PATH}" 
+            --prefix="${INSTALL_FOLDER_PATH}"
 
           cp "config.log" "${LOGS_FOLDER_PATH}/config-libiconv-log.txt"
         ) 2>&1 | tee "${LOGS_FOLDER_PATH}/configure-libiconv-output.txt"
@@ -703,7 +703,7 @@ function build_libiconv()
   fi
 }
 
-function build_gnutls() 
+function build_gnutls()
 {
   # http://www.gnutls.org/
   # https://www.gnupg.org/ftp/gcrypt/gnutls/
@@ -742,7 +742,7 @@ function build_gnutls()
 
       export CC=clang
       export CXX=clang++
-      
+
       if [ ! -f "config.status" ]
       then
         (
@@ -778,7 +778,7 @@ function build_gnutls()
   fi
 }
 
-function build_util_macros() 
+function build_util_macros()
 {
   # http://www.linuxfromscratch.org/blfs/view/7.4/x/util-macros.html
   # http://xorg.freedesktop.org/releases/individual/util/util-macros-1.17.1.tar.bz2
@@ -818,7 +818,7 @@ function build_util_macros()
           bash "${SOURCES_FOLDER_PATH}/${util_macros_folder_name}/configure" --help
 
           bash ${DEBUG} "${SOURCES_FOLDER_PATH}/${util_macros_folder_name}/configure" \
-            --prefix="${INSTALL_FOLDER_PATH}" 
+            --prefix="${INSTALL_FOLDER_PATH}"
 
           cp "config.log" "${LOGS_FOLDER_PATH}/config-util_macros-log.txt"
         ) 2>&1 | tee "${LOGS_FOLDER_PATH}/configure-util_macros-output.txt"
@@ -841,7 +841,7 @@ function build_util_macros()
   fi
 }
 
-function build_xorg_xproto() 
+function build_xorg_xproto()
 {
   # http://www.linuxfromscratch.org/blfs/view/7.4/x/x7proto.html
   # https://www.x.org/releases/individual/proto/xproto-7.0.31.tar.bz2
@@ -881,7 +881,7 @@ function build_xorg_xproto()
           bash "${SOURCES_FOLDER_PATH}/${xorg_xproto_folder_name}/configure" --help
 
           bash ${DEBUG} "${SOURCES_FOLDER_PATH}/${xorg_xproto_folder_name}/configure" \
-            --prefix="${INSTALL_FOLDER_PATH}" 
+            --prefix="${INSTALL_FOLDER_PATH}"
 
           cp "config.log" "${LOGS_FOLDER_PATH}/config-xorg_xproto-log.txt"
         ) 2>&1 | tee "${LOGS_FOLDER_PATH}/configure-xorg_xproto-output.txt"

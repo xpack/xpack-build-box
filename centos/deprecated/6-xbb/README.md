@@ -2,21 +2,21 @@
 
 ### Overview
 
-Dockerfile to create a Docker image based on the latest CentOS 6 32/64-bit 
+Dockerfile to create a Docker image based on the latest CentOS 6 32/64-bit
 development image, plus selected new tools.
 
 ### Changes
 
-Using the bootstrap development tools, build final, most recent, versions 
-of the tools from sources. 
+Using the bootstrap development tools, build final, most recent, versions
+of the tools from sources.
 
-This step installs the newly created tools in `/opt/xbb`, using several 
+This step installs the newly created tools in `/opt/xbb`, using several
 temporary folders.
 
-To use the new tools, add `/opt/xpp/bin` to the path and adjust the include 
+To use the new tools, add `/opt/xpp/bin` to the path and adjust the include
 and library search paths.
 
-To simplify things, use the functions provided by the `xbb-source.sh` bash 
+To simplify things, use the functions provided by the `xbb-source.sh` bash
 script (was previously named `xbb.sh`):
 
 ```console
@@ -34,7 +34,7 @@ $ git clone --recurse-submodules https://github.com/xpack/xpack-build-box.git \
   "${HOME}/Downloads/xpack-build-box.git"
 ```
 
-Note: the repository uses submodules, and if updated manually, the 
+Note: the repository uses submodules, and if updated manually, the
 submodules must also be updated.
 
 #### Create
@@ -101,6 +101,6 @@ $ docker push "ilegeul/centos32:6-xbb-v2.2"
 
 ### Credits
 
-The design was heavily inspired by 
-[Holy Build Box](http://phusion.github.io/holy-build-box/), available from 
+The design was heavily inspired by
+[Holy Build Box](http://phusion.github.io/holy-build-box/), available from
 [GitHub](https://github.com/phusion/holy-build-box).

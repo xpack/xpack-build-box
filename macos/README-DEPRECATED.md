@@ -5,14 +5,14 @@
 The first version of the macOS XBB used Homebrew, but it was soon discovered
 that Homebrew was not designed to facilitate the version locking required
 by XBB, because changes to the Ruby core are quite often, sometimes
-incompatible, and support for older macOS versions, like 10.10, was 
+incompatible, and support for older macOS versions, like 10.10, was
 discontinued.
 
 ### Patches
 
 **Normally this step should not be needed**, but on some system versions and/or
-Homebrew versions, the Homebrew build fails with an error related to the 
-system header `/usr/include/dispatch/object.h`, which has a bug, one of the 
+Homebrew versions, the Homebrew build fails with an error related to the
+system header `/usr/include/dispatch/object.h`, which has a bug, one of the
 definitions is available only for Objective-C, and not for C.
 
 To make the build pass, the file must be edited, and instead of:
@@ -31,7 +31,7 @@ typedef void (*dispatch_block_t)(void);
 #endif
 ```
 
-This was true for macOS 10.13. More recent systems may have this 
+This was true for macOS 10.13. More recent systems may have this
 file already fixed.
 
 #### SIP
@@ -64,7 +64,7 @@ The bootstrap is basically a GCC 7 compiler used to build the final XBB tools.
 $ caffeinate bash "${HOME}/Downloads/xpack-build-box.git/macos/install-homebrew-xbb-bootstrap.sh"
 ```
 
-The build process takes quite a while. 
+The build process takes quite a while.
 
 The result of this step is a folder in user home (`${HOME}/opt/homebrew/xbb-bootstrap`).
 No files are stored in system locations.
@@ -76,7 +76,7 @@ $ caffeinate bash "${HOME}/Downloads/xpack-build-box.git/macos/install-homebrew-
 $ bash "${HOME}/Downloads/xpack-build-box.git/macos/add-xbb-extras.sh
 ```
 
-The build process takes quite a while. 
+The build process takes quite a while.
 
 The result of this step is a folder in user home (`${HOME}/opt/homebrew/xbb`).
 No files are stored in system locations.

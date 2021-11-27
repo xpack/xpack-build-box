@@ -3,7 +3,7 @@
 Note: This page is dedicated to the production version of the
 Ubuntu XBB, used for building distribution packages.
 The Ubuntu XBB used for native builds is docummented in the
-separate [README-NATIVE](README-NATIVE.md) page.  
+separate [README-NATIVE](README-NATIVE.md) page.
 
 The production Ubuntu XBB consists of multiple Docker images,
 in pairs of 32/64-bit, for each platform and version.

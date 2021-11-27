@@ -3,13 +3,13 @@
 #   (http://xpack.github.io)
 # Copyright (c) 2019 Liviu Ionescu.
 #
-# Permission to use, copy, modify, and/or distribute this software 
+# Permission to use, copy, modify, and/or distribute this software
 # for any purpose is hereby granted, under the terms of the MIT license.
 # -----------------------------------------------------------------------------
 
 # -----------------------------------------------------------------------------
 
-function build_zlib() 
+function build_zlib()
 {
   # http://zlib.net
   # http://zlib.net/fossils/
@@ -56,7 +56,7 @@ function build_zlib()
       xbb_activate_installed_dev
 
       # -fPIC makes possible to include static libs in shared libs.
-      CPPFLAGS="${XBB_CPPFLAGS}" 
+      CPPFLAGS="${XBB_CPPFLAGS}"
       CFLAGS="${XBB_CFLAGS_NO_W} -fPIC"
       CXXFLAGS="${XBB_CXXFLAGS_NO_W}"
       LDFLAGS="${XBB_LDFLAGS_LIB} -v"
@@ -75,7 +75,7 @@ function build_zlib()
         run_verbose bash "./configure" --help
 
         run_verbose bash ${DEBUG} "./configure" \
-          --prefix="${INSTALL_FOLDER_PATH}" 
+          --prefix="${INSTALL_FOLDER_PATH}"
 
         cp "configure.log" "${LOGS_FOLDER_PATH}/${zlib_folder_name}/configure-log.txt"
       ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${zlib_folder_name}/configure-output.txt"
@@ -124,7 +124,7 @@ function test_zlib()
 
 # -----------------------------------------------------------------------------
 
-function build_gmp() 
+function build_gmp()
 {
   # https://gmplib.org
   # https://gmplib.org/download/gmp/
@@ -173,7 +173,7 @@ function build_gmp()
       # LDFLAGS="${XBB_LDFLAGS_LIB}"
       LDFLAGS="${XBB_LDFLAGS_LIB} -v"
 
-      # Mandatory, it fails on 32-bits. 
+      # Mandatory, it fails on 32-bits.
       # export ABI="${HOST_BITS}"
 
       export CPPFLAGS
@@ -267,7 +267,7 @@ function test_gmp()
 
 # -----------------------------------------------------------------------------
 
-function build_mpfr() 
+function build_mpfr()
 {
   # http://www.mpfr.org
   # https://ftp.gnu.org/gnu/mpfr/
@@ -402,7 +402,7 @@ function test_mpfr()
 
 # -----------------------------------------------------------------------------
 
-function build_mpc() 
+function build_mpc()
 {
   # http://www.multiprecision.org/
   # https://ftp.gnu.org/gnu/mpc
@@ -463,7 +463,7 @@ function build_mpc()
           run_verbose bash "${SOURCES_FOLDER_PATH}/${mpc_src_folder_name}/configure" --help
 
           run_verbose bash ${DEBUG} "${SOURCES_FOLDER_PATH}/${mpc_src_folder_name}/configure" \
-            --prefix="${INSTALL_FOLDER_PATH}" 
+            --prefix="${INSTALL_FOLDER_PATH}"
 
           if is_linux
           then
@@ -519,7 +519,7 @@ function test_mpc()
 
 # -----------------------------------------------------------------------------
 
-function build_isl() 
+function build_isl()
 {
   # http://isl.gforge.inria.fr - deprecated
   # https://sourceforge.net/projects/libisl/files/
@@ -654,7 +654,7 @@ function test_isl()
 
 # -----------------------------------------------------------------------------
 
-function build_nettle() 
+function build_nettle()
 {
   # https://www.lysator.liu.se/~nisse/nettle/
   # https://ftp.gnu.org/gnu/nettle/
@@ -747,7 +747,7 @@ function build_nettle()
         run_verbose make -j ${JOBS}
 
         # make install-strip
-        # For unknown reasons, on 32-bits make install-info fails 
+        # For unknown reasons, on 32-bits make install-info fails
         # (`install-info --info-dir="/opt/xbb/share/info" nettle.info` returns 1)
         # Make the other install targets.
         run_verbose make install-headers install-static install-pkgconfig install-shared-nettle install-shared-hogweed
@@ -797,7 +797,7 @@ function test_nettle()
 
 # -----------------------------------------------------------------------------
 
-function build_tasn1() 
+function build_tasn1()
 {
   # https://www.gnu.org/software/libtasn1/
   # http://ftp.gnu.org/gnu/libtasn1/
@@ -860,7 +860,7 @@ function build_tasn1()
           run_verbose bash "${SOURCES_FOLDER_PATH}/${tasn1_src_folder_name}/configure" --help
 
           run_verbose bash ${DEBUG} "${SOURCES_FOLDER_PATH}/${tasn1_src_folder_name}/configure" \
-            --prefix="${INSTALL_FOLDER_PATH}" 
+            --prefix="${INSTALL_FOLDER_PATH}"
 
           if is_linux
           then
@@ -926,7 +926,7 @@ function test_tasn1()
 
 # -----------------------------------------------------------------------------
 
-function build_expat() 
+function build_expat()
 {
   # https://libexpat.github.io
   # https://github.com/libexpat/libexpat/releases
@@ -989,7 +989,7 @@ function build_expat()
           run_verbose bash "${SOURCES_FOLDER_PATH}/${expat_src_folder_name}/configure" --help
 
           run_verbose bash ${DEBUG} "${SOURCES_FOLDER_PATH}/${expat_src_folder_name}/configure" \
-            --prefix="${INSTALL_FOLDER_PATH}" 
+            --prefix="${INSTALL_FOLDER_PATH}"
 
           if is_linux
           then
@@ -1045,7 +1045,7 @@ function test_expat()
 
 # -----------------------------------------------------------------------------
 
-function build_libffi() 
+function build_libffi()
 {
   # https://github.com/libffi/libffi
   # https://sourceware.org/libffi/ (deprecated?)
@@ -1056,7 +1056,7 @@ function build_libffi()
   # https://github.com/libffi/libffi/archive/v3.2.1.tar.gz
 
   # 12-Nov-2014, "3.2.1", latest on sourceware.org
-  # 23 Nov 2019, "3.3" 
+  # 23 Nov 2019, "3.3"
   # 29 Jun 2021, "3.4.2"
 
   local libffi_version="$1"
@@ -1088,7 +1088,7 @@ function build_libffi()
       then
 
         cd "${SOURCES_FOLDER_PATH}/${libffi_src_folder_name}"
-        
+
         xbb_activate
         xbb_activate_installed_dev
 
@@ -1187,7 +1187,7 @@ function test_libffi()
 # -----------------------------------------------------------------------------
 
 # Normally not used.
-function build_libiconv() 
+function build_libiconv()
 {
   # https://www.gnu.org/software/libiconv/
   # https://ftp.gnu.org/pub/gnu/libiconv/
@@ -1248,7 +1248,7 @@ function build_libiconv()
           run_verbose bash "${SOURCES_FOLDER_PATH}/${libiconv_src_folder_name}/configure" --help
 
           run_verbose bash ${DEBUG} "${SOURCES_FOLDER_PATH}/${libiconv_src_folder_name}/configure" \
-            --prefix="${INSTALL_FOLDER_PATH}/libiconv" 
+            --prefix="${INSTALL_FOLDER_PATH}/libiconv"
 
           cp "config.log" "${LOGS_FOLDER_PATH}/${libiconv_folder_name}/config-log.txt"
         ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${libiconv_folder_name}/configure-output.txt"
@@ -1299,7 +1299,7 @@ function test_libiconv()
 
 # -----------------------------------------------------------------------------
 
-function build_gnutls() 
+function build_gnutls()
 {
   # http://www.gnutls.org/
   # https://www.gnupg.org/ftp/gcrypt/gnutls/
@@ -1361,7 +1361,7 @@ function build_gnutls()
         # lib/system/certs.c:49 error: variably modified 'bytes' at file scope
         prepare_clang_env ""
       fi
-      
+
       env | sort
 
       if [ ! -f "config.status" ]
@@ -1372,7 +1372,7 @@ function build_gnutls()
 
           run_verbose bash "${SOURCES_FOLDER_PATH}/${gnutls_src_folder_name}/configure" --help
 
-          # --disable-static 
+          # --disable-static
 
           run_verbose bash ${DEBUG} "${SOURCES_FOLDER_PATH}/${gnutls_src_folder_name}/configure" \
             --prefix="${INSTALL_FOLDER_PATH}" \
@@ -1494,7 +1494,7 @@ function build_gnutls()
           if is_darwin # && [ "${XBB_LAYER}" == "xbb-bootstrap" ]
           then
             # tests/cert-tests FAIL:  24
-            run_verbose make -j1 check || true 
+            run_verbose make -j1 check || true
           else
             run_verbose make -j1 check
           fi
@@ -1542,7 +1542,7 @@ function test_gnutls()
 
 # -----------------------------------------------------------------------------
 
-function build_util_macros() 
+function build_util_macros()
 {
   # http://www.linuxfromscratch.org/blfs/view/
   # http://www.linuxfromscratch.org/blfs/view/7.4/x/util-macros.html
@@ -1604,7 +1604,7 @@ function build_util_macros()
           run_verbose bash "${SOURCES_FOLDER_PATH}/${util_macros_src_folder_name}/configure" --help
 
           run_verbose bash ${DEBUG} "${SOURCES_FOLDER_PATH}/${util_macros_src_folder_name}/configure" \
-            --prefix="${INSTALL_FOLDER_PATH}" 
+            --prefix="${INSTALL_FOLDER_PATH}"
 
           cp "config.log" "${LOGS_FOLDER_PATH}/${util_macros_folder_name}/config-log.txt"
         ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${util_macros_folder_name}/configure-output.txt"
@@ -1653,11 +1653,11 @@ function test_util_macros()
 
 # -----------------------------------------------------------------------------
 
-function build_xorg_xproto() 
+function build_xorg_xproto()
 {
   # https://www.x.org/releases/individual/proto/
   # https://www.x.org/releases/individual/proto/xproto-7.0.31.tar.bz2
-  
+
   # https://aur.archlinux.org/cgit/aur.git/tree/PKGBUILD?h=xorgproto-git
 
   # 2016-09-23, "7.0.31" (latest)
@@ -1971,7 +1971,7 @@ function build_libmpdec()
           run_verbose bash "configure" --help
 
           run_verbose bash ${DEBUG} "configure" \
-            --prefix="${INSTALL_FOLDER_PATH}" 
+            --prefix="${INSTALL_FOLDER_PATH}"
 
           if is_linux
           then
@@ -2032,10 +2032,10 @@ function test_libmpdec()
 
 # -----------------------------------------------------------------------------
 
-function build_libgpg_error() 
+function build_libgpg_error()
 {
   # https://gnupg.org/ftp/gcrypt/libgpg-error
-  
+
   # https://archlinuxarm.org/packages/aarch64/libgpg-error/files/PKGBUILD
 
   # 2020-02-07, "1.37"
@@ -2089,7 +2089,7 @@ function build_libgpg_error()
           run_verbose bash "${SOURCES_FOLDER_PATH}/${libgpg_error_src_folder_name}/configure" --help
 
           run_verbose bash ${DEBUG} "${SOURCES_FOLDER_PATH}/${libgpg_error_src_folder_name}/configure" \
-            --prefix="${INSTALL_FOLDER_PATH}" 
+            --prefix="${INSTALL_FOLDER_PATH}"
 
           if is_linux
           then
@@ -2097,7 +2097,7 @@ function build_libgpg_error()
           fi
 
           # WARN-TEST
-          # FAIL: t-syserror (disabled) 
+          # FAIL: t-syserror (disabled)
           # Interestingly enough, initially (before dismissing install-strip)
           # it passed.
           run_verbose sed -i.bak \
@@ -2117,7 +2117,7 @@ function build_libgpg_error()
 
         # make install-strip
         run_verbose make install
- 
+
         if [ "${RUN_TESTS}" == "y" ]
         then
           # WARN-TEST
@@ -2154,11 +2154,11 @@ function test_libgpg_error()
 
 # -----------------------------------------------------------------------------
 
-function build_libgcrypt() 
+function build_libgcrypt()
 {
   # https://gnupg.org/ftp/gcrypt/libgcrypt
   # https://gnupg.org/ftp/gcrypt/libgcrypt/libgcrypt-1.8.5.tar.bz2
-  
+
   # https://archlinuxarm.org/packages/aarch64/libgcrypt/files/PKGBUILD
 
   # 2019-08-29, "1.8.5"
@@ -2285,7 +2285,7 @@ function test_libgcrypt()
 {
   (
     xbb_activate
-    
+
     echo
     echo "Checking the libgcrypt shared libraries..."
 
@@ -2308,7 +2308,7 @@ function test_libgcrypt()
 
 # -----------------------------------------------------------------------------
 
-function build_libassuan() 
+function build_libassuan()
 {
   # https://gnupg.org/ftp/gcrypt/libassuan
   # https://gnupg.org/ftp/gcrypt/libassuan/libassuan-2.5.3.tar.bz2
@@ -2430,7 +2430,7 @@ function test_libassuan()
 
 # -----------------------------------------------------------------------------
 
-function build_libksba() 
+function build_libksba()
 {
   # https://gnupg.org/ftp/gcrypt/libksba
   # https://gnupg.org/ftp/gcrypt/libksba/libksba-1.3.5.tar.bz2
@@ -2450,7 +2450,7 @@ function build_libksba()
   local libksba_folder_name="${libksba_src_folder_name}"
 
   local libksba_patch_file_path="${helper_folder_path}/patches/${libksba_folder_name}.patch"
- 
+
   local libksba_stamp_file_path="${STAMPS_FOLDER_PATH}/stamp-${libksba_folder_name}-installed"
   if [ ! -f "${libksba_stamp_file_path}" -o ! -d "${LIBS_BUILD_FOLDER_PATH}/${libksba_folder_name}" ]
   then
@@ -2556,7 +2556,7 @@ function test_libksba()
 
 # -----------------------------------------------------------------------------
 
-function build_npth() 
+function build_npth()
 {
   # https://gnupg.org/ftp/gcrypt/npth
   # https://gnupg.org/ftp/gcrypt/npth/npth-1.6.tar.bz2
@@ -2620,7 +2620,7 @@ function build_npth()
           run_verbose bash "${SOURCES_FOLDER_PATH}/${npth_src_folder_name}/configure" --help
 
           run_verbose bash ${DEBUG} "${SOURCES_FOLDER_PATH}/${npth_src_folder_name}/configure" \
-            --prefix="${INSTALL_FOLDER_PATH}" 
+            --prefix="${INSTALL_FOLDER_PATH}"
 
           cp "config.log" "${LOGS_FOLDER_PATH}/${npth_folder_name}/config-log.txt"
         ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${npth_folder_name}/configure-output.txt"
@@ -2671,7 +2671,7 @@ function test_npth()
 
 # -----------------------------------------------------------------------------
 
-function build_libxcrypt() 
+function build_libxcrypt()
 {
   # Replacement for the old libcrypt.so.1.
 
@@ -2729,7 +2729,7 @@ function build_libxcrypt()
         then
           run_verbose bash ${DEBUG} bootstrap
         else
-          # 
+          #
           autoreconf -fiv
         fi
 
@@ -2833,7 +2833,7 @@ function test_libxcrypt()
 
 # -----------------------------------------------------------------------------
 
-function build_libunistring() 
+function build_libunistring()
 {
   # https://www.gnu.org/software/libunistring/
   # https://ftp.gnu.org/gnu/libunistring/
@@ -2954,7 +2954,7 @@ function test_libunistring()
 
 # -----------------------------------------------------------------------------
 
-function build_gc() 
+function build_gc()
 {
   # https://www.hboehm.info/gc
   # https://github.com/ivmai/bdwgc/releases/
@@ -3021,7 +3021,7 @@ function build_gc()
 
           if is_linux
           then
-            # Skip the tests folder from patching, since the tests use 
+            # Skip the tests folder from patching, since the tests use
             # internal shared libraries.
             run_verbose find . \
               -name "libtool" \
@@ -3161,7 +3161,7 @@ function build_ncurses()
       export LDFLAGS
 
       if [ ! -f "config.status" ]
-      then 
+      then
         (
           echo
           echo "Running ncurses configure..."
@@ -3171,7 +3171,7 @@ function build_ncurses()
           config_options=()
 
           config_options+=("--prefix=${INSTALL_FOLDER_PATH}")
-            
+
           # Without --with-pkg-config-libdir= it'll try to write the .pc files in the
           # xbb folder, probbaly by using the dirname of pkg-config.
 
@@ -3191,7 +3191,7 @@ function build_ncurses()
           config_options+=("--with-cxx-binding")
           config_options+=("--with-cxx-shared")
           config_options+=("--with-pkg-config-libdir=${INSTALL_FOLDER_PATH}/lib/pkgconfig")
-          
+
           # Fails on Linux, with missing _nc_cur_term, which is there.
           config_options+=("--without-pthread")
 
@@ -3235,7 +3235,7 @@ function build_ncurses()
         run_verbose make install
 
         # The test programs are interactive
-        
+
       ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${ncurses_folder_name}/make-output.txt"
     )
 
@@ -3323,7 +3323,7 @@ function build_readline()
       export LDFLAGS
 
       if [ ! -f "config.status" ]
-      then 
+      then
         (
           echo
           echo "Running readline configure..."
@@ -3333,7 +3333,7 @@ function build_readline()
           config_options=()
 
           config_options+=("--prefix=${INSTALL_FOLDER_PATH}")
-            
+
           run_verbose bash ${DEBUG} "${SOURCES_FOLDER_PATH}/${readline_src_folder_name}/configure" \
             "${config_options[@]}"
 

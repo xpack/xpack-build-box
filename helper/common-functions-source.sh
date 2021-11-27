@@ -3,7 +3,7 @@
 #   (http://xpack.github.io)
 # Copyright (c) 2020 Liviu Ionescu.
 #
-# Permission to use, copy, modify, and/or distribute this software 
+# Permission to use, copy, modify, and/or distribute this software
 # for any purpose is hereby granted, under the terms of the MIT license.
 # -----------------------------------------------------------------------------
 
@@ -11,14 +11,14 @@
 
 # =============================================================================
 
-function start_timer() 
+function start_timer()
 {
   CONTAINER_BEGIN_SECOND=$(date +%s)
   echo
   echo "Container script \"$(basename "$0")\" started at $(date)."
 }
 
-function stop_timer() 
+function stop_timer()
 {
   local end_second=$(date +%s)
   echo
@@ -247,7 +247,7 @@ function is_arm()
 }
 
 function prepare_xbb_env()
-{  
+{
   XBB_PARENT_FOLDER_PATH=${XBB_PARENT_FOLDER_PATH:=""}
   RUN_TESTS=${RUN_TESTS:="y"}
   RUN_LONG_TESTS=${RUN_LONG_TESTS:=""}
@@ -319,7 +319,7 @@ function prepare_xbb_env()
       exit 1
     fi
   fi
-  
+
   CACHE_FOLDER_PATH="${WORK_FOLDER_PATH}/cache"
 
   XBB_WORK_FOLDER_PATH="${WORK_FOLDER_PATH}/$(basename "${XBB_INSTALL_FOLDER_PATH}")-${XBB_VERSION}-${HOST_DISTRO_LC_NAME}-${HOST_DISTRO_RELEASE}-${HOST_MACHINE}"
@@ -346,7 +346,7 @@ function prepare_xbb_env()
   mkdir -pv "${INSTALL_FOLDER_PATH}/bin"
   mkdir -pv "${INSTALL_FOLDER_PATH}/include"
   mkdir -pv "${INSTALL_FOLDER_PATH}/lib"
- 
+
   # ---------------------------------------------------------------------------
 
   XBB_CPPFLAGS=""
@@ -417,7 +417,7 @@ function prepare_xbb_env()
   elif [ "${XBB_LAYER}" == "xbb" ]
   then
     XBB_GCC_SUFFIX="-xbb"
-  elif [ "${XBB_LAYER}" == "xbb-test" ] 
+  elif [ "${XBB_LAYER}" == "xbb-test" ]
   then
     XBB_GCC_SUFFIX="-xbt"
   else
@@ -430,7 +430,7 @@ function prepare_xbb_env()
 
   # ---------------------------------------------------------------------------
 
-  install -m 755 -c "${helper_folder_path}/pkg-config-verbose" "${INSTALL_FOLDER_PATH}/bin/pkg-config-verbose" 
+  install -m 755 -c "${helper_folder_path}/pkg-config-verbose" "${INSTALL_FOLDER_PATH}/bin/pkg-config-verbose"
 
   PKG_CONFIG="${INSTALL_FOLDER_PATH}/bin/pkg-config-verbose"
 
@@ -487,7 +487,7 @@ function prepare_xbb_env()
   export INSTALL_FOLDER_PATH
 
   export PATH
-  
+
   export PKG_CONFIG_PATH
   export PKG_CONFIG_LIBDIR
   export PKG_CONFIG
@@ -593,7 +593,7 @@ function prepare_clang_env()
 
 function prepare_library_path()
 {
-  # Start the path with the local XBB folder, to pick the newly compiled 
+  # Start the path with the local XBB folder, to pick the newly compiled
   # libraries.
   if [ "${HOST_BITS}" == "64" ]
   then
@@ -709,7 +709,7 @@ function create_xbb_source()
 #   (http://xpack.github.io)
 # Copyright (c) $(date '+%Y') Liviu Ionescu.
 #
-# Permission to use, copy, modify, and/or distribute this software 
+# Permission to use, copy, modify, and/or distribute this software
 # for any purpose is hereby granted, under the terms of the MIT license.
 # -----------------------------------------------------------------------------
 
@@ -968,7 +968,7 @@ __EOF__
 # Add nvm shell functions.
 function xbb_activate_nvm()
 {
-  if [ -s "${NVM_DIR}/nvm.sh" ] 
+  if [ -s "${NVM_DIR}/nvm.sh" ]
   then
     source "${NVM_DIR}/nvm.sh"  # This loads nvm
   fi
@@ -1019,7 +1019,7 @@ function extract()
       echo "Extracting \"${archive_name}\" -> \"${pwd}/${folder_name}\"..."
       if [[ "${archive_name}" == *zip ]]
       then
-        unzip "${archive_name}" 
+        unzip "${archive_name}"
       else
         tar xf "${archive_name}"
       fi
@@ -1077,7 +1077,7 @@ function _download_one()
   run_verbose curl --fail --location --insecure -o "${CACHE_FOLDER_PATH}/${archive_name}.download" "${url}"
   exit_code=$?
   set -e
-  
+
   # return true for process exit code 0.
   return ${exit_code}
 }
@@ -1098,15 +1098,15 @@ function download()
         if [ ${count} -eq 4 ]
         then
           local backup_url="${url_base}/$(basename "${url}")"
-          if _download_one "${backup_url}" "${archive_name}" 
+          if _download_one "${backup_url}" "${archive_name}"
           then
             break
           else
             echo "Several download attempts failed. Quit."
             exit 1
-          fi 
+          fi
         fi
-        if _download_one "${url}" "${archive_name}" 
+        if _download_one "${url}" "${archive_name}"
         then
           break
         fi
@@ -1199,8 +1199,8 @@ function is_static()
 function patch_linux_elf_origin()
 {
   if [ $# -lt 1 ]
-  then 
-    echo "patch_linux_elf_origin requires 1 args." 
+  then
+    echo "patch_linux_elf_origin requires 1 args."
     exit 1
   fi
 
@@ -1223,8 +1223,8 @@ function patch_linux_elf_origin()
 function append_linux_elf_rpath()
 {
   if [ $# -lt 2 ]
-  then 
-    echo "patch_linux_elf_rpath requires 2 args." 
+  then
+    echo "patch_linux_elf_rpath requires 2 args."
     exit 1
   fi
 
@@ -1349,7 +1349,7 @@ function get_darwin_lc_rpaths()
 
 # -----------------------------------------------------------------------------
 
-function strip_static_objects() 
+function strip_static_objects()
 {
   echo
   echo "Stripping debug info from static libraries and object files..."
@@ -1385,7 +1385,7 @@ function strip_static_objects()
         -not -path '*mingw*' \
         -print \
         -exec chmod +w {} \; \
-        -exec "${strip}" --strip-debug {} \; 
+        -exec "${strip}" --strip-debug {} \;
 
       if [ "${XBB_LAYER}" != "xbb-bootstrap" ]
       then
@@ -1554,7 +1554,7 @@ function patch_elf_rpath()
 
     if [ ${number_of_log_lines} -gt 0 ]
     then
-      echo 
+      echo
       echo "Check rpath failed:"
       cat "${CHECK_RPATH_LOG}"
       if [ "${XBB_LAYER}" != "xbb-test" ]
@@ -1619,7 +1619,7 @@ function update_config_sub()
 
 # -----------------------------------------------------------------------------
 
-function do_cleaunup() 
+function do_cleaunup()
 {
   # In bootstrap preserve download, it'll be used by xbb and removed later.
   if [ "${XBB_LAYER}" != "xbb-bootstrap" ]

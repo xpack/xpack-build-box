@@ -3,14 +3,14 @@
 #   (http://xpack.github.io)
 # Copyright (c) 2019 Liviu Ionescu.
 #
-# Permission to use, copy, modify, and/or distribute this software 
+# Permission to use, copy, modify, and/or distribute this software
 # for any purpose is hereby granted, under the terms of the MIT license.
 # -----------------------------------------------------------------------------
 
 
 # -----------------------------------------------------------------------------
 
-function build_native_binutils() 
+function build_native_binutils()
 {
   # https://www.gnu.org/software/binutils/
   # https://ftp.gnu.org/gnu/binutils/
@@ -40,7 +40,7 @@ function build_native_binutils()
   NATIVE_BINUTILS_INSTALL_FOLDER_PATH="${NATIVE_BINUTILS_INSTALL_FOLDER_PATH:-${INSTALL_FOLDER_PATH}}"
 
   local native_binutils_src_folder_name="binutils-${native_binutils_version}"
-  
+
   local native_binutils_archive="${native_binutils_src_folder_name}.tar.xz"
   local native_binutils_url="https://ftp.gnu.org/gnu/binutils/${native_binutils_archive}"
 
@@ -66,7 +66,7 @@ function build_native_binutils()
       xbb_activate
       xbb_activate_installed_dev
 
-      CPPFLAGS="${XBB_CPPFLAGS}" 
+      CPPFLAGS="${XBB_CPPFLAGS}"
       CFLAGS="${XBB_CFLAGS_NO_W}"
       CXXFLAGS="${XBB_CXXFLAGS_NO_W}"
       LDFLAGS="${XBB_LDFLAGS_APP} -v"
@@ -91,10 +91,10 @@ function build_native_binutils()
           # ! Do not use the same folder as glibc, since this leads to
           # shared libs confusions.
           config_options+=("--prefix=${NATIVE_BINUTILS_INSTALL_FOLDER_PATH}")
-          
+
           config_options+=("--build=${BUILD}")
           config_options+=("--target=${BUILD}")
-          
+
           config_options+=("--with-pkgversion=${XBB_BINUTILS_BRANDING}")
 
           if false # [ "${XBB_LAYER}" != "xbb-bootstrap" ]
@@ -206,7 +206,7 @@ function build_native_binutils()
 
     hash -r
 
-    touch "${native_binutils_stamp_file_path}" 
+    touch "${native_binutils_stamp_file_path}"
 
   else
     echo "Component native binutils ${step} already installed."
@@ -229,16 +229,16 @@ function test_native_binutils()
     echo
     echo "Checking the binutils shared libraries..."
 
-    show_libs "${NATIVE_BINUTILS_INSTALL_FOLDER_PATH}/bin/ar" 
-    show_libs "${NATIVE_BINUTILS_INSTALL_FOLDER_PATH}/bin/as" 
-    show_libs "${NATIVE_BINUTILS_INSTALL_FOLDER_PATH}/bin/ld" 
-    show_libs "${NATIVE_BINUTILS_INSTALL_FOLDER_PATH}/bin/nm" 
-    show_libs "${NATIVE_BINUTILS_INSTALL_FOLDER_PATH}/bin/objcopy" 
-    show_libs "${NATIVE_BINUTILS_INSTALL_FOLDER_PATH}/bin/objdump" 
-    show_libs "${NATIVE_BINUTILS_INSTALL_FOLDER_PATH}/bin/ranlib" 
-    show_libs "${NATIVE_BINUTILS_INSTALL_FOLDER_PATH}/bin/size" 
-    show_libs "${NATIVE_BINUTILS_INSTALL_FOLDER_PATH}/bin/strings" 
-    show_libs "${NATIVE_BINUTILS_INSTALL_FOLDER_PATH}/bin/strip" 
+    show_libs "${NATIVE_BINUTILS_INSTALL_FOLDER_PATH}/bin/ar"
+    show_libs "${NATIVE_BINUTILS_INSTALL_FOLDER_PATH}/bin/as"
+    show_libs "${NATIVE_BINUTILS_INSTALL_FOLDER_PATH}/bin/ld"
+    show_libs "${NATIVE_BINUTILS_INSTALL_FOLDER_PATH}/bin/nm"
+    show_libs "${NATIVE_BINUTILS_INSTALL_FOLDER_PATH}/bin/objcopy"
+    show_libs "${NATIVE_BINUTILS_INSTALL_FOLDER_PATH}/bin/objdump"
+    show_libs "${NATIVE_BINUTILS_INSTALL_FOLDER_PATH}/bin/ranlib"
+    show_libs "${NATIVE_BINUTILS_INSTALL_FOLDER_PATH}/bin/size"
+    show_libs "${NATIVE_BINUTILS_INSTALL_FOLDER_PATH}/bin/strings"
+    show_libs "${NATIVE_BINUTILS_INSTALL_FOLDER_PATH}/bin/strip"
 
     echo
     echo "Testing if binutils binaries start properly..."
@@ -267,12 +267,12 @@ function test_native_binutils()
     run_app "${NATIVE_BINUTILS_INSTALL_FOLDER_PATH}/bin/size" --help
     run_app "${NATIVE_BINUTILS_INSTALL_FOLDER_PATH}/bin/strings" --help
     run_app "${NATIVE_BINUTILS_INSTALL_FOLDER_PATH}/bin/strip" --help
-  ) 
+  )
 }
 
 # -----------------------------------------------------------------------------
 
-function build_native_gdb() 
+function build_native_gdb()
 {
   # https://www.gnu.org/software/gdb/
   # https://ftp.gnu.org/gnu/gdb/
@@ -295,7 +295,7 @@ function build_native_gdb()
   fi
 
   local native_gdb_src_folder_name="gdb-${native_gdb_version}"
-  
+
   local native_gdb_archive="${native_gdb_src_folder_name}.tar.xz"
   local native_gdb_url="https://ftp.gnu.org/gnu/gdb/${native_gdb_archive}"
 
@@ -322,7 +322,7 @@ function build_native_gdb()
       # xbb_activate_installed_bin
       xbb_activate_installed_dev
 
-      CPPFLAGS="${XBB_CPPFLAGS}" 
+      CPPFLAGS="${XBB_CPPFLAGS}"
       CFLAGS="${XBB_CFLAGS_NO_W}"
       CXXFLAGS="${XBB_CXXFLAGS_NO_W}"
       LDFLAGS="${XBB_LDFLAGS_APP_STATIC_GCC} -v"
@@ -347,10 +347,10 @@ function build_native_gdb()
           # ! Do not use the same folder as glibc, since this leads to
           # shared libs confusions.
           config_options+=("--prefix=${INSTALL_FOLDER_PATH}")
-          
+
           config_options+=("--build=${BUILD}")
           config_options+=("--target=${BUILD}")
-          
+
           config_options+=("--with-pkgversion=${XBB_BINUTILS_BRANDING}")
 
           config_options+=("--disable-nls")
@@ -397,7 +397,7 @@ function build_native_gdb()
 
     hash -r
 
-    touch "${native_gdb_stamp_file_path}" 
+    touch "${native_gdb_stamp_file_path}"
 
   else
     echo "Component native gdb ${step} already installed."
@@ -420,7 +420,7 @@ function test_native_gdb()
     echo
     echo "Checking the gdb shared libraries..."
 
-    show_libs "${INSTALL_FOLDER_PATH}/bin/gdb" 
+    show_libs "${INSTALL_FOLDER_PATH}/bin/gdb"
 
     echo
     echo "Testing if gdb binaries start properly..."
@@ -431,12 +431,12 @@ function test_native_gdb()
     echo "Testing if gdb binaries display help..."
 
     run_app "${INSTALL_FOLDER_PATH}/bin/gdb" --help
-  ) 
+  )
 }
 
 # -----------------------------------------------------------------------------
 
-function build_native_gcc() 
+function build_native_gcc()
 {
   # https://gcc.gnu.org
   # https://ftp.gnu.org/gnu/gcc/
@@ -465,7 +465,7 @@ function build_native_gcc()
   # 2021-05-14, "8.5.0"
   # 2021-06-01, "9.4.0"
   # 2021-07-28, "11.2.0"
-  
+
   local native_gcc_version="$1"
 
   local step
@@ -525,10 +525,10 @@ function build_native_gcc()
       xbb_activate_installed_bin
       xbb_activate_installed_dev
 
-      CPPFLAGS="${XBB_CPPFLAGS}" 
+      CPPFLAGS="${XBB_CPPFLAGS}"
       CFLAGS="${XBB_CFLAGS_NO_W}"
       CXXFLAGS="${XBB_CXXFLAGS_NO_W}"
-      LDFLAGS="${XBB_LDFLAGS_APP} -v" 
+      LDFLAGS="${XBB_LDFLAGS_APP} -v"
 
       LDFLAGS_FOR_TARGET="${LDFLAGS}"
       LDFLAGS_FOR_BUILD="${LDFLAGS}"
@@ -589,7 +589,7 @@ function build_native_gcc()
 
           config_options+=("--without-system-zlib")
           # config_options+=("--with-system-zlib")
-          
+
           config_options+=("--without-cuda-driver")
 
           config_options+=("--enable-languages=c,c++,fortran,objc,obj-c++,lto")
@@ -650,8 +650,8 @@ function build_native_gcc()
           then
 
             # Fail on macOS
-            # --with-linker-hash-style=gnu 
-            # --enable-libmpx 
+            # --with-linker-hash-style=gnu
+            # --enable-libmpx
             # --enable-clocale=gnu
 
             config_options+=("--enable-shared")
@@ -669,11 +669,11 @@ function build_native_gcc()
             # The Linux build also uses:
             # --with-linker-hash-style=gnu
             # --enable-libmpx (fails on arm)
-            # --enable-clocale=gnu 
-            # --enable-install-libiberty 
+            # --enable-clocale=gnu
+            # --enable-install-libiberty
 
             # Ubuntu also used:
-            # --enable-libstdcxx-debug 
+            # --enable-libstdcxx-debug
             # --enable-libstdcxx-time=yes (liks librt)
             # --with-default-libstdcxx-abi=new (default)
 
@@ -763,7 +763,7 @@ function build_native_gcc()
           # Add links with the non-suffixed names, to
           # prevent using the system old versions.
 
-          rm -fv "gcc" "cc"          
+          rm -fv "gcc" "cc"
           ln -sv "gcc${XBB_GCC_SUFFIX}" "gcc"
           ln -sv "gcc${XBB_GCC_SUFFIX}" "cc"
 
@@ -925,7 +925,7 @@ __EOF__
     export LD_RUN_PATH="$(get-gcc-rpath)"
     echo "LD_RUN_PATH=${LD_RUN_PATH}"
 
-    run_app "${INSTALL_FOLDER_PATH}/usr/bin/g++${XBB_GCC_SUFFIX}" hello.cpp -o hello1 -v 
+    run_app "${INSTALL_FOLDER_PATH}/usr/bin/g++${XBB_GCC_SUFFIX}" hello.cpp -o hello1 -v
 
     show_libs hello1
 
@@ -963,7 +963,7 @@ struct MyException : public std::exception {
       return "MyException";
    }
 };
- 
+
 void
 func(void)
 {
@@ -979,13 +979,13 @@ main(int argc, char* argv[])
     std::cout << e.what() << std::endl;
   } catch(std::exception& e) {
     std::cout << "Other" << std::endl;
-  }  
+  }
 
   return 0;
 }
 __EOF__
 
-    run_app "${INSTALL_FOLDER_PATH}/usr/bin/g++${XBB_GCC_SUFFIX}" except.cpp -o except -v 
+    run_app "${INSTALL_FOLDER_PATH}/usr/bin/g++${XBB_GCC_SUFFIX}" except.cpp -o except -v
 
     show_libs except
 
@@ -996,13 +996,13 @@ __EOF__
     then
       exit 1
     fi
-  ) 
+  )
 }
 
 # -----------------------------------------------------------------------------
 # mingw-w64
 
-function build_mingw_binutils() 
+function build_mingw_binutils()
 {
   # https://ftp.gnu.org/gnu/binutils/
 
@@ -1043,7 +1043,7 @@ function build_mingw_binutils()
       xbb_activate
       xbb_activate_installed_dev
 
-      CPPFLAGS="${XBB_CPPFLAGS}" 
+      CPPFLAGS="${XBB_CPPFLAGS}"
       CFLAGS="${XBB_CFLAGS_NO_W}"
       CXXFLAGS="${XBB_CXXFLAGS_NO_W}"
       # LDFLAGS="-static-libstdc++ ${LDFLAGS}"
@@ -1094,17 +1094,17 @@ else
 
           config_options+=("--prefix=${INSTALL_FOLDER_PATH}/usr")
           config_options+=("--with-sysroot=${INSTALL_FOLDER_PATH}")
-            
+
           config_options+=("--build=${BUILD}")
           config_options+=("--target=${MINGW_TARGET}")
-            
+
           config_options+=("--with-pkgversion=${XBB_MINGW_BINUTILS_BRANDING}")
 
           config_options+=("--without-system-zlib")
           # config_options+=("--with-system-zlib")
 
           config_options+=("--with-pic")
-  
+
           # error: debuginfod is missing or unusable
           config_options+=("--without-debuginfod")
 
@@ -1173,7 +1173,7 @@ fi
         # make install-strip
         run_verbose make install
 
-        # For just in case, it has nasty consequences when picked 
+        # For just in case, it has nasty consequences when picked
         # in other builds.
         # TODO: check if needed
         # rm -fv "${INSTALL_FOLDER_PATH}/usr/lib/libiberty.a" "${INSTALL_FOLDER_PATH}/usr/lib64/libiberty.a"
@@ -1187,7 +1187,7 @@ fi
 
     hash -r
 
-    touch "${mingw_binutils_stamp_file_path}" 
+    touch "${mingw_binutils_stamp_file_path}"
 
   else
     echo "Component mingw-w64 binutils already installed."
@@ -1204,16 +1204,16 @@ function test_mingw_binutils()
     echo
     echo "Checking the mingw binutils shared libraries..."
 
-    show_libs "${INSTALL_FOLDER_PATH}/usr/bin/${MINGW_TARGET}-ar" 
-    show_libs "${INSTALL_FOLDER_PATH}/usr/bin/${MINGW_TARGET}-as" 
-    show_libs "${INSTALL_FOLDER_PATH}/usr/bin/${MINGW_TARGET}-ld" 
-    show_libs "${INSTALL_FOLDER_PATH}/usr/bin/${MINGW_TARGET}-nm" 
-    show_libs "${INSTALL_FOLDER_PATH}/usr/bin/${MINGW_TARGET}-objcopy" 
-    show_libs "${INSTALL_FOLDER_PATH}/usr/bin/${MINGW_TARGET}-objdump" 
-    show_libs "${INSTALL_FOLDER_PATH}/usr/bin/${MINGW_TARGET}-ranlib" 
-    show_libs "${INSTALL_FOLDER_PATH}/usr/bin/${MINGW_TARGET}-size" 
-    show_libs "${INSTALL_FOLDER_PATH}/usr/bin/${MINGW_TARGET}-strings" 
-    show_libs "${INSTALL_FOLDER_PATH}/usr/bin/${MINGW_TARGET}-strip" 
+    show_libs "${INSTALL_FOLDER_PATH}/usr/bin/${MINGW_TARGET}-ar"
+    show_libs "${INSTALL_FOLDER_PATH}/usr/bin/${MINGW_TARGET}-as"
+    show_libs "${INSTALL_FOLDER_PATH}/usr/bin/${MINGW_TARGET}-ld"
+    show_libs "${INSTALL_FOLDER_PATH}/usr/bin/${MINGW_TARGET}-nm"
+    show_libs "${INSTALL_FOLDER_PATH}/usr/bin/${MINGW_TARGET}-objcopy"
+    show_libs "${INSTALL_FOLDER_PATH}/usr/bin/${MINGW_TARGET}-objdump"
+    show_libs "${INSTALL_FOLDER_PATH}/usr/bin/${MINGW_TARGET}-ranlib"
+    show_libs "${INSTALL_FOLDER_PATH}/usr/bin/${MINGW_TARGET}-size"
+    show_libs "${INSTALL_FOLDER_PATH}/usr/bin/${MINGW_TARGET}-strings"
+    show_libs "${INSTALL_FOLDER_PATH}/usr/bin/${MINGW_TARGET}-strip"
 
     echo
     echo "Testing if mingw binutils binaries start properly..."
@@ -1295,7 +1295,7 @@ function prepare_mingw_config_options_common()
     echo "prepare_mingw_config_options_common requires a prefix path"
     exit 1
   fi
-                
+
   config_options_common+=("--disable-multilib")
 
   # https://docs.microsoft.com/en-us/cpp/porting/modifying-winver-and-win32-winnt?view=msvc-160
@@ -1322,7 +1322,7 @@ function download_mingw()
   # mingw_src_folder_name="mingw-w64-${mingw_version}"
   # mingw_folder_archive="v${mingw_version}.tar.gz"
   # mingw_url="https://github.com/mirror/mingw-w64/archive/${mingw_folder_archive}"
- 
+
   # https://sourceforge.net/p/mingw-w64/wiki2/Cross%20Win32%20and%20Win64%20compiler/
   # https://sourceforge.net/p/mingw-w64/mingw-w64/ci/master/tree/configure
 
@@ -1356,14 +1356,14 @@ function build_mingw_headers()
           echo "Running mingw-w64 headers configure..."
 
           run_verbose bash "${SOURCES_FOLDER_PATH}/${mingw_src_folder_name}/mingw-w64-headers/configure" --help
-          
+
           prepare_mingw_config_options_common "${INSTALL_FOLDER_PATH}/usr/${MINGW_TARGET}"
           config_options=("${config_options_common[@]}")
-          
+
           config_options+=("--build=${BUILD}")
           config_options+=("--host=${MINGW_TARGET}")
           config_options+=("--target=${MINGW_TARGET}")
-          
+
           config_options+=("--with-tune=generic")
 
           config_options+=("--enable-sdk=all")
@@ -1388,8 +1388,8 @@ function build_mingw_headers()
         run_verbose make install-strip
 
         (
-          # GCC requires the `x86_64-w64-mingw32` folder be mirrored as 
-          # `mingw` in the root. 
+          # GCC requires the `x86_64-w64-mingw32` folder be mirrored as
+          # `mingw` in the root.
           cd "${INSTALL_FOLDER_PATH}"
           run_verbose rm -fv "mingw"
           run_verbose ln -sv "usr/${MINGW_TARGET}" "mingw"
@@ -1453,7 +1453,7 @@ function build_mingw_gcc_first()
       xbb_activate
       xbb_activate_installed_dev
 
-      CPPFLAGS="${XBB_CPPFLAGS}" 
+      CPPFLAGS="${XBB_CPPFLAGS}"
       CFLAGS="${XBB_CFLAGS_NO_W}"
       CXXFLAGS="${XBB_CXXFLAGS_NO_W}"
 
@@ -1510,13 +1510,13 @@ else
 
           config_options+=("--prefix=${INSTALL_FOLDER_PATH}/usr")
           config_options+=("--with-sysroot=${INSTALL_FOLDER_PATH}")
-          
+
           config_options+=("--build=${BUILD}")
           config_options+=("--host=${BUILD}")
           config_options+=("--target=${MINGW_TARGET}")
-          
+
           config_options+=("--with-pkgversion=${XBB_MINGW_GCC_BRANDING}")
-          
+
           config_options+=("--with-dwarf2")
 
           config_options+=("--disable-multilib")
@@ -1594,7 +1594,7 @@ fi
         echo "Running mingw gcc step 1 make..."
 
         # Build.
-        run_verbose make -j ${JOBS} all-gcc 
+        run_verbose make -j ${JOBS} all-gcc
 
         run_verbose make install-strip-gcc
 
@@ -1639,7 +1639,7 @@ function build_mingw_widl()
       export CFLAGS
       export CXXFLAGS
       export LDFLAGS
-      
+
       if [ ! -f "config.status" ]
       then
         (
@@ -1665,7 +1665,7 @@ function build_mingw_widl()
          cp "config.log" "${LOGS_FOLDER_PATH}/${mingw_widl_folder_name}/config-log.txt"
         ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${mingw_widl_folder_name}/configure-output.txt"
       fi
-      
+
       (
         echo
         echo "Running mingw-w64-widl make..."
@@ -1723,7 +1723,7 @@ function build_mingw_crt()
       CXXFLAGS="-O2 -pipe -w"
 
       LDFLAGS="-v"
-      
+
       export CFLAGS
       export CXXFLAGS
       export LDFLAGS
@@ -1753,7 +1753,7 @@ function build_mingw_crt()
           config_options+=("--build=${BUILD}")
           config_options+=("--host=${MINGW_TARGET}")
           config_options+=("--target=${MINGW_TARGET}")
-            
+
           if [ "${HOST_BITS}" == "64" ]
           then
             config_options+=("--disable-lib32")
@@ -1823,12 +1823,12 @@ function build_mingw_winpthreads()
       xbb_activate_installed_bin
       xbb_activate_installed_dev
 
-      CPPFLAGS="" 
+      CPPFLAGS=""
       CFLAGS="-O2 -pipe -w"
       CXXFLAGS="-O2 -pipe -w"
 
       LDFLAGS="-v"
-      
+
       export CPPFLAGS
       export CFLAGS
       export CXXFLAGS
@@ -1857,7 +1857,7 @@ function build_mingw_winpthreads()
           config_options+=("--build=${BUILD}")
           config_options+=("--host=${MINGW_TARGET}")
           config_options+=("--target=${MINGW_TARGET}")
-            
+
           config_options+=("--enable-static")
 
           if true
@@ -1873,7 +1873,7 @@ function build_mingw_winpthreads()
          cp "config.log" "${LOGS_FOLDER_PATH}/${mingw_build_winpthreads_folder_name}/config-log.txt"
         ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${mingw_build_winpthreads_folder_name}/configure-output.txt"
       fi
-      
+
       (
         echo
         echo "Running mingw-w64 winpthreads make..."
@@ -1918,7 +1918,7 @@ function build_mingw_gcc_final()
       xbb_activate
       xbb_activate_installed_dev
 
-      CPPFLAGS="${XBB_CPPFLAGS}" 
+      CPPFLAGS="${XBB_CPPFLAGS}"
       CFLAGS="${XBB_CFLAGS_NO_W}"
       CXXFLAGS="${XBB_CXXFLAGS_NO_W}"
 
@@ -1975,7 +1975,7 @@ function build_mingw_gcc_final()
           -exec "${INSTALL_FOLDER_PATH}/usr/bin/${MINGW_TARGET}-strip" --strip-debug {} \; \
           -exec "${INSTALL_FOLDER_PATH}/usr/bin/${MINGW_TARGET}-ranlib" {} \;
         set -e
-      
+
       fi
     ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${mingw_gcc_folder_name}/strip-final-output.txt"
 
@@ -2073,7 +2073,7 @@ __EOF__
 
 # -----------------------------------------------------------------------------
 
-function build_openssl() 
+function build_openssl()
 {
   # https://www.openssl.org
   # https://www.openssl.org/source/
@@ -2081,8 +2081,8 @@ function build_openssl()
   # https://archlinuxarm.org/packages/aarch64/openssl/files/PKGBUILD
   # https://aur.archlinux.org/cgit/aur.git/tree/PKGBUILD?h=openssl-static
   # https://aur.archlinux.org/cgit/aur.git/tree/PKGBUILD?h=openssl-git
-  
-  # 2017-Nov-02 
+
+  # 2017-Nov-02
   # XBB_OPENSSL_VERSION="1.1.0g"
   # The new version deprecated CRYPTO_set_locking_callback, and yum fails with
   # /usr/lib64/python2.6/site-packages/pycurl.so: undefined symbol: CRYPTO_set_locking_callback
@@ -2177,7 +2177,7 @@ function build_openssl()
                 enable-md2 enable-rc5 enable-tls enable-tls1_3 enable-tls1_2 enable-tls1_1 \
                 "${CPPFLAGS} ${CFLAGS} ${LDFLAGS}"
 
-              run_verbose make depend 
+              run_verbose make depend
 
             else
 
@@ -2208,7 +2208,7 @@ function build_openssl()
             set +u
 
             # undefined reference to EVP_md2
-            #  enable-md2 
+            #  enable-md2
 
             if is_linux
             then
@@ -2239,7 +2239,7 @@ function build_openssl()
 
             if [ ${openssl_version_minor} -eq 0 ]
             then
-              run_verbose make depend 
+              run_verbose make depend
             fi
 
           fi
@@ -2319,7 +2319,7 @@ function test_openssl()
 
 # -----------------------------------------------------------------------------
 
-function build_curl() 
+function build_curl()
 {
   # https://curl.haxx.se
   # https://curl.haxx.se/download/
@@ -2464,12 +2464,12 @@ function test_curl()
 
 # -----------------------------------------------------------------------------
 
-function build_xz() 
+function build_xz()
 {
   # https://tukaani.org/xz/
   # https://sourceforge.net/projects/lzmautils/files/
   # https://tukaani.org/xz/xz-5.2.4.tar.xz
-  
+
   # https://archlinuxarm.org/packages/aarch64/xz/files/PKGBUILD
   # https://aur.archlinux.org/cgit/aur.git/tree/PKGBUILD?h=xz-git
 
@@ -2603,7 +2603,7 @@ function test_xz()
 
 # -----------------------------------------------------------------------------
 
-function build_tar() 
+function build_tar()
 {
   # https://www.gnu.org/software/tar/
   # https://ftp.gnu.org/gnu/tar/
@@ -2629,7 +2629,7 @@ function build_tar()
   local tar_url="https://ftp.gnu.org/gnu/tar/${tar_archive}"
 
   local tar_folder_name="${tar_src_folder_name}"
- 
+
   local tar_stamp_file_path="${STAMPS_FOLDER_PATH}/stamp-${tar_folder_name}-installed"
   if [ ! -f "${tar_stamp_file_path}" -o ! -d "${BUILD_FOLDER_PATH}/${tar_folder_name}" ]
   then
@@ -2798,7 +2798,7 @@ function test_tar()
 
 # -----------------------------------------------------------------------------
 
-function build_coreutils() 
+function build_coreutils()
 {
   # https://www.gnu.org/software/coreutils/
   # https://ftp.gnu.org/gnu/coreutils/
@@ -2867,7 +2867,7 @@ function build_coreutils()
 
           if [ -f "/.dockerenv" ]
           then
-            # configure: error: you should not run configure as root 
+            # configure: error: you should not run configure as root
             # (set FORCE_UNSAFE_CONFIGURE=1 in environment to bypass this check)
             export FORCE_UNSAFE_CONFIGURE=1
           fi
@@ -2984,7 +2984,7 @@ function test_coreutils()
 
 # -----------------------------------------------------------------------------
 
-function build_pkg_config() 
+function build_pkg_config()
 {
   # https://www.freedesktop.org/wiki/Software/pkg-config/
   # https://pkgconfig.freedesktop.org/releases/
@@ -3050,7 +3050,7 @@ function build_pkg_config()
           run_verbose bash "${SOURCES_FOLDER_PATH}/${pkg_config_src_folder_name}/glib/configure" --help
 
           # --with-internal-glib fails with
-          # gconvert.c:61:2: error: #error GNU libiconv not in use but included iconv.h is from libiconv          
+          # gconvert.c:61:2: error: #error GNU libiconv not in use but included iconv.h is from libiconv
           run_verbose bash ${DEBUG} "${SOURCES_FOLDER_PATH}/${pkg_config_src_folder_name}/configure" \
             --prefix="${INSTALL_FOLDER_PATH}" \
             \
@@ -3116,7 +3116,7 @@ function test_pkg_config()
 
 # -----------------------------------------------------------------------------
 
-function build_m4() 
+function build_m4()
 {
   # https://www.gnu.org/software/m4/
   # https://ftp.gnu.org/gnu/m4/
@@ -3255,7 +3255,7 @@ function test_m4()
 
 # -----------------------------------------------------------------------------
 
-function build_gawk() 
+function build_gawk()
 {
   # https://www.gnu.org/software/gawk/
   # https://ftp.gnu.org/gnu/gawk/
@@ -3401,7 +3401,7 @@ function test_gawk()
 
 # -----------------------------------------------------------------------------
 
-function build_sed() 
+function build_sed()
 {
   # https://www.gnu.org/software/sed/
   # https://ftp.gnu.org/gnu/sed/
@@ -3474,7 +3474,7 @@ function build_sed()
           run_verbose sed -i.bak \
             -e 's|testsuite/panic-tests.sh||g' \
             "Makefile"
-       
+
           # Some tests fail due to missing locales.
           # darwin: FAIL: testsuite/subst-mb-incomplete.sh
 
@@ -3549,7 +3549,7 @@ function test_sed()
 
 # -----------------------------------------------------------------------------
 
-function build_autoconf() 
+function build_autoconf()
 {
   # https://www.gnu.org/software/autoconf/
   # https://ftp.gnu.org/gnu/autoconf/
@@ -3608,7 +3608,7 @@ function build_autoconf()
           run_verbose bash "${SOURCES_FOLDER_PATH}/${autoconf_src_folder_name}/configure" --help
 
           run_verbose bash ${DEBUG} "${SOURCES_FOLDER_PATH}/${autoconf_src_folder_name}/configure" \
-            --prefix="${INSTALL_FOLDER_PATH}" 
+            --prefix="${INSTALL_FOLDER_PATH}"
 
           cp "config.log" "${LOGS_FOLDER_PATH}/${autoconf_folder_name}/config-log.txt"
         ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${autoconf_folder_name}/configure-output.txt"
@@ -3667,7 +3667,7 @@ function test_autoconf()
 
 # -----------------------------------------------------------------------------
 
-function build_automake() 
+function build_automake()
 {
   # https://www.gnu.org/software/automake/
   # https://ftp.gnu.org/gnu/automake/
@@ -3794,7 +3794,7 @@ function test_automake()
 
 # -----------------------------------------------------------------------------
 
-function build_libtool() 
+function build_libtool()
 {
   # https://www.gnu.org/software/libtool/
   # http://ftpmirror.gnu.org/libtool/
@@ -3863,7 +3863,7 @@ function build_libtool()
           run_verbose bash "${SOURCES_FOLDER_PATH}/${libtool_src_folder_name}/configure" --help
 
           run_verbose bash ${DEBUG} "${SOURCES_FOLDER_PATH}/${libtool_src_folder_name}/configure" \
-            --prefix="${INSTALL_FOLDER_PATH}" 
+            --prefix="${INSTALL_FOLDER_PATH}"
 
           cp "config.log" "${LOGS_FOLDER_PATH}/${libtool_folder_name}/config-log.txt"
         ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${libtool_folder_name}/configure-output.txt"
@@ -3925,7 +3925,7 @@ function test_libtool()
 
     echo
     echo "Checking the libtool shared libraries..."
-        
+
     show_libs "$(realpath ${INSTALL_FOLDER_PATH}/lib/libltdl.${SHLIB_EXT})"
 
     echo
@@ -3935,14 +3935,14 @@ function test_libtool()
 
     echo
     echo "Testing if libtool binaries display help..."
-    
+
     run_app "${INSTALL_FOLDER_PATH}/bin/libtool" --help
   )
 }
 
 # -----------------------------------------------------------------------------
 
-function build_gettext() 
+function build_gettext()
 {
   # https://www.gnu.org/software/gettext/
   # https://ftp.gnu.org/gnu/gettext/
@@ -4011,7 +4011,7 @@ function build_gettext()
             --enable-nls \
             --enable-threads \
             --disable-rpath \
-          
+
           # TODO: cleanups
           if is_linux
           then
@@ -4027,7 +4027,7 @@ function build_gettext()
             fi
           fi
 
-          # Tests fail on Ubuntu 14 bootstrap 
+          # Tests fail on Ubuntu 14 bootstrap
           # Darwin: FAIL: lang-sh
           if [ "${XBB_LAYER}" == "xbb-bootstrap" ]
           then
@@ -4083,7 +4083,7 @@ function build_gettext()
                 export LD_RUN_PATH="$(pwd)/intl/.libs:${LD_RUN_PATH}"
                 echo "LD_RUN_PATH=$LD_RUN_PATH"
               fi
-              run_verbose make -j1 check 
+              run_verbose make -j1 check
             )
             (
               cd gettext-tools
@@ -4103,7 +4103,7 @@ function build_gettext()
                   run_verbose make -j1 check || true
                 fi
               else
-                run_verbose make -j1 check 
+                run_verbose make -j1 check
               fi
             )
           )
@@ -4171,7 +4171,7 @@ function test_gettext()
 
 # -----------------------------------------------------------------------------
 
-function build_patch() 
+function build_patch()
 {
   # https://www.gnu.org/software/patch/
   # https://ftp.gnu.org/gnu/patch/
@@ -4230,7 +4230,7 @@ function build_patch()
           run_verbose bash "${SOURCES_FOLDER_PATH}/${patch_src_folder_name}/configure" --help
 
           run_verbose bash ${DEBUG} "${SOURCES_FOLDER_PATH}/${patch_src_folder_name}/configure" \
-            --prefix="${INSTALL_FOLDER_PATH}" 
+            --prefix="${INSTALL_FOLDER_PATH}"
 
           cp "config.log" "${LOGS_FOLDER_PATH}/${patch_folder_name}/config-log.txt"
         ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${patch_folder_name}/configure-output.txt"
@@ -4288,7 +4288,7 @@ function test_patch()
 
 # -----------------------------------------------------------------------------
 
-function build_diffutils() 
+function build_diffutils()
 {
   # https://www.gnu.org/software/diffutils/
   # https://ftp.gnu.org/gnu/diffutils/
@@ -4428,7 +4428,7 @@ function test_diffutils()
 
 # -----------------------------------------------------------------------------
 
-function build_bison() 
+function build_bison()
 {
   # https://www.gnu.org/software/bison/
   # https://ftp.gnu.org/gnu/bison/
@@ -4566,7 +4566,7 @@ function test_bison()
 
 # -----------------------------------------------------------------------------
 
-function build_flex() 
+function build_flex()
 {
   # https://www.gnu.org/software/flex/
   # https://github.com/westes/flex/releases
@@ -4583,14 +4583,14 @@ function build_flex()
   # /opt/xbb/lib/gcc/x86_64-w64-mingw32/9.2.0/../../../../x86_64-w64-mingw32/bin/ld: macro.lex.yy.cross.o: in function `yylex':
   # /root/Work/xbb-3.1-ubuntu-18.04-x86_64/build/wine-5.1/programs/winhlp32/macro.lex.yy.c:1031: undefined reference to `yywrap'
   # collect2: error: ld returned 1 exit status
-  
+
   # May 6, 2017, "2.6.4" (latest)
-  # On Ubuntu 18 it crashes (due to an autotool issue) with 
+  # On Ubuntu 18 it crashes (due to an autotool issue) with
   # ./stage1flex   -o stage1scan.c /home/ilg/Work/xbb-bootstrap/sources/flex-2.6.4/src/scan.l
   # make[2]: *** [Makefile:1696: stage1scan.c] Segmentation fault (core dumped)
   # The patch from Arch should fix it.
   # https://archlinuxarm.org/packages/aarch64/flex/files/flex-pie.patch
-  
+
   local flex_version="$1"
 
   local flex_src_folder_name="flex-${flex_version}"
@@ -4625,11 +4625,11 @@ function build_flex()
           xbb_activate_installed_bin
         fi
         xbb_activate_installed_dev
-        
+
         run_verbose bash ${DEBUG} "autogen.sh"
 
         touch "stamp-autogen"
-      
+
       fi
     ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${flex_folder_name}/autogen-output.txt"
 
@@ -4724,7 +4724,7 @@ function test_flex()
 
 # -----------------------------------------------------------------------------
 
-function build_make() 
+function build_make()
 {
   # https://www.gnu.org/software/make/
   # https://ftp.gnu.org/gnu/make/
@@ -4856,12 +4856,12 @@ function test_make()
     echo "Testing if make binaries start properly..."
 
     run_app "${INSTALL_FOLDER_PATH}/bin/make" --version
-  ) 
+  )
 }
 
 # -----------------------------------------------------------------------------
 
-function build_wget() 
+function build_wget()
 {
   # https://www.gnu.org/software/wget/
   # https://ftp.gnu.org/gnu/wget/
@@ -5002,12 +5002,12 @@ function test_wget()
     echo "Testing if wget binaries start properly..."
 
     run_app "${INSTALL_FOLDER_PATH}/bin/wget" --version
-  ) 
+  )
 }
 
 # -----------------------------------------------------------------------------
 
-function build_texinfo() 
+function build_texinfo()
 {
   # https://www.gnu.org/software/texinfo/
   # https://ftp.gnu.org/gnu/texinfo/
@@ -5133,7 +5133,7 @@ function test_texinfo()
 
 # -----------------------------------------------------------------------------
 
-function build_cmake() 
+function build_cmake()
 {
   # https://cmake.org
   # https://github.com/Kitware/CMake/releases/
@@ -5223,7 +5223,7 @@ function build_cmake()
           echo "Running cmake cmake..."
 
           # If more verbosity is needed:
-          #  -DCMAKE_VERBOSE_MAKEFILE:BOOL=ON 
+          #  -DCMAKE_VERBOSE_MAKEFILE:BOOL=ON
 
           # Use the existing cmake to configure this one.
           run_verbose cmake \
@@ -5321,7 +5321,7 @@ function test_cmake()
 
 # -----------------------------------------------------------------------------
 
-function build_perl() 
+function build_perl()
 {
   # https://www.cpan.org
   # http://www.cpan.org/src/
@@ -5342,7 +5342,7 @@ function build_perl()
 
   PERL_VERSION="$1"
   local perl_version_major="$(echo "${PERL_VERSION}" | sed -e 's/\([0-9]*\)\..*/\1.0/')"
- 
+
   local perl_src_folder_name="perl-${PERL_VERSION}"
 
   local perl_archive="${perl_src_folder_name}.tar.gz"
@@ -5387,7 +5387,7 @@ function build_perl()
       xbb_activate_installed_dev
 
       CPPFLAGS="${XBB_CPPFLAGS}"
-      # -Wno-null-pointer-arithmetic 
+      # -Wno-null-pointer-arithmetic
       CFLAGS="${XBB_CPPFLAGS} ${XBB_CFLAGS_NO_W}"
       CXXFLAGS="${XBB_CPPFLAGS} ${XBB_CXXFLAGS_NO_W}"
       LDFLAGS="${XBB_LDFLAGS_APP} -v"
@@ -5526,7 +5526,7 @@ function test_perl()
 
 # -----------------------------------------------------------------------------
 
-function build_makedepend() 
+function build_makedepend()
 {
   # http://www.linuxfromscratch.org/blfs/view/7.4/x/makedepend.html
   # http://xorg.freedesktop.org/archive/individual/util
@@ -5543,7 +5543,7 @@ function build_makedepend()
 
   local makedepend_archive="${makedepend_src_folder_name}.tar.bz2"
   local makedepend_url="http://xorg.freedesktop.org/archive/individual/util/${makedepend_archive}"
-  
+
   local makedepend_folder_name="${makedepend_src_folder_name}"
 
   local makedepend_stamp_file_path="${STAMPS_FOLDER_PATH}/stamp-${makedepend_folder_name}-installed"
@@ -5587,7 +5587,7 @@ function build_makedepend()
           run_verbose bash "${SOURCES_FOLDER_PATH}/${makedepend_src_folder_name}/configure" --help
 
           run_verbose bash ${DEBUG} "${SOURCES_FOLDER_PATH}/${makedepend_src_folder_name}/configure" \
-            --prefix="${INSTALL_FOLDER_PATH}" 
+            --prefix="${INSTALL_FOLDER_PATH}"
 
           cp "config.log" "${LOGS_FOLDER_PATH}/${makedepend_folder_name}/config-log.txt"
         ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${makedepend_folder_name}/configure-output.txt"
@@ -5640,7 +5640,7 @@ function test_makedepend()
 
 # -----------------------------------------------------------------------------
 
-function build_patchelf() 
+function build_patchelf()
 {
   # https://nixos.org/patchelf.html
   # https://github.com/NixOS/patchelf
@@ -5681,7 +5681,7 @@ function build_patchelf()
       then
 
         cd "${SOURCES_FOLDER_PATH}/${patchelf_src_folder_name}"
-        
+
         xbb_activate_installed_bin
         xbb_activate_installed_dev
 
@@ -5700,7 +5700,7 @@ function build_patchelf()
       CPPFLAGS="${XBB_CPPFLAGS}"
       CFLAGS="${XBB_CFLAGS_NO_W}"
       CXXFLAGS="${XBB_CXXFLAGS_NO_W}"
-      # Wihtout -static-libstdc++, the bootstrap lib folder is needed to 
+      # Wihtout -static-libstdc++, the bootstrap lib folder is needed to
       # find libstdc++.
       LDFLAGS="${XBB_LDFLAGS_APP}"
 
@@ -5786,14 +5786,14 @@ function test_patchelf()
 
 # -----------------------------------------------------------------------------
 
-function build_chrpath() 
+function build_chrpath()
 {
   # http://http.debian.net/debian/pool/main/c/chrpath/chrpath_0.16.orig.tar.gz
 
   # https://archlinuxarm.org/packages/aarch64/chrpath/files/PKGBUILD
 
   # 04 Jan 2014, "0.16"
-  
+
   local chrpath_version="$1"
 
   local chrpath_src_folder_name="chrpath-${chrpath_version}"
@@ -5842,7 +5842,7 @@ function build_chrpath()
           run_verbose bash "${SOURCES_FOLDER_PATH}/${chrpath_src_folder_name}/configure" --help
 
           run_verbose bash ${DEBUG} "${SOURCES_FOLDER_PATH}/${chrpath_src_folder_name}/configure" \
-            --prefix="${INSTALL_FOLDER_PATH}" 
+            --prefix="${INSTALL_FOLDER_PATH}"
 
           cp "config.log" "${LOGS_FOLDER_PATH}/${chrpath_folder_name}/config-log.txt"
         ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${chrpath_folder_name}/configure-output.txt"
@@ -5854,7 +5854,7 @@ function build_chrpath()
 
         # Build.
         run_verbose make -j ${JOBS}
-        
+
         # make install-strip
         run_verbose make install
 
@@ -5900,12 +5900,12 @@ function test_chrpath()
 
 # -----------------------------------------------------------------------------
 
-function build_dos2unix() 
+function build_dos2unix()
 {
   # https://waterlan.home.xs4all.nl/dos2unix.html
   # http://dos2unix.sourceforge.net
   # https://waterlan.home.xs4all.nl/dos2unix/dos2unix-7.4.0.tar.
-  
+
   # https://archlinuxarm.org/packages/aarch64/dos2unix/files/PKGBUILD
 
   # 30-Oct-2017, "7.4.0"
@@ -6015,7 +6015,7 @@ function test_dos2unix()
 
 # -----------------------------------------------------------------------------
 
-function build_git() 
+function build_git()
 {
   # https://git-scm.com/
   # https://www.kernel.org/pub/software/scm/git/
@@ -6086,7 +6086,7 @@ function build_git()
           run_verbose bash "./configure" --help
 
           run_verbose bash ${DEBUG} "./configure" \
-            --prefix="${INSTALL_FOLDER_PATH}" 
+            --prefix="${INSTALL_FOLDER_PATH}"
 
           cp "config.log" "${LOGS_FOLDER_PATH}/${git_folder_name}/config-log.txt"
         ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${git_folder_name}/configure-output.txt"
@@ -6136,12 +6136,12 @@ function test_git()
     echo "Testing if git binaries start properly..."
 
     run_app "${INSTALL_FOLDER_PATH}/bin/git" --version
-  ) 
+  )
 }
 
 # -----------------------------------------------------------------------------
 
-function build_python2() 
+function build_python2()
 {
   # https://www.python.org
   # https://www.python.org/downloads/source/
@@ -6154,7 +6154,7 @@ function build_python2()
   # "2.7.12" # Fails on macOS in bootstrap
   # 2017-09-16, "2.7.14" # Fails on macOS in bootstrap
   # March 4, 2019, "2.7.16" # Fails on macOS in bootstrap
-  # Oct. 19, 2019, "2.7.17" 
+  # Oct. 19, 2019, "2.7.17"
   # April 20, 2020, "2.7.18" - final release.
 
   local python2_version="$1"
@@ -6214,10 +6214,10 @@ function build_python2()
           run_verbose bash "${SOURCES_FOLDER_PATH}/${python2_src_folder_name}/configure" --help
 
           # Fail on macOS:
-          # --enable-universalsdk 
+          # --enable-universalsdk
           # --with-universal-archs=${HOST_BITS}-bit
 
-          # "... you should not skip tests when using --enable-optimizations as 
+          # "... you should not skip tests when using --enable-optimizations as
           # the data required for profiling is generated by running tests".
 
           # --with-lto takes way too long on Ubuntu 14 aarch64.
@@ -6232,7 +6232,7 @@ function build_python2()
           config_options+=("--with-dbmliborder=gdbm:ndbm")
           config_options+=("--without-ensurepip")
           config_options+=("--without-lto")
-            
+
           config_options+=("--enable-shared")
           config_options+=("--enable-unicode=ucs4")
 
@@ -6265,7 +6265,7 @@ function build_python2()
 
     (
       xbb_activate_installed_bin
-      
+
       # Install setuptools and pip. Be sure the new version is used.
       # https://packaging.python.org/tutorials/installing-packages/
       echo
@@ -6275,7 +6275,7 @@ function build_python2()
 
       run_app "${INSTALL_FOLDER_PATH}/bin/python2" -m ensurepip --default-pip
       run_app "${INSTALL_FOLDER_PATH}/bin/python2" -m pip install --upgrade pip==19.3.1 setuptools==44.0.0 wheel==0.34.2
-      
+
       run_app "${INSTALL_FOLDER_PATH}/bin/pip2" --version
     ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${python2_folder_name}/pip-output.txt"
 
@@ -6314,12 +6314,12 @@ function test_python2()
 
 # -----------------------------------------------------------------------------
 
-function build_python3() 
+function build_python3()
 {
   # https://www.python.org
   # https://www.python.org/downloads/source/
   # https://www.python.org/ftp/python/3.7.3/Python-3.7.3.tar.xz
-  
+
   # https://archlinuxarm.org/packages/aarch64/python/files/PKGBUILD
   # https://git.archlinux.org/svntogit/packages.git/tree/trunk/PKGBUILD?h=packages/python
   # https://git.archlinux.org/svntogit/packages.git/tree/trunk/PKGBUILD?h=packages/python-pip
@@ -6399,7 +6399,7 @@ function build_python3()
           # --enable-universalsdk
           # --with-lto
 
-          # "... you should not skip tests when using --enable-optimizations as 
+          # "... you should not skip tests when using --enable-optimizations as
           # the data required for profiling is generated by running tests".
 
           # --enable-optimizations takes too long
@@ -6416,7 +6416,7 @@ function build_python3()
           config_options+=("--with-openssl=${INSTALL_FOLDER_PATH}")
           config_options+=("--without-ensurepip")
           config_options+=("--without-lto")
-          
+
           config_options+=("--enable-shared")
 
           # Fails with 3.9.7.
@@ -6430,7 +6430,7 @@ function build_python3()
 
           run_verbose bash ${DEBUG} "${SOURCES_FOLDER_PATH}/${python3_src_folder_name}/configure" \
             "${config_options[@]}"
-             
+
           cp "config.log" "${LOGS_FOLDER_PATH}/${python3_folder_name}/config-log.txt"
         ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${python3_folder_name}/configure-output.txt"
       fi
@@ -6446,7 +6446,7 @@ function build_python3()
         run_verbose make install
 
         # Tests are quite complicated
- 
+
       ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${python3_folder_name}/make-output.txt"
     )
 
@@ -6507,7 +6507,7 @@ function test_python3()
 
 # -----------------------------------------------------------------------------
 
-function build_scons() 
+function build_scons()
 {
   # http://scons.org
   # http://prdownloads.sourceforge.net/scons/
@@ -6631,7 +6631,7 @@ function test_scons()
     fi
 
     run_app "${INSTALL_FOLDER_PATH}/bin/scons" --version
-  )  
+  )
 }
 
 # -----------------------------------------------------------------------------
@@ -6698,12 +6698,12 @@ function test_meson()
     export PYTHONPATH="${INSTALL_FOLDER_PATH}/lib/${PYTHON3X}"
 
     run_app "${INSTALL_FOLDER_PATH}/bin/meson" --version
-  )  
+  )
 }
 
 # -----------------------------------------------------------------------------
 
-function build_ninja() 
+function build_ninja()
 {
   # https://ninja-build.org
   # https://github.com/ninja-build/ninja/releases
@@ -6772,13 +6772,13 @@ function build_ninja()
         ./configure.py --help
 
         echo "Patience..."
-        
+
         # --platform=linux ?
 
         run_verbose ./configure.py \
           --bootstrap \
           --verbose \
-          --with-python=$(which python2) 
+          --with-python=$(which python2)
 
         /usr/bin/install -m755 -c ninja "${INSTALL_FOLDER_PATH}/bin"
 
@@ -6816,7 +6816,7 @@ function test_ninja()
     echo "Testing if ninja binaries start properly..."
 
     run_app "${INSTALL_FOLDER_PATH}/bin/ninja" --version
-  )  
+  )
 }
 
 # -----------------------------------------------------------------------------
@@ -6981,7 +6981,7 @@ function test_p7zip()
     then
       run_app "${INSTALL_FOLDER_PATH}/bin/7z" --help
     fi
-  )  
+  )
 }
 
 # -----------------------------------------------------------------------------
@@ -7049,12 +7049,12 @@ function build_wine()
 
       xbb_activate
       xbb_activate_installed_dev
-      # Required to find the newly compiled mingw-w46. 
+      # Required to find the newly compiled mingw-w46.
       # It also picks flex, which may crash with
       # macro.lex.yy.c:1031: undefined reference to `yywrap'.
       xbb_activate_installed_bin
 
-      CPPFLAGS="${XBB_CPPFLAGS}" 
+      CPPFLAGS="${XBB_CPPFLAGS}"
 
       # TODO: remove when switching to Ubuntu 16.
       # getauxval was defined in glibc 2.16
@@ -7071,7 +7071,7 @@ function build_wine()
           run_verbose diff dlls/ntdll/unix/signal_x86_64.c.bak dlls/ntdll/unix/signal_x86_64.c || true
         fi
       fi
-      
+
       CFLAGS="${XBB_CFLAGS_NO_W}"
       CXXFLAGS="${XBB_CXXFLAGS_NO_W}"
       LDFLAGS="${XBB_LDFLAGS_APP}"
@@ -7201,13 +7201,13 @@ function test_wine()
     # will no longer have to do it.
     local netstat=$(find "${INSTALL_FOLDER_PATH}"/lib* -name netstat.exe)
     run_app "${INSTALL_FOLDER_PATH}/bin/wine" ${netstat}
-  ) 
+  )
 }
 
 # -----------------------------------------------------------------------------
 
 # Not yet functional.
-function build_nvm() 
+function build_nvm()
 {
   # https://github.com/nvm-sh/nvm
   # curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.35.2/install.sh | bash
@@ -7309,12 +7309,12 @@ function test_nvm()
 
     run_app node --version
     run_app npm --version
-  )  
+  )
 }
 
 # -----------------------------------------------------------------------------
 
-function build_gnupg() 
+function build_gnupg()
 {
   # https://www.gnupg.org
   # https://www.gnupg.org/ftp/gcrypt/gnupg/gnupg-2.2.19.tar.bz2
@@ -7559,7 +7559,7 @@ function test_ant()
     echo "Testing if ant binaries start properly..."
 
     run_app "${INSTALL_FOLDER_PATH}/bin/ant" -version
-  )  
+  )
 }
 
 # -----------------------------------------------------------------------------
@@ -7601,7 +7601,7 @@ function build_maven()
 
       download_and_extract "${maven_url}" "${maven_archive}" \
         "${maven_src_folder_name}"
-      
+
       if [ "${maven_src_folder_name}" != "${maven_folder_name}" ]
       then
         mv -v "${maven_src_folder_name}" "${maven_folder_name}"
@@ -7665,7 +7665,7 @@ function test_maven()
 # -----------------------------------------------------------------------------
 
 # Not functional.
-function build_nodejs() 
+function build_nodejs()
 {
   # https://nodejs.org/
   # https://github.com/nodejs/node/releases
@@ -7734,7 +7734,7 @@ function build_nodejs()
           echo "Running nodejs configure..."
 
           run_verbose bash "./configure" --help
-          
+
           run_verbose bash ${DEBUG} "./configure" \
             --prefix="${INSTALL_FOLDER_PATH}/xxx" \
             \
@@ -7790,12 +7790,12 @@ function test_nodejs()
     echo "Testing if node binaries start properly..."
 
     run_app "${INSTALL_FOLDER_PATH}/bin/node" --version
-  )  
+  )
 }
 
 # -----------------------------------------------------------------------------
 
-function build_tcl() 
+function build_tcl()
 {
   # https://www.tcl.tk/
   # https://www.tcl.tk/software/tcltk/download.html
@@ -7947,12 +7947,12 @@ function test_tcl()
     echo "Testing if tcl binaries start properly..."
 
     run_app "${INSTALL_FOLDER_PATH}/bin/tclsh${TCL_VERSION_MAJOR}.${TCL_VERSION_MINOR}" <<< 'puts [info patchlevel]'
-  )  
+  )
 }
 
 # -----------------------------------------------------------------------------
 
-function build_guile() 
+function build_guile()
 {
   # https://www.gnu.org/software/guile/
   # https://ftp.gnu.org/gnu/guile/
@@ -8108,12 +8108,12 @@ function test_guile()
 
     run_app "${INSTALL_FOLDER_PATH}/bin/guile" --version
     run_app "${INSTALL_FOLDER_PATH}/bin/guile-config" --version
-  )  
+  )
 }
 
 # -----------------------------------------------------------------------------
 
-function build_rhash() 
+function build_rhash()
 {
   # https://github.com/rhash/RHash
   # https://github.com/rhash/RHash/releases
@@ -8250,7 +8250,7 @@ function test_rhash()
 
 # -----------------------------------------------------------------------------
 
-function build_re2c() 
+function build_re2c()
 {
   # https://github.com/skvadrik/re2c
   # https://github.com/skvadrik/re2c/releases
@@ -8299,7 +8299,7 @@ function build_re2c()
 
         xbb_activate
         xbb_activate_installed_dev
-        
+
         # run_verbose bash ${DEBUG} "autogen.sh"
 
         touch "stamp-autogen"
@@ -8317,7 +8317,7 @@ function build_re2c()
       CFLAGS="${XBB_CFLAGS_NO_W}"
       CXXFLAGS="${XBB_CXXFLAGS_NO_W}"
       LDFLAGS="${XBB_LDFLAGS_APP}"
-    
+
       export CPPFLAGS
       export CFLAGS
       export CXXFLAGS
@@ -8391,7 +8391,7 @@ function test_re2c()
     echo "Testing if re2c binaries start properly..."
 
     run_app "${INSTALL_FOLDER_PATH}/bin/re2c" --version
-  )  
+  )
 }
 
 # -----------------------------------------------------------------------------
@@ -8450,12 +8450,12 @@ function test_sphinx()
     echo "Testing if sphinx binaries start properly..."
 
     run_app "${INSTALL_FOLDER_PATH}/bin/sphinx-build" --version
-  )  
+  )
 }
 
 # -----------------------------------------------------------------------------
 
-function build_autogen() 
+function build_autogen()
 {
   # https://www.gnu.org/software/autogen/
   # https://ftp.gnu.org/gnu/autogen/
@@ -8614,12 +8614,12 @@ function test_autogen()
 
     # getdefs error:  invalid option descriptor for version
     run_app "${INSTALL_FOLDER_PATH}/bin/getdefs" --help || true
-  )  
+  )
 }
 
 # -----------------------------------------------------------------------------
 
-function build_bash() 
+function build_bash()
 {
   # https://www.gnu.org/software/bash/
   # https://ftp.gnu.org/gnu/bash/
@@ -8754,13 +8754,13 @@ function test_bash()
     echo "Testing if bash binaries display help..."
 
     run_app "${INSTALL_FOLDER_PATH}/bin/bash" --help
-  ) 
+  )
 }
 
 # -----------------------------------------------------------------------------
 
 # Minimalistic realpath to be used on macOS
-function build_realpath() 
+function build_realpath()
 {
   # https://github.com/harto/realpath-osx
   # https://github.com/harto/realpath-osx/archive/1.0.0.tar.gz
@@ -8853,12 +8853,12 @@ function test_realpath()
     echo "Checking the realpath binaries shared libraries..."
 
     show_libs "${INSTALL_FOLDER_PATH}/bin/realpath"
-  )  
+  )
 }
 
 # -----------------------------------------------------------------------------
 
-function build_native_llvm() 
+function build_native_llvm()
 {
   # https://llvm.org
   # https://llvm.org/docs/GettingStarted.html
@@ -9115,7 +9115,7 @@ main(int argc, char* argv[])
 __EOF__
 
 
-    run_app "${LLVM_INSTALL_FOLDER_PATH}/bin/clang${XBB_GCC_SUFFIX}" hello.c -o hello-c -v 
+    run_app "${LLVM_INSTALL_FOLDER_PATH}/bin/clang${XBB_GCC_SUFFIX}" hello.c -o hello-c -v
 
     show_libs hello-c
 
@@ -9142,7 +9142,7 @@ main(int argc, char* argv[])
 }
 __EOF__
 
-    run_app "${LLVM_INSTALL_FOLDER_PATH}/bin/clang++${XBB_GCC_SUFFIX}" hello.cpp -o hello-cpp -v 
+    run_app "${LLVM_INSTALL_FOLDER_PATH}/bin/clang++${XBB_GCC_SUFFIX}" hello.cpp -o hello-cpp -v
 
     show_libs hello-cpp
 
@@ -9164,7 +9164,7 @@ struct MyException : public std::exception {
       return "MyException";
    }
 };
- 
+
 void
 func(void)
 {
@@ -9180,13 +9180,13 @@ main(int argc, char* argv[])
     std::cout << e.what() << std::endl;
   } catch(std::exception& e) {
     std::cout << "Other" << std::endl;
-  }  
+  }
 
   return 0;
 }
 __EOF__
 
-    run_app "${LLVM_INSTALL_FOLDER_PATH}/bin/clang++${XBB_GCC_SUFFIX}" except.cpp -o except -v 
+    run_app "${LLVM_INSTALL_FOLDER_PATH}/bin/clang++${XBB_GCC_SUFFIX}" except.cpp -o except -v
 
     show_libs except
 
@@ -9198,7 +9198,7 @@ __EOF__
       exit 1
     fi
 
-  )  
+  )
 }
 
 # -----------------------------------------------------------------------------

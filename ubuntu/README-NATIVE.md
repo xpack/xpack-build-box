@@ -30,13 +30,13 @@ $ sudo bash "${HOME}/Downloads/xpack-build-box.git/ubuntu/add-native-extras-xbb-
 
 It takes a few minutes to install all system requirements.
 
-In addition to the minimal system, a modern graphical editor and a graphical 
+In addition to the minimal system, a modern graphical editor and a graphical
 Git client are recommended, although none is mandatory, and for the
 brave ones using the command line tools is perfectly possible.
 
 ### Visual Studio Code
 
-The recommended editor is Visual Studio Code, which can be downloaded 
+The recommended editor is Visual Studio Code, which can be downloaded
 for free from
 [visualstudio.com](https://code.visualstudio.com/download).
 
@@ -69,7 +69,7 @@ plug-ins, like;
 ### Git Kraken
 
 A separate alternative is
-Git Kraken, which can be downloaded for free from 
+Git Kraken, which can be downloaded for free from
 [gitkraken.com](https://www.gitkraken.com/download).
 
 Select the `.deb` file, and install it:

@@ -56,7 +56,7 @@ then
 fi
 
 run_verbose apt-get -qq install -y git-core curl tar gzip lsb-release binutils
-run_verbose apt-get -qq install -y build-essential 
+run_verbose apt-get -qq install -y build-essential
 run_verbose apt-get -qq install -y python || true
 
 curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/master/install.sh | bash

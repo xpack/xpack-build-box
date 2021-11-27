@@ -4,7 +4,7 @@
 #   (http://xpack.github.io)
 # Copyright (c) 2019 Liviu Ionescu.
 #
-# Permission to use, copy, modify, and/or distribute this software 
+# Permission to use, copy, modify, and/or distribute this software
 # for any purpose is hereby granted, under the terms of the MIT license.
 # -----------------------------------------------------------------------------
 
@@ -122,7 +122,7 @@ build_openssl "1.0.2r" # "1.1.1b"
 
 # Applications
 
-# By all means DO NOT build binutils, since this will override Apple 
+# By all means DO NOT build binutils, since this will override Apple
 # specific tools (ar, strip, etc) and break the build in multiple ways.
 
 do_gcc "7.4.0"

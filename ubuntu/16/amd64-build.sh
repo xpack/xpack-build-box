@@ -58,7 +58,7 @@ docker_build_from_archive \
 
 host_clean_docker_input
 
-echo 
+echo
 echo "Done."
 
 # -----------------------------------------------------------------------------

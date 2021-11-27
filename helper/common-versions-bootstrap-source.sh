@@ -3,7 +3,7 @@
 #   (http://xpack.github.io)
 # Copyright (c) 2020 Liviu Ionescu.
 #
-# Permission to use, copy, modify, and/or distribute this software 
+# Permission to use, copy, modify, and/or distribute this software
 # for any purpose is hereby granted, under the terms of the MIT license.
 # -----------------------------------------------------------------------------
 
@@ -12,13 +12,13 @@ function build_versioned_components()
   if [[ "${XBB_VERSION}" =~ 3\.[4] ]]
   then
     # WARNING: experimental, used only to test builds on Apple Silicon.
-    
+
     # -------------------------------------------------------------------------
 
     # The main characteristic of XBB Bootstrap is the compiler version.
 
     # Fortunatelly GCC 11.[12] were updated and work on Apple hardware.
-      XBB_GCC_VERSION="11.2.0" # "8.4.0" # "8.3.0" "7.5.0" "7.4.0"    
+    XBB_GCC_VERSION="11.2.0" # "8.4.0" # "8.3.0" "7.5.0" "7.4.0"
     XBB_BINUTILS_VERSION="2.36.1" # "2.32" # "2.31"
 
     XBB_LLVM_BRANDING="xPack Build Box Bootstrap ${HOST_BITS}-bit"
@@ -38,7 +38,7 @@ function build_versioned_components()
       export LD_RUN_PATH
     fi
 
-    # All of he following are compiled with the original Ubuntu compiler 
+    # All of he following are compiled with the original Ubuntu compiler
     # (GCC 6.x) and should be locked to system shared libraries.
 
     # -------------------------------------------------------------------------
@@ -61,7 +61,7 @@ function build_versioned_components()
     # depends=('glibc')
     build_zlib "1.2.11"
 
-    # Library, required by tar. 
+    # Library, required by tar.
     # depends=('sh')
     build_xz "5.2.5" # "5.2.3"
 
@@ -227,10 +227,10 @@ function build_versioned_components()
       PYTHON3X="python3.9"
       build_python3 "3.9.8" # "3.9.7" # "3.8.10" # "3.7.6" # "3.8.1" # "3.7.3"
       # The necessary bits to build these optional modules were not found:
-      # _bz2                  _curses               _curses_panel      
-      # _dbm                  _gdbm                 _sqlite3           
-      # _tkinter              _uuid                 readline 
-                
+      # _bz2                  _curses               _curses_panel
+      # _dbm                  _gdbm                 _sqlite3
+      # _tkinter              _uuid                 readline
+
       # depends=('python3')
       build_meson "0.60.1" # "0.58.1" # "0.57.2" # "0.53.1" # "0.50.0"
     fi
@@ -251,14 +251,14 @@ function build_versioned_components()
     # -------------------------------------------------------------------------
     # Native binutils and gcc.
 
-    # By all means DO NOT build binutils on macOS, since this will 
+    # By all means DO NOT build binutils on macOS, since this will
     # override Apple specific tools (ar, strip, etc) and break the
     # build in multiple ways.
     if is_linux
     then
       # Requires gmp, mpfr, mpc, isl.
       # PATCH!
-      build_native_binutils "${XBB_BINUTILS_VERSION}" 
+      build_native_binutils "${XBB_BINUTILS_VERSION}"
     fi
 
     # Requires gmp, mpfr, mpc, isl.
@@ -297,11 +297,11 @@ function build_versioned_components()
     # /llvm/utils/TableGen/OptParserEmitter.cpp:113:12: error: no viable conversion from 'unique_ptr<MarshallingFlagInfo>' to 'unique_ptr<MarshallingKindInfo>'
     # "10.0.1" fails on macOS 10.10
     # clang: error: unknown argument: '-wd654'
-    # LLVM build still fails even with macOS 10.13. 
+    # LLVM build still fails even with macOS 10.13.
     # XBB_LLVM_VERSION="11.1.0"
 
     # Fortunatelly GCC 11.x was updated and works on Apple hardware.
-    XBB_GCC_VERSION="11.2.0" # "8.4.0" # "8.3.0" "7.5.0" "7.4.0"    
+    XBB_GCC_VERSION="11.2.0" # "8.4.0" # "8.3.0" "7.5.0" "7.4.0"
     XBB_BINUTILS_VERSION="2.36.1" # "2.32" # "2.31"
 
     XBB_LLVM_BRANDING="xPack Build Box Bootstrap ${HOST_BITS}-bit"
@@ -321,7 +321,7 @@ function build_versioned_components()
       export LD_RUN_PATH
     fi
 
-    # All of he following are compiled with the original Ubuntu compiler 
+    # All of he following are compiled with the original Ubuntu compiler
     # (GCC 6.x) and should be locked to system shared libraries.
 
     # -------------------------------------------------------------------------
@@ -344,7 +344,7 @@ function build_versioned_components()
     # depends=('glibc')
     build_zlib "1.2.11"
 
-    # Library, required by tar. 
+    # Library, required by tar.
     # depends=('sh')
     build_xz "5.2.3"
 
@@ -507,10 +507,10 @@ function build_versioned_components()
       PYTHON3X="python3.9"
       build_python3 "3.9.7" # "3.8.10" # "3.7.6" # "3.8.1" # "3.7.3"
       # The necessary bits to build these optional modules were not found:
-      # _bz2                  _curses               _curses_panel      
-      # _dbm                  _gdbm                 _sqlite3           
-      # _tkinter              _uuid                 readline 
-                
+      # _bz2                  _curses               _curses_panel
+      # _dbm                  _gdbm                 _sqlite3
+      # _tkinter              _uuid                 readline
+
       # depends=('python3')
       build_meson "0.58.1" # "0.57.2" # "0.53.1" # "0.50.0"
     fi
@@ -531,14 +531,14 @@ function build_versioned_components()
     # -------------------------------------------------------------------------
     # Native binutils and gcc.
 
-    # By all means DO NOT build binutils on macOS, since this will 
+    # By all means DO NOT build binutils on macOS, since this will
     # override Apple specific tools (ar, strip, etc) and break the
     # build in multiple ways.
     if is_linux
     then
       # Requires gmp, mpfr, mpc, isl.
       # PATCH!
-      build_native_binutils "${XBB_BINUTILS_VERSION}" 
+      build_native_binutils "${XBB_BINUTILS_VERSION}"
     fi
 
     # Requires gmp, mpfr, mpc, isl.
@@ -600,7 +600,7 @@ function build_versioned_components()
       export LD_RUN_PATH
     fi
 
-    # All of he following are compiled with the original Ubuntu compiler 
+    # All of he following are compiled with the original Ubuntu compiler
     # (GCC 6.x) and should be locked to system shared libraries.
 
     # -------------------------------------------------------------------------
@@ -615,7 +615,7 @@ function build_versioned_components()
     # depends=('glibc')
     build_zlib "1.2.11"
 
-    # Library, required by tar. 
+    # Library, required by tar.
     # depends=('sh')
     build_xz "5.2.3"
 
@@ -767,10 +767,10 @@ function build_versioned_components()
       # require xz, openssl
       build_python3 "3.7.6" # "3.8.1" # "3.7.3"
       # The necessary bits to build these optional modules were not found:
-      # _bz2                  _curses               _curses_panel      
-      # _dbm                  _gdbm                 _sqlite3           
-      # _tkinter              _uuid                 readline 
-                
+      # _bz2                  _curses               _curses_panel
+      # _dbm                  _gdbm                 _sqlite3
+      # _tkinter              _uuid                 readline
+
       # depends=('python3')
       build_meson "0.53.1" # "0.50.0"
     fi
@@ -791,14 +791,14 @@ function build_versioned_components()
     # -------------------------------------------------------------------------
     # Native binutils and gcc.
 
-    # By all means DO NOT build binutils on macOS, since this will 
+    # By all means DO NOT build binutils on macOS, since this will
     # override Apple specific tools (ar, strip, etc) and break the
     # build in multiple ways.
     if is_linux
     then
       # Requires gmp, mpfr, mpc, isl.
       # PATCH!
-      build_native_binutils "${XBB_BINUTILS_VERSION}" 
+      build_native_binutils "${XBB_BINUTILS_VERSION}"
     fi
 
     # Requires gmp, mpfr, mpc, isl.
@@ -836,7 +836,7 @@ function build_versioned_components()
     # depends=('glibc')
     build_zlib "1.2.11"
 
-    # Library, required by tar. 
+    # Library, required by tar.
     # depends=('sh')
     build_xz "5.2.3"
 
@@ -949,10 +949,10 @@ function build_versioned_components()
       # require xz, openssl
       build_python3 "3.7.6" # "3.8.1" # "3.7.3"
       # The necessary bits to build these optional modules were not found:
-      # _bz2                  _curses               _curses_panel      
-      # _dbm                  _gdbm                 _sqlite3           
-      # _tkinter              _uuid                 readline 
-                
+      # _bz2                  _curses               _curses_panel
+      # _dbm                  _gdbm                 _sqlite3
+      # _tkinter              _uuid                 readline
+
       # depends=('python3')
       build_meson "0.53.1" # "0.50.0"
     fi
@@ -983,13 +983,13 @@ function build_versioned_components()
     # depends=('gmp')
     build_isl "0.21"
 
-    # By all means DO NOT build binutils on macOS, since this will 
+    # By all means DO NOT build binutils on macOS, since this will
     # override Apple specific tools (ar, strip, etc) and break the
     # build in multiple ways.
     if is_linux
     then
       # Requires gmp, mpfr, mpc, isl.
-      build_native_binutils "${XBB_BINUTILS_VERSION}" 
+      build_native_binutils "${XBB_BINUTILS_VERSION}"
     fi
 
     # Requires gmp, mpfr, mpc, isl.
@@ -1008,7 +1008,7 @@ function build_versioned_components()
     # -------------------------------------------------------------------------
 
   else
-    echo 
+    echo
     echo "Version ${XBB_VERSION} not yet supported."
   fi
 }

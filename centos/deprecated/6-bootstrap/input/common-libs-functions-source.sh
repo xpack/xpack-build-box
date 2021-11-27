@@ -3,7 +3,7 @@
 #   (http://xpack.github.io)
 # Copyright (c) 2019 Liviu Ionescu.
 #
-# Permission to use, copy, modify, and/or distribute this software 
+# Permission to use, copy, modify, and/or distribute this software
 # for any purpose is hereby granted, under the terms of the MIT license.
 # -----------------------------------------------------------------------------
 
@@ -11,7 +11,7 @@
 # Support functions to be used in all versions of the containers.
 # -----------------------------------------------------------------------------
 
-function build_zlib() 
+function build_zlib()
 {
   # http://zlib.net
   # http://zlib.net/fossils/
@@ -41,7 +41,7 @@ function build_zlib()
     xbb_activate_installed_dev
 
     # -fPIC makes possible to include static libs in shared libs.
-    export CPPFLAGS="${XBB_CPPFLAGS}" 
+    export CPPFLAGS="${XBB_CPPFLAGS}"
     export CFLAGS="${XBB_CFLAGS} -fPIC"
     export CXXFLAGS="${XBB_CXXFLAGS}"
     export LDFLAGS="${XBB_LDFLAGS_LIB}"
@@ -61,7 +61,7 @@ function build_zlib()
 
 # -----------------------------------------------------------------------------
 
-function build_xz() 
+function build_xz()
 {
   # https://tukaani.org/xz/
   # https://sourceforge.net/projects/lzmautils/files/
@@ -86,11 +86,11 @@ function build_xz()
 
   (
     cd "${XBB_BUILD_FOLDER}/${XBB_XZ_FOLDER}"
-    
+
     xbb_activate
     xbb_activate_installed_dev
 
-    export CPPFLAGS="${XBB_CPPFLAGS}" 
+    export CPPFLAGS="${XBB_CPPFLAGS}"
     export CFLAGS="${XBB_CFLAGS}"
     export CXXFLAGS="${XBB_CXXFLAGS}"
     export LDFLAGS="${XBB_LDFLAGS}"
@@ -100,7 +100,7 @@ function build_xz()
     ./configure \
       --prefix="${XBB_FOLDER}" \
       --disable-rpath
-    
+
     make -j ${JOBS}
     make install-strip
   )
@@ -116,7 +116,7 @@ function build_xz()
 
 # -----------------------------------------------------------------------------
 
-function build_gmp() 
+function build_gmp()
 {
   # https://gmplib.org
   # https://gmplib.org/download/gmp/
@@ -144,25 +144,25 @@ function build_gmp()
     xbb_activate
     xbb_activate_installed_dev
 
-    export CPPFLAGS="${XBB_CPPFLAGS}" 
+    export CPPFLAGS="${XBB_CPPFLAGS}"
     export CFLAGS="${XBB_CFLAGS}"
     export CXXFLAGS="${XBB_CXXFLAGS}"
     export LDFLAGS="${XBB_LDFLAGS_LIB}"
 
-    # Mandatory, otherwise it fails on 32-bit. 
+    # Mandatory, otherwise it fails on 32-bit.
     export ABI="${BITS}"
 
     ./configure --help
 
     ./configure \
-      --prefix="${XBB_FOLDER}" 
-    
+      --prefix="${XBB_FOLDER}"
+
     make -j ${JOBS}
     make install-strip
   )
 }
 
-function build_mpfr() 
+function build_mpfr()
 {
   # http://www.mpfr.org
   # http://www.mpfr.org/mpfr-3.1.6
@@ -190,7 +190,7 @@ function build_mpfr()
     xbb_activate
     xbb_activate_installed_dev
 
-    export CPPFLAGS="${XBB_CPPFLAGS}" 
+    export CPPFLAGS="${XBB_CPPFLAGS}"
     export CFLAGS="${XBB_CFLAGS}"
     export CXXFLAGS="${XBB_CXXFLAGS}"
     export LDFLAGS="${XBB_LDFLAGS_LIB}"
@@ -198,14 +198,14 @@ function build_mpfr()
     ./configure --help
 
     ./configure \
-      --prefix="${XBB_FOLDER}" 
-    
+      --prefix="${XBB_FOLDER}"
+
     make -j ${JOBS}
     make install-strip
   )
 }
 
-function build_mpc() 
+function build_mpc()
 {
   # http://www.multiprecision.org/
   # ftp://ftp.gnu.org/gnu/mpc/
@@ -232,7 +232,7 @@ function build_mpc()
     xbb_activate
     xbb_activate_installed_dev
 
-    export CPPFLAGS="${XBB_CPPFLAGS}" 
+    export CPPFLAGS="${XBB_CPPFLAGS}"
     export CFLAGS="${XBB_CFLAGS}"
     export CXXFLAGS="${XBB_CXXFLAGS}"
     export LDFLAGS="${XBB_LDFLAGS_LIB}"
@@ -240,14 +240,14 @@ function build_mpc()
     ./configure --help
 
     ./configure \
-      --prefix="${XBB_FOLDER}" 
-    
+      --prefix="${XBB_FOLDER}"
+
     make -j ${JOBS}
     make install-strip
   )
 }
 
-function build_isl() 
+function build_isl()
 {
   # http://isl.gforge.inria.fr
   # https://aur.archlinux.org/cgit/aur.git/tree/PKGBUILD?h=isl
@@ -274,7 +274,7 @@ function build_isl()
     xbb_activate
     xbb_activate_installed_dev
 
-    export CPPFLAGS="${XBB_CPPFLAGS}" 
+    export CPPFLAGS="${XBB_CPPFLAGS}"
     export CFLAGS="${XBB_CFLAGS}"
     export CXXFLAGS="${XBB_CXXFLAGS}"
     export LDFLAGS="${XBB_LDFLAGS_LIB}"
@@ -282,8 +282,8 @@ function build_isl()
     ./configure --help
 
     ./configure \
-      --prefix="${XBB_FOLDER}" 
-    
+      --prefix="${XBB_FOLDER}"
+
     make -j ${JOBS}
     make install-strip
   )

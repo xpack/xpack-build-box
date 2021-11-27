@@ -174,14 +174,14 @@ function is_executable()
   fi
 }
 
-function is_linux_sys_so() 
+function is_linux_sys_so()
 {
   local lib_name="$1"
 
-  # Do not add these two, they are present if the toolchain is installed, 
+  # Do not add these two, they are present if the toolchain is installed,
   # but this is not guaranteed, so better copy them from the xbb toolchain.
-  # libstdc++.so.6 
-  # libgcc_s.so.1 
+  # libstdc++.so.6
+  # libgcc_s.so.1
 
   # Shared libraries that are expected to be present on any Linux.
   # Note the X11 libraries.
@@ -401,7 +401,7 @@ function main()
     IFS=${save_ifs}
   fi
 
-  declare -A paths 
+  declare -A paths
 
   if [ ${#folder_paths[@]} -gt 0 ]
   then
@@ -433,7 +433,7 @@ function main()
     # echo ${path}
     paths+=( ["${path}"]="${path}" )
   done
-  
+
   new_ld_run_paths="$(IFS=":"; echo "${!paths[*]}")"
 
   # echo "${new_ld_run_paths}"
@@ -495,7 +495,7 @@ function main()
 
   set +u
   msg="[$(IFS=" "; echo "${found_names[*]}")]"
-  
+
   msg+=" RPATH=$(IFS=":"; echo "${folder_paths[*]}")"
 
   if [ -n "${interpreter}" ]

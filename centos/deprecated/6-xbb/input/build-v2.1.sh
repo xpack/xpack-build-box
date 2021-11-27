@@ -4,7 +4,7 @@
 #   (http://xpack.github.io)
 # Copyright (c) 2019 Liviu Ionescu.
 #
-# Permission to use, copy, modify, and/or distribute this software 
+# Permission to use, copy, modify, and/or distribute this software
 # for any purpose is hereby granted, under the terms of the MIT license.
 # -----------------------------------------------------------------------------
 
@@ -40,7 +40,7 @@ script_folder_name="$(basename "${script_folder_path}")"
 
 # =============================================================================
 
-# Script to build a subsequent version of a Docker image with the 
+# Script to build a subsequent version of a Docker image with the
 # xPack Build Box (XBB).
 
 # -----------------------------------------------------------------------------
@@ -71,12 +71,12 @@ mkdir -p "${XBB_FOLDER}/bin"
 
 # xbb_activate - activate the bootstrap binaries
 # xbb_activate_installed_bin - activate the new xbb binaries
-# xbb_activate_installed_dev - activate the new xbb headers & libraries 
+# xbb_activate_installed_dev - activate the new xbb headers & libraries
 
 (
   xbb_activate
-  
-  echo 
+
+  echo
   echo "xbb_activate"
   echo ${PATH}
   echo ${LD_LIBRARY_PATH}
@@ -119,7 +119,7 @@ then
   # depends=('glibc')
   build_libffi "3.2.1"
 
-  # Libary, required by tar. 
+  # Libary, required by tar.
   # depends=('sh')
   build_xz "5.2.4"
 

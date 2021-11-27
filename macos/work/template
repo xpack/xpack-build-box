@@ -1,7 +1,7 @@
 # =============================================================================
 # Libs
 
-function do_xxx() 
+function do_xxx()
 {
   # ...
 
@@ -40,7 +40,7 @@ function do_xxx()
           bash "${SOURCES_FOLDER_PATH}/${xxx_folder_name}/configure" --help
 
           bash ${DEBUG} "${SOURCES_FOLDER_PATH}/${xxx_folder_name}/configure" \
-            --prefix="${INSTALL_FOLDER_PATH}" 
+            --prefix="${INSTALL_FOLDER_PATH}"
 
           cp "config.log" "${LOGS_FOLDER_PATH}/config-xxx-log.txt"
         ) 2>&1 | tee "${LOGS_FOLDER_PATH}/configure-xxx-output.txt"
@@ -66,7 +66,7 @@ function do_xxx()
 # =============================================================================
 # Apps
 
-function do_zzz() 
+function do_zzz()
 {
   # ...
 
@@ -105,7 +105,7 @@ function do_zzz()
           bash "${SOURCES_FOLDER_PATH}/${zzz_folder_name}/configure" --help
 
           bash ${DEBUG} "${SOURCES_FOLDER_PATH}/${zzz_folder_name}/configure" \
-            --prefix="${INSTALL_FOLDER_PATH}" 
+            --prefix="${INSTALL_FOLDER_PATH}"
 
           cp "config.log" "${LOGS_FOLDER_PATH}/config-zzz-log.txt"
         ) 2>&1 | tee "${LOGS_FOLDER_PATH}/configure-zzz-output.txt"

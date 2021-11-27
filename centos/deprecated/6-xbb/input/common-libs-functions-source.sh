@@ -4,12 +4,12 @@
 #   (http://xpack.github.io)
 # Copyright (c) 2019 Liviu Ionescu.
 #
-# Permission to use, copy, modify, and/or distribute this software 
+# Permission to use, copy, modify, and/or distribute this software
 # for any purpose is hereby granted, under the terms of the MIT license.
 # -----------------------------------------------------------------------------
 
 
-function build_zlib() 
+function build_zlib()
 {
   # http://zlib.net
   # http://zlib.net/fossils/
@@ -39,7 +39,7 @@ function build_zlib()
     xbb_activate_installed_dev
 
     # -fPIC makes possible to include static libs in shared libs.
-    export CPPFLAGS="${XBB_CPPFLAGS}" 
+    export CPPFLAGS="${XBB_CPPFLAGS}"
     export CFLAGS="${XBB_CFLAGS} -fPIC"
     export CXXFLAGS="${XBB_CXXFLAGS}"
     export LDFLAGS="${XBB_LDFLAGS_LIB}"
@@ -47,8 +47,8 @@ function build_zlib()
     bash configure --help
 
     # Some apps (cmake) would be happier with shared libs.
-    # Some apps (python) fail without shared libs. 
- 
+    # Some apps (python) fail without shared libs.
+
      bash configure \
       --prefix="${XBB_FOLDER}"
 
@@ -57,7 +57,7 @@ function build_zlib()
   )
 }
 
-function build_gmp() 
+function build_gmp()
 {
   # https://gmplib.org
   # https://gmplib.org/download/gmp/
@@ -85,25 +85,25 @@ function build_gmp()
     xbb_activate
     xbb_activate_installed_dev
 
-    export CPPFLAGS="${XBB_CPPFLAGS}" 
+    export CPPFLAGS="${XBB_CPPFLAGS}"
     export CFLAGS="${XBB_CFLAGS}"
     export CXXFLAGS="${XBB_CXXFLAGS}"
     export LDFLAGS="${XBB_LDFLAGS_LIB}"
 
-    # Mandatory, it fails on 32-bits. 
+    # Mandatory, it fails on 32-bits.
     export ABI="${BITS}"
 
     bash configure --help
 
     bash configure \
-      --prefix="${XBB_FOLDER}" 
-    
+      --prefix="${XBB_FOLDER}"
+
     make -j ${JOBS}
     make install-strip
   )
 }
 
-function build_mpfr() 
+function build_mpfr()
 {
   # http://www.mpfr.org
   # http://www.mpfr.org/mpfr-3.1.6
@@ -131,7 +131,7 @@ function build_mpfr()
     xbb_activate
     xbb_activate_installed_dev
 
-    export CPPFLAGS="${XBB_CPPFLAGS}" 
+    export CPPFLAGS="${XBB_CPPFLAGS}"
     export CFLAGS="${XBB_CFLAGS}"
     export CXXFLAGS="${XBB_CXXFLAGS}"
     export LDFLAGS="${XBB_LDFLAGS_LIB}"
@@ -139,14 +139,14 @@ function build_mpfr()
     bash configure --help
 
     bash configure \
-      --prefix="${XBB_FOLDER}" 
-    
+      --prefix="${XBB_FOLDER}"
+
     make -j ${JOBS}
     make install-strip
   )
 }
 
-function build_mpc() 
+function build_mpc()
 {
   # http://www.multiprecision.org/
   # ftp://ftp.gnu.org/gnu/mpc
@@ -173,7 +173,7 @@ function build_mpc()
     xbb_activate
     xbb_activate_installed_dev
 
-    export CPPFLAGS="${XBB_CPPFLAGS}" 
+    export CPPFLAGS="${XBB_CPPFLAGS}"
     export CFLAGS="${XBB_CFLAGS}"
     export CXXFLAGS="${XBB_CXXFLAGS}"
     export LDFLAGS="${XBB_LDFLAGS_LIB}"
@@ -181,15 +181,15 @@ function build_mpc()
     bash configure --help
 
     bash configure \
-      --prefix="${XBB_FOLDER}" 
-    
+      --prefix="${XBB_FOLDER}"
+
     make -j ${JOBS}
     make install-strip
   )
 }
 
 
-function build_isl() 
+function build_isl()
 {
   # http://isl.gforge.inria.fr
   # https://aur.archlinux.org/cgit/aur.git/tree/PKGBUILD?h=isl
@@ -216,7 +216,7 @@ function build_isl()
     xbb_activate
     xbb_activate_installed_dev
 
-    export CPPFLAGS="${XBB_CPPFLAGS}" 
+    export CPPFLAGS="${XBB_CPPFLAGS}"
     export CFLAGS="${XBB_CFLAGS}"
     export CXXFLAGS="${XBB_CXXFLAGS}"
     export LDFLAGS="${XBB_LDFLAGS_LIB}"
@@ -224,14 +224,14 @@ function build_isl()
     bash configure --help
 
     bash configure \
-      --prefix="${XBB_FOLDER}" 
-    
+      --prefix="${XBB_FOLDER}"
+
     make -j ${JOBS}
     make install-strip
   )
 }
 
-function build_nettle() 
+function build_nettle()
 {
   # https://www.lysator.liu.se/~nisse/nettle/
   # https://ftp.gnu.org/gnu/nettle/
@@ -258,7 +258,7 @@ function build_nettle()
     xbb_activate
     xbb_activate_installed_dev
 
-    export CPPFLAGS="${XBB_CPPFLAGS}" 
+    export CPPFLAGS="${XBB_CPPFLAGS}"
     export CFLAGS="${XBB_CFLAGS} -Wno-implicit-fallthrough -Wno-deprecated-declarations"
     export CXXFLAGS="${XBB_CXXFLAGS}"
     export LDFLAGS="${XBB_LDFLAGS_LIB}"
@@ -270,7 +270,7 @@ function build_nettle()
       --disable-documentation
 
     make -j ${JOBS}
-    # For unknown reasons, on 32-bits make install-info fails 
+    # For unknown reasons, on 32-bits make install-info fails
     # (`install-info --info-dir="/opt/xbb/share/info" nettle.info` returns 1)
     # Make the other install targets.
     make install-headers install-static install-pkgconfig install-shared-nettle  install-shared-hogweed
@@ -289,7 +289,7 @@ function build_nettle()
   )
 }
 
-function build_tasn1() 
+function build_tasn1()
 {
   # https://www.gnu.org/software/libtasn1/
   # http://ftp.gnu.org/gnu/libtasn1/
@@ -317,7 +317,7 @@ function build_tasn1()
     xbb_activate
     xbb_activate_installed_dev
 
-    export CPPFLAGS="${XBB_CPPFLAGS}" 
+    export CPPFLAGS="${XBB_CPPFLAGS}"
     export CFLAGS="${XBB_CFLAGS} -Wno-logical-op -Wno-missing-prototypes -Wno-implicit-fallthrough -Wno-format-truncation"
     export CXXFLAGS="${XBB_CXXFLAGS}"
     export LDFLAGS="${XBB_LDFLAGS_LIB}"
@@ -325,8 +325,8 @@ function build_tasn1()
     bash configure --help
 
     bash configure \
-      --prefix="${XBB_FOLDER}" 
-    
+      --prefix="${XBB_FOLDER}"
+
     make -j ${JOBS}
     make install
 
@@ -366,7 +366,7 @@ function build_expat()
     xbb_activate
     xbb_activate_installed_dev
 
-    export CPPFLAGS="${XBB_CPPFLAGS}" 
+    export CPPFLAGS="${XBB_CPPFLAGS}"
     export CFLAGS="${XBB_CFLAGS}"
     export CXXFLAGS="${XBB_CXXFLAGS}"
     export LDFLAGS="${XBB_LDFLAGS_LIB}"
@@ -374,14 +374,14 @@ function build_expat()
     bash configure --help
 
     bash configure \
-      --prefix="${XBB_FOLDER}" 
-    
+      --prefix="${XBB_FOLDER}"
+
     make -j ${JOBS}
     make install-strip
   )
 }
 
-function build_libffi() 
+function build_libffi()
 {
   # https://sourceware.org/libffi/
   # https://sourceware.org/pub/libffi/
@@ -409,7 +409,7 @@ function build_libffi()
     xbb_activate
     xbb_activate_installed_dev
 
-    export CPPFLAGS="${XBB_CPPFLAGS}" 
+    export CPPFLAGS="${XBB_CPPFLAGS}"
     export CFLAGS="${XBB_CFLAGS}"
     export CXXFLAGS="${XBB_CXXFLAGS}"
     export LDFLAGS="${XBB_LDFLAGS_LIB}"
@@ -419,7 +419,7 @@ function build_libffi()
     bash configure \
       --prefix="${XBB_FOLDER}" \
       --enable-pax_emutramp
-    
+
     make -j ${JOBS}
     make install
 
@@ -431,7 +431,7 @@ function build_libffi()
   )
 }
 
-function build_libiconv() 
+function build_libiconv()
 {
   # https://www.gnu.org/software/libiconv/
   # https://ftp.gnu.org/pub/gnu/libiconv/
@@ -459,7 +459,7 @@ function build_libiconv()
     xbb_activate
     xbb_activate_installed_dev
 
-    export CPPFLAGS="${XBB_CPPFLAGS}" 
+    export CPPFLAGS="${XBB_CPPFLAGS}"
     export CFLAGS="${XBB_CFLAGS}"
     export CXXFLAGS="${XBB_CXXFLAGS}"
     export LDFLAGS="${XBB_LDFLAGS_LIB}"
@@ -467,8 +467,8 @@ function build_libiconv()
     bash configure --help
 
     bash configure \
-      --prefix="${XBB_FOLDER}" 
-    
+      --prefix="${XBB_FOLDER}"
+
     make -j ${JOBS}
     make install-strip
 
@@ -477,7 +477,7 @@ function build_libiconv()
   )
 }
 
-function build_gnutls() 
+function build_gnutls()
 {
   # http://www.gnutls.org/
   # https://www.gnupg.org/ftp/gcrypt/gnutls/
@@ -510,7 +510,7 @@ function build_gnutls()
     xbb_activate
     xbb_activate_installed_dev
 
-    export CPPFLAGS="${XBB_CPPFLAGS}" 
+    export CPPFLAGS="${XBB_CPPFLAGS}"
     export CFLAGS="${XBB_CFLAGS} -Wno-parentheses -Wno-bad-function-cast -Wno-unused-macros -Wno-bad-function-cast -Wno-unused-variable -Wno-pointer-sign -Wno-implicit-fallthrough -Wno-format-truncation -Wno-missing-prototypes -Wno-missing-declarations -Wno-shadow -Wno-sign-compare"
     export CXXFLAGS="${XBB_CXXFLAGS}"
     export LDFLAGS="${XBB_LDFLAGS_LIB}"
@@ -522,7 +522,7 @@ function build_gnutls()
       --without-p11-kit \
       --enable-guile \
       --with-guile-site-dir=no \
-      --with-included-unistring 
+      --with-included-unistring
 
     make -j ${JOBS}
     make install-strip
@@ -535,7 +535,7 @@ function build_gnutls()
   )
 }
 
-function build_xz() 
+function build_xz()
 {
   # https://tukaani.org/xz/
   # https://sourceforge.net/projects/lzmautils/files/
@@ -563,7 +563,7 @@ function build_xz()
     xbb_activate
     xbb_activate_installed_dev
 
-    export CPPFLAGS="${XBB_CPPFLAGS}" 
+    export CPPFLAGS="${XBB_CPPFLAGS}"
     export CFLAGS="${XBB_CFLAGS} -Wno-implicit-fallthrough"
     export CXXFLAGS="${XBB_CXXFLAGS}"
     export LDFLAGS="${XBB_LDFLAGS_LIB}"
@@ -573,7 +573,7 @@ function build_xz()
     bash configure \
       --prefix="${XBB_FOLDER}" \
       --disable-rpath
-    
+
     make -j ${JOBS}
     make install-strip
   )
@@ -606,8 +606,8 @@ function build_libpng()
   # 2017-09-16
   # 2018-12-01, "1.6.36"
 
-  local XBB_LIBPNG_VERSION="$1" 
-  local XBB_LIBPNG_SFOLDER="libpng16" 
+  local XBB_LIBPNG_VERSION="$1"
+  local XBB_LIBPNG_SFOLDER="libpng16"
 
   local XBB_LIBPNG_FOLDER_NAME="libpng-${XBB_LIBPNG_VERSION}"
   local XBB_LIBPNG_ARCHIVE="${XBB_LIBPNG_FOLDER_NAME}.tar.xz"
@@ -627,7 +627,7 @@ function build_libpng()
     xbb_activate
     xbb_activate_installed_dev
 
-    export CPPFLAGS="${XBB_CPPFLAGS}" 
+    export CPPFLAGS="${XBB_CPPFLAGS}"
     export CFLAGS="${XBB_CFLAGS}"
     export CXXFLAGS="${XBB_CXXFLAGS}"
     export LDFLAGS="${XBB_LDFLAGS_LIB}"
@@ -636,7 +636,7 @@ function build_libpng()
 
     bash configure \
       --prefix="${XBB_FOLDER}"
-    
+
     make -j ${JOBS}
     make install-strip
   )

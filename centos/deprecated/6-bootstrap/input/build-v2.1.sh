@@ -4,7 +4,7 @@
 #   (http://xpack.github.io)
 # Copyright (c) 2019 Liviu Ionescu.
 #
-# Permission to use, copy, modify, and/or distribute this software 
+# Permission to use, copy, modify, and/or distribute this software
 # for any purpose is hereby granted, under the terms of the MIT license.
 # -----------------------------------------------------------------------------
 
@@ -40,23 +40,23 @@ script_folder_name="$(basename "${script_folder_path}")"
 
 # =============================================================================
 
-# Script to build a Docker image with a bootstrap system, used to later build  
+# Script to build a Docker image with a bootstrap system, used to later build
 # the final xPack Build Box (xbb).
 #
 # Since the orginal CentOS 6 is too old to compile some of the modern
 # sources, two steps are required. In the first step are compiled the most
-# recent versions allowed by CentOS 6; being based on GCC 7.4, they should 
-# be enough for a few years to come. With them, in the second step, are 
+# recent versions allowed by CentOS 6; being based on GCC 7.4, they should
+# be enough for a few years to come. With them, in the second step, are
 # compiled the very latest versions.
 
 # Credits: Inspired by Holy Build Box build script.
 
-# Note: the initial approach was to disable the creation of all shared 
+# Note: the initial approach was to disable the creation of all shared
 # libraries and try to build everything as static. Unfortunately some
 # of the tools are not able to do this correctly, and the final version
 # was simplified to the defaults, which generally include both shared and
-# static versions for the libraries. The drawback is that, in addition to 
-# PATH, for the programs to start, the LD_LIBRARY_PATH must also be set 
+# static versions for the libraries. The drawback is that, in addition to
+# PATH, for the programs to start, the LD_LIBRARY_PATH must also be set
 # correctly.
 
 XBB_VERSION="2.1"
@@ -94,7 +94,7 @@ then
   # New zlib, it is used in most of the tools.
   build_zlib "1.2.11"
 
-  # Library, required by tar. 
+  # Library, required by tar.
   build_xz "5.2.3"
 
   # New tar, with xz support.
@@ -111,7 +111,7 @@ fi
 
 if true
 then
-  # GNU tools. 
+  # GNU tools.
   build_m4 "1.4.18"
   build_gawk "4.2.0"
   build_autoconf "2.69"

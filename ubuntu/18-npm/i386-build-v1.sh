@@ -63,7 +63,7 @@ host_run_docker_build "${version}" "${tag}" "${dockerfile}" "${layer}"
 
 host_clean_docker_input
 
-echo 
+echo
 echo "Done."
 
 # -----------------------------------------------------------------------------

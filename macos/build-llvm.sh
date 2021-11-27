@@ -4,7 +4,7 @@
 #   (http://xpack.github.io)
 # Copyright (c) 2019 Liviu Ionescu.
 #
-# Permission to use, copy, modify, and/or distribute this software 
+# Permission to use, copy, modify, and/or distribute this software
 # for any purpose is hereby granted, under the terms of the MIT license.
 # -----------------------------------------------------------------------------
 
@@ -123,7 +123,7 @@ fi
   config_options+=("-DLIBOMP_INSTALL_ALIASES=ON")
 
 if true
-then          
+then
   config_options+=("-DLLVM_BUILD_LLVM_DYLIB=ON")
   config_options+=("-DLLVM_LINK_LLVM_DYLIB=ON")
   config_options+=("-DLLVM_INSTALL_UTILS=ON")

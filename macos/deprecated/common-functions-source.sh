@@ -3,7 +3,7 @@
 #   (http://xpack.github.io)
 # Copyright (c) 2019 Liviu Ionescu.
 #
-# Permission to use, copy, modify, and/or distribute this software 
+# Permission to use, copy, modify, and/or distribute this software
 # for any purpose is hereby granted, under the terms of the MIT license.
 # -----------------------------------------------------------------------------
 
@@ -56,7 +56,7 @@ function prepare_xbb_env()
 
   # ---------------------------------------------------------------------------
 
-  install -m 755 -c "$(dirname "${script_folder_path}")/helper/pkg-config-verbose" "${INSTALL_FOLDER_PATH}/bin/pkg-config-verbose" 
+  install -m 755 -c "$(dirname "${script_folder_path}")/helper/pkg-config-verbose" "${INSTALL_FOLDER_PATH}/bin/pkg-config-verbose"
 
   PKG_CONFIG="${INSTALL_FOLDER_PATH}/bin/pkg-config-verbose"
 
@@ -104,7 +104,7 @@ function create_xbb_source()
 #   (http://xpack.github.io)
 # Copyright (c) 2019 Liviu Ionescu.
 #
-# Permission to use, copy, modify, and/or distribute this software 
+# Permission to use, copy, modify, and/or distribute this software
 # for any purpose is hereby granted, under the terms of the MIT license.
 # -----------------------------------------------------------------------------
 
@@ -223,7 +223,7 @@ function extract()
       echo "Extracting \"${archive_name}\"..."
       if [[ "${archive_name}" == *zip ]]
       then
-        unzip "${archive_name}" 
+        unzip "${archive_name}"
       else
         tar xf "${archive_name}"
       fi
@@ -305,7 +305,7 @@ function check_binaries()
   local binaries
 
   binaries=$(find "${folder_path}" -name \* -perm +111 -and ! -type d)
-  for bin in ${binaries} 
+  for bin in ${binaries}
   do
     if is_elf "${bin}"
     then

@@ -7,13 +7,13 @@ development tools and new tools like GCC 8.
 
 ### Changes
 
-This step installs the newly created tools in `/opt/xbb`, using several 
+This step installs the newly created tools in `/opt/xbb`, using several
 temporary folders.
 
-To use the new tools, add `/opt/xpp/bin` to the path and adjust the include 
+To use the new tools, add `/opt/xpp/bin` to the path and adjust the include
 and library search paths.
 
-To simplify things, use the functions provided by the `xbb-source.sh` bash 
+To simplify things, use the functions provided by the `xbb-source.sh` bash
 script (was previously named `xbb.sh`):
 
 ```console

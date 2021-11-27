@@ -32,7 +32,7 @@ then
 
   curl --fail -L -o zlib123-dll.zip https://downloads.sourceforge.net/project/libpng/zlib/1.2.3/zlib123-dll.zip
   mkdir -p "${XBB_NSIS_FOLDER}-zlib"
-  
+
   (cd "${XBB_NSIS_FOLDER}-zlib"; unzip ../zlib123-dll.zip)
   ls -lLR "${XBB_BUILD}/${XBB_NSIS_FOLDER}-zlib"
 

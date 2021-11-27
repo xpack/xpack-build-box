@@ -3,11 +3,11 @@
 #   (http://xpack.github.io)
 # Copyright (c) 2019 Liviu Ionescu.
 #
-# Permission to use, copy, modify, and/or distribute this software 
+# Permission to use, copy, modify, and/or distribute this software
 # for any purpose is hereby granted, under the terms of the MIT license.
 # -----------------------------------------------------------------------------
 
-function do_gcc() 
+function do_gcc()
 {
   # https://gcc.gnu.org
   # https://ftp.gnu.org/gnu/gcc/
@@ -18,7 +18,7 @@ function do_gcc()
   # 2018-12-06, "7.4.0"
 
   local gcc_version="$1"
-  
+
   local gcc_folder_name="gcc-${gcc_version}"
   local gcc_archive="${gcc_folder_name}.tar.xz"
   local gcc_url="https://ftp.gnu.org/gnu/gcc/gcc-${gcc_version}/${gcc_archive}"
@@ -29,7 +29,7 @@ function do_gcc()
 
     cd "${SOURCES_FOLDER_PATH}"
 
-    download_and_extract "${gcc_url}" "${gcc_archive}" "${gcc_folder_name}" 
+    download_and_extract "${gcc_url}" "${gcc_archive}" "${gcc_folder_name}"
 
     (
       mkdir -p "${BUILD_FOLDER_PATH}/${gcc_folder_name}"
@@ -177,14 +177,14 @@ __EOF__
 
 # -----------------------------------------------------------------------------
 
-function build_openssl() 
+function build_openssl()
 {
   # https://www.openssl.org
   # https://www.openssl.org/source/
   # https://aur.archlinux.org/cgit/aur.git/tree/PKGBUILD?h=openssl-static
   # https://aur.archlinux.org/cgit/aur.git/tree/PKGBUILD?h=openssl-git
-  
-  # 2017-Nov-02 
+
+  # 2017-Nov-02
   # XBB_OPENSSL_VERSION="1.1.0g"
   # The new version deprecated CRYPTO_set_locking_callback, and yum fails with
   # /usr/lib64/python2.6/site-packages/pycurl.so: undefined symbol: CRYPTO_set_locking_callback
@@ -235,9 +235,9 @@ function build_openssl()
           "./Configure" darwin64-x86_64-cc \
             --prefix="${INSTALL_FOLDER_PATH}" \
             --openssldir="${INSTALL_FOLDER_PATH}/openssl" \
-            no-ssl3-method 
+            no-ssl3-method
 
-          make depend 
+          make depend
           make -j ${JOBS}
 
           touch config.stamp
@@ -285,7 +285,7 @@ function build_openssl()
   fi
 }
 
-function build_curl() 
+function build_curl()
 {
   # https://curl.haxx.se
   # https://curl.haxx.se/download/
@@ -376,7 +376,7 @@ function build_curl()
   fi
 }
 
-function build_xz() 
+function build_xz()
 {
   # https://tukaani.org/xz/
   # https://sourceforge.net/projects/lzmautils/files/
@@ -455,7 +455,7 @@ function build_xz()
   fi
 }
 
-function build_tar() 
+function build_tar()
 {
   # https://www.gnu.org/software/tar/
   # https://ftp.gnu.org/gnu/tar/
@@ -470,7 +470,7 @@ function build_tar()
   local tar_folder_name="tar-${tar_version}"
   local tar_archive="${tar_folder_name}.tar.xz"
   local tar_url="https://ftp.gnu.org/gnu/tar/${tar_archive}"
-  
+
   local tar_stamp_file_path="${STAMPS_FOLDER_PATH}/stamp-tar-${tar_version}-installed"
   if [ ! -f "${tar_stamp_file_path}" -o ! -d "${BUILD_FOLDER_PATH}/${tar_folder_name}" ]
   then
@@ -501,7 +501,7 @@ function build_tar()
           bash "${SOURCES_FOLDER_PATH}/${tar_folder_name}/configure" --help
 
           bash ${DEBUG} "${SOURCES_FOLDER_PATH}/${tar_folder_name}/configure" \
-            --prefix="${INSTALL_FOLDER_PATH}" 
+            --prefix="${INSTALL_FOLDER_PATH}"
 
           cp "config.log" "${LOGS_FOLDER_PATH}/config-tar-log.txt"
         ) 2>&1 | tee "${LOGS_FOLDER_PATH}/configure-tar-output.txt"
@@ -520,7 +520,7 @@ function build_tar()
         echo "Linking gnutar..."
         cd "${INSTALL_FOLDER_PATH}/bin"
         ln -s -v tar gnutar
-        
+
       ) 2>&1 | tee "${LOGS_FOLDER_PATH}/make-tar-output.txt"
     )
 
@@ -540,7 +540,7 @@ function build_tar()
   fi
 }
 
-function build_coreutils() 
+function build_coreutils()
 {
   # https://www.gnu.org/software/coreutils/
   # https://ftp.gnu.org/gnu/coreutils/
@@ -622,7 +622,7 @@ function build_coreutils()
   fi
 }
 
-function build_pkg_config() 
+function build_pkg_config()
 {
   # https://www.freedesktop.org/wiki/Software/pkg-config/
   # https://pkgconfig.freedesktop.org/releases/
@@ -671,7 +671,7 @@ function build_pkg_config()
           bash "${SOURCES_FOLDER_PATH}/${pkg_config_folder_name}/glib/configure" --help
 
           # --with-internal-glib fails with
-          # gconvert.c:61:2: error: #error GNU libiconv not in use but included iconv.h is from libiconv          
+          # gconvert.c:61:2: error: #error GNU libiconv not in use but included iconv.h is from libiconv
           bash ${DEBUG} "${SOURCES_FOLDER_PATH}/${pkg_config_folder_name}/configure" \
             --prefix="${INSTALL_FOLDER_PATH}" \
             --with-internal-glib \
@@ -709,7 +709,7 @@ function build_pkg_config()
   fi
 }
 
-function build_m4() 
+function build_m4()
 {
   # https://www.gnu.org/software/m4/
   # https://ftp.gnu.org/gnu/m4/
@@ -794,7 +794,7 @@ function build_m4()
 }
 
 
-function build_gawk() 
+function build_gawk()
 {
   # https://www.gnu.org/software/gawk/
   # https://ftp.gnu.org/gnu/gawk/
@@ -872,7 +872,7 @@ function build_gawk()
   fi
 }
 
-function build_sed() 
+function build_sed()
 {
   # https://www.gnu.org/software/sed/
   # https://ftp.gnu.org/gnu/sed/
@@ -884,7 +884,7 @@ function build_sed()
   local sed_folder_name="sed-${sed_version}"
   local sed_archive="${sed_folder_name}.tar.xz"
   local sed_url="https://ftp.gnu.org/gnu/sed/${sed_archive}"
-  
+
   local sed_stamp_file_path="${STAMPS_FOLDER_PATH}/stamp-sed-${sed_version}-installed"
   if [ ! -f "${sed_stamp_file_path}" -o ! -d "${BUILD_FOLDER_PATH}/${sed_folder_name}" ]
   then
@@ -915,7 +915,7 @@ function build_sed()
           bash "${SOURCES_FOLDER_PATH}/${sed_folder_name}/configure" --help
 
           bash ${DEBUG} "${SOURCES_FOLDER_PATH}/${sed_folder_name}/configure" \
-            --prefix="${INSTALL_FOLDER_PATH}" 
+            --prefix="${INSTALL_FOLDER_PATH}"
 
           cp "config.log" "${LOGS_FOLDER_PATH}/config-sed-log.txt"
         ) 2>&1 | tee "${LOGS_FOLDER_PATH}/configure-sed-output.txt"
@@ -952,7 +952,7 @@ function build_sed()
   fi
 }
 
-function build_autoconf() 
+function build_autoconf()
 {
   # https://www.gnu.org/software/autoconf/
   # https://ftp.gnu.org/gnu/autoconf/
@@ -996,7 +996,7 @@ function build_autoconf()
           bash "${SOURCES_FOLDER_PATH}/${autoconf_folder_name}/configure" --help
 
           bash ${DEBUG} "${SOURCES_FOLDER_PATH}/${autoconf_folder_name}/configure" \
-            --prefix="${INSTALL_FOLDER_PATH}" 
+            --prefix="${INSTALL_FOLDER_PATH}"
 
           cp "config.log" "${LOGS_FOLDER_PATH}/config-autoconf-log.txt"
         ) 2>&1 | tee "${LOGS_FOLDER_PATH}/configure-autoconf-output.txt"
@@ -1028,7 +1028,7 @@ function build_autoconf()
   fi
 }
 
-function build_automake() 
+function build_automake()
 {
   # https://www.gnu.org/software/automake/
   # https://ftp.gnu.org/gnu/automake/
@@ -1073,7 +1073,7 @@ function build_automake()
           bash "${SOURCES_FOLDER_PATH}/${automake_folder_name}/configure" --help
 
           bash ${DEBUG} "${SOURCES_FOLDER_PATH}/${automake_folder_name}/configure" \
-            --prefix="${INSTALL_FOLDER_PATH}" 
+            --prefix="${INSTALL_FOLDER_PATH}"
 
           cp "config.log" "${LOGS_FOLDER_PATH}/config-automake-log.txt"
         ) 2>&1 | tee "${LOGS_FOLDER_PATH}/configure-automake-output.txt"
@@ -1105,7 +1105,7 @@ function build_automake()
   fi
 }
 
-function build_libtool() 
+function build_libtool()
 {
   # https://www.gnu.org/software/libtool/
   # http://gnu.mirrors.linux.ro/libtool/
@@ -1150,7 +1150,7 @@ function build_libtool()
           bash "${SOURCES_FOLDER_PATH}/${libtool_folder_name}/configure" --help
 
           bash ${DEBUG} "${SOURCES_FOLDER_PATH}/${libtool_folder_name}/configure" \
-            --prefix="${INSTALL_FOLDER_PATH}" 
+            --prefix="${INSTALL_FOLDER_PATH}"
 
           cp "config.log" "${LOGS_FOLDER_PATH}/config-libtool-log.txt"
         ) 2>&1 | tee "${LOGS_FOLDER_PATH}/configure-libtool-output.txt"
@@ -1188,7 +1188,7 @@ function build_libtool()
   fi
 }
 
-function build_gettext() 
+function build_gettext()
 {
   # https://www.gnu.org/software/gettext/
   # https://ftp.gnu.org/gnu/gettext/
@@ -1232,7 +1232,7 @@ function build_gettext()
           bash "${SOURCES_FOLDER_PATH}/${gettext_folder_name}/configure" --help
 
           bash ${DEBUG} "${SOURCES_FOLDER_PATH}/${gettext_folder_name}/configure" \
-            --prefix="${INSTALL_FOLDER_PATH}" 
+            --prefix="${INSTALL_FOLDER_PATH}"
 
           cp "config.log" "${LOGS_FOLDER_PATH}/config-gettext-log.txt"
         ) 2>&1 | tee "${LOGS_FOLDER_PATH}/configure-gettext-output.txt"
@@ -1265,7 +1265,7 @@ function build_gettext()
   fi
 }
 
-function build_patch() 
+function build_patch()
 {
   # https://www.gnu.org/software/patch/
   # https://ftp.gnu.org/gnu/patch/
@@ -1310,7 +1310,7 @@ function build_patch()
           bash "${SOURCES_FOLDER_PATH}/${patch_folder_name}/configure" --help
 
           bash ${DEBUG} "${SOURCES_FOLDER_PATH}/${patch_folder_name}/configure" \
-            --prefix="${INSTALL_FOLDER_PATH}" 
+            --prefix="${INSTALL_FOLDER_PATH}"
 
           cp "config.log" "${LOGS_FOLDER_PATH}/config-patch-log.txt"
         ) 2>&1 | tee "${LOGS_FOLDER_PATH}/configure-patch-output.txt"
@@ -1342,7 +1342,7 @@ function build_patch()
   fi
 }
 
-function build_diffutils() 
+function build_diffutils()
 {
   # https://www.gnu.org/software/diffutils/
   # https://ftp.gnu.org/gnu/diffutils/
@@ -1387,7 +1387,7 @@ function build_diffutils()
           bash "${SOURCES_FOLDER_PATH}/${diffutils_folder_name}/configure" --help
 
           bash ${DEBUG} "${SOURCES_FOLDER_PATH}/${diffutils_folder_name}/configure" \
-            --prefix="${INSTALL_FOLDER_PATH}" 
+            --prefix="${INSTALL_FOLDER_PATH}"
 
           cp "config.log" "${LOGS_FOLDER_PATH}/config-diffutils-log.txt"
         ) 2>&1 | tee "${LOGS_FOLDER_PATH}/configure-diffutils-output.txt"
@@ -1419,7 +1419,7 @@ function build_diffutils()
   fi
 }
 
-function build_bison() 
+function build_bison()
 {
   # https://www.gnu.org/software/bison/
   # https://ftp.gnu.org/gnu/bison/
@@ -1465,7 +1465,7 @@ function build_bison()
           bash "${SOURCES_FOLDER_PATH}/${bison_folder_name}/configure" --help
 
           bash ${DEBUG} "${SOURCES_FOLDER_PATH}/${bison_folder_name}/configure" \
-            --prefix="${INSTALL_FOLDER_PATH}" 
+            --prefix="${INSTALL_FOLDER_PATH}"
 
           cp "config.log" "${LOGS_FOLDER_PATH}/config-bison-log.txt"
         ) 2>&1 | tee "${LOGS_FOLDER_PATH}/configure-bison-output.txt"
@@ -1499,7 +1499,7 @@ function build_bison()
 }
 
 # Not functional, it requires libtoolize
-function build_flex() 
+function build_flex()
 {
   # https://www.gnu.org/software/flex/
   # https://github.com/westes/flex/releases
@@ -1553,7 +1553,7 @@ function build_flex()
           bash "${SOURCES_FOLDER_PATH}/${flex_folder_name}/configure" --help
 
           bash ${DEBUG} "${SOURCES_FOLDER_PATH}/${flex_folder_name}/configure" \
-            --prefix="${INSTALL_FOLDER_PATH}" 
+            --prefix="${INSTALL_FOLDER_PATH}"
 
           cp "config.log" "${LOGS_FOLDER_PATH}/config-flex-log.txt"
         ) 2>&1 | tee "${LOGS_FOLDER_PATH}/configure-flex-output.txt"
@@ -1585,7 +1585,7 @@ function build_flex()
   fi
 }
 
-function build_make() 
+function build_make()
 {
   # https://www.gnu.org/software/make/
   # https://ftp.gnu.org/gnu/make/
@@ -1667,7 +1667,7 @@ function build_make()
   fi
 }
 
-function build_wget() 
+function build_wget()
 {
   # https://www.gnu.org/software/wget/
   # https://ftp.gnu.org/gnu/wget/
@@ -1723,7 +1723,7 @@ function build_wget()
             --with-metalink \
             --disable-debug \
             --disable-pcre \
-            --disable-pcre2 
+            --disable-pcre2
 
           cp "config.log" "${LOGS_FOLDER_PATH}/config-wget-log.txt"
         ) 2>&1 | tee "${LOGS_FOLDER_PATH}/configure-wget-output.txt"
@@ -1735,7 +1735,7 @@ function build_wget()
 
         # Build.
         # make -j ${JOBS}
-        make 
+        make
         make install-strip
       ) 2>&1 | tee "${LOGS_FOLDER_PATH}/make-wget-output.txt"
     )
@@ -1756,7 +1756,7 @@ function build_wget()
   fi
 }
 
-function build_texinfo() 
+function build_texinfo()
 {
   # https://www.gnu.org/software/texinfo/
   # https://ftp.gnu.org/gnu/texinfo/
@@ -1801,7 +1801,7 @@ function build_texinfo()
           bash "${SOURCES_FOLDER_PATH}/${texinfo_folder_name}/configure" --help
 
           bash ${DEBUG} "${SOURCES_FOLDER_PATH}/${texinfo_folder_name}/configure" \
-            --prefix="${INSTALL_FOLDER_PATH}" 
+            --prefix="${INSTALL_FOLDER_PATH}"
 
           cp "config.log" "${LOGS_FOLDER_PATH}/config-texinfo-log.txt"
         ) 2>&1 | tee "${LOGS_FOLDER_PATH}/configure-texinfo-output.txt"
@@ -1833,7 +1833,7 @@ function build_texinfo()
   fi
 }
 
-function build_cmake() 
+function build_cmake()
 {
   # https://cmake.org
   # https://github.com/Kitware/CMake/releases/
@@ -1886,7 +1886,7 @@ function build_cmake()
             bash "${SOURCES_FOLDER_PATH}/${cmake_folder_name}/bootstrap" --help || true
 
             bash ${DEBUG} "${SOURCES_FOLDER_PATH}/${cmake_folder_name}/bootstrap" \
-              --prefix="${INSTALL_FOLDER_PATH}" 
+              --prefix="${INSTALL_FOLDER_PATH}"
 
             cp "Bootstrap.cmk/cmake_bootstrap.log" "${LOGS_FOLDER_PATH}/bootstrap-cmake-log.txt"
           ) 2>&1 | tee "${LOGS_FOLDER_PATH}/bootstrap-cmake-output.txt"
@@ -1897,7 +1897,7 @@ function build_cmake()
             echo "Running cmake cmake..."
 
             # If more verbosity is needed:
-            #  -DCMAKE_VERBOSE_MAKEFILE:BOOL=ON 
+            #  -DCMAKE_VERBOSE_MAKEFILE:BOOL=ON
 
             # Use the existing cmake to configure this one.
             cmake \
@@ -1939,7 +1939,7 @@ function build_cmake()
   fi
 }
 
-function build_perl() 
+function build_perl()
 {
   # https://www.cpan.org
   # http://www.cpan.org/src/
@@ -2000,7 +2000,7 @@ function build_perl()
 
         # Build.
         make -j ${JOBS}
-        # 
+        #
         # make -j1 test
         make install-strip
 
@@ -2026,7 +2026,7 @@ function build_perl()
   fi
 }
 
-function build_makedepend() 
+function build_makedepend()
 {
   # http://www.linuxfromscratch.org/blfs/view/7.4/x/makedepend.html
   # http://xorg.freedesktop.org/archive/individual/util/makedepend-1.0.5.tar.bz2
@@ -2036,7 +2036,7 @@ function build_makedepend()
   local makedepend_folder_name="makedepend-${makedepend_version}"
   local makedepend_archive="${makedepend_folder_name}.tar.bz2"
   local makedepend_url="http://xorg.freedesktop.org/archive/individual/util/${makedepend_archive}"
-  
+
 
   local makedepend_stamp_file_path="${STAMPS_FOLDER_PATH}/stamp-makedepend-${makedepend_version}-installed"
   if [ ! -f "${makedepend_stamp_file_path}" -o ! -d "${BUILD_FOLDER_PATH}/${makedepend_folder_name}" ]
@@ -2069,7 +2069,7 @@ function build_makedepend()
           bash "${SOURCES_FOLDER_PATH}/${makedepend_folder_name}/configure" --help
 
           bash ${DEBUG} "${SOURCES_FOLDER_PATH}/${makedepend_folder_name}/configure" \
-            --prefix="${INSTALL_FOLDER_PATH}" 
+            --prefix="${INSTALL_FOLDER_PATH}"
 
           cp "config.log" "${LOGS_FOLDER_PATH}/config-makedepend-log.txt"
         ) 2>&1 | tee "${LOGS_FOLDER_PATH}/configure-makedepend-output.txt"
@@ -2101,7 +2101,7 @@ function build_makedepend()
   fi
 }
 
-function build_patchelf() 
+function build_patchelf()
 {
   # https://nixos.org/patchelf.html
   # https://nixos.org/releases/patchelf/
@@ -2146,7 +2146,7 @@ function build_patchelf()
           bash "${SOURCES_FOLDER_PATH}/${patchelf_folder_name}/configure" --help
 
           bash ${DEBUG} "${SOURCES_FOLDER_PATH}/${patchelf_folder_name}/configure" \
-            --prefix="${INSTALL_FOLDER_PATH}" 
+            --prefix="${INSTALL_FOLDER_PATH}"
 
           cp "config.log" "${LOGS_FOLDER_PATH}/config-patchelf-log.txt"
         ) 2>&1 | tee "${LOGS_FOLDER_PATH}/configure-patchelf-output.txt"
@@ -2178,7 +2178,7 @@ function build_patchelf()
   fi
 }
 
-function build_dos2unix() 
+function build_dos2unix()
 {
   # https://waterlan.home.xs4all.nl/dos2unix.html
   # http://dos2unix.sourceforge.net
@@ -2239,7 +2239,7 @@ function build_dos2unix()
   fi
 }
 
-function build_git() 
+function build_git()
 {
   # https://git-scm.com/
   # https://www.kernel.org/pub/software/scm/git/
@@ -2285,7 +2285,7 @@ function build_git()
           bash "./configure" --help
 
           bash ${DEBUG} "./configure" \
-            --prefix="${INSTALL_FOLDER_PATH}" 
+            --prefix="${INSTALL_FOLDER_PATH}"
 
           cp "config.log" "${LOGS_FOLDER_PATH}/config-git-log.txt"
         ) 2>&1 | tee "${LOGS_FOLDER_PATH}/configure-git-output.txt"
@@ -2321,7 +2321,7 @@ function build_git()
   fi
 }
 
-function do_python() 
+function do_python()
 {
   # https://www.python.org
   # https://www.python.org/downloads/source/
@@ -2413,12 +2413,12 @@ function do_python()
   fi
 }
 
-function build_python3() 
+function build_python3()
 {
   # https://www.python.org
   # https://www.python.org/downloads/source/
   # https://www.python.org/ftp/python/3.7.3/Python-3.7.3.tar.xz
-  
+
   # https://git.archlinux.org/svntogit/packages.git/tree/trunk/PKGBUILD?h=packages/python
   # https://git.archlinux.org/svntogit/packages.git/tree/trunk/PKGBUILD?h=packages/python-pip
 
@@ -2467,7 +2467,7 @@ function build_python3()
             --prefix="${INSTALL_FOLDER_PATH}" \
             \
             --without-ensurepip
-            
+
           cp "config.log" "${LOGS_FOLDER_PATH}/config-python3-log.txt"
         ) 2>&1 | tee "${LOGS_FOLDER_PATH}/configure-python3-output.txt"
       fi
@@ -2507,7 +2507,7 @@ function build_python3()
   fi
 }
 
-function build_scons() 
+function build_scons()
 {
   # http://scons.org
   # https://sourceforge.net/projects/scons/files/scons/
@@ -2585,7 +2585,7 @@ function build_meson
   hash -r
 }
 
-function build_ninja() 
+function build_ninja()
 {
   # https://ninja-build.org
   # https://github.com/ninja-build/ninja/releases
@@ -2629,11 +2629,11 @@ function build_ninja()
         ./configure.py --help
 
         echo "Patience..."
-        
+
         ./configure.py \
           --bootstrap \
           --verbose \
-          --with-python=$(which python2) 
+          --with-python=$(which python2)
 
         /usr/bin/install -m755 -c ninja "${INSTALL_FOLDER_PATH}/bin"
       ) 2>&1 | tee "${LOGS_FOLDER_PATH}/configure-ninja-output.txt"

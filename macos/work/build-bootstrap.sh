@@ -19,23 +19,23 @@ IFS=$'\n\t'
 
 # -----------------------------------------------------------------------------
 
-# Script to build a Docker image with a bootstrap system, used to later build  
+# Script to build a Docker image with a bootstrap system, used to later build
 # the final xPack Build Box (xbb).
 #
 # Since the orginal CentOS 6 is too old to compile some of the modern
 # sources, two steps are required. In the first step are compiled the most
-# recent versions allowed by CentOS 6; being based on GCC 7.2, they should 
-# be enough for a few years to come. With them, in the second step, are 
+# recent versions allowed by CentOS 6; being based on GCC 7.2, they should
+# be enough for a few years to come. With them, in the second step, are
 # compiled the very latest versions.
 
 # Credits: Inspired by Holy Build Box build script.
 
-# Note: the initial approach was to disable the creation of all shared 
+# Note: the initial approach was to disable the creation of all shared
 # libraries and try to build everything as static. Unfortunately some
 # of the tools are not able to do this correctly, and the final version
 # was simplified to the defaults, which generally include both shared and
-# static versions for the libraries. The drawback is that, in addition to 
-# PATH, for the programs to start, the LD_LIBRARY_PATH must also be set 
+# static versions for the libraries. The drawback is that, in addition to
+# PATH, for the programs to start, the LD_LIBRARY_PATH must also be set
 # correctly.
 
 # XBB_INPUT="/xbb-input"
@@ -165,12 +165,12 @@ function xbb_activate_bootstrap_dev()
   # `-pipe` should make things faster, by using more memory.
   EXTRA_CFLAGS_="-pipe -ffunction-sections -fdata-sections -arch x86_64"
   EXTRA_CXXFLAGS_="-pipe -ffunction-sections -fdata-sections -arch x86_64"
-  # Without -static-libstdc++ it'll pick up the out of date 
+  # Without -static-libstdc++ it'll pick up the out of date
   # /usr/lib[64]/libstdc++.so.6
   # Do not use extra quotes around XBB_FOLDER, tools like guile fail.
-  # EXTRA_LDFLAGS_="-static-libstdc++ -Wl,--gc-sections  -Wl,-rpath -Wl,${XBB_FOLDER}/lib" 
+  # EXTRA_LDFLAGS_="-static-libstdc++ -Wl,--gc-sections  -Wl,-rpath -Wl,${XBB_FOLDER}/lib"
   # macOS has no -static-libstdc++ -Wl,--gc-sections
-  EXTRA_LDFLAGS_="-Wl,-rpath -Wl,${XBB_FOLDER}/lib" 
+  EXTRA_LDFLAGS_="-Wl,-rpath -Wl,${XBB_FOLDER}/lib"
 
   xbb_activate_param
 }
@@ -254,7 +254,7 @@ function eval_bool()
 
 # -----------------------------------------------------------------------------
 
-function build_zlib() 
+function build_zlib()
 {
   # http://zlib.net
   # http://zlib.net/fossils/
@@ -297,7 +297,7 @@ function build_zlib()
 
 # -----------------------------------------------------------------------------
 
-function build_xz() 
+function build_xz()
 {
   # https://tukaani.org/xz/
   # https://sourceforge.net/projects/lzmautils/files/
@@ -321,7 +321,7 @@ function build_xz()
 
   (
     cd "${XBB_BUILD}/${XBB_XZ_FOLDER}"
-    
+
     xbb_activate_bootstrap_dev
 
     ./configure --help
@@ -329,7 +329,7 @@ function build_xz()
     ./configure \
       --prefix="${XBB}" \
       --disable-rpath
-    
+
     make -j${MAKE_CONCURRENCY}
     make install-strip
   )
@@ -343,7 +343,7 @@ function build_xz()
   hash -r
 }
 
-function build_tar() 
+function build_tar()
 {
   # https://www.gnu.org/software/tar/
   # https://ftp.gnu.org/gnu/tar/
@@ -379,8 +379,8 @@ function build_tar()
     ./configure --help
 
     ./configure \
-      --prefix="${XBB}" 
-    
+      --prefix="${XBB}"
+
     make -j${MAKE_CONCURRENCY}
     make install-strip
   )
@@ -396,19 +396,19 @@ function build_tar()
 
 # -----------------------------------------------------------------------------
 
-function build_openssl() 
+function build_openssl()
 {
   # https://www.openssl.org
   # https://www.openssl.org/source/
   # https://aur.archlinux.org/cgit/aur.git/tree/PKGBUILD?h=openssl-static
   # https://aur.archlinux.org/cgit/aur.git/tree/PKGBUILD?h=openssl-git
 
-  # 2017-Nov-02 
+  # 2017-Nov-02
   # XBB_OPENSSL_VERSION="1.1.0g"
   # The new version deprecated CRYPTO_set_locking_callback, and yum fails with
   # /usr/lib64/python2.6/site-packages/pycurl.so: undefined symbol: CRYPTO_set_locking_callback
 
-  # 2017-Dec-07 
+  # 2017-Dec-07
   XBB_OPENSSL_VERSION="1.0.2n"
 
   XBB_OPENSSL_FOLDER="openssl-${XBB_OPENSSL_VERSION}"
@@ -435,7 +435,7 @@ function build_openssl()
     ./Configure darwin64-x86_64-cc --help
 
     # -Wa,--noexecstack failed
-    # ./config 
+    # ./config
     ./Configure darwin64-x86_64-cc \
       --prefix="${XBB}" \
       --openssldir="${XBB}"/openssl \
@@ -443,7 +443,7 @@ function build_openssl()
       no-ssl3-method \
       enable-ec_nistp_64_gcc_128 \
       "${CPPFLAGS} ${CFLAGS}"
-    
+
     # Fails on macOS.
     # make depend -j${MAKE_CONCURRENCY}
     make -j${MAKE_CONCURRENCY}
@@ -472,13 +472,13 @@ function build_openssl()
 
 # -----------------------------------------------------------------------------
 
-function build_curl() 
+function build_curl()
 {
   # https://curl.haxx.se
   # https://curl.haxx.se/download/
   # https://aur.archlinux.org/cgit/aur.git/tree/PKGBUILD?h=curl-git
 
-  # 2017-10-23 
+  # 2017-10-23
   # XBB_CURL_VERSION="7.56.1"
   # 2017-11-29
   XBB_CURL_VERSION="7.57.0"
@@ -518,7 +518,7 @@ function build_curl()
       --enable-threaded-resolver \
       --with-gssapi \
       --with-ca-bundle="${XBB}"/openssl/certs/cacert.pem
-    
+
     make -j${MAKE_CONCURRENCY}
     make install
 
@@ -536,7 +536,7 @@ function build_curl()
 
 # -----------------------------------------------------------------------------
 
-function do_help2man() 
+function do_help2man()
 {
   # https://www.gnu.org/software/m4/
   # http://ftp.sotirov-bg.net/pub/mirrors/gnu/help2man/
@@ -566,7 +566,7 @@ function do_help2man()
     export CFLAGS="${CFLAGS}"
     ./configure \
       --prefix="${XBB}"
-    
+
     make -j${MAKE_CONCURRENCY}
     make install
   )
@@ -583,14 +583,14 @@ function do_help2man()
 
 # -----------------------------------------------------------------------------
 
-function build_m4() 
+function build_m4()
 {
   # https://www.gnu.org/software/m4/
   # https://ftp.gnu.org/gnu/m4/
   # https://aur.archlinux.org/cgit/aur.git/tree/PKGBUILD?h=m4-git
 
-  # gnulib in macOS 10.13 crashes the executable when it is called with a 
-  # format string containing %n located in writable memory, because that 
+  # gnulib in macOS 10.13 crashes the executable when it is called with a
+  # format string containing %n located in writable memory, because that
   # is a potential attack vector, and the older gnulib use it that way.
 
   # 2016-12-31
@@ -619,7 +619,7 @@ function build_m4()
     export CFLAGS="${CFLAGS}"
     ./configure \
       --prefix="${XBB}"
-    
+
     make -j${MAKE_CONCURRENCY}
     make # install-strip
   )
@@ -633,7 +633,7 @@ function build_m4()
   hash -r
 }
 
-function build_gawk() 
+function build_gawk()
 {
   # https://www.gnu.org/software/gawk/
   # https://ftp.gnu.org/gnu/gawk/
@@ -663,7 +663,7 @@ function build_gawk()
     ./configure \
       --prefix="${XBB}" \
       --without-libsigsegv
-    
+
     make -j${MAKE_CONCURRENCY}
     make install-strip
   )
@@ -677,7 +677,7 @@ function build_gawk()
   hash -r
 }
 
-function build_autoconf() 
+function build_autoconf()
 {
   # https://www.gnu.org/software/autoconf/
   # https://ftp.gnu.org/gnu/autoconf/
@@ -705,8 +705,8 @@ function build_autoconf()
     ./configure --help
 
     ./configure \
-      --prefix="${XBB}" 
-    
+      --prefix="${XBB}"
+
     make -j${MAKE_CONCURRENCY}
     make install-strip
   )
@@ -720,7 +720,7 @@ function build_autoconf()
   hash -r
 }
 
-function build_automake() 
+function build_automake()
 {
   # https://www.gnu.org/software/automake/
   # https://ftp.gnu.org/gnu/automake/
@@ -748,8 +748,8 @@ function build_automake()
     ./configure --help
 
     ./configure \
-      --prefix="${XBB}" 
-    
+      --prefix="${XBB}"
+
     make -j${MAKE_CONCURRENCY}
     make install-strip
   )
@@ -763,7 +763,7 @@ function build_automake()
   hash -r
 }
 
-function build_libtool() 
+function build_libtool()
 {
   # https://www.gnu.org/software/libtool/
   # http://gnu.mirrors.linux.ro/libtool/
@@ -792,8 +792,8 @@ function build_libtool()
     ./configure --help
 
     ./configure \
-      --prefix="${XBB}" 
-    
+      --prefix="${XBB}"
+
     make -j${MAKE_CONCURRENCY}
     make install-strip
   )
@@ -807,7 +807,7 @@ function build_libtool()
   hash -r
 }
 
-function build_gettext() 
+function build_gettext()
 {
   # https://www.gnu.org/software/gettext/
   # https://ftp.gnu.org/gnu/gettext/
@@ -837,8 +837,8 @@ function build_gettext()
     ./configure --help
 
     ./configure \
-      --prefix="${XBB}" 
-    
+      --prefix="${XBB}"
+
     make -j${MAKE_CONCURRENCY}
     make install-strip
   )
@@ -852,7 +852,7 @@ function build_gettext()
   hash -r
 }
 
-function build_patch() 
+function build_patch()
 {
   # https://www.gnu.org/software/patch/
   # https://ftp.gnu.org/gnu/patch/
@@ -880,8 +880,8 @@ function build_patch()
     ./configure --help
 
     ./configure \
-      --prefix="${XBB}" 
-    
+      --prefix="${XBB}"
+
     make -j${MAKE_CONCURRENCY}
     make install-strip
   )
@@ -895,7 +895,7 @@ function build_patch()
   hash -r
 }
 
-function build_diffutils() 
+function build_diffutils()
 {
   # https://www.gnu.org/software/diffutils/
   # https://ftp.gnu.org/gnu/diffutils/
@@ -923,7 +923,7 @@ function build_diffutils()
     ./configure --help
 
     ./configure \
-      --prefix="${XBB}" 
+      --prefix="${XBB}"
 
     make -j${MAKE_CONCURRENCY}
     make install-strip
@@ -938,7 +938,7 @@ function build_diffutils()
   hash -r
 }
 
-function build_bison() 
+function build_bison()
 {
   # https://www.gnu.org/software/bison/
   # https://ftp.gnu.org/gnu/bison/
@@ -966,8 +966,8 @@ function build_bison()
     ./configure --help
 
     ./configure \
-      --prefix="${XBB}" 
-    
+      --prefix="${XBB}"
+
     make -j${MAKE_CONCURRENCY}
     make install-strip
   )
@@ -981,7 +981,7 @@ function build_bison()
   hash -r
 }
 
-function build_make() 
+function build_make()
 {
   # https://www.gnu.org/software/make/
   # https://ftp.gnu.org/gnu/make/
@@ -1011,7 +1011,7 @@ function build_make()
 
     ./configure \
       --prefix="${XBB}"
-    
+
     make -j${MAKE_CONCURRENCY}
     make install-strip
   )
@@ -1027,7 +1027,7 @@ function build_make()
 
 # -----------------------------------------------------------------------------
 
-function build_pkg_config() 
+function build_pkg_config()
 {
   # https://www.freedesktop.org/wiki/Software/pkg-config/
   # https://pkgconfig.freedesktop.org/releases/
@@ -1058,9 +1058,9 @@ function build_pkg_config()
     ./configure \
       --prefix="${XBB}" \
       --with-internal-glib
-    
+
     rm -f "${XBB}"/bin/*pkg-config
-    make -j${MAKE_CONCURRENCY} 
+    make -j${MAKE_CONCURRENCY}
     make install-strip
   )
 
@@ -1073,7 +1073,7 @@ function build_pkg_config()
   hash -r
 }
 
-function build_flex() 
+function build_flex()
 {
   # https://github.com/westes/flex
   # https://github.com/westes/flex/releases
@@ -1104,8 +1104,8 @@ function build_flex()
     ./configure --help
 
     ./configure \
-      --prefix="${XBB}" 
-    
+      --prefix="${XBB}"
+
     make -j${MAKE_CONCURRENCY}
     make install-strip
   )
@@ -1119,7 +1119,7 @@ function build_flex()
   hash -r
 }
 
-function build_perl() 
+function build_perl()
 {
   # https://www.cpan.org
   # http://www.cpan.org/src/
@@ -1157,7 +1157,7 @@ function build_perl()
     ./Configure -d -e -s \
       -Dprefix="${XBB}" \
       -Dcc=gcc
- 
+
     make -j${MAKE_CONCURRENCY}
     make install-strip
 
@@ -1176,7 +1176,7 @@ function build_perl()
 
 # -----------------------------------------------------------------------------
 
-function build_cmake() 
+function build_cmake()
 {
   # https://cmake.org
   # https://cmake.org/download/
@@ -1210,7 +1210,7 @@ function build_cmake()
     # Normally it would be much happier with dynamic zlib and curl.
 
     # If more verbosity is needed:
-    #  -DCMAKE_VERBOSE_MAKEFILE:BOOL=ON 
+    #  -DCMAKE_VERBOSE_MAKEFILE:BOOL=ON
 
     # Use the existing cmake to configure this one.
     cmake \
@@ -1232,7 +1232,7 @@ function build_cmake()
   hash -r
 }
 
-function do_python() 
+function do_python()
 {
   # https://www.python.org
   # https://www.python.org/downloads/source/
@@ -1255,7 +1255,7 @@ function do_python()
   (
     cd "${XBB_BUILD}/${XBB_PYTHON_FOLDER}"
 
-    xbb_activate_bootstrap_dev 
+    xbb_activate_bootstrap_dev
 
     ./configure --help
 
@@ -1280,8 +1280,8 @@ function do_python()
       --with-system-ffi \
       --with-dbmliborder=gdbm:ndbm \
       --without-ensurepip
-    
-    make -j${MAKE_CONCURRENCY} 
+
+    make -j${MAKE_CONCURRENCY}
     make install
 
     strip "${XBB}"/bin/python
@@ -1314,7 +1314,7 @@ function do_python()
   hash -r
 }
 
-function build_scons() 
+function build_scons()
 {
   # http://scons.org
   # https://sourceforge.net/projects/scons/files/scons/3.0.1/
@@ -1350,7 +1350,7 @@ function build_scons()
 
 # -----------------------------------------------------------------------------
 
-function build_gmp() 
+function build_gmp()
 {
   # https://gmplib.org
   # https://gmplib.org/download/gmp/
@@ -1376,20 +1376,20 @@ function build_gmp()
 
     xbb_activate_bootstrap_dev
 
-    # Mandatory, otherwise it fails on 32-bits. 
+    # Mandatory, otherwise it fails on 32-bits.
     export ABI="${BITS}"
 
     ./configure --help
 
     ./configure \
-      --prefix="${XBB}" 
-    
+      --prefix="${XBB}"
+
     make -j${MAKE_CONCURRENCY}
     make install-strip
   )
 }
 
-function build_mpfr() 
+function build_mpfr()
 {
   # http://www.mpfr.org
   # http://www.mpfr.org/mpfr-3.1.6
@@ -1418,14 +1418,14 @@ function build_mpfr()
     ./configure --help
 
     ./configure \
-      --prefix="${XBB}" 
-    
+      --prefix="${XBB}"
+
     make -j${MAKE_CONCURRENCY}
     make install-strip
   )
 }
 
-function build_mpc() 
+function build_mpc()
 {
   # http://www.multiprecision.org/
   # ftp://ftp.gnu.org/gnu/mpc/
@@ -1453,14 +1453,14 @@ function build_mpc()
     ./configure --help
 
     ./configure \
-      --prefix="${XBB}" 
-    
+      --prefix="${XBB}"
+
     make -j${MAKE_CONCURRENCY}
     make install-strip
   )
 }
 
-function build_isl() 
+function build_isl()
 {
   # http://isl.gforge.inria.fr
   # https://aur.archlinux.org/cgit/aur.git/tree/PKGBUILD?h=isl
@@ -1488,8 +1488,8 @@ function build_isl()
     ./configure --help
 
     ./configure \
-      --prefix="${XBB}" 
-    
+      --prefix="${XBB}"
+
     make -j${MAKE_CONCURRENCY}
     make install-strip
   )
@@ -1517,7 +1517,7 @@ function build_isl()
 
 # -----------------------------------------------------------------------------
 
-function build_native_binutils() 
+function build_native_binutils()
 {
   # https://www.gnu.org/software/binutils/
   # https://ftp.gnu.org/gnu/binutils/
@@ -1557,7 +1557,7 @@ function build_native_binutils()
       --enable-threads \
       --enable-deterministic-archives \
       --disable-gdb
-  
+
     make -j${MAKE_CONCURRENCY}
     make install-strip
   )
@@ -1573,7 +1573,7 @@ function build_native_binutils()
 
 # -----------------------------------------------------------------------------
 
-function build_native_gcc() 
+function build_native_gcc()
 {
   # https://gcc.gnu.org
   # https://ftp.gnu.org/gnu/gcc/
@@ -1632,7 +1632,7 @@ function build_native_gcc()
       --enable-gnu-indirect-function \
       --disable-multilib \
       --disable-werror
-    
+
     make -j${MAKE_CONCURRENCY}
     make install-strip
   )
@@ -1681,7 +1681,7 @@ __EOF__
 
 # -----------------------------------------------------------------------------
 
-do_strip_libs() 
+do_strip_libs()
 {
   (
     cd "${XBB}"
@@ -1702,7 +1702,7 @@ do_strip_libs()
 
 # -----------------------------------------------------------------------------
 
-do_cleaunup() 
+do_cleaunup()
 {
   # Preserve download, will be used by xbb and removed later.
   # rm -rf "$XBB_DOWNLOAD"
@@ -1730,7 +1730,7 @@ then
   # New zlib, it is used in most of the tools.
   build_zlib
 
-  # Library, required by tar. 
+  # Library, required by tar.
   build_xz
 
   # New tar, with xz support.
@@ -1777,7 +1777,7 @@ fi
 if true
 then
 
-  # GNU tools. 
+  # GNU tools.
 
   #  Illegal instruction: 4
   build_m4

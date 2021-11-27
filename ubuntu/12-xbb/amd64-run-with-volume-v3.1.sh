@@ -62,7 +62,7 @@ host_run_docker_it_with_volume
 
 host_clean_docker_input
 
-echo 
+echo
 echo "Done."
 
 # -----------------------------------------------------------------------------

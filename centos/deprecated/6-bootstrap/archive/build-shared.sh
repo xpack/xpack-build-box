@@ -19,11 +19,11 @@ IFS=$'\n\t'
 
 # -----------------------------------------------------------------------------
 
-# Script to build a Docker image with a bootstrap system, used to later build  
+# Script to build a Docker image with a bootstrap system, used to later build
 # the final xPack Build Box (xbb).
 #
-# To finally get access to the very latest tools versions it is required to   
-# do it in two steps, since the orginal CentOS 6 is too old to compile some 
+# To finally get access to the very latest tools versions it is required to
+# do it in two steps, since the orginal CentOS 6 is too old to compile some
 # of the modern sources. So, in the first step are compiled the most recent
 # versions allowed by CentOS 6; being based on GCC 7.2, they shold be enough
 # for a few years to come. With them, in the second step are compiled the
@@ -92,7 +92,7 @@ function xbb_activate_param()
   # Do not include -I... here, use CPPFLAGS.
   EXTRA_SHLIB_CFLAGS_=${EXTRA_SHLIB_CFLAGS_:-""}
   EXTRA_SHLIB_CXXFLAGS_=${EXTRA_SHLIB_CXXFLAGS_:-${EXTRA_SHLIB_CFLAGS_}}
-  
+
   EXTRA_SHLIB_LDFLAGS_=${EXTRA_SHLIB_LDFLAGS_:-""}
 
   EXTRA_LDPATHFLAGS_=${EXTRA_LDPATHFLAGS_:-""}
@@ -144,8 +144,8 @@ function xbb_activate_param()
 
 xbb_activate_bootstrap()
 {
-  PREFIX_="${XBB}" 
-  EXTRA_LDFLAGS_="-Wl,-rpath -Wl,\"${XBB}/lib\"" 
+  PREFIX_="${XBB}"
+  EXTRA_LDFLAGS_="-Wl,-rpath -Wl,\"${XBB}/lib\""
   EXTRA_SHLIB_CFLAGS_="-fPIC"
 
   xbb_activate_param
@@ -278,7 +278,7 @@ function build_zlib() {
 
     if [ -f "${XBB}"/lib/libz.a ]
     then
-      strip --strip-debug "${XBB}"/lib/libz.a 
+      strip --strip-debug "${XBB}"/lib/libz.a
     fi
 
     # 415 Bus error
@@ -311,7 +311,7 @@ function build_xz() {
 
   (
     cd "${XBB_XZ_FOLDER}"
-    
+
     xbb_activate_bootstrap
 
     ./configure --help
@@ -320,7 +320,7 @@ function build_xz() {
       --prefix="${XBB}" \
       --disable-shared \
       --enable-static
-    
+
     make -j${MAKE_CONCURRENCY}
     make install-strip
   )
@@ -361,8 +361,8 @@ function build_tar() {
     ./configure --help
 
     ./configure \
-      --prefix="${XBB}" 
-    
+      --prefix="${XBB}"
+
     make -j${MAKE_CONCURRENCY}
     make install-strip
   )
@@ -378,7 +378,7 @@ function build_openssl() {
 
   # https://www.openssl.org
   # https://www.openssl.org/source/
-  # 2017-Nov-02 
+  # 2017-Nov-02
   XBB_OPENSSL_VERSION="1.1.0g"
   XBB_OPENSSL_FOLDER="openssl-${XBB_OPENSSL_VERSION}"
   # Only .gz available.
@@ -401,9 +401,9 @@ function build_openssl() {
 
     ./config --help
 
-    # Without the 'shared' option cmake builds normally fail, but there 
+    # Without the 'shared' option cmake builds normally fail, but there
     # are workarounds:
-    # - disable compression (`no-comp`), which should fix the need for 
+    # - disable compression (`no-comp`), which should fix the need for
     #  zlib, which breaks cmake.
     # - disable threads (`no-threads`), which breaks cmake.
     ./config \
@@ -412,7 +412,7 @@ function build_openssl() {
       no-threads \
       no-comp \
       no-shared
-    
+
     make
     make install_sw
 
@@ -425,7 +425,7 @@ function build_openssl() {
 
     if [ -f "${XBB}"/lib/libssl.a ]
     then
-      strip --strip-debug "${XBB}"/lib/libssl.a 
+      strip --strip-debug "${XBB}"/lib/libssl.a
     fi
 
     if [ -f "${XBB}"/lib/libcrypto.so ]
@@ -473,7 +473,7 @@ function build_curl() {
 
   # https://curl.haxx.se
   # https://curl.haxx.se/download/
-  # 2017-10-23 
+  # 2017-10-23
   XBB_CURL_VERSION="7.56.1"
   XBB_CURL_FOLDER="curl-${XBB_CURL_VERSION}"
   XBB_CURL_ARCHIVE="${XBB_CURL_FOLDER}.tar.xz"
@@ -507,7 +507,7 @@ function build_curl() {
       --enable-optimize \
       --disable-manual \
       --with-ca-bundle=/etc/pki/tls/certs/ca-bundle.crt
-    
+
     make -j${MAKE_CONCURRENCY}
     make install
 
@@ -557,7 +557,7 @@ function build_m4() {
 
     ./configure \
       --prefix="${XBB}"
-    
+
     make -j${MAKE_CONCURRENCY}
     make install-strip
   )
@@ -593,7 +593,7 @@ function build_gawk() {
 
     ./configure \
       --prefix="${XBB}"
-    
+
     make -j${MAKE_CONCURRENCY}
     make install-strip
   )
@@ -628,8 +628,8 @@ function build_autoconf() {
     ./configure --help
 
     ./configure \
-      --prefix="${XBB}" 
-    
+      --prefix="${XBB}"
+
     make -j${MAKE_CONCURRENCY}
     make install-strip
   )
@@ -664,8 +664,8 @@ function build_automake() {
     ./configure --help
 
     ./configure \
-      --prefix="${XBB}" 
-    
+      --prefix="${XBB}"
+
     make -j${MAKE_CONCURRENCY}
     make install-strip
   )
@@ -703,7 +703,7 @@ function build_libtool() {
       --prefix="${XBB}" \
       --disable-shared \
       --enable-static
-    
+
     make -j${MAKE_CONCURRENCY}
     make install-strip
   )
@@ -741,7 +741,7 @@ function build_gettext() {
       --prefix="${XBB}" \
       --disable-shared \
       --enable-static
-    
+
     make -j${MAKE_CONCURRENCY}
     make install-strip
   )
@@ -776,8 +776,8 @@ function build_patch() {
     ./configure --help
 
     ./configure \
-      --prefix="${XBB}" 
-    
+      --prefix="${XBB}"
+
     make -j${MAKE_CONCURRENCY}
     make install-strip
   )
@@ -812,7 +812,7 @@ function build_diffutils() {
     ./configure --help
 
     ./configure \
-      --prefix="${XBB}" 
+      --prefix="${XBB}"
 
     make -j${MAKE_CONCURRENCY}
     make install-strip
@@ -848,8 +848,8 @@ function build_bison() {
     ./configure --help
 
     ./configure \
-      --prefix="${XBB}" 
-    
+      --prefix="${XBB}"
+
     make -j${MAKE_CONCURRENCY}
     make install-strip
   )
@@ -886,7 +886,7 @@ function build_make() {
 
     ./configure \
       --prefix="${XBB}"
-    
+
     make -j${MAKE_CONCURRENCY}
     make install-strip
   )
@@ -927,9 +927,9 @@ function build_pkg_config() {
       --enable-static \
       --disable-shared \
       --with-internal-glib
-    
+
     rm -f "${XBB}"/bin/*pkg-config
-    make -j${MAKE_CONCURRENCY} 
+    make -j${MAKE_CONCURRENCY}
     make install-strip
   )
 
@@ -969,7 +969,7 @@ function build_flex() {
       --prefix="${XBB}" \
       --disable-shared \
       --enable-static
-    
+
     make -j${MAKE_CONCURRENCY}
     make install-strip
   )
@@ -1012,7 +1012,7 @@ function build_perl() {
     ./Configure -d -e -s \
       -Dprefix="${XBB}" \
       -Dcc=gcc
- 
+
     make -j${MAKE_CONCURRENCY}
     make install-strip
 
@@ -1053,7 +1053,7 @@ function build_cmake() {
     # Normally it would be much happier with dynamic zlib and curl.
 
     # If more verbosity is needed:
-    #  -DCMAKE_VERBOSE_MAKEFILE:BOOL=ON 
+    #  -DCMAKE_VERBOSE_MAKEFILE:BOOL=ON
 
     # Use the existing cmake to configure this one.
     cmake \
@@ -1091,16 +1091,16 @@ function do_python() {
   (
     cd "${XBB_PYTHON_FOLDER}"
 
-    xbb_activate_bootstrap 
+    xbb_activate_bootstrap
 
     ./configure --help
 
     # It would be happier with dynamic zlib and curl.
     # https://github.com/python/cpython/tree/2.7
     ./configure \
-      --prefix="${XBB}"  
-    
-    make -j${MAKE_CONCURRENCY} 
+      --prefix="${XBB}"
+
+    make -j${MAKE_CONCURRENCY}
     make install
 
     strip --strip-all "${XBB}"/bin/python
@@ -1110,7 +1110,7 @@ function do_python() {
   "${XBB}"/bin/python --version
 
   hash -r
- 
+
   (
     cd "${XBB_PYTHON_FOLDER}"
 
@@ -1186,7 +1186,7 @@ function build_gmp() {
 
     export CFLAGS="${STATICLIB_CFLAGS}"
 
-    # Mandatory, otherwise it fails on 32-bits. 
+    # Mandatory, otherwise it fails on 32-bits.
     export ABI="${BITS}"
 
     ./configure --help
@@ -1195,7 +1195,7 @@ function build_gmp() {
       --prefix="${XBB}" \
       --disable-shared \
       --enable-static
-    
+
     make -j${MAKE_CONCURRENCY}
     make install-strip
   )
@@ -1231,7 +1231,7 @@ function build_mpfr() {
       --prefix="${XBB}" \
       --disable-shared \
       --enable-static
-    
+
     make -j${MAKE_CONCURRENCY}
     make install-strip
   )
@@ -1267,7 +1267,7 @@ function build_mpc() {
       --prefix="${XBB}" \
       --disable-shared \
       --enable-static
-    
+
     make -j${MAKE_CONCURRENCY}
     make install-strip
   )
@@ -1302,7 +1302,7 @@ function build_isl() {
       --prefix="${XBB}" \
       --disable-shared \
       --enable-static
-    
+
     make -j${MAKE_CONCURRENCY}
     make install-strip
   )
@@ -1359,7 +1359,7 @@ function build_native_binutils() {
       --prefix="${XBB}" \
       --disable-shared \
       --enable-static
-    
+
     make -j${MAKE_CONCURRENCY}
     make install-strip
   )
@@ -1405,7 +1405,7 @@ function build_native_gcc() {
       --prefix="${XBB}" \
       --enable-languages=c,c++ \
       --disable-multilib
-    
+
     make -j${MAKE_CONCURRENCY}
     make install-strip
   )

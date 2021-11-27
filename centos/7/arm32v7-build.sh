@@ -54,7 +54,7 @@ docker_build_from_hub \
   "${arch}" \
   "ilegeul/${distro}:${arch}-${release}"
 
-echo 
+echo
 echo "Done."
 
 # -----------------------------------------------------------------------------

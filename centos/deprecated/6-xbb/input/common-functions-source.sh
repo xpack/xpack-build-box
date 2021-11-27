@@ -3,7 +3,7 @@
 #   (http://xpack.github.io)
 # Copyright (c) 2019 Liviu Ionescu.
 #
-# Permission to use, copy, modify, and/or distribute this software 
+# Permission to use, copy, modify, and/or distribute this software
 # for any purpose is hereby granted, under the terms of the MIT license.
 # -----------------------------------------------------------------------------
 
@@ -55,7 +55,7 @@ function prepare_xbb_env()
 
   XBB_LDFLAGS=""
   XBB_LDFLAGS_LIB="${XBB_LDFLAGS}"
-  # Wihtout -static-libstdc++, the bootstrap lib folder is needed to 
+  # Wihtout -static-libstdc++, the bootstrap lib folder is needed to
   # find libstdc++.
   XBB_LDFLAGS_APP="${XBB_LDFLAGS} -Wl,--gc-sections -static-libstdc++"
   XBB_LDFLAGS_APP_STATIC="${XBB_LDFLAGS_APP} -static -static-libgcc"
@@ -88,7 +88,7 @@ function prepare_xbb_env()
   JOBS=${JOBS:-""}
 
   # ---------------------------------------------------------------------------
-  
+
   export XBB_DOWNLOAD_FOLDER
   export XBB_TMP_FOLDER
   export XBB_FOLDER
@@ -132,7 +132,7 @@ function create_xbb_source()
 #   (http://xpack.github.io)
 # Copyright (c) 2019 Liviu Ionescu.
 #
-# Permission to use, copy, modify, and/or distribute this software 
+# Permission to use, copy, modify, and/or distribute this software
 # for any purpose is hereby granted, under the terms of the MIT license.
 # -----------------------------------------------------------------------------
 
@@ -243,7 +243,7 @@ function xbb_activate_installed_dev()
   fi
 
   export XBB_CPPFLAGS
-  
+
   export XBB_LDFLAGS
   export XBB_LDFLAGS_LIB
   export XBB_LDFLAGS_APP
@@ -302,7 +302,7 @@ function eval_bool()
   [[ "${val}" = 1 || "${val}" = true || "${val}" = yes || "${val}" = y ]]
 }
 
-do_strip_libs() 
+do_strip_libs()
 {
   (
     cd "${XBB_FOLDER}"
@@ -359,14 +359,14 @@ do_strip_libs()
 
 # -----------------------------------------------------------------------------
 
-function do_cleaunup() 
+function do_cleaunup()
 {
   rm -rf "${XBB_DOWNLOAD_FOLDER}"
 
   # rm -rf "${XBB_BOOTSTRAP_FOLDER}"
   rm -rf "${XBB_BUILD_FOLDER}"
   rm -rf "${XBB_TMP_FOLDER}"
-  rm -rf "${XBB_INPUT_FOLDER}"  
+  rm -rf "${XBB_INPUT_FOLDER}"
 }
 
 # -----------------------------------------------------------------------------

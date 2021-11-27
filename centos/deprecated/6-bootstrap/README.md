@@ -6,7 +6,7 @@ Dockerfile to create a Docker image based on the latest CentOS 6 32/64-bits deve
 
 ### Changes
 
-Using the original development tools, build newer versions of the tools from sources. 
+Using the original development tools, build newer versions of the tools from sources.
 
 Due to the limitations of the old GCC 4.4, they are not the final tools, but new enough to build a modern GCC, which will be used to build the final tools & libraries.
 
@@ -28,7 +28,7 @@ $ git clone --recurse-submodules https://github.com/xpack/xpack-build-box.git \
   "${HOME}/Downloads/xpack-build-box.git"
 ```
 
-Note: the repository uses submodules, and if updated manually, the 
+Note: the repository uses submodules, and if updated manually, the
 submodules must also be updated.
 
 #### Create

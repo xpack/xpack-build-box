@@ -4,7 +4,7 @@
 #   (https://xpack.github.io)
 # Copyright (c) 2019 Liviu Ionescu.
 #
-# Permission to use, copy, modify, and/or distribute this software 
+# Permission to use, copy, modify, and/or distribute this software
 # for any purpose is hereby granted, under the terms of the MIT license.
 # -----------------------------------------------------------------------------
 
@@ -43,8 +43,8 @@ script_folder_name="$(basename "${script_folder_path}")"
 # Script to build a Docker image with the xPack Build Box (xbb).
 #
 # Some of the newest tools can no longer be built on CentOS 6 directly; an
-# intermediate solution (a bootstrap) is used, which includes the most 
-# recent versions that can be build with GCC 4.4. This intermediate version 
+# intermediate solution (a bootstrap) is used, which includes the most
+# recent versions that can be build with GCC 4.4. This intermediate version
 # is used to build the final tools.
 
 # To activate the new build environment, use:
@@ -127,7 +127,7 @@ export CXX=g++
 
 # =============================================================================
 
-function do_texlive() 
+function do_texlive()
 {
   local year=$1
 

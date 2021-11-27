@@ -3,7 +3,7 @@
 #   (http://xpack.github.io)
 # Copyright (c) 2020 Liviu Ionescu.
 #
-# Permission to use, copy, modify, and/or distribute this software 
+# Permission to use, copy, modify, and/or distribute this software
 # for any purpose is hereby granted, under the terms of the MIT license.
 # -----------------------------------------------------------------------------
 
@@ -27,7 +27,7 @@ function build_versioned_components()
     # - gettext
     # - bison (long)
     # - make (long)
-    # - wget 
+    # - wget
     # - texinfo (darwin)
     # - tcl (long)
     # - guile (!)
@@ -43,10 +43,12 @@ function build_versioned_components()
     # XBB_LLVM_VERSION="11.1.0"
 
     # Fortunatelly GCC 11.[12] were updated and work on Apple hardware.
-      # "10.3.0" fails with:
-      # error: unknown conversion type character ‘l’ in format [-Werror=format=]
-      XBB_GCC_VERSION="11.2.0" # "9.4.0" # !"10.3.0" # !"11.1.0" # "9.3.0" # "9.2.0" # "8.3.0" # "7.4.0"
+    # "10.3.0" fails with:
+    # error: unknown conversion type character ‘l’ in format [-Werror=format=]
+    XBB_GCC_VERSION="11.2.0" # "9.4.0" # !"10.3.0" # !"11.1.0" # "9.3.0" # "9.2.0" # "8.3.0" # "7.4.0"
 
+    if is_linux
+    then
       XBB_BINUTILS_VERSION="2.36.1" # "2.34" # "2.33.1"
 
       # 8.x fails to compile the libstdc++ new file system classes.
@@ -136,7 +138,7 @@ function build_versioned_components()
     # Required by Python
     build_libmpdec "2.5.1" # "2.4.2"
 
-    # Libary, required by tar. 
+    # Libary, required by tar.
     # depends=('sh')
     build_xz "5.2.5" # "5.2.4"
 
@@ -253,23 +255,23 @@ function build_versioned_components()
     # macOS 10.10 uses 2.5.3, an update is not mandatory.
     # depends=('glibc' 'm4' 'sh')
     # PATCH!
-#    build_flex "2.6.4" # "2.6.3" fails in wine
+    build_flex "2.6.4" # "2.6.3" fails in wine
 
     if true # is_linux
     then
       # macOS 10.1[03] uses 5.18.2.
       # macOS 11.6 uses 5.30.2
-      # HiRes.c:2037:17: error: use of undeclared identifier 'CLOCK_REALTIME'   
+      # HiRes.c:2037:17: error: use of undeclared identifier 'CLOCK_REALTIME'
       #     clock_id = CLOCK_REALTIME;
-      # 
+      #
       # depends=('gdbm' 'db' 'glibc')
       # old PATCH!
-#      build_perl "5.34.0" # "5.32.0" # "5.30.1" # "5.18.2" # "5.30.1" # "5.28.1"
+      build_perl "5.34.0" # "5.32.0" # "5.30.1" # "5.18.2" # "5.30.1" # "5.28.1"
     fi
 
     # Give other a chance to use it.
     # However some (like Python) test for Tk too.
-#    build_tcl "8.6.12" # "8.6.11" # "8.6.10"
+    build_tcl "8.6.12" # "8.6.11" # "8.6.10"
 
     # depends=('curl' 'libarchive' 'shared-mime-info' 'jsoncpp' 'rhash')
     build_cmake "3.21.4" #  "3.20.6" # "3.19.8" # "3.16.2" # "3.13.4"
@@ -278,7 +280,7 @@ function build_versioned_components()
     # 2.7.17 -> /Library/Frameworks/Python.framework/Versions/2.7
     # 3.7.6 -> /Library/Frameworks/Python.framework/Versions/3.7
     # 3.8.1 -> /Library/Frameworks/Python.framework/Versions/3.8 (too new)
-    
+
     # pip3 install meson=="0.53.1"
 
     # Fails on Darwin.
@@ -302,15 +304,15 @@ function build_versioned_components()
       : # On Apple Silicon it fails, it is not worth the effort.
     elif is_linux
     then
-      # There are several errors on macOS 10.10 and some tests fail.                                           
+      # There are several errors on macOS 10.10 and some tests fail.
       # depends=('bzip2' 'gdbm' 'openssl' 'zlib' 'expat' 'sqlite' 'libffi')
       build_python2 "2.7.18" # "2.7.17" # "2.7.16" (2.7.17 is the final release)
       # Python build finished, but the necessary bits to build these modules were not found:
-      # _bsddb             _curses            _curses_panel   
-      # _sqlite3           _tkinter           bsddb185        
-      # bz2                dbm                dl              
-      # gdbm               imageop            readline        
-      # sunaudiodev  
+      # _bsddb             _curses            _curses_panel
+      # _sqlite3           _tkinter           bsddb185
+      # bz2                dbm                dl
+      # gdbm               imageop            readline
+      # sunaudiodev
     fi
 
     # depends=('python2')
@@ -323,10 +325,10 @@ function build_versioned_components()
       PYTHON3X="python3.9"
       build_python3 "3.9.8" # "3.9.7" # "3.8.10" # "3.7.6" # "3.8.1" # "3.7.3"
       # The necessary bits to build these optional modules were not found:
-      # _bz2                  _curses               _curses_panel      
-      # _dbm                  _gdbm                 _sqlite3           
-      # _tkinter              _uuid                 readline 
-                
+      # _bz2                  _curses               _curses_panel
+      # _dbm                  _gdbm                 _sqlite3
+      # _tkinter              _uuid                 readline
+
       # depends=('python3')
       build_meson "0.60.1" # "0.58.1" # "0.53.1" # "0.50.0"
     fi
@@ -385,7 +387,7 @@ function build_versioned_components()
 
       build_maven "3.8.3" # "3.8.1" # "3.6.3"
     fi
-    
+
     # Not ready, dependency libs not yet in.
     # build_nodejs "12.16.0"
 
@@ -402,7 +404,7 @@ function build_versioned_components()
       build_native_binutils "${XBB_BINUTILS_VERSION}"
 
       # makedepends=('binutils>=2.26' 'libmpc' 'gcc-ada' 'doxygen' 'git')
-      build_native_gcc "${XBB_GCC_VERSION}" 
+      build_native_gcc "${XBB_GCC_VERSION}"
 
       (
         prepare_gcc_env "" "-xbb"
@@ -464,12 +466,12 @@ function build_versioned_components()
     elif is_darwin
     then
 
-      # By all means DO NOT build binutils on macOS, since this will 
+      # By all means DO NOT build binutils on macOS, since this will
       # override Apple specific tools (ar, strip, etc) and break the
       # build in multiple ways.
 
       # makedepends=('binutils>=2.26' 'libmpc' 'gcc-ada' 'doxygen' 'git')
-      build_native_gcc "${XBB_GCC_VERSION}" 
+      build_native_gcc "${XBB_GCC_VERSION}"
 
       (
         prepare_gcc_env "" "-xbb"
@@ -533,7 +535,7 @@ function build_versioned_components()
     # -------------------------------------------------------------------------
 
     # At this point we're mostly done, there is only some polishing to do.
-    
+
     strip_static_objects
 
     if is_linux
@@ -582,7 +584,7 @@ function build_versioned_components()
     # - gettext
     # - bison (long)
     # - make (long)
-    # - wget 
+    # - wget
     # - texinfo (darwin)
     # - tcl (long)
     # - guile (!)
@@ -694,7 +696,7 @@ function build_versioned_components()
     # Required by Python
     build_libmpdec "2.4.2"
 
-    # Libary, required by tar. 
+    # Libary, required by tar.
     # depends=('sh')
     build_xz "5.2.5" # "5.2.4"
 
@@ -816,9 +818,9 @@ function build_versioned_components()
     if true # is_linux
     then
       # macOS 10.1[03] uses 5.18.2.
-      # HiRes.c:2037:17: error: use of undeclared identifier 'CLOCK_REALTIME'   
+      # HiRes.c:2037:17: error: use of undeclared identifier 'CLOCK_REALTIME'
       #     clock_id = CLOCK_REALTIME;
-      # 
+      #
       # depends=('gdbm' 'db' 'glibc')
        # old PATCH!
       build_perl "5.32.0" # "5.30.1" # "5.18.2" # "5.30.1" # "5.28.1"
@@ -835,7 +837,7 @@ function build_versioned_components()
     # 2.7.17 -> /Library/Frameworks/Python.framework/Versions/2.7
     # 3.7.6 -> /Library/Frameworks/Python.framework/Versions/3.7
     # 3.8.1 -> /Library/Frameworks/Python.framework/Versions/3.8 (too new)
-    
+
     # pip3 install meson=="0.53.1"
 
     # Fails on Darwin.
@@ -855,15 +857,15 @@ function build_versioned_components()
 
     if true # is_linux
     then
-      # There are several errors on macOS 10.10 and some tests fail.                                           
+      # There are several errors on macOS 10.10 and some tests fail.
       # depends=('bzip2' 'gdbm' 'openssl' 'zlib' 'expat' 'sqlite' 'libffi')
       build_python2 "2.7.18" # "2.7.17" # "2.7.16" (2.7.17 is the final release)
       # Python build finished, but the necessary bits to build these modules were not found:
-      # _bsddb             _curses            _curses_panel   
-      # _sqlite3           _tkinter           bsddb185        
-      # bz2                dbm                dl              
-      # gdbm               imageop            readline        
-      # sunaudiodev  
+      # _bsddb             _curses            _curses_panel
+      # _sqlite3           _tkinter           bsddb185
+      # bz2                dbm                dl
+      # gdbm               imageop            readline
+      # sunaudiodev
     fi
 
     # depends=('python2')
@@ -876,10 +878,10 @@ function build_versioned_components()
       PYTHON3X="python3.9"
       build_python3 "3.9.7" # "3.8.10" # "3.7.6" # "3.8.1" # "3.7.3"
       # The necessary bits to build these optional modules were not found:
-      # _bz2                  _curses               _curses_panel      
-      # _dbm                  _gdbm                 _sqlite3           
-      # _tkinter              _uuid                 readline 
-                
+      # _bz2                  _curses               _curses_panel
+      # _dbm                  _gdbm                 _sqlite3
+      # _tkinter              _uuid                 readline
+
       # depends=('python3')
       build_meson "0.58.1" # "0.53.1" # "0.50.0"
     fi
@@ -934,7 +936,7 @@ function build_versioned_components()
     build_ant "1.10.10" # "1.10.7"
 
     build_maven "3.8.1" # "3.6.3"
-    
+
     # Not ready, dependency libs not yet in.
     # build_nodejs "12.16.0"
 
@@ -951,7 +953,7 @@ function build_versioned_components()
       build_native_binutils "${XBB_BINUTILS_VERSION}"
 
       # makedepends=('binutils>=2.26' 'libmpc' 'gcc-ada' 'doxygen' 'git')
-      build_native_gcc "${XBB_GCC_VERSION}" 
+      build_native_gcc "${XBB_GCC_VERSION}"
 
       (
         prepare_gcc_env "" "-xbb"
@@ -1013,12 +1015,12 @@ function build_versioned_components()
     elif is_darwin
     then
 
-      # By all means DO NOT build binutils on macOS, since this will 
+      # By all means DO NOT build binutils on macOS, since this will
       # override Apple specific tools (ar, strip, etc) and break the
       # build in multiple ways.
 
       # makedepends=('binutils>=2.26' 'libmpc' 'gcc-ada' 'doxygen' 'git')
-      build_native_gcc "${XBB_GCC_VERSION}" 
+      build_native_gcc "${XBB_GCC_VERSION}"
 
       (
         prepare_gcc_env "" "-xbb"
@@ -1085,7 +1087,7 @@ function build_versioned_components()
     # -------------------------------------------------------------------------
 
     # At this point we're mostly done, there is only some polishing to do.
-    
+
     strip_static_objects
 
     if is_linux
@@ -1115,7 +1117,7 @@ function build_versioned_components()
     # - gettext
     # - bison (long)
     # - make (long)
-    # - wget 
+    # - wget
     # - texinfo (darwin)
     # - tcl (long)
     # - guile (!)
@@ -1128,7 +1130,7 @@ function build_versioned_components()
 
     # The main characteristic of XBB is the compiler version.
     XBB_GCC_VERSION="9.3.0" # "9.2.0" # "8.3.0" # "7.4.0"
-    
+
     XBB_BINUTILS_VERSION="2.34" # "2.33.1"
 
     # 8.x fails to compile the libstdc++ new file system classes.
@@ -1180,7 +1182,7 @@ function build_versioned_components()
 
     if is_linux
     then
-      # By all means DO NOT build binutils on macOS, since this will 
+      # By all means DO NOT build binutils on macOS, since this will
       # override Apple specific tools (ar, strip, etc) and break the
       # build in multiple ways.
 
@@ -1196,7 +1198,7 @@ function build_versioned_components()
     fi
 
     # makedepends=('binutils>=2.26' 'libmpc' 'gcc-ada' 'doxygen' 'git')
-    build_native_gcc "${XBB_GCC_VERSION}" 
+    build_native_gcc "${XBB_GCC_VERSION}"
 
     # Requires new gcc.
     # depends=('sh' 'tar' 'glibc')
@@ -1237,7 +1239,7 @@ function build_versioned_components()
     # Required by Python
     build_libmpdec "2.4.2"
 
-    # Libary, required by tar. 
+    # Libary, required by tar.
     # depends=('sh')
     build_xz "5.2.4"
 
@@ -1259,7 +1261,7 @@ function build_versioned_components()
 
     # depends=('glibc' 'ncurses' 'libncursesw.so')
     build_readline "8.0"
-    
+
     # -------------------------------------------------------------------------
 
     # depends=('glibc' 'glib2 (internal)')
@@ -1347,9 +1349,9 @@ function build_versioned_components()
     if is_linux
     then
       # macOS 10.10 uses 5.18.2, an update is not mandatory.
-      # HiRes.c:2037:17: error: use of undeclared identifier 'CLOCK_REALTIME'   
+      # HiRes.c:2037:17: error: use of undeclared identifier 'CLOCK_REALTIME'
       #     clock_id = CLOCK_REALTIME;
-      # 
+      #
       # depends=('gdbm' 'db' 'glibc')
       # For Linux, go back to the same version supported by macOS 10.10.
       # old PATCH!
@@ -1367,7 +1369,7 @@ function build_versioned_components()
     # 2.7.17 -> /Library/Frameworks/Python.framework/Versions/2.7
     # 3.7.6 -> /Library/Frameworks/Python.framework/Versions/3.7
     # 3.8.1 -> /Library/Frameworks/Python.framework/Versions/3.8 (too new)
-    
+
     # pip3 install meson=="0.53.1"
 
     # Fails on Darwin.
@@ -1387,15 +1389,15 @@ function build_versioned_components()
 
     if true # is_linux
     then
-      # There are several errors on macOS 10.10 and some tests fail.                                           
+      # There are several errors on macOS 10.10 and some tests fail.
       # depends=('bzip2' 'gdbm' 'openssl' 'zlib' 'expat' 'sqlite' 'libffi')
       build_python2 "2.7.17" # "2.7.16" (2.7.17 is the final release)
       # Python build finished, but the necessary bits to build these modules were not found:
-      # _bsddb             _curses            _curses_panel   
-      # _sqlite3           _tkinter           bsddb185        
-      # bz2                dbm                dl              
-      # gdbm               imageop            readline        
-      # sunaudiodev  
+      # _bsddb             _curses            _curses_panel
+      # _sqlite3           _tkinter           bsddb185
+      # bz2                dbm                dl
+      # gdbm               imageop            readline
+      # sunaudiodev
     fi
 
     # depends=('python2')
@@ -1406,10 +1408,10 @@ function build_versioned_components()
       # require xz, openssl
       build_python3 "3.7.6" # "3.8.1" # "3.7.3"
       # The necessary bits to build these optional modules were not found:
-      # _bz2                  _curses               _curses_panel      
-      # _dbm                  _gdbm                 _sqlite3           
-      # _tkinter              _uuid                 readline 
-                
+      # _bz2                  _curses               _curses_panel
+      # _dbm                  _gdbm                 _sqlite3
+      # _tkinter              _uuid                 readline
+
       # depends=('python3')
       build_meson "0.53.1" # "0.50.0"
     fi
@@ -1449,7 +1451,7 @@ function build_versioned_components()
     build_ant "1.10.7"
 
     build_maven "3.6.3"
-    
+
     # Not ready, dependency libs not yet in.
     # build_nodejs "12.16.0"
 
@@ -1498,7 +1500,7 @@ function build_versioned_components()
     # -------------------------------------------------------------------------
 
     # At this point we're mostly done, there is only some polishing to do.
-    
+
     strip_static_objects
 
     patch_elf_rpath
@@ -1569,7 +1571,7 @@ function build_versioned_components()
     # Required by Python
     build_libmpdec "2.4.2"
 
-    # Libary, required by tar. 
+    # Libary, required by tar.
     # depends=('sh')
     build_xz "5.2.4"
 
@@ -1684,7 +1686,7 @@ function build_versioned_components()
     # 2.7.17 -> /Library/Frameworks/Python.framework/Versions/2.7
     # 3.7.6 -> /Library/Frameworks/Python.framework/Versions/3.7
     # 3.8.1 -> /Library/Frameworks/Python.framework/Versions/3.8 (too new)
-    
+
     # pip3 install meson=="0.53.1"
 
     # Fails on Darwin.
@@ -1704,15 +1706,15 @@ function build_versioned_components()
 
     if true # is_linux
     then
-      # There are several errors on macOS 10.10 and some tests fail.                                           
+      # There are several errors on macOS 10.10 and some tests fail.
       # depends=('bzip2' 'gdbm' 'openssl' 'zlib' 'expat' 'sqlite' 'libffi')
       build_python2 "2.7.17" # "2.7.16" (2.7.17 is the final release)
       # Python build finished, but the necessary bits to build these modules were not found:
-      # _bsddb             _curses            _curses_panel   
-      # _sqlite3           _tkinter           bsddb185        
-      # bz2                dbm                dl              
-      # gdbm               imageop            readline        
-      # sunaudiodev  
+      # _bsddb             _curses            _curses_panel
+      # _sqlite3           _tkinter           bsddb185
+      # bz2                dbm                dl
+      # gdbm               imageop            readline
+      # sunaudiodev
     fi
 
     if true # is_linux
@@ -1720,10 +1722,10 @@ function build_versioned_components()
       # require xz, openssl
       build_python3 "3.7.6" # "3.8.1" # "3.7.3"
       # The necessary bits to build these optional modules were not found:
-      # _bz2                  _curses               _curses_panel      
-      # _dbm                  _gdbm                 _sqlite3           
-      # _tkinter              _uuid                 readline 
-                
+      # _bz2                  _curses               _curses_panel
+      # _dbm                  _gdbm                 _sqlite3
+      # _tkinter              _uuid                 readline
+
       # depends=('python3')
       build_meson "0.53.1" # "0.50.0"
     fi
@@ -1764,25 +1766,25 @@ function build_versioned_components()
     build_ant "1.10.7"
 
     build_maven "3.6.3"
-    
+
     # Not ready, dependency libs not yet in.
     # build_nodejs "12.16.0"
 
     # -------------------------------------------------------------------------
     # Compilers, native & mingw
 
-    # By all means DO NOT build binutils on macOS, since this will 
+    # By all means DO NOT build binutils on macOS, since this will
     # override Apple specific tools (ar, strip, etc) and break the
     # build in multiple ways.
     if is_linux
     then
       # Requires gmp, mpfr, mpc, isl.
-      build_native_binutils "${XBB_BINUTILS_VERSION}" 
+      build_native_binutils "${XBB_BINUTILS_VERSION}"
     fi
 
     # makedepends=('binutils>=2.26' 'libmpc' 'gcc-ada' 'doxygen' 'git')
     build_native_gcc "${XBB_GCC_VERSION}"
-     
+
     # Build mingw-w64 binutils and gcc only on Intel Linux.
     if is_linux && is_intel
     then
@@ -1843,7 +1845,7 @@ function build_versioned_components()
     # =========================================================================
 
   else
-    echo 
+    echo
     echo "Version ${XBB_VERSION} not yet supported."
   fi
 }

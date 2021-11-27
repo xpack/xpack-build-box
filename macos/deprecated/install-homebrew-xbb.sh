@@ -4,7 +4,7 @@
 #   (http://xpack.github.io)
 # Copyright (c) 2019 Liviu Ionescu.
 #
-# Permission to use, copy, modify, and/or distribute this software 
+# Permission to use, copy, modify, and/or distribute this software
 # for any purpose is hereby granted, under the terms of the MIT license.
 # -----------------------------------------------------------------------------
 
@@ -52,7 +52,7 @@ script_folder_name="$(basename "${script_folder_path}")"
 # There is still no guarantee that this works, but no better solution
 # was identified.
 # Another complication is caused by brew insisting on updating itself to the
-# latest version, which is not guaranteed to work with the old formulas. 
+# latest version, which is not guaranteed to work with the old formulas.
 # To prevent this it is mandatory to define HOMEBREW_NO_AUTO_UPDATE in the
 # environment before calling brew.
 
@@ -86,7 +86,7 @@ use_master_archive=""
 # No longer supported (since 2.0.0, 1 February 2019 at 16:22:17 EET)
 # - El Capitan (10.11)
 # - Yosemite (10.10) <- !
-# - Mavericks (10.9) 
+# - Mavericks (10.9)
 
 if [[ "${macos_version}" =~ 10\.13\.* ]]
 then
@@ -99,13 +99,13 @@ then
   # Error: undefined method `strip' for :provided_until_xcode43:Symbol
   # 24 January 2019 at 11:24:36 EET, 6a912c369125caca5e1e3929e942bbb946ce6367
   # brew_git_commit_id="1.9.3"
-  # 24 January 2018 at 10:09:12 EET 
+  # 24 January 2018 at 10:09:12 EET
   # homebrew_core_git_commit_id="dcb056fc8533ebf1edbc0b600712ebbd5bd476ac"
 
   # Error: Calling needs :cxx11 is disabled! There is no replacement.
   # 17 February 2019 at 14:59:18 EET, 117c24f4b6294e037431d3a850ced6955d53e26f
   # brew_git_commit_id="2.0.2"
-  # 24 January 2018 at 10:09:12 EET 
+  # 24 January 2018 at 10:09:12 EET
   # homebrew_core_git_commit_id="dcb056fc8533ebf1edbc0b600712ebbd5bd476ac"
 
   # Latest now.
@@ -119,7 +119,7 @@ elif [[ "${macos_version}" =~ 10\.10\.* ]]
 then
   # 24 January 2019 at 11:24:36, 6a912c369125caca5e1e3929e942bbb946ce6367, 1.9.3
   brew_git_commit_id="1.9.3"
-  # 24 January 2018 at 10:09:12 EET 
+  # 24 January 2018 at 10:09:12 EET
   homebrew_core_git_commit_id="dcb056fc8533ebf1edbc0b600712ebbd5bd476ac"
 fi
 
@@ -128,7 +128,7 @@ fi
   # Fails with :cxx is disabled! There is no replacement.
   # brew_git_commit_id="2.0.1"
 
-  # Fails on macOS 10.13, was ok on 10.10 
+  # Fails on macOS 10.13, was ok on 10.10
   # Error: Your Xcode (1) is too outdated.
   # Please update to Xcode 9.2 (or delete it).
   # brew_git_commit_id="1.5.4"
@@ -263,14 +263,14 @@ then
   brew install texinfo
   brew link texinfo --force
 
-  # libtool required to build openOCD (bootstrap) 
+  # libtool required to build openOCD (bootstrap)
   brew install libtool
 
   brew install readline
   brew link readline --force
 
   # gawk & gsed required by GCC
-  brew install gawk 
+  brew install gawk
   brew install gnu-sed
 
   # Same packages as for CentOS XBB (missing 'patch')
@@ -281,16 +281,16 @@ then
     brew install perl
   fi
 
-  brew install git 
+  brew install git
   brew install python python@3
 
   brew install flex
   brew link flex --force
 
-  brew install dos2unix 
-  brew install wget 
-  brew install make 
-  brew install diffutils 
+  brew install dos2unix
+  brew install wget
+  brew install make
+  brew install diffutils
 
   brew install m4
   brew link m4 --force
@@ -306,7 +306,7 @@ then
   brew install openssl
   brew link openssl --force
 
-  brew install gnu-tar 
+  brew install gnu-tar
   brew install xz
 
   brew install gdb
@@ -384,7 +384,7 @@ echo 'To codesign gdb: https://sourceware.org/gdb/wiki/BuildingOnDarwin'
 
 # -----------------------------------------------------------------------------
 
-# Warning: to use some of the tools with the usual names (like make instead 
+# Warning: to use some of the tools with the usual names (like make instead
 # of gmake) it is necessary to add extra folders to the PATH, like
 # .../opt/make/libexec/gnubin
 

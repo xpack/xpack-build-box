@@ -47,7 +47,7 @@ Thread model: posix
 InstalledDir: /Library/Developer/CommandLineTools/usr/bin
 ```
 
-Some modern tools can no longer be compiled with this old version, and require 
+Some modern tools can no longer be compiled with this old version, and require
 the bootstrap tools, which will generally include reasonably recent tools that
 can still be built with the native compiler.
 
