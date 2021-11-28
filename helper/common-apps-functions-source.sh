@@ -3139,6 +3139,8 @@ function build_m4()
   # https://archlinuxarm.org/packages/aarch64/m4/files/PKGBUILD
   # https://aur.archlinux.org/cgit/aur.git/tree/PKGBUILD?h=m4-git
 
+  # https://github.com/Homebrew/homebrew-core/blob/master/Formula/m4.rb
+
   # 2016-12-31, "1.4.18"
   # 2021-05-28, "1.4.19"
 
@@ -3572,6 +3574,8 @@ function build_autoconf()
   # https://archlinuxarm.org/packages/any/autoconf2.13/files/PKGBUILD
   # https://aur.archlinux.org/cgit/aur.git/tree/PKGBUILD?h=autoconf-git
 
+  # https://github.com/Homebrew/homebrew-core/blob/master/Formula/autoconf.rb
+
   # 2012-04-24, "2.69"
   # 2021-01-28, "2.71"
 
@@ -3817,6 +3821,8 @@ function build_libtool()
 
   # https://archlinuxarm.org/packages/aarch64/libtool/files/PKGBUILD
   # https://aur.archlinux.org/cgit/aur.git/tree/PKGBUILD?h=libtool-git
+
+  # https://github.com/Homebrew/homebrew-core/blob/master/Formula/libtool.rb
 
   # 15-Feb-2015, "2.4.6", latest
 
@@ -4655,6 +4661,8 @@ function build_flex()
 
         run_verbose bash ${DEBUG} "autogen.sh"
 
+        patch -p0 <"${helper_folder_path}/patches/flex-2.4.6-libtool.patch"
+
         touch "stamp-autogen"
 
       fi
@@ -4710,7 +4718,13 @@ function build_flex()
         then
           # cxx_restart fails - https://github.com/westes/flex/issues/98
           # make -k check || true
-          run_verbose make -k check
+          if is_darwin && is_arm
+          then
+            : # Fail with internal error, caused by gm4
+            run_verbose make -k check || true
+          else
+            run_verbose make -k check
+          fi
         fi
 
       ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${flex_folder_name}/make-output.txt"
