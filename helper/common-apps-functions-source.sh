@@ -3837,6 +3837,8 @@ function build_libtool()
 
   local libtool_folder_name="libtool${step}-${libtool_version}"
 
+  local libtool_patch_file_path="${helper_folder_path}/patches/${libtool_folder_name}.patch"
+
   local libtool_stamp_file_path="${STAMPS_FOLDER_PATH}/stamp-${libtool_folder_name}-installed"
   if [ ! -f "${libtool_stamp_file_path}" -o ! -d "${BUILD_FOLDER_PATH}/${libtool_folder_name}" ]
   then
@@ -3844,7 +3846,7 @@ function build_libtool()
     cd "${SOURCES_FOLDER_PATH}"
 
     download_and_extract "${libtool_url}" "${libtool_archive}" \
-      "${libtool_src_folder_name}"
+      "${libtool_src_folder_name}" "${libtool_patch_file_path}"
 
     mkdir -pv "${LOGS_FOLDER_PATH}/${libtool_folder_name}"
 
@@ -3877,8 +3879,16 @@ function build_libtool()
 
           run_verbose bash "${SOURCES_FOLDER_PATH}/${libtool_src_folder_name}/configure" --help
 
+          # From HomeBrew: Ensure configure is happy with the patched files
+          for f in aclocal.m4 libltdl/aclocal.m4 Makefile.in libltdl/Makefile.in config-h.in libltdl/config-h.in configure libltdl/configure
+          do
+            touch "${SOURCES_FOLDER_PATH}/${libtool_src_folder_name}/$f"
+          done
+
           run_verbose bash ${DEBUG} "${SOURCES_FOLDER_PATH}/${libtool_src_folder_name}/configure" \
-            --prefix="${INSTALL_FOLDER_PATH}"
+            --prefix="${INSTALL_FOLDER_PATH}" \
+            \
+            --enable-ltdl-install
 
           cp "config.log" "${LOGS_FOLDER_PATH}/${libtool_folder_name}/config-log.txt"
         ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${libtool_folder_name}/configure-output.txt"
