@@ -4661,7 +4661,8 @@ function build_flex()
 
         run_verbose bash ${DEBUG} "autogen.sh"
 
-        patch -p0 <"${helper_folder_path}/patches/flex-2.4.6-libtool.patch"
+        # No longer needed, done in libtool.
+        # patch -p0 <"${helper_folder_path}/patches/flex-2.4.6-libtool.patch"
 
         touch "stamp-autogen"
 
