@@ -252,10 +252,16 @@ function build_versioned_components()
     # depends=('glibc')
     build_dos2unix "7.4.2" # "7.4.1" # "7.4.0"
 
-    # macOS 10.10 uses 2.5.3, an update is not mandatory.
-    # depends=('glibc' 'm4' 'sh')
-    # PATCH!
-    build_flex "2.6.4" # "2.6.3" fails in wine
+    if is_darwin && is_arm
+    then
+      # Still problematic, building GCC in XBB fails with missing __Z5yyendv...
+      :
+    else
+      # macOS 10.10 uses 2.5.3, an update is not mandatory.
+      # depends=('glibc' 'm4' 'sh')
+      # PATCH!
+      build_flex "2.6.4" # "2.6.3" fails in wine
+    fi
 
     # macOS 10.1[03] uses 5.18.2.
     # macOS 11.6 uses 5.30.2
