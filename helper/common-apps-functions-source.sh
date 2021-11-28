@@ -7915,13 +7915,6 @@ function build_tcl()
 
             run_verbose bash "${SOURCES_FOLDER_PATH}/${tcl_src_folder_name}/macosx/configure" --help
 
-            run_verbose bash ${DEBUG} "${SOURCES_FOLDER_PATH}/${tcl_src_folder_name}/macosx/configure" \
-              --prefix="${INSTALL_FOLDER_PATH}" \
-              \
-              --enable-threads \
-              --enable-64bit \
-              --disable-rpath \
-
             if is_arm
             then
               # The current GCC 11.2 generates wrong code for this illegal option.
@@ -7929,6 +7922,13 @@ function build_tcl()
                 -e 's|EXTRA_APP_CC_SWITCHES=.-mdynamic-no-pic.|EXTRA_APP_CC_SWITCHES=""|' \
                 "${SOURCES_FOLDER_PATH}/${tcl_src_folder_name}/macosx/configure"
             fi
+
+            run_verbose bash ${DEBUG} "${SOURCES_FOLDER_PATH}/${tcl_src_folder_name}/macosx/configure" \
+              --prefix="${INSTALL_FOLDER_PATH}" \
+              \
+              --enable-threads \
+              --enable-64bit \
+              --disable-rpath \
 
           fi
 
