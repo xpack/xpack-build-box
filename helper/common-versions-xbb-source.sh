@@ -815,16 +815,13 @@ function build_versioned_components()
     # PATCH!
     build_flex "2.6.4" # "2.6.3" fails in wine
 
-    if true # is_linux
-    then
-      # macOS 10.1[03] uses 5.18.2.
-      # HiRes.c:2037:17: error: use of undeclared identifier 'CLOCK_REALTIME'
-      #     clock_id = CLOCK_REALTIME;
-      #
-      # depends=('gdbm' 'db' 'glibc')
-       # old PATCH!
-      build_perl "5.32.0" # "5.30.1" # "5.18.2" # "5.30.1" # "5.28.1"
-    fi
+    # macOS 10.1[03] uses 5.18.2.
+    # HiRes.c:2037:17: error: use of undeclared identifier 'CLOCK_REALTIME'
+    #     clock_id = CLOCK_REALTIME;
+    #
+    # depends=('gdbm' 'db' 'glibc')
+      # old PATCH!
+    build_perl "5.32.0" # "5.30.1" # "5.18.2" # "5.30.1" # "5.28.1"
 
     # Give other a chance to use it.
     # However some (like Python) test for Tk too.
