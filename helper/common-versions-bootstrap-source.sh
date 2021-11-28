@@ -163,14 +163,7 @@ function build_versioned_components()
     # ! Requires autopoint from autotools.
     # depends=('glibc' 'm4' 'sh')
     # PATCH!
-    if is_darwin && is_arm
-    then
-      # Fails, due to missing `-Wl,-undefined -Wl,dynamic_lookup`;
-      # HomeBrew uses a patch.
-      :
-    else
-      build_flex "2.6.4" # "2.6.3" fails
-    fi
+    build_flex "2.6.4" # "2.6.3" fails
 
     # depends=()
     # Not needed, possibly harmful for GCC 9.
