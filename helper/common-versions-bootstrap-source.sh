@@ -52,7 +52,7 @@ function build_versioned_components()
     then
       # depends ?
       # Warning: buggy!
-      build_patchelf "0.13" # "0.12" # "0.10"
+      build_patchelf "0.13.1" # "0.12" # "0.10"
     fi
 
     # build_chrpath "0.16"
