@@ -253,16 +253,9 @@ function build_versioned_components()
     build_dos2unix "7.4.2" # "7.4.1" # "7.4.0"
 
     # macOS 10.10 uses 2.5.3, an update is not mandatory.
-    if is_darwin && is_arm
-    then
-      # Fails, due to missing `-Wl,-undefined -Wl,dynamic_lookup`;
-      # HomeBrew uses a patch.
-      :
-    else
-      # depends=('glibc' 'm4' 'sh')
-      # PATCH!
-      build_flex "2.6.4" # "2.6.3" fails in wine
-    fi
+    # depends=('glibc' 'm4' 'sh')
+    # PATCH!
+    build_flex "2.6.4" # "2.6.3" fails in wine
 
     if true # is_linux
     then
