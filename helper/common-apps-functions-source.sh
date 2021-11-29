@@ -583,7 +583,6 @@ function build_native_gcc()
           config_options+=("--with-pkgversion=${XBB_GCC_BRANDING}")
 
           config_options+=("--with-dwarf2")
-          config_options+=("--with-stabs")
           config_options+=("--with-libiconv")
 
           # On macOS it fails with:
@@ -591,8 +590,6 @@ function build_native_gcc()
           # config_options+=("--with-isl")
           config_options+=("--with-isl=${INSTALL_FOLDER_PATH}")
 
-          config_options+=("--with-gnu-as")
-          config_options+=("--with-gnu-ld")
           config_options+=("--with-diagnostics-color=auto")
 
           config_options+=("--without-system-zlib")
@@ -684,6 +681,10 @@ function build_native_gcc()
             # --enable-libstdcxx-debug
             # --enable-libstdcxx-time=yes (liks librt)
             # --with-default-libstdcxx-abi=new (default)
+
+            config_options+=("--with-gnu-as")
+            config_options+=("--with-gnu-ld")
+            config_options+=("--with-stabs")
 
             if true
             then
