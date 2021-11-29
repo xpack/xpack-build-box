@@ -2875,7 +2875,8 @@ function build_coreutils()
       then
         # Undefined symbols for architecture x86_64:
         # "_rpl_fchownat", referenced from:
-        prepare_clang_env ""
+        # Ok with GCC 11.2 on Arm. TODO: check again on Intel
+        : # prepare_clang_env ""
       fi
 
       env | sort
@@ -8753,6 +8754,7 @@ function build_bash()
       then
         # Undefined symbols for architecture x86_64:
         # "_rpl_fchownat", referenced from:
+        # Ok with GCC 11.2 on Arm. TODO: check again on Intel
         prepare_clang_env ""
       fi
 
