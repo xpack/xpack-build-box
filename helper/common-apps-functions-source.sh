@@ -2091,6 +2091,7 @@ function build_openssl()
   # https://aur.archlinux.org/cgit/aur.git/tree/PKGBUILD?h=openssl-git
 
   # https://github.com/Homebrew/homebrew-core/blob/master/Formula/openssl@1.1.rb
+  # https://github.com/Homebrew/homebrew-core/blob/master/Formula/openssl@3.rb
 
   # 2017-Nov-02
   # XBB_OPENSSL_VERSION="1.1.0g"
@@ -2104,6 +2105,7 @@ function build_openssl()
   # 20 Dec 2019, "1.0.2u"
   # 2021-Mar-25, "1.1.1k"
   # 2021-Aug-24, "1.1.1l"
+  # 2021-Sep-07, "3.0.0"
 
   local openssl_version="$1"
   # Numbers
