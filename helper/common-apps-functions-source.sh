@@ -476,7 +476,13 @@ function build_native_gcc()
   # The repo used by the HomeBrew:
   # https://github.com/Homebrew/homebrew-core/blob/master/Formula/gcc.rb
   # https://github.com/fxcoudert/gcc/tags
-  if is_darwin && [ "${native_gcc_version}" == "11.2.0" ]
+  if is_darwin && [ "${step}" == "-edge" ]
+  then
+    local native_gcc_src_folder_name="gcc-${native_gcc_version}-edge"
+    local native_gcc_url="https://github.com/iains/gcc-darwin-arm64.git"
+
+    prepare_clang_env ""
+  elif is_darwin && [ "${native_gcc_version}" == "11.2.0" ]
   then
     # https://github.com/fxcoudert/gcc/archive/refs/tags/gcc-11.2.0-arm-20211126.tar.gz
     local native_gcc_archive="gcc-11.2.0-arm-20211126.tar.gz"
@@ -500,12 +506,20 @@ function build_native_gcc()
   local native_gcc_stamp_file_path="${STAMPS_FOLDER_PATH}/stamp-${native_gcc_folder_name}-installed"
   if [ ! -f "${native_gcc_stamp_file_path}" -o ! -d "${BUILD_FOLDER_PATH}/${native_gcc_folder_name}" ]
   then
-
     cd "${SOURCES_FOLDER_PATH}"
 
-    download_and_extract "${native_gcc_url}" "${native_gcc_archive}" \
-      "${native_gcc_src_folder_name}" \
-      "${native_gcc_patch_file_path}"
+    if [ "${step}" == "-edge" ]
+    then
+      if [ ! -d "${native_gcc_src_folder_name}" ]
+      then
+        run_verbose git clone "${native_gcc_url}" \
+          "${native_gcc_src_folder_name}"
+      fi
+    else
+      download_and_extract "${native_gcc_url}" "${native_gcc_archive}" \
+        "${native_gcc_src_folder_name}" \
+        "${native_gcc_patch_file_path}"
+    fi
 
     mkdir -pv "${LOGS_FOLDER_PATH}/${native_gcc_folder_name}"
 
@@ -746,7 +760,7 @@ function build_native_gcc()
         echo "Running native gcc make..."
 
         # Build.
-        run_verbose make -j ${JOBS}
+        run_verbose make # -j ${JOBS}
 
          # make install-strip
         run_verbose make install
@@ -797,7 +811,7 @@ function build_native_gcc()
     echo "Component gcc native already installed."
   fi
 
-  if [ -z "${step}" ]
+  if [ -z "${step}" -o "${step}" == "-edge" ]
   then
     test_functions+=("test_native_gcc")
   fi
