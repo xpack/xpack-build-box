@@ -760,7 +760,7 @@ function build_native_gcc()
         echo "Running native gcc make..."
 
         # Build.
-        run_verbose make # -j ${JOBS}
+        run_verbose make -j ${JOBS}
 
          # make install-strip
         run_verbose make install
