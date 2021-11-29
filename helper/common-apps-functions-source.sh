@@ -2148,6 +2148,13 @@ function build_openssl()
 
       # CPPFLAGS="${XBB_CPPFLAGS} -I${BUILD_FOLDER_PATH}/${openssl_folder_name}/include"
       CPPFLAGS="${XBB_CPPFLAGS}"
+      if is_darwin
+      then
+        # Otherwise it fails on macOS 10.13 with:
+        # In file included from crypto/rand/rand_unix.c:38:
+        # /usr/include/CommonCrypto/CommonRandom.h:35:9: error: unknown type name 'CCCryptorStatus'
+        CPPFLAGS+="-I/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include"
+      fi
       CFLAGS="${XBB_CFLAGS_NO_W}"
       CXXFLAGS="${XBB_CXXFLAGS_NO_W}"
       LDFLAGS="${XBB_LDFLAGS_APP}"
