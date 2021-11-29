@@ -468,13 +468,7 @@ function build_native_gcc()
 
   local native_gcc_version="$1"
 
-  local step
-  if [ $# -ge 2 ]
-  then
-    step="$2"
-  else
-    step=""
-  fi
+  local step="${2:-""}"
 
   # Branch from the Darwin maintainer of GCC with Apple Silicon support,
   # located at https://github.com/iains/gcc-darwin-arm64 and
