@@ -76,11 +76,11 @@ function build_native_binutils()
       export CXXFLAGS
       export LDFLAGS
 
-      env | sort
-
       if [ ! -f "config.status" ]
       then
         (
+          env | sort
+
           echo
           echo "Running native binutils configure..."
 
@@ -332,11 +332,11 @@ function build_native_gdb()
       export CXXFLAGS
       export LDFLAGS
 
-      env | sort
-
       if [ ! -f "config.status" ]
       then
         (
+          env | sort
+
           echo
           echo "Running native gdb configure..."
 
@@ -558,11 +558,11 @@ function build_native_gcc()
       export LDFLAGS_FOR_BUILD
       export BOOT_LDFLAGS
 
-      env | sort
-
       if [ ! -f "config.status" ]
       then
         (
+          env | sort
+
           echo
           echo "Running native gcc configure..."
 
@@ -1063,11 +1063,11 @@ function build_mingw_binutils()
       export CXXFLAGS
       export LDFLAGS
 
-      env | sort
-
       if [ ! -f "config.status" ]
       then
         (
+          env | sort
+
           echo
           echo "Running mingw-w64 binutils configure..."
 
@@ -1356,11 +1356,11 @@ function build_mingw_headers()
       xbb_activate
       xbb_activate_installed_dev
 
-      env | sort
-
       if [ ! -f "config.status" ]
       then
         (
+          env | sort
+
           echo
           echo "Running mingw-w64 headers configure..."
 
@@ -1473,11 +1473,11 @@ function build_mingw_gcc_first()
       export CXXFLAGS
       export LDFLAGS
 
-      env | sort
-
       if [ ! -f "config.status" ]
       then
         (
+          env | sort
+
           echo
           echo "Running mingw gcc step 1 configure..."
 
@@ -1743,11 +1743,11 @@ function build_mingw_crt()
       # (https://github.com/henry0312/build_gcc/issues/1)
       # export CC=""
 
-      env | sort
-
       if [ ! -f "config.status" ]
       then
         (
+          env | sort
+
           echo
           echo "Running mingw-w64 crt configure..."
 
@@ -1846,11 +1846,11 @@ function build_mingw_winpthreads()
       # export CC=""
       # prepare_gcc_env "${MINGW_TARGET}-"
 
-      env | sort
-
       if [ ! -f "config.status" ]
       then
         (
+          env | sort
+
           echo
           echo "Running mingw-w64 winpthreads configure..."
 
@@ -2167,11 +2167,11 @@ function build_openssl()
       export CXXFLAGS
       export LDFLAGS
 
-      env | sort
-
       if [ ! -f config.stamp ]
       then
         (
+          env | sort
+
           echo
           echo "Running openssl configure..."
 
@@ -2406,11 +2406,11 @@ function build_curl()
       export CXXFLAGS
       export LDFLAGS
 
-      env | sort
-
       if [ ! -f "config.status" ]
       then
         (
+          env | sort
+
           echo
           echo "Running curl configure..."
 
@@ -2552,11 +2552,11 @@ function build_xz()
       export CXXFLAGS
       export LDFLAGS
 
-      env | sort
-
       if [ ! -f "config.status" ]
       then
         (
+          env | sort
+
           echo
           echo "Running xz configure..."
 
@@ -2735,11 +2735,11 @@ function build_tar()
       # Avoid 'configure: error: you should not run configure as root'.
       export FORCE_UNSAFE_CONFIGURE=1
 
-      env | sort
-
       if [ ! -f "config.status" ]
       then
         (
+          env | sort
+
           echo
           echo "Running tar configure..."
 
@@ -2889,11 +2889,11 @@ function build_coreutils()
         : # prepare_clang_env ""
       fi
 
-      env | sort
-
       if [ ! -f "config.status" ]
       then
         (
+          env | sort
+
           echo
           echo "Running coreutils configure..."
 
@@ -3072,11 +3072,11 @@ function build_pkg_config()
       export CXXFLAGS
       export LDFLAGS
 
-      env | sort
-
       if [ ! -f "config.status" ]
       then
         (
+          env | sort
+
           echo
           echo "Running pkg_config configure..."
 
@@ -3202,11 +3202,11 @@ function build_m4()
       export CXXFLAGS
       export LDFLAGS
 
-      env | sort
-
       if [ ! -f "config.status" ]
       then
         (
+          env | sort
+
           echo
           echo "Running m4 configure..."
 
@@ -3342,11 +3342,11 @@ function build_gawk()
       export CXXFLAGS
       export LDFLAGS
 
-      env | sort
-
       if [ ! -f "config.status" ]
       then
         (
+          env | sort
+
           echo
           echo "Running gawk configure..."
 
@@ -3491,11 +3491,11 @@ function build_sed()
       export CXXFLAGS
       export LDFLAGS
 
-      env | sort
-
       if [ ! -f "config.status" ]
       then
         (
+          env | sort
+
           echo
           echo "Running sed configure..."
 
@@ -3635,11 +3635,11 @@ function build_autoconf()
       export CXXFLAGS
       export LDFLAGS
 
-      env | sort
-
       if [ ! -f "config.status" ]
       then
         (
+          env | sort
+
           echo
           echo "Running autoconf configure..."
 
@@ -3762,11 +3762,11 @@ function build_automake()
       export CXXFLAGS
       export LDFLAGS
 
-      env | sort
-
       if [ ! -f "config.status" ]
       then
         (
+          env | sort
+
           echo
           echo "Running automake configure..."
 
@@ -3894,11 +3894,11 @@ function build_libtool()
       export CXXFLAGS
       export LDFLAGS
 
-      env | sort
-
       if [ ! -f "config.status" ]
       then
         (
+          env | sort
+
           echo
           echo "Running libtool configure..."
 
@@ -4041,11 +4041,11 @@ function build_gettext()
       export CXXFLAGS
       export LDFLAGS
 
-      env | sort
-
       if [ ! -f "config.status" ]
       then
         (
+          env | sort
+
           echo
           echo "Running gettext configure..."
 
@@ -4269,11 +4269,11 @@ function build_patch()
       export CXXFLAGS
       export LDFLAGS
 
-      env | sort
-
       if [ ! -f "config.status" ]
       then
         (
+          env | sort
+
           echo
           echo "Running patch configure..."
 
@@ -4394,11 +4394,11 @@ function build_diffutils()
       export CXXFLAGS
       export LDFLAGS
 
-      env | sort
-
       if [ ! -f "config.status" ]
       then
         (
+          env | sort
+
           echo
           echo "Running diffutils configure..."
 
@@ -4536,11 +4536,11 @@ function build_bison()
       export CXXFLAGS
       export LDFLAGS
 
-      env | sort
-
       if [ ! -f "config.status" ]
       then
         (
+          env | sort
+
           echo
           echo "Running bison configure..."
 
@@ -4705,11 +4705,11 @@ function build_flex()
       export CXXFLAGS
       export LDFLAGS
 
-      env | sort
-
       if [ ! -f "config.status" ]
       then
         (
+          env | sort
+
           echo
           echo "Running flex configure..."
 
@@ -4840,11 +4840,11 @@ function build_make()
       export CXXFLAGS
       export LDFLAGS
 
-      env | sort
-
       if [ ! -f "config.status" ]
       then
         (
+          env | sort
+
           echo
           echo "Running make configure..."
 
@@ -4980,11 +4980,11 @@ function build_wget()
       export CXXFLAGS
       export LDFLAGS
 
-      env | sort
-
       if [ ! -f "config.status" ]
       then
         (
+          env | sort
+
           echo
           echo "Running wget configure..."
 
@@ -5118,11 +5118,11 @@ function build_texinfo()
       export CXXFLAGS
       export LDFLAGS
 
-      env | sort
-
       if [ ! -f "config.status" ]
       then
         (
+          env | sort
+
           echo
           echo "Running texinfo configure..."
 
@@ -5257,14 +5257,14 @@ function build_cmake()
         prepare_clang_env ""
       fi
 
-      env | sort
-
       local which_cmake="$(which cmake)"
       if [ -z "${which_cmake}" -o "${XBB_LAYER}" == "xbb-bootstrap" ]
       then
         if [ ! -d "Bootstrap.cmk" ]
         then
           (
+            env | sort
+
             echo
             echo "Running cmake bootstrap..."
 
@@ -5280,6 +5280,8 @@ function build_cmake()
         fi
       else
         (
+          env | sort
+
           echo
           echo "Running cmake cmake..."
 
@@ -5472,11 +5474,11 @@ function build_perl()
         prepare_clang_env ""
       fi
 
-      env | sort
-
       if [ ! -f "config.h" ]
       then
         (
+          env | sort
+
           echo
           echo "Running perl configure..."
 
@@ -5645,11 +5647,11 @@ function build_makedepend()
       export LDFLAGS
       export PKG_CONFIG_PATH
 
-      env | sort
-
       if [ ! -f "config.status" ]
       then
         (
+          env | sort
+
           echo
           echo "Running makedepend configure..."
 
@@ -5778,11 +5780,11 @@ function build_patchelf()
       export CXXFLAGS
       export LDFLAGS
 
-      env | sort
-
       if [ ! -f "config.status" ]
       then
         (
+          env | sort
+
           echo
           echo "Running patchelf configure..."
 
@@ -5900,11 +5902,11 @@ function build_chrpath()
       export CXXFLAGS
       export LDFLAGS
 
-      env | sort
-
       if [ ! -f "config.status" ]
       then
         (
+          env | sort
+
           echo
           echo "Running chrpath configure..."
 
@@ -6018,9 +6020,9 @@ function build_dos2unix()
       export CXXFLAGS
       export LDFLAGS
 
-      env | sort
-
       (
+        env | sort
+
         echo
         echo "Running dos2unix make..."
 
@@ -6144,11 +6146,11 @@ function build_git()
       export CXXFLAGS
       export LDFLAGS
 
-      env | sort
-
       if [ ! -f "config.status" ]
       then
         (
+          env | sort
+
           echo
           echo "Running git configure..."
 
@@ -6272,11 +6274,11 @@ function build_python2()
       # From Arch.
       export OPT="${CFLAGS}"
 
-      env | sort
-
       if [ ! -f "config.status" ]
       then
         (
+          env | sort
+
           echo
           echo "Running python2 configure..."
 
@@ -6454,11 +6456,11 @@ function build_python3()
       export CXXFLAGS
       export LDFLAGS
 
-      env | sort
-
       if [ ! -f "config.status" ]
       then
         (
+          env | sort
+
           echo
           echo "Running python3 configure..."
 
@@ -6832,9 +6834,9 @@ function build_ninja()
       export CXXFLAGS
       export LDFLAGS
 
-      env | sort
-
       (
+        env | sort
+
         echo
         echo "Running ninja bootstrap..."
 
@@ -7150,11 +7152,11 @@ function build_wine()
       export CXXFLAGS
       export LDFLAGS
 
-      env | sort
-
       if [ ! -f "config.status" ]
       then
         (
+          env | sort
+
           echo
           echo "Running wine configure..."
 
@@ -7435,11 +7437,11 @@ function build_gnupg()
       export CXXFLAGS
       export LDFLAGS
 
-      env | sort
-
       if [ ! -f "config.status" ]
       then
         (
+          env | sort
+
           echo
           echo "Running gnupg configure..."
 
@@ -7585,9 +7587,9 @@ function build_ant()
       xbb_activate
       xbb_activate_installed_dev
 
-      env | sort
-
       (
+        env | sort
+
         # https://ant.apache.org/manual/install.html#buildingant
 
         echo
@@ -7685,9 +7687,9 @@ function build_maven()
       xbb_activate
       xbb_activate_installed_dev
 
-      env | sort
-
       (
+        env | sort
+
         # https://maven.apache.org/guides/development/guide-building-maven.html
 
         echo
@@ -7794,11 +7796,11 @@ function build_nodejs()
       export CXXFLAGS
       export LDFLAGS
 
-      env | sort
-
       if true # [ ! -f "config.status" ]
       then
         (
+          env | sort
+
           echo
           echo "Running nodejs configure..."
 
@@ -7920,11 +7922,11 @@ function build_tcl()
       export CXXFLAGS
       export LDFLAGS
 
-      env | sort
-
       if [ ! -f "config.status" ]
       then
         (
+          env | sort
+
           echo
           echo "Running tcl configure..."
 
@@ -8103,11 +8105,11 @@ function build_guile()
       export CXXFLAGS
       export LDFLAGS
 
-      env | sort
-
       if [ ! -f "config.status" ]
       then
         (
+          env | sort
+
           echo
           echo "Running guile configure..."
 
@@ -8265,11 +8267,11 @@ function build_rhash()
       export CXXFLAGS
       export LDFLAGS
 
-      env | sort
-
       if [ ! -f "stamp-configure" ]
       then
         (
+          env | sort
+
           echo
           echo "Running rhash configure..."
 
@@ -8417,11 +8419,11 @@ function build_re2c()
       export CXXFLAGS
       export LDFLAGS
 
-      env | sort
-
       if [ ! -f "config.status" ]
       then
         (
+          env | sort
+
           echo
           echo "Running re2c configure..."
 
@@ -8604,11 +8606,11 @@ function build_autogen()
       export CXXFLAGS
       export LDFLAGS
 
-      env | sort
-
       if [ ! -f "config.status" ]
       then
         (
+          env | sort
+
           echo
           echo "Running autogen configure..."
 
@@ -8773,11 +8775,11 @@ function build_bash()
       export CXXFLAGS
       export LDFLAGS
 
-      env | sort
-
       if [ ! -f "config.status" ]
       then
         (
+          env | sort
+
           echo
           echo "Running bash configure..."
 
@@ -8910,9 +8912,9 @@ function build_realpath()
       export CXXFLAGS
       export LDFLAGS
 
-      env | sort
-
       (
+        env | sort
+
         echo
         echo "Running realpath make..."
 
@@ -9013,11 +9015,11 @@ function build_native_llvm()
       export CXXFLAGS
       export LDFLAGS
 
-      env | sort
-
       if true # [ ! -f "ninja.build" ]
       then
         (
+          env | sort
+
           echo
           echo "Running llvm cmake..."
 
