@@ -589,6 +589,24 @@ function prepare_clang_env()
 
   export CC="${prefix}clang${suffix}"
   export CXX="${prefix}clang++${suffix}"
+  unset CPP # Important! Do not use cpp!
+
+  export AR="${prefix}ar"
+  export NM="${prefix}nm"
+  export RANLIB="${prefix}ranlib"
+
+  export AS="${prefix}as"
+  export OBJCOPY="${prefix}objcopy"
+  export OBJDUMP="${prefix}objdump"
+  export READELF="${prefix}readelf"
+  export SIZE="${prefix}size"
+  export STRIP="${prefix}strip"
+
+  unset DLLTOOL
+  unset READELF
+  unset WINDRES
+  unset WINDMC
+  unset RC
 }
 
 function prepare_library_path()
