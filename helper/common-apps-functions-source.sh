@@ -611,6 +611,9 @@ function build_native_gcc()
 
           config_options+=("--enable-threads=posix")
 
+            config_options+=("--enable-shared")
+            config_options+=("--enable-shared-libgcc")
+
           # It fails on macOS master with:
           # libstdc++-v3/include/bits/cow_string.h:630:9: error: no matching function for call to 'std::basic_string<wchar_t>::_Alloc_hider::_Alloc_hider(std::basic_string<wchar_t>::_Rep*)'
           # config_options+=("--enable-fully-dynamic-string") # ?
@@ -657,9 +660,6 @@ function build_native_gcc()
             # --with-linker-hash-style=gnu
             # --enable-libmpx
             # --enable-clocale=gnu
-
-            config_options+=("--enable-shared")
-            config_options+=("--enable-shared-libgcc")
 
             # From HomeBrew, but not present on 11.x
             # config_options+=("--with-native-system-header-dir=/usr/include")
