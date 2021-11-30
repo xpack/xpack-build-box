@@ -496,9 +496,9 @@ function build_native_gcc()
     local native_gcc_url="https://github.com/fxcoudert/gcc/archive/refs/tags/${native_gcc_archive}"
     local native_gcc_src_folder_name="gcc-gcc-11.1.0-arm-20210504"
   else
+    local native_gcc_src_folder_name="gcc-${native_gcc_version}"
     local native_gcc_archive="${native_gcc_src_folder_name}.tar.xz"
     local native_gcc_url="https://ftp.gnu.org/gnu/gcc/gcc-${native_gcc_version}/${native_gcc_archive}"
-    local native_gcc_src_folder_name="gcc-${native_gcc_version}"
   fi
 
   local native_gcc_folder_name="native-gcc${step}-${native_gcc_version}"
