@@ -583,13 +583,13 @@ function build_native_gcc()
 
           config_options+=("--with-pkgversion=${XBB_GCC_BRANDING}")
 
-          config_options+=("--with-dwarf2")
-          config_options+=("--with-libiconv")
-
           # On macOS it fails with:
           # ld: library not found for -lisl
           # config_options+=("--with-isl")
           config_options+=("--with-isl=${INSTALL_FOLDER_PATH}")
+          config_options+=("--enable-languages=c,c++,fortran,objc,obj-c++,lto")
+
+          config_options+=("--with-libiconv")
 
           config_options+=("--with-diagnostics-color=auto")
 
@@ -598,8 +598,7 @@ function build_native_gcc()
 
           config_options+=("--without-cuda-driver")
 
-          config_options+=("--enable-languages=c,c++,fortran,objc,obj-c++,lto")
-          config_options+=("--enable-objc-gc=auto")
+          # config_options+=("--enable-objc-gc=auto")
 
           config_options+=("--enable-checking=release")
 
@@ -611,10 +610,6 @@ function build_native_gcc()
           config_options+=("--enable-__cxa_atexit")
 
           config_options+=("--enable-threads=posix")
-
-          config_options+=("--enable-gnu-unique-object")
-          config_options+=("--enable-gnu-indirect-function")
-          config_options+=("--enable-linker-build-id")
 
           # It fails on macOS master with:
           # libstdc++-v3/include/bits/cow_string.h:630:9: error: no matching function for call to 'std::basic_string<wchar_t>::_Alloc_hider::_Alloc_hider(std::basic_string<wchar_t>::_Rep*)'
@@ -692,6 +687,8 @@ function build_native_gcc()
             config_options+=("--with-gnu-ld")
             config_options+=("--with-stabs")
 
+            config_options+=("--with-dwarf2")
+
             if true
             then
               # Shared libraries remain problematic when refered from generated
@@ -745,6 +742,10 @@ function build_native_gcc()
             then
               config_options+=("--with-sysroot=${INSTALL_FOLDER_PATH}")
             fi
+
+            config_options+=("--enable-gnu-unique-object")
+            config_options+=("--enable-gnu-indirect-function")
+            config_options+=("--enable-linker-build-id")
 
             # Specific to XBB, not used in xPack.
             config_options+=("--disable-rpath")
