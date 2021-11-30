@@ -779,7 +779,17 @@ function build_native_gcc()
         echo "Running native gcc make..."
 
         # Build.
-        run_verbose make -j ${JOBS}
+        if is_darwin
+        then
+          # Weird. On macOS parallel builds may fail with missing
+          # symbols or files, like:
+          # Undefined symbols for architecture x86_64:
+          # "std::__throw_bad_function_call()", referenced from:
+          # Thus always use the old make 3.81 from macOS.
+          run_verbose /usr/bin/make -j ${JOBS}
+        else
+          run_verbose make -j ${JOBS}
+        fi
 
          # make install-strip
         run_verbose make install
