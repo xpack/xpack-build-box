@@ -589,68 +589,77 @@ function build_native_gcc()
           config_options+=("--with-isl=${INSTALL_FOLDER_PATH}")
           config_options+=("--enable-languages=c,c++,fortran,objc,obj-c++,lto")
 
-          config_options+=("--with-libiconv")
+          if [ "${step}" == "-edge" ]
+          then
+            : # The edge build must be as clean as possible.
+          else
+            # Many of these are probably redundand.
+            # Some may be plainly wrong.
+            
+            config_options+=("--with-libiconv")
 
-          config_options+=("--with-diagnostics-color=auto")
+            config_options+=("--with-diagnostics-color=auto")
 
-          config_options+=("--without-system-zlib")
-          # config_options+=("--with-system-zlib")
+            config_options+=("--without-system-zlib")
+            # config_options+=("--with-system-zlib")
 
-          config_options+=("--without-cuda-driver")
+            config_options+=("--without-cuda-driver")
 
-          # config_options+=("--enable-objc-gc=auto")
+            # config_options+=("--enable-objc-gc=auto")
 
-          config_options+=("--enable-checking=release")
+            config_options+=("--enable-checking=release")
 
-          config_options+=("--enable-lto")
-          config_options+=("--enable-plugin")
+            config_options+=("--enable-lto")
+            config_options+=("--enable-plugin")
 
-          config_options+=("--enable-static")
+            config_options+=("--enable-static")
 
-          config_options+=("--enable-__cxa_atexit")
+            config_options+=("--enable-__cxa_atexit")
 
-          config_options+=("--enable-threads=posix")
+            config_options+=("--enable-threads=posix")
 
             config_options+=("--enable-shared")
             config_options+=("--enable-shared-libgcc")
 
-          # It fails on macOS master with:
-          # libstdc++-v3/include/bits/cow_string.h:630:9: error: no matching function for call to 'std::basic_string<wchar_t>::_Alloc_hider::_Alloc_hider(std::basic_string<wchar_t>::_Rep*)'
-          # config_options+=("--enable-fully-dynamic-string") # ?
+            # It fails on macOS master with:
+            # libstdc++-v3/include/bits/cow_string.h:630:9: error: no matching function for call to 'std::basic_string<wchar_t>::_Alloc_hider::_Alloc_hider(std::basic_string<wchar_t>::_Rep*)'
+            # config_options+=("--enable-fully-dynamic-string") # ?
 
-          config_options+=("--enable-cloog-backend=isl")
-          config_options+=("--enable-libgomp")
+            config_options+=("--enable-cloog-backend=isl")
+            config_options+=("--enable-libgomp")
 
-          config_options+=("--enable-libssp")
-          config_options+=("--enable-default-pie")
-          config_options+=("--enable-default-ssp")
-          config_options+=("--enable-libatomic")
-          config_options+=("--enable-graphite")
-          config_options+=("--enable-libquadmath")
-          config_options+=("--enable-libquadmath-support")
+            config_options+=("--enable-libssp")
+            config_options+=("--enable-default-pie")
+            config_options+=("--enable-default-ssp")
+            config_options+=("--enable-libatomic")
+            config_options+=("--enable-graphite")
+            config_options+=("--enable-libquadmath")
+            config_options+=("--enable-libquadmath-support")
 
-          config_options+=("--enable-libstdcxx")
-          config_options+=("--enable-libstdcxx-time=yes")
-          config_options+=("--enable-libstdcxx-visibility")
-          config_options+=("--enable-libstdcxx-threads")
-          config_options+=("--with-default-libstdcxx-abi=new")
+            config_options+=("--enable-libstdcxx")
+            config_options+=("--enable-libstdcxx-time=yes")
+            config_options+=("--enable-libstdcxx-visibility")
+            config_options+=("--enable-libstdcxx-threads")
+            config_options+=("--with-default-libstdcxx-abi=new")
 
-          if true
-          then
-            # Fails in some circumstances.
-            config_options+=("--enable-bootstrap")
-          else
-            config_options+=("--disable-bootstrap")
+            if true
+            then
+              # Fails in some circumstances.
+              config_options+=("--enable-bootstrap")
+            else
+              config_options+=("--disable-bootstrap")
+            fi
+
+            config_options+=("--disable-nls")
+            config_options+=("--disable-multilib")
+            config_options+=("--disable-libstdcxx-debug")
+            config_options+=("--disable-libstdcxx-pch")
+
+            config_options+=("--disable-install-libiberty")
+
+            # config_options+=("--disable-libunwind-exceptions")
           fi
 
-          config_options+=("--disable-nls")
-          config_options+=("--disable-multilib")
-          config_options+=("--disable-libstdcxx-debug")
-          config_options+=("--disable-libstdcxx-pch")
-
-          config_options+=("--disable-install-libiberty")
-
-#         config_options+=("--disable-libunwind-exceptions")
           config_options+=("--disable-werror")
 
           if is_darwin
