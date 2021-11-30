@@ -481,7 +481,8 @@ function build_native_gcc()
     local native_gcc_src_folder_name="gcc-darwin-arm64.git"
     local native_gcc_url="https://github.com/iains/gcc-darwin-arm64.git"
 
-    prepare_clang_env ""
+    # Comment out this to bootstrap it with system clang.
+    # prepare_clang_env ""
   elif is_darwin && [ "${native_gcc_version}" == "11.2.0" ]
   then
     # https://github.com/fxcoudert/gcc/archive/refs/tags/gcc-11.2.0-arm-20211126.tar.gz
