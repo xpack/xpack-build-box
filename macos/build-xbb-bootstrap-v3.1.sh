@@ -98,7 +98,7 @@ strip_static_objects
 if [ "${HOST_UNAME}" == "Darwin" ]
 then
   echo
-  echo "macOS version ${macos_version}"
+  echo "macOS version ${MACOS_VERSION}"
   echo "XCode Command Line Tools version ${xclt_version}"
 fi
 

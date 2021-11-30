@@ -254,7 +254,7 @@ function prepare_xbb_env()
 
   if [ "${HOST_UNAME}" == "Darwin" ]
   then
-    macos_version=$(defaults read loginwindow SystemVersionStampAsString)
+    export MACOS_VERSION=$(defaults read loginwindow SystemVersionStampAsString)
     xclt_version=$(xcode-select --version | sed -e 's/xcode-select version \([0-9]*\)\./\1/')
 
     if [ "${XBB_LAYER}" == "xbb-bootstrap" ]
