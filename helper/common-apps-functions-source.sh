@@ -672,6 +672,8 @@ function build_native_gcc()
             echo "${MACOS_SDK_PATH}"
             config_options+=("--with-sysroot=${MACOS_SDK_PATH}")
 
+            config_options+=("--enable-pie-tools")
+
           elif is_linux
           then
 
@@ -747,6 +749,8 @@ function build_native_gcc()
             # Specific to XBB, not used in xPack.
             config_options+=("--disable-rpath")
             config_options+=("--disable-new-dtags")
+
+            # config_options+=("--enable-pie-tools")
 
           else
             echo "Unsupported gcc configuration."
