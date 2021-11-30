@@ -478,7 +478,7 @@ function build_native_gcc()
   # https://github.com/fxcoudert/gcc/tags
   if is_darwin && [ "${step}" == "-edge" ]
   then
-    local native_gcc_src_folder_name="gcc-${native_gcc_version}-edge.git"
+    local native_gcc_src_folder_name="gcc-darwin-arm64.git"
     local native_gcc_url="https://github.com/iains/gcc-darwin-arm64.git"
 
     prepare_clang_env ""
