@@ -4821,6 +4821,8 @@ function build_make()
   # https://archlinuxarm.org/packages/aarch64/make/files/PKGBUILD
   # https://aur.archlinux.org/cgit/aur.git/tree/PKGBUILD?h=make-git
 
+  # https://github.com/Homebrew/homebrew-core/blob/master/Formula/make.rb
+
   # 2016-06-10, "4.2.1"
   # 2020-01-19, "4.3"
 
@@ -4882,6 +4884,7 @@ function build_make()
             --prefix="${INSTALL_FOLDER_PATH}" \
             \
             --disable-rpath \
+            --program-prefix=g \
 
           cp "config.log" "${LOGS_FOLDER_PATH}/${make_folder_name}/config-log.txt"
         ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${make_folder_name}/configure-output.txt"
@@ -4897,13 +4900,18 @@ function build_make()
         # make install-strip
         run_verbose make install
 
-        (
-          echo
-          echo "Linking gmake..."
-          cd "${INSTALL_FOLDER_PATH}/bin"
-          rm -fv gmake
-          ln -sv make gmake
-        )
+        # On macOS the old make 3.18 is prefered, the new 4.3 fails on
+        # some GCC parallel builds.
+        if is_linux
+        then
+          (
+            echo
+            echo "Linking gmake -> make..."
+            cd "${INSTALL_FOLDER_PATH}/bin"
+            rm -fv make
+            ln -sv gmake make
+          )
+        fi
 
         # Takes too long.
         if [ "${RUN_LONG_TESTS}" == "y" ]
