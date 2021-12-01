@@ -4895,18 +4895,13 @@ function build_make()
         # make install-strip
         run_verbose make install
 
-        # On macOS the old make 3.18 is prefered, the new 4.3 fails on
-        # some GCC parallel builds.
-        if is_linux
-        then
-          (
-            echo
-            echo "Linking gmake -> make..."
-            cd "${INSTALL_FOLDER_PATH}/bin"
-            rm -fv make
-            ln -sv gmake make
-          )
-        fi
+        (
+          echo
+          echo "Linking gmake -> make..."
+          cd "${INSTALL_FOLDER_PATH}/bin"
+          rm -fv make
+          ln -sv gmake make
+        )
 
         # Takes too long.
         if [ "${RUN_LONG_TESTS}" == "y" ]
