@@ -30,7 +30,9 @@ since it guarantees a full SDK, not present on older versions of CLT.
 
 ```sh
 caffeinate bash "${HOME}/Downloads/xpack-build-box.git/macos/build-xbb-bootstrap-v3.4.sh" \
-  && caffeinate bash "${HOME}/Downloads/xpack-build-box.git/macos/build-xbb-v3.4.sh"
+  && chmod -R -w "${HOME}/.local/xbb-bootstrap" \
+  && caffeinate bash "${HOME}/Downloads/xpack-build-box.git/macos/build-xbb-v3.4.sh" \
+  && chmod -R -w "${HOME}/.local/xbb" \
 ```
 
 ## macOS 10.13
