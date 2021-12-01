@@ -2908,15 +2908,6 @@ function build_coreutils()
       export CXXFLAGS
       export LDFLAGS
 
-      # Use Apple GCC, since with GNU GCC it fails with some undefined symbols.
-      if is_darwin_not_clang
-      then
-        # Undefined symbols for architecture x86_64:
-        # "_rpl_fchownat", referenced from:
-        # Ok with GCC 11.2 on Arm. TODO: check again on Intel
-        : # prepare_clang_env ""
-      fi
-
       if [ ! -f "config.status" ]
       then
         (
@@ -5503,12 +5494,6 @@ function build_perl()
       export CFLAGS
       export CXXFLAGS
       export LDFLAGS
-
-      if is_darwin_not_clang && is_arm
-      then
-        # https://github.com/iains/gcc-darwin-arm64/issues/54
-        prepare_clang_env ""
-      fi
 
       if [ ! -f "config.h" ]
       then
@@ -8796,15 +8781,6 @@ function build_bash()
       CFLAGS="${XBB_CFLAGS_NO_W}"
       CXXFLAGS="${XBB_CXXFLAGS_NO_W}"
       LDFLAGS="${XBB_LDFLAGS_APP}"
-
-      # Use Apple GCC, since with GNU GCC it fails with some undefined symbols.
-      if false # is_darwin
-      then
-        # Undefined symbols for architecture x86_64:
-        # "_rpl_fchownat", referenced from:
-        # Ok with GCC 11.2 on Arm. TODO: check again on Intel
-        prepare_clang_env ""
-      fi
 
       export CPPFLAGS
       export CFLAGS
