@@ -646,13 +646,7 @@ function build_native_gcc()
             config_options+=("--enable-libstdcxx-threads")
             config_options+=("--with-default-libstdcxx-abi=new")
 
-            if true
-            then
-              # Fails in some circumstances.
-              config_options+=("--enable-bootstrap")
-            else
-              config_options+=("--disable-bootstrap")
-            fi
+            config_options+=("--enable-bootstrap")
 
             config_options+=("--disable-nls")
             config_options+=("--disable-multilib")
