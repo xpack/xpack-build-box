@@ -4947,12 +4947,12 @@ function test_make()
     echo
     echo "Checking the make binaries shared libraries..."
 
-    show_libs "${INSTALL_FOLDER_PATH}/bin/make"
+    show_libs "${INSTALL_FOLDER_PATH}/bin/gmake"
 
     echo
     echo "Testing if make binaries start properly..."
 
-    run_app "${INSTALL_FOLDER_PATH}/bin/make" --version
+    run_app "${INSTALL_FOLDER_PATH}/bin/gmake" --version
   )
 }
 
