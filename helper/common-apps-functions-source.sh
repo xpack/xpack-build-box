@@ -485,10 +485,14 @@ function build_native_gcc()
     prepare_clang_env ""
   elif is_darwin && is_arm && [ "${native_gcc_version}" == "11.2.0" ]
   then
+    # https://github.com/xpack-dev-tools/gcc/archive/refs/tags/gcc-11.2.0-arm-20211201-xpack.tar.gz
+    local native_gcc_archive="gcc-11.2.0-arm-20211201-xpack.tar.gz"
+    local native_gcc_url="https://github.com/xpack-dev-tools/gcc/archive/refs/tags/${native_gcc_archive}"
+    local native_gcc_src_folder_name="gcc-gcc-11.2.0-arm-20211201-xpack"
     # https://github.com/fxcoudert/gcc/archive/refs/tags/gcc-11.2.0-arm-20211126.tar.gz
-    local native_gcc_archive="gcc-11.2.0-arm-20211128.tar.gz"
-    local native_gcc_url="https://github.com/fxcoudert/gcc/archive/refs/tags/${native_gcc_archive}"
-    local native_gcc_src_folder_name="gcc-gcc-11.2.0-arm-20211128"
+    # local native_gcc_archive="gcc-11.2.0-arm-20211128.tar.gz"
+    # local native_gcc_url="https://github.com/fxcoudert/gcc/archive/refs/tags/${native_gcc_archive}"
+    # local native_gcc_src_folder_name="gcc-gcc-11.2.0-arm-20211128"
   elif is_darwin && is_arm && [ "${native_gcc_version}" == "11.1.0" ]
   then
     # https://github.com/fxcoudert/gcc/archive/refs/tags/gcc-11.1.0-arm-20210504.tar.gz
@@ -595,7 +599,7 @@ function build_native_gcc()
           else
             # Many of these are probably redundand.
             # Some may be plainly wrong.
-            
+
             config_options+=("--with-libiconv")
 
             config_options+=("--with-diagnostics-color=auto")
