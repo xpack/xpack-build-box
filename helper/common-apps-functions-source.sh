@@ -777,13 +777,23 @@ function build_native_gcc()
         echo "Running native gcc make..."
 
         # Build.
-
-        # Weird. On macOS parallel builds may fail with missing
-        # symbols or files, like:
-        # Undefined symbols for architecture x86_64:
-        # "std::__throw_bad_function_call()", referenced from:
-        # Thus always use the old /usr/bin/make 3.81 from macOS.
-        run_verbose make -j ${JOBS}
+        if is_darwin
+        then
+          # Weird. On macOS parallel builds may fail with missing
+          # symbols or files, like:
+          # Undefined symbols for architecture x86_64:
+          # "std::__throw_bad_function_call()", referenced from:
+          for i in 1 2 3
+          do
+            if run_verbose make -j ${JOBS}
+            then
+              break
+            fi
+            touch "${LOGS_FOLDER_PATH}/${native_gcc_folder_name}/make-attempt-${i}-failed.txt"
+          done
+        else
+          run_verbose make -j ${JOBS}
+        fi
 
         # make install-strip
         run_verbose make install
