@@ -26,6 +26,13 @@ packed in the base system and need to be installed as part of the
 Although Xcode itself is not needed, it is prefered over the Command Line Tools,
 since it guarantees a full SDK, not present on older versions of CLT.
 
+## TL;DR
+
+```sh
+caffeinate bash "${HOME}/Downloads/xpack-build-box.git/macos/build-xbb-bootstrap-v3.4.sh" \
+  && caffeinate bash "${HOME}/Downloads/xpack-build-box.git/macos/build-xbb-v3.4.sh"
+```
+
 ## macOS 10.13
 
 For the xPack binaries  to run on all macOS 10.13 or later, it is necessary to run
