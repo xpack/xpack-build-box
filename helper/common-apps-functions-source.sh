@@ -2208,14 +2208,11 @@ function build_openssl()
           echo "Running openssl configure..."
 
           echo
-          if is_darwin
+          if is_darwin && [ ${openssl_version_minor} -eq 0 ]
           then
 
             # Older versions do not support the KERNEL_BITS trick and require
             # the separate configurator.
-
-            if [ ${openssl_version_minor} -eq 0 ]
-            then
 
               # This config does not use the standard GNU environment definitions.
               # `Configure` is a Perl script.
@@ -2226,46 +2223,69 @@ function build_openssl()
                 \
                 --openssldir="${INSTALL_FOLDER_PATH}/openssl" \
                 shared \
-                enable-md2 enable-rc5 enable-tls enable-tls1_3 enable-tls1_2 enable-tls1_1 \
+              enable-md2 \
+              enable-rc5 \
+              enable-tls \
+              enable-tls1_3 \
+              enable-tls1_2 \
+              enable-tls1_1 \
                 "${CPPFLAGS} ${CFLAGS} ${LDFLAGS}"
 
               run_verbose make depend
 
             else
 
-              "./config" --help
+            config_options=()
 
+            config_options+=("--prefix=${INSTALL_FOLDER_PATH}")
+            config_options+=("--openssldir=${INSTALL_FOLDER_PATH}/openssl")
+
+            config_options+=("shared")
+
+            config_options+=("enable-md2")
+            config_options+=("enable-rc5")
+            config_options+=("enable-tls")
+            config_options+=("enable-tls1_3")
+            config_options+=("enable-tls1_2")
+            config_options+=("enable-tls1_1")
+
+            # From HomeBrew
               # SSLv2 died with 1.1.0, so no-ssl2 no longer required.
               # SSLv3 & zlib are off by default with 1.1.0 but this may not
               # be obvious to everyone, so explicitly state it for now to
               # help debug inevitable breakage.
-              export KERNEL_BITS=64
-              run_verbose "./config" \
-                --prefix="${INSTALL_FOLDER_PATH}" \
-                \
-                --openssldir="${INSTALL_FOLDER_PATH}/openssl" \
-                shared \
-                enable-md2 \
-                enable-rc5 \
-                enable-tls \
-                enable-tls1_3 \
-                enable-tls1_2 \
-                enable-tls1_1 \
-                no-ssl3 \
-                no-ssl3-method \
-                "${CPPFLAGS} ${CFLAGS} ${LDFLAGS}"
+            config_options+=("no-ssl3")
+            config_options+=("no-ssl3-method")
 
-            fi
-
+            if is_darwin
+            then
+              config_options+=("enable-ec_nistp_64_gcc_128")
+              if [ "${HOST_MACHINE}" == "arm64" ]
+              then
+                : # config_options+=("darwin64-arm64-cc")
+              elif [ "${HOST_MACHINE}" == "x86_64" ]
+              then
+                : # config_options+=("darwin64-x64_86-cc")
           else
-
-            config_options=()
+                echo "HOST_MACHINE?"
+                exit 1
+              fi
+              export KERNEL_BITS=64
+            elif is_linux
+            then
+              # arch_args << (Hardware::CPU.is_64_bit? ? "linux-x86_64" : "linux-elf")
+              # arch_args << (Hardware::CPU.is_64_bit? ? "linux-aarch64" : "linux-armv4")
             if [ "${HOST_MACHINE}" == "x86_64" ]
             then
               config_options+=("enable-ec_nistp_64_gcc_128")
             elif [ "${HOST_MACHINE}" == "aarch64" ]
             then
               config_options+=("no-afalgeng")
+              else
+                echo "HOST_MACHINE?"
+                exit 1
+              fi
+              config_options+=("-Wa,--noexecstack")
             fi
 
             set +u
@@ -2285,20 +2305,8 @@ function build_openssl()
 
             # perl, do not start with bash.
             run_verbose "./config" \
-              --prefix="${INSTALL_FOLDER_PATH}" \
-              \
-              --openssldir="${INSTALL_FOLDER_PATH}/openssl" \
-              shared \
-              enable-md2 \
-              enable-rc5 \
-              enable-tls \
-              enable-tls1_3 \
-              enable-tls1_2 \
-              enable-tls1_1 \
-              no-ssl3 \
-              no-ssl3-method \
               "${config_options[@]}" \
-              "-Wa,--noexecstack ${CPPFLAGS} ${CFLAGS} ${LDFLAGS}"
+              "${CPPFLAGS} ${CFLAGS} ${LDFLAGS}"
 
             set -u
 
