@@ -791,6 +791,8 @@ function build_native_gcc()
             fi
             touch "${LOGS_FOLDER_PATH}/${native_gcc_folder_name}/make-attempt-${i}-failed.txt"
           done
+          # One more time without -j, to be sure it ends...
+          run_verbose make 
         else
           run_verbose make -j ${JOBS}
         fi
