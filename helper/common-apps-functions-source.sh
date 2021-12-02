@@ -2401,6 +2401,8 @@ function build_curl()
   # https://archlinuxarm.org/packages/aarch64/curl/files/PKGBUILD
   # https://aur.archlinux.org/cgit/aur.git/tree/PKGBUILD?h=curl-git
 
+  # https://github.com/Homebrew/homebrew-core/blob/master/Formula/curl.rb
+
   # 2017-10-23, "7.56.1"
   # 2017-11-29, "7.57.0"
   # 2019-03-27, "7.64.1"
@@ -2462,6 +2464,8 @@ function build_curl()
             --with-gssapi \
             --with-ca-bundle="${INSTALL_FOLDER_PATH}/openssl/ca-bundle.crt" \
             --with-ssl \
+            --with-secure-transport \
+            --without-libpsl \
             \
             --enable-optimize \
             --enable-versioned-symbols \
@@ -2472,6 +2476,7 @@ function build_curl()
             --disable-werror \
             --disable-warnings \
             --disable-debug \
+            --disable-silent-rules \
 
           if is_linux
           then
@@ -2532,6 +2537,8 @@ function test_curl()
     echo "Testing if curl binaries start properly..."
 
     run_app "${INSTALL_FOLDER_PATH}/bin/curl" --version
+
+    run_app "${INSTALL_FOLDER_PATH}/bin/curl"  -L https://github.com/xpack-dev-tools/content/raw/master/README.md
   )
 }
 
