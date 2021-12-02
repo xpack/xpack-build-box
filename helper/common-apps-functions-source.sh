@@ -2214,26 +2214,26 @@ function build_openssl()
             # Older versions do not support the KERNEL_BITS trick and require
             # the separate configurator.
 
-              # This config does not use the standard GNU environment definitions.
-              # `Configure` is a Perl script.
-              "./Configure" --help || true
+            # This config does not use the standard GNU environment definitions.
+            # `Configure` is a Perl script.
+            "./Configure" --help || true
 
-              run_verbose "./Configure" "darwin64-x86_64-cc" \
-                --prefix="${INSTALL_FOLDER_PATH}" \
-                \
-                --openssldir="${INSTALL_FOLDER_PATH}/openssl" \
-                shared \
+            run_verbose "./Configure" "darwin64-x86_64-cc" \
+              --prefix="${INSTALL_FOLDER_PATH}" \
+              \
+              --openssldir="${INSTALL_FOLDER_PATH}/openssl" \
+              shared \
               enable-md2 \
               enable-rc5 \
               enable-tls \
               enable-tls1_3 \
               enable-tls1_2 \
               enable-tls1_1 \
-                "${CPPFLAGS} ${CFLAGS} ${LDFLAGS}"
+              "${CPPFLAGS} ${CFLAGS} ${LDFLAGS}"
 
-              run_verbose make depend
+            run_verbose make depend
 
-            else
+          else
 
             config_options=()
 
@@ -2250,10 +2250,10 @@ function build_openssl()
             config_options+=("enable-tls1_1")
 
             # From HomeBrew
-              # SSLv2 died with 1.1.0, so no-ssl2 no longer required.
-              # SSLv3 & zlib are off by default with 1.1.0 but this may not
-              # be obvious to everyone, so explicitly state it for now to
-              # help debug inevitable breakage.
+            # SSLv2 died with 1.1.0, so no-ssl2 no longer required.
+            # SSLv3 & zlib are off by default with 1.1.0 but this may not
+            # be obvious to everyone, so explicitly state it for now to
+            # help debug inevitable breakage.
             config_options+=("no-ssl3")
             config_options+=("no-ssl3-method")
 
@@ -2266,7 +2266,7 @@ function build_openssl()
               elif [ "${HOST_MACHINE}" == "x86_64" ]
               then
                 : # config_options+=("darwin64-x64_86-cc")
-          else
+              else
                 echo "HOST_MACHINE?"
                 exit 1
               fi
@@ -2275,12 +2275,12 @@ function build_openssl()
             then
               # arch_args << (Hardware::CPU.is_64_bit? ? "linux-x86_64" : "linux-elf")
               # arch_args << (Hardware::CPU.is_64_bit? ? "linux-aarch64" : "linux-armv4")
-            if [ "${HOST_MACHINE}" == "x86_64" ]
-            then
-              config_options+=("enable-ec_nistp_64_gcc_128")
-            elif [ "${HOST_MACHINE}" == "aarch64" ]
-            then
-              config_options+=("no-afalgeng")
+              if [ "${HOST_MACHINE}" == "x86_64" ]
+              then
+                config_options+=("enable-ec_nistp_64_gcc_128")
+              elif [ "${HOST_MACHINE}" == "aarch64" ]
+              then
+                config_options+=("no-afalgeng")
               else
                 echo "HOST_MACHINE?"
                 exit 1
@@ -6128,6 +6128,8 @@ function build_git()
 
   # https://git.archlinux.org/svntogit/packages.git/tree/trunk/PKGBUILD?h=packages/git
 
+  # https://github.com/Homebrew/homebrew-core/blob/master/Formula/git.rb
+
   # 30-Oct-2017, "2.15.0"
   # 24-Feb-2019, "2.21.0"
   # 13-Jan-2020, "2.25.0"
@@ -6180,6 +6182,12 @@ function build_git()
       export CFLAGS
       export CXXFLAGS
       export LDFLAGS
+
+      if is_darwin
+      then
+        export NO_OPENSSL=1
+        export APPLE_COMMON_CRYPTO=1
+      fi
 
       if [ ! -f "config.status" ]
       then
@@ -6242,6 +6250,11 @@ function test_git()
     echo "Testing if git binaries start properly..."
 
     run_app "${INSTALL_FOLDER_PATH}/bin/git" --version
+
+    rm -rf content.git
+    run_app "${INSTALL_FOLDER_PATH}/bin/git" clone \
+      https://github.com/xpack-dev-tools/content.git \
+      content.git
   )
 }
 
