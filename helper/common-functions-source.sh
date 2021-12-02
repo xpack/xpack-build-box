@@ -1674,4 +1674,9 @@ function run_timed_verbose()
   time "${app_path}" "$@" 2>&1
 }
 
+function ndate()
+{
+  date -u +%Y%m%d-%H%M%S
+}
+
 # =============================================================================
