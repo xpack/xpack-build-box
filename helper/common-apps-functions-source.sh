@@ -2538,7 +2538,9 @@ function test_curl()
 
     run_app "${INSTALL_FOLDER_PATH}/bin/curl" --version
 
-    run_app "${INSTALL_FOLDER_PATH}/bin/curl"  -L https://github.com/xpack-dev-tools/content/raw/master/README.md
+    run_app "${INSTALL_FOLDER_PATH}/bin/curl" \
+      -L https://github.com/xpack-dev-tools/content/raw/master/README.md \
+      --output test-output.md
   )
 }
 
