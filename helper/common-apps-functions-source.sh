@@ -6135,6 +6135,7 @@ function build_git()
   # 13-Jan-2020, "2.25.0"
   # 06-Jun-2021, "2.32.0"
   # 12-Oct-2021, "2.33.1"
+  # 24-Nov-2021, "2.34.1"
 
   local git_version="$1"
 
@@ -6171,6 +6172,12 @@ function build_git()
 
       xbb_activate
       xbb_activate_installed_dev
+
+      if is_darwin_not_clang && is_arm
+      then
+        # The requested URL returned error: 405
+        prepare_clang_env ""
+      fi
 
       CPPFLAGS="${XBB_CPPFLAGS}"
       CFLAGS="${XBB_CFLAGS_NO_W}"
