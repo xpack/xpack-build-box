@@ -77,8 +77,8 @@ function build_zlib()
         run_verbose bash ${DEBUG} "./configure" \
           --prefix="${INSTALL_FOLDER_PATH}"
 
-        cp "configure.log" "${LOGS_FOLDER_PATH}/${zlib_folder_name}/configure-log.txt"
-      ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${zlib_folder_name}/configure-output.txt"
+        cp "configure.log" "${LOGS_FOLDER_PATH}/${zlib_folder_name}/configure-log-$(ndate).txt"
+      ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${zlib_folder_name}/configure-output-$(ndate).txt"
 
       (
         echo
@@ -94,12 +94,12 @@ function build_zlib()
           run_verbose make -j1 test
         fi
 
-      ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${zlib_folder_name}/make-output.txt"
+      ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${zlib_folder_name}/make-output-$(ndate).txt"
     )
 
     (
       test_zlib
-    ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${zlib_folder_name}/test-output.txt"
+    ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${zlib_folder_name}/test-output-$(ndate).txt"
 
     touch "${zlib_stamp_file_path}"
 
@@ -212,8 +212,8 @@ function build_gmp()
               "tests/mpn/Makefile"
           fi
 
-          cp "config.log" "${LOGS_FOLDER_PATH}/${gmp_folder_name}/config-log.txt"
-        ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${gmp_folder_name}/configure-output.txt"
+          cp "config.log" "${LOGS_FOLDER_PATH}/${gmp_folder_name}/config-log-$(ndate).txt"
+        ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${gmp_folder_name}/configure-output-$(ndate).txt"
       fi
 
       (
@@ -236,12 +236,12 @@ function build_gmp()
           fi
         fi
 
-      ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${gmp_folder_name}/make-output.txt"
+      ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${gmp_folder_name}/make-output-$(ndate).txt"
     )
 
     (
       test_gmp
-    ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${gmp_folder_name}/test-output.txt"
+    ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${gmp_folder_name}/test-output-$(ndate).txt"
 
     touch "${gmp_stamp_file_path}"
 
@@ -347,8 +347,8 @@ function build_mpfr()
             patch_all_libtool_rpath
           fi
 
-          cp "config.log" "${LOGS_FOLDER_PATH}/${mpfr_folder_name}/config-log.txt"
-        ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${mpfr_folder_name}/configure-output.txt"
+          cp "config.log" "${LOGS_FOLDER_PATH}/${mpfr_folder_name}/config-log-$(ndate).txt"
+        ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${mpfr_folder_name}/configure-output-$(ndate).txt"
       fi
 
       (
@@ -372,12 +372,12 @@ function build_mpfr()
           fi
         fi
 
-      ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${mpfr_folder_name}/make-output.txt"
+      ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${mpfr_folder_name}/make-output-$(ndate).txt"
     )
 
     (
       test_mpfr
-    ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${mpfr_folder_name}/test-output.txt"
+    ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${mpfr_folder_name}/test-output-$(ndate).txt"
 
     touch "${mpfr_stamp_file_path}"
 
@@ -470,8 +470,8 @@ function build_mpc()
             patch_all_libtool_rpath
           fi
 
-          cp "config.log" "${LOGS_FOLDER_PATH}/${mpc_folder_name}/config-log.txt"
-        ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${mpc_folder_name}/configure-output.txt"
+          cp "config.log" "${LOGS_FOLDER_PATH}/${mpc_folder_name}/config-log-$(ndate).txt"
+        ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${mpc_folder_name}/configure-output-$(ndate).txt"
       fi
 
       (
@@ -489,12 +489,12 @@ function build_mpc()
           run_verbose make -j1 check
         fi
 
-      ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${mpc_folder_name}/make-output.txt"
+      ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${mpc_folder_name}/make-output-$(ndate).txt"
     )
 
     (
       test_mpc
-    ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${mpc_folder_name}/test-output.txt"
+    ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${mpc_folder_name}/test-output-$(ndate).txt"
 
     touch "${mpc_stamp_file_path}"
 
@@ -605,8 +605,8 @@ function build_isl()
             patch_all_libtool_rpath
           fi
 
-          cp "config.log" "${LOGS_FOLDER_PATH}/${isl_folder_name}/config-log.txt"
-        ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${isl_folder_name}/configure-output.txt"
+          cp "config.log" "${LOGS_FOLDER_PATH}/${isl_folder_name}/config-log-$(ndate).txt"
+        ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${isl_folder_name}/configure-output-$(ndate).txt"
       fi
 
       (
@@ -624,12 +624,12 @@ function build_isl()
           run_verbose make -j1 check
         fi
 
-      ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${isl_folder_name}/make-output.txt"
+      ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${isl_folder_name}/make-output-$(ndate).txt"
     )
 
     (
       test_isl
-    ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${isl_folder_name}/test-output.txt"
+    ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${isl_folder_name}/test-output-$(ndate).txt"
 
     touch "${isl_stamp_file_path}"
 
@@ -735,8 +735,8 @@ function build_nettle()
               "testsuite/Makefile"
           fi
 
-          cp "config.log" "${LOGS_FOLDER_PATH}/${nettle_folder_name}/config-log.txt"
-        ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${nettle_folder_name}/configure-output.txt"
+          cp "config.log" "${LOGS_FOLDER_PATH}/${nettle_folder_name}/config-log-$(ndate).txt"
+        ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${nettle_folder_name}/configure-output-$(ndate).txt"
       fi
 
       (
@@ -767,12 +767,12 @@ function build_nettle()
           fi
         fi
 
-      ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${nettle_folder_name}/make-output.txt"
+      ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${nettle_folder_name}/make-output-$(ndate).txt"
     )
 
     (
       test_nettle
-    ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${nettle_folder_name}/test-output.txt"
+    ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${nettle_folder_name}/test-output-$(ndate).txt"
 
     touch "${nettle_stamp_file_path}"
 
@@ -876,8 +876,8 @@ function build_tasn1()
               "tests/Makefile"
           fi
 
-          cp "config.log" "${LOGS_FOLDER_PATH}/${tasn1_folder_name}/config-log.txt"
-        ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${tasn1_folder_name}/configure-output.txt"
+          cp "config.log" "${LOGS_FOLDER_PATH}/${tasn1_folder_name}/config-log-$(ndate).txt"
+        ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${tasn1_folder_name}/configure-output-$(ndate).txt"
       fi
 
       (
@@ -895,12 +895,12 @@ function build_tasn1()
           run_verbose make -j1 check
         fi
 
-      ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${tasn1_folder_name}/make-output.txt"
+      ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${tasn1_folder_name}/make-output-$(ndate).txt"
     )
 
     (
       test_tasn1
-    ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${tasn1_folder_name}/test-output.txt"
+    ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${tasn1_folder_name}/test-output-$(ndate).txt"
 
     touch "${tasn1_stamp_file_path}"
 
@@ -996,8 +996,8 @@ function build_expat()
             patch_all_libtool_rpath
           fi
 
-          cp "config.log" "${LOGS_FOLDER_PATH}/${expat_folder_name}/config-log.txt"
-        ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${expat_folder_name}/configure-output.txt"
+          cp "config.log" "${LOGS_FOLDER_PATH}/${expat_folder_name}/config-log-$(ndate).txt"
+        ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${expat_folder_name}/configure-output-$(ndate).txt"
       fi
 
       (
@@ -1015,12 +1015,12 @@ function build_expat()
           run_verbose make -j1 check
         fi
 
-      ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${expat_folder_name}/make-output.txt"
+      ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${expat_folder_name}/make-output-$(ndate).txt"
     )
 
     (
       test_expat
-    ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${expat_folder_name}/test-output.txt"
+    ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${expat_folder_name}/test-output-$(ndate).txt"
 
     touch "${expat_stamp_file_path}"
 
@@ -1095,7 +1095,7 @@ function build_libffi()
         run_verbose bash ${DEBUG} "autogen.sh"
 
       fi
-    ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${libffi_folder_name}/autogen-output.txt"
+    ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${libffi_folder_name}/autogen-output-$(ndate).txt"
 
     (
       mkdir -pv "${LIBS_BUILD_FOLDER_PATH}/${libffi_folder_name}"
@@ -1136,8 +1136,8 @@ function build_libffi()
             patch_all_libtool_rpath
           fi
 
-          cp "config.log" "${LOGS_FOLDER_PATH}/${libffi_folder_name}/config-log.txt"
-        ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${libffi_folder_name}/configure-output.txt"
+          cp "config.log" "${LOGS_FOLDER_PATH}/${libffi_folder_name}/config-log-$(ndate).txt"
+        ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${libffi_folder_name}/configure-output-$(ndate).txt"
       fi
 
       (
@@ -1155,12 +1155,12 @@ function build_libffi()
           run_verbose make -j1 check
         fi
 
-      ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${libffi_folder_name}/make-output.txt"
+      ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${libffi_folder_name}/make-output-$(ndate).txt"
     )
 
     (
       test_libffi
-    ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${libffi_folder_name}/test-output.txt"
+    ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${libffi_folder_name}/test-output-$(ndate).txt"
 
     touch "${libffi_stamp_file_path}"
 
@@ -1250,8 +1250,8 @@ function build_libiconv()
           run_verbose bash ${DEBUG} "${SOURCES_FOLDER_PATH}/${libiconv_src_folder_name}/configure" \
             --prefix="${INSTALL_FOLDER_PATH}/libiconv"
 
-          cp "config.log" "${LOGS_FOLDER_PATH}/${libiconv_folder_name}/config-log.txt"
-        ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${libiconv_folder_name}/configure-output.txt"
+          cp "config.log" "${LOGS_FOLDER_PATH}/${libiconv_folder_name}/config-log-$(ndate).txt"
+        ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${libiconv_folder_name}/configure-output-$(ndate).txt"
       fi
 
       (
@@ -1269,12 +1269,12 @@ function build_libiconv()
           run_verbose make -j1 check
         fi
 
-      ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${libiconv_folder_name}/make-output.txt"
+      ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${libiconv_folder_name}/make-output-$(ndate).txt"
     )
 
     (
       test_libiconv
-    ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${libiconv_folder_name}/test-output.txt"
+    ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${libiconv_folder_name}/test-output-$(ndate).txt"
 
     touch "${libiconv_stamp_file_path}"
 
@@ -1473,8 +1473,8 @@ function build_gnutls()
             fi
           fi
 
-          cp "config.log" "${LOGS_FOLDER_PATH}/${gnutls_folder_name}/config-log.txt"
-        ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${gnutls_folder_name}/configure-output.txt"
+          cp "config.log" "${LOGS_FOLDER_PATH}/${gnutls_folder_name}/config-log-$(ndate).txt"
+        ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${gnutls_folder_name}/configure-output-$(ndate).txt"
       fi
 
       (
@@ -1500,12 +1500,12 @@ function build_gnutls()
           fi
         fi
 
-      ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${gnutls_folder_name}/make-output.txt"
+      ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${gnutls_folder_name}/make-output-$(ndate).txt"
     )
 
     (
       test_gnutls
-    ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${gnutls_folder_name}/test-output.txt"
+    ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${gnutls_folder_name}/test-output-$(ndate).txt"
 
     touch "${gnutls_stamp_file_path}"
 
@@ -1606,8 +1606,8 @@ function build_util_macros()
           run_verbose bash ${DEBUG} "${SOURCES_FOLDER_PATH}/${util_macros_src_folder_name}/configure" \
             --prefix="${INSTALL_FOLDER_PATH}"
 
-          cp "config.log" "${LOGS_FOLDER_PATH}/${util_macros_folder_name}/config-log.txt"
-        ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${util_macros_folder_name}/configure-output.txt"
+          cp "config.log" "${LOGS_FOLDER_PATH}/${util_macros_folder_name}/config-log-$(ndate).txt"
+        ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${util_macros_folder_name}/configure-output-$(ndate).txt"
       fi
 
       (
@@ -1625,12 +1625,12 @@ function build_util_macros()
           run_verbose make -j1 check
         fi
 
-      ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${util_macros_folder_name}/make-output.txt"
+      ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${util_macros_folder_name}/make-output-$(ndate).txt"
     )
 
     (
       test_util_macros
-    ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${util_macros_folder_name}/test-output.txt"
+    ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${util_macros_folder_name}/test-output-$(ndate).txt"
 
     touch "${util_macros_stamp_file_path}"
 
@@ -1720,8 +1720,8 @@ function build_xorg_xproto()
             --without-xsltproc \
             --without-fop \
 
-          cp "config.log" "${LOGS_FOLDER_PATH}/${xorg_xproto_folder_name}/config-log.txt"
-        ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${xorg_xproto_folder_name}/configure-output.txt"
+          cp "config.log" "${LOGS_FOLDER_PATH}/${xorg_xproto_folder_name}/config-log-$(ndate).txt"
+        ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${xorg_xproto_folder_name}/configure-output-$(ndate).txt"
       fi
 
       (
@@ -1739,12 +1739,12 @@ function build_xorg_xproto()
           run_verbose make -j1 check
         fi
 
-      ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${xorg_xproto_folder_name}/make-output.txt"
+      ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${xorg_xproto_folder_name}/make-output-$(ndate).txt"
     )
 
     (
       test_xorg_xproto
-    ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${xorg_xproto_folder_name}/test-output.txt"
+    ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${xorg_xproto_folder_name}/test-output-$(ndate).txt"
 
     touch "${xorg_xproto_stamp_file_path}"
 
@@ -1840,8 +1840,8 @@ function build_libpng()
             patch_all_libtool_rpath
           fi
 
-          cp "config.log" "${LOGS_FOLDER_PATH}/${libpng_folder_name}/config-log.txt"
-        ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${libpng_folder_name}/configure-output.txt"
+          cp "config.log" "${LOGS_FOLDER_PATH}/${libpng_folder_name}/config-log-$(ndate).txt"
+        ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${libpng_folder_name}/configure-output-$(ndate).txt"
       fi
 
       (
@@ -1866,12 +1866,12 @@ function build_libpng()
           )
         fi
 
-      ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${libpng_folder_name}/make-output.txt"
+      ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${libpng_folder_name}/make-output-$(ndate).txt"
     )
 
     (
       test_libpng
-    ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${libpng_folder_name}/test-output.txt"
+    ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${libpng_folder_name}/test-output-$(ndate).txt"
 
     touch "${libpng_stamp_file_path}"
 
@@ -1978,8 +1978,8 @@ function build_libmpdec()
             patch_all_libtool_rpath
           fi
 
-          cp "config.log" "${LOGS_FOLDER_PATH}/${libmpdec_folder_name}/config-log.txt"
-        ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${libmpdec_folder_name}/configure-output.txt"
+          cp "config.log" "${LOGS_FOLDER_PATH}/${libmpdec_folder_name}/config-log-$(ndate).txt"
+        ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${libmpdec_folder_name}/configure-output-$(ndate).txt"
       fi
 
       (
@@ -2001,12 +2001,12 @@ function build_libmpdec()
           fi
         fi
 
-      ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${libmpdec_folder_name}/make-output.txt"
+      ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${libmpdec_folder_name}/make-output-$(ndate).txt"
     )
 
     (
       test_libmpdec
-    ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${libmpdec_folder_name}/test-output.txt"
+    ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${libmpdec_folder_name}/test-output-$(ndate).txt"
 
     touch "${libmpdec_stamp_file_path}"
 
@@ -2104,8 +2104,8 @@ function build_libgpg_error()
             -e 's|t-syserror$(EXEEXT)||' \
             "tests/Makefile"
 
-          cp "config.log" "${LOGS_FOLDER_PATH}/${libgpg_error_folder_name}/config-log.txt"
-        ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${libgpg_error_folder_name}/configure-output.txt"
+          cp "config.log" "${LOGS_FOLDER_PATH}/${libgpg_error_folder_name}/config-log-$(ndate).txt"
+        ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${libgpg_error_folder_name}/configure-output-$(ndate).txt"
       fi
 
       (
@@ -2124,12 +2124,12 @@ function build_libgpg_error()
           run_verbose make -j1 check
         fi
 
-      ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${libgpg_error_folder_name}/make-output.txt"
+      ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${libgpg_error_folder_name}/make-output-$(ndate).txt"
     )
 
     (
       test_libgpg_error
-    ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${libgpg_error_folder_name}/test-output.txt"
+    ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${libgpg_error_folder_name}/test-output-$(ndate).txt"
 
     touch "${libgpg_error_stamp_file_path}"
 
@@ -2245,8 +2245,8 @@ function build_libgcrypt()
             sed -i.bak -e '/HAVE_GCC_INLINE_ASM_NEON 1/d' "config.h"
           fi
 
-          cp "config.log" "${LOGS_FOLDER_PATH}/${libgcrypt_folder_name}/config-log.txt"
-        ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${libgcrypt_folder_name}/configure-output.txt"
+          cp "config.log" "${LOGS_FOLDER_PATH}/${libgcrypt_folder_name}/config-log-$(ndate).txt"
+        ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${libgcrypt_folder_name}/configure-output-$(ndate).txt"
       fi
 
       (
@@ -2265,12 +2265,12 @@ function build_libgcrypt()
 
         run_verbose make -j1 check
 
-      ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${libgcrypt_folder_name}/make-output.txt"
+      ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${libgcrypt_folder_name}/make-output-$(ndate).txt"
     )
 
     (
       test_libgcrypt
-    ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${libgcrypt_folder_name}/test-output.txt"
+    ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${libgcrypt_folder_name}/test-output-$(ndate).txt"
 
     touch "${libgcrypt_stamp_file_path}"
 
@@ -2375,8 +2375,8 @@ function build_libassuan()
             patch_all_libtool_rpath
           fi
 
-          cp "config.log" "${LOGS_FOLDER_PATH}/${libassuan_folder_name}/config-log.txt"
-        ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${libassuan_folder_name}/configure-output.txt"
+          cp "config.log" "${LOGS_FOLDER_PATH}/${libassuan_folder_name}/config-log-$(ndate).txt"
+        ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${libassuan_folder_name}/configure-output-$(ndate).txt"
       fi
 
       (
@@ -2394,12 +2394,12 @@ function build_libassuan()
           run_verbose make -j1 check
         fi
 
-      ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${libassuan_folder_name}/make-output.txt"
+      ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${libassuan_folder_name}/make-output-$(ndate).txt"
     )
 
     (
       test_libassuan
-    ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${libassuan_folder_name}/test-output.txt"
+    ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${libassuan_folder_name}/test-output-$(ndate).txt"
 
     touch "${libassuan_stamp_file_path}"
 
@@ -2501,8 +2501,8 @@ function build_libksba()
             patch_all_libtool_rpath
           fi
 
-          cp "config.log" "${LOGS_FOLDER_PATH}/${libksba_folder_name}/config-log.txt"
-        ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${libksba_folder_name}/configure-output.txt"
+          cp "config.log" "${LOGS_FOLDER_PATH}/${libksba_folder_name}/config-log-$(ndate).txt"
+        ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${libksba_folder_name}/configure-output-$(ndate).txt"
       fi
 
       (
@@ -2520,12 +2520,12 @@ function build_libksba()
           run_verbose make -j1 check
         fi
 
-      ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${libksba_folder_name}/make-output.txt"
+      ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${libksba_folder_name}/make-output-$(ndate).txt"
     )
 
     (
       test_libksba
-    ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${libksba_folder_name}/test-output.txt"
+    ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${libksba_folder_name}/test-output-$(ndate).txt"
 
     touch "${libksba_stamp_file_path}"
 
@@ -2622,8 +2622,8 @@ function build_npth()
           run_verbose bash ${DEBUG} "${SOURCES_FOLDER_PATH}/${npth_src_folder_name}/configure" \
             --prefix="${INSTALL_FOLDER_PATH}"
 
-          cp "config.log" "${LOGS_FOLDER_PATH}/${npth_folder_name}/config-log.txt"
-        ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${npth_folder_name}/configure-output.txt"
+          cp "config.log" "${LOGS_FOLDER_PATH}/${npth_folder_name}/config-log-$(ndate).txt"
+        ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${npth_folder_name}/configure-output-$(ndate).txt"
       fi
 
       (
@@ -2641,12 +2641,12 @@ function build_npth()
           run_verbose make -j1 check
         fi
 
-      ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${npth_folder_name}/make-output.txt"
+      ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${npth_folder_name}/make-output-$(ndate).txt"
     )
 
     (
       test_npth
-    ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${npth_folder_name}/test-output.txt"
+    ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${npth_folder_name}/test-output-$(ndate).txt"
 
     touch "${npth_stamp_file_path}"
 
@@ -2733,7 +2733,7 @@ function build_libxcrypt()
           autoreconf -fiv
         fi
 
-      ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${libxcrypt_folder_name}/autogen-output.txt"
+      ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${libxcrypt_folder_name}/autogen-output-$(ndate).txt"
 
     fi
 
@@ -2772,8 +2772,8 @@ function build_libxcrypt()
             patch_all_libtool_rpath
           fi
 
-          cp "config.log" "${LOGS_FOLDER_PATH}/${libxcrypt_folder_name}/config-log.txt"
-        ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${libxcrypt_folder_name}/configure-output.txt"
+          cp "config.log" "${LOGS_FOLDER_PATH}/${libxcrypt_folder_name}/config-log-$(ndate).txt"
+        ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${libxcrypt_folder_name}/configure-output-$(ndate).txt"
       fi
 
       (
@@ -2803,12 +2803,12 @@ function build_libxcrypt()
           fi
         fi
 
-      ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${libxcrypt_folder_name}/make-output.txt"
+      ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${libxcrypt_folder_name}/make-output-$(ndate).txt"
     )
 
     (
       test_libxcrypt
-    ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${libxcrypt_folder_name}/test-output.txt"
+    ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${libxcrypt_folder_name}/test-output-$(ndate).txt"
 
     touch "${libxcrypt_stamp_file_path}"
 
@@ -2900,8 +2900,8 @@ function build_libunistring()
             patch_all_libtool_rpath
           fi
 
-          cp "config.log" "${LOGS_FOLDER_PATH}/${libunistring_folder_name}/config-log.txt"
-        ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${libunistring_folder_name}/configure-output.txt"
+          cp "config.log" "${LOGS_FOLDER_PATH}/${libunistring_folder_name}/config-log-$(ndate).txt"
+        ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${libunistring_folder_name}/configure-output-$(ndate).txt"
       fi
 
       (
@@ -2924,12 +2924,12 @@ function build_libunistring()
           fi
         fi
 
-      ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${libunistring_folder_name}/make-output.txt"
+      ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${libunistring_folder_name}/make-output-$(ndate).txt"
     )
 
     (
       test_libunistring
-    ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${libunistring_folder_name}/test-output.txt"
+    ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${libunistring_folder_name}/test-output-$(ndate).txt"
 
     touch "${libunistring_stamp_file_path}"
 
@@ -3030,8 +3030,8 @@ function build_gc()
               -exec bash patch_file_libtool_rpath {} \;
           fi
 
-          cp "config.log" "${LOGS_FOLDER_PATH}/${gc_folder_name}/config-log.txt"
-        ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${gc_folder_name}/configure-output.txt"
+          cp "config.log" "${LOGS_FOLDER_PATH}/${gc_folder_name}/config-log-$(ndate).txt"
+        ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${gc_folder_name}/configure-output-$(ndate).txt"
       fi
 
       (
@@ -3064,12 +3064,12 @@ function build_gc()
           fi
         fi
 
-      ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${gc_folder_name}/make-output.txt"
+      ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${gc_folder_name}/make-output-$(ndate).txt"
     )
 
     (
       test_gc
-    ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${gc_folder_name}/test-output.txt"
+    ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${gc_folder_name}/test-output-$(ndate).txt"
 
     touch "${gc_stamp_file_path}"
 
@@ -3220,8 +3220,8 @@ function build_ncurses()
           run_verbose bash ${DEBUG} "${SOURCES_FOLDER_PATH}/${ncurses_src_folder_name}/configure" \
             "${config_options[@]}"
 
-          cp "config.log" "${LOGS_FOLDER_PATH}/${ncurses_folder_name}/config-log.txt"
-        ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${ncurses_folder_name}/configure-output.txt"
+          cp "config.log" "${LOGS_FOLDER_PATH}/${ncurses_folder_name}/config-log-$(ndate).txt"
+        ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${ncurses_folder_name}/configure-output-$(ndate).txt"
       fi
 
       (
@@ -3236,12 +3236,12 @@ function build_ncurses()
 
         # The test programs are interactive
 
-      ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${ncurses_folder_name}/make-output.txt"
+      ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${ncurses_folder_name}/make-output-$(ndate).txt"
     )
 
     (
       test_ncurses
-    ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${ncurses_folder_name}/test-output.txt"
+    ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${ncurses_folder_name}/test-output-$(ndate).txt"
 
     touch "${ncurses_stamp_file_path}"
 
@@ -3342,8 +3342,8 @@ function build_readline()
             -print \
             -exec sed -i.bak -e 's|-Wl,-rpath,$(libdir)||' {} \;
 
-          cp "config.log" "${LOGS_FOLDER_PATH}/${readline_folder_name}/config-log.txt"
-        ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${readline_folder_name}/configure-output.txt"
+          cp "config.log" "${LOGS_FOLDER_PATH}/${readline_folder_name}/config-log-$(ndate).txt"
+        ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${readline_folder_name}/configure-output-$(ndate).txt"
       fi
 
       (
@@ -3361,12 +3361,12 @@ function build_readline()
           run_verbose make -j1 check
         fi
 
-      ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${readline_folder_name}/make-output.txt"
+      ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${readline_folder_name}/make-output-$(ndate).txt"
     )
 
     (
       test_readline
-    ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${readline_folder_name}/test-output.txt"
+    ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${readline_folder_name}/test-output-$(ndate).txt"
 
     touch "${readline_stamp_file_path}"
 

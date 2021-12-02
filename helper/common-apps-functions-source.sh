@@ -170,8 +170,8 @@ function build_native_binutils()
             patch_all_libtool_rpath
           fi
 
-          cp "config.log" "${LOGS_FOLDER_PATH}/${native_binutils_folder_name}/config-log.txt"
-        ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${native_binutils_folder_name}/configure-output.txt"
+          cp "config.log" "${LOGS_FOLDER_PATH}/${native_binutils_folder_name}/config-log-$(ndate).txt"
+        ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${native_binutils_folder_name}/configure-output-$(ndate).txt"
       fi
 
       (
@@ -197,12 +197,12 @@ function build_native_binutils()
         # make install-strip
         run_verbose make install
 
-      ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${native_binutils_folder_name}/make-output.txt"
+      ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${native_binutils_folder_name}/make-output-$(ndate).txt"
     )
 
     (
       test_native_binutils
-    ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${native_binutils_folder_name}/test-output.txt"
+    ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${native_binutils_folder_name}/test-output-$(ndate).txt"
 
     hash -r
 
@@ -374,8 +374,8 @@ function build_native_gdb()
             patch_all_libtool_rpath
           fi
 
-          cp "config.log" "${LOGS_FOLDER_PATH}/${native_gdb_folder_name}/config-log.txt"
-        ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${native_gdb_folder_name}/configure-output.txt"
+          cp "config.log" "${LOGS_FOLDER_PATH}/${native_gdb_folder_name}/config-log-$(ndate).txt"
+        ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${native_gdb_folder_name}/configure-output-$(ndate).txt"
       fi
 
       (
@@ -388,12 +388,12 @@ function build_native_gdb()
         # make install-strip
         run_verbose make install
 
-      ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${native_gdb_folder_name}/make-output.txt"
+      ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${native_gdb_folder_name}/make-output-$(ndate).txt"
     )
 
     (
       test_native_gdb
-    ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${native_gdb_folder_name}/test-output.txt"
+    ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${native_gdb_folder_name}/test-output-$(ndate).txt"
 
     hash -r
 
@@ -768,8 +768,8 @@ function build_native_gcc()
           run_verbose bash "${SOURCES_FOLDER_PATH}/${native_gcc_src_folder_name}/configure" \
             "${config_options[@]}"
 
-          cp "config.log" "${LOGS_FOLDER_PATH}/${native_gcc_folder_name}/config-log.txt"
-        ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${native_gcc_folder_name}/configure-output.txt"
+          cp "config.log" "${LOGS_FOLDER_PATH}/${native_gcc_folder_name}/config-log-$(ndate).txt"
+        ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${native_gcc_folder_name}/configure-output-$(ndate).txt"
       fi
 
       (
@@ -789,7 +789,7 @@ function build_native_gcc()
             then
               break
             fi
-            touch "${LOGS_FOLDER_PATH}/${native_gcc_folder_name}/make-attempt-${i}-failed.txt"
+            touch "${LOGS_FOLDER_PATH}/${native_gcc_folder_name}/make-attempt-${i}-failed-$(ndate).txt"
           done
           # One more time without -j, to be sure it ends...
           run_verbose make 
@@ -831,12 +831,12 @@ function build_native_gcc()
           fi
         )
 
-      ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${native_gcc_folder_name}/make-output.txt"
+      ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${native_gcc_folder_name}/make-output-$(ndate).txt"
     )
 
     (
       test_native_gcc
-    ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${native_gcc_folder_name}/test-output.txt"
+    ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${native_gcc_folder_name}/test-output-$(ndate).txt"
 
     hash -r
 
@@ -1202,8 +1202,8 @@ fi
             patch_all_libtool_rpath
           fi
 
-          cp "config.log" "${LOGS_FOLDER_PATH}/${mingw_binutils_folder_name}/config-log.txt"
-        ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${mingw_binutils_folder_name}/configure-output.txt"
+          cp "config.log" "${LOGS_FOLDER_PATH}/${mingw_binutils_folder_name}/config-log-$(ndate).txt"
+        ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${mingw_binutils_folder_name}/configure-output-$(ndate).txt"
       fi
 
       (
@@ -1221,12 +1221,12 @@ fi
         # TODO: check if needed
         # rm -fv "${INSTALL_FOLDER_PATH}/usr/lib/libiberty.a" "${INSTALL_FOLDER_PATH}/usr/lib64/libiberty.a"
 
-      ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${mingw_binutils_folder_name}/make-output.txt"
+      ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${mingw_binutils_folder_name}/make-output-$(ndate).txt"
     )
 
     (
       test_mingw_binutils
-    ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${mingw_binutils_folder_name}/test-output.txt"
+    ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${mingw_binutils_folder_name}/test-output-$(ndate).txt"
 
     hash -r
 
@@ -1416,8 +1416,8 @@ function build_mingw_headers()
           run_verbose bash ${DEBUG} "${SOURCES_FOLDER_PATH}/${mingw_src_folder_name}/mingw-w64-headers/configure" \
             "${config_options[@]}"
 
-          cp "config.log" "${LOGS_FOLDER_PATH}/${mingw_headers_folder_name}/config-log.txt"
-        ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${mingw_headers_folder_name}/configure-output.txt"
+          cp "config.log" "${LOGS_FOLDER_PATH}/${mingw_headers_folder_name}/config-log-$(ndate).txt"
+        ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${mingw_headers_folder_name}/configure-output-$(ndate).txt"
       fi
 
       (
@@ -1438,7 +1438,7 @@ function build_mingw_headers()
           run_verbose ln -sv "usr/${MINGW_TARGET}" "mingw"
         )
 
-      ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${mingw_headers_folder_name}/make-output.txt"
+      ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${mingw_headers_folder_name}/make-output-$(ndate).txt"
     )
 
     hash -r
@@ -1628,8 +1628,8 @@ else
 
 fi
 
-          cp "config.log" "${LOGS_FOLDER_PATH}/${mingw_gcc_folder_name}/config-step1-log.txt"
-        ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${mingw_gcc_folder_name}/configure-step1-output.txt"
+          cp "config.log" "${LOGS_FOLDER_PATH}/${mingw_gcc_folder_name}/config-step1-log-$(ndate).txt"
+        ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${mingw_gcc_folder_name}/configure-step1-output-$(ndate).txt"
       fi
 
       (
@@ -1641,7 +1641,7 @@ fi
 
         run_verbose make install-strip-gcc
 
-      ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${mingw_gcc_folder_name}/make-step1-output.txt"
+      ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${mingw_gcc_folder_name}/make-step1-output-$(ndate).txt"
     )
 
     hash -r
@@ -1705,8 +1705,8 @@ function build_mingw_widl()
           run_verbose bash ${DEBUG} "${SOURCES_FOLDER_PATH}/${mingw_src_folder_name}/mingw-w64-tools/widl/configure" \
             "${config_options[@]}"
 
-         cp "config.log" "${LOGS_FOLDER_PATH}/${mingw_widl_folder_name}/config-log.txt"
-        ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${mingw_widl_folder_name}/configure-output.txt"
+         cp "config.log" "${LOGS_FOLDER_PATH}/${mingw_widl_folder_name}/config-log-$(ndate).txt"
+        ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${mingw_widl_folder_name}/configure-output-$(ndate).txt"
       fi
 
       (
@@ -1718,7 +1718,7 @@ function build_mingw_widl()
 
         run_verbose make install-strip
 
-      ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${mingw_widl_folder_name}/make-output.txt"
+      ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${mingw_widl_folder_name}/make-output-$(ndate).txt"
     )
 
     hash -r
@@ -1815,8 +1815,8 @@ function build_mingw_crt()
           run_verbose bash ${DEBUG} "${SOURCES_FOLDER_PATH}/${mingw_src_folder_name}/mingw-w64-crt/configure" \
             "${config_options[@]}"
 
-          cp "config.log" "${LOGS_FOLDER_PATH}/${mingw_crt_folder_name}/config-log.txt"
-        ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${mingw_crt_folder_name}/configure-output.txt"
+          cp "config.log" "${LOGS_FOLDER_PATH}/${mingw_crt_folder_name}/config-log-$(ndate).txt"
+        ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${mingw_crt_folder_name}/configure-output-$(ndate).txt"
       fi
 
       (
@@ -1831,7 +1831,7 @@ function build_mingw_crt()
 
         ls -l "${INSTALL_FOLDER_PATH}/usr/${MINGW_TARGET}"
 
-      ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${mingw_crt_folder_name}/make-output.txt"
+      ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${mingw_crt_folder_name}/make-output-$(ndate).txt"
     )
 
     hash -r
@@ -1913,8 +1913,8 @@ function build_mingw_winpthreads()
           run_verbose bash ${DEBUG} "${SOURCES_FOLDER_PATH}/${mingw_src_folder_name}/mingw-w64-libraries/winpthreads/configure" \
             "${config_options[@]}"
 
-         cp "config.log" "${LOGS_FOLDER_PATH}/${mingw_build_winpthreads_folder_name}/config-log.txt"
-        ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${mingw_build_winpthreads_folder_name}/configure-output.txt"
+         cp "config.log" "${LOGS_FOLDER_PATH}/${mingw_build_winpthreads_folder_name}/config-log-$(ndate).txt"
+        ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${mingw_build_winpthreads_folder_name}/configure-output-$(ndate).txt"
       fi
 
       (
@@ -1929,7 +1929,7 @@ function build_mingw_winpthreads()
 
         run_verbose ls -l "${INSTALL_FOLDER_PATH}/usr/${MINGW_TARGET}"
 
-      ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${mingw_build_winpthreads_folder_name}/make-output.txt"
+      ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${mingw_build_winpthreads_folder_name}/make-output-$(ndate).txt"
     )
 
     hash -r
@@ -1990,7 +1990,7 @@ function build_mingw_gcc_final()
       # make install-strip
       run_verbose make install-strip
 
-    ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${mingw_gcc_folder_name}/make-final-output.txt"
+    ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${mingw_gcc_folder_name}/make-final-output-$(ndate).txt"
 
     (
       xbb_activate_installed_bin
@@ -2020,11 +2020,11 @@ function build_mingw_gcc_final()
         set -e
 
       fi
-    ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${mingw_gcc_folder_name}/strip-final-output.txt"
+    ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${mingw_gcc_folder_name}/strip-final-output-$(ndate).txt"
 
     (
       test_mingw_gcc
-    ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${mingw_gcc_folder_name}/test-final-output.txt"
+    ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${mingw_gcc_folder_name}/test-final-output-$(ndate).txt"
 
     hash -r
 
@@ -2321,8 +2321,8 @@ function build_openssl()
 
           touch config.stamp
 
-          # cp "configure.log" "${LOGS_FOLDER_PATH}/configure-openssl-log.txt"
-        ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${openssl_folder_name}/configure-output.txt"
+          # cp "configure.log" "${LOGS_FOLDER_PATH}/configure-openssl-log-$(ndate).txt"
+        ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${openssl_folder_name}/configure-output-$(ndate).txt"
       fi
 
       (
@@ -2357,11 +2357,11 @@ function build_openssl()
           run_verbose make -j1 test
         fi
 
-      ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${openssl_folder_name}/make-output.txt"
+      ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${openssl_folder_name}/make-output-$(ndate).txt"
 
       (
         test_openssl
-      ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${openssl_folder_name}/test-output.txt"
+      ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${openssl_folder_name}/test-output-$(ndate).txt"
     )
 
     touch "${openssl_stamp_file_path}"
@@ -2487,8 +2487,8 @@ function build_curl()
             patch_all_libtool_rpath
           fi
 
-          cp "config.log" "${LOGS_FOLDER_PATH}/${curl_folder_name}/config-log.txt"
-        ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${curl_folder_name}/configure-output.txt"
+          cp "config.log" "${LOGS_FOLDER_PATH}/${curl_folder_name}/config-log-$(ndate).txt"
+        ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${curl_folder_name}/configure-output-$(ndate).txt"
       fi
 
       (
@@ -2511,12 +2511,12 @@ function build_curl()
           fi
         fi
 
-      ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${curl_folder_name}/make-output.txt"
+      ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${curl_folder_name}/make-output-$(ndate).txt"
     )
 
     (
       test_curl
-    ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${curl_folder_name}/test-output.txt"
+    ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${curl_folder_name}/test-output-$(ndate).txt"
 
     touch "${curl_stamp_file_path}"
 
@@ -2626,8 +2626,8 @@ function build_xz()
             patch_all_libtool_rpath
           fi
 
-          cp "config.log" "${LOGS_FOLDER_PATH}/${xz_folder_name}/config-log.txt"
-        ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${xz_folder_name}/configure-output.txt"
+          cp "config.log" "${LOGS_FOLDER_PATH}/${xz_folder_name}/config-log-$(ndate).txt"
+        ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${xz_folder_name}/configure-output-$(ndate).txt"
       fi
 
       (
@@ -2646,12 +2646,12 @@ function build_xz()
           run_verbose make -j1 check
         fi
 
-      ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${xz_folder_name}/make-output.txt"
+      ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${xz_folder_name}/make-output-$(ndate).txt"
     )
 
     (
       test_xz
-    ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${xz_folder_name}/test-output.txt"
+    ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${xz_folder_name}/test-output-$(ndate).txt"
 
     hash -r
 
@@ -2803,8 +2803,8 @@ function build_tar()
             \
             --disable-rpath \
 
-          cp "config.log" "${LOGS_FOLDER_PATH}/${tar_folder_name}/config-log.txt"
-        ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${tar_folder_name}/configure-output.txt"
+          cp "config.log" "${LOGS_FOLDER_PATH}/${tar_folder_name}/config-log-$(ndate).txt"
+        ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${tar_folder_name}/configure-output-$(ndate).txt"
       fi
 
       (
@@ -2847,12 +2847,12 @@ function build_tar()
           fi
         fi
 
-      ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${tar_folder_name}/make-output.txt"
+      ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${tar_folder_name}/make-output-$(ndate).txt"
     )
 
     (
       test_tar
-    ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${tar_folder_name}/test-output.txt"
+    ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${tar_folder_name}/test-output-$(ndate).txt"
 
     hash -r
 
@@ -2968,8 +2968,8 @@ function build_coreutils()
 
           set -u
 
-          cp "config.log" "${LOGS_FOLDER_PATH}/${coreutils_folder_name}/config-log.txt"
-        ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${coreutils_folder_name}/configure-output.txt"
+          cp "config.log" "${LOGS_FOLDER_PATH}/${coreutils_folder_name}/config-log-$(ndate).txt"
+        ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${coreutils_folder_name}/configure-output-$(ndate).txt"
       fi
 
       (
@@ -2988,12 +2988,12 @@ function build_coreutils()
         # WARN-TEST
         # make -j1 check
 
-      ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${coreutils_folder_name}/make-output.txt"
+      ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${coreutils_folder_name}/make-output-$(ndate).txt"
     )
 
     (
       test_coreutils
-    ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${coreutils_folder_name}/test-output.txt"
+    ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${coreutils_folder_name}/test-output-$(ndate).txt"
 
     hash -r
 
@@ -3138,8 +3138,8 @@ function build_pkg_config()
             --disable-debug \
             --disable-host-tool \
 
-          cp "config.log" "${LOGS_FOLDER_PATH}/${pkg_config_folder_name}/config-log.txt"
-        ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${pkg_config_folder_name}/configure-output.txt"
+          cp "config.log" "${LOGS_FOLDER_PATH}/${pkg_config_folder_name}/config-log-$(ndate).txt"
+        ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${pkg_config_folder_name}/configure-output-$(ndate).txt"
       fi
 
       (
@@ -3157,12 +3157,12 @@ function build_pkg_config()
           run_verbose make -j1 check
         fi
 
-      ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${pkg_config_folder_name}/make-output.txt"
+      ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${pkg_config_folder_name}/make-output-$(ndate).txt"
     )
 
     (
       test_pkg_config
-    ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${pkg_config_folder_name}/test-output.txt"
+    ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${pkg_config_folder_name}/test-output-$(ndate).txt"
 
     hash -r
 
@@ -3261,8 +3261,8 @@ function build_m4()
             \
             --disable-rpath \
 
-          cp "config.log" "${LOGS_FOLDER_PATH}/${m4_folder_name}/config-log.txt"
-        ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${m4_folder_name}/configure-output.txt"
+          cp "config.log" "${LOGS_FOLDER_PATH}/${m4_folder_name}/config-log-$(ndate).txt"
+        ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${m4_folder_name}/configure-output-$(ndate).txt"
       fi
 
       (
@@ -3298,12 +3298,12 @@ function build_m4()
           fi
         fi
 
-      ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${m4_folder_name}/make-output.txt"
+      ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${m4_folder_name}/make-output-$(ndate).txt"
     )
 
     (
       test_m4
-    ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${m4_folder_name}/test-output.txt"
+    ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${m4_folder_name}/test-output-$(ndate).txt"
 
     hash -r
 
@@ -3423,8 +3423,8 @@ function build_gawk()
             --disable-extensions \
             --enable-builtin-intdiv0 \
 
-          cp "config.log" "${LOGS_FOLDER_PATH}/${gawk_folder_name}/config-log.txt"
-        ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${gawk_folder_name}/configure-output.txt"
+          cp "config.log" "${LOGS_FOLDER_PATH}/${gawk_folder_name}/config-log-$(ndate).txt"
+        ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${gawk_folder_name}/configure-output-$(ndate).txt"
       fi
 
       (
@@ -3444,12 +3444,12 @@ function build_gawk()
           : # make -j1 check
         fi
 
-      ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${gawk_folder_name}/make-output.txt"
+      ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${gawk_folder_name}/make-output-$(ndate).txt"
     )
 
     (
       test_gawk
-    ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${gawk_folder_name}/test-output.txt"
+    ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${gawk_folder_name}/test-output-$(ndate).txt"
 
     hash -r
 
@@ -3558,8 +3558,8 @@ function build_sed()
           # Some tests fail due to missing locales.
           # darwin: FAIL: testsuite/subst-mb-incomplete.sh
 
-          cp "config.log" "${LOGS_FOLDER_PATH}/${sed_folder_name}/config-log.txt"
-        ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${sed_folder_name}/configure-output.txt"
+          cp "config.log" "${LOGS_FOLDER_PATH}/${sed_folder_name}/config-log-$(ndate).txt"
+        ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${sed_folder_name}/configure-output-$(ndate).txt"
       fi
 
       (
@@ -3592,12 +3592,12 @@ function build_sed()
           fi
         fi
 
-      ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${sed_folder_name}/make-output.txt"
+      ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${sed_folder_name}/make-output-$(ndate).txt"
     )
 
     (
       test_sed
-    ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${sed_folder_name}/test-output.txt"
+    ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${sed_folder_name}/test-output-$(ndate).txt"
 
     hash -r
 
@@ -3692,8 +3692,8 @@ function build_autoconf()
           run_verbose bash ${DEBUG} "${SOURCES_FOLDER_PATH}/${autoconf_src_folder_name}/configure" \
             --prefix="${INSTALL_FOLDER_PATH}"
 
-          cp "config.log" "${LOGS_FOLDER_PATH}/${autoconf_folder_name}/config-log.txt"
-        ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${autoconf_folder_name}/configure-output.txt"
+          cp "config.log" "${LOGS_FOLDER_PATH}/${autoconf_folder_name}/config-log-$(ndate).txt"
+        ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${autoconf_folder_name}/configure-output-$(ndate).txt"
       fi
 
       (
@@ -3712,12 +3712,12 @@ function build_autoconf()
           : # make -j1 check
         fi
 
-      ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${autoconf_folder_name}/make-output.txt"
+      ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${autoconf_folder_name}/make-output-$(ndate).txt"
     )
 
     (
       test_autoconf
-    ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${autoconf_folder_name}/test-output.txt"
+    ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${autoconf_folder_name}/test-output-$(ndate).txt"
 
     hash -r
 
@@ -3821,8 +3821,8 @@ function build_automake()
             \
             --build="${BUILD}" \
 
-          cp "config.log" "${LOGS_FOLDER_PATH}/${automake_folder_name}/config-log.txt"
-        ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${automake_folder_name}/configure-output.txt"
+          cp "config.log" "${LOGS_FOLDER_PATH}/${automake_folder_name}/config-log-$(ndate).txt"
+        ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${automake_folder_name}/configure-output-$(ndate).txt"
       fi
 
       (
@@ -3844,12 +3844,12 @@ function build_automake()
           : # make -j1 check
         fi
 
-      ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${automake_folder_name}/make-output.txt"
+      ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${automake_folder_name}/make-output-$(ndate).txt"
     )
 
     (
       test_automake
-    ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${automake_folder_name}/test-output.txt"
+    ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${automake_folder_name}/test-output-$(ndate).txt"
 
     hash -r
 
@@ -3959,8 +3959,8 @@ function build_libtool()
             \
             --enable-ltdl-install
 
-          cp "config.log" "${LOGS_FOLDER_PATH}/${libtool_folder_name}/config-log.txt"
-        ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${libtool_folder_name}/configure-output.txt"
+          cp "config.log" "${LOGS_FOLDER_PATH}/${libtool_folder_name}/config-log-$(ndate).txt"
+        ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${libtool_folder_name}/configure-output-$(ndate).txt"
       fi
 
       (
@@ -3991,12 +3991,12 @@ function build_libtool()
           : # make -j1 check gl_public_submodule_commit=
         fi
 
-      ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${libtool_folder_name}/make-output.txt"
+      ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${libtool_folder_name}/make-output-$(ndate).txt"
     )
 
     (
       test_libtool
-    ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${libtool_folder_name}/test-output.txt"
+    ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${libtool_folder_name}/test-output-$(ndate).txt"
 
     hash -r
 
@@ -4151,8 +4151,8 @@ function build_gettext()
               "gettext-tools/gnulib-tests/Makefile"
           fi
 
-          cp "config.log" "${LOGS_FOLDER_PATH}/${gettext_folder_name}/config-log.txt"
-        ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${gettext_folder_name}/configure-output.txt"
+          cp "config.log" "${LOGS_FOLDER_PATH}/${gettext_folder_name}/config-log-$(ndate).txt"
+        ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${gettext_folder_name}/configure-output-$(ndate).txt"
       fi
 
       (
@@ -4203,12 +4203,12 @@ function build_gettext()
           )
         fi
 
-      ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${gettext_folder_name}/make-output.txt"
+      ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${gettext_folder_name}/make-output-$(ndate).txt"
     )
 
     (
       test_gettext
-    ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${gettext_folder_name}/test-output.txt"
+    ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${gettext_folder_name}/test-output-$(ndate).txt"
 
     hash -r
 
@@ -4326,8 +4326,8 @@ function build_patch()
           run_verbose bash ${DEBUG} "${SOURCES_FOLDER_PATH}/${patch_src_folder_name}/configure" \
             --prefix="${INSTALL_FOLDER_PATH}"
 
-          cp "config.log" "${LOGS_FOLDER_PATH}/${patch_folder_name}/config-log.txt"
-        ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${patch_folder_name}/configure-output.txt"
+          cp "config.log" "${LOGS_FOLDER_PATH}/${patch_folder_name}/config-log-$(ndate).txt"
+        ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${patch_folder_name}/configure-output-$(ndate).txt"
       fi
 
       (
@@ -4345,12 +4345,12 @@ function build_patch()
           run_verbose make -j1 check
         fi
 
-      ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${patch_folder_name}/make-output.txt"
+      ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${patch_folder_name}/make-output-$(ndate).txt"
     )
 
     (
       test_patch
-    ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${patch_folder_name}/test-output.txt"
+    ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${patch_folder_name}/test-output-$(ndate).txt"
 
     hash -r
 
@@ -4453,8 +4453,8 @@ function build_diffutils()
             \
             --disable-rpath \
 
-          cp "config.log" "${LOGS_FOLDER_PATH}/${diffutils_folder_name}/config-log.txt"
-        ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${diffutils_folder_name}/configure-output.txt"
+          cp "config.log" "${LOGS_FOLDER_PATH}/${diffutils_folder_name}/config-log-$(ndate).txt"
+        ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${diffutils_folder_name}/configure-output-$(ndate).txt"
       fi
 
       (
@@ -4479,12 +4479,12 @@ function build_diffutils()
           fi
         fi
 
-      ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${diffutils_folder_name}/make-output.txt"
+      ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${diffutils_folder_name}/make-output-$(ndate).txt"
     )
 
     (
       test_diffutils
-    ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${diffutils_folder_name}/test-output.txt"
+    ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${diffutils_folder_name}/test-output-$(ndate).txt"
 
     hash -r
 
@@ -4600,8 +4600,8 @@ function build_bison()
             -print \
             -exec sed -i.bak -e "s|-Wl,-rpath -Wl,${INSTALL_FOLDER_PATH}/lib||" {} \;
 
-          cp "config.log" "${LOGS_FOLDER_PATH}/${bison_folder_name}/config-log.txt"
-        ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${bison_folder_name}/configure-output.txt"
+          cp "config.log" "${LOGS_FOLDER_PATH}/${bison_folder_name}/config-log-$(ndate).txt"
+        ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${bison_folder_name}/configure-output-$(ndate).txt"
       fi
 
       (
@@ -4621,12 +4621,12 @@ function build_bison()
           : # make -j1 check
         fi
 
-      ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${bison_folder_name}/make-output.txt"
+      ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${bison_folder_name}/make-output-$(ndate).txt"
     )
 
     (
       test_bison
-    ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${bison_folder_name}/test-output.txt"
+    ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${bison_folder_name}/test-output-$(ndate).txt"
 
     hash -r
 
@@ -4730,7 +4730,7 @@ function build_flex()
         touch "stamp-autogen"
 
       fi
-    ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${flex_folder_name}/autogen-output.txt"
+    ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${flex_folder_name}/autogen-output-$(ndate).txt"
 
     (
       mkdir -pv "${BUILD_FOLDER_PATH}/${flex_folder_name}"
@@ -4764,8 +4764,8 @@ function build_flex()
             \
             --disable-rpath \
 
-          cp "config.log" "${LOGS_FOLDER_PATH}/${flex_folder_name}/config-log.txt"
-        ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${flex_folder_name}/configure-output.txt"
+          cp "config.log" "${LOGS_FOLDER_PATH}/${flex_folder_name}/config-log-$(ndate).txt"
+        ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${flex_folder_name}/configure-output-$(ndate).txt"
       fi
 
       (
@@ -4791,12 +4791,12 @@ function build_flex()
           fi
         fi
 
-      ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${flex_folder_name}/make-output.txt"
+      ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${flex_folder_name}/make-output-$(ndate).txt"
     )
 
     (
       test_flex
-    ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${flex_folder_name}/test-output.txt"
+    ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${flex_folder_name}/test-output-$(ndate).txt"
 
     hash -r
 
@@ -4902,8 +4902,8 @@ function build_make()
             --disable-rpath \
             --program-prefix=g \
 
-          cp "config.log" "${LOGS_FOLDER_PATH}/${make_folder_name}/config-log.txt"
-        ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${make_folder_name}/configure-output.txt"
+          cp "config.log" "${LOGS_FOLDER_PATH}/${make_folder_name}/config-log-$(ndate).txt"
+        ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${make_folder_name}/configure-output-$(ndate).txt"
       fi
 
       (
@@ -4932,12 +4932,12 @@ function build_make()
           : make -k check
         fi
 
-      ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${make_folder_name}/make-output.txt"
+      ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${make_folder_name}/make-output-$(ndate).txt"
     )
 
     (
       test_make
-    ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${make_folder_name}/test-output.txt"
+    ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${make_folder_name}/test-output-$(ndate).txt"
 
     hash -r
 
@@ -5059,8 +5059,8 @@ function build_wget()
               -exec sed -i.bak -e "s|-Wl,-rpath -Wl,${INSTALL_FOLDER_PATH}/lib||" {} \;
           fi
 
-          cp "config.log" "${LOGS_FOLDER_PATH}/${wget_folder_name}/config-log.txt"
-        ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${wget_folder_name}/configure-output.txt"
+          cp "config.log" "${LOGS_FOLDER_PATH}/${wget_folder_name}/config-log-$(ndate).txt"
+        ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${wget_folder_name}/configure-output-$(ndate).txt"
       fi
 
       (
@@ -5078,12 +5078,12 @@ function build_wget()
         # WARN-TEST
         # make -j1 check
 
-      ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${wget_folder_name}/make-output.txt"
+      ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${wget_folder_name}/make-output-$(ndate).txt"
     )
 
     (
       test_wget
-    ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${wget_folder_name}/test-output.txt"
+    ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${wget_folder_name}/test-output-$(ndate).txt"
 
     hash -r
 
@@ -5180,8 +5180,8 @@ function build_texinfo()
             \
             --disable-rpath \
 
-          cp "config.log" "${LOGS_FOLDER_PATH}/${texinfo_folder_name}/config-log.txt"
-        ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${texinfo_folder_name}/configure-output.txt"
+          cp "config.log" "${LOGS_FOLDER_PATH}/${texinfo_folder_name}/config-log-$(ndate).txt"
+        ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${texinfo_folder_name}/configure-output-$(ndate).txt"
       fi
 
       (
@@ -5207,12 +5207,12 @@ function build_texinfo()
           fi
         fi
 
-      ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${texinfo_folder_name}/make-output.txt"
+      ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${texinfo_folder_name}/make-output-$(ndate).txt"
     )
 
     (
       test_texinfo
-    ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${texinfo_folder_name}/test-output.txt"
+    ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${texinfo_folder_name}/test-output-$(ndate).txt"
 
     hash -r
 
@@ -5322,8 +5322,8 @@ function build_cmake()
               \
               --parallel="${JOBS}"
 
-            cp "Bootstrap.cmk/cmake_bootstrap.log" "${LOGS_FOLDER_PATH}/${cmake_folder_name}/bootstrap-log.txt"
-          ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${cmake_folder_name}/bootstrap-output.txt"
+            cp "Bootstrap.cmk/cmake_bootstrap.log" "${LOGS_FOLDER_PATH}/${cmake_folder_name}/bootstrap-log-$(ndate).txt"
+          ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${cmake_folder_name}/bootstrap-output-$(ndate).txt"
         fi
       else
         (
@@ -5340,7 +5340,7 @@ function build_cmake()
             -DCMAKE_INSTALL_PREFIX="${INSTALL_FOLDER_PATH}" \
             "${SOURCES_FOLDER_PATH}/${cmake_src_folder_name}"
 
-        ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${cmake_folder_name}/cmake-output.txt"
+        ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${cmake_folder_name}/cmake-output-$(ndate).txt"
       fi
 
       if is_linux
@@ -5382,12 +5382,12 @@ function build_cmake()
           : # make -j1 test
         fi
 
-      ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${cmake_folder_name}/make-output.txt"
+      ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${cmake_folder_name}/make-output-$(ndate).txt"
     )
 
     (
       test_cmake
-    ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${cmake_folder_name}/test-output.txt"
+    ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${cmake_folder_name}/test-output-$(ndate).txt"
 
     hash -r
 
@@ -5541,7 +5541,7 @@ function build_perl()
             -Dusethreads \
             -Uusedl \
 
-        ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${perl_folder_name}/configure-output.txt"
+        ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${perl_folder_name}/configure-output-$(ndate).txt"
       fi
 
       (
@@ -5592,12 +5592,12 @@ function build_perl()
           run_verbose cpan App::cpanminus
         )
 
-      ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${perl_folder_name}/make-output.txt"
+      ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${perl_folder_name}/make-output-$(ndate).txt"
     )
 
     (
       test_perl
-    ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${perl_folder_name}/test-output.txt"
+    ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${perl_folder_name}/test-output-$(ndate).txt"
 
     hash -r
 
@@ -5701,8 +5701,8 @@ function build_makedepend()
           run_verbose bash ${DEBUG} "${SOURCES_FOLDER_PATH}/${makedepend_src_folder_name}/configure" \
             --prefix="${INSTALL_FOLDER_PATH}"
 
-          cp "config.log" "${LOGS_FOLDER_PATH}/${makedepend_folder_name}/config-log.txt"
-        ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${makedepend_folder_name}/configure-output.txt"
+          cp "config.log" "${LOGS_FOLDER_PATH}/${makedepend_folder_name}/config-log-$(ndate).txt"
+        ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${makedepend_folder_name}/configure-output-$(ndate).txt"
       fi
 
       (
@@ -5720,12 +5720,12 @@ function build_makedepend()
           run_verbose make -j1 check
         fi
 
-      ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${makedepend_folder_name}/make-output.txt"
+      ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${makedepend_folder_name}/make-output-$(ndate).txt"
     )
 
     (
       test_makedepend
-    ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${makedepend_folder_name}/test-output.txt"
+    ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${makedepend_folder_name}/test-output-$(ndate).txt"
 
     hash -r
 
@@ -5800,7 +5800,7 @@ function build_patchelf()
         run_verbose bash ${DEBUG} "bootstrap.sh"
 
       fi
-    ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${patchelf_folder_name}/autogen-output.txt"
+    ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${patchelf_folder_name}/autogen-output-$(ndate).txt"
 
     (
       mkdir -pv "${BUILD_FOLDER_PATH}/${patchelf_folder_name}"
@@ -5842,8 +5842,8 @@ function build_patchelf()
           run_verbose bash ${DEBUG} "${SOURCES_FOLDER_PATH}/${patchelf_src_folder_name}/configure" \
             "${config_options[@]}"
 
-          cp "config.log" "${LOGS_FOLDER_PATH}/${patchelf_folder_name}/config-log.txt"
-        ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${patchelf_folder_name}/configure-output.txt"
+          cp "config.log" "${LOGS_FOLDER_PATH}/${patchelf_folder_name}/config-log-$(ndate).txt"
+        ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${patchelf_folder_name}/configure-output-$(ndate).txt"
       fi
 
       (
@@ -5861,12 +5861,12 @@ function build_patchelf()
         # x86_64: FAIL: set-interpreter-long.sh (Segmentation fault (core dumped))
         # make -C tests -j1 check
 
-      ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${patchelf_folder_name}/make-output.txt"
+      ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${patchelf_folder_name}/make-output-$(ndate).txt"
     )
 
     (
       test_patchelf
-    ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${patchelf_folder_name}/test-output.txt"
+    ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${patchelf_folder_name}/test-output-$(ndate).txt"
 
     hash -r
 
@@ -5956,8 +5956,8 @@ function build_chrpath()
           run_verbose bash ${DEBUG} "${SOURCES_FOLDER_PATH}/${chrpath_src_folder_name}/configure" \
             --prefix="${INSTALL_FOLDER_PATH}"
 
-          cp "config.log" "${LOGS_FOLDER_PATH}/${chrpath_folder_name}/config-log.txt"
-        ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${chrpath_folder_name}/configure-output.txt"
+          cp "config.log" "${LOGS_FOLDER_PATH}/${chrpath_folder_name}/config-log-$(ndate).txt"
+        ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${chrpath_folder_name}/configure-output-$(ndate).txt"
       fi
 
       (
@@ -5975,12 +5975,12 @@ function build_chrpath()
           run_verbose make -j1 check
         fi
 
-      ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${chrpath_folder_name}/make-output.txt"
+      ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${chrpath_folder_name}/make-output-$(ndate).txt"
     )
 
     (
       test_chrpath
-    ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${chrpath_folder_name}/test-output.txt"
+    ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${chrpath_folder_name}/test-output-$(ndate).txt"
 
     hash -r
 
@@ -6088,12 +6088,12 @@ function build_dos2unix()
           fi
         fi
 
-      ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${dos2unix_folder_name}/make-output.txt"
+      ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${dos2unix_folder_name}/make-output-$(ndate).txt"
     )
 
     (
       test_dos2unix
-    ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${dos2unix_folder_name}/test-output.txt"
+    ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${dos2unix_folder_name}/test-output-$(ndate).txt"
 
     hash -r
 
@@ -6215,8 +6215,8 @@ function build_git()
           run_verbose bash ${DEBUG} "./configure" \
             --prefix="${INSTALL_FOLDER_PATH}"
 
-          cp "config.log" "${LOGS_FOLDER_PATH}/${git_folder_name}/config-log.txt"
-        ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${git_folder_name}/configure-output.txt"
+          cp "config.log" "${LOGS_FOLDER_PATH}/${git_folder_name}/config-log-$(ndate).txt"
+        ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${git_folder_name}/configure-output-$(ndate).txt"
       fi
 
       (
@@ -6231,12 +6231,12 @@ function build_git()
 
         # Tests are quite complicated
 
-      ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${git_folder_name}/make-output.txt"
+      ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${git_folder_name}/make-output-$(ndate).txt"
     )
 
     (
       test_git
-    ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${git_folder_name}/test-output.txt"
+    ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${git_folder_name}/test-output-$(ndate).txt"
 
     hash -r
 
@@ -6376,8 +6376,8 @@ function build_python2()
           run_verbose bash ${DEBUG} "${SOURCES_FOLDER_PATH}/${python2_src_folder_name}/configure" \
             "${config_options[@]}"
 
-          cp "config.log" "${LOGS_FOLDER_PATH}/${python2_folder_name}/config-log.txt"
-        ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${python2_folder_name}/configure-output.txt"
+          cp "config.log" "${LOGS_FOLDER_PATH}/${python2_folder_name}/config-log-$(ndate).txt"
+        ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${python2_folder_name}/configure-output-$(ndate).txt"
       fi
 
       (
@@ -6392,7 +6392,7 @@ function build_python2()
 
         # Tests are quite complicated
 
-      ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${python2_folder_name}/make-output.txt"
+      ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${python2_folder_name}/make-output-$(ndate).txt"
     )
 
     (
@@ -6409,11 +6409,11 @@ function build_python2()
       run_app "${INSTALL_FOLDER_PATH}/bin/python2" -m pip install --upgrade pip==19.3.1 setuptools==44.0.0 wheel==0.34.2
 
       run_app "${INSTALL_FOLDER_PATH}/bin/pip2" --version
-    ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${python2_folder_name}/pip-output.txt"
+    ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${python2_folder_name}/pip-output-$(ndate).txt"
 
     (
       test_python2
-    ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${python2_folder_name}/test-output.txt"
+    ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${python2_folder_name}/test-output-$(ndate).txt"
 
     hash -r
 
@@ -6563,8 +6563,8 @@ function build_python3()
           run_verbose bash ${DEBUG} "${SOURCES_FOLDER_PATH}/${python3_src_folder_name}/configure" \
             "${config_options[@]}"
 
-          cp "config.log" "${LOGS_FOLDER_PATH}/${python3_folder_name}/config-log.txt"
-        ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${python3_folder_name}/configure-output.txt"
+          cp "config.log" "${LOGS_FOLDER_PATH}/${python3_folder_name}/config-log-$(ndate).txt"
+        ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${python3_folder_name}/configure-output-$(ndate).txt"
       fi
 
       (
@@ -6579,7 +6579,7 @@ function build_python3()
 
         # Tests are quite complicated
 
-      ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${python3_folder_name}/make-output.txt"
+      ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${python3_folder_name}/make-output-$(ndate).txt"
     )
 
     (
@@ -6599,11 +6599,11 @@ function build_python3()
       run_app "${INSTALL_FOLDER_PATH}/bin/python3" -m pip install --upgrade pip==20.0.2 setuptools==45.2.0 wheel==0.34.2
 
       run_app "${INSTALL_FOLDER_PATH}/bin/pip3" --version
-    ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${python3_folder_name}/pip-output.txt"
+    ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${python3_folder_name}/pip-output-$(ndate).txt"
 
     (
       test_python3
-    ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${python3_folder_name}/test-output.txt"
+    ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${python3_folder_name}/test-output-$(ndate).txt"
 
     hash -r
 
@@ -6727,11 +6727,11 @@ function build_scons()
         rm -rv "${INSTALL_FOLDER_PATH}/man/man1"
       fi
 
-    ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${scons_folder_name}/install-output.txt"
+    ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${scons_folder_name}/install-output-$(ndate).txt"
 
     (
       test_scons
-    ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${scons_folder_name}/test-output.txt"
+    ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${scons_folder_name}/test-output-$(ndate).txt"
 
     hash -r
 
@@ -6802,11 +6802,11 @@ function build_meson
 
       # export LC_CTYPE=en_US.UTF-8 CPPFLAGS= CFLAGS= CXXFLAGS= LDFLAGS=
       # ./run_tests.py
-    ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${meson_folder_name}/install-output.txt"
+    ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${meson_folder_name}/install-output-$(ndate).txt"
 
     (
       test_meson
-    ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${meson_folder_name}/test-output.txt"
+    ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${meson_folder_name}/test-output-$(ndate).txt"
 
     hash -r
 
@@ -6916,12 +6916,12 @@ function build_ninja()
 
         # TODO: No tests?
 
-      ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${ninja_folder_name}/configure-output.txt"
+      ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${ninja_folder_name}/configure-output-$(ndate).txt"
     )
 
     (
       test_ninja
-    ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${ninja_folder_name}/test-output.txt"
+    ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${ninja_folder_name}/test-output-$(ndate).txt"
 
     hash -r
 
@@ -7051,11 +7051,11 @@ function build_p7zip()
         fi
       fi
 
-    ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${p7zip_folder_name}/install-output.txt"
+    ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${p7zip_folder_name}/install-output-$(ndate).txt"
 
     (
       test_p7zip
-    ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${p7zip_folder_name}/test-output.txt"
+    ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${p7zip_folder_name}/test-output-$(ndate).txt"
 
     hash -r
 
@@ -7248,8 +7248,8 @@ function build_wine()
             --disable-win16 \
             --disable-tests \
 
-          cp "config.log" "${LOGS_FOLDER_PATH}/${wine_folder_name}/config-log.txt"
-        ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${wine_folder_name}/configure-output.txt"
+          cp "config.log" "${LOGS_FOLDER_PATH}/${wine_folder_name}/config-log-$(ndate).txt"
+        ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${wine_folder_name}/configure-output-$(ndate).txt"
       fi
 
       (
@@ -7272,12 +7272,12 @@ function build_wine()
 
         # TODO: no tests?
 
-      ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${wine_folder_name}/make-output.txt"
+      ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${wine_folder_name}/make-output-$(ndate).txt"
     )
 
     (
       test_wine
-    ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${wine_folder_name}/test-output.txt"
+    ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${wine_folder_name}/test-output-$(ndate).txt"
 
     hash -r
 
@@ -7413,11 +7413,11 @@ function build_nvm()
         npm --version
       fi
 
-    ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${nvm_folder_name}/install-output.txt"
+    ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${nvm_folder_name}/install-output-$(ndate).txt"
 
     (
       test_nvm
-    ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${nvm_folder_name}/test-output.txt"
+    ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${nvm_folder_name}/test-output-$(ndate).txt"
 
     hash -r
 
@@ -7521,8 +7521,8 @@ function build_gnupg()
             --enable-symcryptrun \
             --disable-rpath \
 
-          cp "config.log" "${LOGS_FOLDER_PATH}/${gnupg_folder_name}/config-log.txt"
-        ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${gnupg_folder_name}/configure-output.txt"
+          cp "config.log" "${LOGS_FOLDER_PATH}/${gnupg_folder_name}/config-log-$(ndate).txt"
+        ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${gnupg_folder_name}/configure-output-$(ndate).txt"
       fi
 
       (
@@ -7540,12 +7540,12 @@ function build_gnupg()
           run_verbose make -j1 check
         fi
 
-      ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${gnupg_folder_name}/make-output.txt"
+      ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${gnupg_folder_name}/make-output-$(ndate).txt"
     )
 
     (
       test_gpg
-    ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${gnupg_folder_name}/test-output.txt"
+    ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${gnupg_folder_name}/test-output-$(ndate).txt"
 
     hash -r
 
@@ -7664,12 +7664,12 @@ function build_ant()
         rm -fv "${INSTALL_FOLDER_PATH}/bin/ant"
         ln -sv "${INSTALL_FOLDER_PATH}/share/ant/bin/ant" "${INSTALL_FOLDER_PATH}/bin/ant"
 
-      ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${ant_folder_name}/build-output.txt"
+      ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${ant_folder_name}/build-output-$(ndate).txt"
     )
 
     (
       test_ant
-    ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${ant_folder_name}/test-output.txt"
+    ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${ant_folder_name}/test-output-$(ndate).txt"
 
     hash -r
 
@@ -7764,12 +7764,12 @@ function build_maven()
         rm -fv "${INSTALL_FOLDER_PATH}/bin/mvn"
         ln -sv "${INSTALL_FOLDER_PATH}/share/maven/bin/mvn" "${INSTALL_FOLDER_PATH}/bin/mvn"
 
-      ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${maven_folder_name}/build-output.txt"
+      ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${maven_folder_name}/build-output-$(ndate).txt"
     )
 
     (
       test_maven
-    ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${maven_folder_name}/test-output.txt"
+    ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${maven_folder_name}/test-output-$(ndate).txt"
 
     hash -r
 
@@ -7879,8 +7879,8 @@ function build_nodejs()
             --shared-cares \
             --shared-nghttp2 \
 
-          # cp "config.log" "${LOGS_FOLDER_PATH}/config-nodejs-log.txt"
-        ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${nodejs_folder_name}/configure-output.txt"
+          # cp "config.log" "${LOGS_FOLDER_PATH}/config-nodejs-log-$(ndate).txt"
+        ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${nodejs_folder_name}/configure-output-$(ndate).txt"
       fi
 
       (
@@ -7895,12 +7895,12 @@ function build_nodejs()
 
         # make -j1 check
 
-      ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${nodejs_folder_name}/make-output.txt"
+      ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${nodejs_folder_name}/make-output-$(ndate).txt"
     )
 
     (
       test_nodejs
-    ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${nodejs_folder_name}/test-output.txt"
+    ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${nodejs_folder_name}/test-output-$(ndate).txt"
 
     hash -r
 
@@ -8029,8 +8029,8 @@ function build_tcl()
 
           fi
 
-          cp "config.log" "${LOGS_FOLDER_PATH}/${tcl_folder_name}/config-log.txt"
-        ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${tcl_folder_name}/configure-output.txt"
+          cp "config.log" "${LOGS_FOLDER_PATH}/${tcl_folder_name}/config-log-$(ndate).txt"
+        ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${tcl_folder_name}/configure-output-$(ndate).txt"
       fi
 
       (
@@ -8048,12 +8048,12 @@ function build_tcl()
           run_verbose make -j1 test
         fi
 
-      ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${tcl_folder_name}/make-output.txt"
+      ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${tcl_folder_name}/make-output-$(ndate).txt"
     )
 
     (
       test_tcl
-    ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${tcl_folder_name}/test-output.txt"
+    ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${tcl_folder_name}/test-output-$(ndate).txt"
 
     hash -r
 
@@ -8203,8 +8203,8 @@ function build_guile()
               "test-suite/Makefile"
           fi
 
-          cp "config.log" "${LOGS_FOLDER_PATH}/${guile_folder_name}/config-log.txt"
-        ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${guile_folder_name}/configure-output.txt"
+          cp "config.log" "${LOGS_FOLDER_PATH}/${guile_folder_name}/config-log-$(ndate).txt"
+        ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${guile_folder_name}/configure-output-$(ndate).txt"
       fi
 
       (
@@ -8230,12 +8230,12 @@ function build_guile()
           fi
         fi
 
-      ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${guile_folder_name}/make-output.txt"
+      ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${guile_folder_name}/make-output-$(ndate).txt"
     )
 
     (
       test_guile
-    ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${guile_folder_name}/test-output.txt"
+    ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${guile_folder_name}/test-output-$(ndate).txt"
 
     hash -r
 
@@ -8344,10 +8344,10 @@ function build_rhash()
             --extra-cflags="${CFLAGS} ${CPPFLAGS}" \
             --extra-ldflags="${LDFLAGS}" \
 
-          cp "config.log" "${LOGS_FOLDER_PATH}/${rhash_folder_name}/config-log.txt"
+          cp "config.log" "${LOGS_FOLDER_PATH}/${rhash_folder_name}/config-log-$(ndate).txt"
 
           touch "stamp-configure"
-        ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${rhash_folder_name}/configure-output.txt"
+        ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${rhash_folder_name}/configure-output-$(ndate).txt"
       fi
 
       (
@@ -8364,12 +8364,12 @@ function build_rhash()
           run_verbose make -j1 test test-lib
         fi
 
-      ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${rhash_folder_name}/make-output.txt"
+      ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${rhash_folder_name}/make-output-$(ndate).txt"
     )
 
     (
       test_rhash
-    ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${rhash_folder_name}/test-output.txt"
+    ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${rhash_folder_name}/test-output-$(ndate).txt"
 
     hash -r
 
@@ -8462,7 +8462,7 @@ function build_re2c()
         touch "stamp-autogen"
 
       fi
-    ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${re2c_folder_name}/autogen-output.txt"
+    ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${re2c_folder_name}/autogen-output-$(ndate).txt"
 
     (
       cd "${BUILD_FOLDER_PATH}/${re2c_folder_name}"
@@ -8493,8 +8493,8 @@ function build_re2c()
           run_verbose bash ${DEBUG} configure \
             --prefix="${INSTALL_FOLDER_PATH}" \
 
-          cp "config.log" "${LOGS_FOLDER_PATH}/${re2c_folder_name}/config-log.txt"
-        ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${re2c_folder_name}/configure-output.txt"
+          cp "config.log" "${LOGS_FOLDER_PATH}/${re2c_folder_name}/config-log-$(ndate).txt"
+        ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${re2c_folder_name}/configure-output-$(ndate).txt"
       fi
 
       (
@@ -8516,12 +8516,12 @@ function build_re2c()
           fi
         fi
 
-      ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${re2c_folder_name}/make-output.txt"
+      ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${re2c_folder_name}/make-output-$(ndate).txt"
     )
 
     (
       test_re2c
-    ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${re2c_folder_name}/test-output.txt"
+    ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${re2c_folder_name}/test-output-$(ndate).txt"
 
     hash -r
 
@@ -8581,13 +8581,13 @@ function build_sphinx()
 
       run_verbose pip3 install sphinx==${sphinx_version}
 
-    ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${sphinx_folder_name}/install-output.txt"
+    ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${sphinx_folder_name}/install-output-$(ndate).txt"
 
     hash -r
 
     (
       test_sphinx
-    ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${sphinx_folder_name}/test-output.txt"
+    ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${sphinx_folder_name}/test-output-$(ndate).txt"
 
     touch "${sphinx_stamp_file_path}"
 
@@ -8708,8 +8708,8 @@ function build_autogen()
               -exec sed -i.bak -e "s|-Wl,-rpath -Wl,${INSTALL_FOLDER_PATH}/lib||" {} \;
           fi
 
-          cp "config.log" "${LOGS_FOLDER_PATH}/${autogen_folder_name}/config-log.txt"
-        ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${autogen_folder_name}/configure-output.txt"
+          cp "config.log" "${LOGS_FOLDER_PATH}/${autogen_folder_name}/config-log-$(ndate).txt"
+        ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${autogen_folder_name}/configure-output-$(ndate).txt"
       fi
 
       (
@@ -8727,12 +8727,12 @@ function build_autogen()
           run_verbose make -j1 check
         fi
 
-      ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${autogen_folder_name}/make-output.txt"
+      ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${autogen_folder_name}/make-output-$(ndate).txt"
     )
 
     (
       test_autogen
-    ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${autogen_folder_name}/test-output.txt"
+    ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${autogen_folder_name}/test-output-$(ndate).txt"
 
     touch "${autogen_stamp_file_path}"
 
@@ -8848,8 +8848,8 @@ function build_bash()
           run_verbose bash ${DEBUG} "${SOURCES_FOLDER_PATH}/${bash_src_folder_name}/configure" \
             "${config_options[@]}"
 
-          cp "config.log" "${LOGS_FOLDER_PATH}/${bash_folder_name}/config-log.txt"
-        ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${bash_folder_name}/configure-output.txt"
+          cp "config.log" "${LOGS_FOLDER_PATH}/${bash_folder_name}/config-log-$(ndate).txt"
+        ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${bash_folder_name}/configure-output-$(ndate).txt"
       fi
 
       (
@@ -8867,12 +8867,12 @@ function build_bash()
           run_verbose make -j1 check
         fi
 
-      ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${bash_folder_name}/make-output.txt"
+      ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${bash_folder_name}/make-output-$(ndate).txt"
     )
 
     (
       test_bash
-    ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${bash_folder_name}/test-output.txt"
+    ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${bash_folder_name}/test-output-$(ndate).txt"
 
     hash -r
 
@@ -8976,12 +8976,12 @@ function build_realpath()
 
         # TODO: No tests?
 
-      ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${realpath_folder_name}/configure-output.txt"
+      ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${realpath_folder_name}/configure-output-$(ndate).txt"
     )
 
     (
       test_realpath
-    ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${realpath_folder_name}/test-output.txt"
+    ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${realpath_folder_name}/test-output-$(ndate).txt"
 
     hash -r
 
@@ -9166,7 +9166,7 @@ function build_native_llvm()
             "${config_options[@]}" \
             "${SOURCES_FOLDER_PATH}/${llvm_src_folder_name}/llvm"
 
-        ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${llvm_folder_name}/cmake-output.txt"
+        ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${llvm_folder_name}/cmake-output-$(ndate).txt"
       fi
 
       (
@@ -9196,12 +9196,12 @@ function build_native_llvm()
 
         # make -j1 check
 
-      ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${llvm_folder_name}/build-output.txt"
+      ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${llvm_folder_name}/build-output-$(ndate).txt"
     )
 
     (
       test_llvm
-    ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${llvm_folder_name}/test-output.txt"
+    ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${llvm_folder_name}/test-output-$(ndate).txt"
 
     hash -r
 
