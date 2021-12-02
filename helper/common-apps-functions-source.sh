@@ -2458,14 +2458,17 @@ function build_curl()
 
           run_verbose bash "${SOURCES_FOLDER_PATH}/${curl_src_folder_name}/configure" --help
 
+          # HomeBrew options failed:
+          # --with-secure-transport
+          # --without-libpsl
+          # --disable-silent-rules
+
           run_verbose bash ${DEBUG} "${SOURCES_FOLDER_PATH}/${curl_src_folder_name}/configure" \
             --prefix="${INSTALL_FOLDER_PATH}" \
             \
             --with-gssapi \
             --with-ca-bundle="${INSTALL_FOLDER_PATH}/openssl/ca-bundle.crt" \
             --with-ssl \
-            --with-secure-transport \
-            --without-libpsl \
             \
             --enable-optimize \
             --enable-versioned-symbols \
@@ -2476,7 +2479,6 @@ function build_curl()
             --disable-werror \
             --disable-warnings \
             --disable-debug \
-            --disable-silent-rules \
 
           if is_linux
           then
