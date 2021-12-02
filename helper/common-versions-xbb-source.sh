@@ -340,8 +340,13 @@ function build_versioned_components()
     # depends=('python2')
     build_ninja "1.10.2" # "1.10.0" # "1.9.0"
 
-    # depends=('curl' 'expat>=2.0' 'perl-error' 'perl>=5.14.0' 'openssl' 'pcre2' 'grep' 'shadow')
-    build_git "2.33.1" # "2.32.0" # "2.25.0" # "2.21.0"
+    if is_darwin && is_arm
+    then
+      : # fatal: unable to access 'https://github.com/xpack-dev-tools/content.git/': The requested URL returned error: 405
+    else
+      # depends=('curl' 'expat>=2.0' 'perl-error' 'perl>=5.14.0' 'openssl' 'pcre2' 'grep' 'shadow')
+      build_git "2.33.1" # "2.32.0" # "2.25.0" # "2.21.0"
+    fi
 
     build_p7zip "16.02"
 
