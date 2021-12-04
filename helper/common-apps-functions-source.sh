@@ -792,7 +792,7 @@ function build_native_gcc()
             touch "${LOGS_FOLDER_PATH}/${native_gcc_folder_name}/make-attempt-${i}-failed-$(ndate).txt"
           done
           # One more time without -j, to be sure it ends...
-          run_verbose make 
+          run_verbose make
         else
           run_verbose make -j ${JOBS}
         fi
@@ -2267,7 +2267,7 @@ function build_openssl()
                 : # config_options+=("darwin64-arm64-cc")
               elif [ "${HOST_MACHINE}" == "x86_64" ]
               then
-                : # config_options+=("darwin64-x64_86-cc")
+                : # config_options+=("darwin64-x86_64-cc")
               else
                 echo "HOST_MACHINE?"
                 exit 1
