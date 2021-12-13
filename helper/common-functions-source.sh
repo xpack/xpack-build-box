@@ -762,6 +762,8 @@ then
   fi
 fi
 
+if [[ "${XBB_VERSION}" =~ 3\.[123] ]]
+then
   if [ ! -d "${TEXLIVE_FOLDER_PATH:-"/no-folder"}/bin" ]
   then
     if [ -d "${HOME}/.local/texlive/bin" ]
@@ -778,6 +780,7 @@ fi
 
   export TEXLIVE_FOLDER_PATH
   echo "export TEXLIVE_FOLDER_PATH=${TEXLIVE_FOLDER_PATH}" >> "${INSTALL_FOLDER_PATH}/xbb-source.sh"
+fi
 
   if [ "${XBB_LAYER}" == "xbb-bootstrap" ]
   then
@@ -828,6 +831,9 @@ __EOF__
 __EOF__
 # The above marker must start in the first column.
 
+if [[ "${XBB_VERSION}" =~ 3\.[123] ]]
+then
+
   # Use the first folder in `bin`.
   # Note: __EOF__ is NOT quoted to allow substitutions.
   cat <<__EOF__ >> "${INSTALL_FOLDER_PATH}/xbb-source.sh"
@@ -842,6 +848,21 @@ function xbb_activate_tex()
 
 __EOF__
 # The above marker must start in the first column.
+
+else
+
+  cat <<__EOF__ >> "${INSTALL_FOLDER_PATH}/xbb-source.sh"
+
+# No more TeX to be added to the PATH.
+function xbb_activate_tex()
+{
+  : # Nothing
+}
+
+__EOF__
+# The above marker must start in the first column.
+
+fi
 
   # Note: __EOF__ is quoted to prevent substitutions here.
   cat <<'__EOF__' > "${INSTALL_FOLDER_PATH}/bin/get-gcc-rpath"
