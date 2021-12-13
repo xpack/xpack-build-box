@@ -57,7 +57,7 @@ The two builds started in parallel take about 200 minutes on an Intel NUC.
 
 ## Test
 
-The following tests were performed on an Debian 10
+The following tests were performed on a Debian 10
 running on an Intel NUC.
 
 ```sh

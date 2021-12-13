@@ -66,7 +66,7 @@ There are several environment variables that can be passed to the script:
 
 ## Test
 
-The following tests were performed on an Debian 10
+The following tests were performed on a Debian 10
 running on an Intel NUC.
 
 ```sh

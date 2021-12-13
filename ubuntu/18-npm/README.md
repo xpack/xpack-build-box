@@ -19,8 +19,8 @@ $ docker images
 
 ## Test
 
-The following tests were performed on an Ubuntu Server
-18.04 running on an Intel NUC.
+The following tests were performed on a Debian 10
+running on an Intel NUC.
 
 ```console
 $ docker run --interactive --tty ilegeul/ubuntu:amd64-18.04-npm-v1
