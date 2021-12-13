@@ -34,21 +34,32 @@ script_folder_name="$(basename "${script_folder_path}")"
 
 # =============================================================================
 
-helper_folder_path="${script_folder_path}/helper"
+# Walk two steps up.
+helper_folder_path="$(dirname $(dirname "${script_folder_path}"))/helper"
 
 source "${helper_folder_path}/common-functions-source.sh"
 source "${helper_folder_path}/common-docker-functions-source.sh"
 
 # -----------------------------------------------------------------------------
 
-# These tools should be enough to build the bootstrap tools.
-ubuntu_install_develop
+version="3.4"
+layer="develop"
 
-ubuntu_clean
+arch="amd64"
+distro="ubuntu"
+release="18.04"
 
-# -----------------------------------------------------------------------------
+host_init_docker_env
+host_init_docker_input
+
+tag="ilegeul/${distro}:${arch}-${release}-${layer}-v${version}"
+dockerfile="${arch}-Dockerfile-v${version}"
+
+host_run_docker_build "${version}" "${tag}" "${dockerfile}" "${layer}"
+
+host_clean_docker_input
 
 echo
-echo "Container done."
+echo "Done."
 
 # -----------------------------------------------------------------------------
