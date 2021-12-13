@@ -59,14 +59,17 @@ fi
 # download/uncompress archives.
 run_verbose apt-get -qq install -y \
 bzip2 \
+ca-certificates \
 curl \
 file \
 git \
 gzip \
 lsb-release \
+patch \
 tar \
 time \
 unzip \
+wget \
 xz-utils \
 
 # https://www.thomas-krenn.com/en/wiki/Configure_Locales_in_Ubuntu
