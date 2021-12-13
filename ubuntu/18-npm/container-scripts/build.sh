@@ -55,9 +55,24 @@ then
   docker_replace_source_list "http://ports.ubuntu.com/ubuntu-ports/" "bionic"
 fi
 
-run_verbose apt-get -qq install -y git-core curl tar gzip lsb-release binutils
-run_verbose apt-get -qq install -y build-essential
-run_verbose apt-get -qq install -y python || true
+# Keep it to a minimum, mainly to allow scripts to
+# download/uncompress archives.
+run_verbose apt-get -qq install -y \
+bzip2 \
+curl \
+file \
+git \
+gzip \
+lsb-release \
+tar \
+time \
+unzip \
+xz-utils \
+
+# https://www.thomas-krenn.com/en/wiki/Configure_Locales_in_Ubuntu
+run_verbose apt-get install --yes locales
+run_verbose locale-gen en_US.UTF-8
+run_verbose update-locale LANG=en_US.UTF-8
 
 curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/master/install.sh | bash
 
@@ -65,10 +80,19 @@ export NVM_DIR="${HOME}/.nvm"
 [ -s "${NVM_DIR}/nvm.sh" ] && \. "${NVM_DIR}/nvm.sh"  # This loads nvm
 [ -s "${NVM_DIR}/bash_completion" ] && \. "${NVM_DIR}/bash_completion"  # This loads nvm bash_completion
 
-run_verbose nvm install --lts node
-run_verbose nvm use --lts node
+# run_verbose nvm install --lts node
+# run_verbose nvm use --lts node
+# run_verbose nvm install-latest-npm
 
-run_verbose nvm install-latest-npm
+if [ "${XBB_VERSION}" == "1" ]
+then
+  run_verbose nvm install v16.13.1
+  run_verbose nvm use v16.13.1
+  run_verbose npm install -g npm@8.3.0
+else
+  echo "Version ${XBB_VERSION} not supported."
+  exit 1
+fi
 
 # -----------------------------------------------------------------------------
 
