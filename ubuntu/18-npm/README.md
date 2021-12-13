@@ -17,6 +17,12 @@ bash ~/Downloads/xpack-build-box.git/ubuntu/18-npm/arm64v8-build-v1.sh
 bash ~/Downloads/xpack-build-box.git/ubuntu/18-npm/arm32v7-build-v1.sh
 
 docker images
+
+REPOSITORY       TAG                    IMAGE ID       CREATED          SIZE
+ilegeul/ubuntu   amd64-18.04-npm-v1     1dd88287986c   3 minutes ago    464MB
+ilegeul/ubuntu   arm64v8-18.04-npm-v1   ba9278d45bd8   12 minutes ago   432MB
+ilegeul/ubuntu   arm32v7-18.04-npm-v1   dfaa21816ce0   14 minutes ago   385MB
+
 ```
 
 Note: the arm32v7 script requires a 32-bit Arm machine, on a 64-bit machine
