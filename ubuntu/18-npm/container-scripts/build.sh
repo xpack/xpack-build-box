@@ -65,6 +65,7 @@ curl \
 file \
 git \
 gzip \
+libatomic1 \
 lsb-release \
 patch \
 tar \
