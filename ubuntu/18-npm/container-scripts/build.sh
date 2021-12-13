@@ -66,6 +66,8 @@ file \
 git \
 gzip \
 libatomic1 \
+libc6-dev \
+linux-headers-generic \
 lsb-release \
 patch \
 tar \
@@ -73,6 +75,7 @@ time \
 unzip \
 wget \
 xz-utils \
+zlib1g-dev \
 
 # https://www.thomas-krenn.com/en/wiki/Configure_Locales_in_Ubuntu
 run_verbose apt-get install --yes locales
