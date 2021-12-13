@@ -55,8 +55,24 @@ then
   docker_replace_source_list "http://ports.ubuntu.com/ubuntu-ports/" "bionic"
 fi
 
+# -----------------------------------------------------------------------------
+
+# https://www.thomas-krenn.com/en/wiki/Configure_Locales_in_Ubuntu
+run_verbose apt-get install --yes locales
+run_verbose locale-gen en_US.UTF-8
+run_verbose update-locale LANG=en_US.UTF-8
+
+# Must be passed as `ENV TZ=UTC` in Dockerfile.
+# export TZ=UTC
+ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
+
+run_verbose apt-get --yes install tzdata
+
+# -----------------------------------------------------------------------------
+
 # Keep it to a minimum, mainly to allow scripts to
 # download/uncompress archives.
+# The test is to instantiate and build an xpm hello template.
 run_verbose apt-get -qq install -y \
 bzip2 \
 ca-certificates \
@@ -70,6 +86,7 @@ libc6-dev \
 linux-headers-generic \
 lsb-release \
 patch \
+systemd \
 tar \
 time \
 unzip \
@@ -77,11 +94,9 @@ wget \
 xz-utils \
 zlib1g-dev \
 
-# https://www.thomas-krenn.com/en/wiki/Configure_Locales_in_Ubuntu
-run_verbose apt-get install --yes locales
-run_verbose locale-gen en_US.UTF-8
-run_verbose update-locale LANG=en_US.UTF-8
+# -----------------------------------------------------------------------------
 
+# Install nvm/node/npm.
 curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/master/install.sh | bash
 
 export NVM_DIR="${HOME}/.nvm"
