@@ -60,6 +60,7 @@ fi
 run_verbose apt-get -qq install -y \
 bzip2 \
 ca-certificates \
+coreutils \
 curl \
 file \
 git \
