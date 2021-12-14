@@ -217,7 +217,7 @@ function build_versioned_components()
     then
       # macOS 10.13/11.6 use 2.7.16, close enough.
       : # On Apple Silicon it fails, it is not worth the effort.
-    elif is_linux
+    elif false # is_linux
     then
       # depends=('bzip2' 'gdbm' 'openssl' 'zlib' 'expat' 'sqlite' 'libffi')
       build_python2 "2.7.18" # "2.7.16" # "2.7.10" # "2.7.12" # "2.7.14" #  # "2.7.14"
