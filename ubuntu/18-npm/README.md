@@ -20,8 +20,8 @@ docker images
 
 REPOSITORY       TAG                    IMAGE ID       CREATED          SIZE
 ilegeul/ubuntu   amd64-18.04-npm-v1     1dd88287986c   3 minutes ago    464MB
-ilegeul/ubuntu   arm64v8-18.04-npm-v1   ba9278d45bd8   12 minutes ago   432MB
-ilegeul/ubuntu   arm32v7-18.04-npm-v1   dfaa21816ce0   14 minutes ago   385MB
+ilegeul/ubuntu   arm64v8-18.04-npm-v1   287142edf484   12 minutes ago   491MB
+ilegeul/ubuntu   arm32v7-18.04-npm-v1   67417d00a35e   14 minutes ago   437MB
 
 ```
 
