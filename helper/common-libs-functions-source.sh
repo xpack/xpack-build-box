@@ -2975,7 +2975,12 @@ function build_gc()
   # https://archlinuxarm.org/packages/aarch64/gc/files/PKGBUILD
 
   # 2 Mar 2019 "8.0.4"
+  # 28 Sep 2021, "8.0.6"
   # 29 Sep 2021, "8.2.0"
+
+  # On linux 8.2.0 fails with
+  # extra/../pthread_support.c:365:13: error: too few arguments to function 'pthread_setname_np'
+  # 365 |       (void)pthread_setname_np(name_buf);
 
   local gc_version="$1"
 
