@@ -6661,14 +6661,15 @@ function build_scons()
 
   local scons_version="$1"
 
-  local scons_src_folder_name="scons-${scons_version}"
+  # Previous versions used lower case.
+  local scons_src_folder_name="SCons-${scons_version}"
 
   local scons_archive="${scons_src_folder_name}.tar.gz"
 
   local scons_url
   scons_url="https://sourceforge.net/projects/scons/files/scons/${scons_version}/${scons_archive}"
 
-  local scons_folder_name="${scons_src_folder_name}"
+  local scons_folder_name="scons-${scons_version}"
 
   local scons_stamp_file_path="${STAMPS_FOLDER_PATH}/stamp-${scons_folder_name}-installed"
   if [ ! -f "${scons_stamp_file_path}" -o ! -d "${BUILD_FOLDER_PATH}/${scons_folder_name}" ]
