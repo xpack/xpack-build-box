@@ -1066,8 +1066,8 @@ function extract()
       # Docker containers run as root, adjust owner and mode.
       if [ -f "/.dockerenv" ]
       then
-        chown -R $(id -u):$(id -g) "${folder_name}"
-        chmod -R +w "${folder_name}"
+        chown -R $(id -u):$(id -g) "${folder_name}" || true
+        chmod -R +w "${folder_name}" || true
       fi
 
       if [ $# -ge 3 ]
