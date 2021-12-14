@@ -132,9 +132,6 @@ function build_versioned_components()
 
     build_libunistring "0.9.10"
 
-    # Required by guile, not used now.
-    build_gc "8.0.6" # "8.2.0" # "8.0.4"
-
     # Required by Python
     build_libmpdec "2.5.1" # "2.4.2"
 
@@ -235,6 +232,9 @@ function build_versioned_components()
     build_tar "1.34" # "1.32"
 
     build_libtool "${libtool_version}"
+
+    # Required by guile.
+    build_gc "8.0.6" # "8.2.0" # "8.0.4"
 
     # depends=(gmp libltdl ncurses texinfo libunistring gc libffi)
     # 3.x is too new, autogen requires 2.x
