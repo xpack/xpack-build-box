@@ -6836,7 +6836,10 @@ function test_meson()
     echo
     echo "Testing if python3 binaries start properly..."
 
-    export PYTHONPATH="${INSTALL_FOLDER_PATH}/lib/${PYTHON3X}"
+    if [ -d "${INSTALL_FOLDER_PATH}/lib/${PYTHON3X:-none}" ]
+    then
+      export PYTHONPATH="${INSTALL_FOLDER_PATH}/lib/${PYTHON3X}"
+    fi
 
     run_app "${INSTALL_FOLDER_PATH}/bin/meson" --version
   )
