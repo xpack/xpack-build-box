@@ -371,9 +371,9 @@ function ubuntu_install_develop()
 
   # These tools should be enough to build the bootstrap tools.
 
-  apt-get update
+  run_verbose apt-get update
 
-  apt-get install --yes \
+  run_verbose apt-get install --yes \
   \
   autoconf \
   automake \
@@ -415,30 +415,30 @@ function ubuntu_install_develop()
   # https://askubuntu.com/questions/1202249/c-compilng-failed
   if [ "${machine}" == "armv8l" -o "${machine}" == "armv7l" ]
   then
-    apt-get install --yes g++-multilib
+    run_verbose apt-get install --yes g++-multilib
   fi
 
   # libtool-bin - not present in precise
 
   # For QEMU
-  apt-get install --yes \
+  run_verbose apt-get install --yes \
   libx11-dev \
   libxext-dev \
   mesa-common-dev \
 
   # For QEMU & OpenOCD
-  apt-get install --yes \
+  run_verbose apt-get install --yes \
   libudev-dev
 
   # From  (universe)
-  apt-get install --yes \
+  run_verbose apt-get install --yes \
   texinfo \
   help2man \
 
   # Not available on Ubuntu 16.
   if [ "${release}" != "16.04" ]
   then
-    apt-get install --yes dos2unix
+    run_verbose apt-get install --yes dos2unix
   fi
 
   # patchelf - not present in 14 trusty, 16 precise
@@ -446,25 +446,25 @@ function ubuntu_install_develop()
   # Starting with 16.04, it is part of coreutils.
   if [ "${release}" == "12.04" -o "${release}" == "14.04" ]
   then
-    apt-get install --yes realpath
+    run_verbose apt-get install --yes realpath
   fi
 
   # ---------------------------------------------------------------------------
 
   # For add-apt-repository
-  apt-get install --yes software-properties-common
+  run_verbose apt-get install --yes software-properties-common
   if [ "${release}" == "12.04" ]
   then
     # Only needed on old distributions.
-    apt-get install --yes python-software-properties
+    run_verbose apt-get install --yes python-software-properties
   fi
 
-  add-apt-repository --yes ppa:ubuntu-toolchain-r/test
-  add-apt-repository --yes ppa:openjdk-r/ppa
+  run_verbose add-apt-repository --yes ppa:ubuntu-toolchain-r/test
+  run_verbose add-apt-repository --yes ppa:openjdk-r/ppa
 
-  apt-get update
+  run_verbose apt-get update
 
-  gcc --version
+  run_verbose gcc --version
 
   local gcc_version="$(gcc -dumpversion)"
   local gcc_version_major=$(echo ${gcc_version} | sed -e 's|\([0-9][0-9]*\)\.[0-9].*|\1|')
@@ -473,42 +473,57 @@ function ubuntu_install_develop()
   if [ ${gcc_version_major} -le 6 ]
   then
     # Install 6.x.
-    apt-get install --yes \
+    run_verbose apt-get install --yes \
     gcc-6 \
     g++-6 \
 
-    update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-6 60 --slave /usr/bin/g++ g++ /usr/bin/g++-6
+    run_verbose update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-6 60 --slave /usr/bin/g++ g++ /usr/bin/g++-6
     if [ "${release}" == "12.04" ]
     then
-      update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-4.6 60 --slave /usr/bin/g++ g++ /usr/bin/g++-4.6
+      run_verbose update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-4.6 60 --slave /usr/bin/g++ g++ /usr/bin/g++-4.6
     elif [ "${release}" == "14.04" ]
     then
-      update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-4.8 60 --slave /usr/bin/g++ g++ /usr/bin/g++-4.6
+      run_verbose update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-4.8 60 --slave /usr/bin/g++ g++ /usr/bin/g++-4.6
     elif [ "${release}" == "16.04" ]
     then
-      update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-5 60 --slave /usr/bin/g++ g++ /usr/bin/g++-5
+      run_verbose update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-5 60 --slave /usr/bin/g++ g++ /usr/bin/g++-5
     fi
 
     echo 2 | update-alternatives --config gcc
   fi
 
-  apt-get install --yes gdb
+  run_verbose apt-get install --yes gdb
 
   # ---------------------------------------------------------------------------
 
-  apt-get install --yes openjdk-8-jdk
+  if [ "${release}" == "18.04" ]
+  then
+    run_verbose apt-get install --yes openjdk-11-jdk
+  else
+    run_verbose apt-get install --yes openjdk-8-jdk
+  fi
 
-  apt-get install --yes ant
+  run_verbose apt-get install --yes ant
 
   # maven not available in Ubuntu 14, and not needed so far.
   # apt-get install --yes maven
 
   # ---------------------------------------------------------------------------
 
-  # https://www.thomas-krenn.com/en/wiki/Configure_Locales_in_Ubuntu
-  apt-get install --yes locales
-  locale-gen en_US.UTF-8
-  update-locale LANG=en_US.UTF-8
+  if [ "${release}" == "18.04" ]
+  then
+    run_verbose apt-get install --yes texlive
+  fi
+
+  # ---------------------------------------------------------------------------
+
+  if [ "${release}" != "18.04" ]
+  then
+    # https://www.thomas-krenn.com/en/wiki/Configure_Locales_in_Ubuntu
+    run_verbose apt-get install --yes locales
+    run_verbose locale-gen en_US.UTF-8
+    run_verbose update-locale LANG=en_US.UTF-8
+  fi
 
   # ---------------------------------------------------------------------------
 
