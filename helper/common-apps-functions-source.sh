@@ -6803,7 +6803,10 @@ function build_meson
     (
       xbb_activate_installed_bin
 
-      export PYTHONPATH="${INSTALL_FOLDER_PATH}/lib/${PYTHON3X}"
+      if [ -d "${INSTALL_FOLDER_PATH}/lib/${PYTHON3X:-none}" ]
+      then
+        export PYTHONPATH="${INSTALL_FOLDER_PATH}/lib/${PYTHON3X}"
+      fi
 
       env | sort
 
