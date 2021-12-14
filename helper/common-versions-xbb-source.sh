@@ -144,7 +144,6 @@ function build_versioned_components()
     # PATCH!
     build_nettle "3.7.3" # "3.5.1" # "3.4.1"
 
-
     # Library, required by wget.
     # depends=()
     # Harmful for GCC 9.
@@ -230,6 +229,9 @@ function build_versioned_components()
     # tar with xz support.
     # depends=('glibc')
     build_tar "1.34" # "1.32"
+
+    # Required before guile.
+    build_libtool "${libtool_version}"
 
     # Required by guile.
     build_gc "8.0.6" # "8.2.0" # "8.0.4"
@@ -398,8 +400,6 @@ function build_versioned_components()
 
     # When all libraries are available, build the compiler(s).
 
-    # build_libtool "${libtool_version}"
-
     if is_linux
     then
 
@@ -416,7 +416,7 @@ function build_versioned_components()
 
         # Requires new gcc.
         # depends=('sh' 'tar' 'glibc')
-        build_libtool "${libtool_version}" # "-2"
+        build_libtool "${libtool_version}" "-2"
       )
 
       build_native_gdb "${XBB_GDB_VERSION}"
@@ -483,7 +483,7 @@ function build_versioned_components()
 
         # Requires new gcc.
         # depends=('sh' 'tar' 'glibc')
-        build_libtool "${libtool_version}" # "-2"
+        build_libtool "${libtool_version}" "-2"
       )
 
       # Fails to install on Apple Silicon
