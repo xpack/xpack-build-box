@@ -400,6 +400,7 @@ function ubuntu_install_develop()
   pkg-config \
   python \
   python3 \
+  python3-pip \
   re2c \
   rhash \
   rsync \
