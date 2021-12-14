@@ -1058,9 +1058,9 @@ function extract()
       echo "Extracting \"${archive_name}\" -> \"${pwd}/${folder_name}\"..."
       if [[ "${archive_name}" == *zip ]]
       then
-        unzip "${archive_name}"
+        run_verbose unzip "${archive_name}"
       else
-        tar xf "${archive_name}"
+        run_verbose tar -x -f "${archive_name}" --no-same-owner || tar -x -f "${archive_name}" --no-same-owner
       fi
 
       # Docker containers run as root, adjust owner and mode.
@@ -1092,10 +1092,10 @@ function do_patch()
       if [[ ${patch_path} == *.patch.diff ]]
       then
         # Sourcetree creates patch.diff files, which require -p1.
-        patch -p1 < "${patch_path}"
+        run_verbose patch -p1 < "${patch_path}"
       else
         # Manually created patches.
-        patch -p0 < "${patch_path}"
+        run_verbose patch -p0 < "${patch_path}"
       fi
     fi
   fi
