@@ -8600,7 +8600,7 @@ function build_sphinx()
 
       env | sort
 
-      run_verbose pip3 install sphinx==${sphinx_version}
+      run_verbose pip3 install sphinx==${sphinx_version} --verbose
 
     ) 2>&1 | tee "${LOGS_FOLDER_PATH}/${sphinx_folder_name}/install-output-$(ndate).txt"
 
