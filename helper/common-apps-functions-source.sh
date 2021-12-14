@@ -2269,7 +2269,7 @@ function build_openssl()
               then
                 : # config_options+=("darwin64-x86_64-cc")
               else
-                echo "HOST_MACHINE?"
+                echo "Unsupported macOS HOST_MACHINE ${HOST_MACHINE}"
                 exit 1
               fi
               export KERNEL_BITS=64
@@ -2280,11 +2280,17 @@ function build_openssl()
               if [ "${HOST_MACHINE}" == "x86_64" ]
               then
                 config_options+=("enable-ec_nistp_64_gcc_128")
+              elif [ "${HOST_MACHINE}" == "i386" -o "${HOST_MACHINE}" == "i686" ]
+              then
+                : # Nothing special
               elif [ "${HOST_MACHINE}" == "aarch64" ]
               then
                 config_options+=("no-afalgeng")
+              elif [ "${HOST_MACHINE}" == "armv7l" -o "${HOST_MACHINE}" == "armv8l" ]
+              then
+                : # Nothing special.
               else
-                echo "HOST_MACHINE?"
+                echo "Unsupported Linux HOST_MACHINE ${HOST_MACHINE}"
                 exit 1
               fi
               config_options+=("-Wa,--noexecstack")
