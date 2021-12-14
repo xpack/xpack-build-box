@@ -2986,6 +2986,7 @@ function build_gc()
 
   local gc_folder_name="${gc_src_folder_name}"
 
+  local gc_patch_file_path="${helper_folder_path}/patches/${gc_folder_name}.patch.diff"
   local gc_stamp_file_path="${STAMPS_FOLDER_PATH}/stamp-${gc_folder_name}-installed"
   if [ ! -f "${gc_stamp_file_path}" -o ! -d "${LIBS_BUILD_FOLDER_PATH}/${gc_folder_name}" ]
   then
@@ -2993,7 +2994,7 @@ function build_gc()
     cd "${SOURCES_FOLDER_PATH}"
 
     download_and_extract "${gc_url}" "${gc_archive}" \
-      "${gc_src_folder_name}"
+    "${gc_src_folder_name}" "${gc_patch_file_path}"
 
     mkdir -pv "${LOGS_FOLDER_PATH}/${gc_folder_name}"
 
