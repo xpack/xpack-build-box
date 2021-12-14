@@ -117,9 +117,9 @@ docker push "ilegeul/ubuntu:amd64-18.04-npm-v1"
 set -o errexit
 docker system prune -f
 
-bash ~/Downloads/xpack-build-box.git/ubuntu/18-develop/amd64-build-v3.4.sh && \
+time ( bash ~/Downloads/xpack-build-box.git/ubuntu/18-develop/amd64-build-v3.4.sh && \
 bash ~/Downloads/xpack-build-box.git/ubuntu/18-xbb-bootstrap/amd64-build-v3.4.sh && \
-bash ~/Downloads/xpack-build-box.git/ubuntu/18-xbb/amd64-build-v3.4.sh
+bash ~/Downloads/xpack-build-box.git/ubuntu/18-xbb/amd64-build-v3.4.sh )
 
 docker push "ilegeul/ubuntu:amd64-18.04-develop-v3.4" && \
 docker push "ilegeul/ubuntu:amd64-18.04-xbb-bootstrap-v3.4" && \
@@ -197,13 +197,13 @@ docker push "ilegeul/ubuntu:arm64v8-18.04"
 set -o errexit
 docker system prune -f
 
-bash ~/Downloads/xpack-build-box.git/ubuntu/18-develop/arm64v8-build-v3.4.sh && \
+time ( bash ~/Downloads/xpack-build-box.git/ubuntu/18-develop/arm64v8-build-v3.4.sh && \
 bash ~/Downloads/xpack-build-box.git/ubuntu/18-xbb-bootstrap/arm64v8-build-v3.4.sh && \
-bash ~/Downloads/xpack-build-box.git/ubuntu/18-xbb/arm64v8-build-v3.3.sh
+bash ~/Downloads/xpack-build-box.git/ubuntu/18-xbb/arm64v8-build-v3.3.sh )
 
-docker push "ilegeul/ubuntu:arm64v8-18.04-develop-v3.3" && \
-docker push "ilegeul/ubuntu:arm64v8-18.04-xbb-bootstrap-v3.3" && \
-docker push "ilegeul/ubuntu:arm64v8-18.04-xbb-v3.3"
+docker push "ilegeul/ubuntu:arm64v8-18.04-develop-v3.4" && \
+docker push "ilegeul/ubuntu:arm64v8-18.04-xbb-bootstrap-v3.4" && \
+docker push "ilegeul/ubuntu:arm64v8-18.04-xbb-v3.4"
 ```
 
 The build takes about 13-14 hours on a Raspberry Pi CM4 at 2 GHz.
@@ -221,9 +221,9 @@ bash ~/Downloads/xpack-build-box.git/ubuntu/18-npm/arm32v7-build-v1.sh
 set -o errexit
 docker system prune -f
 
-bash ~/Downloads/xpack-build-box.git/ubuntu/18-develop/arm32v7-build-v3.4.sh && \
+time ( bash ~/Downloads/xpack-build-box.git/ubuntu/18-develop/arm32v7-build-v3.4.sh && \
 bash ~/Downloads/xpack-build-box.git/ubuntu/18-xbb-bootstrap/arm32v7-build-v3.4.sh && \
-bash ~/Downloads/xpack-build-box.git/ubuntu/18-xbb/arm32v7-build-v3.4.sh
+bash ~/Downloads/xpack-build-box.git/ubuntu/18-xbb/arm32v7-build-v3.4.sh )
 
 docker push "ilegeul/ubuntu:arm32v7-18.04-develop-v3.4" && \
 docker push "ilegeul/ubuntu:arm32v7-18.04-xbb-bootstrap-v3.4" && \
