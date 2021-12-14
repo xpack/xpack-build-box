@@ -184,13 +184,17 @@ release will be based on Ubuntu 18.
 
 ### Ubuntu 18 Arm (bionic)
 
+### 64-bit
+
+It is recommended to run the entire build on a Raspberry Pi OS 64-bit machine.
+
 ```bash
 set -o errexit
 docker system prune -f
 
 bash ~/Downloads/xpack-build-box.git/ubuntu/18-npm/arm64v8-build-v1.sh
 
-docker push "ilegeul/ubuntu:arm64v8-18.04"
+docker push "ilegeul/ubuntu:arm64v8-18.04-npm-v1"
 ```
 
 ```bash
@@ -208,13 +212,20 @@ docker push "ilegeul/ubuntu:arm64v8-18.04-xbb-v3.4"
 
 The build takes about 13-14 hours on a Raspberry Pi CM4 at 2 GHz.
 
-Note: The 32-bit 18-npm build must be performed on a 32-bit machine!
+#### 32-bit
+
+It is recommended to run the entire build on a Raspberry Pi OS 32-bit machine.
+
+Note: the 32-bit 18-npm build **must** be performed on a 32-bit machine,
+otherwise `nvm` will try to install the 64-bit node/npm.
 
 ```bash
 set -o errexit
 docker system prune -f
 
-bash ~/Downloads/xpack-build-box.git/ubuntu/18-npm/arm32v7-build-v1.sh
+bash ~/Downloads/xpack-build-box.git/ubuntu/18-npm/arm32v7-build-v1.sh && \
+
+docker push "ilegeul/ubuntu:arm32v7-18.04-npm-v1"
 ```
 
 ```bash
