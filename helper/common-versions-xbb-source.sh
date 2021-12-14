@@ -231,8 +231,6 @@ function build_versioned_components()
     # depends=('glibc')
     build_tar "1.34" # "1.32"
 
-    build_libtool "${libtool_version}"
-
     # Required by guile.
     build_gc "8.0.6" # "8.2.0" # "8.0.4"
 
@@ -400,6 +398,8 @@ function build_versioned_components()
 
     # When all libraries are available, build the compiler(s).
 
+    # build_libtool "${libtool_version}"
+
     if is_linux
     then
 
@@ -416,7 +416,7 @@ function build_versioned_components()
 
         # Requires new gcc.
         # depends=('sh' 'tar' 'glibc')
-        build_libtool "${libtool_version}" "-2"
+        build_libtool "${libtool_version}" # "-2"
       )
 
       build_native_gdb "${XBB_GDB_VERSION}"
@@ -483,11 +483,11 @@ function build_versioned_components()
 
         # Requires new gcc.
         # depends=('sh' 'tar' 'glibc')
-        build_libtool "${libtool_version}" "-2"
+        build_libtool "${libtool_version}" # "-2"
       )
 
       # Fails to install on Apple Silicon
-#      build_native_gdb "${XBB_GDB_VERSION}"
+      # build_native_gdb "${XBB_GDB_VERSION}"
     else
       echo "Unsupported platform."
       exit 1
