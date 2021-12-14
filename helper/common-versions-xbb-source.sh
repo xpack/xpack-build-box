@@ -305,7 +305,7 @@ function build_versioned_components()
     then
       # macOS 10.13/11.6 use 2.7.16, close enough.
       : # On Apple Silicon it fails, it is not worth the effort.
-    elif is_linux
+    elif false # is_linux
     then
       # There are several errors on macOS 10.10 and some tests fail.
       # depends=('bzip2' 'gdbm' 'openssl' 'zlib' 'expat' 'sqlite' 'libffi')
@@ -322,19 +322,20 @@ function build_versioned_components()
     # "4.1.0" fails on macOS 10.13
     build_scons "4.2.0" # "3.1.2" # "3.0.5"
 
-    if true # is_linux
+    if false # is_linux
     then
-      # require xz, openssl
       PYTHON3X="python3.9"
+      # require xz, openssl
       build_python3 "3.9.8" # "3.9.7" # "3.8.10" # "3.7.6" # "3.8.1" # "3.7.3"
       # The necessary bits to build these optional modules were not found:
       # _bz2                  _curses               _curses_panel
       # _dbm                  _gdbm                 _sqlite3
       # _tkinter              _uuid                 readline
 
-      # depends=('python3')
-      build_meson "0.60.1" # "0.58.1" # "0.53.1" # "0.50.0"
     fi
+
+    # depends=('python3')
+    build_meson "0.60.1" # "0.58.1" # "0.53.1" # "0.50.0"
 
     # Requires scons
     # depends=('python2')
