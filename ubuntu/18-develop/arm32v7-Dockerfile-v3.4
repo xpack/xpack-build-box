@@ -1,0 +1,23 @@
+FROM ilegeul/ubuntu:arm32v7-18.04-npm-v1
+
+LABEL description="Ubuntu 18.04 arm32v7 image, with development tools."
+LABEL maintainer="Liviu Ionescu <ilg@livius.net>"
+LABEL repository="https://github.com/xpack/xpack-build-box.git"
+LABEL docs="https://github.com/xpack/xpack-build-box/tree/master/ubuntu/18-develop/README.md"
+
+ENTRYPOINT ["linux32"]
+
+ARG DEBUG
+ARG JOBS
+
+ARG XBB_VERSION
+ARG XBB_LAYER
+
+ADD input-ubuntu-18.04-arm32v7 /input
+RUN linux32 bash /input/build-v3.sh
+
+ENV LANG en_US.UTF-8
+ENV LANGUAGE en_US:en
+ENV LC_ALL en_US.UTF-8
+
+CMD ["/bin/bash"]
