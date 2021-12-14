@@ -121,7 +121,7 @@ function detect_host()
       HOST_BITS="64"
       HOST_NODE_ARCH="x64"
       IS_HOST_INTEL="y"
-    elif [ "${HOST_MACHINE}" == "i686" ]
+    elif [ "${HOST_MACHINE}" == "i386" -o "${HOST_MACHINE}" == "i686" ]
     then
       HOST_BITS="32"
       HOST_NODE_ARCH="x32"

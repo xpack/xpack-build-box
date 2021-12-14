@@ -111,7 +111,7 @@ __EOF__
     # Adjust to TexLive conventions.
     # Recent versions for macOS use `universal-darwin`.
     tl_machine="${HOST_MACHINE}"
-    if [ "${HOST_MACHINE}" == "i686" ]
+    if [  "${HOST_MACHINE}" == "i386" -o "${HOST_MACHINE}" == "i686" ]
     then
        tl_machine="i386"
     elif [ "${HOST_MACHINE}" == "armv8l" -o "${HOST_MACHINE}" == "armv7l" ]
