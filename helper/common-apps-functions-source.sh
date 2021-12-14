@@ -6460,9 +6460,12 @@ function build_python3()
   # https://www.python.org/downloads/source/
   # https://www.python.org/ftp/python/3.7.3/Python-3.7.3.tar.xz
 
+  # https://github.com/archlinux/svntogit-packages/blob/packages/python/trunk/PKGBUILD
   # https://archlinuxarm.org/packages/aarch64/python/files/PKGBUILD
   # https://git.archlinux.org/svntogit/packages.git/tree/trunk/PKGBUILD?h=packages/python
   # https://git.archlinux.org/svntogit/packages.git/tree/trunk/PKGBUILD?h=packages/python-pip
+
+  # https://github.com/Homebrew/homebrew-core/blob/master/Formula/python@3.9.rb
 
   # 2018-12-24, "3.7.2"
   # March 25, 2019, "3.7.3"
