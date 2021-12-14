@@ -6810,7 +6810,7 @@ function build_meson
 
       env | sort
 
-      run_verbose pip3 install meson==${meson_version}
+      run_verbose pip3 install meson==${meson_version} --verbose
 
       # export LC_CTYPE=en_US.UTF-8 CPPFLAGS= CFLAGS= CXXFLAGS= LDFLAGS=
       # ./run_tests.py
@@ -6837,14 +6837,20 @@ function test_meson()
     # xbb_activate_installed_bin
 
     echo
-    echo "Testing if python3 binaries start properly..."
+    echo "Testing if meson binaries start properly..."
 
     if [ -d "${INSTALL_FOLDER_PATH}/lib/${PYTHON3X:-none}" ]
     then
       export PYTHONPATH="${INSTALL_FOLDER_PATH}/lib/${PYTHON3X}"
     fi
 
-    run_app "${INSTALL_FOLDER_PATH}/bin/meson" --version
+    if [ -x "${INSTALL_FOLDER_PATH}/bin/meson" ]
+    then
+      run_app "${INSTALL_FOLDER_PATH}/bin/meson" --version
+    else
+      run_verbose which meson
+      run_app meson --version
+    fi
   )
 }
 
