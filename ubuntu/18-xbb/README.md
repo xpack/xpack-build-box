@@ -3,19 +3,18 @@
 
 ## Build Docker images
 
-There are two scripts:
+There are several scripts:
 
-- `amd64-build-v3.3.sh` -> `ilegeul/ubuntu:amd64-18.04-xbb-v3.3`
-- `i386-build-v3.3.sh` -> `ilegeul/ubuntu:i386-18.04-xbb-v3.3`
-- `arm64v8-build-v3.3.sh` -> `ilegeul/ubuntu:arm64v8-18.04-xbb-v3.3`
-- `arm32v7-build-v3.3.sh` -> `ilegeul/ubuntu:arm32v7-18.04-xbb-v3.3`
+- `amd64-build-v3.4.sh` -> `ilegeul/ubuntu:amd64-18.04-xbb-v3.4`
+- no i386 support
+- `arm64v8-build-v3.4.sh` -> `ilegeul/ubuntu:arm64v8-18.04-xbb-v3.4`
+- `arm32v7-build-v3.4.sh` -> `ilegeul/ubuntu:arm32v7-18.04-xbb-v3.4`
 
 ```sh
-bash ~/Downloads/xpack-build-box.git/ubuntu/18-xbb/amd64-build-v3.3.sh
-bash ~/Downloads/xpack-build-box.git/ubuntu/18-xbb/i386-build-v3.3.sh
+bash ~/Downloads/xpack-build-box.git/ubuntu/18-xbb/amd64-build-v3.4.sh
 
-bash ~/Downloads/xpack-build-box.git/ubuntu/18-xbb/arm64v8-build-v3.3.sh
-bash ~/Downloads/xpack-build-box.git/ubuntu/18-xbb/arm32v7-build-v3.3.sh
+bash ~/Downloads/xpack-build-box.git/ubuntu/18-xbb/arm64v8-build-v3.4.sh
+bash ~/Downloads/xpack-build-box.git/ubuntu/18-xbb/arm32v7-build-v3.4.sh
 
 docker images
 ```
@@ -30,11 +29,10 @@ The following commands can be used to create the docker container
 based on the bootstrap image:
 
 ```sh
-bash ~/Downloads/xpack-build-box.git/ubuntu/18-xbb/amd64-run-with-image-v3.3.sh
-bash ~/Downloads/xpack-build-box.git/ubuntu/18-xbb/i386-run-with-image-v3.3.sh
+bash ~/Downloads/xpack-build-box.git/ubuntu/18-xbb/amd64-run-with-image-v3.4.sh
 
-bash ~/Downloads/xpack-build-box.git/ubuntu/18-xbb/arm64v8-run-with-image-v3.3.sh
-bash ~/Downloads/xpack-build-box.git/ubuntu/18-xbb/arm32v7-run-with-image-v3.3.sh
+bash ~/Downloads/xpack-build-box.git/ubuntu/18-xbb/arm64v8-run-with-image-v3.4.sh
+bash ~/Downloads/xpack-build-box.git/ubuntu/18-xbb/arm32v7-run-with-image-v3.4.sh
 ```
 
 The two Arm builds started in parallel take about 670 minutes
@@ -44,11 +42,10 @@ The following commands can be used to create the docker container
 with the bootstrap also mounted from the host:
 
 ```sh
-bash ~/Downloads/xpack-build-box.git/ubuntu/18-xbb/amd64-run-with-volume-v3.3.sh
-bash ~/Downloads/xpack-build-box.git/ubuntu/18-xbb/i386-run-with-volume-v3.3.sh
+bash ~/Downloads/xpack-build-box.git/ubuntu/18-xbb/amd64-run-with-volume-v3.4.sh
 
-bash ~/Downloads/xpack-build-box.git/ubuntu/18-xbb/arm64v8-run-with-volume-v3.3.sh
-bash ~/Downloads/xpack-build-box.git/ubuntu/18-xbb/arm32v7-run-with-volume-v3.3.sh
+bash ~/Downloads/xpack-build-box.git/ubuntu/18-xbb/arm64v8-run-with-volume-v3.4.sh
+bash ~/Downloads/xpack-build-box.git/ubuntu/18-xbb/arm32v7-run-with-volume-v3.4.sh
 ```
 
 Inside the container, run the build script:
@@ -70,16 +67,15 @@ The following tests were performed on a Debian 10
 running on an Intel NUC.
 
 ```sh
-docker run --interactive --tty ilegeul/ubuntu:amd64-18.04-xbb-v3.3
-docker run --interactive --tty ilegeul/ubuntu:i386-18.04-xbb-v3.3
+docker run --interactive --tty ilegeul/ubuntu:amd64-18.04-xbb-v3.4
 ```
 
 The following tests were performed on a Raspberry Pi OS
 running on a Raspberry CM4 with 8 GB RAM.
 
 ```sh
-docker run --interactive --tty ilegeul/ubuntu:arm64v8-18.04-xbb-v3.3
-docker run --interactive --tty ilegeul/ubuntu:arm32v7-18.04-xbb-v3.3
+docker run --interactive --tty ilegeul/ubuntu:arm64v8-18.04-xbb-v3.4
+docker run --interactive --tty ilegeul/ubuntu:arm32v7-18.04-xbb-v3.4
 ```
 
 ## Publish
@@ -87,9 +83,8 @@ docker run --interactive --tty ilegeul/ubuntu:arm32v7-18.04-xbb-v3.3
 To publish, use:
 
 ```sh
-docker push "ilegeul/ubuntu:amd64-18.04-xbb-v3.3"
-docker push "ilegeul/ubuntu:i386-18.04-xbb-v3.3"
+docker push "ilegeul/ubuntu:amd64-18.04-xbb-v3.4"
 
-docker push "ilegeul/ubuntu:arm64v8-18.04-xbb-v3.3"
-docker push "ilegeul/ubuntu:arm32v7-18.04-xbb-v3.3"
+docker push "ilegeul/ubuntu:arm64v8-18.04-xbb-v3.4"
+docker push "ilegeul/ubuntu:arm32v7-18.04-xbb-v3.4"
 ```
