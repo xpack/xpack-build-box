@@ -147,8 +147,6 @@ function build_versioned_components()
     # PATCH!
     build_nettle "3.7.3" # "3.5.1" # "3.4.1"
 
-    # Required by wine.
-    build_libpng "1.6.37"
 
     # Library, required by wget.
     # depends=()
@@ -501,6 +499,10 @@ function build_versioned_components()
     # Build wine only on Intel Linux.
     if is_linux && is_intel
     then
+
+      # Required by wine.
+      build_libpng "1.6.37"
+
       # depends=('libpng')
       # "6.17" requires a patch on Ubuntu 12 to disable getauxval()
       # "5.22" fails meson tests in 32-bit.
