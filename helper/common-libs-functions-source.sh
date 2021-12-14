@@ -2767,11 +2767,14 @@ function build_libxcrypt()
 
           run_verbose bash "${SOURCES_FOLDER_PATH}/${libxcrypt_src_folder_name}/configure" --help
 
+          # --enable-hashes=strong,glibc
+          # expand-selected-hashes: Argument "8/16" isn't numeric in numeric eq (==) at /Users/ilg/Work/xbb-bootstrap-3.4-macosx-10.13.6-x86_64/sources/libxcrypt-4.4.26/build-aux/expand-selected-hashes line 53.
+          # configure: error: bad value 'strong,glibc' for --enable-hashes
+
           run_verbose bash ${DEBUG} "${SOURCES_FOLDER_PATH}/${libxcrypt_src_folder_name}/configure" \
             --prefix="${INSTALL_FOLDER_PATH}" \
             \
             --disable-static \
-            --enable-hashes=strong,glibc \
             --enable-obsolete-api=no \
             --disable-failure-tokens \
 
