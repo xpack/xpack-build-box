@@ -2678,6 +2678,9 @@ function build_libxcrypt()
   # https://github.com/besser82/libxcrypt
   # https://github.com/besser82/libxcrypt/archive/v4.4.15.tar.gz
 
+  # https://github.com/archlinux/svntogit-packages/blob/packages/libxcrypt/trunk/PKGBUILD
+  # https://archlinuxarm.org/packages/aarch64/libxcrypt/files/PKGBUILD
+
   # 26 Jul 2018, "4.1.1"
   # 26 Oct 2018, "4.2.3"
   # 14 Nov 2018, "4.3.4"
