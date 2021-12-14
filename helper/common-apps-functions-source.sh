@@ -6759,20 +6759,8 @@ function build_scons()
 function test_scons()
 {
   (
-    # xbb_activate_installed_bin
-
     echo
     echo "Testing if scons binaries start properly..."
-
-    echo
-    which python
-
-    if is_darwin
-    then
-      PYTHONPATH="${INSTALL_FOLDER_PATH}/lib/python2.7/site-packages"
-      export PYTHONPATH
-      echo PYTHONPATH="${PYTHONPATH}"
-    fi
 
     run_app "${INSTALL_FOLDER_PATH}/bin/scons" --version
   )
