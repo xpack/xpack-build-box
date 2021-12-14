@@ -2766,6 +2766,11 @@ function build_libxcrypt()
 
           run_verbose bash ${DEBUG} "${SOURCES_FOLDER_PATH}/${libxcrypt_src_folder_name}/configure" \
             --prefix="${INSTALL_FOLDER_PATH}" \
+            \
+            --disable-static \
+            --enable-hashes=strong,glibc \
+            --enable-obsolete-api=no \
+            --disable-failure-tokens \
 
           if is_linux
           then
