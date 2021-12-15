@@ -25,6 +25,10 @@ ilegeul/ubuntu   arm32v7-18.04-npm-v1   67417d00a35e   14 minutes ago   437MB
 
 ```
 
+To simplify things, these images are based on the official `ubuntu:18.04`
+images. If, for any reasons, this proves unsuitable, it is always possible
+to go back to our own images (like `ilegeul/ubuntu:amd64-18.04`).
+
 Note: the arm32v7 script requires a 32-bit Arm machine, on a 64-bit machine
 nvm messes versions.
 
