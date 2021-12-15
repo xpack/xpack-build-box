@@ -16,11 +16,14 @@ Intel Ubuntu
 
 - `ilegeul/ubuntu:amd64-12.04-xbb-v3.3`
 - `ilegeul/ubuntu:i386-12.04-xbb-v3.3`
+- `ilegeul/ubuntu:amd64-18.04-xbb-v3.4`
 
 Arm Ubuntu
 
 - `ilegeul/ubuntu:arm64v8-16.04-xbb-v3.3`
 - `ilegeul/ubuntu:arm32v7-16.04-xbb-v3.3`
+- `ilegeul/ubuntu:arm64v8-18.04-xbb-v3.4`
+- `ilegeul/ubuntu:arm32v7-18.04-xbb-v3.4`
 
 Each of these images are built upon multiple layers,
 starting from a base archive,
@@ -42,66 +45,14 @@ Linux (x86_64):
 
 ### Ubuntu 12 Intel (precise)
 
-Note: Starting with 2022 will be no longer maintained.
-
-```bash
-set -o errexit
-docker system prune -f
-
-bash ~/Downloads/xpack-build-box.git/ubuntu/12/amd64-build.sh; \
-bash ~/Downloads/xpack-build-box.git/ubuntu/12-updated/amd64-build-v3.3.sh; \
-bash ~/Downloads/xpack-build-box.git/ubuntu/12-develop/amd64-build-v3.3.sh; \
-bash ~/Downloads/xpack-build-box.git/ubuntu/12-tex/amd64-build-v3.3.sh; \
-bash ~/Downloads/xpack-build-box.git/ubuntu/12-xbb-bootstrap/amd64-build-v3.3.sh; \
-bash ~/Downloads/xpack-build-box.git/ubuntu/12-xbb/amd64-build-v3.3.sh
-
-docker push "ilegeul/ubuntu:amd64-12.04"; \
-docker push "ilegeul/ubuntu:amd64-12.04-updated-v3.3"; \
-docker push "ilegeul/ubuntu:amd64-12.04-develop-v3.3"; \
-docker push "ilegeul/ubuntu:amd64-12.04-tex-v3.3"; \
-docker push "ilegeul/ubuntu:amd64-12.04-xbb-bootstrap-v3.3"; \
-docker push "ilegeul/ubuntu:amd64-12.04-xbb-v3.3"
-```
-
-The build takes about 4 hours on an Intel NUC.
-
-```bash
-set -o errexit
-docker system prune -f
-
-bash ~/Downloads/xpack-build-box.git/ubuntu/12/i386-build.sh; \
-bash ~/Downloads/xpack-build-box.git/ubuntu/12-updated/i386-build-v3.3.sh; \
-bash ~/Downloads/xpack-build-box.git/ubuntu/12-develop/i386-build-v3.3.sh; \
-bash ~/Downloads/xpack-build-box.git/ubuntu/12-tex/i386-build-v3.3.sh; \
-bash ~/Downloads/xpack-build-box.git/ubuntu/12-xbb-bootstrap/i386-build-v3.3.sh; \
-bash ~/Downloads/xpack-build-box.git/ubuntu/12-xbb/i386-build-v3.3.sh
-
-docker push "ilegeul/ubuntu:i386-12.04"; \
-docker push "ilegeul/ubuntu:i386-12.04-updated-v3.3"; \
-docker push "ilegeul/ubuntu:i386-12.04-develop-v3.3"; \
-docker push "ilegeul/ubuntu:i386-12.04-tex-v3.3"; \
-docker push "ilegeul/ubuntu:i386-12.04-xbb-bootstrap-v3.3"; \
-docker push "ilegeul/ubuntu:i386-12.04-xbb-v3.3"
-```
-
-The build takes about 4 hours on an Intel NUC.
-
-Note: this is the final release supporting Ubuntu 12. The next major
-release will be based on Ubuntu 18.
-
+No longer maintained.
 ### Ubuntu 14 Intel (trusty)
 
 No longer maintained.
 
 ### Ubuntu 16 Intel (xenial)
 
-The bootstrap build fails with:
-
-```console
-/usr/bin/x86_64-linux-gnu-ld: _muldi3_s.o: unable to initialize decompress status for section .debug_info
-_muldi3_s.o: file not recognized: File format not recognized
-collect2: error: ld returned 1 exit status
-```
+No longer maintained.
 
 ### Ubuntu 18 Intel (bionic)
 
@@ -135,52 +86,7 @@ Linux (Aarch64):
 
 ### Ubuntu 16 Arm (xenial)
 
-Note: Starting with 2022 will be no longer maintained.
-
-```bash
-set -o errexit
-docker system prune -f
-
-bash ~/Downloads/xpack-build-box.git/ubuntu/16/arm64v8-build.sh; \
-bash ~/Downloads/xpack-build-box.git/ubuntu/16-updated/arm64v8-build-v3.3.sh; \
-bash ~/Downloads/xpack-build-box.git/ubuntu/16-develop/arm64v8-build-v3.3.sh; \
-bash ~/Downloads/xpack-build-box.git/ubuntu/16-tex/arm64v8-build-v3.3.sh; \
-bash ~/Downloads/xpack-build-box.git/ubuntu/16-xbb-bootstrap/arm64v8-build-v3.3.sh; \
-bash ~/Downloads/xpack-build-box.git/ubuntu/16-xbb/arm64v8-build-v3.3.sh
-
-docker push "ilegeul/ubuntu:arm64v8-16.04"; \
-docker push "ilegeul/ubuntu:arm64v8-16.04-updated-v3.3"; \
-docker push "ilegeul/ubuntu:arm64v8-16.04-develop-v3.3"; \
-docker push "ilegeul/ubuntu:arm64v8-16.04-tex-v3.3"; \
-docker push "ilegeul/ubuntu:arm64v8-16.04-xbb-bootstrap-v3.3"; \
-docker push "ilegeul/ubuntu:arm64v8-16.04-xbb-v3.3"
-```
-
-The build takes about 13-14 hours on a Raspberry Pi CM4 at 2 GHz.
-
-```bash
-set -o errexit
-docker system prune -f
-
-bash ~/Downloads/xpack-build-box.git/ubuntu/16/arm32v7-build.sh; \
-bash ~/Downloads/xpack-build-box.git/ubuntu/16-updated/arm32v7-build-v3.3.sh; \
-bash ~/Downloads/xpack-build-box.git/ubuntu/16-develop/arm32v7-build-v3.3.sh; \
-bash ~/Downloads/xpack-build-box.git/ubuntu/16-tex/arm32v7-build-v3.3.sh; \
-bash ~/Downloads/xpack-build-box.git/ubuntu/16-xbb-bootstrap/arm32v7-build-v3.3.sh; \
-bash ~/Downloads/xpack-build-box.git/ubuntu/16-xbb/arm32v7-build-v3.3.sh
-
-docker push "ilegeul/ubuntu:arm32v7-16.04"; \
-docker push "ilegeul/ubuntu:arm32v7-16.04-updated-v3.3"; \
-docker push "ilegeul/ubuntu:arm32v7-16.04-develop-v3.3"; \
-docker push "ilegeul/ubuntu:arm32v7-16.04-tex-v3.3"; \
-docker push "ilegeul/ubuntu:arm32v7-16.04-xbb-bootstrap-v3.3"; \
-docker push "ilegeul/ubuntu:arm32v7-16.04-xbb-v3.3"
-```
-
-The build takes about 13-14 hours on a Raspberry Pi CM4 at 2 GHz.
-
-Note: this is the final release supporting Ubuntu 12. The next major
-release will be based on Ubuntu 18.
+No longer maintained.
 
 ### Ubuntu 18 Arm (bionic)
 
