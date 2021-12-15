@@ -212,35 +212,24 @@ function build_versioned_components()
 
     # -------------------------------------------------------------------------
 
-    # macOS: Segmentation fault: 11
-    if is_darwin
-    then
-      # macOS 10.13/11.6 use 2.7.16, close enough.
-      : # On Apple Silicon it fails, it is not worth the effort.
-    elif false # is_linux
-    then
-      # depends=('bzip2' 'gdbm' 'openssl' 'zlib' 'expat' 'sqlite' 'libffi')
-      build_python2 "2.7.18" # "2.7.16" # "2.7.10" # "2.7.12" # "2.7.14" #  # "2.7.14"
-    fi
+    # macOS 10.13/11.6 use 2.7.16, close enough.
+    # On Apple Silicon it fails, it is not worth the effort.
+    # On Ubuntu 18 there is 2.7.17; not much difference with 2.7.18.
+    # depends=('bzip2' 'gdbm' 'openssl' 'zlib' 'expat' 'sqlite' 'libffi')
+    # build_python2 "2.7.18" # "2.7.16" # "2.7.10" # "2.7.12" # "2.7.14" #  # "2.7.14"
 
-    if true # is_linux
-    then
-      # required by Glibc
+    # require xz, openssl
+    build_python3 "3.9.8" # "3.9.7" # "3.8.10" # "3.7.6" # "3.8.1" # "3.7.3"
+    # The necessary bits to build these optional modules were not found:
+    # _bz2                  _curses               _curses_panel
+    # _dbm                  _gdbm                 _sqlite3
+    # _tkinter              _uuid                 readline
 
-      # require xz, openssl
-      PYTHON3X="python3.9"
-      build_python3 "3.9.8" # "3.9.7" # "3.8.10" # "3.7.6" # "3.8.1" # "3.7.3"
-      # The necessary bits to build these optional modules were not found:
-      # _bz2                  _curses               _curses_panel
-      # _dbm                  _gdbm                 _sqlite3
-      # _tkinter              _uuid                 readline
+    # depends=('python3')
+    build_meson "0.60.1" # "0.58.1" # "0.57.2" # "0.53.1" # "0.50.0"
 
       # depends=('python3')
-      build_meson "0.60.1" # "0.58.1" # "0.57.2" # "0.53.1" # "0.50.0"
-    fi
-
-    # depends=('python2')
-    build_scons "4.2.0" # "3.1.2" # "3.1.1" # "3.0.5" # "3.0.1"
+      build_scons "4.2.0" # "3.1.2" # "3.1.1" # "3.0.5" # "3.0.1"
 
     # Requires scons
     # depends=('python2')
@@ -508,7 +497,6 @@ function build_versioned_components()
       # required by Glibc
 
       # require xz, openssl
-      PYTHON3X="python3.9"
       build_python3 "3.9.7" # "3.8.10" # "3.7.6" # "3.8.1" # "3.7.3"
       # The necessary bits to build these optional modules were not found:
       # _bz2                  _curses               _curses_panel

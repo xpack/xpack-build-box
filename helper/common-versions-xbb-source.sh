@@ -177,46 +177,30 @@ function build_versioned_components()
     # error: [Errno 54] Connection reset by peer
     # 0:05:27 load avg: 1.64 [311/400] test_startfile -- test_ssl failed (env changed)
 
-    if is_darwin
-    then
-      # macOS 10.13/11.6 use 2.7.16, close enough.
-      : # On Apple Silicon it fails, it is not worth the effort.
-    elif false # is_linux
-    then
-      # There are several errors on macOS 10.10 and some tests fail.
-      # depends=('bzip2' 'gdbm' 'openssl' 'zlib' 'expat' 'sqlite' 'libffi')
-      build_python2 "2.7.18" # "2.7.17" # "2.7.16" (2.7.17 is the final release)
-      # Python build finished, but the necessary bits to build these modules were not found:
-      # _bsddb             _curses            _curses_panel
-      # _sqlite3           _tkinter           bsddb185
-      # bz2                dbm                dl
-      # gdbm               imageop            readline
-      # sunaudiodev
-    fi
+    # macOS 10.13/11.6 use 2.7.16, close enough.
+    # On Apple Silicon it fails, it is not worth the effort.
+    # On Ubuntu 18 there is 2.7.17; not much difference with 2.7.18.
+    # depends=('bzip2' 'gdbm' 'openssl' 'zlib' 'expat' 'sqlite' 'libffi')
+    # build_python2 "2.7.18" # "2.7.16" # "2.7.10" # "2.7.12" # "2.7.14" #  # "2.7.14"
 
-    if true # is_linux
-    then
-      PYTHON3X="python3.9"
+    # homebrew: gdbm, mpdecimal, openssl, readline, sqlite, xz; bzip2, expat, libffi, ncurses, unzip, zlib
+    # arch: 'bzip2' 'expat' 'gdbm' 'libffi' 'libnsl' 'libxcrypt' 'openssl' 'zlib'
+    build_python3 "3.9.8" # "3.9.7" # "3.8.10" # "3.7.6" # "3.8.1" # "3.7.3"
 
-      # homebrew: gdbm, mpdecimal, openssl, readline, sqlite, xz; bzip2, expat, libffi, ncurses, unzip, zlib
-      # arch: 'bzip2' 'expat' 'gdbm' 'libffi' 'libnsl' 'libxcrypt' 'openssl' 'zlib'
-      build_python3 "3.9.8" # "3.9.7" # "3.8.10" # "3.7.6" # "3.8.1" # "3.7.3"
+    # The necessary bits to build these optional modules were not found:
+    # _bz2                  _dbm                  _gdbm
+    # _sqlite3              _tkinter              _uuid
+    # Failed to build these modules:
+    # _curses               _curses_panel         _decimal
 
-      # The necessary bits to build these optional modules were not found:
-      # _bz2                  _dbm                  _gdbm
-      # _sqlite3              _tkinter              _uuid
-      # Failed to build these modules:
-      # _curses               _curses_panel         _decimal
+    # depends=('python3')
+    # "4.1.0" fails on macOS 10.13
+    build_scons "4.2.0" # "3.1.2" # "3.0.5"
 
-      # depends=('python3')
-      # "4.1.0" fails on macOS 10.13
-      build_scons "4.2.0" # "3.1.2" # "3.0.5"
+    # depends=('python3')
+    build_meson "0.60.1" # "0.58.1" # "0.53.1" # "0.50.0"
 
-      # depends=('python3')
-      build_meson "0.60.1" # "0.58.1" # "0.53.1" # "0.50.0"
-
-      build_sphinx "4.3.0" # "4.0.2" # "2.4.4"
-    fi
+    build_sphinx "4.3.0" # "4.0.2" # "2.4.4"
 
     # -------------------------------------------------------------------------
 
@@ -881,7 +865,6 @@ function build_versioned_components()
     if true # is_linux
     then
       # require xz, openssl
-      PYTHON3X="python3.9"
       build_python3 "3.9.7" # "3.8.10" # "3.7.6" # "3.8.1" # "3.7.3"
       # The necessary bits to build these optional modules were not found:
       # _bz2                  _curses               _curses_panel
