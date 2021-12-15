@@ -29,6 +29,10 @@ since it guarantees a full SDK, not present on older versions of CLT.
 ## TL;DR
 
 ```sh
+chmod -R +w "${HOME}/.local/xbb-bootstrap" "${HOME}/.local/xbb"
+rm -rf "${HOME}/.local/xbb-bootstrap" "${HOME}/.local/xbb"
+rm -rf "${HOME}/Work"/xbb-bootstrap-3.4-* "${HOME}/Work"/xbb-3.4-*
+
 time ( \
   caffeinate bash "${HOME}/Downloads/xpack-build-box.git/macos/build-xbb-bootstrap-v3.4.sh" \
   && chmod -R -w "${HOME}/.local/xbb-bootstrap" \
