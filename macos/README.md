@@ -33,12 +33,22 @@ chmod -R +w "${HOME}/.local/xbb-bootstrap" "${HOME}/.local/xbb"
 rm -rf "${HOME}/.local/xbb-bootstrap" "${HOME}/.local/xbb"
 rm -rf "${HOME}/Work"/xbb-bootstrap-3.4-* "${HOME}/Work"/xbb-3.4-*
 
-time ( \
-  caffeinate bash "${HOME}/Downloads/xpack-build-box.git/macos/build-xbb-bootstrap-v3.4.sh" \
-  && chmod -R -w "${HOME}/.local/xbb-bootstrap" \
-  && caffeinate bash "${HOME}/Downloads/xpack-build-box.git/macos/build-xbb-v3.4.sh" \
-  && chmod -R -w "${HOME}/.local/xbb" )
+caffeinate bash "${HOME}/Downloads/xpack-build-box.git/macos/build-xbb-bootstrap-v3.4.sh" && \
+chmod -R -w "${HOME}/.local/xbb-bootstrap" && \
+caffeinate bash "${HOME}/Downloads/xpack-build-box.git/macos/build-xbb-v3.4.sh" && \
+chmod -R -w "${HOME}/.local/xbb"
 ```
+
+The build takes about 2h10m on a Mac Mini M1 2020, about 3h20m on a
+Mac Mini 2018 (the M1 is 1.57 times faster than the Intel!) and
+about 11h45m on a MacBook Pro 2011.
+
+To archive the results, pack the `.local/xbb` and `.local/xbb-bootstrap` into
+archives, like:
+
+- `xbb-3.4-macos-10.13.6-x86_64.zip`
+- `xbb-3.4-macos-11.6.1-x86_64.zip`
+- `xbb-3.4-macos-11.6.1-arm64.zip`
 
 ## macOS 10.13
 
@@ -200,8 +210,8 @@ For more details, see the [README-DEPRECATED](README-DEPRECATED.md) file.
 
 From https://stackoverflow.com/questions/52977581/why-isnt-mmacosx-version-min-10-10-preventing-use-of-a-function-tagged-as-star
 
-- `-mmacosx-version-min=10.10` for the compilers
-- `-Wl,-mmacosx-version-min=10.10`, for the linker
+- `-mmacosx-version-min=10.13` for the compilers
+- `-Wl,-mmacosx-version-min=10.13`, for the linker
 - `-Wunguarded-availability`
 
 Apple clang

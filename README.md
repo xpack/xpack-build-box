@@ -19,7 +19,12 @@ and provides the scripts to create the xPack build environments
 - [End-of-life](https://xpack.github.io/xbb/end-of-life/)
 - [Releases](https://xpack.github.io/xbb/releases/)
 
-The current version is v3.3; see the release page for details.
+Starting with 2022, all builds will be performed with v3.4;
+see the release page for details.
+
+Except possible maintenance releases,
+this is planned to be the final monolithic release; future releases
+should be modular, and use binary xPacks on top of simple npm images.
 
 ## Credits
 
