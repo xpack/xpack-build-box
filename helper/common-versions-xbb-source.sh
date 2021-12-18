@@ -50,8 +50,7 @@ function build_versioned_components()
     if is_linux
     then
       # Patch!
-      # 2.37 has problems in ld with finding libz.so.1
-      XBB_BINUTILS_VERSION="2.36.1" # "2.34" # "2.33.1"
+      XBB_BINUTILS_VERSION="2.37" # "2.36.1" # "2.34" # "2.33.1"
 
       # 8.x fails to compile the libstdc++ new file system classes.
       # must be the same as native, otherwise shared libraries will mess versions.
