@@ -495,6 +495,11 @@ function ubuntu_install_develop()
 
   run_verbose apt-get install --yes gdb
 
+  if [ "${machine}" == "x86_64" ]
+  then
+    run_verbose apt-get install --yes mingw-w64
+  fi
+
   # ---------------------------------------------------------------------------
 
   if [ "${release}" == "18.04" ]
