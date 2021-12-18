@@ -131,6 +131,7 @@ function build_native_binutils()
             fi
 
             # Prevent ld to set DT_RUNPATH.
+            config_options+=("--disable-rpath")
             config_options+=("--disable-new-dtags")
           elif is_darwin
           then
@@ -1191,6 +1192,7 @@ else
           config_options+=("--disable-sim")
           config_options+=("--disable-gdb")
 
+          config_options+=("--disable-rpath")
           config_options+=("--disable-new-dtags")
 
           run_verbose bash "${SOURCES_FOLDER_PATH}/${mingw_binutils_src_folder_name}/configure" \
@@ -5856,6 +5858,7 @@ function build_patchelf()
           config_options+=("--prefix=${INSTALL_FOLDER_PATH}")
           if is_linux
           then
+            config_options+=("--disable-rpath")
             config_options+=("--disable-new-dtags")
           fi
 
@@ -6390,6 +6393,7 @@ function build_python2()
 
           if is_linux
           then
+            config_options+=("--disable-rpath")
             config_options+=("--disable-new-dtags")
           fi
 
@@ -6584,6 +6588,7 @@ function build_python3()
 
           if is_linux
           then
+            config_options+=("--disable-rpath")
             config_options+=("--disable-new-dtags")
           fi
 
