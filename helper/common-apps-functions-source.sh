@@ -15,8 +15,10 @@ function build_native_binutils()
   # https://www.gnu.org/software/binutils/
   # https://ftp.gnu.org/gnu/binutils/
 
+  # https://github.com/archlinux/svntogit-packages/blob/packages/binutils/trunk/PKGBUILD
   # https://archlinuxarm.org/packages/aarch64/binutils/files/PKGBUILD
-  # https://aur.archlinux.org/cgit/aur.git/tree/PKGBUILD?h=gdb-git
+  # https://aur.archlinux.org/cgit/aur.git/tree/PKGBUILD?h=aarch64-binutils
+
 
   # 2017-07-24, "2.29"
   # 2018-07-14, "2.31"
@@ -24,7 +26,7 @@ function build_native_binutils()
   # 2019-10-12, "2.33.1"
   # 2020-02-01, "2.34"
   # 2021-02-06, "2.36.1"
-  # 2021-07-18, "2.37"
+  # 2021-07-18, "2.37" ! -mbig-obj, ld -> libz
 
   local native_binutils_version="$1"
 
@@ -1049,6 +1051,7 @@ function build_mingw_binutils()
 {
   # https://ftp.gnu.org/gnu/binutils/
 
+  # https://github.com/archlinux/svntogit-community/blob/packages/mingw-w64-binutils/trunk/PKGBUILD
   # https://aur.archlinux.org/cgit/aur.git/tree/PKGBUILD?h=mingw-w64-binutils
   # https://aur.archlinux.org/cgit/aur.git/tree/PKGBUILD?h=mingw-w64-binutils-weak
 
@@ -1457,7 +1460,7 @@ function build_mingw_gcc_first()
   # https://gcc.gnu.org
   # https://gcc.gnu.org/wiki/InstallingGCC
 
-  # https://aur.archlinux.org/cgit/aur.git/tree/PKGBUILD?h=mingw-w64-binutils
+  # https://github.com/archlinux/svntogit-community/blob/packages/mingw-w64-gcc/trunk/PKGBUILD
   # https://aur.archlinux.org/cgit/aur.git/tree/PKGBUILD?h=mingw-w64-gcc
 
   # https://ftp.gnu.org/gnu/gcc/
@@ -5266,6 +5269,7 @@ function build_cmake()
   # Apr 6, 2021, "3.19.8"
   # Sep 20, 2021, "3.20.6"
   # Oct 7, 2021, "3.21.4"
+  # Dec 7, 2021, "3.22.1"
 
   local cmake_version="$1"
   local cmake_version_major="$(echo ${cmake_version} | sed -e 's|\([0-9][0-9]*\)\..*|\1|')"
@@ -5773,6 +5777,7 @@ function build_patchelf()
   # 2020-06-09, "0.11"
   # 2020-08-27, "0.12"
   # 05 Aug 2021, "0.13"
+  # 05 Dec 2021, "0.14.3"
 
   local patchelf_version="$1"
 
@@ -6475,6 +6480,7 @@ function build_python3()
   # Aug. 30, 2021, "3.9.7"
   # Nov. 5, 2021, "3.9.8"
   # Oct. 4, 2021, "3.10.0"
+  # Nov. 15, 2021, "3.9.9"
 
   local python3_version="$1"
   local python3_version_major="$(echo ${python3_version} | sed -e 's|\([0-9][0-9]*\)\.\([0-9][0-9]*\)|\1|')"
@@ -6784,6 +6790,7 @@ function build_meson
   # Apr 10, 2021, "0.57.2"
   # Jun 7, 2021, "0.58.1"
   # Nov 2, 2021, "0.60.1"
+  # Nov 25, 2021, "0.60.2"
 
   local meson_version="$1"
 
@@ -7132,6 +7139,7 @@ function build_wine()
   # 2020-11-20, "5.22"
   # 2021-09-10, "6.17"
   # 2021-11-05, "6.21"
+  # 2021-12-03, "6.23"
 
   local wine_version="$1"
 
