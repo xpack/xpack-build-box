@@ -1111,7 +1111,7 @@ function build_mingw_binutils()
           # --build used conservatively
           run_verbose bash "${SOURCES_FOLDER_PATH}/${mingw_binutils_src_folder_name}/configure" --help
 
-if true
+if false
 then
 
           run_verbose bash "${SOURCES_FOLDER_PATH}/${mingw_binutils_src_folder_name}/configure" \
