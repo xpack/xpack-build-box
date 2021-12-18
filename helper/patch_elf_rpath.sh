@@ -482,9 +482,13 @@ function main()
 
     if [ "${found}" != "y" ]
     then
+      local do_accept_system_libz="${ACCEPT_SYSTEM_LIBZ:=""}"
       if is_linux_sys_so ${lib_name}
       then
         echo "system library ${lib_name} reluctantly accepted :-("
+      elif [ "${do_accept_system_libz}" == "y" -a "${lib_name}" == "libz.so.1" ]
+      then
+        echo "system library ${lib_name} additionally accepted :-("
       else
         errors+=("    ${lib_name} not found")
         show_details="y"
