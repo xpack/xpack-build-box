@@ -1219,6 +1219,10 @@ fi
         # Build.
         run_verbose make -j ${JOBS}
 
+        show_libs "ld/.libs/ld-new"
+        show_libs "gas/.libs/as-new"
+        show_libs "binutils/.libs/readelf"
+
         # make install-strip
         run_verbose make install
 
