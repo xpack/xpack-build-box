@@ -30,6 +30,7 @@ based on the bootstrap image:
 
 ```sh
 bash ~/Downloads/xpack-build-box.git/ubuntu/18-xbb/amd64-run-with-image-v3.4.sh
+bash ~/Downloads/xpack-build-box.git/ubuntu/18-xbb/amd64-run-with-image-v3.5.sh
 
 bash ~/Downloads/xpack-build-box.git/ubuntu/18-xbb/arm64v8-run-with-image-v3.4.sh
 bash ~/Downloads/xpack-build-box.git/ubuntu/18-xbb/arm32v7-run-with-image-v3.4.sh
