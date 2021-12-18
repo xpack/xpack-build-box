@@ -1203,6 +1203,9 @@ fi
           if is_linux
           then
             patch_all_libtool_rpath
+
+            # Unfortunately the ld files are generated again, and the
+            # patches are lost.
           fi
 
           cp "config.log" "${LOGS_FOLDER_PATH}/${mingw_binutils_folder_name}/config-log-$(ndate).txt"
