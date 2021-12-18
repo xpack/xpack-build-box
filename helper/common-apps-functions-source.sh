@@ -106,8 +106,8 @@ function build_native_binutils()
           # Arch also uses
           # --with-lib-path=/usr/lib:/usr/local/lib
 
-          config_options+=("--without-system-zlib")
-          # config_options+=("--with-system-zlib")
+          # config_options+=("--without-system-zlib")
+          config_options+=("--with-system-zlib")
 
           config_options+=("--with-pic")
 
@@ -604,8 +604,8 @@ function build_native_gcc()
 
             config_options+=("--with-diagnostics-color=auto")
 
-            config_options+=("--without-system-zlib")
-            # config_options+=("--with-system-zlib")
+            # config_options+=("--without-system-zlib")
+            config_options+=("--with-system-zlib")
 
             config_options+=("--without-cuda-driver")
 
@@ -1143,8 +1143,8 @@ else
 
           config_options+=("--with-pkgversion=${XBB_MINGW_BINUTILS_BRANDING}")
 
-          config_options+=("--without-system-zlib")
-          # config_options+=("--with-system-zlib")
+          # config_options+=("--without-system-zlib")
+          config_options+=("--with-system-zlib")
 
           config_options+=("--with-pic")
 
