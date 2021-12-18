@@ -62,6 +62,9 @@ function build_versioned_components()
       # This can be fixed with a sed patch.
       XBB_MINGW_GCC_VERSION="${XBB_GCC_VERSION}" # "9.2.0" # "8.3.0" # "7.4.0"
       XBB_MINGW_BINUTILS_VERSION="${XBB_BINUTILS_VERSION}" # "2.34" # "2.33.1"
+
+      # Hack to avoid libz.1.so not found in binutils linker.
+      export ACCEPT_SYSTEM_LIBZ="y"
     fi
 
     XBB_GDB_VERSION="11.1" # "10.2"
