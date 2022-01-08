@@ -1112,7 +1112,9 @@ function build_mingw_binutils()
           # --build used conservatively
           run_verbose bash "${SOURCES_FOLDER_PATH}/${mingw_binutils_src_folder_name}/configure" --help
 
-if false
+# TODO: check what is wrong, the else branch fails to compile some
+# packages, like zlib, due to something possibly related to big-obj.
+if true
 then
 
           run_verbose bash "${SOURCES_FOLDER_PATH}/${mingw_binutils_src_folder_name}/configure" \
