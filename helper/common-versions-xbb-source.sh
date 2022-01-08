@@ -817,7 +817,7 @@ function build_versioned_components()
     # depends ?
     # Warning: buggy!
     # "0.12" weird tag
-    build_patchelf "0.13.1" # "0.12" # "0.10"
+    build_patchelf "0.14.3" # "0.13.1" # "0.12" # "0.10"
 
     # depends=('glibc')
     build_dos2unix "7.4.2" # "7.4.1" # "7.4.0"
