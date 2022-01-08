@@ -488,7 +488,7 @@ function ubuntu_install_develop()
 
   if [ "${machine}" == "x86_64" ]
   then
-    run_verbose apt-get install --yes mingw-w64
+    run_verbose apt-get install --yes mingw-w64 wine64
   fi
 
   # ---------------------------------------------------------------------------
