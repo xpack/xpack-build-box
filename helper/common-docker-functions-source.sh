@@ -374,49 +374,51 @@ function ubuntu_install_develop()
   run_verbose apt-get update
 
   run_verbose apt-get install --yes \
-  \
-  autoconf \
-  automake \
-  bison \
-  bzip2 \
-  ca-certificates \
-  cmake \
-  cpio \
-  curl \
-  diffutils \
-  file \
-  flex \
-  gawk \
-  gcc \
-  g++ \
-  gettext \
-  git \
-  libc6-dev \
-  libtool \
-  m4 \
-  make \
-  patch \
-  perl \
-  pkg-config \
-  python \
-  python3 \
-  python3-pip \
-  re2c \
-  rhash \
-  rsync \
-  tcl \
-  time \
-  unzip \
-  wget \
-  xz-utils \
-  zip \
-  zlib1g-dev \
+    \
+    autoconf \
+    automake \
+    bison \
+    bzip2 \
+    ca-certificates \
+    cmake \
+    cpio \
+    curl \
+    diffutils \
+    file \
+    flex \
+    gawk \
+    gcc g++ \
+    gcc-8 g++-8 \
+    gettext \
+    git \
+    libc6-dev \
+    libtool \
+    m4 \
+    make \
+    patch \
+    perl \
+    pkg-config \
+    python \
+    python3 \
+    python3-pip \
+    re2c \
+    rhash \
+    rsync \
+    tcl \
+    time \
+    unzip \
+    wget \
+    xz-utils \
+    zip \
+    zlib1g-dev \
+
+  update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-8 800 --slave /usr/bin/g++ g++ /usr/bin/g++-8
 
   # Without it, building GCC on Arm 32-bit fails.
   # https://askubuntu.com/questions/1202249/c-compilng-failed
   if [ "${machine}" == "armv8l" -o "${machine}" == "armv7l" ]
   then
-    run_verbose apt-get install --yes g++-multilib
+    run_verbose apt-get install --yes g++-multilib g++-8-multilib
   fi
 
   # libtool-bin - not present in precise
