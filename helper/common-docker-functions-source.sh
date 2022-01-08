@@ -493,12 +493,7 @@ function ubuntu_install_develop()
 
   # ---------------------------------------------------------------------------
 
-  if [ "${release}" == "18.04" ]
-  then
-    run_verbose apt-get install --yes openjdk-11-jdk
-  else
-    run_verbose apt-get install --yes openjdk-8-jdk
-  fi
+  run_verbose apt-get install --yes openjdk-11-jdk
 
   run_verbose apt-get install --yes ant
 
