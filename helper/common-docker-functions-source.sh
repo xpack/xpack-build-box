@@ -439,18 +439,7 @@ function ubuntu_install_develop()
   help2man \
 
   # Not available on Ubuntu 16.
-  if [ "${release}" != "16.04" ]
-  then
-    run_verbose apt-get install --yes dos2unix
-  fi
-
-  # patchelf - not present in 14 trusty, 16 precise
-
-  # Starting with 16.04, it is part of coreutils.
-  if [ "${release}" == "12.04" -o "${release}" == "14.04" ]
-  then
-    run_verbose apt-get install --yes realpath
-  fi
+  run_verbose apt-get install --yes dos2unix
 
   # ---------------------------------------------------------------------------
 
