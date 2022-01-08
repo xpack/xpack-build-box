@@ -502,10 +502,6 @@ function ubuntu_install_develop()
 
   # ---------------------------------------------------------------------------
 
-  if [ "${release}" == "18.04" ]
-  then
-    run_verbose apt-get install --yes texlive
-  fi
 
   # ---------------------------------------------------------------------------
 
@@ -516,6 +512,7 @@ function ubuntu_install_develop()
     run_verbose locale-gen en_US.UTF-8
     run_verbose update-locale LANG=en_US.UTF-8
   fi
+  run_verbose apt-get install --yes texlive
 
   # ---------------------------------------------------------------------------
 
