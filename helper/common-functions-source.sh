@@ -1609,6 +1609,21 @@ function patch_elf_rpath()
   ) 2>&1 | tee "${LOGS_FOLDER_PATH}/check-rpath-output.txt"
 }
 
+# More elaborate, if needed.
+# -e 's|finalize_rpath=".*"|finalize_rpath=""|' \
+# -e 's|finalize_rpath=$rpath|finalize_rpath=""|' \
+# -e 's|finalize_rpath+=" $libdir"|finalize_rpath=""|' \
+# -e 's|compile_rpath=".*"|compile_rpath=""|' \
+# -e 's|compile_rpath=$rpath|compile_rpath=""|' \
+# -e 's|finalize_perm_rpath=".*"|finalize_perm_rpath=""|' \
+# -e 's|perm_rpath=".*"|perm_rpath=""|' \
+# -e 's|temp_rpath=".*"|temp_rpath=""|' \
+# \
+# -e 's|func_append finalize_rpath " $libdir"||' \
+# -e 's|dep_rpath+=" $flag"||' \
+# -e 's|func_append dep_rpath " $flag"||' \
+# -e 's|func_append compile_rpath " $absdir"||' \
+
 function patch_file_libtool_rpath()
 {
   local file_path="$1"

@@ -374,140 +374,96 @@ function ubuntu_install_develop()
   run_verbose apt-get update
 
   run_verbose apt-get install --yes \
-  \
-  autoconf \
-  automake \
-  bison \
-  bzip2 \
-  ca-certificates \
-  cmake \
-  cpio \
-  curl \
-  diffutils \
-  file \
-  flex \
-  gawk \
-  gcc \
-  g++ \
-  gettext \
-  git \
-  libc6-dev \
-  libtool \
-  m4 \
-  make \
-  patch \
-  perl \
-  pkg-config \
-  python \
-  python3 \
-  python3-pip \
-  re2c \
-  rhash \
-  rsync \
-  tcl \
-  time \
-  unzip \
-  wget \
-  xz-utils \
-  zip \
-  zlib1g-dev \
+    \
+    autoconf \
+    automake \
+    bison \
+    bzip2 \
+    ca-certificates \
+    cmake \
+    cpio \
+    curl \
+    diffutils \
+    file \
+    flex \
+    gawk \
+    gcc g++ \
+    gcc-8 g++-8 \
+    gettext \
+    git \
+    libc6-dev \
+    libtool \
+    m4 \
+    make \
+    patch \
+    perl \
+    pkg-config \
+    python \
+    python3 \
+    python3-pip \
+    re2c \
+    rhash \
+    rsync \
+    tcl \
+    time \
+    unzip \
+    wget \
+    xz-utils \
+    zip \
+    zlib1g-dev \
+
+  update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-8 800 --slave /usr/bin/g++ g++ /usr/bin/g++-8
 
   # Without it, building GCC on Arm 32-bit fails.
   # https://askubuntu.com/questions/1202249/c-compilng-failed
   if [ "${machine}" == "armv8l" -o "${machine}" == "armv7l" ]
   then
-    run_verbose apt-get install --yes g++-multilib
+    run_verbose apt-get install --yes g++-multilib g++-8-multilib
   fi
 
   # libtool-bin - not present in precise
 
   # For QEMU
   run_verbose apt-get install --yes \
-  libx11-dev \
-  libxext-dev \
-  mesa-common-dev \
+    libx11-dev \
+    libxext-dev \
+    mesa-common-dev \
 
   # For QEMU & OpenOCD
   run_verbose apt-get install --yes \
-  libudev-dev
+    libudev-dev
 
   # From  (universe)
   run_verbose apt-get install --yes \
-  texinfo \
-  help2man \
+    texinfo \
+    help2man \
 
   # Not available on Ubuntu 16.
-  if [ "${release}" != "16.04" ]
-  then
-    run_verbose apt-get install --yes dos2unix
-  fi
-
-  # patchelf - not present in 14 trusty, 16 precise
-
-  # Starting with 16.04, it is part of coreutils.
-  if [ "${release}" == "12.04" -o "${release}" == "14.04" ]
-  then
-    run_verbose apt-get install --yes realpath
-  fi
+  run_verbose apt-get install --yes dos2unix
 
   # ---------------------------------------------------------------------------
 
   # For add-apt-repository
   run_verbose apt-get install --yes software-properties-common
-  if [ "${release}" == "12.04" ]
-  then
-    # Only needed on old distributions.
-    run_verbose apt-get install --yes python-software-properties
-  fi
 
-  run_verbose add-apt-repository --yes ppa:ubuntu-toolchain-r/test
+  # run_verbose add-apt-repository --yes ppa:ubuntu-toolchain-r/test
   run_verbose add-apt-repository --yes ppa:openjdk-r/ppa
 
   run_verbose apt-get update
 
+  # 7.5.0
   run_verbose gcc --version
-
-  local gcc_version="$(gcc -dumpversion)"
-  local gcc_version_major=$(echo ${gcc_version} | sed -e 's|\([0-9][0-9]*\)\.[0-9].*|\1|')
-
-  # Ubuntu 18 is already 7.4, no need to install 6.x.
-  if [ ${gcc_version_major} -le 6 ]
-  then
-    # Install 6.x.
-    run_verbose apt-get install --yes \
-    gcc-6 \
-    g++-6 \
-
-    run_verbose update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-6 60 --slave /usr/bin/g++ g++ /usr/bin/g++-6
-    if [ "${release}" == "12.04" ]
-    then
-      run_verbose update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-4.6 60 --slave /usr/bin/g++ g++ /usr/bin/g++-4.6
-    elif [ "${release}" == "14.04" ]
-    then
-      run_verbose update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-4.8 60 --slave /usr/bin/g++ g++ /usr/bin/g++-4.6
-    elif [ "${release}" == "16.04" ]
-    then
-      run_verbose update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-5 60 --slave /usr/bin/g++ g++ /usr/bin/g++-5
-    fi
-
-    echo 2 | update-alternatives --config gcc
-  fi
 
   run_verbose apt-get install --yes gdb
 
   if [ "${machine}" == "x86_64" ]
   then
-    run_verbose apt-get install --yes mingw-w64
+    run_verbose apt-get install --yes mingw-w64 wine64
   fi
 
   # ---------------------------------------------------------------------------
 
-  if [ "${release}" == "18.04" ]
-  then
-    run_verbose apt-get install --yes openjdk-11-jdk
-  else
-    run_verbose apt-get install --yes openjdk-8-jdk
-  fi
+  run_verbose apt-get install --yes openjdk-11-jdk
 
   run_verbose apt-get install --yes ant
 
@@ -516,20 +472,7 @@ function ubuntu_install_develop()
 
   # ---------------------------------------------------------------------------
 
-  if [ "${release}" == "18.04" ]
-  then
-    run_verbose apt-get install --yes texlive
-  fi
-
-  # ---------------------------------------------------------------------------
-
-  if [ "${release}" != "18.04" ]
-  then
-    # https://www.thomas-krenn.com/en/wiki/Configure_Locales_in_Ubuntu
-    run_verbose apt-get install --yes locales
-    run_verbose locale-gen en_US.UTF-8
-    run_verbose update-locale LANG=en_US.UTF-8
-  fi
+  run_verbose apt-get install --yes texlive
 
   # ---------------------------------------------------------------------------
 

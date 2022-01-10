@@ -131,6 +131,7 @@ function build_native_binutils()
             fi
 
             # Prevent ld to set DT_RUNPATH.
+            config_options+=("--disable-rpath")
             config_options+=("--disable-new-dtags")
           elif is_darwin
           then
@@ -1111,7 +1112,9 @@ function build_mingw_binutils()
           # --build used conservatively
           run_verbose bash "${SOURCES_FOLDER_PATH}/${mingw_binutils_src_folder_name}/configure" --help
 
-if false
+# TODO: check what is wrong, the else branch fails to compile some
+# packages, like zlib, due to something possibly related to big-obj.
+if true
 then
 
           run_verbose bash "${SOURCES_FOLDER_PATH}/${mingw_binutils_src_folder_name}/configure" \
@@ -1191,6 +1194,7 @@ else
           config_options+=("--disable-sim")
           config_options+=("--disable-gdb")
 
+          config_options+=("--disable-rpath")
           config_options+=("--disable-new-dtags")
 
           run_verbose bash "${SOURCES_FOLDER_PATH}/${mingw_binutils_src_folder_name}/configure" \
@@ -1203,6 +1207,9 @@ fi
           if is_linux
           then
             patch_all_libtool_rpath
+
+            # Unfortunately the ld files are generated again, and the
+            # patches are lost.
           fi
 
           cp "config.log" "${LOGS_FOLDER_PATH}/${mingw_binutils_folder_name}/config-log-$(ndate).txt"
@@ -1215,6 +1222,10 @@ fi
 
         # Build.
         run_verbose make -j ${JOBS}
+
+        show_libs "ld/.libs/ld-new"
+        show_libs "gas/.libs/as-new"
+        show_libs "binutils/.libs/readelf"
 
         # make install-strip
         run_verbose make install
@@ -5849,6 +5860,7 @@ function build_patchelf()
           config_options+=("--prefix=${INSTALL_FOLDER_PATH}")
           if is_linux
           then
+            config_options+=("--disable-rpath")
             config_options+=("--disable-new-dtags")
           fi
 
@@ -6383,6 +6395,7 @@ function build_python2()
 
           if is_linux
           then
+            config_options+=("--disable-rpath")
             config_options+=("--disable-new-dtags")
           fi
 
@@ -6577,6 +6590,7 @@ function build_python3()
 
           if is_linux
           then
+            config_options+=("--disable-rpath")
             config_options+=("--disable-new-dtags")
           fi
 

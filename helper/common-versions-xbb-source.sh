@@ -50,8 +50,7 @@ function build_versioned_components()
     if is_linux
     then
       # Patch!
-      # 2.37 has problems in ld with finding libz.so.1
-      XBB_BINUTILS_VERSION="2.36.1" # "2.34" # "2.33.1"
+      XBB_BINUTILS_VERSION="2.37" # "2.36.1" # "2.34" # "2.33.1"
 
       # 8.x fails to compile the libstdc++ new file system classes.
       # must be the same as native, otherwise shared libraries will mess versions.
@@ -62,6 +61,9 @@ function build_versioned_components()
       # This can be fixed with a sed patch.
       XBB_MINGW_GCC_VERSION="${XBB_GCC_VERSION}" # "9.2.0" # "8.3.0" # "7.4.0"
       XBB_MINGW_BINUTILS_VERSION="${XBB_BINUTILS_VERSION}" # "2.34" # "2.33.1"
+
+      # Hack to avoid libz.1.so not found in binutils linker.
+      export ACCEPT_SYSTEM_LIBZ="y"
     fi
 
     XBB_GDB_VERSION="11.1" # "10.2"
@@ -580,6 +582,9 @@ function build_versioned_components()
       # This can be fixed with a sed patch.
       XBB_MINGW_GCC_VERSION="${XBB_GCC_VERSION}" # "9.2.0" # "8.3.0" # "7.4.0"
       XBB_MINGW_BINUTILS_VERSION="${XBB_BINUTILS_VERSION}" # "2.34" # "2.33.1"
+
+      # Hack to avoid libz.1.so not found in binutils linker.
+      export ACCEPT_SYSTEM_LIBZ="y"
     fi
 
     XBB_GDB_VERSION="11.1" # "10.2"
@@ -812,7 +817,7 @@ function build_versioned_components()
     # depends ?
     # Warning: buggy!
     # "0.12" weird tag
-    build_patchelf "0.13.1" # "0.12" # "0.10"
+    build_patchelf "0.14.3" # "0.13.1" # "0.12" # "0.10"
 
     # depends=('glibc')
     build_dos2unix "7.4.2" # "7.4.1" # "7.4.0"
