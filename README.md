@@ -16,7 +16,8 @@ and provides the scripts to create the xPack build environments
 
 - [Homepage](https://xpack.github.io/xbb/)
 - [Prerequisites](https://xpack.github.io/xbb/prerequisites/)
-- [End-of-life](https://xpack.github.io/xbb/end-of-life/)
+- [End of support](https://xpack.github.io/xbb/end-of-support/) schedule
+  for various Linux distributions
 - [Releases](https://xpack.github.io/xbb/releases/)
 
 Starting with 2022, all builds will be performed with v3.4;
