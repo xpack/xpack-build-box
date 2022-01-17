@@ -57,10 +57,10 @@ No longer maintained.
 set -o errexit
 docker system prune -f
 
-time ( bash ~/Downloads/xpack-build-box.git/ubuntu/18-npm/amd64-build-v1.sh && \
-bash ~/Downloads/xpack-build-box.git/ubuntu/18-develop/amd64-build-v3.4.sh && \
-bash ~/Downloads/xpack-build-box.git/ubuntu/18-xbb-bootstrap/amd64-build-v3.4.sh && \
-bash ~/Downloads/xpack-build-box.git/ubuntu/18-xbb/amd64-build-v3.4.sh && \
+time ( bash ${HOME}/Work/xpack-build-box.git/ubuntu/18-npm/amd64-build-v1.sh && \
+bash ${HOME}/Work/xpack-build-box.git/ubuntu/18-develop/amd64-build-v3.4.sh && \
+bash ${HOME}/Work/xpack-build-box.git/ubuntu/18-xbb-bootstrap/amd64-build-v3.4.sh && \
+bash ${HOME}/Work/xpack-build-box.git/ubuntu/18-xbb/amd64-build-v3.4.sh && \
 docker images )
 
 docker push "ilegeul/ubuntu:amd64-18.04-npm-v1" && \
@@ -98,10 +98,10 @@ It is recommended to run the entire build on a Raspberry Pi OS 64-bit machine.
 set -o errexit
 docker system prune -f
 
-time ( bash ~/Downloads/xpack-build-box.git/ubuntu/18-npm/arm64v8-build-v1.sh && \
-bash ~/Downloads/xpack-build-box.git/ubuntu/18-develop/arm64v8-build-v3.4.sh && \
-bash ~/Downloads/xpack-build-box.git/ubuntu/18-xbb-bootstrap/arm64v8-build-v3.4.sh && \
-bash ~/Downloads/xpack-build-box.git/ubuntu/18-xbb/arm64v8-build-v3.4.sh && \
+time ( bash ${HOME}/Work/xpack-build-box.git/ubuntu/18-npm/arm64v8-build-v1.sh && \
+bash ${HOME}/Work/xpack-build-box.git/ubuntu/18-develop/arm64v8-build-v3.4.sh && \
+bash ${HOME}/Work/xpack-build-box.git/ubuntu/18-xbb-bootstrap/arm64v8-build-v3.4.sh && \
+bash ${HOME}/Work/xpack-build-box.git/ubuntu/18-xbb/arm64v8-build-v3.4.sh && \
 docker images )
 
 docker push "ilegeul/ubuntu:arm64v8-18.04-npm-v1" && \
@@ -131,10 +131,10 @@ otherwise `nvm` will try to incorectly install the 64-bit node/npm.
 set -o errexit
 docker system prune -f
 
-time ( bash ~/Downloads/xpack-build-box.git/ubuntu/18-npm/arm32v7-build-v1.sh && \
-bash ~/Downloads/xpack-build-box.git/ubuntu/18-develop/arm32v7-build-v3.4.sh && \
-bash ~/Downloads/xpack-build-box.git/ubuntu/18-xbb-bootstrap/arm32v7-build-v3.4.sh && \
-bash ~/Downloads/xpack-build-box.git/ubuntu/18-xbb/arm32v7-build-v3.4.sh && \
+time ( bash ${HOME}/Work/xpack-build-box.git/ubuntu/18-npm/arm32v7-build-v1.sh && \
+bash ${HOME}/Work/xpack-build-box.git/ubuntu/18-develop/arm32v7-build-v3.4.sh && \
+bash ${HOME}/Work/xpack-build-box.git/ubuntu/18-xbb-bootstrap/arm32v7-build-v3.4.sh && \
+bash ${HOME}/Work/xpack-build-box.git/ubuntu/18-xbb/arm32v7-build-v3.4.sh && \
 docker images )
 
 docker push "ilegeul/ubuntu:arm32v7-18.04-npm-v1" && \

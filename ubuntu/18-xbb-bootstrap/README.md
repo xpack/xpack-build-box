@@ -11,10 +11,10 @@ There are several scripts:
 - `arm32v7-build-v3.4.sh` -> `ilegeul/ubuntu:arm32v7-18.04-bootstrap-v3.4`
 
 ```sh
-bash ~/Downloads/xpack-build-box.git/ubuntu/18-xbb-bootstrap/amd64-build-v3.4.sh
+bash ${HOME}/Work/xpack-build-box.git/ubuntu/18-xbb-bootstrap/amd64-build-v3.4.sh
 
-bash ~/Downloads/xpack-build-box.git/ubuntu/18-xbb-bootstrap/arm64v8-build-v3.4.sh
-bash ~/Downloads/xpack-build-box.git/ubuntu/18-xbb-bootstrap/arm32v7-build-v3.4.sh
+bash ${HOME}/Work/xpack-build-box.git/ubuntu/18-xbb-bootstrap/arm64v8-build-v3.4.sh
+bash ${HOME}/Work/xpack-build-box.git/ubuntu/18-xbb-bootstrap/arm32v7-build-v3.4.sh
 
 docker images
 ```
@@ -28,10 +28,10 @@ build.
 The following commands can be used to create the docker container:
 
 ```sh
-bash ~/Downloads/xpack-build-box.git/ubuntu/18-xbb-bootstrap/amd64-run-v3.4.sh
+bash ${HOME}/Work/xpack-build-box.git/ubuntu/18-xbb-bootstrap/amd64-run-v3.4.sh
 
-bash ~/Downloads/xpack-build-box.git/ubuntu/18-xbb-bootstrap/arm64v8-run-v3.4.sh
-bash ~/Downloads/xpack-build-box.git/ubuntu/18-xbb-bootstrap/arm32v7-run-v3.4.sh
+bash ${HOME}/Work/xpack-build-box.git/ubuntu/18-xbb-bootstrap/arm64v8-run-v3.4.sh
+bash ${HOME}/Work/xpack-build-box.git/ubuntu/18-xbb-bootstrap/arm32v7-run-v3.4.sh
 ```
 
 Inside the container, run the build script:

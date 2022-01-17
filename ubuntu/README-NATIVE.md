@@ -20,12 +20,12 @@ install a **minimal** system (select this during the install).
 ## How to install
 
 ```console
-$ rm -rf "${HOME}/Downloads/xpack-build-box.git"
+$ rm -rf "${HOME}/Work/xpack-build-box.git"
 $ git clone --recurse-submodules https://github.com/xpack/xpack-build-box.git \
   "${HOME}"/Downloads/xpack-build-box.git
 
-$ sudo bash "${HOME}/Downloads/xpack-build-box.git/ubuntu/install-native-xbb-v3.1.sh"
-$ sudo bash "${HOME}/Downloads/xpack-build-box.git/ubuntu/add-native-extras-xbb-v3.1.sh"
+$ sudo bash "${HOME}/Work/xpack-build-box.git/ubuntu/install-native-xbb-v3.1.sh"
+$ sudo bash "${HOME}/Work/xpack-build-box.git/ubuntu/add-native-extras-xbb-v3.1.sh"
 ```
 
 It takes a few minutes to install all system requirements.
@@ -43,7 +43,7 @@ for free from
 Select the `.deb` file, and install it:
 
 ```console
-$ sudo apt install --yes ~/Downloads/code_1.31.1-1549938243_amd64.deb
+$ sudo apt install --yes ${HOME}/Work/code_1.31.1-1549938243_amd64.deb
 ```
 
 Preferably add it to the tool bar, for convenient access.
@@ -75,7 +75,7 @@ Git Kraken, which can be downloaded for free from
 Select the `.deb` file, and install it:
 
 ```console
-$ sudo apt install --yes ~/Downloads/gitkraken-amd64.deb
+$ sudo apt install --yes ${HOME}/Work/gitkraken-amd64.deb
 ```
 
 Preferably add it to the tool bar, for convenient access.

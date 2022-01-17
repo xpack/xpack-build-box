@@ -33,9 +33,9 @@ chmod -R +w "${HOME}/.local/xbb-bootstrap" "${HOME}/.local/xbb"
 rm -rf "${HOME}/.local/xbb-bootstrap" "${HOME}/.local/xbb"
 rm -rf "${HOME}/Work"/xbb-bootstrap-3.4-* "${HOME}/Work"/xbb-3.4-*
 
-caffeinate bash "${HOME}/Downloads/xpack-build-box.git/macos/build-xbb-bootstrap-v3.4.sh" && \
+caffeinate bash "${HOME}/Work/xpack-build-box.git/macos/build-xbb-bootstrap-v3.4.sh" && \
 chmod -R -w "${HOME}/.local/xbb-bootstrap" && \
-caffeinate bash "${HOME}/Downloads/xpack-build-box.git/macos/build-xbb-v3.4.sh" && \
+caffeinate bash "${HOME}/Work/xpack-build-box.git/macos/build-xbb-v3.4.sh" && \
 chmod -R -w "${HOME}/.local/xbb"
 ```
 
@@ -102,13 +102,13 @@ compiler, but with a GCC. This first set of tools is called _the XBB
 bootstrap_.
 
 ```bash
-RUN_LONG_TESTS=y caffeinate bash "${HOME}/Downloads/xpack-build-box.git/macos/build-xbb-bootstrap-v3.4.sh"
+RUN_LONG_TESTS=y caffeinate bash "${HOME}/Work/xpack-build-box.git/macos/build-xbb-bootstrap-v3.4.sh"
 ```
 
 There are several environment variables that can be passed to the script:
 
 ```bash
-DEBUG=-x caffeinate bash "${HOME}/Downloads/xpack-build-box.git/macos/build-xbb-bootstrap-v3.4.sh"
+DEBUG=-x caffeinate bash "${HOME}/Work/xpack-build-box.git/macos/build-xbb-bootstrap-v3.4.sh"
 ```
 
 The build process takes about 300 minutes on a MacBook Pro 2011,
@@ -129,7 +129,7 @@ since they may refer to bootstrap libraries.
 The final XBB tools are compiled with the bootstrapped compiler.
 
 ```bash
-RUN_LONG_TESTS=y caffeinate bash "${HOME}/Downloads/xpack-build-box.git/macos/build-xbb-v3.4.sh"
+RUN_LONG_TESTS=y caffeinate bash "${HOME}/Work/xpack-build-box.git/macos/build-xbb-v3.4.sh"
 ```
 
 The build process takes about 450 minutes on a MacBook Pro 2011,
@@ -186,7 +186,7 @@ not mandatory.
 TeX is available in the [TeX Live](https://tug.org/texlive/) distribution.
 
 ```bash
-caffeinate bash "${HOME}/Downloads/xpack-build-box.git/macos/install-texlive.sh" 2021
+caffeinate bash "${HOME}/Work/xpack-build-box.git/macos/install-texlive.sh" 2021
 ```
 
 The TeX install script is locked to a certain version, but depends on the

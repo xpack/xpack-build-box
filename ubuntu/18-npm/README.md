@@ -11,10 +11,10 @@ There are several scripts:
 - `arm32v7-build-v1.sh` -> `ilegeul/ubuntu:arm32v7-18.04-npm-v1`
 
 ```sh
-bash ~/Downloads/xpack-build-box.git/ubuntu/18-npm/amd64-build-v1.sh
+bash ${HOME}/Work/xpack-build-box.git/ubuntu/18-npm/amd64-build-v1.sh
 
-bash ~/Downloads/xpack-build-box.git/ubuntu/18-npm/arm64v8-build-v1.sh
-bash ~/Downloads/xpack-build-box.git/ubuntu/18-npm/arm32v7-build-v1.sh
+bash ${HOME}/Work/xpack-build-box.git/ubuntu/18-npm/arm64v8-build-v1.sh
+bash ${HOME}/Work/xpack-build-box.git/ubuntu/18-npm/arm32v7-build-v1.sh
 
 docker images
 

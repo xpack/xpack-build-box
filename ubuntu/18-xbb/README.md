@@ -11,10 +11,10 @@ There are several scripts:
 - `arm32v7-build-v3.4.sh` -> `ilegeul/ubuntu:arm32v7-18.04-xbb-v3.4`
 
 ```sh
-bash ~/Downloads/xpack-build-box.git/ubuntu/18-xbb/amd64-build-v3.4.sh
+bash ${HOME}/Work/xpack-build-box.git/ubuntu/18-xbb/amd64-build-v3.4.sh
 
-bash ~/Downloads/xpack-build-box.git/ubuntu/18-xbb/arm64v8-build-v3.4.sh
-bash ~/Downloads/xpack-build-box.git/ubuntu/18-xbb/arm32v7-build-v3.4.sh
+bash ${HOME}/Work/xpack-build-box.git/ubuntu/18-xbb/arm64v8-build-v3.4.sh
+bash ${HOME}/Work/xpack-build-box.git/ubuntu/18-xbb/arm32v7-build-v3.4.sh
 
 docker images
 ```
@@ -29,11 +29,11 @@ The following commands can be used to create the docker container
 based on the bootstrap image:
 
 ```sh
-bash ~/Downloads/xpack-build-box.git/ubuntu/18-xbb/amd64-run-with-image-v3.4.sh
-bash ~/Downloads/xpack-build-box.git/ubuntu/18-xbb/amd64-run-with-image-v3.5.sh
+bash ${HOME}/Work/xpack-build-box.git/ubuntu/18-xbb/amd64-run-with-image-v3.4.sh
+bash ${HOME}/Work/xpack-build-box.git/ubuntu/18-xbb/amd64-run-with-image-v3.5.sh
 
-bash ~/Downloads/xpack-build-box.git/ubuntu/18-xbb/arm64v8-run-with-image-v3.4.sh
-bash ~/Downloads/xpack-build-box.git/ubuntu/18-xbb/arm32v7-run-with-image-v3.4.sh
+bash ${HOME}/Work/xpack-build-box.git/ubuntu/18-xbb/arm64v8-run-with-image-v3.4.sh
+bash ${HOME}/Work/xpack-build-box.git/ubuntu/18-xbb/arm32v7-run-with-image-v3.4.sh
 ```
 
 The two Arm builds started in parallel take about 670 minutes
@@ -43,10 +43,10 @@ The following commands can be used to create the docker container
 with the bootstrap also mounted from the host:
 
 ```sh
-bash ~/Downloads/xpack-build-box.git/ubuntu/18-xbb/amd64-run-with-volume-v3.4.sh
+bash ${HOME}/Work/xpack-build-box.git/ubuntu/18-xbb/amd64-run-with-volume-v3.4.sh
 
-bash ~/Downloads/xpack-build-box.git/ubuntu/18-xbb/arm64v8-run-with-volume-v3.4.sh
-bash ~/Downloads/xpack-build-box.git/ubuntu/18-xbb/arm32v7-run-with-volume-v3.4.sh
+bash ${HOME}/Work/xpack-build-box.git/ubuntu/18-xbb/arm64v8-run-with-volume-v3.4.sh
+bash ${HOME}/Work/xpack-build-box.git/ubuntu/18-xbb/arm32v7-run-with-volume-v3.4.sh
 ```
 
 Inside the container, run the build script:

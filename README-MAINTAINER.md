@@ -5,23 +5,23 @@
 To clone the repo with its submodule:
 
 ```sh
-rm -rf ~/Downloads/xpack-build-box.git; \
+rm -rf ${HOME}/Work/xpack-build-box.git; \
 git clone \
   --branch master \
   https://github.com/xpack/xpack-build-box.git \
-  ~/Downloads/xpack-build-box.git; \
-git -C ~/Downloads/xpack-build-box.git submodule update --init --recursive 
+  ${HOME}/Work/xpack-build-box.git; \
+git -C ${HOME}/Work/xpack-build-box.git submodule update --init --recursive
 ```
 
 For the development version use the `develop` branch:
 
 ```sh
-rm -rf ~/Downloads/xpack-build-box.git; \
+rm -rf ${HOME}/Work/xpack-build-box.git; \
 git clone \
   --branch develop \
   https://github.com/xpack/xpack-build-box.git \
-  ~/Downloads/xpack-build-box.git; \
-git -C ~/Downloads/xpack-build-box.git submodule update --init --recursive 
+  ${HOME}/Work/xpack-build-box.git; \
+git -C ${HOME}/Work/xpack-build-box.git submodule update --init --recursive
 ```
 
 ## TeX
@@ -32,7 +32,7 @@ TeX 2020 and 2021 failed with:
 
 ```console
 re-running mktexlsr /opt/texlive/texmf-var /opt/texlive/texmf-config ...
-setting up ConTeXt cache: running mtxrun --generate .../root/Work/install-tl-20210324/install-tl: mtxrun --generate failed (status 1): 
+setting up ConTeXt cache: running mtxrun --generate .../root/Work/install-tl-20210324/install-tl: mtxrun --generate failed (status 1):
 failed
 pre-generating all format files, be patient...
 running fmtutil-sys --no-error-if-no-engine=luajithbtex,luajittex,mfluajit --no-strict --all ...done
@@ -41,7 +41,7 @@ running package-specific postactions
 /root/Work/install-tl-20210324/install-tl: errors in installation reported above
 
 Summary of warnings:
-/root/Work/install-tl-20210324/install-tl: mtxrun --generate failed (status 1): 
+/root/Work/install-tl-20210324/install-tl: mtxrun --generate failed (status 1):
 finished with package-specific postactions
 ```
 
@@ -49,7 +49,7 @@ TeX 2021 installer also complains if environment variables contain `tex`:
 
 ```console
 Summary of warnings:
-/root/Work/install-tl-20210324/install-tl: mtxrun --generate failed (status 1): 
+/root/Work/install-tl-20210324/install-tl: mtxrun --generate failed (status 1):
 
  ----------------------------------------------------------------------
  The following environment variables contain the string "tex"

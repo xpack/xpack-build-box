@@ -9,10 +9,10 @@ There are several scripts:
 - `arm32v7-build.sh` -> `ilegeul/centos:arm32v7-7.8`
 
 ```console
-$ bash ~/Downloads/xpack-build-box.git/centos/7/amd64-build.sh
-$ bash ~/Downloads/xpack-build-box.git/centos/7/i386-build.sh
-$ bash ~/Downloads/xpack-build-box.git/centos/7/arm64v8-build.sh
-$ bash ~/Downloads/xpack-build-box.git/centos/7/arm32v7-build.sh
+$ bash ${HOME}/Work/xpack-build-box.git/centos/7/amd64-build.sh
+$ bash ${HOME}/Work/xpack-build-box.git/centos/7/i386-build.sh
+$ bash ${HOME}/Work/xpack-build-box.git/centos/7/arm64v8-build.sh
+$ bash ${HOME}/Work/xpack-build-box.git/centos/7/arm32v7-build.sh
 
 $ docker images
 ```

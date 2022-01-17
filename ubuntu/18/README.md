@@ -67,10 +67,10 @@ There are several scripts:
 - `arm32v7-build.sh` -> `ilegeul/ubuntu:arm32v7-18.04`
 
 ```sh
-bash ~/Downloads/xpack-build-box.git/ubuntu/18/amd64-build.sh
-bash ~/Downloads/xpack-build-box.git/ubuntu/18/i386-build.sh
-bash ~/Downloads/xpack-build-box.git/ubuntu/18/arm64v8-build.sh
-bash ~/Downloads/xpack-build-box.git/ubuntu/18/arm32v7-build.sh
+bash ${HOME}/Work/xpack-build-box.git/ubuntu/18/amd64-build.sh
+bash ${HOME}/Work/xpack-build-box.git/ubuntu/18/i386-build.sh
+bash ${HOME}/Work/xpack-build-box.git/ubuntu/18/arm64v8-build.sh
+bash ${HOME}/Work/xpack-build-box.git/ubuntu/18/arm32v7-build.sh
 
 docker images
 ```
