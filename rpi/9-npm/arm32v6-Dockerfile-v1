@@ -1,0 +1,21 @@
+FROM ilegeul/rpi:arm32v6-9
+
+LABEL description="Raspbian 9 (stretch) arm32v6 image, with npm."
+LABEL maintainer="Liviu Ionescu <ilg@livius.net>"
+LABEL repository="https://github.com/xpack/xpack-build-box.git"
+LABEL docs="https://github.com/xpack/xpack-build-box/tree/master/rpi/9-npm/README.md"
+
+ENTRYPOINT ["linux32"]
+
+ARG DEBUG
+ARG JOBS
+
+ARG XBB_VERSION
+ARG XBB_LAYER
+
+ENV TZ=UTC
+
+ADD input-rpi-9-arm32v6 /input
+RUN bash /input/build.sh
+
+CMD ["/bin/bash"]

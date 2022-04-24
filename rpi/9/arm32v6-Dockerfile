@@ -1,0 +1,13 @@
+FROM scratch
+
+LABEL description="Pristine Raspberry Pi arm32v6 image, as resulted from debootstrap."
+LABEL maintainer="Liviu Ionescu <ilg@livius.net>"
+LABEL repository="https://github.com/xpack/xpack-build-box.git"
+LABEL docs="https://github.com/xpack/xpack-build-box/tree/master/rpi/9/README.md"
+
+ENTRYPOINT ["linux32"]
+
+ADD input-rpi-9-arm32v6/arm32v6-rpi9-rootfs.xz /
+RUN linux32 apt-get update && apt-get -y upgrade
+
+CMD ["/bin/bash"]

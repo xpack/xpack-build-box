@@ -9,3 +9,6 @@ ubuntu/*/input-*
 centos/*/input
 centos/*/input-*
 
+rpi/9/input-rpi-9-arm32v6/
+rpi/9-develop/input-rpi-9-arm32v6/
+rpi/9-npm/input-rpi-9-arm32v6/
