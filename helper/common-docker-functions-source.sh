@@ -511,6 +511,164 @@ function ubuntu_clean()
 
 # =============================================================================
 
+
+function debian_install_develop()
+{
+  # lsb_release must be present from upgrade.
+  local release="$(lsb_release -r | sed 's/Release:[^0-9]*//')"
+  local release_major=$(echo ${release} | sed -e 's|\([0-9][0-9]*\)\.[0-9].*|\1|')
+
+  local machine="$(uname -m)"
+
+  # ---------------------------------------------------------------------------
+
+  echo "docker env..."
+  env | sort
+  # Be sure no tool will senter a curses mode.
+  unset TERM
+
+  # These tools should be enough to build the bootstrap tools.
+
+  run_verbose apt-get update
+
+  run_verbose apt-get install --yes \
+    \
+    autoconf \
+    automake \
+    bison \
+    bzip2 \
+    ca-certificates \
+    cmake \
+    cpio \
+    curl \
+    diffutils \
+    file \
+    flex \
+    gawk \
+    gcc g++ \
+    gcc-8 g++-8 \
+    gettext \
+    git \
+    libc6-dev \
+    libtool \
+    m4 \
+    make \
+    patch \
+    perl \
+    pkg-config \
+    python \
+    python3 \
+    python3-pip \
+    re2c \
+    rhash \
+    rsync \
+    tcl \
+    time \
+    unzip \
+    wget \
+    xz-utils \
+    zip \
+    zlib1g-dev \
+
+  update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-8 800 --slave /usr/bin/g++ g++ /usr/bin/g++-8
+
+  # Without it, building GCC on Arm 32-bit fails.
+  # https://askubuntu.com/questions/1202249/c-compilng-failed
+  if [ "${machine}" == "armv8l" -o "${machine}" == "armv7l" ]
+  then
+    run_verbose apt-get install --yes g++-multilib g++-8-multilib
+  fi
+
+  # libtool-bin - not present in precise
+
+  # For QEMU
+  run_verbose apt-get install --yes \
+    libx11-dev \
+    libxext-dev \
+    mesa-common-dev \
+
+  # For QEMU & OpenOCD
+  run_verbose apt-get install --yes \
+    libudev-dev
+
+  # From  (universe)
+  run_verbose apt-get install --yes \
+    texinfo \
+    help2man \
+
+  # Not available on Ubuntu 16.
+  run_verbose apt-get install --yes dos2unix
+
+  # ---------------------------------------------------------------------------
+
+  # For add-apt-repository
+  run_verbose apt-get install --yes software-properties-common
+
+  # run_verbose add-apt-repository --yes ppa:ubuntu-toolchain-r/test
+  run_verbose add-apt-repository --yes ppa:openjdk-r/ppa
+
+  run_verbose apt-get update
+
+  # 7.5.0
+  run_verbose gcc --version
+
+  run_verbose apt-get install --yes gdb
+
+  if [ "${machine}" == "x86_64" ]
+  then
+    run_verbose apt-get install --yes mingw-w64 wine64
+  fi
+
+  # ---------------------------------------------------------------------------
+
+  run_verbose apt-get install --yes openjdk-11-jdk
+
+  run_verbose apt-get install --yes ant
+
+  # maven not available in Ubuntu 14, and not needed so far.
+  # apt-get install --yes maven
+
+  # ---------------------------------------------------------------------------
+
+  run_verbose apt-get install --yes texlive
+
+  # ---------------------------------------------------------------------------
+
+  echo
+  uname -a
+  lsb_release -a
+
+  ant -version
+  autoconf --version
+  bison --version
+  cmake --version
+  curl --version
+  flex --version
+  g++ --version
+  gawk --version
+  gdb --version
+  git --version
+  java -version
+  m4 --version
+  # mvn -version
+  make --version
+  patch --version
+  perl --version
+  pkg-config --version
+  python --version
+  python3 --version
+
+}
+
+function debian_clean()
+{
+  apt-get clean --yes
+  apt-get autoclean --yes
+  apt-get autoremove --yes
+}
+
+# =============================================================================
+
 # yum search packpattern
 # yum provides file
 # repoquery -l <packname>
