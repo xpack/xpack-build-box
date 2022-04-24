@@ -3,7 +3,7 @@ FROM arm32v7/ubuntu:18.04
 LABEL description="Ubuntu 18.04 arm32v7 image, with npm."
 LABEL maintainer="Liviu Ionescu <ilg@livius.net>"
 LABEL repository="https://github.com/xpack/xpack-build-box.git"
-LABEL docs="https://github.com/xpack/xpack-build-box/tree/master/ubuntu/18-updated/README.md"
+LABEL docs="https://github.com/xpack/xpack-build-box/tree/master/ubuntu/18-npm/README.md"
 
 ENTRYPOINT ["linux32"]
 
