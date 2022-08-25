@@ -9,7 +9,7 @@
 
 function build_versioned_components()
 {
-  if [[ "${XBB_VERSION}" =~ 3\.[5] ]]
+  if [[ "${XBB_VERSION}" =~ 3\.5 ]]
   then
 
     # =========================================================================
@@ -531,7 +531,44 @@ function build_versioned_components()
 
     # =========================================================================
 
-  elif [[ "${XBB_VERSION}" =~ 3\.[4] ]]
+  elif [[ "${XBB_VERSION}" =~ 3\.4\.1 ]]
+  then
+    if is_linux
+    then
+      # Uses CC to compute the library path.
+      prepare_library_path
+
+      LD_RUN_PATH="${XBB_LIBRARY_PATH}"
+
+      echo "LD_RUN_PATH=${LD_RUN_PATH}"
+      export LD_RUN_PATH
+    fi
+
+    # Upgrade wine
+    # -------------------------------------------------------------------------
+    # Requires mingw-w64 GCC.
+
+    # Build wine only on Intel Linux.
+    if is_linux && is_intel
+    then
+
+      # Required by wine.
+      # build_libpng "1.6.37"
+
+      # depends=('libpng')
+      build_wine "7.15" # "6.17" # "5.22" # "5.1" # "5.0" # "4.3"
+    fi
+
+    strip_static_objects
+
+    if is_linux
+    then
+      patch_elf_rpath
+    fi
+
+    run_tests
+
+  elif [[ "${XBB_VERSION}" =~ 3\.4 ]]
   then
 
     # =========================================================================

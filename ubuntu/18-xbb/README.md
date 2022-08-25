@@ -89,3 +89,8 @@ docker push "ilegeul/ubuntu:amd64-18.04-xbb-v3.4"
 docker push "ilegeul/ubuntu:arm64v8-18.04-xbb-v3.4"
 docker push "ilegeul/ubuntu:arm32v7-18.04-xbb-v3.4"
 ```
+
+## Notes
+
+The unpublished 3.4.1 version, durectly derived from 3.4,
+was a failed attempt to fix the GCC tests by updating wine to 7.15.
