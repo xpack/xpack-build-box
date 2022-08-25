@@ -7141,6 +7141,7 @@ function build_wine()
   # https://dl.winehq.org/wine/source/
   # https://dl.winehq.org/wine/source/4.x/wine-4.3.tar.xz
   # https://dl.winehq.org/wine/source/5.x/wine-5.1.tar.xz
+  # https://dl.winehq.org/wine/source/7.x/wine-7.15.tar.xz
 
   # https://github.com/archlinux/svntogit-community/blob/packages/wine/trunk/PKGBUILD
 
@@ -7154,6 +7155,7 @@ function build_wine()
   # 2021-09-10, "6.17"
   # 2021-11-05, "6.21"
   # 2021-12-03, "6.23"
+  # 2022-08-13, "7.15"
 
   local wine_version="$1"
 
