@@ -127,9 +127,24 @@ else
   exit 1
 fi
 
+# https://github.com/nodejs/help/wiki/Installation
 mkdir -pv /usr/local/lib/nodejs
 curl -L https://nodejs.org/dist/$VERSION/node-$VERSION-$DISTRO.tar.xz | tar -xJv -C /usr/local/lib/nodejs
 
+# The path where npm installs other binaries must be somehow
+# added to the system PATH. It is not clear exactly how the docker
+# image is invoked, so add it in multiple places.
+
+# .bashrc is used by interractive shells (like `docker run -it`).
+echo "export PATH=\"/usr/local/lib/nodejs/node-$VERSION-$DISTRO/bin:$PATH\"" >>/etc/bash.bashrc
+
+# profile is used by login shells.
+echo "export PATH=\"/usr/local/lib/nodejs/node-$VERSION-$DISTRO/bin:$PATH\"" >/etc/profile.d/00-path.sh
+
+# Probably not used.
+run_verbose sed -i -e "s|PATH=\"|PATH=\"/usr/local/lib/nodejs/node-$VERSION-$DISTRO/bin:|" /etc/environment
+
+# Explicit links that work regardless the PATH.
 ln -sv /usr/local/lib/nodejs/node-$VERSION-$DISTRO/bin/node /usr/bin/node
 ln -sv /usr/local/lib/nodejs/node-$VERSION-$DISTRO/bin/npm /usr/bin/npm
 ln -sv /usr/local/lib/nodejs/node-$VERSION-$DISTRO/bin/npx /usr/bin/npx
