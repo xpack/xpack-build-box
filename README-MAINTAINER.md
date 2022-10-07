@@ -141,7 +141,7 @@ when not possible, add the xPacks for them.
 
 ### macOS
 
-For macOS all needed toos not yet available as xPacks should be
+For macOS all needed tools not yet available as xPacks should be
 compiled in a static XBB folder, as of now. For consistency,
 the versions will replicate those available in Ubuntu 16.
 
