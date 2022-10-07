@@ -1,0 +1,20 @@
+FROM ubuntu:18.04
+
+LABEL description="Ubuntu 18.04 amd64 image, with the XBB."
+LABEL maintainer="Liviu Ionescu <ilg@livius.net>"
+LABEL repository="https://github.com/xpack/xpack-build-box.git"
+LABEL docs="https://github.com/xpack/xpack-build-box/tree/master/ubuntu/18-xbb/README.md"
+
+ARG DEBUG
+ARG JOBS
+
+ARG XBB_VERSION
+ARG XBB_LAYER
+ARG RUN_LONG_TESTS
+
+ENV TZ=UTC
+
+ADD input-ubuntu-18.04-amd64 /input
+RUN bash /input/build-v4.sh
+
+CMD ["/bin/bash"]
