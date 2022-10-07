@@ -2891,7 +2891,7 @@ function test_tar()
     # xbb_activate_installed_bin
 
     echo
-    echo "Checking the xz shared libraries..."
+    echo "Checking the tar shared libraries..."
 
     show_libs "${INSTALL_FOLDER_PATH}/bin/tar"
 
