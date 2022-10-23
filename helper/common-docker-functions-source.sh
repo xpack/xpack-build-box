@@ -172,6 +172,8 @@ function host_run_docker_build()
     --build-arg XBB_VERSION="${version}" \
     --build-arg XBB_LAYER="${layer}" \
     --build-arg RUN_LONG_TESTS="${RUN_LONG_TESTS:-""}" \
+    --no-cache \
+    --progress plain \
     --tag "${tag}" \
     --file "${dockerfile}" \
     .
@@ -245,7 +247,7 @@ function docker_build_from_archive()
 
   echo
   echo "Building Docker image ${tag}..."
-  docker build --tag "${tag}" -f "${arch}-Dockerfile" .
+  docker build --tag "${tag}" -f "${arch}-Dockerfile" --no-cache --progress plain .
 }
 
 function docker_build_from_hub()
@@ -261,7 +263,7 @@ function docker_build_from_hub()
 
   echo
   echo "Building Docker image ${tag}..."
-  docker build --tag "${tag}" -f "${arch}-Dockerfile" .
+  docker build --tag "${tag}" -f "${arch}-Dockerfile" --no-cache --progress plain .
 }
 
 # =============================================================================
