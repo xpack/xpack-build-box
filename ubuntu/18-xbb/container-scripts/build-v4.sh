@@ -41,6 +41,8 @@ source "${helper_folder_path}/common-docker-functions-source.sh"
 
 # -----------------------------------------------------------------------------
 
+export DEBIAN_FRONTEND=noninteractive
+
 echo
 env | sort
 unset TERM
