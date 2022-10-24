@@ -37,7 +37,7 @@ script_folder_name="$(basename "${script_folder_path}")"
 uname_arch="$(uname -m)"
 case "${uname_arch}" in
   x86_64 ) arch="amd64";;
-  arm64 ) arch="arm64v8";;
+  aarch64 ) arch="arm64v8";;
   armv7l | armv8l ) aarch='arm32v7';;
   * ) echo "unsupported architecture ${uname_arch}"; exit 1;;
 esac
