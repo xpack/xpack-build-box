@@ -38,7 +38,7 @@ uname_arch="$(uname -m)"
 case "${uname_arch}" in
   x86_64 ) arch="amd64";;
   aarch64 ) arch="arm64v8";;
-  armv7l | armv8l ) aarch='arm32v7';;
+  armv7l | armv8l ) arch='arm32v7';;
   * ) echo "unsupported architecture ${uname_arch}"; exit 1;;
 esac
 
