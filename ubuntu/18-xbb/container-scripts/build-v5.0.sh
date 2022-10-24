@@ -87,10 +87,12 @@ diffutils \
 dos2unix \
 file \
 flex \
+g++-multilib \
 gawk \
 gettext \
 git \
 gzip \
+help2man \
 libatomic1 \
 libc6-dev \
 libtool \
