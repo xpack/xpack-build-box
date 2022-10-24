@@ -87,7 +87,6 @@ diffutils \
 dos2unix \
 file \
 flex \
-g++-multilib \
 gawk \
 gettext \
 git \
@@ -119,6 +118,9 @@ wget \
 xz-utils \
 zip \
 zlib1g-dev \
+
+# Not available on aarch64.
+# g++-multilib
 
 # -----------------------------------------------------------------------------
 
