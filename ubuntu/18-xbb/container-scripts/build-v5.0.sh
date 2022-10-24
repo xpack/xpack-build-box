@@ -74,8 +74,10 @@ run_verbose apt-get --yes install tzdata
 
 # Keep it to a minimum.
 run_verbose apt-get -qq install -y \
+\
 autoconf \
 automake \
+bison \
 bzip2 \
 ca-certificates \
 coreutils \
@@ -99,6 +101,9 @@ make \
 patch \
 perl \
 pkg-config \
+python \
+python3 \
+python3-pip \
 re2c \
 rhash \
 rsync \
