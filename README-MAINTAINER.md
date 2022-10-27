@@ -5,23 +5,29 @@
 To clone the repo with its submodule:
 
 ```sh
-rm -rf ${HOME}/Work/xpack-build-box.git; \
+rm -rf ~/Work/xpack-build-box.git; \
 git clone \
   --branch master \
   https://github.com/xpack/xpack-build-box.git \
-  ${HOME}/Work/xpack-build-box.git; \
-git -C ${HOME}/Work/xpack-build-box.git submodule update --init --recursive
+  ~/Work/xpack-build-box.git; \
+git -C ~/Work/xpack-build-box.git submodule update --init --recursive
 ```
 
 For the development version use the `develop` branch:
 
 ```sh
-rm -rf ${HOME}/Work/xpack-build-box.git; \
+rm -rf ~/Work/xpack-build-box.git; \
 git clone \
   --branch develop \
   https://github.com/xpack/xpack-build-box.git \
-  ${HOME}/Work/xpack-build-box.git; \
-git -C ${HOME}/Work/xpack-build-box.git submodule update --init --recursive
+  ~/Work/xpack-build-box.git; \
+git -C ~/Work/xpack-build-box.git submodule update --init --recursive
+```
+
+To do a quick update:
+
+```sh
+(cd ~/Work/xpack-build-box.git; git pull)
 ```
 
 ## TeX
