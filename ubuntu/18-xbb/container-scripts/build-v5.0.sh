@@ -117,10 +117,20 @@ unzip \
 wget \
 xz-utils \
 zip \
-zlib1g-dev \
+zlib1g-dev
 
 # Not available on aarch64.
 # g++-multilib
+
+# For QEMU
+run_verbose apt-get install --yes \
+libx11-dev \
+libxext-dev \
+mesa-common-dev
+
+# For QEMU & OpenOCD
+run_verbose apt-get install --yes \
+libudev-dev
 
 # -----------------------------------------------------------------------------
 
