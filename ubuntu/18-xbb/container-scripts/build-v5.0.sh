@@ -119,8 +119,10 @@ xz-utils \
 zip \
 zlib1g-dev
 
-# Not available on aarch64.
-# g++-multilib
+if is_intel
+then
+  run_verbose apt-get install --yes g++-multilib
+fi
 
 # For QEMU
 run_verbose apt-get install --yes \
