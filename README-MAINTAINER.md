@@ -27,7 +27,7 @@ git -C ~/Work/xpack-build-box.git submodule update --init --recursive
 To do a quick update:
 
 ```sh
-(cd ~/Work/xpack-build-box.git; git pull)
+git -C ~/Work/xpack-build-box.git pull
 ```
 
 ## TeX
