@@ -236,6 +236,20 @@ function is_arm()
   fi
 }
 
+function is_arm32()
+{
+  local machine="$(uname -m)"
+  if [ "${machine}" == "armv8l" ]
+  then
+    return 0
+  elif [ "${machine}" == "armv7l" ]
+  then
+    return 0
+  else
+    return 1
+  fi
+}
+
 function prepare_xbb_env()
 {
   XBB_PARENT_FOLDER_PATH=${XBB_PARENT_FOLDER_PATH:=""}

@@ -118,8 +118,19 @@ xz-utils \
 zip \
 zlib1g-dev
 
-run_verbose apt-get install --yes \
-  linux-headers-$(uname -r | sed -e 's|.*-||')
+if is_intel
+then
+  run_verbose apt-get install --yes \
+    linux-headers-4.19.0-20-all-amd64
+elif is_aarch64
+then
+  run_verbose apt-get install --yes \
+    linux-headers-4.19.0-20-all-arm64
+elif is_arm32
+then
+  run_verbose apt-get install --yes \
+    linux-headers-4.19.0-20-all-armhf
+fi
 
 if is_intel
 then
