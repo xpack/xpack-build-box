@@ -59,6 +59,15 @@ fi
 
 # -----------------------------------------------------------------------------
 
+if is_aarch64
+then
+  run_verbose dpkg --add-architecture armhf
+fi
+
+run_verbose apt-get update
+
+# -----------------------------------------------------------------------------
+
 # https://www.thomas-krenn.com/en/wiki/Configure_Locales_in_Ubuntu
 run_verbose apt-get install --yes locales
 run_verbose locale-gen en_US.UTF-8
@@ -122,6 +131,12 @@ zlib1g-dev
 if is_intel
 then
   run_verbose apt-get install --yes g++-multilib
+elif is_aarch64
+then
+  run_verbose apt-get install --yes \
+    crossbuild-essential-armhf \
+    libc6:armhf \
+    libstdc++6:armhf
 fi
 
 # For QEMU
