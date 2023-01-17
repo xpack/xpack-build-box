@@ -32,6 +32,8 @@ git -C ~/Work/xpack-build-box.git pull
 
 ## TeX
 
+TeX support was removed.
+
 TeX 2019 failed on Aarch64 with a CRC error.
 
 TeX 2020 and 2021 failed with:
@@ -95,62 +97,29 @@ Fixed
 - autogen (1 test disabled)
 - add bash
 
-## Future work
+## Current status
 
-XBB v4.x should be more modular, using binary xPacks.
+XBB v5.0.0 is more modular, using binary xPacks.
 
 ### GNU/Linux
 
-There will be 3 Docker images (no i386) with Ubuntu 16.04 LTS,
+There will be 3 Docker images (no i386) with Ubuntu 18.04 LTS,
 basic development tools and node/npm.
 
-The toolchains will be installed as binary xPacks.
+The toolchains and other tools will be installed as binary xPacks.
 
-Planned xPacks:
-
-- patchelf
-- coreutils
-- autoconf
-- automake
-- pkg_config
-- python3
-- mingw-gcc
-- wine
-
-Some may not be available for all platforms.
-
-Possible future xPacks:
-
-- curl
-- wget
-- tar
-- m4
-- gawk
-- sed
-- patch
-- diffutils
-- bison
-- make
-- bash
-- texinfo
-- dos2unix
-- p7zip
-- rhash
-- re2c
-- sphinx
-- gnupg
-- makedepend
-- git
-
-The strategy will be to try use the Ubuntu 16 versions first, and,
-when not possible, add the xPacks for them.
+- <https://github.com/xpack-dev-tools/>
 
 ### macOS
 
-For macOS all needed tools not yet available as xPacks should be
-compiled in a static XBB folder, as of now. For consistency,
-the versions will replicate those available in Ubuntu 16.
+For macOS the only prerequisite is the Command Line Tools (CLT) package.
 
-macOS specific tools:
+`realpath` is provided as a separate binary xPack.
 
-- realpath
+## Future work
+
+When node 18.x will be needed, the base system must be upgraded to
+GLIBC 2.28, which is available since Debian 10.
+
+The scripts to create Debian 10 Docker images are already added.
+
