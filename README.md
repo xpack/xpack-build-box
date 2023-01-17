@@ -20,12 +20,12 @@ and provides the scripts to create the xPack build environments
   for various Linux distributions
 - [Releases](https://xpack.github.io/xbb/releases/)
 
-Starting with 2022, all builds will be performed with v5.0.0;
-see the release page for details.
+Starting with 2023, all builds will be performed with v5.0.0,
+which uses binary xPacks on top of simple npm images.
 
-Except possible maintenance releases,
-this is planned to be the final monolithic release; future releases
-should be modular, and use binary xPacks on top of simple npm images.
+The current Docker images are:
+
+- [ubuntu/18-xbb](ubuntu/18-xbb/)
 
 ## Credits
 
