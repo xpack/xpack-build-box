@@ -49,6 +49,15 @@ unset TERM
 
 # -----------------------------------------------------------------------------
 
+if is_aarch64
+then
+  run_verbose dpkg --add-architecture armhf
+fi
+
+run_verbose apt-get update
+
+# -----------------------------------------------------------------------------
+
 # https://wiki.debian.org/Locale
 # run_verbose apt-get install --yes locales
 # run_verbose locale-gen en_US.UTF-8
@@ -109,8 +118,16 @@ xz-utils \
 zip \
 zlib1g-dev
 
-# Not available on aarch64.
-# g++-multilib
+if is_intel
+then
+  run_verbose apt-get install --yes g++-multilib
+elif is_aarch64
+then
+  run_verbose apt-get install --yes \
+    crossbuild-essential-armhf \
+    libc6:armhf \
+    libstdc++6:armhf
+fi
 
 # For QEMU
 run_verbose apt-get install --yes \
