@@ -59,8 +59,9 @@ run_verbose apt-get update
 # -----------------------------------------------------------------------------
 
 # https://wiki.debian.org/Locale
-# run_verbose apt-get install --yes locales
-# run_verbose locale-gen en_US.UTF-8
+run_verbose apt-get install --yes locales
+sed -i.bak -e 's|# en_US.UTF-8|en_US.UTF-8|' /etc/locale.gen
+run_verbose locale-gen en_US.UTF-8
 run_verbose update-locale LANG=en_US.UTF-8
 
 # Must be passed as `ENV TZ=UTC` in Dockerfile.
@@ -72,7 +73,7 @@ run_verbose apt-get --yes install tzdata
 # -----------------------------------------------------------------------------
 
 # Keep it to a minimum.
-run_verbose apt-get -qq install -y \
+run_verbose apt-get install --yes \
 \
 autoconf \
 automake \
@@ -94,7 +95,6 @@ help2man \
 libatomic1 \
 libc6-dev \
 libtool \
-linux-headers-generic \
 lsb-release \
 m4 \
 make \
@@ -117,6 +117,9 @@ wget \
 xz-utils \
 zip \
 zlib1g-dev
+
+run_verbose apt-get install --yes \
+  linux-headers-$(uname -r | sed -e 's|.*-||')
 
 if is_intel
 then
