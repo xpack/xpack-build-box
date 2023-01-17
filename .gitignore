@@ -3,6 +3,9 @@
 # Archives are no longer checked in, must be downloaded from the GitHub Releases.
 *.xz
 
+debian/*/input
+debian/*/input-*
+
 ubuntu/*/input
 ubuntu/*/input-*
 
