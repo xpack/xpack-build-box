@@ -33,8 +33,8 @@ in the final location.
 
 The workaround is simple, run install first, and then check.
 
-Thus, for consistency reasons, all packages are first instaled then checked.
+Thus, for consistency reasons, all packages are first installed then checked.
 
 For packets that use test specific shared libraries, not installed in the
 final folders, the workaround is a bit more elaborated, and requires
-skipping patchein in the test folders. (for example in the `gc` package).
+skipping patching in the test folders. (for example in the `gc` package).

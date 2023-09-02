@@ -122,4 +122,3 @@ When node 18.x will be needed, the base system must be upgraded to
 GLIBC 2.28, which is available since Debian 10.
 
 The scripts to create Debian 10 Docker images are already added.
-

@@ -1,4 +1,4 @@
-# The Ubuntu XBB - native development
+# The Ubuntu XBB - native development (possibly outdated)
 
 ## Overview
 
@@ -48,7 +48,7 @@ $ sudo apt install --yes ${HOME}/Work/code_1.31.1-1549938243_amd64.deb
 
 Preferably add it to the tool bar, for convenient access.
 
-Some of the project Gits, like qemu.git, already includes
+Some of the project Git repos, like qemu.git, already includes
 the `.vscode` folder with preconfigured
 build and debug configurations.
 
