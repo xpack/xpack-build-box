@@ -1,6 +1,11 @@
 
 # 18-node
 
+## End-of-life notice
+
+Node.js 18 LTS support ends on April 2025.
+Node.js 16 LTS support ends on April 2024.
+
 ## Build Docker images
 
 There are several scripts, with respective node LTS versions:
