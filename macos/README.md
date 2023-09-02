@@ -1,4 +1,4 @@
-# The macOS XBB
+# The macOS XBB - DEPRECATED since v5.x
 
 ## Overview
 
