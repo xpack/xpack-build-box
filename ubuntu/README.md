@@ -2,7 +2,7 @@
 
 Note: This page is dedicated to the production version of the
 Ubuntu XBB, used for building distribution packages.
-The Ubuntu XBB used for native builds is docummented in the
+The Ubuntu XBB used for native builds is documented in the
 separate [README-NATIVE](README-NATIVE.md) page.
 
 The production Ubuntu XBB consists of multiple Docker images,
@@ -82,7 +82,7 @@ ilegeul/ubuntu      amd64-18.04-npm-v1               5c5aee6b1e9c        7 hours
 ## Arm Linux
 
 The following sequences of commands were used on a Raspberry Pi OS
-Linux (Aarch64):
+Linux (AArch64):
 
 ### Ubuntu 16 Arm (xenial)
 
