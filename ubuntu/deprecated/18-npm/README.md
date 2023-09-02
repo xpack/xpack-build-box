@@ -1,5 +1,5 @@
 
-# 18-npm
+# 18-npm - DEPRECATED in v5.x
 
 ## Build Docker images (experimental)
 

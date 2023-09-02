@@ -1,5 +1,5 @@
 
-# 18-xbb-bootstrap
+# 18-xbb-bootstrap - DEPRECATED in v5.x
 
 ## Build Docker images
 

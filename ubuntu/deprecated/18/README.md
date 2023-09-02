@@ -1,4 +1,4 @@
-# 18
+# 18 - DEPRECATED in v5.x
 
 ## The root file systems
 
