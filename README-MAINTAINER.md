@@ -34,7 +34,7 @@ git -C ~/Work/xpack-build-box.git pull
 
 TeX support was removed.
 
-TeX 2019 failed on Aarch64 with a CRC error.
+TeX 2019 failed on AArch64 with a CRC error.
 
 TeX 2020 and 2021 failed with:
 
