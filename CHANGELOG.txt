@@ -1,5 +1,9 @@
 The major changes and releases, in reverse chronological order:
 
+[2023-09-11]
+
+- v5.1.1 released, with g++ & libraries kept in the final image.
+
 [2023-09-03]
 
 - v5.1.0 released, with support for Python 3.11.4.
@@ -8,9 +12,9 @@ The major changes and releases, in reverse chronological order:
 
 - v5.0.0 released, with node support.
 - publish:
--  ilegeul/ubuntu:amd64-18.04-xbb-v5.1.0
--  ilegeul/ubuntu:arm64v8-18.04-xbb-v5.1.0
--  ilegeul/ubuntu:arm32v7-18.04-xbb-v5.1.0
+-  ilegeul/ubuntu:amd64-18.04-xbb-v5.0.0
+-  ilegeul/ubuntu:arm64v8-18.04-xbb-v5.0.0
+-  ilegeul/ubuntu:arm32v7-18.04-xbb-v5.0.0
 
 [2022-10-07]
 
