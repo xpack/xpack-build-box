@@ -9,6 +9,6 @@ LABEL docs="https://github.com/xpack/xpack-build-box/tree/master/ubuntu/18-xbb/R
 ENV TZ=UTC
 
 ADD input-ubuntu-18.04-arm32v7 /input
-RUN bash /input/build-v5.1.sh
+RUN bash /input/build-v5.1.0.sh
 
 CMD ["/bin/bash"]
