@@ -190,7 +190,7 @@ run_verbose pip3 list
 rm -rf ~/Work/python3
 
 # Try to avoid leaking development packages into the final image.
-run_verbose apt-get remove --yes build-essential zlib1g-dev libncurses5-dev libgdbm-dev libnss3-dev libssl-dev libreadline-dev libffi-dev libsqlite3-dev libbz2-dev
+run_verbose apt-get remove --yes zlib1g-dev libncurses5-dev libgdbm-dev libnss3-dev libssl-dev libreadline-dev libffi-dev libsqlite3-dev libbz2-dev
 
 run_verbose apt-get autoremove --yes
 
