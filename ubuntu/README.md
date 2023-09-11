@@ -14,12 +14,12 @@ The images are published on
 
 Intel Ubuntu
 
-- `ilegeul/ubuntu:amd64-18.04-xbb-v5.1.0`
+- `ilegeul/ubuntu:amd64-18.04-xbb-v5.1.1`
 
 Arm Ubuntu
 
-- `ilegeul/ubuntu:arm64v8-18.04-xbb-v5.1.0`
-- `ilegeul/ubuntu:arm32v7-18.04-xbb-v5.1.0`
+- `ilegeul/ubuntu:arm64v8-18.04-xbb-v5.1.1`
+- `ilegeul/ubuntu:arm32v7-18.04-xbb-v5.1.1`
 
 Each of these images are built upon multiple layers,
 starting from a base archive,
@@ -58,23 +58,24 @@ set -o errexit
 docker system prune -f
 
 time ( bash ${HOME}/Work/xpack-build-box.git/ubuntu/18-node/build-v16.20.2.sh && \
-bash ${HOME}/Work/xpack-build-box.git/ubuntu/18-xbb/build-v5.1.0.sh && \
+bash ${HOME}/Work/xpack-build-box.git/ubuntu/18-xbb/build-v5.1.1.sh && \
 docker images )
 
 docker push "ilegeul/ubuntu:amd64-18.04-node-v16.20.2" && \
-docker push "ilegeul/ubuntu:amd64-18.04-xbb-v5.1.0"
+docker push "ilegeul/ubuntu:amd64-18.04-xbb-v5.1.1"
 ```
 
 The build takes about 5 minutes on the GIGABYTE motherboard with AMD 5600G.
 
 ```console
-REPOSITORY            TAG                         IMAGE ID       CREATED              SIZE
-ilegeul/ubuntu        amd64-18.04-xbb-v5.1.0      d891971595b5   About a minute ago   1.21GB
-ilegeul/ubuntu        amd64-18.04-node-v16.20.2   b2377a77e168   5 minutes ago        173MB
-ilegeul/ubuntu        amd64-18.04-xbb-v5.0.0      5974fda9979c   9 months ago         908MB
-ilegeul/ubuntu        amd64-18.04-node-v16.18.0   1c0643ba6a91   10 months ago        173MB
-ilegeul/ubuntu        amd64-18.04-xbb-v4.0        801333c614c6   10 months ago        506MB
-ubuntu                18.04                       71cb16d32be4   11 months ago        63.1MB
+REPOSITORY            TAG                         IMAGE ID       CREATED         SIZE
+ilegeul/ubuntu        amd64-18.04-xbb-v5.1.1      19690b6c1041   3 minutes ago   1.21GB
+ilegeul/ubuntu        amd64-18.04-xbb-v5.1.0      d891971595b5   8 days ago      1.21GB
+ilegeul/ubuntu        amd64-18.04-node-v16.20.2   b2377a77e168   8 days ago      173MB
+ilegeul/ubuntu        amd64-18.04-xbb-v5.0.0      5974fda9979c   10 months ago   908MB
+ilegeul/ubuntu        amd64-18.04-node-v16.18.0   1c0643ba6a91   10 months ago   173MB
+ilegeul/ubuntu        amd64-18.04-xbb-v4.0        801333c614c6   11 months ago   506MB
+ubuntu                18.04                       71cb16d32be4   11 months ago   63.1MB
 ```
 
 ## Arm Linux
@@ -97,22 +98,24 @@ set -o errexit
 docker system prune -f
 
 time ( bash ${HOME}/Work/xpack-build-box.git/ubuntu/18-node/build-v16.20.2.sh && \
-bash ${HOME}/Work/xpack-build-box.git/ubuntu/18-xbb/build-v5.1.0.sh && \
+bash ${HOME}/Work/xpack-build-box.git/ubuntu/18-xbb/build-v5.1.1.sh && \
 docker images )
 
 docker push "ilegeul/ubuntu:arm64v8-18.04-node-v16.20.2" && \
-docker push "ilegeul/ubuntu:arm64v8-18.04-xbb-v5.1.0"
+docker push "ilegeul/ubuntu:arm64v8-18.04-xbb-v5.1.1"
 ```
 
 The build takes about 30 minutes on a Raspberry Pi CM4 at 2 GHz.
 
 ```console
-REPOSITORY            TAG                           IMAGE ID       CREATED              SIZE
-ilegeul/ubuntu        arm64v8-18.04-xbb-v5.1.0      8463ef17d171   About a minute ago   1.16GB
-ilegeul/ubuntu        arm64v8-18.04-node-v16.20.2   4dff11135c01   27 minutes ago       166MB
-ubuntu                18.04                         d1a528908992   3 months ago         56.7MB
-ilegeul/ubuntu        arm64v8-18.04-node-v16.18.0   fccbc2567073   7 months ago         166MB
-ilegeul/ubuntu        arm64v8-18.04-xbb-v5.0.0      baa7d6c9797e   10 months ago        758MB
+REPOSITORY            TAG                           IMAGE ID       CREATED         SIZE
+ilegeul/ubuntu        arm64v8-18.04-xbb-v5.1.1      29d8d82a475d   4 hours ago     1.19GB
+ilegeul/ubuntu        arm64v8-18.04-xbb-v5.1.0      8463ef17d171   8 days ago      1.16GB
+ilegeul/ubuntu        arm64v8-18.04-node-v16.20.2   4dff11135c01   8 days ago      166MB
+ubuntu                18.04                         d1a528908992   3 months ago    56.7MB
+ilegeul/ubuntu        arm64v8-18.04-node-v16.18.0   fccbc2567073   7 months ago    166MB
+ilegeul/ubuntu        arm64v8-18.04-xbb-v5.0.0      baa7d6c9797e   10 months ago   758MB
+ilegeul/ubuntu        arm64v8-18.04-xbb-v4.0        c87b49337906   11 months ago   472MB
 ```
 
 #### 32-bit
@@ -127,22 +130,24 @@ set -o errexit
 docker system prune -f
 
 time ( bash ${HOME}/Work/xpack-build-box.git/ubuntu/18-node/build-v16.20.2.sh && \
-bash ${HOME}/Work/xpack-build-box.git/ubuntu/18-xbb/build-v5.1.0.sh && \
+bash ${HOME}/Work/xpack-build-box.git/ubuntu/18-xbb/build-v5.1.1.sh && \
 docker images )
 
 docker push "ilegeul/ubuntu:arm32v7-18.04-node-v16.20.2" && \
-docker push "ilegeul/ubuntu:arm32v7-18.04-xbb-v5.1.0"
+docker push "ilegeul/ubuntu:arm32v7-18.04-xbb-v5.1.1"
 ```
 
 The build takes about 30 minutes on a Raspberry Pi4.
 
 ```console
-REPOSITORY         TAG                           IMAGE ID       CREATED              SIZE
-ilegeul/ubuntu     arm32v7-18.04-xbb-v5.1.0      e925c617ffae   About a minute ago   862MB
-ilegeul/ubuntu     arm32v7-18.04-node-v16.20.2   11bdc6e25d12   28 minutes ago       147MB
-ilegeul/ubuntu     arm32v7-18.04-xbb-v5.0.0      b071935af982   10 months ago        657MB
-ilegeul/ubuntu     arm32v7-18.04-node-v16.18.0   4aee7f964002   10 months ago        147MB
-ubuntu             18.04                         bfbba71facee   11 months ago        45.8MB
+REPOSITORY         TAG                           IMAGE ID       CREATED         SIZE
+ilegeul/ubuntu     arm32v7-18.04-xbb-v5.1.1      6c31512719d1   3 hours ago     892MB
+ilegeul/ubuntu     arm32v7-18.04-xbb-v5.1.0      e925c617ffae   8 days ago      862MB
+ilegeul/ubuntu     arm32v7-18.04-node-v16.20.2   11bdc6e25d12   8 days ago      147MB
+ilegeul/ubuntu     arm32v7-18.04-xbb-v5.0.0      b071935af982   10 months ago   657MB
+ilegeul/ubuntu     arm32v7-18.04-node-v16.18.0   4aee7f964002   10 months ago   147MB
+ilegeul/ubuntu     arm32v7-18.04-xbb-v4.0        7c1c3f724109   11 months ago   420MB
+ubuntu             18.04                         bfbba71facee   11 months ago   45.8MB
 ```
 
 ## Testing
