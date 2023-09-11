@@ -99,7 +99,7 @@ Fixed
 
 ## Current status
 
-XBB v5.0.0 is more modular, using binary xPacks.
+XBB v5.0.0 and up are more modular, using binary xPacks.
 
 ### GNU/Linux
 
