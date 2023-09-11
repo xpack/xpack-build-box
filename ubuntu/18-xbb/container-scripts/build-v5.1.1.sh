@@ -86,6 +86,7 @@ run_verbose apt-get --yes install tzdata
 # python3-pip \
 
 # Keep it to a minimum.
+# g++ required for the clang tests.
 run_verbose apt-get -qq install -y \
 \
 autoconf \
