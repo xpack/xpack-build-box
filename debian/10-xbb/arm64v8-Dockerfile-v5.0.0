@@ -1,5 +1,5 @@
 
-FROM ilegeul/debian:arm64v8-10-node-v18.13.0
+FROM ilegeul/debian:arm64v8-10-node-v18.17.0
 
 LABEL description="Debian 10 arm64v8 image, with the XBB."
 LABEL maintainer="Liviu Ionescu <ilg@livius.net>"
