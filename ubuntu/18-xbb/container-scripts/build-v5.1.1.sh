@@ -87,7 +87,7 @@ run_verbose apt-get --yes install tzdata
 
 # Keep it to a minimum.
 # g++ required for the clang tests.
-run_verbose apt-get -qq install -y \
+run_verbose apt-get install --yes \
 \
 autoconf \
 automake \
