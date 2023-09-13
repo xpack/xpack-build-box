@@ -9,6 +9,6 @@ LABEL docs="https://github.com/xpack/xpack-build-box/tree/master/debian/10-xbb/R
 ENV TZ=UTC
 
 ADD input-debian-10-amd64 /input
-RUN bash /input/build-v5.0.sh
+RUN bash /input/build-v5.0.0.sh
 
 CMD ["/bin/bash"]
