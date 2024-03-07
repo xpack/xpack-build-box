@@ -6,6 +6,10 @@
 Node.js 18 LTS support ends on April 2025.
 Node.js 16 LTS support ends on April 2024.
 
+- <https://nodejs.org/en/about/previous-releases>
+
+Node 18 does not run on Ubuntu 18!
+
 ## Build Docker images
 
 There are several scripts, with respective node LTS versions:
