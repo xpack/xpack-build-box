@@ -23,7 +23,7 @@ packed in the base system and need to be installed as part of the
 **Xcode** package, available from
 [Apple](https://developer.apple.com).
 
-Although Xcode itself is not needed, it is prefered over the Command Line Tools,
+Although Xcode itself is not needed, it is preferred over the Command Line Tools,
 since it guarantees a full SDK, not present on older versions of CLT.
 
 ## TL;DR
@@ -75,7 +75,7 @@ Some modern tools can no longer be compiled with this old version, and require
 the bootstrap tools, which will generally include reasonably recent tools that
 can still be built with the native compiler.
 
-As of now, the boostrap compiler is GCC 11.x, since older versions do
+As of now, the bootstrap compiler is GCC 11.x, since older versions do
 not compile on new M1 Macs.
 
 ## Remove macPorts or Homebrew from the PATH
